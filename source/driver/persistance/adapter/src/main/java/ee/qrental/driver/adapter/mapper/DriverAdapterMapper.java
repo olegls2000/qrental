@@ -7,7 +7,7 @@ public class DriverAdapterMapper {
 
   public Driver mapToDomain(final DriverJakartaEntity jpaEntity) {
     return Driver.builder()
-        .id(null)
+        .id(jpaEntity.getId())
         .active(jpaEntity.getActive())
         .firstName(jpaEntity.getFirstName())
         .lastName(jpaEntity.getLastName())

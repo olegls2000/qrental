@@ -1,4 +1,4 @@
-package ee.qrental.callsign.spring.config;
+package ee.qrental.callsign.spring.config.callsign;
 
 import ee.qrental.callsign.adapter.repository.CallSignRepository;
 import ee.qrental.callsign.repository.impl.CallSignRepositoryImpl;

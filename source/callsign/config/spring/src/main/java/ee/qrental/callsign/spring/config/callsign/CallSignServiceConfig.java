@@ -1,4 +1,4 @@
-package ee.qrental.callsign.spring.config;
+package ee.qrental.callsign.spring.config.callsign;
 
 import ee.qrental.callsign.api.in.query.GetCallSignQuery;
 import ee.qrental.callsign.api.out.CallSignAddPort;
@@ -10,6 +10,7 @@ import ee.qrental.callsign.core.mapper.CallSignResponseMapper;
 import ee.qrental.callsign.core.mapper.CallSignUpdateRequestMapper;
 import ee.qrental.callsign.core.service.CallSignQueryService;
 import ee.qrental.callsign.core.service.CallSignUseCaseService;
+import ee.qrental.callsign.core.validator.CallSignBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +32,15 @@ public class CallSignServiceConfig {
       final CallSignDeletePort deletePort,
       final CallSignLoadPort loadPort,
       final CallSignAddRequestMapper addRequestMapper,
-      final CallSignUpdateRequestMapper updateRequestMapper) {
+      final CallSignUpdateRequestMapper updateRequestMapper,
+      final CallSignBusinessRuleValidator businessRuleValidator) {
     return new CallSignUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        businessRuleValidator);
   }
 }

@@ -12,7 +12,7 @@ import ee.qrental.callsign.api.out.CallSignLoadPort;
 import ee.qrental.callsign.api.out.CallSignUpdatePort;
 import ee.qrental.callsign.core.mapper.CallSignAddRequestMapper;
 import ee.qrental.callsign.core.mapper.CallSignUpdateRequestMapper;
-import lombok.AllArgsConstructor;
+import ee.qrental.callsign.core.validator.CallSignBusinessRuleValidator;import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CallSignUseCaseService
@@ -24,15 +24,30 @@ public class CallSignUseCaseService
   private final CallSignLoadPort loadPort;
   private final CallSignAddRequestMapper addRequestMapper;
   private final CallSignUpdateRequestMapper updateRequestMapper;
+  private final CallSignBusinessRuleValidator businessRuleValidator;
 
   @Override
   public Long add(final CallSignAddRequest request) {
+    final var domain = addRequestMapper.toDomain(request);
+    final var violationsCollector = businessRuleValidator.validate(domain);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+      return null;
+    }
+
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 
   @Override
   public void update(final CallSignUpdateRequest request) {
     checkExistence(request.getId());
+    final var domain = updateRequestMapper.toDomain(request);
+    final var violationsCollector = businessRuleValidator.validate(domain);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return;
+    }
     updatePort.update(updateRequestMapper.toDomain(request));
   }
 

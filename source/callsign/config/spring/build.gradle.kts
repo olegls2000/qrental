@@ -11,6 +11,8 @@ dependencies {
     implementation(project(":source:callsign:persistance:flyway"))
     implementation(project(":source:callsign:persistance:adapter"))
     implementation(project(":source:callsign:persistance:repository:spring"))
+
+    implementation(project(":source:driver:api:in"))
     implementation("org.springframework:spring-context")
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

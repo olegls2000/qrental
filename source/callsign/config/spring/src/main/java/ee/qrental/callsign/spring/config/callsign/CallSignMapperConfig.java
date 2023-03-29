@@ -1,4 +1,4 @@
-package ee.qrental.callsign.spring.config;
+package ee.qrental.callsign.spring.config.callsign;
 
 import ee.qrental.callsign.core.mapper.CallSignAddRequestMapper;
 import ee.qrental.callsign.core.mapper.CallSignResponseMapper;
