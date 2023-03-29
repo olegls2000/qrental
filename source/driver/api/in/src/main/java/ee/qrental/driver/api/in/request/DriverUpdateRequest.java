@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Boolean active;
   private String firstName;

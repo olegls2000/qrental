@@ -24,4 +24,16 @@ include("source:driver:persistance:repository:spring")
 include("source:driver:persistance:flyway")
 include("source:driver:config:spring")
 
+
+//Call-sign domain:
+include("source:callsign:api:in")
+include("source:callsign:api:out")
+include("source:callsign:domain")
+include("source:callsign:core")
+include("source:callsign:persistance:adapter")
+include("source:callsign:persistance:entity")
+include("source:callsign:persistance:repository:spring")
+include("source:callsign:persistance:flyway")
+include("source:callsign:config:spring")
+
 include("source:ui-thymeleaf")

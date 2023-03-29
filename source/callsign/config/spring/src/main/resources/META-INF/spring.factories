@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.callsign.spring.config.CallSignAdapterConfig,\
+ee.qrental.callsign.spring.config.CallSignMapperConfig,\
+ee.qrental.callsign.spring.config.CallSignServiceConfig,\
+ee.qrental.callsign.spring.config.CallSignRepositoryConfig
