@@ -2,8 +2,7 @@ plugins {
     id("q-java")
 }
 
-dependencies{
-    implementation(project(":source:common"))
+dependencies {
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

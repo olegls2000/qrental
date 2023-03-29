@@ -1,16 +1,15 @@
 plugins {
     id("q-java")
     id("org.springframework.boot") version "3.0.5"
+    id("io.spring.dependency-management") version "1.1.0"
 }
 
 dependencies {
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.0.5"))
     implementation(project(":source:ui-thymeleaf"))
     implementation(project(":source:driver:config:spring"))
     implementation(project(":source:driver:core"))
     implementation(project(":source:driver:persistance:adapter"))
     implementation(project(":source:driver:persistance:repository:spring"))
-
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")

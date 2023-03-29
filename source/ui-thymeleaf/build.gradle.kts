@@ -7,7 +7,7 @@ plugins {
 dependencies {
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:common"))
-    implementation(platform(libs.q.spring.boot))
+
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly(libs.q.lombok)

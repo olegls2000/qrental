@@ -3,8 +3,7 @@ plugins {
 }
 
 dependencies{
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.0.5"))
-    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
+    implementation(libs.q.jakarta)
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

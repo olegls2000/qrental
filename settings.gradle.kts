@@ -7,12 +7,13 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories.mavenCentral()
-    //includeBuild("gradle/platform")
+    includeBuild("gradle/platform")
 }
 
 include("source:app")
 include("source:common")
 
+//Driver domain:
 include("source:driver:api:in")
 include("source:driver:api:out")
 include("source:driver:domain")

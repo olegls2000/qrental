@@ -5,8 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
-    implementation(platform(libs.q.spring.boot))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
 }
 
 tasks.test {
