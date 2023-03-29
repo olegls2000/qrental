@@ -1,0 +1,39 @@
+<div th:fragment="callSignPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/callsignTabFragment.html :: callsignTabs('callSigns')"></ul>
+
+    <h2 class="py-3">Call Signs</h2>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/call-signs/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Add new Call Sign
+                </a>
+            </th>
+            <th>Call Sign</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(callSigns)}">
+            <td colspan="5">No Call Signs</td>
+        </tr>
+        <tr th:each="callSign : ${callSigns}">
+            <td>
+                <a class="btn btn-sm btn-warning "
+                   th:href="@{/call-signs/update-form/{id}(id=${callSign.id})}">
+                    <span class="bi-pencil-square"></span>
+                    Edit</a>
+                <a class="btn btn-sm btn-danger "
+                   th:href="@{/call-signs/delete-form/{id}(id=${callSign.id})}">
+                    <span class="bi-trash"></span>
+                    Delete</a>
+            </td>
+            <td th:text="${callSign.callSign}"></td>
+            <td th:text="${callSign.comment}"></td>
+        </tr>
+    </table>
+</div>

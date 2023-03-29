@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Transaction Type',
+            closeRef='/transaction-types',
+            content=~{fragments/transactionTypeDeleteFormFragment.html :: deleteForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/transaction-types/delete}"
+      th:object="${deleteRequest}"
+      method="post">
+    <input id="transactionTypeId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text=${objectInfo}>Transaction Type info</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/transaction-types'
+        )">
+    </div>
+</form>

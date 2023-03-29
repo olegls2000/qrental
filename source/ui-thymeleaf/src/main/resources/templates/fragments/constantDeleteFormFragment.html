@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Constant',
+            closeRef='/settings',
+            content=~{fragments/constantDeleteFormFragment.html :: deleteForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/settings/delete}"
+      th:object="${constantDeleteCommand}"
+      method="post">
+    <input id="constantId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text=${constantDeleteCommand.objectInfo}>Constant info</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/settings'
+        )">
+    </div>
+</form>

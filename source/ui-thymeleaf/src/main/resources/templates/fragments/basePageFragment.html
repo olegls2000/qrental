@@ -1,0 +1,10 @@
+<!doctype html>
+<html th:fragment="qrentalPage(bodyContent)"
+      lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="fragments/headFragment.html :: qrental-head"></head>
+
+<body class="container bg-light">
+<div th:insert="${bodyContent}"></div>
+</body>
+</html>

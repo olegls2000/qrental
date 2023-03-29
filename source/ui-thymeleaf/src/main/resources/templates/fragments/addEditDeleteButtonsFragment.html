@@ -1,0 +1,18 @@
+<div th:fragment="addEditDeleteButtons(submitValue, cancelHref)"
+     class="row justify-content-center">
+    <div class="col-2">
+        <input class="btn btn-success"
+               type="submit"
+               th:value="${submitValue}"
+               value="Submit">
+    </div>
+    <div class="col-2">
+        <a class="btn btn-secondary"
+           th:href="${cancelHref}"
+           href="/">
+            Cancel
+        </a>
+    </div>
+</div>
+
+

@@ -1,0 +1,116 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Firm',
+            closeRef='/firms',
+            content=~{fragments/firmAddFormFragment.html :: addForm}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/firms/add}"
+          th:object="${addRequest}">
+
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="qGroupId">Q Group Firm</label>
+                <input class="form-check-input" id="qGroupId"
+                       th:field="*{qGroup}"
+                       type="checkbox"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="firmNameId">Firm name</label>
+                    <input class="form-control" id="firmNameId"
+                           placeholder="Enter Firm name"
+                           required
+                           th:field="*{name}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ibanId">IBAN</label>
+                    <input class="form-control" id="ibanID" placeholder="Enter  IBAN" required
+                           th:field="*{iban}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="regNumberId">REG Number</label>
+                    <input class="form-control" id="regNumberID" placeholder="Enter REG Number" required
+                           th:field="*{regNumber}"
+                           type="number"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="vatNumberId">VAT Number</label>
+                    <input class="form-control" id="vatNumberID" placeholder="Enter VAT Number"
+                           th:field="*{vatNumber}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="eMailId">E-Mail</label>
+                    <input class="form-control" id="eMailID" placeholder="Enter E-Mail" required
+                           th:field="*{eMail}"
+                           type="email"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="postAddressId">Post Address</label>
+                    <input class="form-control" id="postAddressID" placeholder="Enter post address"
+                           th:field="*{postAddress}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="phone">Phone</label>
+                    <input class="form-control" id="phone" placeholder="Enter Phone" required
+                           th:field="*{phone}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="bankId">Bank Name</label>
+                    <input class="form-control" id="bankID" placeholder="Enter Bank Name"
+                           th:field="*{bank}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add',
+            cancelHref='/firms'
+        )">
+        </div>
+    </form>
+</div>
+
+

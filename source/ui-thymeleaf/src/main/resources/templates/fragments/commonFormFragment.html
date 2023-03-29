@@ -1,0 +1,16 @@
+<div th:fragment="commonForm(title,  content)" class="row mt-5">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title" th:text="${title}">Title</h4>
+                <a class="btn-close position-absolute top-0 end-0 m-2"
+                   aria-label="Close"
+                   href="#" onclick="history.back();">
+                </a>
+                <div th:insert="${content}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

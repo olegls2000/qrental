@@ -1,0 +1,13 @@
+<div th:fragment="transactionPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/transactionTabFragment :: transactionTabs('transactions')"></ul>
+    <h2 class="py-3">Transactions</h2>
+
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <form th:replace="fragments/transactionSearchFormFragment.html :: searchForm"></form>
+        </div>
+    </div>
+    <table th:replace="fragments/transactionTableFragment.html :: transactionTable"></table>
+
+</div>

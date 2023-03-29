@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headFragment.html :: qrental-head">
+</head>
+<body class="container bg-light">
+<nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Add new Call Sign Link</h4>
+                <form method="post"
+                      th:action="@{/call-sign-links/add}"
+                      th:object="${callSignLinkAddCommand}">
+
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted" for="driverId">Driver</label>
+                        <select id="driverId" class="form-select"
+                                th:field="*{driverId}">
+                            <option th:each="driver : ${drivers}"
+                                    th:value="${driver.id}"
+                                    th:text="|${driver.firstName} ${driver.lastName} - ${driver.isikukood}|"></option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label class="form-label text-muted" for="callSignId">Call Sign</label>
+                            <input class="form-control" id="callSignId" placeholder="Enter  Call Sign" required
+                                   th:field="*{callSign}"
+                                   type="number"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-label text-muted" for="dateStartId">Start Date</label>
+                                <input class="form-control" id="dateStartId" placeholder="Enter Start Date" required
+                                       th:field="*{dateStart}"
+                                       type="date"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-label text-muted" for="dateEndId">End Date</label>
+                                <input class="form-control" id="dateEndId" placeholder="Enter End Date"
+                                       th:field="*{dateEnd}"
+                                       type="date"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted" for="commentId">Comment</label>
+                        <textarea class="form-control"
+                                  id="commentId"
+                                  placeholder="Enter Comment"
+                                  th:field="*{comment}"/>
+                    </div>
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <input class="btn btn-success"
+                                   type="submit"
+                                   value="Add">
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-secondary"
+                               href="/call-sign-links">
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+</body>
+</html>

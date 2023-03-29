@@ -1,0 +1,10 @@
+<ul th:fragment="linkTabs(activeTab)" class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'links'} ? active : ''"
+           href="/links">Active Links</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'closedLinks'} ?  active : ''"
+           href="/links">Closed Links</a>
+    </li>
+</ul>

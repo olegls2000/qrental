@@ -1,0 +1,265 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Car',
+            closeRef='/cars',
+            content=~{fragments/carAddFormFragment.html :: addForm}
+        )">
+    </div>
+</div>
+
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/cars/add}"
+          th:object="${carAddCommand}">
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="regNumberId">Registration Number </label>
+                    <input class="form-control" id="regNumberId" placeholder="Enter regNumber"
+                           required
+                           th:field="*{regNumber}"
+                           type="text"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="vinId">VIN</label>
+                    <input class="form-control" id="vinId" placeholder="Enter vin"
+                           required
+                           th:field="*{vin}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="releaseDateId">Release Date</label>
+                <input class="form-control" id="releaseDateId" placeholder="Enter releaseDate"
+                       required
+                       th:field="*{releaseDate}"
+                       type="date"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="manufacturerId">Manufacturer</label>
+                    <input class="form-control" id="manufacturerId" placeholder="Enter manufacturer" required
+                           th:field="*{manufacturer}"
+                           type="text"/>
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="modelId">Model</label>
+                    <input class="form-control" id="modelId" placeholder="Enter model" required
+                           th:field="*{model}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="activeId">Active Car</label>
+                    <input class="form-check-input" id="activeId"
+                           th:field="*{active}"
+                           type="checkbox"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="qRentId">Q-Rent</label>
+                    <input class="form-check-input" id="qRentId"
+                           th:field="*{qRent}"
+                           type="checkbox"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="eleganceId">Elegance</label>
+                    <input class="form-check-input" id="eleganceId"
+                           th:field="*{elegance}"
+                           type="checkbox"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="appropriationId">Appropriation</label>
+                    <input class="form-check-input" id="appropriationId"
+                           th:field="*{appropriation}"
+                           type="checkbox"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="gearTypeId">Gear Type</label>
+                    <input class="form-control" id="gearTypeId" placeholder="Enter gearType"
+                           required
+                           th:field="*{gearType}"
+                           type="text"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="fuelTypeId">Fuel Type</label>
+                    <input class="form-control" id="fuelTypeId" placeholder="Enter fuelType"
+                           required
+                           th:field="*{fuelType}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="lpgId">LPG</label>
+                    <input class="form-check-input" id="lpgId"
+                           th:field="*{lpg}"
+                           type="checkbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateInstallLpgId">Date Installing LPG</label>
+                    <input class="form-control" id="dateInstallLpgId" placeholder="Enter date Install Lpg"
+                           th:field="*{dateInstallLpg}"
+                           type="date"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateEndLpgId">End Date of added fee for LPG</label>
+                    <input class="form-control" id="dateEndLpgId" placeholder="Enter end date of added fee for Lpg"
+                           th:field="*{dateEndLpg}"
+                           type="date"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="insuranceFirmId">Insurance Firm </label>
+                <input class="form-control" id="insuranceFirmId" placeholder="Enter insurance Firm"
+                       required
+                       th:field="*{insuranceFirm}"
+                       type="text"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="insuranceDateStartId">Insurance Date Start</label>
+                    <input class="form-control" id="insuranceDateStartId"
+                           placeholder="Enter insuranceDateStart"
+                           required
+                           th:field="*{insuranceDateStart}"
+                           type="date"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="insuranceDateEndId">Insurance Date End</label>
+                    <input class="form-control" id="insuranceDateEndId" placeholder="Enter insuranceDateEnd"
+                           required
+                           th:field="*{insuranceDateEnd}"
+                           type="date"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="sCardId">S-Card</label>
+                    <input class="form-check-input" id="sCardId"
+                           th:field="*{sCard}"
+                           type="checkbox"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="key2Id">Key 2</label>
+                    <input class="form-check-input" id="key2Id"
+                           th:field="*{key2}"
+                           type="checkbox"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="gpsId">GPS</label>
+                    <input class="form-check-input" id="gpsId"
+                           th:field="*{gps}"
+                           type="checkbox"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="technicalInspectionEnd">Technical Inspection End</label>
+                    <input class="form-control" id="technicalInspectionEnd"
+                           placeholder="Enter technicalInspectionEnd"
+                           required
+                           th:field="*{technicalInspectionEnd}"
+                           type="date"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="gasInspectionEnd">Technical Gas InspectionEnd End</label>
+                    <input class="form-control" id="gasInspectionEnd"
+                           placeholder="Enter gasInspectionEnd"
+                           th:field="*{gasInspectionEnd}"
+                           type="date"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="commentId">Comment</label>
+                <textarea class="form-control"
+                          id="commentId"
+                          placeholder="Enter Comment"
+                          th:field="*{comment}"/>
+            </div>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add',
+            cancelHref='/cars'
+        )">
+        </div>
+    </form>
+</div>
+
+

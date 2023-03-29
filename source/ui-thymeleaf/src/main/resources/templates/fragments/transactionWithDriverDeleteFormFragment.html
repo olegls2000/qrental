@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Transaction',
+            closeRef='/balances/driver/'+${driverId},
+            content=~{fragments/transactionWithDriverDeleteFormFragment.html :: deleteForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/transactions/delete/driver/{driverId}(driverId = ${driverId})}"
+      th:object="${deleteRequest}"
+      method="post">
+    <input id="transactionId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text="${objectInfo}">???</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/balances/driver/'+${driverId}
+        )">
+    </div>
+</form>

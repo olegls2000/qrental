@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Call Sign',
+            closeRef='/call-signs',
+            content=~{fragments/callSignDeleteFormFragment.html :: deleteForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/call-signs/delete}"
+      th:object="${deleteRequest}"
+      method="post">
+    <input id="id" required
+           th:field="*{id}"
+           type="number"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text=${objectInfo}>???</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/call-signs'
+        )">
+    </div>
+</form>

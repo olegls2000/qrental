@@ -1,0 +1,49 @@
+<table th:fragment="transactionTable" class="table table-striped table-bordered">
+    <tr>
+        <th>
+            <a class="btn btn-sm btn-success"
+               href="/transactions/add-form"
+               role="button"
+               aria-controls="offcanvasExample">
+                <span class="bi-plus-circle"></span>
+                Add new Transaction
+            </a>
+        </th>
+        <th>Transaction Type</th>
+        <th>Driver</th>
+        <th>Call Sign</th>
+        <th>Amount</th>
+        <th>Week</th>
+        <th>Date</th>
+        <th>Date Stamp</th>
+        <th>Comment</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(transactions)}">
+        <td colspan="5">No Transactions</td>
+    </tr>
+    <tr th:each="transaction : ${transactions}">
+        <td>
+            <a class="btn btn-sm btn-warning"
+               th:href="@{/transactions/update-form/{id}(id=${transaction.id})}">
+                <span class="bi-pencil-square"></span>
+                Edit</a>
+            <a class="btn btn-sm btn-danger"
+               th:href="@{/transactions/delete-form/{id}(id=${transaction.id})}">
+                <span class="bi-trash"></span>
+                Delete</a>
+        </td>
+        <td th:text="${transaction.type}">???</td>
+        <td th:text="${transaction.driverInfo}">???</td>
+        <td th:text="${transaction.callSign}" >... </td>
+        <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+            th:classappend="${transaction.realAmount<0} ?
+                'text-danger bg-danger border-danger'
+                : 'text-success bg-success border-success'"
+            th:text="${transaction.realAmount}">???
+        </td>
+        <td th:text="${transaction.weekNumber}">???</td>
+        <td th:text="${transaction.date}">???</td>
+        <td th:text="${transaction.dateStamp}">???</td>
+        <td th:text="${transaction.comment}">???</td>
+    </tr>
+</table>

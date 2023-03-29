@@ -1,0 +1,32 @@
+<div th:fragment="calculationsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <h2 class="py-3">Rent Calculation</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/calculations/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Calculate
+                </a>
+            </th>
+            <th>Action Date</th>
+            <th>Transaction Count</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(calculations)}">
+            <td colspan="5">No Rent Calculations were done yet</td>
+        </tr>
+        <tr th:each="calculation : ${calculations}">
+            <td><a class="btn btn-sm btn-warning"
+                   th:href="@{/calculations/transactions/{id}(id=${calculation.id})}">
+                <span class="bi bi-card-checklist"></span>
+                Details</a></td>
+            <td th:text="${calculation.actionDate}">???</td>
+            <td th:text="${calculation.transactionCount}">???</td>
+            <td th:text="${calculation.comment}">???</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,68 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Link',
+            closeRef='/links',
+            content=~{fragments/linkUpdateFormFragment.html :: updateForm}
+        )">
+    </div>
+</div>
+<form th:fragment="updateForm"
+      th:action="@{/links/update}"
+      th:object="${updateRequest}"
+      method="post">
+
+    <input id="linkId" required
+           th:field="*{id}"
+           type="number"
+           hidden/>
+
+    <div class="mb-3">
+        <label class="form-label text-muted" for="driverId">Driver</label>
+        <select id="driverId" class="form-select"
+                th:field="*{driverId}">
+            <option th:each="driver : ${drivers}"
+                    th:value="${driver.driverId}"
+                    th:text="|${driver.firstName} ${driver.lastName}. Total: ${driver.total} EURO|"></option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="carId">Car</label>
+        <select id="carId" class="form-select"
+                th:field="*{carId}">
+            <option th:each="car: ${cars}"
+                    th:value="${car.id}"
+                    th:text="|${car.regNumber}|"></option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="dateStart"> Date Start</label>
+                <input class="form-control" id="dateStart" placeholder="Enter Start Date" required
+                       th:field="*{dateStart}"
+                       type="date"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="dateEnd"> Date End</label>
+                <input class="form-control" id="dateEnd" placeholder="Enter  Date End"
+                       th:field="*{dateEnd}"
+                       type="date"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="comment">Comment</label>
+        <textarea class="form-control"
+                  id="comment"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/links'
+        )">
+    </div>
+</form>

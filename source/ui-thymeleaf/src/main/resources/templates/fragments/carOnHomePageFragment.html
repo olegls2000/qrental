@@ -1,0 +1,42 @@
+<div th:fragment="carOnHomePage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+
+    <h2 class="py-3">Free Cars</h2>
+    <table  class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/links/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Add New Link
+                </a>
+            </th>
+            <th>REG Number</th>
+            <th>Release Date</th>
+            <th>Manufacturer</th>
+            <th>Model</th>
+            <th>Gear Type</th>
+            <th>Fuel Type</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(cars)}">
+            <td colspan="5">No cars</td>
+        </tr>
+        <tr th:each="car : ${cars}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/cars/update-form/{id}(id=${car.id})}">
+                    <span class="bi-pencil-square"></span>
+                    Edit</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/cars/delete-form/{id}(id=${car.id})}">
+                    <span class="bi-trash"></span>
+                    Delete</a>
+            </td>
+
+        </tr>
+    </table>
+</div>

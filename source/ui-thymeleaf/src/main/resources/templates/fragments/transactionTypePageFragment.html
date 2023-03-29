@@ -1,0 +1,44 @@
+<div th:fragment="transactionTypePage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/transactionTabFragment :: transactionTabs('transactionTypes')"></ul>
+    <h2 class="py-3">Transaction Types</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/transaction-types/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Add a new Type
+                </a>
+            </th>
+            <th>Name</th>
+            <th>Negative</th>
+            <th>Nimi ( estonian language )</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(transactionTypes)}">
+            <td colspan="5">No Transaction Types</td>
+        </tr>
+        <tr th:each="transactionType : ${transactionTypes}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/transaction-types/update-form/{id}(id=${transactionType.id})}">
+                    <span class="bi-pencil-square"></span>
+                    Edit</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/transaction-types/delete-form/{id}(id=${transactionType.id})}">
+                    <span class="bi-trash"></span>
+                    Delete</a>
+            </td>
+            <td th:text="${transactionType.name}"></td>
+            <td th:if="${transactionType.negative}"
+                class = "text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">Negative</td>
+            <td th:unless="${transactionType.negative}"
+                class = "text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">Positive</td>
+            <td th:text="${transactionType.description}"></td>
+            <td th:text="${transactionType.comment}"></td>
+        </tr>
+    </table>
+</div>

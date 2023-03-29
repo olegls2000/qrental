@@ -1,0 +1,59 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Constant',
+            closeRef='/settings',
+            content=~{fragments/constantAddFormFragment.html :: addForm}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/settings/add}"
+          th:object="${constantAddCommand}">
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="constantId">Constant name</label>
+                    <input class="form-control" id="constantId"
+                           placeholder="Enter Constant name"
+                           required
+                           th:field="*{name}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="descriptionId">Description</label>
+                    <input class="form-control" id="descriptionID" placeholder="Enter  Description" required
+                           th:field="*{description}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="negativeId">Negative</label>
+            <input class="form-check-input" id="negativeId"
+                   th:field="*{negative}"
+                   type="checkbox"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-muted" for="valueId">Value</label>
+            <input class="form-control"
+                   id="valueId"
+                   placeholder="Enter Value" required
+                   th:field="*{value}"
+                   type="number" step="any" />
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add',
+            cancelHref='/settings'
+        )">
+        </div>
+    </form>
+</div>
+
+

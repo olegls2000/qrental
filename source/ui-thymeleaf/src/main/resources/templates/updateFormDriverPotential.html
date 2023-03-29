@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headFragment.html :: qrental-head">
+</head>
+<body class="container">
+<nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+
+                <h4>Update Potential Driver</h4>
+
+                <form method="post"
+                      th:action="@{/drivers-potential/update}"
+                      th:object="${driverUpdateCommand}">
+
+
+                    <input id="driverId" required
+                           th:field="*{id}"
+                           type="text"
+                           hidden/>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="firstName">First Name</label>
+                                <input class="form-control" id="firstName" placeholder="Enter First Name" required
+                                       th:field="*{firstName}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="lastName">Last Name</label>
+                                <input class="form-control" id="lastName" placeholder="Enter Last Name" required
+                                       th:field="*{lastName}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="phone">Phone</label>
+                                <input class="form-control" id="phone" placeholder="Enter Phone" required
+                                       th:field="*{phone}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="comment">Comment</label>
+                                <textarea class="form-control"
+                                          id="comment"
+                                          placeholder="Enter Comment"
+                                          th:field="*{comment}"/>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-4">
+                                <input class="btn btn-success"
+                                       type="submit"
+                                       value="Update">
+                            </div>
+                            <div class="col-4">
+                                <a class="btn btn-secondary"
+                                   href="/">
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<form th:fragment="searchForm"
+      th:action="@{/balances/driver/{id}(id=${driverId})}"
+      th:object="${transactionFilterRequest}"
+      method="post">
+
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="text"
+           hidden/>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="yearId">Select Year</label>
+                <select id="yearId" class="form-select"
+                        th:field="*{year}">
+                    <option th:each="year: ${years}"
+                            th:value="${year}"
+                            th:text="|${year}|"></option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="weekId">Select Week</label>
+                <select id="weekId" class="form-select"
+                        th:field="*{week}">
+                    <option th:each="week: ${weeks}"
+                            th:value="${week}"
+                            th:text="|${week.displayValue}|"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <input class="btn btn-sm btn-success"
+                   type="submit"
+                   value="Apply Filter">
+            <i class="fa fa-home"></i>
+            </input>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-sm btn-danger"
+               th:href="@{/balances/driver/{id}(id=${driverId})}">
+                <span class="bi bi-x-circle"></span>
+                Clean</a>
+        </div>
+    </div>
+</form>

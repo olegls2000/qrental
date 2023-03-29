@@ -1,0 +1,12 @@
+<div th:fragment="addUpdateButtons(submitValue, cancelHref)"
+     class="row justify-content-center">
+    <div class="col-2">
+        <input class="btn btn-success"
+               type="submit"
+               th:value="${submitValue}"
+               value="Submit">
+    </div>
+    <div class="col-2">
+        <a class="btn btn-secondary" href="#" onclick="history.back();">Cancel</a>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Call Sign',
+            closeRef='/call-signs',
+            content=~{fragments/callSignAddFormFragment.html :: addForm}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/call-signs/add}"
+          th:object="${addRequest}">
+        <div th:if="${addRequest.hasViolations}"
+             class="mt-3 mb-3">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-danger fs-6"
+                    th:each="violation : ${addRequest.violations}"
+                    th:text="${violation}">???
+                </li>
+            </ul>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="callSignId">Call Sign</label>
+                <input class="form-control" id="callSignId" placeholder="Enter  Call Sign"
+                       required
+                       th:field="*{callSign}"
+                       type="number"/>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add',
+            cancelHref='/call-signs'
+        )">
+        </div>
+    </form>
+</div>
+
+

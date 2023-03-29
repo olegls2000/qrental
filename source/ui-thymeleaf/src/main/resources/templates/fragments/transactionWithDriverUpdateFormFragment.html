@@ -1,0 +1,69 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Transaction',
+            closeRef='/balances/driver/'+ ${driverId},
+            content=~{fragments/transactionWithDriverUpdateFormFragment.html :: updateForm}
+        )">
+    </div>
+</div>
+<form th:fragment="updateForm"
+      th:action="@{/transactions/update/driver}"
+      th:object="${updateRequest}"
+      method="post">
+    <div class="mb-3">
+        <p class="fs-6 text-center"
+           th:text="|for driver: ${driverInfo}|">???</p>
+    </div>
+    <input id="transactionId" required
+           th:field="*{id}"
+           type="number"
+           hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="number"
+           hidden/>
+    <input id="dateStampId" required
+           th:field="*{dateStamp}"
+           type="date"
+           hidden=""/>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted text-muted" for="transactionTypeId">Transaction
+                    type</label>
+                <select id="transactionTypeId" class="form-select"
+                        th:field="*{transactionTypeId}">
+                    <option th:each="transactionType : ${transactionTypes}"
+                            th:value="${transactionType.id}"
+                            th:text="${transactionType.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="amountId">Amount</label>
+                <input class="form-control" id="amountId" placeholder="Enter  amount" required
+                       th:field="*{amount}"
+                       type="number" step=0.01 />
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="dateId">Date</label>
+        <input class="form-control" id="dateId" placeholder="Enter date" required
+               th:field="*{date}"
+               type="date"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="commentId">Comment</label>
+        <textarea class="form-control"
+                  id="commentId"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/balances/driver/'+ ${driverId}
+        )">
+    </div>
+</form>

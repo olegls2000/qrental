@@ -1,0 +1,10 @@
+<ul th:fragment="callsignTabs(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'callSignLinks'} ? active : ''"
+       href="/call-sign-links">Call Sign Links</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'callSigns'} ? active : ''"
+       href="/call-signs">Call Signs</a>
+  </li>
+</ul>

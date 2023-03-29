@@ -1,0 +1,60 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Transaction Type',
+            closeRef='/transaction-types',
+            content=~{fragments/transactionTypeUpdateFormFragment.html :: updateForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="updateForm"
+      method="post"
+      th:action="@{/transaction-types/update}"
+      th:object="${updateRequest}">
+
+    <input id="transactionTypeId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="transactionTypeId">Transaction type name</label>
+                <input class="form-control" id="transactionTypeId" placeholder="Enter Transaction type "
+                       required
+                       th:field="*{name}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="descriptionId">Transaction Type On Estonian Language</label>
+                <input class="form-control" id="descriptionId" placeholder="Enter Tr.Type On Estonian Language"
+                       th:field="*{description}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-check-label text-muted" for="negativeId">Negative</label>
+        <input class="form-check-input" id="negativeId"
+               th:field="*{negative}"
+               type="checkbox"/>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-muted" for="commentId">Comment</label>
+        <textarea class="form-control"
+                  id="commentId"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/transaction-types'
+        )">
+    </div>
+</form>

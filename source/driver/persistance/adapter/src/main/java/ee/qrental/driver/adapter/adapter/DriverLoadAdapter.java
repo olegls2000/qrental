@@ -1,0 +1,34 @@
+package ee.qrental.driver.adapter.adapter;
+
+import ee.qrental.driver.adapter.mapper.DriverAdapterMapper;
+import ee.qrental.driver.adapter.repository.DriverRepository;
+import ee.qrental.driver.api.out.DriverLoadPort;
+import ee.qrental.driver.domain.Driver;
+import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+
+@AllArgsConstructor
+public class DriverLoadAdapter
+        implements DriverLoadPort {
+
+    private final DriverRepository repository;
+    private final DriverAdapterMapper mapper;
+
+    @Override
+    public List<Driver> loadAll() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::mapToDomain)
+                .collect(toList());
+    }
+
+    @Override
+    public Driver loadById(Long id) {
+        return mapper.mapToDomain(
+                repository.getReferenceById(id));
+    }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headFragment.html :: qrental-head">
+</head>
+<body class="container">
+<nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-7">
+        <div class="card">
+            <div class="card-body">
+
+
+                <h4>Update NEW Driver</h4>
+
+
+                <form method="post"
+                      th:action="@{/drivers/update}"
+                      th:object="${driverUpdateCommand}">
+
+                    <input id="driverId" required
+                           th:field="*{id}"
+                           type="text"
+                           hidden/>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="firstName">First Name</label>
+                                <input class="form-control" id="firstName" placeholder="Enter First Name" required
+                                       th:field="*{firstName}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="lastName">Last Name</label>
+                                <input class="form-control" id="lastName" placeholder="Enter Last Name" required
+                                       th:field="*{lastName}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="isikukood">Isikukood</label>
+                                <input class="form-control" id="isikukood" placeholder="Enter Isikukood" required
+                                       th:field="*{isikukood}"
+                                       type="number"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="phone">Phone</label>
+                                <input class="form-control" id="phone" placeholder="Enter Phone" required
+                                       th:field="*{phone}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="email">E-mail</label>
+                                <input class="form-control" id="email" placeholder="Enter E-mail" required
+                                       th:field="*{email}"
+                                       type="email"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="company">Compnay</label>
+                                <input class="form-control" id="company" placeholder="Enter Company Name"
+                                       th:field="*{company}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="regNumber">RegNumber</label>
+                                <input class="form-control" id="regNumber" placeholder="Enter Reg Number"
+                                       th:field="*{regNumber}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="companyAddress">CompanyAddress</label>
+                                <input class="form-control" id="companyAddress" placeholder="Enter Company Address"
+                                       th:field="*{companyAddress}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="driverLicenseNumber">Driver License Number</label>
+                                <input class="form-control" id="driverLicenseNumber"
+                                       placeholder="Enter Driver License Number"
+                                       required
+                                       th:field="*{driverLicenseNumber}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="driverLicenseExp">Driver License Exp</label>
+                                <input class="form-control" id="driverLicenseExp"
+                                       placeholder="Enter Driver License Exp"
+                                       required
+                                       th:field="*{driverLicenseExp}"
+                                       type="date"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="taxiLicense">Driver TAXI License </label>
+                                <input class="form-control" id="taxiLicense"
+                                       placeholder="Enter Driver TAXI License "
+
+                                       th:field="*{taxiLicense}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label for="address">Driver Address</label>
+                        <input class="form-control" id="address" placeholder="Enter Driver Address"
+                               required
+                               th:field="*{address}"
+                               type="text"/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-muted" for="commentId">Comment</label>
+                            <textarea class="form-control"
+                                      id="commentId"
+                                      placeholder="Enter Comment"
+                                      th:field="*{comment}"/>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <input class="btn btn-success"
+                                   type="submit"
+                                   value="Update">
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-secondary"
+                               href="/drivers">
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+</body>
+</html>
