@@ -20,8 +20,8 @@ public class DriverRepositoryImpl implements DriverRepository {
     }
 
     @Override
-    public DriverJakartaEntity save(final DriverJakartaEntity jpaEntity) {
-        return springDataRepository.save(jpaEntity);
+    public DriverJakartaEntity save(final DriverJakartaEntity entity) {
+        return springDataRepository.save(entity);
     }
 
     @Override

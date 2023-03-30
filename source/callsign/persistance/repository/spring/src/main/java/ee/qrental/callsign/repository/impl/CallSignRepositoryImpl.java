@@ -17,8 +17,8 @@ public class CallSignRepositoryImpl implements CallSignRepository {
   }
 
   @Override
-  public CallSignJakartaEntity save(final CallSignJakartaEntity jpaEntity) {
-    return springDataRepository.save(jpaEntity);
+  public CallSignJakartaEntity save(final CallSignJakartaEntity entity) {
+    return springDataRepository.save(entity);
   }
 
   @Override

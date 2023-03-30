@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.invoice.spring.config.InvoiceAdapterConfig,\
+ee.qrental.invoice.spring.config.InvoiceMapperConfig,\
+ee.qrental.invoice.spring.config.InvoiceServiceConfig,\
+ee.qrental.invoice.spring.config.InvoiceRepositoryConfig

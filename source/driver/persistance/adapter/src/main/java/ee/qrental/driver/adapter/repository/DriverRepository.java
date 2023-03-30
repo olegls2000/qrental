@@ -6,7 +6,7 @@ import java.util.List;
 public interface DriverRepository {
   List<DriverJakartaEntity> findAll();
 
-  DriverJakartaEntity save(final DriverJakartaEntity jpaEntity);
+  DriverJakartaEntity save(final DriverJakartaEntity entity);
 
   DriverJakartaEntity getReferenceById(final Long id);
 

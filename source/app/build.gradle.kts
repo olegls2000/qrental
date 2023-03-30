@@ -16,6 +16,12 @@ dependencies {
     implementation(project(":source:callsign:persistance:adapter"))
     implementation(project(":source:callsign:persistance:repository:spring"))
 
+
+    implementation(project(":source:invoice:config:spring"))
+    implementation(project(":source:invoice:core"))
+    implementation(project(":source:invoice:persistance:adapter"))
+    implementation(project(":source:invoice:persistance:repository:spring"))
+
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

@@ -5,23 +5,23 @@ import ee.qrental.driver.entity.jakarta.DriverJakartaEntity;
 
 public class DriverAdapterMapper {
 
-  public Driver mapToDomain(final DriverJakartaEntity jpaEntity) {
+  public Driver mapToDomain(final DriverJakartaEntity entity) {
     return Driver.builder()
-        .id(jpaEntity.getId())
-        .active(jpaEntity.getActive())
-        .firstName(jpaEntity.getFirstName())
-        .lastName(jpaEntity.getLastName())
-        .isikukood(jpaEntity.getIsikukood())
-        .phone(jpaEntity.getPhone())
-        .email(jpaEntity.getEmail())
-        .company(jpaEntity.getCompany())
-        .regNumber(jpaEntity.getRegNumber())
-        .companyAddress(jpaEntity.getCompanyAddress())
-        .driverLicenseNumber(jpaEntity.getDriverLicenseNumber())
-        .taxiLicense(jpaEntity.getTaxiLicense())
-        .address(jpaEntity.getAddress())
-        .deposit(jpaEntity.getDeposit())
-        .comment(jpaEntity.getComment())
+        .id(entity.getId())
+        .active(entity.getActive())
+        .firstName(entity.getFirstName())
+        .lastName(entity.getLastName())
+        .isikukood(entity.getIsikukood())
+        .phone(entity.getPhone())
+        .email(entity.getEmail())
+        .company(entity.getCompany())
+        .regNumber(entity.getRegNumber())
+        .companyAddress(entity.getCompanyAddress())
+        .driverLicenseNumber(entity.getDriverLicenseNumber())
+        .taxiLicense(entity.getTaxiLicense())
+        .address(entity.getAddress())
+        .deposit(entity.getDeposit())
+        .comment(entity.getComment())
         .build();
   }
 

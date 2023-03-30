@@ -15,13 +15,13 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
   private final DriverAdapterMapper mapper;
 
   @Override
-  public Driver add(final Driver driver) {
-    return mapper.mapToDomain(repository.save(mapper.mapToEntity(driver)));
+  public Driver add(final Driver domain) {
+    return mapper.mapToDomain(repository.save(mapper.mapToEntity(domain)));
   }
 
   @Override
-  public Driver update(final Driver driver) {
-    return mapper.mapToDomain(repository.save(mapper.mapToEntity(driver)));
+  public Driver update(final Driver domain) {
+    return mapper.mapToDomain(repository.save(mapper.mapToEntity(domain)));
   }
 
   @Override

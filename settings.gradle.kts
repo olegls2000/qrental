@@ -36,4 +36,15 @@ include("source:callsign:persistance:repository:spring")
 include("source:callsign:persistance:flyway")
 include("source:callsign:config:spring")
 
+//Invoice domain:
+include("source:invoice:api:in")
+include("source:invoice:api:out")
+include("source:invoice:domain")
+include("source:invoice:core")
+include("source:invoice:persistance:adapter")
+include("source:invoice:persistance:entity")
+include("source:invoice:persistance:repository:spring")
+include("source:invoice:persistance:flyway")
+include("source:invoice:config:spring")
+
 include("source:ui-thymeleaf")
