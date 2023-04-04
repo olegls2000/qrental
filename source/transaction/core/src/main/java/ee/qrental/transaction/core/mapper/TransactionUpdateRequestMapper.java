@@ -18,6 +18,7 @@ public class TransactionUpdateRequestMapper
         .type(TransactionType.builder().id(request.getTransactionTypeId()).build())
         .amount(request.getAmount())
         .date(request.getDate())
+        .withVat(request.getWithVat())
         .comment(request.getComment())
         .build();
   }
@@ -29,6 +30,7 @@ public class TransactionUpdateRequestMapper
         .transactionTypeId(domain.getType().getId())
         .driverId(domain.getDriverId())
         .amount(domain.getRealAmount())
+        .withVat(domain.getWithVat())
         .comment(domain.getComment())
         .date(domain.getDate())
         .build();

@@ -16,6 +16,6 @@ public class TransactionAddRequest extends AbstractAddRequest {
   private BigDecimal amount;
   private Integer weekNumber;
   private LocalDate date = LocalDate.now();
+  private Boolean withVat;
   private String comment;
-  private LocalDate dateStamp = LocalDate.now();
 }

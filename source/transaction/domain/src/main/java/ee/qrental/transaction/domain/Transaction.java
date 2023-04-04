@@ -15,6 +15,7 @@ public class Transaction {
   private Long driverId;
   private BigDecimal amount;
   private LocalDate date;
+  private Boolean withVat;
   private String comment;
 
   public BigDecimal getRealAmount() {

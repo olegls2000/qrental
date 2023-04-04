@@ -29,6 +29,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .callSign(callSign)
         .date(domain.getDate())
         .weekNumber(domain.getWeekNumber())
+        .withVat(domain.getWithVat())
         .comment(domain.getComment())
         .build();
   }

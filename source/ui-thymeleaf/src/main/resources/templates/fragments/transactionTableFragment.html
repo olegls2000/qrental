@@ -15,7 +15,7 @@
         <th>Amount</th>
         <th>Week</th>
         <th>Date</th>
-        <th>Date Stamp</th>
+        <th>With VAT</th>
         <th>Comment</th>
     </tr>
     <tr th:if="${#lists.isEmpty(transactions)}">
@@ -34,7 +34,7 @@
         </td>
         <td th:text="${transaction.type}">???</td>
         <td th:text="${transaction.driverInfo}">???</td>
-        <td th:text="${transaction.callSign}" >... </td>
+        <td th:text="${transaction.callSign}" >???</td>
         <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
             th:classappend="${transaction.realAmount<0} ?
                 'text-danger bg-danger border-danger'
@@ -43,7 +43,7 @@
         </td>
         <td th:text="${transaction.weekNumber}">???</td>
         <td th:text="${transaction.date}">???</td>
-        <td th:text="${transaction.dateStamp}">???</td>
+        <td th:text="${transaction.withVat}">???</td>
         <td th:text="${transaction.comment}">???</td>
     </tr>
 </table>

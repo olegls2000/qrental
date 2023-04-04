@@ -73,11 +73,22 @@
                    th:field="*{amount}"
                    type="number" step=0.01>
         </div>
-        <div class="mb-3">
-            <label class="form-label text-muted" for="dateId">Date</label>
-            <input class="form-control" id="dateId" placeholder="Enter date" required
-                   th:field="*{date}"
-                   type="date"/>
+        <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="dateId">Date</label>
+                <input class="form-control" id="dateId" placeholder="Enter date" required
+                       th:field="*{date}"
+                       type="date"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="withVatId">With VAT</label>
+                <input class="form-check-input" id="withVatId"
+                       th:field="*{withVat}"
+                       type="checkbox"/>
+            </div>
         </div>
         <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>

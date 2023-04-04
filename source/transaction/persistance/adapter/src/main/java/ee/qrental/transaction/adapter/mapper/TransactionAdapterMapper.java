@@ -17,6 +17,7 @@ public class TransactionAdapterMapper {
         .amount(entity.getAmount())
         .type(transactionTypeAdapterMapper.mapToDomain(entity.getType()))
         .date(entity.getDate())
+        .withVat(entity.getWithVat())
         .comment(entity.getComment())
         .build();
   }
@@ -28,6 +29,7 @@ public class TransactionAdapterMapper {
         .driverId(domain.getDriverId())
         .amount(domain.getAmount())
         .date(domain.getDate())
+        .withVat(domain.getWithVat())
         .comment(domain.getComment())
         .build();
   }
