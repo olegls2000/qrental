@@ -14,6 +14,6 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
 
   @Override
   public String toObjectInfo(Invoice domain) {
-    return format("%s %s", domain.getLastName(), domain.getFirstName());
+    return format("%s %s", domain.getDriverCallSign(), domain.getDriverCompany());
   }
 }

@@ -8,6 +8,8 @@ dependencies{
     implementation(project(":source:invoice:api:out"))
     implementation(project(":source:invoice:domain"))
 
+    implementation(project(":source:transaction:api:in"))
+
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

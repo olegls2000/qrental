@@ -11,6 +11,8 @@ dependencies {
     implementation(project(":source:invoice:persistance:flyway"))
     implementation(project(":source:invoice:persistance:adapter"))
     implementation(project(":source:invoice:persistance:repository:spring"))
+    implementation(project(":source:transaction:api:in"))
+
     implementation("org.springframework:spring-context")
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

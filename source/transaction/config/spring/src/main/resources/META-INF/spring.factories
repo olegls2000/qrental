@@ -1,0 +1,10 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.transaction.spring.config.TransactionAdapterConfig,\
+ee.qrental.transaction.spring.config.TransactionMapperConfig,\
+ee.qrental.transaction.spring.config.TransactionServiceConfig,\
+ee.qrental.transaction.spring.config.TransactionRepositoryConfig,\
+ee.qrental.transaction.spring.config.type.TransactionTypeAdapterConfig,\
+ee.qrental.transaction.spring.config.type.TransactionTypeMapperConfig,\
+ee.qrental.transaction.spring.config.type.TransactionTypeServiceConfig,\
+ee.qrental.transaction.spring.config.type.TransactionTypeRepositoryConfig,\
+ee.qrental.transaction.spring.config.balance.BalanceServiceConfig

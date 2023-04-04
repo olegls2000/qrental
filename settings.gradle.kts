@@ -47,4 +47,15 @@ include("source:invoice:persistance:repository:spring")
 include("source:invoice:persistance:flyway")
 include("source:invoice:config:spring")
 
+//Transaction domain:
+include("source:transaction:api:in")
+include("source:transaction:api:out")
+include("source:transaction:domain")
+include("source:transaction:core")
+include("source:transaction:persistance:adapter")
+include("source:transaction:persistance:entity")
+include("source:transaction:persistance:repository:spring")
+include("source:transaction:persistance:flyway")
+include("source:transaction:config:spring")
+
 include("source:ui-thymeleaf")
