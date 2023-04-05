@@ -1,5 +1,6 @@
 package ee.qrental.driver.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -14,13 +15,14 @@ public class Driver {
   private Long isikukood;
   private String phone;
   private String email;
-  private String company;
-  private String regNumber;
-  private String companyAddress;
+  private String address;
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp;
+  private String companyName;
+  private String companyRegistrationNumber;
+  private String companyAddress;
+  private String companyVat;
   private String taxiLicense;
-  private String address;
+  private BigDecimal deposit;
   private String comment;
-  private Long deposit;
 }

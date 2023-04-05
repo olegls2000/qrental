@@ -1,6 +1,6 @@
 package ee.qrental.driver.api.in.response;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;import java.time.LocalDate;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -14,13 +14,13 @@ public class DriverResponse {
   private Long isikukood;
   private String phone;
   private String email;
-  private String iban1;
-  private String iban2;
-  private String iban3;
+  private String address;
+  private String companyName;
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp;
+  private String companyRegistrationNumber;
+  private String companyAddress;
   private String taxiLicense;
-  private String address;
+  private BigDecimal deposit;
   private String comment;
-  private Long deposit;
 }

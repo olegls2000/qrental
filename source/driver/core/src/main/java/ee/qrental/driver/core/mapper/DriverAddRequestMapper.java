@@ -9,22 +9,22 @@ public class DriverAddRequestMapper
 
     @Override
     public Driver toDomain(DriverAddRequest request) {
-        return Driver.builder()
-                .id(null)
-                .active(request.getActive())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .isikukood(request.getIsikukood())
-                .phone(request.getPhone())
-                .email(request.getEmail())
-                .company(request.getCompany())
-                .regNumber(request.getRegNumber())
-                .companyAddress(request.getCompanyAddress())
-                .driverLicenseNumber(request.getDriverLicenseNumber())
-                .taxiLicense(request.getTaxiLicense())
-                .address(request.getAddress())
-                .deposit(request.getDeposit())
-                .comment(request.getComment())
-                .build();
+    return Driver.builder()
+        .id(null)
+        .active(request.getActive())
+        .firstName(request.getFirstName())
+        .lastName(request.getLastName())
+        .isikukood(request.getIsikukood())
+        .phone(request.getPhone())
+        .email(request.getEmail())
+        .companyName(request.getCompany())
+        .companyRegistrationNumber(request.getRegNumber())
+        .companyAddress(request.getCompanyAddress())
+        .driverLicenseNumber(request.getDriverLicenseNumber())
+        .taxiLicense(request.getTaxiLicense())
+        .address(request.getAddress())
+        .deposit(request.getDeposit())
+        .comment(request.getComment())
+        .build();
     }
 }

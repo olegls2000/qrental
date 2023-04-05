@@ -3,6 +3,7 @@ package ee.qrental.driver.entity.jakarta;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class DriverJakartaEntity {
-
   @Id
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
@@ -41,14 +41,17 @@ public class DriverJakartaEntity {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "company")
-  private String company;
+  @Column(name = "company_name")
+  private String companyName;
 
-  @Column(name = "reg_number")
-  private String regNumber;
+  @Column(name = "company_registration_number")
+  private String companyRegistrationNumber;
 
   @Column(name = "company_address")
   private String companyAddress;
+
+  @Column(name = "company_vat")
+  private String companyVat;
 
   @Column(name = "driver_license_number")
   private String driverLicenseNumber;
@@ -66,5 +69,5 @@ public class DriverJakartaEntity {
   private String comment;
 
   @Column(name = "deposit")
-  private Long deposit;
+  private BigDecimal deposit;
 }

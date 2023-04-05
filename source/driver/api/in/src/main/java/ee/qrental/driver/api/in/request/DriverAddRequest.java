@@ -1,6 +1,7 @@
 package ee.qrental.driver.api.in.request;
 
 import ee.qrental.common.core.in.request.AbstractAddRequest;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,5 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String taxiLicense;
   private String address;
   private String comment;
-  private Long deposit;
+  private BigDecimal deposit;
 }
