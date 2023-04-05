@@ -5,7 +5,7 @@ import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addFilterOptionsToModel;
 
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,9 +34,9 @@ public class TransactionQueryController {
 
   @PostMapping
   public String getPageWithFilteredTransactions(
-      @ModelAttribute final TransactionFilterRequest filterRequest, final Model model) {
+      @ModelAttribute final YearAndWeekAndDriverFilter filterRequest, final Model model) {
     addFilterOptionsToModel(model);
-    addTransactionDataToModel(transactionQuery.getAllByFilterRequest(filterRequest), model);
+    addTransactionDataToModel(transactionQuery.getAllByFilter(filterRequest), model);
 
     return "transactions";
   }

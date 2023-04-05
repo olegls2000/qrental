@@ -32,15 +32,13 @@ public class InvoiceServiceConfig {
       final InvoiceDeletePort deletePort,
       final InvoiceLoadPort loadPort,
       final InvoiceAddRequestMapper addRequestMapper,
-      final InvoiceUpdateRequestMapper updateRequestMapper,
-      final GetTransactionQuery transactionQuery) {
+      final InvoiceUpdateRequestMapper updateRequestMapper) {
     return new InvoiceUseCaseService(
         addPort,
         updatePort,
         deletePort,
         loadPort,
         addRequestMapper,
-        updateRequestMapper,
-        transactionQuery);
+        updateRequestMapper);
   }
 }

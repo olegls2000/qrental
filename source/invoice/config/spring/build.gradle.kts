@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":source:invoice:persistance:adapter"))
     implementation(project(":source:invoice:persistance:repository:spring"))
     implementation(project(":source:transaction:api:in"))
+    implementation(project(":source:driver:api:in"))
 
     implementation("org.springframework:spring-context")
     compileOnly(libs.q.lombok)

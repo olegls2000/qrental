@@ -1,0 +1,47 @@
+<div th:fragment="invoicePage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <h1 class="py-5">Invoices</h1>
+
+    <table  class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/invoices/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Create a New Invoice
+                </a>
+            </th>
+            <th>Call Sign</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Isikukood</th>
+            <th>Deposit</th>
+            <th>Phone</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(invoices)}">
+            <td colspan="5">No invoices</td>
+        </tr>
+        <tr th:each="invoice : ${invoices}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/invoices/update-form/{id}(id=${invoice.id})}">
+                    <span class="bi-pencil-square"></span>
+                    Edit</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/invoices/delete-form/{id}(id=${invoice.id})}">
+                    <span class="bi-trash"></span>
+                    Delete</a>
+            </td>
+            <td th:text="${invoice.id}"></td>
+            <td th:text="${invoice.lastName}"></td>
+            <td th:text="${invoice.firstName}"></td>
+            <td th:text="${invoice.isikukood}"></td>
+            <td th:text="${invoice.deposit}"></td>
+            <td th:text="${invoice.phone}"></td>
+            <td th:text="${invoice.comment}"></td>
+        </tr>
+    </table>
+</div>

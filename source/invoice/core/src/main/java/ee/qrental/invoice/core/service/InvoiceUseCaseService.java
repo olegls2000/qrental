@@ -6,15 +6,12 @@ import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceAddUseCase;
 import ee.qrental.invoice.api.in.usecase.InvoiceDeleteUseCase;
 import ee.qrental.invoice.api.in.usecase.InvoiceUpdateUseCase;
-
 import ee.qrental.invoice.api.out.InvoiceAddPort;
 import ee.qrental.invoice.api.out.InvoiceDeletePort;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.api.out.InvoiceUpdatePort;
 import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
 import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -27,20 +24,13 @@ public class InvoiceUseCaseService
   private final InvoiceLoadPort loadPort;
   private final InvoiceAddRequestMapper addRequestMapper;
   private final InvoiceUpdateRequestMapper updateRequestMapper;
-  private final GetTransactionQuery transactionQuery;
 
   @Override
   public Long add(final InvoiceAddRequest request) {
-    final var invoiceId = addPort.add(addRequestMapper.toDomain(request)).getId();
-    final var transactionFilterRequest =
-        TransactionFilterRequest.builder()
-            .driverId(request.getDriverId())
-            .build();
+    final var invoice = addRequestMapper.toDomain(request);
+    final var savedInvoice = addPort.add(invoice);
 
-    final var transactions = transactionQuery.getAllByFilterRequest(transactionFilterRequest);
-
-
-    return invoiceId;
+    return savedInvoice.getId();
   }
 
   @Override

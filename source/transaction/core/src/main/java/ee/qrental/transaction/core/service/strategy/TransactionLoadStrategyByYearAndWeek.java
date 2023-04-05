@@ -2,7 +2,7 @@ package ee.qrental.transaction.core.service.strategy;
 
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.QWeek;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.util.List;
@@ -14,12 +14,12 @@ public class TransactionLoadStrategyByYearAndWeek implements TransactionLoadStra
   private final TransactionLoadPort transactionLoadPort;
 
   @Override
-  public boolean canApply(TransactionFilterRequest request) {
+  public boolean canApply(YearAndWeekAndDriverFilter request) {
     return request.getDriverId() == null && request.getWeek() != QWeek.ALL;
   }
 
   @Override
-  public List<Transaction> load(TransactionFilterRequest request) {
+  public List<Transaction> load(YearAndWeekAndDriverFilter request) {
     final var year = request.getYear();
     final var weekNumber = request.getWeek().getNumber();
 

@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:transaction:api:in"))
+    implementation(project(":source:invoice:api:in"))
     implementation(project(":source:common"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")

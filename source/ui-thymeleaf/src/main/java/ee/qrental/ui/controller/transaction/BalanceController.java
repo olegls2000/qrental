@@ -5,7 +5,7 @@ import static ee.qrental.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,11 +42,10 @@ public class BalanceController {
   @PostMapping(value = "/driver/{id}")
   public String getFilteredDriverTransactionsView(
       @PathVariable("id") long id,
-      @ModelAttribute final TransactionFilterRequest transactionFilterRequest,
+      @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest,
       final Model model) {
     TransactionFilterRequestUtils.addFilterOptionsToModel(model);
-    addTransactionDataToModel(
-        transactionQuery.getAllByFilterRequest(transactionFilterRequest), model);
+    addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     addDriverDataToModel(id, model);
 
     return "detailView/balanceDriver";

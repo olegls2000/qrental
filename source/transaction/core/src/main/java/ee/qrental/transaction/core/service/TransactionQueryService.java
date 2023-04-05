@@ -4,7 +4,8 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
@@ -44,24 +45,30 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByCalculationId(Long calculationId) {
+  public List<TransactionResponse> getAllByCalculationId(final Long calculationId) {
     return mapToTransactionResponseList(transactionLoadPort.loadAllByCalculationId(calculationId));
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilterRequest(final TransactionFilterRequest request) {
+  public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverFilter filter) {
     return mapToTransactionResponseList(
         loadStrategies.stream()
-            .filter(strategy -> strategy.canApply(request))
+            .filter(strategy -> strategy.canApply(filter))
             .findFirst()
             .orElseThrow(
-                () ->
-                    new RuntimeException("No Load Strategy was found for the request: " + request))
-            .load(request));
+                () -> new RuntimeException("No Load Strategy was found for the request: " + filter))
+            .load(filter));
   }
 
   @Override
-  public TransactionUpdateRequest getUpdateRequestById(Long id) {
+  public List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter) {
+    return mapToTransactionResponseList(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+            filter.getDriverId(), filter.getDateStart(), filter.getDatEnd()));
+  }
+
+  @Override
+  public TransactionUpdateRequest getUpdateRequestById(final Long id) {
     return updateRequestMapper.toRequest(transactionLoadPort.loadById(id));
   }
 

@@ -9,11 +9,23 @@ import ee.qrental.invoice.domain.Invoice;
 public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, Invoice> {
   @Override
   public InvoiceResponse toResponse(final Invoice domain) {
-    return InvoiceResponse.builder().build();
+    return InvoiceResponse.builder()
+        .id(domain.getId())
+        .number(domain.getNumber())
+        .driverCompany(domain.getDriverCompany())
+        .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())
+        .driverCompanyAddress(domain.getDriverCompanyAddress())
+        .qFirmName(domain.getQFirmName())
+        .qFirmRegNumber(domain.getQFirmRegNumber())
+        .qFirmVatNumber(domain.getQFirmVatNumber())
+        .qFirmBank(domain.getQFirmBank())
+        .created(domain.getCreated())
+        .comment(domain.getComment())
+        .build();
   }
 
   @Override
   public String toObjectInfo(Invoice domain) {
-    return format("%s %s", domain.getDriverCallSign(), domain.getDriverCompany());
+    return format("Receiver: %s, Sender: %s", domain.getDriverCompany(), domain.getQFirmName());
   }
 }

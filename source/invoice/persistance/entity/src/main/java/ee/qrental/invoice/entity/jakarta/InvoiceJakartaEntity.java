@@ -60,7 +60,7 @@ public class InvoiceJakartaEntity {
   @Column(name = "q_firm_bank")
   private String qFirmBank;
 
-  @Column(name = "createdd")
+  @Column(name = "created")
   private LocalDate created;
 
   @Column(name = "comment")

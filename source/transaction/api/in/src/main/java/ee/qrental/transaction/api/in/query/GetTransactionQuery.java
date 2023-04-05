@@ -1,7 +1,8 @@
 package ee.qrental.transaction.api.in.query;
 
 import ee.qrental.common.core.in.query.BaseGetQuery;
-import ee.qrental.transaction.api.in.request.TransactionFilterRequest;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.util.List;
@@ -13,5 +14,7 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByCalculationId(final Long calculationId);
 
-  List<TransactionResponse> getAllByFilterRequest(final TransactionFilterRequest filterRequest);
+  List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverFilter filter);
+
+  List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter);
 }

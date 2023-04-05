@@ -1,4 +1,4 @@
-package ee.qrental.transaction.api.in.request;
+package ee.qrental.transaction.api.in.query.filter;
 
 import ee.qrental.common.core.utils.QWeek;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString
-public class TransactionFilterRequest {
+public class YearAndWeekAndDriverFilter {
     private Integer year;
     private QWeek week;
     private Long driverId;
