@@ -1,0 +1,100 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update an Invoice',
+            closeRef='/invoices',
+            content=~{fragments/invoiceUpdateFormFragment.html :: updateForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="updateForm"
+      th:action="@{/invoices/update}"
+      th:object="${updateRequest}"
+      method="post">
+
+    <input id="invoiceId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="driverCompanyId">Driver Company</label>
+                <input class="form-control" id="driverCompanyId"
+                       th:field="*{driverCompany}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="driverCompanyRegNumberId">Driver Company Registration Number</label>
+                <input class="form-control" id="driverCompanyRegNumberId"
+                       th:field="*{driverCompanyRegNumber}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="driverCompanyAddressId">Driver Company Adress</label>
+        <input class="form-control" id="driverCompanyAddressId"
+               th:field="*{driverCompanyAddress}"
+               type="text"/>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="qFirmNameId">Q Firm name</label>
+                <input class="form-control" id="qFirmNameId" required
+                       th:field="*{qFirmName}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="qFirmRegNumberId">Q Firm Registration Number</label>
+                <input class="form-control" id="qFirmRegNumberId" required
+                       th:field="*{qFirmRegNumber}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="qFirmVatNumberId">Q Firm Vat Number</label>
+                <input class="form-control" id="qFirmVatNumberId"
+                       th:field="*{qFirmVatNumber}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="qFirmIbanId">Q Firm IBAN </label>
+                <input class="form-control" id="qFirmIbanId" required
+                       th:field="*{qFirmIban}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="qFirmBankId">Q Firm Bank</label>
+                <input class="form-control" id="qFirmBankId" required
+                       th:field="*{qFirmBank}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="commentId">Comment</label>
+        <textarea class="form-control"
+                  id="commentId"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/invoices'
+        )">
+    </div>
+</form>

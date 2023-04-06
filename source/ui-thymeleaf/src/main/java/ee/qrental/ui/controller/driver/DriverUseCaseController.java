@@ -35,7 +35,7 @@ public class DriverUseCaseController {
   public String addDriverDriver(@ModelAttribute final DriverAddRequest driverInfo) {
     addUseCase.add(driverInfo);
 
-    return "redirect:/drivers";
+    return "redirect:" + DRIVER_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -46,10 +46,10 @@ public class DriverUseCaseController {
   }
 
   @PostMapping("/update")
-  public String updateDriverDriver(final DriverUpdateRequest driverUpdateRequest) {
+  public String updateDriver(final DriverUpdateRequest driverUpdateRequest) {
     updateUseCase.update(driverUpdateRequest);
 
-    return "redirect:/drivers";
+    return "redirect:" + DRIVER_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -64,6 +64,6 @@ public class DriverUseCaseController {
   public String deleteForm(final DriverDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:/drivers";
+    return "redirect:" + DRIVER_ROOT_PATH;
   }
 }
