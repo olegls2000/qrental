@@ -9,7 +9,7 @@ public class FirmUpdateRequestMapper implements UpdateRequestMapper<FirmUpdateRe
   @Override
   public Firm toDomain(final FirmUpdateRequest request) {
     return Firm.builder()
-            .id(null)
+            .id(request.getId())
             .firmName(request.getFirmName())
             .iban(request.getIban())
             .regNumber(request.getRegNumber())

@@ -9,13 +9,13 @@ dependencies {
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:invoice:api:in"))
+    implementation(project(":source:firm:api:in"))
     implementation(project(":source:common"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation(project(mapOf("path" to ":source:firm:api:in")))
-    implementation(project(mapOf("path" to ":source:firm:api:in")))
-    implementation(project(mapOf("path" to ":source:firm:api:in")))
+
+
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }
