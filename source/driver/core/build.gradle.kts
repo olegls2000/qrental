@@ -2,7 +2,7 @@ plugins {
     id("q-java")
 }
 
-dependencies{
+dependencies {
     implementation(project(":source:common"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:driver:api:out"))

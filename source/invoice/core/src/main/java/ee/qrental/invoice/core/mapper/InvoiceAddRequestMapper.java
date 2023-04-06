@@ -3,7 +3,9 @@ package ee.qrental.invoice.core.mapper;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrental.common.core.utils.QWeek;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.invoice.api.in.request.InvoiceAddRequest;
 import ee.qrental.invoice.domain.Invoice;
@@ -24,21 +26,24 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
 
   private final GetTransactionQuery transactionQuery;
 
+  private final GetCallSignLinkQuery callSignLinkQuery;
+
   @Override
   public Invoice toDomain(InvoiceAddRequest request) {
-    final var driver = driverQuery.getById(request.getDriverId());
+    final var driverId = request.getDriverId();
+    final var driver = driverQuery.getById(driverId);
+    final var callSign = callSignLinkQuery.getCallSignLinkByDriverId(driverId).getCallSign();
+    final var year = request.getYear();
+    final var week = request.getWeek();
+
     final var filter =
-        YearAndWeekAndDriverFilter.builder()
-            .driverId(request.getDriverId())
-            .year(request.getYear())
-            .week(request.getWeek())
-            .build();
+        YearAndWeekAndDriverFilter.builder().driverId(driverId).year(year).week(week).build();
 
     return Invoice.builder()
         .id(null)
-        .number("RANDOM-1234")
-        .driverId(request.getDriverId())
-        .driverCallSign(null)
+        .number(getInvoiceNumber(year, week, callSign))
+        .driverId(driverId)
+        .driverCallSign(callSign)
         .driverCompany(driver.getCompanyName())
         .driverCompanyAddress(driver.getCompanyAddress())
         .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
@@ -52,6 +57,11 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
         .created(LocalDate.now())
         .comment(request.getComment())
         .build();
+  }
+
+  private String getInvoiceNumber(final Integer year, final QWeek week, final Integer callSign) {
+    final var weekNumber = week.getNumber();
+    return String.format("%d%d%d", year, weekNumber, callSign);
   }
 
   private List<InvoiceItem> getInvoiceItems(final YearAndWeekAndDriverFilter filter) {

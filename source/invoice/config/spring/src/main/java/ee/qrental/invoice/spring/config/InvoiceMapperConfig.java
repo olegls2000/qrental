@@ -1,5 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
 import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
@@ -12,8 +13,10 @@ import org.springframework.context.annotation.Configuration;
 public class InvoiceMapperConfig {
   @Bean
   InvoiceAddRequestMapper getInvoiceAddRequestMapper(
-      final GetDriverQuery driverQuery, final GetTransactionQuery transactionQuery) {
-    return new InvoiceAddRequestMapper(driverQuery, transactionQuery);
+      final GetDriverQuery driverQuery,
+      final GetTransactionQuery transactionQuery,
+      final GetCallSignLinkQuery callSignLinkQuery) {
+    return new InvoiceAddRequestMapper(driverQuery, transactionQuery, callSignLinkQuery);
   }
 
   @Bean
