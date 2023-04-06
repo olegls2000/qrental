@@ -22,6 +22,11 @@ dependencies {
     implementation(project(":source:invoice:persistance:adapter"))
     implementation(project(":source:invoice:persistance:repository:spring"))
 
+    implementation(project(":source:firm:config:spring"))
+    implementation(project(":source:firm:core"))
+    implementation(project(":source:firm:persistance:adapter"))
+    implementation(project(":source:firm:persistance:repository:spring"))
+
     implementation(project(":source:transaction:config:spring"))
     implementation(project(":source:transaction:core"))
     implementation(project(":source:transaction:persistance:adapter"))

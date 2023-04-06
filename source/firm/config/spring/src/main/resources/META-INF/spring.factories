@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.firm.spring.config.FirmAdapterConfig,\
+ee.qrental.firm.spring.config.FirmMapperConfig,\
+ee.qrental.firm.spring.config.FirmServiceConfig,\
+ee.qrental.firm.spring.config.FirmRepositoryConfig
