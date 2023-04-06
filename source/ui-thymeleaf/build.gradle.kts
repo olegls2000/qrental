@@ -13,6 +13,9 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation(project(mapOf("path" to ":source:firm:api:in")))
+    implementation(project(mapOf("path" to ":source:firm:api:in")))
+    implementation(project(mapOf("path" to ":source:firm:api:in")))
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

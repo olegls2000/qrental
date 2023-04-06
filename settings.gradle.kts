@@ -24,6 +24,17 @@ include("source:driver:persistance:repository:spring")
 include("source:driver:persistance:flyway")
 include("source:driver:config:spring")
 
+//Firm domain:
+include("source:firm:api:in")
+include("source:firm:api:out")
+include("source:firm:domain")
+include("source:firm:core")
+include("source:firm:persistance:adapter")
+include("source:firm:persistance:entity")
+include("source:firm:persistance:repository:spring")
+include("source:firm:persistance:flyway")
+include("source:firm:config:spring")
+
 
 //Call-sign domain:
 include("source:callsign:api:in")
