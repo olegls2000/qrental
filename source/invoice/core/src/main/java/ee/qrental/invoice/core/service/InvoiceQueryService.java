@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
+import ee.qrental.invoice.api.in.response.InvoiceImmutableResponse;
 import ee.qrental.invoice.api.in.response.InvoiceResponse;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
@@ -36,5 +37,10 @@ public class InvoiceQueryService implements GetInvoiceQuery {
   @Override
   public InvoiceUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
+  }
+
+  @Override
+  public InvoiceImmutableResponse getImmutableDataById(Long id) {
+    return mapper.toImmutableData(loadPort.loadById(id));
   }
 }

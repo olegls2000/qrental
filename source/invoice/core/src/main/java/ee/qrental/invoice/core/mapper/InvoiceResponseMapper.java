@@ -1,10 +1,14 @@
 package ee.qrental.invoice.core.mapper;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrental.invoice.api.in.response.InvoiceImmutableResponse;
 import ee.qrental.invoice.api.in.response.InvoiceResponse;
 import ee.qrental.invoice.domain.Invoice;
+import ee.qrental.invoice.domain.InvoiceItem;
+import java.util.HashMap;
 
 public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, Invoice> {
   @Override
@@ -28,5 +32,16 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
   @Override
   public String toObjectInfo(Invoice domain) {
     return format("Receiver: %s, Sender: %s", domain.getDriverCompany(), domain.getQFirmName());
+  }
+
+  public InvoiceImmutableResponse toImmutableData(final Invoice domain) {
+    return InvoiceImmutableResponse.builder()
+        .number(domain.getNumber())
+        .created(domain.getCreated())
+        .items(
+            domain.getItems().stream()
+                .collect(
+                    toMap(InvoiceItem::getType, InvoiceItem::getAmount, (a, b) -> b, HashMap::new)))
+        .build();
   }
 }

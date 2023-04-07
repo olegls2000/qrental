@@ -7,14 +7,14 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class FirmResponse {
   private Long id;
-  private String firmName;
+  private String name;
   private String iban;
   private String regNumber;
   private String vatNumber;
-  private String comment;
   private String email;
   private String postAddress;
   private String phone;
   private String bank;
   private Boolean qGroup;
+  private String comment;
 }

@@ -1,6 +1,7 @@
 package ee.qrental.invoice.adapter.adapter;
 
 import ee.qrental.invoice.adapter.mapper.InvoiceAdapterMapper;
+import ee.qrental.invoice.adapter.repository.InvoiceItemRepository;
 import ee.qrental.invoice.adapter.repository.InvoiceRepository;
 import ee.qrental.invoice.api.out.InvoiceAddPort;
 import ee.qrental.invoice.api.out.InvoiceDeletePort;
@@ -13,11 +14,19 @@ public class InvoicePersistenceAdapter
     implements InvoiceAddPort, InvoiceUpdatePort, InvoiceDeletePort {
 
   private final InvoiceRepository repository;
+  private final InvoiceItemRepository itemRepository;
   private final InvoiceAdapterMapper mapper;
 
   @Override
   public Invoice add(final Invoice domain) {
-    return mapper.mapToDomain(repository.save(mapper.mapToEntity(domain)));
+    final var savedInvoiceEntity = repository.save(mapper.mapToEntity(domain));
+
+    domain.getItems().stream()
+        .map(item -> mapper.mapToItemEntity(item))
+        .peek(entityItem -> entityItem.setInvoice(savedInvoiceEntity))
+        .forEach(itemRepository::save);
+
+    return mapper.mapToDomain(savedInvoiceEntity);
   }
 
   @Override

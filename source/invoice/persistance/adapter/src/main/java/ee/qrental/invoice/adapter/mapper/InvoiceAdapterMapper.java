@@ -30,7 +30,7 @@ public class InvoiceAdapterMapper {
         .build();
   }
 
-  private InvoiceItem mapToItemDomain(final InvoiceItemJakartaEntity entity) {
+  public InvoiceItem mapToItemDomain(final InvoiceItemJakartaEntity entity) {
     return InvoiceItem.builder().amount(entity.getAmount()).type(entity.getType()).build();
   }
 
@@ -52,11 +52,10 @@ public class InvoiceAdapterMapper {
         .qFirmBank(domain.getQFirmBank())
         .created(domain.getCreated())
         .comment(domain.getComment())
-        .items(domain.getItems().stream().map(this::mapToItemEntity).collect(toList()))
         .build();
   }
 
-  private InvoiceItemJakartaEntity mapToItemEntity(final InvoiceItem entity) {
+  public InvoiceItemJakartaEntity mapToItemEntity(final InvoiceItem entity) {
     return InvoiceItemJakartaEntity.builder()
         .amount(entity.getAmount())
         .type(entity.getType())
