@@ -12,7 +12,7 @@ public class FirmResponseMapper
     public FirmResponse toResponse(final Firm domain) {
     return FirmResponse.builder()
         .id(domain.getId())
-        .name(domain.getFirmName())
+        .firmName(domain.getFirmName())
         .iban(domain.getIban())
         .regNumber(domain.getRegNumber())
         .vatNumber(domain.getVatNumber())
