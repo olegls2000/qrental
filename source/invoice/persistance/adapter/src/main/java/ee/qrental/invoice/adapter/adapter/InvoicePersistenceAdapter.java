@@ -31,11 +31,14 @@ public class InvoicePersistenceAdapter
 
   @Override
   public Invoice update(final Invoice domain) {
-    return mapper.mapToDomain(repository.save(mapper.mapToEntity(domain)));
+    repository.save(mapper.mapToEntity(domain));
+
+    return domain;
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(final Long id) {
+    itemRepository.deleteByInvoiceId(id);
     repository.deleteById(id);
   }
 }

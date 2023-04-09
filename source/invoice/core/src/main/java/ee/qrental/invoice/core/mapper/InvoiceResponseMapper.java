@@ -30,8 +30,10 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
   }
 
   @Override
-  public String toObjectInfo(Invoice domain) {
-    return format("Receiver: %s, Sender: %s", domain.getDriverCompany(), domain.getQFirmName());
+  public String toObjectInfo(final Invoice domain) {
+    return format(
+        "Receiver: %s, Sender: %s, Week: %d",
+        domain.getDriverCompany(), domain.getQFirmName(), domain.getWeekNumber());
   }
 
   public InvoiceImmutableResponse toImmutableData(final Invoice domain) {

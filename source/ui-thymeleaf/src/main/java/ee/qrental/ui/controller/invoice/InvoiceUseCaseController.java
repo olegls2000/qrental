@@ -7,8 +7,10 @@ import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
 import ee.qrental.invoice.api.in.request.InvoiceAddRequest;
+import ee.qrental.invoice.api.in.request.InvoiceDeleteRequest;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceAddUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoiceDeleteUseCase;
 import ee.qrental.invoice.api.in.usecase.InvoiceUpdateUseCase;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ public class InvoiceUseCaseController {
 
   private final InvoiceAddUseCase addUseCase;
   private final InvoiceUpdateUseCase updateUseCase;
+  private final InvoiceDeleteUseCase deleteUseCase;
   private final GetInvoiceQuery invoiceQuery;
   private final GetDriverQuery driverQuery;
   private final GetFirmQuery firmQuery;
@@ -56,6 +59,21 @@ public class InvoiceUseCaseController {
   @PostMapping("/update")
   public String updateInvoice(final InvoiceUpdateRequest updateRequest) {
     updateUseCase.update(updateRequest);
+
+    return "redirect:" + INVOICE_ROOT_PATH;
+  }
+
+  @GetMapping(value = "/delete-form/{id}")
+  public String deleteForm(@PathVariable("id") Long id, Model model) {
+    model.addAttribute("deleteRequest", new InvoiceDeleteRequest(id));
+    model.addAttribute("objectInfo", invoiceQuery.getObjectInfo(id));
+
+    return "forms/deleteInvoice";
+  }
+
+  @PostMapping("/delete")
+  public String deleteForm(final InvoiceDeleteRequest deleteRequest) {
+    deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + INVOICE_ROOT_PATH;
   }

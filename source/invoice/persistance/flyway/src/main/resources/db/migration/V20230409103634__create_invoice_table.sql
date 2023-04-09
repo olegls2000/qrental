@@ -2,6 +2,7 @@ create table if not exists invoice
 (
     id                        serial primary key,
     number                    varchar unique not null,
+    week_number               integer        not null,
     driver_id                 integer        not null,
     FOREIGN KEY (driver_id) REFERENCES driver (id),
     driver_call_sign          integer,
@@ -16,5 +17,6 @@ create table if not exists invoice
     q_firm_iban               varchar        not null,
     q_firm_bank               varchar        not null,
     created                   date           not null,
-    comment                   varchar
+    comment                   varchar,
+    UNIQUE (week_number, driver_id, q_firm_id)
 );

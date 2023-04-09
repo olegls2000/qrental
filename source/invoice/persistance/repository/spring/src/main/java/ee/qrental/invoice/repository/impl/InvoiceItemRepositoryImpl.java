@@ -14,4 +14,9 @@ public class InvoiceItemRepositoryImpl implements InvoiceItemRepository {
   public InvoiceItemJakartaEntity save(final InvoiceItemJakartaEntity entity) {
     return springDataRepository.save(entity);
   }
+
+  @Override
+  public void deleteByInvoiceId(final Long invoiceId) {
+    springDataRepository.deleteAllByInvoiceId(invoiceId);
+  }
 }

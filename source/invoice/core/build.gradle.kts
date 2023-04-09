@@ -11,6 +11,7 @@ dependencies{
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:callsign:api:in"))
+    implementation(project(":source:firm:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

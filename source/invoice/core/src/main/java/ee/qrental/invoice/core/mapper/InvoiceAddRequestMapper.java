@@ -7,6 +7,7 @@ import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.common.core.utils.QWeek;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.request.InvoiceAddRequest;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
@@ -23,10 +24,9 @@ import lombok.AllArgsConstructor;
 public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddRequest, Invoice> {
 
   private final GetDriverQuery driverQuery;
-
   private final GetTransactionQuery transactionQuery;
-
   private final GetCallSignLinkQuery callSignLinkQuery;
+  private final GetFirmQuery firmQuery;
 
   @Override
   public Invoice toDomain(InvoiceAddRequest request) {
@@ -36,23 +36,27 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
     final var year = request.getYear();
     final var week = request.getWeek();
 
+    final var qFirmId = request.getQFirmId();
+    final var qFirm = firmQuery.getById(qFirmId);
+
     final var filter =
         YearAndWeekAndDriverFilter.builder().driverId(driverId).year(year).week(week).build();
 
     return Invoice.builder()
         .id(null)
         .number(getInvoiceNumber(year, week, callSign))
+        .weekNumber(week.getNumber())
         .driverId(driverId)
         .driverCallSign(callSign)
         .driverCompany(driver.getCompanyName())
         .driverCompanyAddress(driver.getCompanyAddress())
         .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
-        .qFirmId(request.getQFirmId())
-        .qFirmName("Fake name")
-        .qFirmRegNumber("Fake Reg Number")
-        .qFirmVatNumber("Fake VAT Number")
-        .qFirmBank("Fake Bank")
-        .qFirmIban("Fake IBAN")
+        .qFirmId(qFirmId)
+        .qFirmName(qFirm.getFirmName())
+        .qFirmRegNumber(qFirm.getRegNumber())
+        .qFirmVatNumber(qFirm.getVatNumber())
+        .qFirmBank(qFirm.getBank())
+        .qFirmIban(qFirm.getIban())
         .items(getInvoiceItems(filter))
         .created(LocalDate.now())
         .comment(request.getComment())

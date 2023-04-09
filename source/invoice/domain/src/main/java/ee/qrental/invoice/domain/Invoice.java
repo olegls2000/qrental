@@ -3,14 +3,16 @@ package ee.qrental.invoice.domain;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
+@Setter
 public class Invoice {
   private Long id;
-
   private String number;
+  private Integer weekNumber;
   private Long driverId;
   private Integer driverCallSign;
   private String driverCompany;
@@ -24,6 +26,5 @@ public class Invoice {
   private String qFirmBank;
   private LocalDate created;
   private String comment;
-
   private List<InvoiceItem> items;
 }

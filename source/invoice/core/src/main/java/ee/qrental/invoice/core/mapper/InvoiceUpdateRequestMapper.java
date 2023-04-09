@@ -2,24 +2,29 @@ package ee.qrental.invoice.core.mapper;
 
 import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
+import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.domain.Invoice;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class InvoiceUpdateRequestMapper
     implements UpdateRequestMapper<InvoiceUpdateRequest, Invoice> {
 
+  private final InvoiceLoadPort loadPort;
+
   @Override
   public Invoice toDomain(final InvoiceUpdateRequest request) {
-    return Invoice.builder()
-        .id(request.getId())
-        .driverCompany(request.getDriverCompany())
-        .driverCompanyRegNumber(request.getDriverCompanyRegNumber())
-        .driverCompanyAddress(request.getDriverCompanyAddress())
-        .qFirmName(request.getQFirmName())
-        .qFirmRegNumber(request.getQFirmRegNumber())
-        .qFirmVatNumber(request.getQFirmVatNumber())
-        .qFirmBank(request.getQFirmIban())
-        .comment(request.getComment())
-        .build();
+    final var invoiceFromDb = loadPort.loadById(request.getId());
+    invoiceFromDb.setDriverCompany(request.getDriverCompany());
+    invoiceFromDb.setDriverCompanyRegNumber(request.getDriverCompanyRegNumber());
+    invoiceFromDb.setDriverCompanyAddress(request.getDriverCompanyAddress());
+    invoiceFromDb.setQFirmName(request.getQFirmName());
+    invoiceFromDb.setQFirmRegNumber(request.getQFirmRegNumber());
+    invoiceFromDb.setQFirmVatNumber(request.getQFirmVatNumber());
+    invoiceFromDb.setQFirmBank(request.getQFirmIban());
+    invoiceFromDb.setComment(request.getComment());
+
+    return invoiceFromDb;
   }
 
   @Override
