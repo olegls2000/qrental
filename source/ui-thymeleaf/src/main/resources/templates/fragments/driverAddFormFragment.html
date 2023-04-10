@@ -1,7 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Driver',
-            closeRef='/drivers',
             content=~{fragments/driverAddFormFragment.html :: addForm}
         )">
     </div>

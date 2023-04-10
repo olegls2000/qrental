@@ -1,7 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Firm',
-            closeRef='/firms',
             content=~{fragments/firmAddFormFragment.html :: addForm}
         )">
     </div>

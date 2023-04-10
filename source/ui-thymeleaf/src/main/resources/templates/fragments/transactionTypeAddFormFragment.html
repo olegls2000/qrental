@@ -1,7 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Transaction Type',
-            closeRef='/transaction-types',
             content=~{fragments/transactionTypeAddFormFragment.html :: addForm}
         )">
     </div>
@@ -11,26 +10,19 @@
     <form method="post"
           th:action="@{/transaction-types/add}"
           th:object="${addRequest}">
-
-        <div class="row">
-            <div class="col">
-                <div class="mb-3">
-                    <label class="form-label text-muted" for="transactionTypeId">Transaction type name</label>
-                    <input class="form-control" id="transactionTypeId"
-                           placeholder="Enter Transaction Type name"
-                           required
-                           th:field="*{name}"
-                           type="text"/>
-                </div>
-            </div>
-            <div class="col">
-                <div class="mb-3">
-                    <label class="form-label text-muted" for="descriptionId">Transaction Type On Estonian Language</label>
-                    <input class="form-control" id="descriptionID" placeholder="Enter Tr.Type on Estonian Language"
-                           th:field="*{description}"
-                           type="text"/>
-                </div>
-            </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="transactionTypeId">Transaction type name (Eng)</label>
+            <input class="form-control" id="transactionTypeId"
+                   placeholder="Enter Transaction Type name"
+                   required
+                   th:field="*{name}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="descriptionId">Transaction Type name (Est)</label>
+            <input class="form-control" id="descriptionID" placeholder="Enter Tr.Type on Estonian Language"
+                   th:field="*{description}"
+                   type="text"/>
         </div>
         <div class="mb-3">
             <label class="form-check-label text-muted" for="negativeId">Negative</label>
@@ -38,7 +30,6 @@
                    th:field="*{negative}"
                    type="checkbox"/>
         </div>
-
         <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>
             <textarea class="form-control"
@@ -54,5 +45,3 @@
         </div>
     </form>
 </div>
-
-
