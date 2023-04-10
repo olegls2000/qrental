@@ -31,7 +31,7 @@ public class CallSignLinkLoadAdapter implements CallSignLinkLoadPort {
   }
 
   @Override
-  public CallSignLink loadByDriverId(final Long driverId) {
-    return mapper.mapToDomain(repository.findByDriverId(driverId));
+  public Integer loadCallSignByDriverId(final Long driverId) {
+    return repository.findCallSignByDriverId(driverId);
   }
 }

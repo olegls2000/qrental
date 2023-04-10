@@ -18,7 +18,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
   @Override
   public TransactionResponse toResponse(final Transaction domain) {
     final var driverId = domain.getDriverId();
-    final var callSign = callSignLinkQuery.getCallSignLinkByDriverId(driverId).getCallSign();
+    final var callSign = callSignLinkQuery.getCallSignByDriverId(driverId);
     final var driverInfo = driverQuery.getObjectInfo(driverId);
 
     return TransactionResponse.builder()
@@ -36,23 +36,19 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
 
   @Override
   public String toObjectInfo(final Transaction domain) {
+    final var driverId = domain.getDriverId();
     final var type = domain.getType().getName();
     final var realAmount = domain.getRealAmount();
     final var date = domain.getDate().toString();
     final var weekNumber = domain.getWeekNumber();
-    final var callSignLinkResponse =
-        callSignLinkQuery.getCallSignLinkByDriverId(domain.getDriverId());
+    final var callSign = callSignLinkQuery.getCallSignByDriverId(driverId);
+    final var driverInfo = driverQuery.getObjectInfo(driverId);
 
     return format(
         "Transaction: %s %s EURO, "
             + "week number: %d (%s), "
             + "for driver: %s "
             + "with call sign: %d",
-        type,
-        realAmount,
-        weekNumber,
-        date,
-        callSignLinkResponse.getDriverInfo(),
-        callSignLinkResponse.getCallSign());
+        type, realAmount, weekNumber, date, driverInfo, callSign);
   }
 }

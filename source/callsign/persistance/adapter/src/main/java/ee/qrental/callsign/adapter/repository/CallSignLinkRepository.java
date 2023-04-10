@@ -15,4 +15,6 @@ public interface CallSignLinkRepository {
   List<CallSignLinkJakartaEntity> findAllByDateEndIsNull();
 
   CallSignLinkJakartaEntity findByDriverId(final Long driverId);
+  Integer findCallSignByDriverId(final Long driverId);
+
 }

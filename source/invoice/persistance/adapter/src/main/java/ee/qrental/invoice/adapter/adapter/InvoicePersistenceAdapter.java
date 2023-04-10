@@ -1,5 +1,7 @@
 package ee.qrental.invoice.adapter.adapter;
 
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.invoice.adapter.mapper.InvoiceAdapterMapper;
 import ee.qrental.invoice.adapter.repository.InvoiceItemRepository;
 import ee.qrental.invoice.adapter.repository.InvoiceRepository;
@@ -20,11 +22,13 @@ public class InvoicePersistenceAdapter
   @Override
   public Invoice add(final Invoice domain) {
     final var savedInvoiceEntity = repository.save(mapper.mapToEntity(domain));
-
-    domain.getItems().stream()
-        .map(item -> mapper.mapToItemEntity(item))
-        .peek(entityItem -> entityItem.setInvoice(savedInvoiceEntity))
-        .forEach(itemRepository::save);
+    final var savedInvoiceItemEntities =
+        domain.getItems().stream()
+            .map(item -> mapper.mapToItemEntity(item))
+            .peek(entityItem -> entityItem.setInvoice(savedInvoiceEntity))
+            .map(itemRepository::save)
+            .collect(toList());
+    savedInvoiceEntity.setItems(savedInvoiceItemEntities);
 
     return mapper.mapToDomain(savedInvoiceEntity);
   }

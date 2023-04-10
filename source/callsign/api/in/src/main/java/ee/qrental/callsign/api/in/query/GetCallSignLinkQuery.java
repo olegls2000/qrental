@@ -7,5 +7,5 @@ import ee.qrental.common.core.in.query.BaseGetQuery;
 public interface GetCallSignLinkQuery
     extends BaseGetQuery<CallSignLinkUpdateRequest, CallSignLinkResponse> {
 
-  CallSignLinkResponse getCallSignLinkByDriverId(final Long driverId);
+  Integer getCallSignByDriverId(final Long driverId);
 }

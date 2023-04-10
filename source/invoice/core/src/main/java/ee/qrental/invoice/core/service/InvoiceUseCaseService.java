@@ -29,7 +29,6 @@ public class InvoiceUseCaseService
   private final InvoiceAddRequestMapper addRequestMapper;
   private final InvoiceUpdateRequestMapper updateRequestMapper;
 
-  @Transactional
   @Override
   public Long add(final InvoiceAddRequest request) {
     final var invoice = addRequestMapper.toDomain(request);
@@ -38,7 +37,6 @@ public class InvoiceUseCaseService
     return savedInvoice.getId();
   }
 
-  @Transactional
   @Override
   public void update(final InvoiceUpdateRequest request) {
     checkExistence(request.getId());

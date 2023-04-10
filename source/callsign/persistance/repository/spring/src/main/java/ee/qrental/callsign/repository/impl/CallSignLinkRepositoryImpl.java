@@ -40,4 +40,9 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
   public CallSignLinkJakartaEntity findByDriverId(final Long driverId) {
     return springDataRepository.findFirstByDriverId(driverId);
   }
+
+  @Override
+  public Integer findCallSignByDriverId(final Long driverId) {
+    return springDataRepository.getCallSignByDriverId(driverId);
+  }
 }
