@@ -5,5 +5,5 @@ import ee.qrental.invoice.entity.jakarta.InvoiceItemJakartaEntity;
 public interface InvoiceItemRepository {
   InvoiceItemJakartaEntity save(final InvoiceItemJakartaEntity entity);
 
-  void deleteByInvoiceId(final Long invoiceId);
+  void removeByInvoiceId(final Long invoiceId);
 }

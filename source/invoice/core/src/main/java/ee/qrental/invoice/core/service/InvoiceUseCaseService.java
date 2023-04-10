@@ -1,5 +1,7 @@
 package ee.qrental.invoice.core.service;
 
+import static jakarta.transaction.Transactional.TxType.SUPPORTS;
+
 import ee.qrental.invoice.api.in.request.InvoiceAddRequest;
 import ee.qrental.invoice.api.in.request.InvoiceDeleteRequest;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
@@ -12,8 +14,10 @@ import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.api.out.InvoiceUpdatePort;
 import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
 import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+@Transactional(SUPPORTS)
 @AllArgsConstructor
 public class InvoiceUseCaseService
     implements InvoiceAddUseCase, InvoiceUpdateUseCase, InvoiceDeleteUseCase {
@@ -25,6 +29,7 @@ public class InvoiceUseCaseService
   private final InvoiceAddRequestMapper addRequestMapper;
   private final InvoiceUpdateRequestMapper updateRequestMapper;
 
+  @Transactional
   @Override
   public Long add(final InvoiceAddRequest request) {
     final var invoice = addRequestMapper.toDomain(request);
@@ -33,12 +38,14 @@ public class InvoiceUseCaseService
     return savedInvoice.getId();
   }
 
+  @Transactional
   @Override
   public void update(final InvoiceUpdateRequest request) {
     checkExistence(request.getId());
     updatePort.update(updateRequestMapper.toDomain(request));
   }
 
+  @Transactional
   @Override
   public void delete(final InvoiceDeleteRequest request) {
     deletePort.delete(request.getId());

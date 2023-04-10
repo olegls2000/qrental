@@ -1,10 +1,11 @@
 package ee.qrental.invoice.repository.spring;
 
 import ee.qrental.invoice.entity.jakarta.InvoiceItemJakartaEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InvoiceItemSpringDataRepository
     extends JpaRepository<InvoiceItemJakartaEntity, Long> {
 
-  void deleteAllByInvoiceId(final Long id);
+  List<InvoiceItemJakartaEntity> removeByInvoiceId(final Long id);
 }

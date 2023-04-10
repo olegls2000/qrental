@@ -15,4 +15,6 @@ dependencies{
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
+
+    implementation("jakarta.transaction:jakarta.transaction-api:2.0.1")
 }

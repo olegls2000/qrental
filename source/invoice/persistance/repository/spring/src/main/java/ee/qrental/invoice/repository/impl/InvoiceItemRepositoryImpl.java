@@ -16,7 +16,7 @@ public class InvoiceItemRepositoryImpl implements InvoiceItemRepository {
   }
 
   @Override
-  public void deleteByInvoiceId(final Long invoiceId) {
-    springDataRepository.deleteAllByInvoiceId(invoiceId);
+  public void removeByInvoiceId(final Long invoiceId) {
+    springDataRepository.removeByInvoiceId(invoiceId);
   }
 }

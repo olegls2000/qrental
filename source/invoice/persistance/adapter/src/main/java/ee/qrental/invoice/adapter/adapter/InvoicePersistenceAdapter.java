@@ -38,7 +38,7 @@ public class InvoicePersistenceAdapter
 
   @Override
   public void delete(final Long id) {
-    itemRepository.deleteByInvoiceId(id);
+    itemRepository.removeByInvoiceId(id);
     repository.deleteById(id);
   }
 }
