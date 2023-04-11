@@ -24,6 +24,17 @@ include("source:driver:persistance:repository:spring")
 include("source:driver:persistance:flyway")
 include("source:driver:config:spring")
 
+//Driver car:
+include("source:car:api:in")
+include("source:car:api:out")
+include("source:car:domain")
+include("source:car:core")
+include("source:car:persistance:adapter")
+include("source:car:persistance:entity")
+include("source:car:persistance:repository:spring")
+include("source:car:persistance:flyway")
+include("source:car:config:spring")
+
 //Firm domain:
 include("source:firm:api:in")
 include("source:firm:api:out")

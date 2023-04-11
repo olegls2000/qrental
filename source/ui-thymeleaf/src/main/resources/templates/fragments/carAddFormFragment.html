@@ -11,7 +11,7 @@
 <div th:fragment="addForm">
     <form method="post"
           th:action="@{/cars/add}"
-          th:object="${carAddCommand}">
+          th:object="${addRequest}">
 
         <div class="row">
             <div class="col">
