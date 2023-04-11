@@ -10,6 +10,9 @@ import ee.qrental.invoice.entity.jakarta.InvoiceJakartaEntity;
 public class InvoiceAdapterMapper {
 
   public Invoice mapToDomain(final InvoiceJakartaEntity entity) {
+    if (entity == null) {
+      return null;
+    }
     return Invoice.builder()
         .id(entity.getId())
         .number(entity.getNumber())

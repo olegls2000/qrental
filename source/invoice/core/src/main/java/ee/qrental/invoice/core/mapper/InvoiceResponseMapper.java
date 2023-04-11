@@ -16,6 +16,7 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
     return InvoiceResponse.builder()
         .id(domain.getId())
         .number(domain.getNumber())
+        .weekNumber(domain.getWeekNumber())
         .driverCallSign(domain.getDriverCallSign())
         .driverCompany(domain.getDriverCompany())
         .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())

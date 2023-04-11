@@ -39,7 +39,7 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   }
 
   @Override
-  public Integer getCallSignByDriverId(final Long driverId) {
-    return loadPort.loadCallSignByDriverId(driverId);
+  public CallSignLinkResponse getActiveCallSignLinkByDriverId(final Long driverId) {
+    return mapper.toResponse(loadPort.loadActiveByDriverId(driverId));
   }
 }

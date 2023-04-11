@@ -11,10 +11,7 @@ public class CallSignLinkValidatorConfig {
 
   @Bean
   CallSignLinkBusinessRuleValidator getCallSignLinkBusinessRuleValidator(
-      final CallSignLinkLoadPort callSignLinkLoadPort,
-      final CallSignLoadPort callSignLoadPort,
-      final GetDriverQuery driverQuery) {
-    return new CallSignLinkBusinessRuleValidator(
-        callSignLinkLoadPort, callSignLoadPort, driverQuery);
+      final CallSignLinkLoadPort loadPort, final GetDriverQuery driverQuery) {
+    return new CallSignLinkBusinessRuleValidator(loadPort, driverQuery);
   }
 }

@@ -10,11 +10,11 @@ public interface CallSignLinkRepository {
 
   CallSignLinkJakartaEntity getReferenceById(final Long id);
 
+  List<CallSignLinkJakartaEntity> findAllByCallSignId(final Long callSignId);
+
   List<CallSignLinkJakartaEntity> findAll();
 
-  List<CallSignLinkJakartaEntity> findAllByDateEndIsNull();
+  CallSignLinkJakartaEntity findOneByDateEndIsNullAndCallSignId(final Long callSignId);
 
-  CallSignLinkJakartaEntity findByDriverId(final Long driverId);
-  Integer findCallSignByDriverId(final Long driverId);
-
+  CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(final Long driverId);
 }

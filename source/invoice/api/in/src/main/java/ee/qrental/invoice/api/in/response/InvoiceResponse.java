@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 public class InvoiceResponse {
   private Long id;
   private String number;
+  private Integer weekNumber;
   private String driverCompany;
   private Integer driverCallSign;
   private String driverCompanyRegNumber;

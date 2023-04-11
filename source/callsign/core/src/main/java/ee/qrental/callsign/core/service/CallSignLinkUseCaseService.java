@@ -30,7 +30,7 @@ public class CallSignLinkUseCaseService
   @Override
   public Long add(final CallSignLinkAddRequest request) {
     final var domain = addRequestMapper.toDomain(request);
-    final var violationsCollector = businessRuleValidator.validate(domain);
+    final var violationsCollector = businessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
       return null;
@@ -41,21 +41,14 @@ public class CallSignLinkUseCaseService
 
   @Override
   public void update(final CallSignLinkUpdateRequest request) {
-    checkExistence(request.getId());
     final var domain = updateRequestMapper.toDomain(request);
-    final var violationsCollector = businessRuleValidator.validate(domain);
+    final var violationsCollector = businessRuleValidator.validateUpdate(domain);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 
       return;
     }
     updatePort.update(updateRequestMapper.toDomain(request));
-  }
-
-  private void checkExistence(final Long id) {
-    if (loadPort.loadById(id) == null) {
-      throw new RuntimeException("Update of CallSign Link failed. No Record with id = " + id);
-    }
   }
 
   @Override

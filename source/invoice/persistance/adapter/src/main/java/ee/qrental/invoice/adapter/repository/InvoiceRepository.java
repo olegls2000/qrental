@@ -11,4 +11,7 @@ public interface InvoiceRepository {
   InvoiceJakartaEntity getReferenceById(final Long id);
 
   void deleteById(final Long id);
+
+  InvoiceJakartaEntity findByWeekAndDriverIdAndFirmId(
+      final Integer weekNumber, final Long driverId, final Long firmId);
 }

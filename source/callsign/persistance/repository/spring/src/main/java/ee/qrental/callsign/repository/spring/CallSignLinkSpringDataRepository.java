@@ -1,22 +1,30 @@
 package ee.qrental.callsign.repository.spring;
 
 import ee.qrental.callsign.entity.jakarta.CallSignLinkJakartaEntity;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 
 public interface CallSignLinkSpringDataRepository
     extends JpaRepository<CallSignLinkJakartaEntity, Long> {
-
-  List<CallSignLinkJakartaEntity> findAllByDateEndIsNull();
-
-  CallSignLinkJakartaEntity findFirstByDriverId(final Long driverId);
+  @Query(
+      value = "SELECT csl.* FROM call_sign_link csl where csl.call_sign_id = :callSignId",
+      nativeQuery = true)
+  List<CallSignLinkJakartaEntity> findAllByCallSignId(final Long callSignId);
 
   @Query(
       value =
-          "SELECT cs.call_sign FROM call_sign_link csl "
-              + "LEFT JOIN call_sign cs ON csl.call_sign_id = cs.id "
-              + " where csl.driver_id = :driverId",
+          "SELECT csl.* FROM call_sign_link csl "
+              + "where csl.date_end is null "
+              + "and csl.call_sign_id = :callSignId",
       nativeQuery = true)
-  Integer getCallSignByDriverId(final Long driverId);
+  CallSignLinkJakartaEntity findOneByDateEndIsNullAndCallSignId(final Long callSignId);
+
+  @Query(
+          value =
+                  "SELECT csl.* FROM call_sign_link csl "
+                          + "where csl.date_end is null "
+                          + "and csl.driver_id = :driverId",
+          nativeQuery = true)
+  CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(final Long driverId);
 }

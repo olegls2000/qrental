@@ -32,20 +32,30 @@ public class InvoiceUseCaseController {
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
-    model.addAttribute("addRequest", new InvoiceAddRequest());
-    model.addAttribute("qFirms", firmQuery.getAll());
-    model.addAttribute("drivers", driverQuery.getAll());
-    model.addAttribute("years", List.of(2023));
-    model.addAttribute("weeks", QWeek.values());
+    addAddRequestToModel(new InvoiceAddRequest(), model);
+    populateSelectOptions(model);
 
     return "forms/addInvoice";
   }
 
   @PostMapping(value = "/add")
-  public String addInvoice(@ModelAttribute final InvoiceAddRequest addRequest) {
+  public String addInvoice(@ModelAttribute final InvoiceAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
+    if (addRequest.hasViolations()) {
+      addAddRequestToModel(addRequest, model);
+      populateSelectOptions(model);
+
+      return "forms/addInvoice";
+    }
 
     return "redirect:" + INVOICE_ROOT_PATH;
+  }
+
+  private void populateSelectOptions(final Model model) {
+    model.addAttribute("qFirms", firmQuery.getAll());
+    model.addAttribute("drivers", driverQuery.getAll());
+    model.addAttribute("years", List.of(2023));
+    model.addAttribute("weeks", QWeek.values());
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -76,5 +86,9 @@ public class InvoiceUseCaseController {
     deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + INVOICE_ROOT_PATH;
+  }
+
+  private void addAddRequestToModel(final InvoiceAddRequest addRequest, final Model model) {
+    model.addAttribute("addRequest", addRequest);
   }
 }

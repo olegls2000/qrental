@@ -10,6 +10,7 @@ import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
 import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
 import ee.qrental.invoice.core.service.InvoiceQueryService;
 import ee.qrental.invoice.core.service.InvoiceUseCaseService;
+import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +32,9 @@ public class InvoiceServiceConfig {
       final InvoiceDeletePort deletePort,
       final InvoiceLoadPort loadPort,
       final InvoiceAddRequestMapper addRequestMapper,
-      final InvoiceUpdateRequestMapper updateRequestMapper) {
+      final InvoiceUpdateRequestMapper updateRequestMapper,
+      final InvoiceBusinessRuleValidator businessRuleValidator) {
     return new InvoiceUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper, businessRuleValidator);
   }
 }

@@ -27,22 +27,22 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
   }
 
   @Override
+  public List<CallSignLinkJakartaEntity> findAllByCallSignId(Long callSignId) {
+    return springDataRepository.findAllByCallSignId(callSignId);
+  }
+
+  @Override
   public List<CallSignLinkJakartaEntity> findAll() {
     return springDataRepository.findAll();
   }
 
   @Override
-  public List<CallSignLinkJakartaEntity> findAllByDateEndIsNull() {
-    return springDataRepository.findAllByDateEndIsNull();
+  public CallSignLinkJakartaEntity findOneByDateEndIsNullAndCallSignId(final Long callSignId) {
+    return springDataRepository.findOneByDateEndIsNullAndCallSignId(callSignId);
   }
 
   @Override
-  public CallSignLinkJakartaEntity findByDriverId(final Long driverId) {
-    return springDataRepository.findFirstByDriverId(driverId);
-  }
-
-  @Override
-  public Integer findCallSignByDriverId(final Long driverId) {
-    return springDataRepository.getCallSignByDriverId(driverId);
+  public CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(final Long driverId) {
+    return springDataRepository.findOneByDateEndIsNullAndDriverId(driverId);
   }
 }

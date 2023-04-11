@@ -10,7 +10,7 @@ public class CallSignValidatorConfig {
 
   @Bean
   CallSignBusinessRuleValidator getCallSignBusinessRuleValidator(
-      final CallSignLoadPort callSignLoadPort) {
-    return new CallSignBusinessRuleValidator(callSignLoadPort);
+      final CallSignLoadPort callSignLoadPort, final CallSignLinkLoadPort callSignLinkLoadPort) {
+    return new CallSignBusinessRuleValidator(callSignLoadPort, callSignLinkLoadPort);
   }
 }

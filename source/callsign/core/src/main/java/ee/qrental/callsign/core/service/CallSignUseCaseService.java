@@ -29,7 +29,7 @@ public class CallSignUseCaseService
   @Override
   public Long add(final CallSignAddRequest request) {
     final var domain = addRequestMapper.toDomain(request);
-    final var violationsCollector = businessRuleValidator.validate(domain);
+    final var violationsCollector = businessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
       return null;
@@ -42,7 +42,7 @@ public class CallSignUseCaseService
   public void update(final CallSignUpdateRequest request) {
     checkExistence(request.getId());
     final var domain = updateRequestMapper.toDomain(request);
-    final var violationsCollector = businessRuleValidator.validate(domain);
+    final var violationsCollector = businessRuleValidator.validateUpdate(domain);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 

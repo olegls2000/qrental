@@ -30,4 +30,10 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);
   }
+
+  @Override
+  public InvoiceJakartaEntity findByWeekAndDriverIdAndFirmId(
+      final Integer weekNumber, final Long driverId, final Long firmId) {
+    return springDataRepository.findByWeekNumberAndDriverIdAndQFirmId(weekNumber, driverId, firmId);
+  }
 }

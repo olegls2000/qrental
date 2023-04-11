@@ -16,22 +16,29 @@ public class CallSignLinkLoadAdapter implements CallSignLinkLoadPort {
   private final CallSignLinkAdapterMapper mapper;
 
   @Override
-  public CallSignLink loadById(final Long id) {
-    return mapper.mapToDomain(repository.getReferenceById(id));
-  }
-
-  @Override
   public List<CallSignLink> loadAll() {
     return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
-  public List<CallSignLink> loadActiveCallSignLinks() {
-    return repository.findAllByDateEndIsNull().stream().map(mapper::mapToDomain).collect(toList());
+  public CallSignLink loadById(final Long id) {
+    return mapper.mapToDomain(repository.getReferenceById(id));
   }
 
   @Override
-  public Integer loadCallSignByDriverId(final Long driverId) {
-    return repository.findCallSignByDriverId(driverId);
+  public List<CallSignLink> loadByCallSignId(final Long callSignId) {
+    return repository.findAllByCallSignId(callSignId).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
+
+  @Override
+  public CallSignLink loadActiveByCallSignId(final Long callSignId) {
+    return mapper.mapToDomain(repository.findOneByDateEndIsNullAndCallSignId(callSignId));
+  }
+
+  @Override
+  public CallSignLink loadActiveByDriverId(final Long driverId) {
+    return mapper.mapToDomain(repository.findOneByDateEndIsNullAndDriverId(driverId));
   }
 }

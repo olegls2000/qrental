@@ -1,6 +1,7 @@
 package ee.qrental.ui.controller.callsign;
 
 import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_ROOT_PATH;
+import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
 
 import ee.qrental.callsign.api.in.query.GetCallSignQuery;
 import ee.qrental.callsign.api.in.request.CallSignAddRequest;
@@ -40,7 +41,7 @@ public class CallSignUseCaseController {
       return "forms/addCallSign";
     }
 
-    return "redirect:/call-signs";
+    return "redirect:" + CALL_SIGN_ROOT_PATH;
   }
 
   private void addAddRequestToModel(final CallSignAddRequest addRequest, final Model model) {
@@ -64,7 +65,7 @@ public class CallSignUseCaseController {
       return "forms/updateCallSign";
     }
 
-    return "redirect:/call-signs";
+    return "redirect:" + CALL_SIGN_ROOT_PATH;
   }
 
   private void addUpdateRequestToModel(
@@ -84,6 +85,6 @@ public class CallSignUseCaseController {
   public String deleteForm(final CallSignDeleteRequest deleteRequest) {
     callSignDeleteUseCase.delete(deleteRequest);
 
-    return "redirect:/call-signs";
+    return "redirect:" + CALL_SIGN_ROOT_PATH;
   }
 }

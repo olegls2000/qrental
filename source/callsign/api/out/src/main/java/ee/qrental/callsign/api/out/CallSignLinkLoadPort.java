@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface CallSignLinkLoadPort extends LoadPort<CallSignLink> {
 
-  List<CallSignLink> loadActiveCallSignLinks();
+  List<CallSignLink> loadByCallSignId(final Long callSignId);
 
-  Integer loadCallSignByDriverId(final Long driverId);
+  CallSignLink loadActiveByCallSignId(final Long callSignId);
+
+  CallSignLink loadActiveByDriverId(final Long driverId);
 }

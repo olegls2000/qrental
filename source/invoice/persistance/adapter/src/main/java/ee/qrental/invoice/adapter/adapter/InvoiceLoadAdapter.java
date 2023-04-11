@@ -24,4 +24,10 @@ public class InvoiceLoadAdapter implements InvoiceLoadPort {
   public Invoice loadById(Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
+
+  @Override
+  public Invoice loadByWeekAndDriverAndFirm(Integer weekNumber, Long driverId, Long firmId) {
+    return mapper.mapToDomain(
+        repository.findByWeekAndDriverIdAndFirmId(weekNumber, driverId, firmId));
+  }
 }

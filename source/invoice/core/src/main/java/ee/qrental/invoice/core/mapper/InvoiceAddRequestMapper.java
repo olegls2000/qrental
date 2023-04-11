@@ -32,7 +32,8 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
   public Invoice toDomain(InvoiceAddRequest request) {
     final var driverId = request.getDriverId();
     final var driver = driverQuery.getById(driverId);
-    final var callSign = callSignLinkQuery.getCallSignByDriverId(driverId);
+    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    final var callSign = callSignLink.getCallSign();
     final var year = request.getYear();
     final var week = request.getWeek();
 
