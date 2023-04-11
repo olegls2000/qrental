@@ -1,0 +1,39 @@
+package ee.qrental.car.core.mapper;
+
+import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrental.car.api.in.request.CarAddRequest;
+import ee.qrental.car.domain.Car;
+
+public class CarAddRequestMapper
+        implements AddRequestMapper<CarAddRequest, Car> {
+
+    @Override
+    public Car toDomain(CarAddRequest request) {
+        return Car.builder()
+                .id(null)
+                .active(request.getActive())
+                .qRent(request.getQRent())
+                .regNumber(request.getRegNumber())
+                .vin(request.getVin())
+                .releaseDate(request.getReleaseDate())
+                .manufacturer(request.getManufacturer())
+                .model(request.getModel())
+                .appropriation(request.getAppropriation())
+                .elegance(request.getElegance())
+                .gearType(request.getGearType())
+                .fuelType(request.getFuelType())
+                .lpg(request.getLpg())
+                .dateInstallLpg(request.getDateInstallLpg())
+                .insuranceFirm(request.getInsuranceFirm())
+                .insuranceDateStart(request.getInsuranceDateStart())
+                .insuranceDateEnd(request.getInsuranceDateEnd())
+                .sCard(request.getSCard())
+                .key2(request.getKey2())
+                .gps(request.getGps())
+                .technicalInspectionEnd(request.getTechnicalInspectionEnd())
+                .gasInspectionEnd(request.getGasInspectionEnd())
+                .comment(request.getComment())
+                .dateEndLpg(request.getDateEndLpg())
+                .build();
+    }
+}

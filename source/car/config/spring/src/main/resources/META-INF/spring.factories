@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.car.spring.config.CarAdapterConfig,\
+ee.qrental.car.spring.config.CarMapperConfig,\
+ee.qrental.car.spring.config.CarServiceConfig,\
+ee.qrental.car.spring.config.CarRepositoryConfig

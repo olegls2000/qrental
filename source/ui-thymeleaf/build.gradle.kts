@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":source:car:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:transaction:api:in"))

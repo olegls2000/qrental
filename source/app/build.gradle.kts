@@ -12,6 +12,11 @@ dependencies {
     implementation(project(":source:driver:persistance:adapter"))
     implementation(project(":source:driver:persistance:repository:spring"))
 
+    implementation(project(":source:car:config:spring"))
+    implementation(project(":source:car:core"))
+    implementation(project(":source:car:persistance:adapter"))
+    implementation(project(":source:car:persistance:repository:spring"))
+
     implementation(project(":source:callsign:config:spring"))
     implementation(project(":source:callsign:core"))
     implementation(project(":source:callsign:persistance:adapter"))
