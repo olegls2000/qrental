@@ -46,6 +46,16 @@ include("source:firm:persistance:repository:spring")
 include("source:firm:persistance:flyway")
 include("source:firm:config:spring")
 
+//Constant domain:
+include("source:constant:api:in")
+include("source:constant:api:out")
+include("source:constant:domain")
+include("source:constant:core")
+include("source:constant:persistance:adapter")
+include("source:constant:persistance:entity")
+include("source:constant:persistance:repository:spring")
+include("source:constant:persistance:flyway")
+include("source:constant:config:spring")
 
 //Call-sign domain:
 include("source:callsign:api:in")

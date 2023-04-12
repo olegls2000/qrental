@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.constant.spring.config.ConstantAdapterConfig,\
+ee.qrental.constant.spring.config.ConstantMapperConfig,\
+ee.qrental.constant.spring.config.ConstantServiceConfig,\
+ee.qrental.constant.spring.config.ConstantRepositoryConfig

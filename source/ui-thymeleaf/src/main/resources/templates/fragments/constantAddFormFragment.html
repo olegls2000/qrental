@@ -1,7 +1,7 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Constant',
-            closeRef='/settings',
+            closeRef='/constants',
             content=~{fragments/constantAddFormFragment.html :: addForm}
         )">
     </div>
@@ -9,8 +9,8 @@
 
 <div th:fragment="addForm">
     <form method="post"
-          th:action="@{/settings/add}"
-          th:object="${constantAddCommand}">
+          th:action="@{/constants/add}"
+          th:object="${addRequest}">
 
         <div class="row">
             <div class="col">
@@ -19,7 +19,7 @@
                     <input class="form-control" id="constantId"
                            placeholder="Enter Constant name"
                            required
-                           th:field="*{name}"
+                           th:field="*{constant}"
                            type="text"/>
                 </div>
             </div>
@@ -50,7 +50,7 @@
 
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Add',
-            cancelHref='/settings'
+            cancelHref='/constants'
         )">
         </div>
     </form>

@@ -1,15 +1,15 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete a Constant',
-            closeRef='/settings',
+            closeRef='/constants',
             content=~{fragments/constantDeleteFormFragment.html :: deleteForm}
         )">
     </div>
 </div>
 
 <form th:fragment="deleteForm"
-      th:action="@{/settings/delete}"
-      th:object="${constantDeleteCommand}"
+      th:action="@{/constants/delete}"
+      th:object="${deleteRequest}"
       method="post">
     <input id="constantId" required
            th:field="*{id}"
@@ -18,11 +18,11 @@
     <div class="mb-3">
         <p class="fs-4 ">Please confirm that you want to delete next data:</p>
         <p class="fs-6 text-center"
-           th:text=${constantDeleteCommand.objectInfo}>Constant info</p>
+           th:text=${objectInfo}>Constant info</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
             submitValue='Delete',
-            cancelHref='/settings'
+            cancelHref='/constants'
         )">
     </div>
 </form>

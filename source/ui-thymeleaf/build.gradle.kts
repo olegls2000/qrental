@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:invoice:api:in"))
     implementation(project(":source:firm:api:in"))
+    implementation(project(":source:constant:api:in"))
     implementation(project(":source:common"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
