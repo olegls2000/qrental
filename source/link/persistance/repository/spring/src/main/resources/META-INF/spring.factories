@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.link.repository.LinkSpringDataConfig

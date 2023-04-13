@@ -46,6 +46,17 @@ include("source:firm:persistance:repository:spring")
 include("source:firm:persistance:flyway")
 include("source:firm:config:spring")
 
+//Link domain:
+include("source:link:api:in")
+include("source:link:api:out")
+include("source:link:domain")
+include("source:link:core")
+include("source:link:persistance:adapter")
+include("source:link:persistance:entity")
+include("source:link:persistance:repository:spring")
+include("source:link:persistance:flyway")
+include("source:link:config:spring")
+
 //Constant domain:
 include("source:constant:api:in")
 include("source:constant:api:out")

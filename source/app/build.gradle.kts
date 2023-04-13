@@ -32,6 +32,11 @@ dependencies {
     implementation(project(":source:firm:persistance:adapter"))
     implementation(project(":source:firm:persistance:repository:spring"))
 
+    implementation(project(":source:link:config:spring"))
+    implementation(project(":source:link:core"))
+    implementation(project(":source:link:persistance:adapter"))
+    implementation(project(":source:link:persistance:repository:spring"))
+
     implementation(project(":source:constant:config:spring"))
     implementation(project(":source:constant:core"))
     implementation(project(":source:constant:persistance:adapter"))
