@@ -14,7 +14,7 @@ public class InvoicePdfService implements InvoicePdfUseCase {
   private final InvoiceLoadPort loadPort;
 
   @Override
-  public InputStream getPdfInputStreamById(Long id) {
+  public InputStream getPdfInputStreamById(final Long id) {
     final var invoice = loadPort.loadById(id);
     final var invoiceNumber = invoice.getNumber();
     final var invoicePdfDoc = new Document();

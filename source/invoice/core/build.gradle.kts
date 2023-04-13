@@ -15,7 +15,6 @@ dependencies{
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
-
-    implementation("jakarta.transaction:jakarta.transaction-api:2.0.1")
-    implementation("com.github.librepdf:openpdf:1.3.30")
+    implementation(libs.q.jakarta.transaction)
+    implementation(libs.q.librepdf.openpdf)
 }

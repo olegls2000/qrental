@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies{
-    implementation(libs.q.jakarta)
+    implementation(libs.q.jakarta.persistence)
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }
