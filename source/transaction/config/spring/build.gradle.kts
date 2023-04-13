@@ -8,9 +8,9 @@ dependencies {
     implementation(project(":source:transaction:core"))
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:transaction:api:out"))
-    implementation(project(":source:transaction:persistance:flyway"))
-    implementation(project(":source:transaction:persistance:adapter"))
-    implementation(project(":source:transaction:persistance:repository:spring"))
+    implementation(project(":source:transaction:persistence:flyway"))
+    implementation(project(":source:transaction:persistence:adapter"))
+    implementation(project(":source:transaction:persistence:repository:spring"))
 
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:driver:api:in"))
