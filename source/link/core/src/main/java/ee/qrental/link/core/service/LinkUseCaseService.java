@@ -15,8 +15,7 @@ import ee.qrental.link.core.mapper.LinkUpdateRequestMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class LinkUseCaseService
-    implements LinkAddUseCase, LinkUpdateUseCase, LinkDeleteUseCase {
+public class LinkUseCaseService implements LinkAddUseCase, LinkUpdateUseCase, LinkDeleteUseCase {
 
   private final LinkAddPort addPort;
   private final LinkUpdatePort updatePort;

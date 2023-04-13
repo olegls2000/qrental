@@ -1,18 +1,15 @@
 package ee.qrental.link.core.service;
 
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.link.api.in.query.GetLinkQuery;
 import ee.qrental.link.api.in.request.LinkUpdateRequest;
 import ee.qrental.link.api.in.response.LinkResponse;
 import ee.qrental.link.api.out.LinkLoadPort;
 import ee.qrental.link.core.mapper.LinkResponseMapper;
 import ee.qrental.link.core.mapper.LinkUpdateRequestMapper;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
-
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class LinkQueryService implements GetLinkQuery {
