@@ -11,9 +11,14 @@ import ee.qrental.invoice.api.in.request.InvoiceDeleteRequest;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceAddUseCase;
 import ee.qrental.invoice.api.in.usecase.InvoiceDeleteUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.in.usecase.InvoiceUpdateUseCase;
+import java.io.*;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +32,7 @@ public class InvoiceUseCaseController {
   private final InvoiceUpdateUseCase updateUseCase;
   private final InvoiceDeleteUseCase deleteUseCase;
   private final GetInvoiceQuery invoiceQuery;
+  private final InvoicePdfUseCase pdfUseCase;
   private final GetDriverQuery driverQuery;
   private final GetFirmQuery firmQuery;
 
@@ -86,6 +92,16 @@ public class InvoiceUseCaseController {
     deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + INVOICE_ROOT_PATH;
+  }
+
+  @GetMapping("/pdf/{id}")
+  @ResponseBody
+  public ResponseEntity<InputStreamResource> getPdf(@PathVariable("id") long id)
+      throws IOException {
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_PDF)
+        .body(new InputStreamResource(pdfUseCase.getPdfInputStreamById(id)));
   }
 
   private void addAddRequestToModel(final InvoiceAddRequest addRequest, final Model model) {

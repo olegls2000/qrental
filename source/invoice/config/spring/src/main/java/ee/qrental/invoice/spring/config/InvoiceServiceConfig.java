@@ -1,6 +1,7 @@
 package ee.qrental.invoice.spring.config;
 
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
+import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.out.InvoiceAddPort;
 import ee.qrental.invoice.api.out.InvoiceDeletePort;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
@@ -8,6 +9,7 @@ import ee.qrental.invoice.api.out.InvoiceUpdatePort;
 import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
 import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
 import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
+import ee.qrental.invoice.core.service.InvoicePdfService;
 import ee.qrental.invoice.core.service.InvoiceQueryService;
 import ee.qrental.invoice.core.service.InvoiceUseCaseService;
 import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
@@ -35,6 +37,17 @@ public class InvoiceServiceConfig {
       final InvoiceUpdateRequestMapper updateRequestMapper,
       final InvoiceBusinessRuleValidator businessRuleValidator) {
     return new InvoiceUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper, businessRuleValidator);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        businessRuleValidator);
+  }
+
+  @Bean
+  public InvoicePdfUseCase getInvoicePdfService(final InvoiceLoadPort loadPort) {
+    return new InvoicePdfService(loadPort);
   }
 }

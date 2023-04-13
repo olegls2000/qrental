@@ -33,6 +33,10 @@
                    th:href="@{/invoices/delete-form/{id}(id=${invoice.id})}">
                     <span class="bi-trash"></span>
                     Delete</a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/invoices/pdf/{id}(id=${invoice.id})}">
+                    <span class="bi-file-earmark-pdf"></span>
+                    View Pdf</a>
             </td>
             <td th:text="${invoice.number}"></td>
             <td th:text="${invoice.weekNumber}"></td>
