@@ -14,19 +14,18 @@ public class InvoicePdfService implements InvoicePdfUseCase {
   private final InvoiceLoadPort loadPort;
 
   @Override
-  public InputStream getPdfInputStreamById(Long id)throws FileNotFoundException {
+  public InputStream getPdfInputStreamById(Long id) {
     final var invoice = loadPort.loadById(id);
     final var invoiceNumber = invoice.getNumber();
-    final var myPDFDoc = new Document();
-    final var fileName = "invoice_" + invoiceNumber + ".pdf";
-    final var filePath = "./" + fileName;
-    final var pdfOutputFile = new FileOutputStream(filePath);
-    final var pdfWriter = PdfWriter.getInstance(myPDFDoc, pdfOutputFile);
-    myPDFDoc.open();
-    myPDFDoc.add(new Paragraph("Draft invoice pdf! "));
-    myPDFDoc.add(new Paragraph("Number: "+ invoiceNumber));
-    myPDFDoc.close();
-    pdfWriter.close();
-    return new FileInputStream(filePath);
+    final var invoicePdfDoc = new Document();
+    final var invoicePdfOutputStream = new ByteArrayOutputStream();
+    final var writer = PdfWriter.getInstance(invoicePdfDoc, invoicePdfOutputStream);
+    invoicePdfDoc.open();
+    invoicePdfDoc.add(new Paragraph("Draft invoice pdf! "));
+    invoicePdfDoc.add(new Paragraph("Number: " + invoiceNumber));
+    invoicePdfDoc.close();
+    writer.close();
+
+    return new ByteArrayInputStream(invoicePdfOutputStream.toByteArray());
   }
 }
