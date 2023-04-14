@@ -1,43 +1,31 @@
 package ee.qrental.invoice.core.service;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getLastSundayFromDate;
-
-import ee.qrental.invoice.api.in.request.InvoiceCalculationRequest;
-import ee.qrental.invoice.api.in.request.InvoiceDeleteRequest;
-import ee.qrental.invoice.api.in.usecase.InvoiceCalculationUseCase;
-import ee.qrental.invoice.api.out.InvoiceAddPort;
-import ee.qrental.invoice.api.out.InvoiceDeletePort;
-import ee.qrental.invoice.api.out.InvoiceLoadPort;
-import ee.qrental.invoice.api.out.InvoiceUpdatePort;
-import ee.qrental.invoice.core.mapper.InvoiceCalculationRequestMapper;
-import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
-import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
+import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
+import ee.qrental.invoice.api.in.request.InvoiceCalculationDeleteRequest;
+import ee.qrental.invoice.api.in.request.InvoiceCalculationUpdateRequest;
+import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoiceCalculationDeleteUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoiceCalculationUpdateUseCase;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class InvoiceCalculationService implements InvoiceCalculationUseCase {
-
-  private final InvoiceAddPort addPort;
-  private final InvoiceUpdatePort updatePort;
-  private final InvoiceDeletePort deletePort;
-  private final InvoiceLoadPort loadPort;
-  private final InvoiceCalculationRequestMapper calculationRequestMapper;
-  private final InvoiceUpdateRequestMapper updateRequestMapper;
-  private final InvoiceBusinessRuleValidator businessRuleValidator;
+public class InvoiceCalculationService
+    implements InvoiceCalculationAddUseCase,
+        InvoiceCalculationUpdateUseCase,
+        InvoiceCalculationDeleteUseCase {
 
   @Override
-  public void calculate(InvoiceCalculationRequest request) {
-    final var domain = calculationRequestMapper.toDomain(request);
-    final var actionDateFormal = getLastSundayFromDate(domain.getActionDate());
+  public void add(final InvoiceCalculationAddRequest request) {
+    System.out.println("MOck add");
   }
 
-  public void delete(final InvoiceDeleteRequest request) {
-    deletePort.delete(request.getId());
+  @Override
+  public void delete(final InvoiceCalculationDeleteRequest request) {
+    System.out.println("MOck delete");
   }
 
-  private void checkExistence(final Long id) {
-    if (loadPort.loadById(id) == null) {
-      throw new RuntimeException("Update of Invoice failed. No Record with id = " + id);
-    }
+  @Override
+  public void update(final InvoiceCalculationUpdateRequest request) {
+    System.out.println("MOck update");
   }
 }
