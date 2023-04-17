@@ -42,6 +42,9 @@ public class InvoiceJakartaEntity {
   @Column(name = "driver_company_reg_number")
   private String driverCompanyRegNumber;
 
+  @Column(name = "driver_company_vat_number")
+  private String driverCompanyVatNumber;
+
   @Column(name = "driver_company_address")
   private String driverCompanyAddress;
 

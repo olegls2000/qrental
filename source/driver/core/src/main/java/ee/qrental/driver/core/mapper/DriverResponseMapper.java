@@ -21,6 +21,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .companyName(domain.getCompanyName())
         .companyRegistrationNumber(domain.getCompanyRegistrationNumber())
         .companyAddress(domain.getCompanyAddress())
+        .companyVat(domain.getCompanyVat())
         .driverLicenseNumber(domain.getDriverLicenseNumber())
         .driverLicenseExp(domain.getDriverLicenseExp())
         .taxiLicense(domain.getTaxiLicense())

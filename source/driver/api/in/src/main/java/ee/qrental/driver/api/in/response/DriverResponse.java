@@ -20,6 +20,7 @@ public class DriverResponse {
   private LocalDate driverLicenseExp;
   private String companyRegistrationNumber;
   private String companyAddress;
+  private String companyVat;
   private String taxiLicense;
   private BigDecimal deposit;
   private String comment;

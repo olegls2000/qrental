@@ -18,6 +18,7 @@ public class Invoice {
   private String driverCompany;
   private String driverCompanyRegNumber;
   private String driverCompanyAddress;
+  private String driverCompanyVat;
   private Long qFirmId;
   private String qFirmName;
   private String qFirmRegNumber;

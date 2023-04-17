@@ -9,11 +9,14 @@ import com.lowagie.text.alignment.VerticalAlignment;
 import com.lowagie.text.pdf.PdfWriter;
 import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
+import ee.qrental.invoice.domain.InvoiceItem;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 
@@ -35,6 +38,17 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     final var invoiceQFirmVatNumber = invoice.getQFirmVatNumber();
     final var invoiceQFirmIban = invoice.getQFirmIban();
     final var invoiceQFirmBank = invoice.getQFirmBank();
+    final var invoiceTotalAmount =
+        invoice.getItems().stream()
+            .map(InvoiceItem::getAmount)
+            .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
+            .reduce(BigDecimal::add)
+            .get();
+    final var driverCompanyVat = invoice.getDriverCompanyVat();
+
+    final var vatAmount = invoiceTotalAmount.divide(java.math.BigDecimal.valueOf(5));
+
+    final var arveSum = invoiceTotalAmount.add(vatAmount);
 
     final var invoicePdfDoc =
         new Document(
@@ -156,7 +170,7 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell22.setHorizontalAlignment(HorizontalAlignment.LEFT);
     invoiceTable2.addCell(cell22);
 
-    Cell cell23 = new Cell(new Paragraph("Aadress: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell23 = new Cell(new Paragraph("Adress: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell23.setBorder(Rectangle.NO_BORDER);
     cell23.setHorizontalAlignment(HorizontalAlignment.LEFT);
     invoiceTable2.addCell(cell23);
@@ -183,35 +197,45 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell26.setHorizontalAlignment(HorizontalAlignment.LEFT);
     invoiceTable2.addCell(cell26);
 
-    Cell cell27 = new Cell(new Paragraph("KMKR nr. : ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell27 = new Cell(new Paragraph("KMKR nr.: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell27.setBorder(Rectangle.NO_BORDER);
     cell27.setHorizontalAlignment(HorizontalAlignment.LEFT);
     invoiceTable2.addCell(cell27);
 
-    Cell cell28 = new Cell(new Paragraph("...... ", new Font(Font.COURIER, 11, Font.BOLDITALIC)));
+    Cell cell28 =
+        new Cell(new Paragraph(driverCompanyVat, new Font(Font.COURIER, 11, Font.BOLDITALIC)));
     cell28.setBorder(Rectangle.NO_BORDER);
     cell28.setHorizontalAlignment(HorizontalAlignment.LEFT);
     invoiceTable2.addCell(cell28);
 
     // Main Table
+    for (InvoiceItem item : invoice.getItems()) {
+      if (item.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+        continue;
+      }
+      Cell cell31 =
+          new Cell(new Paragraph(item.getType(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
+      cell31.setHorizontalAlignment(HorizontalAlignment.LEFT);
+      invoiceMainTable.addCell(cell31);
 
-    Cell cell31 =
-        new Cell(new Paragraph("Renditasu ", new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
-    cell31.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceMainTable.addCell(cell31);
-
-    Cell cell32 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
-    cell32.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceMainTable.addCell(cell32);
+      Cell cell32 =
+          new Cell(
+              new Paragraph(
+                  getFormattedString(item.getAmount()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+      cell32.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+      invoiceMainTable.addCell(cell32);
+    }
 
     // Summa Table
-
     Cell cell4 = new Cell(new Paragraph("Summa:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell4.setBorder(Rectangle.NO_BORDER);
     cell4.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell4);
 
-    Cell cell5 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell5 =
+        new Cell(
+            new Paragraph(
+                invoiceTotalAmount.toString(), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell5.setBorder(Rectangle.NO_BORDER);
     cell5.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell5);
@@ -221,7 +245,10 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell6.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell6);
 
-    Cell cell7 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell7 =
+        new Cell(
+            new Paragraph(
+                getFormattedString(vatAmount), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell7.setBorder(Rectangle.NO_BORDER);
     cell7.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell7);
@@ -232,7 +259,8 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell8.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell8);
 
-    Cell cell9 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell9 =
+        new Cell(new Paragraph(arveSum.toString(), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell9.setBorder(Rectangle.NO_BORDER);
     cell9.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceSumma.addCell(cell9);
@@ -245,7 +273,8 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell10.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell10);
 
-    Cell cell11 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell11 =
+        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell11.setBorder(Rectangle.NO_BORDER);
     cell11.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell11);
@@ -258,7 +287,8 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell12.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell12);
 
-    Cell cell13 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell13 =
+        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell13.setBorder(Rectangle.NO_BORDER);
     cell13.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell13);
@@ -268,7 +298,8 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell14.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell14);
 
-    Cell cell15 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell15 =
+        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell15.setBorder(Rectangle.NO_BORDER);
     cell15.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell15);
@@ -279,7 +310,10 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     cell16.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell16);
 
-    Cell cell17 = new Cell(new Paragraph("...... ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    Cell cell17 =
+        new Cell(
+            new Paragraph(
+                getFormattedString(arveSum), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
     cell17.setBorder(Rectangle.NO_BORDER);
     cell17.setHorizontalAlignment(HorizontalAlignment.RIGHT);
     invoiceTotal.addCell(cell17);
@@ -359,5 +393,14 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     writer.close();
 
     return new ByteArrayInputStream(invoicePdfOutputStream.toByteArray());
+  }
+
+  private String getFormattedString(BigDecimal number) {
+    number = number.setScale(2, BigDecimal.ROUND_DOWN);
+    DecimalFormat df = new DecimalFormat();
+    df.setMaximumFractionDigits(2);
+    df.setMinimumFractionDigits(0);
+    df.setGroupingUsed(false);
+    return df.format(number);
   }
 }

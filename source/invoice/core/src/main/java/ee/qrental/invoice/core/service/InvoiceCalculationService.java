@@ -17,10 +17,10 @@ import ee.qrental.invoice.domain.InvoiceItem;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -68,6 +68,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
         final var driverId = entry.getKey();
         final var driver = driverQuery.getById(driverId);
+        final var driverCompanyVat = driver.getCompanyVat();
 
         final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
         final var driversCalSign = driversCallSignLink.getCallSign();
@@ -94,6 +95,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 .driverCompanyAddress(driver.getCompanyAddress())
                 .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
                 .driverCallSign(driversCalSign)
+                .driverCompanyVat(driverCompanyVat)
                 .qFirmId(qFirmId)
                 .qFirmName(qFirm.getFirmName())
                 .qFirmBank(qFirm.getBank())
