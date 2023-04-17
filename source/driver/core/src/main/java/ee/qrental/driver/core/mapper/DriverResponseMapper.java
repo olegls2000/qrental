@@ -27,6 +27,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .taxiLicense(domain.getTaxiLicense())
         .comment(domain.getComment())
         .deposit(domain.getDeposit())
+        .qFirmId(domain.getQFirmId())
         .build();
   }
 

@@ -65,11 +65,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
       for (Map.Entry<Long, List<TransactionResponse>> entry : driverVsTransaction.entrySet()) {
         final var driversTransactions = entry.getValue();
-
         final var driverId = entry.getKey();
         final var driver = driverQuery.getById(driverId);
         final var driverCompanyVat = driver.getCompanyVat();
-
         final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
         final var driversCalSign = driversCallSignLink.getCallSign();
         if (driversTransactions.isEmpty()) {
@@ -79,8 +77,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                   week.weekNumber(), driversCalSign, week.start(), week.end()));
           continue;
         }
-
-        final var qFirmId = 3L; // TODO get from Driver
+        final var qFirmId = driver.getQFirmId();
         final var qFirm = firmQuery.getById(qFirmId);
 
         final var invoiceNumber = getInvoiceNumber(week, driversCalSign);

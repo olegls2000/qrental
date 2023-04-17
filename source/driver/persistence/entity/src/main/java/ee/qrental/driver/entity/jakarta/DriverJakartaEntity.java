@@ -65,9 +65,13 @@ public class DriverJakartaEntity {
   @Column(name = "address")
   private String address;
 
+  @Column(name = "deposit")
+  private BigDecimal deposit;
+
   @Column(name = "comment")
   private String comment;
 
-  @Column(name = "deposit")
-  private BigDecimal deposit;
+  @Column(name = "q_firm_id")
+  private Long qFirmId;
+
 }

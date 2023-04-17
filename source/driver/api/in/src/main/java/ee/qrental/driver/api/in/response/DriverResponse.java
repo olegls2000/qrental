@@ -24,4 +24,5 @@ public class DriverResponse {
   private String taxiLicense;
   private BigDecimal deposit;
   private String comment;
+  private Long qFirmId;
 }
