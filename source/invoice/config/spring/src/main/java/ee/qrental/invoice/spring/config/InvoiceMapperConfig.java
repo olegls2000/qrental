@@ -3,10 +3,9 @@ package ee.qrental.invoice.spring.config;
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
+import ee.qrental.invoice.adapter.mapper.InvoiceCalculationAdapterMapper;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
-import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
-import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
-import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
+import ee.qrental.invoice.core.mapper.*;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +29,20 @@ public class InvoiceMapperConfig {
   @Bean
   InvoiceUpdateRequestMapper getInvoiceUpdateRequestMapper(final InvoiceLoadPort loadPort) {
     return new InvoiceUpdateRequestMapper(loadPort);
+  }
+
+  @Bean
+  InvoiceCalculationAddRequestMapper getInvoiceCalculationAddRequestMapper() {
+    return new InvoiceCalculationAddRequestMapper();
+  }
+
+  @Bean
+  InvoiceCalculationResponseMapper getInvoiceCalculationResponseMapper() {
+    return new InvoiceCalculationResponseMapper();
+  }
+
+  @Bean
+  InvoiceCalculationAdapterMapper getInvoiceCalculationAdapterMapper() {
+    return new InvoiceCalculationAdapterMapper();
   }
 }

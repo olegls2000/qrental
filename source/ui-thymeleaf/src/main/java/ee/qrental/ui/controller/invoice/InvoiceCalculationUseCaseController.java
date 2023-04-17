@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InvoiceCalculationUseCaseController {
 
   private final InvoiceCalculationAddUseCase addUseCase;
-  private final InvoiceCalculationDeleteUseCase deleteUseCase;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {

@@ -11,6 +11,7 @@ public class TransactionResponse {
   private Long id;
   private String type;
   private String driverInfo;
+  private Long driverId;
   private Integer callSign;
   private BigDecimal realAmount;
   private Integer weekNumber;

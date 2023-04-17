@@ -1,16 +1,17 @@
-package ee.qrental.invoice.entity.jakarta.calculation;
+package ee.qrental.invoice.entity.jakarta;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import ee.qrental.invoice.entity.jakarta.InvoiceJakartaEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "invoice_calculation_result")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

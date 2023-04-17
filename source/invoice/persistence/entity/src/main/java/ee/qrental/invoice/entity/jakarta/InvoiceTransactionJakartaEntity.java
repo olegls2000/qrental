@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "transaction_per_invoice")
+@Table(name = "invoice_transaction")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

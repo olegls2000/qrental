@@ -1,4 +1,4 @@
-create table if not exists transaction_per_invoice
+create table if not exists invoice_transaction
 (
     id             serial primary key,
     transaction_id integer not null,

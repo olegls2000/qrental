@@ -38,7 +38,7 @@ public enum QWeek {
 
   @Getter private Integer number;
 
-  QWeek(String month, Integer number) {
+  QWeek(final String month, final Integer number) {
     this.month = month;
     this.number = number;
   }

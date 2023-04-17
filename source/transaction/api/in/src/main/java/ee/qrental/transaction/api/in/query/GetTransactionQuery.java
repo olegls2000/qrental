@@ -2,6 +2,7 @@ package ee.qrental.transaction.api.in.query;
 
 import ee.qrental.common.core.in.query.BaseGetQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -17,4 +18,5 @@ public interface GetTransactionQuery
   List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverFilter filter);
 
   List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter);
+  List<TransactionResponse> getAllByFilter(final PeriodFilter filter);
 }

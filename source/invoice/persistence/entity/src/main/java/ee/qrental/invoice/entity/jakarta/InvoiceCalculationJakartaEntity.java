@@ -1,17 +1,19 @@
-package ee.qrental.invoice.entity.jakarta.calculation;
+package ee.qrental.invoice.entity.jakarta;
 
-import java.time.LocalDate;
-import java.util.List;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "invoice_calculation")
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,8 +26,8 @@ public class InvoiceCalculationJakartaEntity {
   @Column(name = "action_date")
   private LocalDate actionDate;
 
-    @Column(name = "comment")
-    private String comment;
+  @Column(name = "comment")
+  private String comment;
 
   @OneToMany(mappedBy = "calculation")
   private List<InvoiceCalculationResultJakartaEntity> results;

@@ -1,16 +1,16 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
 import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
-import ee.qrental.invoice.api.out.InvoiceAddPort;
-import ee.qrental.invoice.api.out.InvoiceDeletePort;
-import ee.qrental.invoice.api.out.InvoiceLoadPort;
-import ee.qrental.invoice.api.out.InvoiceUpdatePort;
-import ee.qrental.invoice.core.mapper.InvoiceAddRequestMapper;
-import ee.qrental.invoice.core.mapper.InvoiceResponseMapper;
-import ee.qrental.invoice.core.mapper.InvoiceUpdateRequestMapper;
+import ee.qrental.invoice.api.out.*;
+import ee.qrental.invoice.core.mapper.*;
 import ee.qrental.invoice.core.service.*;
 import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
+import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,12 +50,36 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  public InvoiceCalculationQueryService getInvoiceCalculationQueryService() {
-    return new InvoiceCalculationQueryService();
+  public InvoiceCalculationQueryService getInvoiceCalculationQueryService(
+      final InvoiceCalculationLoadPort loadPort,
+      final InvoiceCalculationResponseMapper responseMapper) {
+    return new InvoiceCalculationQueryService(loadPort, responseMapper);
   }
 
   @Bean
-  public InvoiceCalculationService getInvoiceCalculationService() {
-    return new InvoiceCalculationService();
+  public InvoiceCalculationService getInvoiceCalculationService(
+      final InvoiceCalculationAddPort addPort,
+      final GetTransactionQuery transactionQuery,
+      final GetDriverQuery driverQuery,
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetFirmQuery firmQuery,
+      final InvoiceCalculationAddRequestMapper addRequestMapper,
+      final InvoiceCalculationBusinessRuleValidator businessRuleValidator,
+      final InvoiceCalculationPeriodService datesCalculationService) {
+    return new InvoiceCalculationService(
+        addPort,
+        transactionQuery,
+        driverQuery,
+        callSignLinkQuery,
+        firmQuery,
+        addRequestMapper,
+        businessRuleValidator,
+        datesCalculationService);
+  }
+
+  @Bean
+  InvoiceCalculationPeriodService getInvoiceCalculationPeriodService(
+      final InvoiceCalculationLoadPort loadPort) {
+    return new InvoiceCalculationPeriodService(loadPort);
   }
 }
