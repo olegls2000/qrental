@@ -1,7 +1,7 @@
 package ee.qrental.car.adapter.adapter;
 
 import ee.qrental.car.adapter.mapper.CarAdapterMapper;
-import ee.qrental.car.adapter.repository.CarRepository;
+
 import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.domain.Car;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import ee.qrental.car.adapter.repository.CarRepository;
 
 @AllArgsConstructor
 public class CarLoadAdapter implements CarLoadPort {

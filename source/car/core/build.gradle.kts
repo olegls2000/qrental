@@ -1,7 +1,3 @@
-plugins {
-    id("q-java")
-}
-
 dependencies {
     implementation(project(":source:common"))
     implementation(project(":source:car:api:in"))
