@@ -24,6 +24,7 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
         .qFirmName(domain.getQFirmName())
         .qFirmRegNumber(domain.getQFirmRegNumber())
         .qFirmVatNumber(domain.getQFirmVatNumber())
+        .qFirmIban(domain.getQFirmIban())
         .qFirmBank(domain.getQFirmBank())
         .created(domain.getCreated())
         .comment(domain.getComment())

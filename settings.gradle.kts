@@ -99,4 +99,9 @@ include("source:transaction:persistence:repository")
 include("source:transaction:persistence:flyway")
 include("source:transaction:config")
 
+//Email domain:
+include("source:email:api:in")
+include("source:email:core")
+include("source:email:config")
+
 include("source:ui-thymeleaf")

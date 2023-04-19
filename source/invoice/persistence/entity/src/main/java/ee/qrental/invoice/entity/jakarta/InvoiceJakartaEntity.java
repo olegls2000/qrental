@@ -3,13 +3,13 @@ package ee.qrental.invoice.entity.jakarta;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -39,6 +39,9 @@ public class InvoiceJakartaEntity {
   @Column(name = "driver_company")
   private String driverCompany;
 
+  @Column(name = "driver_info")
+  private String driverInfo;
+
   @Column(name = "driver_company_reg_number")
   private String driverCompanyRegNumber;
 
@@ -65,6 +68,15 @@ public class InvoiceJakartaEntity {
 
   @Column(name = "q_firm_bank")
   private String qFirmBank;
+
+  @Column(name = "q_firm_email")
+  private String qFirmEmail;
+
+  @Column(name = "q_firm_post_address")
+  private String qFirmPostAddress;
+
+  @Column(name = "q_firm_phone")
+  private String qFirmPhone;
 
   @Column(name = "created")
   private LocalDate created;

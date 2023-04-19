@@ -2,9 +2,11 @@ package ee.qrental.invoice.spring.config;
 
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
 import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoiceSendByEmailUseCase;
 import ee.qrental.invoice.api.out.*;
 import ee.qrental.invoice.core.mapper.*;
 import ee.qrental.invoice.core.service.*;
@@ -18,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 public class InvoiceServiceConfig {
 
   @Bean
-  public GetInvoiceQuery getInvoiceQueryService(
+  GetInvoiceQuery getInvoiceQueryService(
       final InvoiceLoadPort loadPort,
       final InvoiceResponseMapper mapper,
       final InvoiceUpdateRequestMapper updateRequestMapper) {
@@ -26,7 +28,7 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  public InvoiceUseCaseService getInvoiceUseCaseService(
+  InvoiceUseCaseService getInvoiceUseCaseService(
       final InvoiceAddPort addPort,
       final InvoiceUpdatePort updatePort,
       final InvoiceDeletePort deletePort,
@@ -45,19 +47,19 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  public InvoicePdfUseCase getInvoicePdfService(final InvoiceLoadPort loadPort) {
+  InvoicePdfUseCase getInvoicePdfService(final InvoiceLoadPort loadPort) {
     return new InvoicePdfService(loadPort);
   }
 
   @Bean
-  public InvoiceCalculationQueryService getInvoiceCalculationQueryService(
+  InvoiceCalculationQueryService getInvoiceCalculationQueryService(
       final InvoiceCalculationLoadPort loadPort,
       final InvoiceCalculationResponseMapper responseMapper) {
     return new InvoiceCalculationQueryService(loadPort, responseMapper);
   }
 
   @Bean
-  public InvoiceCalculationService getInvoiceCalculationService(
+  InvoiceCalculationService getInvoiceCalculationService(
       final InvoiceCalculationAddPort addPort,
       final GetTransactionQuery transactionQuery,
       final GetDriverQuery driverQuery,
@@ -65,13 +67,17 @@ public class InvoiceServiceConfig {
       final GetFirmQuery firmQuery,
       final InvoiceCalculationAddRequestMapper addRequestMapper,
       final InvoiceCalculationBusinessRuleValidator businessRuleValidator,
-      final InvoiceCalculationPeriodService datesCalculationService) {
+      final InvoiceCalculationPeriodService datesCalculationService,
+      final EmailSendUseCase emailSendUseCase,
+      final InvoicePdfUseCase invoicePdfUseCase) {
     return new InvoiceCalculationService(
         addPort,
         transactionQuery,
         driverQuery,
         callSignLinkQuery,
         firmQuery,
+        emailSendUseCase,
+        invoicePdfUseCase,
         addRequestMapper,
         businessRuleValidator,
         datesCalculationService);
@@ -81,5 +87,15 @@ public class InvoiceServiceConfig {
   InvoiceCalculationPeriodService getInvoiceCalculationPeriodService(
       final InvoiceCalculationLoadPort loadPort) {
     return new InvoiceCalculationPeriodService(loadPort);
+  }
+
+  @Bean
+  InvoiceSendByEmailUseCase getInvoiceSendByEmailUseCase(
+      final EmailSendUseCase emailSendUseCase,
+      final InvoiceLoadPort invoiceLoadPort,
+      final GetDriverQuery driverQuery,
+      InvoicePdfUseCase invoicePdfUseCase) {
+    return new InvoiceSendByEmailService(
+        emailSendUseCase, invoiceLoadPort, invoicePdfUseCase, driverQuery);
   }
 }

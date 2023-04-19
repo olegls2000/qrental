@@ -9,3 +9,12 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
+  mail:
+    username: pasechnik.o.n@gmail.com
+    password: tcyxeqswupeeyrqq
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true

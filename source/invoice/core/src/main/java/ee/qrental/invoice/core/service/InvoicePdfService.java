@@ -1,43 +1,63 @@
 package ee.qrental.invoice.core.service;
 
+import static com.lowagie.text.Font.BOLDITALIC;
+import static com.lowagie.text.Font.COURIER;
+import static com.lowagie.text.Rectangle.NO_BORDER;
+import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
+import static java.awt.Color.white;
+import static java.lang.String.format;
+import static java.time.format.DateTimeFormatter.ofLocalizedDate;
+import static java.time.format.FormatStyle.SHORT;
+
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.Rectangle;
 import com.lowagie.text.alignment.HorizontalAlignment;
 import com.lowagie.text.alignment.VerticalAlignment;
 import com.lowagie.text.pdf.PdfWriter;
+import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
+import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 
 @AllArgsConstructor
 public class InvoicePdfService implements InvoicePdfUseCase {
 
   private final InvoiceLoadPort loadPort;
 
+  @SneakyThrows
   @Override
-  public InputStream getPdfInputStreamById(final Long id) throws IOException {
+  public InputStream getPdfInputStreamById(final Long id) {
     final var invoice = loadPort.loadById(id);
-    final var invoiceNumber = invoice.getNumber();
-    final var invoiceDate = invoice.getCreated();
-    final var invoiceDriverCompany = invoice.getDriverCompany();
-    final var invoiceDriverCompanyRegNumber = invoice.getDriverCompanyRegNumber();
-    final var invoiceDriverCompanyAddress = invoice.getDriverCompanyAddress();
-    final var invoiceQFirmName = invoice.getQFirmName();
-    final var invoiceQFirmRegNumber = invoice.getQFirmRegNumber();
-    final var invoiceQFirmVatNumber = invoice.getQFirmVatNumber();
-    final var invoiceQFirmIban = invoice.getQFirmIban();
-    final var invoiceQFirmBank = invoice.getQFirmBank();
+    final var number = invoice.getNumber();
+    final var creationDate = invoice.getCreated().format(ofLocalizedDate(SHORT));
+    final var weekNumber = invoice.getWeekNumber();
+    final var year = invoice.getCreated().getYear();
+    final var startDate =
+        QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
+    final var endDate =
+        QTimeUtils.getLastDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
+    final var driverCompany = invoice.getDriverCompany();
+    final var driverInfo = invoice.getDriverInfo();
+    final var driverCompanyRegNumber = invoice.getDriverCompanyRegNumber();
+    final var driverCompanyAddress = invoice.getDriverCompanyAddress();
+    final var qFirmEmail = invoice.getQFirmEmail();
+    final var qFirmPostAddress = invoice.getQFirmPostAddress();
+    final var qFirmPhone = invoice.getQFirmPhone();
+    final var qFirmName = invoice.getQFirmName();
+    final var qFirmRegNumber = invoice.getQFirmRegNumber();
+    final var qFirmVatNumber = invoice.getQFirmVatNumber();
+    final var qFirmIban = invoice.getQFirmIban();
+    final var qFirmBank = invoice.getQFirmBank();
     final var invoiceTotalAmount =
         invoice.getItems().stream()
             .map(InvoiceItem::getAmount)
@@ -45,362 +65,300 @@ public class InvoicePdfService implements InvoicePdfUseCase {
             .reduce(BigDecimal::add)
             .get();
     final var driverCompanyVat = invoice.getDriverCompanyVat();
-
-    final var vatAmount = invoiceTotalAmount.divide(java.math.BigDecimal.valueOf(5));
-
+    final var vatAmount = invoiceTotalAmount.divide(BigDecimal.valueOf(5));
     final var arveSum = invoiceTotalAmount.add(vatAmount);
-
-    final var invoicePdfDoc =
-        new Document(
-            PageSize.A4,
-            40f, // left
-            40f, // right
-            50f, // top
-            50f); // down);
+    final var invoicePdfDoc = new Document(PageSize.A4, 40f, 40f, 50f, 50f);
     final var invoicePdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(invoicePdfDoc, invoicePdfOutputStream);
-
-    Table invoiceTable1 = new Table(2);
-    invoiceTable1.setPadding(0f);
-    invoiceTable1.setSpacing(0f);
-    invoiceTable1.setWidth(100f);
-    invoiceTable1.setBorderColor(Color.white);
-    invoiceTable1.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTable1.setBorder(Rectangle.NO_BORDER);
-    invoiceTable1.setBorder(Cell.NO_BORDER);
-
-    float[] widthsTable2 = {1, 2};
-    Table invoiceTable2 = new Table(2); // 2 columns
-    invoiceTable2.setWidths(widthsTable2);
-    invoiceTable2.setPadding(0f);
-    invoiceTable2.setSpacing(-1f);
-    invoiceTable2.setWidth(60f);
-    invoiceTable2.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.setBorder(Rectangle.NO_BORDER);
-    invoiceTable2.setBorder(Cell.NO_BORDER);
-
-    float[] widths = {3, 1};
-    Table invoiceMainTable = new Table(2);
-    invoiceMainTable.setWidths(widths);
-    invoiceMainTable.setPadding(2f);
-    invoiceMainTable.setSpacing(1f);
-    invoiceMainTable.setWidth(100f);
-    invoiceMainTable.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceMainTable.setBorderColor(Color.BLACK);
-
-    // header of the Main table
-    ArrayList<String> headerTable = new ArrayList<>();
-    headerTable.add("Selgitus");
-    headerTable.add("Summa");
-
-    headerTable.forEach(
-        e -> {
-          Cell current = new Cell(new Phrase(e));
-          current.setHeader(true);
-          current.setBackgroundColor(Color.LIGHT_GRAY);
-          current.setVerticalAlignment(VerticalAlignment.CENTER);
-          current.setHorizontalAlignment(HorizontalAlignment.CENTER);
-          invoiceMainTable.addCell(current);
-        });
-
-    float[] widths1 = {2, 1};
-    Table invoiceSumma = new Table(2);
-    invoiceSumma.setWidths(widths1);
-    invoiceSumma.setSpacing(-1f);
-    invoiceSumma.setPadding(0f);
-    invoiceSumma.setWidth(50f);
-    invoiceSumma.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.setBorder(Rectangle.NO_BORDER);
-
-    float[] widths2 = {2, 1};
-    Table invoiceTotal = new Table(2);
-    invoiceTotal.setWidths(widths2);
-    invoiceTotal.setSpacing(-1f);
-    invoiceTotal.setPadding(0f);
-    invoiceTotal.setWidth(50f);
-    invoiceTotal.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.setBorder(Rectangle.NO_BORDER);
-
-    Table invoiceQFirm = new Table(3);
-    invoiceQFirm.setSpacing(-2f);
-    invoiceQFirm.setPadding(0f);
-    invoiceQFirm.setWidth(100f);
-    invoiceQFirm.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceQFirm.setBorder(Rectangle.NO_BORDER);
+    final var header = getHeader(number, creationDate, startDate, endDate);
+    final var requisites =
+        getRequisites(
+            driverCompany,
+            driverCompanyAddress,
+            driverCompanyRegNumber,
+            driverCompanyVat,
+            driverInfo);
+    final var itemsTable = getItemsTable(invoice);
+    final var invoiceSumma = getSumms(invoiceTotalAmount, vatAmount, arveSum);
+    final var invoiceTotal = getTotal(arveSum);
+    final var footer =
+        getFooter(
+            qFirmName,
+            qFirmPostAddress,
+            qFirmBank,
+            qFirmRegNumber,
+            qFirmEmail,
+            qFirmIban,
+            qFirmVatNumber,
+            qFirmPhone);
 
     invoicePdfDoc.open();
-
-    Image logo = Image.getInstance("Images/qRentalGroup_gorznt.png");
-    logo.scaleAbsolute(150f, 60f);
-
-    // Table 1
-    Cell cell = new Cell(logo);
-    cell.setRowspan(3);
-    cell.setBorder(Rectangle.NO_BORDER);
-    invoiceTable1.addCell(cell);
-
-    Cell cell1 =
-        new Cell(
-            new Paragraph("Arve Nr.: " + invoiceNumber, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
-    cell1.setBorder(Rectangle.NO_BORDER);
-    invoiceTable1.addCell(cell1);
-
-    Cell cell2 =
-        new Cell(new Paragraph("Data : " + invoiceDate, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
-    cell2.setBorder(Rectangle.NO_BORDER);
-    invoiceTable1.addCell(cell2);
-
-    Cell cell3 =
-        new Cell(
-            new Paragraph(
-                "Ajaperiood: " + "Date-Date/Month/Year",
-                new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
-    cell3.setBorder(Rectangle.NO_BORDER);
-    invoiceTable1.addCell(cell3);
-
-    // Table 2
-    Cell cell21 = new Cell(new Paragraph("Maksja: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell21.setBorder(Rectangle.NO_BORDER);
-    cell21.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell21);
-
-    Cell cell22 =
-        new Cell(new Paragraph(invoiceDriverCompany, new Font(Font.COURIER, 11, Font.BOLDITALIC)));
-    cell22.setBorder(Rectangle.NO_BORDER);
-    cell22.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell22);
-
-    Cell cell23 = new Cell(new Paragraph("Adress: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell23.setBorder(Rectangle.NO_BORDER);
-    cell23.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell23);
-
-    Cell cell24 =
-        new Cell(
-            new Paragraph(
-                invoiceDriverCompanyAddress, new Font(Font.COURIER, 11, Font.BOLDITALIC)));
-    cell24.setBorder(Rectangle.NO_BORDER);
-    cell24.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell24);
-
-    Cell cell25 =
-        new Cell(new Paragraph("Äriregistri nr: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell25.setBorder(Rectangle.NO_BORDER);
-    cell25.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell25);
-
-    Cell cell26 =
-        new Cell(
-            new Paragraph(
-                invoiceDriverCompanyRegNumber, new Font(Font.COURIER, 11, Font.BOLDITALIC)));
-    cell26.setBorder(Rectangle.NO_BORDER);
-    cell26.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell26);
-
-    Cell cell27 = new Cell(new Paragraph("KMKR nr.: ", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell27.setBorder(Rectangle.NO_BORDER);
-    cell27.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell27);
-
-    Cell cell28 =
-        new Cell(new Paragraph(driverCompanyVat, new Font(Font.COURIER, 11, Font.BOLDITALIC)));
-    cell28.setBorder(Rectangle.NO_BORDER);
-    cell28.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceTable2.addCell(cell28);
-
-    // Main Table
-    for (InvoiceItem item : invoice.getItems()) {
-      if (item.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-        continue;
-      }
-      Cell cell31 =
-          new Cell(new Paragraph(item.getType(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
-      cell31.setHorizontalAlignment(HorizontalAlignment.LEFT);
-      invoiceMainTable.addCell(cell31);
-
-      Cell cell32 =
-          new Cell(
-              new Paragraph(
-                  getFormattedString(item.getAmount()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
-      cell32.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-      invoiceMainTable.addCell(cell32);
-    }
-
-    // Summa Table
-    Cell cell4 = new Cell(new Paragraph("Summa:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell4.setBorder(Rectangle.NO_BORDER);
-    cell4.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell4);
-
-    Cell cell5 =
-        new Cell(
-            new Paragraph(
-                invoiceTotalAmount.toString(), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell5.setBorder(Rectangle.NO_BORDER);
-    cell5.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell5);
-
-    Cell cell6 = new Cell(new Paragraph("Käibemaks %:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell6.setBorder(Rectangle.NO_BORDER);
-    cell6.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell6);
-
-    Cell cell7 =
-        new Cell(
-            new Paragraph(
-                getFormattedString(vatAmount), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell7.setBorder(Rectangle.NO_BORDER);
-    cell7.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell7);
-
-    Cell cell8 =
-        new Cell(new Paragraph("Arve summa EUR:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell8.setBorder(Rectangle.NO_BORDER);
-    cell8.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell8);
-
-    Cell cell9 =
-        new Cell(new Paragraph(arveSum.toString(), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell9.setBorder(Rectangle.NO_BORDER);
-    cell9.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceSumma.addCell(cell9);
-
-    // Total Table
-    Cell cell10 =
-        new Cell(
-            new Paragraph("Eelmise perioodi ettemaks:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell10.setBorder(Rectangle.NO_BORDER);
-    cell10.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell10);
-
-    Cell cell11 =
-        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell11.setBorder(Rectangle.NO_BORDER);
-    cell11.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell11);
-
-    Cell cell12 =
-        new Cell(
-            new Paragraph(
-                "Eelmise perioodi võlgnevus:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell12.setBorder(Rectangle.NO_BORDER);
-    cell12.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell12);
-
-    Cell cell13 =
-        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell13.setBorder(Rectangle.NO_BORDER);
-    cell13.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell13);
-
-    Cell cell14 = new Cell(new Paragraph("Vivis:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell14.setBorder(Rectangle.NO_BORDER);
-    cell14.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell14);
-
-    Cell cell15 =
-        new Cell(new Paragraph("pole saadaval", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell15.setBorder(Rectangle.NO_BORDER);
-    cell15.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell15);
-
-    Cell cell16 =
-        new Cell(new Paragraph("Tasuda kokku:", new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell16.setBorder(Rectangle.NO_BORDER);
-    cell16.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell16);
-
-    Cell cell17 =
-        new Cell(
-            new Paragraph(
-                getFormattedString(arveSum), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
-    cell17.setBorder(Rectangle.NO_BORDER);
-    cell17.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    invoiceTotal.addCell(cell17);
-
-    // Q Firm  Table
-    Cell cell41 =
-        new Cell(new Paragraph(invoiceQFirmName, new Font(Font.TIMES_ROMAN, 10, Font.BOLD)));
-    cell41.setBorder(Rectangle.NO_BORDER);
-    cell41.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell41);
-
-    Cell cell42 =
-        new Cell(new Paragraph("invoiceQFirmAddress", new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
-    cell42.setBorder(Rectangle.NO_BORDER);
-    cell42.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell42);
-
-    Cell cell43 =
-        new Cell(new Paragraph(invoiceQFirmBank, new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
-    cell43.setBorder(Rectangle.NO_BORDER);
-    cell43.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell43);
-
-    Cell cell44 =
-        new Cell(
-            new Paragraph(
-                "Äriregistri nr.: " + invoiceQFirmRegNumber,
-                new Font(Font.TIMES_ROMAN, 10, Font.BOLD)));
-    cell44.setBorder(Rectangle.NO_BORDER);
-    cell44.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell44);
-
-    Cell cell45 =
-        new Cell(
-            new Paragraph(
-                "E-mail: " + "invoiceQFirmRegEmail", new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
-    cell45.setBorder(Rectangle.NO_BORDER);
-    cell45.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell45);
-
-    Cell cell46 =
-        new Cell(
-            new Paragraph("IBAN: " + invoiceQFirmIban, new Font(Font.TIMES_ROMAN, 10, Font.BOLD)));
-    cell46.setBorder(Rectangle.NO_BORDER);
-    cell46.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell46);
-
-    Cell cell47 =
-        new Cell(
-            new Paragraph(
-                "KMKR :" + invoiceQFirmVatNumber, new Font(Font.TIMES_ROMAN, 10, Font.BOLD)));
-    cell47.setBorder(Rectangle.NO_BORDER);
-    cell47.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell47);
-
-    Cell cell48 =
-        new Cell(
-            new Paragraph(
-                "Telefon: " + "invoiceQFirmPhone", new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
-    cell48.setBorder(Rectangle.NO_BORDER);
-    cell48.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    invoiceQFirm.addCell(cell48);
-
-    invoicePdfDoc.add(invoiceTable1);
+    invoicePdfDoc.add(header);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(invoiceTable2);
+    invoicePdfDoc.add(requisites);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(invoiceMainTable);
+    invoicePdfDoc.add(itemsTable);
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(invoiceSumma);
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(invoiceTotal);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(invoiceQFirm);
-
+    invoicePdfDoc.add(footer);
     invoicePdfDoc.close();
     writer.close();
 
     return new ByteArrayInputStream(invoicePdfOutputStream.toByteArray());
   }
 
-  private String getFormattedString(BigDecimal number) {
-    number = number.setScale(2, BigDecimal.ROUND_DOWN);
+  @SneakyThrows
+  private Table getHeader(
+      final String invoiceNumber,
+      final String invoiceDate,
+      final String startDate,
+      final String endDate) {
+    final var header = new Table(2);
+    header.setPadding(0f);
+    header.setSpacing(0f);
+    header.setWidth(100f);
+    header.setBorderColor(white);
+    header.setHorizontalAlignment(RIGHT);
+    header.setBorder(NO_BORDER);
+    header.setBorder(NO_BORDER);
+
+    final var logo = Image.getInstance("Images/qRentalGroup_gorznt.png");
+    logo.scaleAbsolute(150f, 60f);
+    final var cell = new Cell(logo);
+    cell.setRowspan(3);
+    cell.setBorder(NO_BORDER);
+    header.addCell(cell);
+
+    final var cell1 =
+        new Cell(
+            new Paragraph("Arve Nr.: " + invoiceNumber, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
+    cell1.setBorder(NO_BORDER);
+    header.addCell(cell1);
+
+    final var cell2 =
+        new Cell(new Paragraph("Data : " + invoiceDate, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
+    cell2.setBorder(NO_BORDER);
+    header.addCell(cell2);
+
+    final var cell3 =
+        new Cell(
+            new Paragraph(
+                format("Ajaperiood: %s - %s", startDate, endDate),
+                new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+    cell3.setBorder(NO_BORDER);
+    header.addCell(cell3);
+
+    return header;
+  }
+
+  private Table getRequisites(
+      final String invoiceDriverCompany,
+      final String invoiceDriverCompanyAddress,
+      final String invoiceDriverCompanyRegNumber,
+      final String driverCompanyVat,
+      final String driverInfo) {
+    final var requisites = new Table(2);
+    requisites.setWidths(new float[] {1, 2});
+    requisites.setPadding(0f);
+    requisites.setSpacing(-1f);
+    requisites.setWidth(60f);
+    requisites.setHorizontalAlignment(HorizontalAlignment.LEFT);
+    requisites.setBorder(NO_BORDER);
+    requisites.addCell(getRequisitLabelCell("Maksja"));
+    requisites.addCell(getRequisitValueCell(invoiceDriverCompany));
+    requisites.addCell(getRequisitLabelCell("Adress"));
+    requisites.addCell(getRequisitValueCell(invoiceDriverCompanyAddress));
+    requisites.addCell(getRequisitLabelCell("Äriregistri nr."));
+    requisites.addCell(getRequisitValueCell(invoiceDriverCompanyRegNumber));
+    requisites.addCell(getRequisitLabelCell("KMKR nr."));
+    requisites.addCell(getRequisitValueCell(driverCompanyVat));
+    requisites.addCell(getRequisitLabelCell("Arvesaja"));
+    requisites.addCell(getRequisitValueCell(driverInfo));
+
+    return requisites;
+  }
+
+  private Table getItemsTable(final Invoice invoice) {
+    final var table = new Table(2);
+    table.setWidths(new float[] {3, 1});
+    table.setPadding(2f);
+    table.setSpacing(1f);
+    table.setWidth(100f);
+    table.setHorizontalAlignment(HorizontalAlignment.LEFT);
+    table.setBorderColor(Color.BLACK);
+    table.addCell(getItemTablHeaderCell("Selgitus"));
+    table.addCell(getItemTablHeaderCell("Summa"));
+    invoice.getItems().forEach(item -> addRow(item, table));
+
+    return table;
+  }
+
+  private Table getSumms(
+      final BigDecimal invoiceTotalAmount, final BigDecimal vatAmount, final BigDecimal arveSum) {
+    final var table = new Table(2);
+    table.setWidths(new float[] {2, 1});
+    table.setSpacing(-1f);
+    table.setPadding(0f);
+    table.setWidth(50f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+    table.addCell(getSummLabelCell("Summa, EUR"));
+    table.addCell(getSummValueCell(invoiceTotalAmount));
+    table.addCell(getSummLabelCell("Käibemaks, %"));
+    table.addCell(getSummValueCell(vatAmount));
+    table.addCell(getSummLabelCell("Arve summa, EUR"));
+    table.addCell(getSummValueCell(arveSum));
+
+    return table;
+  }
+
+  private Cell getSummLabelCell(final String label) {
+    final var labelFinal = format("%s: ", label);
+    final var cell = new Cell(new Paragraph(labelFinal, new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(RIGHT);
+
+    return cell;
+  }
+
+  private Cell getSummValueCell(final BigDecimal value) {
+    final var cell =
+        new Cell(
+            new Paragraph(getFormattedString(value), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(RIGHT);
+
+    return cell;
+  }
+
+  private Table getTotal(final BigDecimal arveSum) {
+    final var table = new Table(2);
+    table.setWidths(new float[] {2, 1});
+    table.setSpacing(-1f);
+    table.setPadding(0f);
+    table.setWidth(50f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+    table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks, EUR"));
+    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus, EUR"));
+    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalLabelCell("Vivis, EUR"));
+    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalLabelCell("Tasuda kokku, EUR"));
+    table.addCell(getTotalValueCell(arveSum));
+
+    return table;
+  }
+
+  private Cell getTotalLabelCell(final String label) {
+    final var labelFinal = format("%s: ", label);
+    final var cell = new Cell(new Paragraph(labelFinal, new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+
+    return cell;
+  }
+
+  private Cell getTotalValueCell(final BigDecimal value) {
+    final var cell =
+        new Cell(
+            new Paragraph(getFormattedString(value), new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+
+    return cell;
+  }
+
+  private Table getFooter(
+      final String qFirmName,
+      final String qFirmAddress,
+      final String qFirmBank,
+      final String qFirmRegNumber,
+      final String qFirmEmail,
+      final String qFirmIban,
+      final String qFirmVatNumber,
+      final String qFirmPhone) {
+    final var table = new Table(3);
+    table.setSpacing(-2f);
+    table.setPadding(0f);
+    table.setWidth(100f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+
+    table.addCell(getFooterCell(qFirmName));
+    table.addCell(getFooterCell(format("Adress: %s", qFirmAddress)));
+    table.addCell(getFooterCell(format("Äriregistri nr.: %s", qFirmBank)));
+    table.addCell(getFooterCell(format("Äriregistri nr.: %s", qFirmRegNumber)));
+    table.addCell(getFooterCell(format("E-mail: %s", qFirmEmail)));
+    table.addCell(getFooterCell(format("IBAN: %s", qFirmIban)));
+    table.addCell(getFooterCell(format("KMKR: %s", qFirmVatNumber)));
+    table.addCell(getFooterCell(format("Telefon: %s", qFirmPhone)));
+
+    return table;
+  }
+
+  private Cell getFooterCell(final String text) {
+    final var cell = new Cell(new Paragraph(text, new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(HorizontalAlignment.LEFT);
+
+    return cell;
+  }
+
+  private void addRow(final InvoiceItem item, final Table table) {
+    final var descriptionCell =
+        new Cell(new Paragraph(item.getType(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
+    descriptionCell.setHorizontalAlignment(HorizontalAlignment.LEFT);
+    table.addCell(descriptionCell);
+    final var sumCell =
+        new Cell(
+            new Paragraph(
+                getFormattedString(item.getAmount()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+    sumCell.setHorizontalAlignment(RIGHT);
+    table.addCell(sumCell);
+  }
+
+  private Cell getItemTablHeaderCell(final String value) {
+    final var cell = new Cell(new Phrase(value));
+    cell.setHeader(true);
+    cell.setBackgroundColor(Color.LIGHT_GRAY);
+    cell.setVerticalAlignment(VerticalAlignment.CENTER);
+    cell.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+    return cell;
+  }
+
+  private Cell getRequisitValueCell(final String value) {
+    final var cell = new Cell(new Paragraph(value, new Font(COURIER, 11, BOLDITALIC)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(HorizontalAlignment.LEFT);
+
+    return cell;
+  }
+
+  private Cell getRequisitLabelCell(final String label) {
+    final var labelFinal = format("%s: ", label);
+    final var cell = new Cell(new Paragraph(labelFinal, new Font(Font.TIMES_ROMAN, 11, Font.BOLD)));
+    cell.setBorder(NO_BORDER);
+    cell.setHorizontalAlignment(HorizontalAlignment.LEFT);
+
+    return cell;
+  }
+
+  private String getFormattedString(final BigDecimal number) {
+    if (number == null) {
+      return "pole saadaval";
+    }
+    final var numberFinal = number.setScale(2, BigDecimal.ROUND_DOWN);
     DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
-    df.setMinimumFractionDigits(0);
+    df.setMinimumFractionDigits(2);
     df.setGroupingUsed(false);
-    return df.format(number);
+
+    return df.format(numberFinal);
   }
 }

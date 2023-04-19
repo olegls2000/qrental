@@ -36,7 +36,7 @@ public class LinkUseCaseController {
   public String addLinkLink(@ModelAttribute final LinkAddRequest linkInfo) {
     addUseCase.add(linkInfo);
 
-    return "redirect:/links";
+    return "redirect:" + LINK_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -50,7 +50,7 @@ public class LinkUseCaseController {
   public String updateLinkLink(final LinkUpdateRequest linkUpdateRequest) {
     updateUseCase.update(linkUpdateRequest);
 
-    return "redirect:/links";
+    return "redirect:" + LINK_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -65,6 +65,6 @@ public class LinkUseCaseController {
   public String deleteForm(final LinkDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:/links";
+    return "redirect:" + LINK_ROOT_PATH;
   }
 }

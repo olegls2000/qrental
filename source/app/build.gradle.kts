@@ -53,6 +53,10 @@ dependencies {
     implementation(project(":source:transaction:persistence:repository"))
     implementation(project(":source:transaction:persistence:flyway"))
 
+    implementation(project(":source:email:api:in"))
+    implementation(project(":source:email:core"))
+    implementation(project(":source:email:config"))
+
     implementation("org.springframework.boot:spring-boot-starter")
 }
 

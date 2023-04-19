@@ -1,17 +1,23 @@
 package ee.qrental.invoice.core.service;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.email.api.in.request.EmailSendRequest;
+import ee.qrental.email.api.in.request.EmailType;
+import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
+import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.out.InvoiceCalculationAddPort;
 import ee.qrental.invoice.core.mapper.InvoiceCalculationAddRequestMapper;
 import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
 import ee.qrental.invoice.domain.Invoice;
+import ee.qrental.invoice.domain.InvoiceCalculation;
 import ee.qrental.invoice.domain.InvoiceCalculationResult;
 import ee.qrental.invoice.domain.InvoiceItem;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -19,6 +25,7 @@ import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -32,7 +39,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
-
+  private final EmailSendUseCase emailSendUseCase;
+  private final InvoicePdfUseCase invoicePdfUseCase;
   private final InvoiceCalculationAddRequestMapper addRequestMapper;
   private final InvoiceCalculationBusinessRuleValidator businessRuleValidator;
   private final InvoiceCalculationPeriodService datesCalculationService;
@@ -68,6 +76,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         final var driverId = entry.getKey();
         final var driver = driverQuery.getById(driverId);
         final var driverCompanyVat = driver.getCompanyVat();
+        final var driverInfo =
+            String.format(
+                "%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
         final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
         final var driversCalSign = driversCallSignLink.getCallSign();
         if (driversTransactions.isEmpty()) {
@@ -89,6 +100,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 .weekNumber(week.weekNumber())
                 .driverId(driverId)
                 .driverCompany(driver.getCompanyName())
+                .driverInfo(driverInfo)
                 .driverCompanyAddress(driver.getCompanyAddress())
                 .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
                 .driverCallSign(driversCalSign)
@@ -113,6 +125,29 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
       }
     }
     addPort.add(domain);
+  }
+
+  private void sendEmails(InvoiceCalculation invoiceCalculation) {
+    invoiceCalculation.getResults().stream()
+        .map(InvoiceCalculationResult::getInvoice)
+        .forEach(
+            invoice -> {
+              final var driverId = invoice.getDriverId();
+              final var driver = driverQuery.getById(driverId);
+              final var recipient = driver.getEmail();
+              final var attachment = invoicePdfUseCase.getPdfInputStreamById(invoice.getId());
+              final var properties = new HashMap<String, Object>();
+              properties.put("invoiceNumber", invoice.getNumber());
+
+              final var emailSendRequest =
+                  EmailSendRequest.builder()
+                      .type(EmailType.INVOICE)
+                      .recipients(singletonList(recipient))
+                      .attachment(attachment)
+                      .properties(properties)
+                      .build();
+              emailSendUseCase.sendEmail(emailSendRequest);
+            });
   }
 
   private String getInvoiceNumber(final Week week, final Integer callSign) {

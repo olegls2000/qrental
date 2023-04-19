@@ -23,7 +23,7 @@ public class FirmJakartaEntity {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-   @Column(name = "firm_name")
+  @Column(name = "firm_name")
   private String firmName;
 
   @Column(name = "iban")

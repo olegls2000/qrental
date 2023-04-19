@@ -21,7 +21,11 @@
                 <a class="btn btn-sm btn-info"
                    th:href="@{/invoices/pdf/{id}(id=${invoice.id})}">
                     <span class="bi-file-earmark-pdf"></span>
-                    View Pdf</a>
+                    View</a>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/invoices/email/send-form/{id}(id=${invoice.id})}">
+                    <span class="bi bi-envelope-at"></span>
+                    Send</a>
             </td>
             <td th:text="${invoice.number}"></td>
             <td th:text="${invoice.weekNumber}"></td>

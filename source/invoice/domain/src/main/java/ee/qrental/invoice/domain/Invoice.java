@@ -16,6 +16,7 @@ public class Invoice {
   private Long driverId;
   private Integer driverCallSign;
   private String driverCompany;
+  private String driverInfo;
   private String driverCompanyRegNumber;
   private String driverCompanyAddress;
   private String driverCompanyVat;
@@ -25,6 +26,9 @@ public class Invoice {
   private String qFirmVatNumber;
   private String qFirmIban;
   private String qFirmBank;
+  private String qFirmEmail;
+  private String qFirmPostAddress;
+  private String qFirmPhone;
   private LocalDate created;
   private String comment;
   private List<InvoiceItem> items;

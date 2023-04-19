@@ -5,5 +5,5 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface InvoicePdfUseCase {
-  InputStream getPdfInputStreamById(final Long id) throws IOException;
+  InputStream getPdfInputStreamById(final Long id);
 }

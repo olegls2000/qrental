@@ -17,6 +17,7 @@ public class InvoiceResponse {
   private String qFirmName;
   private String qFirmRegNumber;
   private String qFirmVatNumber;
+  private String qFirmIban;
   private String qFirmBank;
   private LocalDate created;
   private String comment;
