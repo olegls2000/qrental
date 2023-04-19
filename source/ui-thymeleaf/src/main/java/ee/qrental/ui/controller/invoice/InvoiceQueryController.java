@@ -32,8 +32,7 @@ public class InvoiceQueryController {
 
   @GetMapping("/pdf/{id}")
   @ResponseBody
-  public ResponseEntity<InputStreamResource> getPdf(@PathVariable("id") long id)
-      throws IOException {
+  public ResponseEntity<InputStreamResource> getPdf(@PathVariable("id") long id) {
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_PDF)

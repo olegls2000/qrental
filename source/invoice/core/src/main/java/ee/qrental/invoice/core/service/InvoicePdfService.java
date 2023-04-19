@@ -30,14 +30,10 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 @AllArgsConstructor
-public class InvoicePdfService implements InvoicePdfUseCase {
-
-  private final InvoiceLoadPort loadPort;
+public class InvoicePdfService{
 
   @SneakyThrows
-  @Override
-  public InputStream getPdfInputStreamById(final Long id) {
-    final var invoice = loadPort.loadById(id);
+  public InputStream getPdfInputStream(final Invoice invoice) {
     final var number = invoice.getNumber();
     final var creationDate = invoice.getCreated().format(ofLocalizedDate(SHORT));
     final var weekNumber = invoice.getWeekNumber();

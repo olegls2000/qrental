@@ -12,7 +12,6 @@ import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
-import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrental.invoice.api.out.InvoiceCalculationAddPort;
 import ee.qrental.invoice.core.mapper.InvoiceCalculationAddRequestMapper;
 import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
@@ -40,7 +39,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
   private final EmailSendUseCase emailSendUseCase;
-  private final InvoicePdfUseCase invoicePdfUseCase;
+  private final InvoicePdfService invoicePdfService;
   private final InvoiceCalculationAddRequestMapper addRequestMapper;
   private final InvoiceCalculationBusinessRuleValidator businessRuleValidator;
   private final InvoiceCalculationPeriodService datesCalculationService;
@@ -125,6 +124,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
       }
     }
     addPort.add(domain);
+    sendEmails(domain);
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
@@ -135,7 +135,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
               final var driverId = invoice.getDriverId();
               final var driver = driverQuery.getById(driverId);
               final var recipient = driver.getEmail();
-              final var attachment = invoicePdfUseCase.getPdfInputStreamById(invoice.getId());
+              final var attachment = invoicePdfService.getPdfInputStream(invoice);
               final var properties = new HashMap<String, Object>();
               properties.put("invoiceNumber", invoice.getNumber());
 

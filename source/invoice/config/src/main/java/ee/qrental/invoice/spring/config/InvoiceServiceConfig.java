@@ -47,8 +47,8 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  InvoicePdfUseCase getInvoicePdfService(final InvoiceLoadPort loadPort) {
-    return new InvoicePdfService(loadPort);
+  InvoicePdfService getInvoicePdfService() {
+    return new InvoicePdfService();
   }
 
   @Bean
@@ -69,7 +69,7 @@ public class InvoiceServiceConfig {
       final InvoiceCalculationBusinessRuleValidator businessRuleValidator,
       final InvoiceCalculationPeriodService datesCalculationService,
       final EmailSendUseCase emailSendUseCase,
-      final InvoicePdfUseCase invoicePdfUseCase) {
+      final InvoicePdfService invoicePdfUseCase) {
     return new InvoiceCalculationService(
         addPort,
         transactionQuery,
@@ -97,5 +97,11 @@ public class InvoiceServiceConfig {
       InvoicePdfUseCase invoicePdfUseCase) {
     return new InvoiceSendByEmailService(
         emailSendUseCase, invoiceLoadPort, invoicePdfUseCase, driverQuery);
+  }
+
+  @Bean
+  InvoicePdfUseCase getInvoicePdfUseCase(
+      final InvoiceLoadPort loadPort, final InvoicePdfService pdfService) {
+    return new InvoicePdfUseCaseImpl(loadPort, pdfService);
   }
 }
