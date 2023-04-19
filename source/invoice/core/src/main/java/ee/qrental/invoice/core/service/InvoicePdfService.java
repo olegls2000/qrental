@@ -63,7 +63,7 @@ public class InvoicePdfService implements InvoicePdfUseCase {
             .map(InvoiceItem::getAmount)
             .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
             .reduce(BigDecimal::add)
-            .get();
+            .orElseThrow(() -> new RuntimeException("No Negative Transactions during Invoice period."));
     final var driverCompanyVat = invoice.getDriverCompanyVat();
     final var vatAmount = invoiceTotalAmount.divide(BigDecimal.valueOf(5));
     final var arveSum = invoiceTotalAmount.add(vatAmount);
@@ -81,6 +81,7 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     final var itemsTable = getItemsTable(invoice);
     final var invoiceSumma = getSumms(invoiceTotalAmount, vatAmount, arveSum);
     final var invoiceTotal = getTotal(arveSum);
+    final var interest = getInterest();
     final var footer =
         getFooter(
             qFirmName,
@@ -102,6 +103,8 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     invoicePdfDoc.add(invoiceSumma);
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(invoiceTotal);
+    invoicePdfDoc.add(new Paragraph("\n"));
+    invoicePdfDoc.add(interest);
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(footer);
     invoicePdfDoc.close();
@@ -205,11 +208,11 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     table.setWidth(50f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
-    table.addCell(getSummLabelCell("Summa, EUR"));
+    table.addCell(getSummLabelCell("Summa"));
     table.addCell(getSummValueCell(invoiceTotalAmount));
-    table.addCell(getSummLabelCell("Käibemaks, %"));
+    table.addCell(getSummLabelCell("Käibemaks (20%)"));
     table.addCell(getSummValueCell(vatAmount));
-    table.addCell(getSummLabelCell("Arve summa, EUR"));
+    table.addCell(getSummLabelCell("Arve summa"));
     table.addCell(getSummValueCell(arveSum));
 
     return table;
@@ -234,6 +237,24 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     return cell;
   }
 
+  private Table getInterest() {
+    final var table = new Table(2);
+    table.setWidths(new float[] {2, 1});
+    table.setSpacing(-1f);
+    table.setPadding(0f);
+    table.setWidth(50f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+    table.addCell(getTotalLabelCell("Vivised dd.MM.yyyy - dd.MM.yyyy perioodi eest"));
+    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalLabelCell("Viisiste üldsumma"));
+    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
+    table.addCell(getTotalValueCell(null));
+
+    return table;
+  }
+
   private Table getTotal(final BigDecimal arveSum) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
@@ -242,13 +263,13 @@ public class InvoicePdfService implements InvoicePdfUseCase {
     table.setWidth(50f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
-    table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks, EUR"));
+    table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(null));
-    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus, EUR"));
+    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus"));
     table.addCell(getTotalValueCell(null));
-    table.addCell(getTotalLabelCell("Vivis, EUR"));
+    table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
     table.addCell(getTotalValueCell(null));
-    table.addCell(getTotalLabelCell("Tasuda kokku, EUR"));
+    table.addCell(getTotalLabelCell("Tasuda kokku"));
     table.addCell(getTotalValueCell(arveSum));
 
     return table;
@@ -323,7 +344,7 @@ public class InvoicePdfService implements InvoicePdfUseCase {
   }
 
   private Cell getItemTablHeaderCell(final String value) {
-    final var cell = new Cell(new Phrase(value));
+    final var cell = new Cell(new Phrase(value, new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     cell.setHeader(true);
     cell.setBackgroundColor(Color.LIGHT_GRAY);
     cell.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -351,14 +372,14 @@ public class InvoicePdfService implements InvoicePdfUseCase {
 
   private String getFormattedString(final BigDecimal number) {
     if (number == null) {
-      return "pole saadaval";
+      return "---- eur";
     }
-    final var numberFinal = number.setScale(2, BigDecimal.ROUND_DOWN);
+    final var numberFinal = number.setScale(2, BigDecimal.ROUND_DOWN).abs();
     DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);
     df.setGroupingUsed(false);
 
-    return df.format(numberFinal);
+    return df.format(numberFinal) + " eur";
   }
 }
