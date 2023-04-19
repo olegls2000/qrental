@@ -42,7 +42,7 @@ public class TransactionUseCaseController {
   public String addTransaction(@ModelAttribute final TransactionAddRequest addRequest) {
     addUseCase.add(addRequest);
 
-    return "redirect:/transactions";
+    return "redirect:" + TRANSACTION_ROOT_PATH;
   }
 
   @GetMapping(value = "/add-form/driver/{driverId}")
@@ -79,7 +79,7 @@ public class TransactionUseCaseController {
   public String updateTransactionTransaction(final TransactionUpdateRequest updateRequest) {
     updateUseCase.update(updateRequest);
 
-    return "redirect:/transactions";
+    return "redirect:" + TRANSACTION_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/driver/{id}")
@@ -114,7 +114,7 @@ public class TransactionUseCaseController {
   public String deleteForm(final TransactionDeleteRequest transactionDeleteCommand) {
     deleteUseCase.delete(transactionDeleteCommand);
 
-    return "redirect:/transactions";
+    return "redirect:" + TRANSACTION_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/driver/{id}")

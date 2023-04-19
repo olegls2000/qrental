@@ -5,7 +5,7 @@ dependencies {
     implementation(project(":source:link:persistence:flyway"))
     implementation(project(":source:link:persistence:adapter"))
     implementation(project(":source:link:persistence:repository"))
-    implementation("org.springframework:spring-context")
+    implementation("org.springframework:spring-context-support")
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

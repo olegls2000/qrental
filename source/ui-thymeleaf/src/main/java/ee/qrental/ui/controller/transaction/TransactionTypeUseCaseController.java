@@ -36,7 +36,7 @@ public class TransactionTypeUseCaseController {
       @ModelAttribute final TransactionTypeAddRequest transactionTypeInfo) {
     addUseCase.add(transactionTypeInfo);
 
-    return "redirect:/transaction-types";
+    return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -51,7 +51,7 @@ public class TransactionTypeUseCaseController {
       final TransactionTypeUpdateRequest transactionTypeUpdateRequest) {
     updateUseCase.update(transactionTypeUpdateRequest);
 
-    return "redirect:/transaction-types";
+    return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -66,6 +66,6 @@ public class TransactionTypeUseCaseController {
   public String deleteForm(final TransactionTypeDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:/transaction-types";
+    return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }
 }

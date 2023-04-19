@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class FirmServiceConfig {
 
   @Bean
-  public GetFirmQuery getFirmQueryService(
+  GetFirmQuery getFirmQueryService(
       final FirmLoadPort loadPort,
       final FirmResponseMapper mapper,
       final FirmUpdateRequestMapper updateRequestMapper) {

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MapperConfig {
+public class DriverMapperConfig {
   @Bean
   DriverAddRequestMapper getDriverAddRequestMapper() {
     return new DriverAddRequestMapper();

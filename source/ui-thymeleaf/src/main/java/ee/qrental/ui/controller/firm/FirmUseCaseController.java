@@ -1,5 +1,7 @@
 package ee.qrental.ui.controller.firm;
 
+import static ee.qrental.ui.controller.ControllerUtils.FIRM_ROOT_PATH;
+
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.firm.api.in.request.FirmAddRequest;
 import ee.qrental.firm.api.in.request.FirmDeleteRequest;
@@ -11,9 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import static ee.qrental.ui.controller.ControllerUtils.FIRM_ROOT_PATH;
-
 
 @Controller
 @RequestMapping(FIRM_ROOT_PATH)
@@ -36,7 +35,7 @@ public class FirmUseCaseController {
   public String addFirmFirm(@ModelAttribute final FirmAddRequest firmInfo) {
     addUseCase.add(firmInfo);
 
-    return "redirect:/firms";
+    return "redirect:" + FIRM_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -50,7 +49,7 @@ public class FirmUseCaseController {
   public String updateFirmFirm(final FirmUpdateRequest firmUpdateRequest) {
     updateUseCase.update(firmUpdateRequest);
 
-    return "redirect:/firms";
+    return "redirect:" + FIRM_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -65,6 +64,6 @@ public class FirmUseCaseController {
   public String deleteForm(final FirmDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:/firms";
+    return "redirect:" + FIRM_ROOT_PATH;
   }
 }

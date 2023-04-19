@@ -1,5 +1,7 @@
 package ee.qrental.ui.controller.constant;
 
+import static ee.qrental.ui.controller.ControllerUtils.CONSTANT_ROOT_PATH;
+
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.request.ConstantAddRequest;
 import ee.qrental.constant.api.in.request.ConstantDeleteRequest;
@@ -11,9 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import static ee.qrental.ui.controller.ControllerUtils.CONSTANT_ROOT_PATH;
-
 
 @Controller
 @RequestMapping(CONSTANT_ROOT_PATH)
@@ -36,7 +35,7 @@ public class ConstantUseCaseController {
   public String addConstantConstant(@ModelAttribute final ConstantAddRequest constantInfo) {
     addUseCase.add(constantInfo);
 
-    return "redirect:/constants";
+    return "redirect:" + CONSTANT_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -50,7 +49,7 @@ public class ConstantUseCaseController {
   public String updateConstantConstant(final ConstantUpdateRequest constantUpdateRequest) {
     updateUseCase.update(constantUpdateRequest);
 
-    return "redirect:/constants";
+    return "redirect:" + CONSTANT_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -65,6 +64,6 @@ public class ConstantUseCaseController {
   public String deleteForm(final ConstantDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:/constants";
+    return "redirect:" + CONSTANT_ROOT_PATH;
   }
 }
