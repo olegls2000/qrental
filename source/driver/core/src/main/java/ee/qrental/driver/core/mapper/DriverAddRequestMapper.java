@@ -4,11 +4,10 @@ import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.domain.Driver;
 
-public class DriverAddRequestMapper
-        implements AddRequestMapper<DriverAddRequest, Driver> {
+public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest, Driver> {
 
-    @Override
-    public Driver toDomain(DriverAddRequest request) {
+  @Override
+  public Driver toDomain(DriverAddRequest request) {
     return Driver.builder()
         .id(null)
         .active(request.getActive())
@@ -24,8 +23,9 @@ public class DriverAddRequestMapper
         .taxiLicense(request.getTaxiLicense())
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
-         .deposit(request.getDeposit())
+        .deposit(request.getDeposit())
+        .qFirmId(request.getQFirmId())
         .comment(request.getComment())
         .build();
-    }
+  }
 }

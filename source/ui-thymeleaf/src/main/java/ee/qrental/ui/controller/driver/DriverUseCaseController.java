@@ -9,6 +9,7 @@ import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.api.in.usecase.DriverAddUseCase;
 import ee.qrental.driver.api.in.usecase.DriverDeleteUseCase;
 import ee.qrental.driver.api.in.usecase.DriverUpdateUseCase;
+import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +24,12 @@ public class DriverUseCaseController {
   private final DriverUpdateUseCase updateUseCase;
   private final DriverDeleteUseCase deleteUseCase;
   private final GetDriverQuery driverQuery;
+  private final GetFirmQuery firmQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new DriverAddRequest());
-
+    addQFirmsToModel(model);
     return "forms/addDriver";
   }
 
@@ -41,8 +43,12 @@ public class DriverUseCaseController {
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", driverQuery.getUpdateRequestById(id));
-
+    addQFirmsToModel(model);
     return "forms/updateDriver";
+  }
+
+  private void addQFirmsToModel(Model model) {
+    model.addAttribute("qFirms", firmQuery.getAll());
   }
 
   @PostMapping("/update")

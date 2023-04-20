@@ -19,6 +19,7 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Long isikukood;
   private String phone;
   private String email;
+  private Long qFirmId;
   private String company;
   private String regNumber;
   private String companyAddress;

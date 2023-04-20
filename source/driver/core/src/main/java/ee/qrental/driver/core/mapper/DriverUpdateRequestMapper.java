@@ -25,6 +25,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .deposit(request.getDeposit())
+        .qFirmId(request.getQFirmId())
         .comment(request.getComment())
         .build();
   }
@@ -47,6 +48,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .taxiLicense(domain.getTaxiLicense())
         .address(domain.getAddress())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
+        .qFirmId(domain.getQFirmId())
         .comment(domain.getComment())
         .build();
   }

@@ -6,7 +6,6 @@
     </div>
 </div>
 
-
 <div th:fragment="addForm">
     <form method="post"
           th:action="@{/drivers/add}"
@@ -22,7 +21,20 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label for="deposit">Deposit</label>
+                    <label class="form-label text-muted"
+                           for="qFirmId">Select Q-Firm</label>
+                    <select id="qFirmId"
+                            class="form-select"
+                            th:field="*{qFirmId}">
+                        <option th:each="qFirm : ${qFirms}"
+                                th:value="${qFirm.id}"
+                                th:text="${qFirm.firmName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="deposit">Deposit</label>
                     <input class="form-control" id="deposit" placeholder="Enter Deposit -EUR"
                            th:field="*{deposit}"
                            type="number"/>

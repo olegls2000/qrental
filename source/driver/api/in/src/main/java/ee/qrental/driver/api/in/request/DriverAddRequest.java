@@ -26,5 +26,6 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String address;
   private Boolean needInvoicesByEmail;
   private BigDecimal deposit;
+  private Long qFirmId;
   private String comment;
 }
