@@ -15,3 +15,7 @@ dependencies{
     implementation(libs.q.jakarta.transaction)
     implementation(libs.q.librepdf.openpdf)
 }
+
+tasks.jar {
+    archiveFileName.set("invoice-core.jar")
+}

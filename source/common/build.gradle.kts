@@ -13,3 +13,7 @@ tasks.test {
         events("passed")
     }
 }
+
+tasks.jar {
+    archiveFileName.set("common.jar")
+}

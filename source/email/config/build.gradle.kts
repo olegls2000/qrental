@@ -9,3 +9,7 @@ dependencies {
         annotationProcessor(libs.q.lombok)
     }
 }
+
+tasks.jar {
+    archiveFileName.set("email-config.jar")
+}

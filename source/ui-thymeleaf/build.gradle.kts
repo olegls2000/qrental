@@ -1,4 +1,3 @@
-
 dependencies {
     implementation(project(":source:car:api:in"))
     implementation(project(":source:driver:api:in"))
@@ -15,4 +14,8 @@ dependencies {
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
+}
+
+tasks.jar {
+    archiveFileName.set("ui-thymeleaf.jar")
 }

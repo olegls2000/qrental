@@ -3,9 +3,11 @@ dependencies{
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:callsign:api:out"))
     implementation(project(":source:callsign:domain"))
-
     implementation(project(":source:driver:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
+}
+tasks.jar {
+    archiveFileName.set("call-sign-core.jar")
 }
