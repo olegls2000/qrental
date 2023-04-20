@@ -22,6 +22,7 @@ public class DriverAdapterMapper {
         .taxiLicense(entity.getTaxiLicense())
         .address(entity.getAddress())
         .needInvoicesByEmail(entity.getNeedInvoicesByEmail())
+        .deposit(entity.getDeposit())
         .comment(entity.getComment())
         .qFirmId(entity.getQFirmId())
         .build();
@@ -44,8 +45,9 @@ public class DriverAdapterMapper {
         .taxiLicense(domain.getTaxiLicense())
         .address(domain.getAddress())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
-        .comment(domain.getComment())
+        .deposit(domain.getDeposit())
         .qFirmId(domain.getQFirmId())
+        .comment(domain.getComment())
         .build();
   }
 }

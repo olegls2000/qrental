@@ -1,1 +1,0 @@
-alter table driver drop column deposit;

@@ -24,6 +24,7 @@ public class DriverAddRequestMapper
         .taxiLicense(request.getTaxiLicense())
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
+         .deposit(request.getDeposit())
         .comment(request.getComment())
         .build();
     }
