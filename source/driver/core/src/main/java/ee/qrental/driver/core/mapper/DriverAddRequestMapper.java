@@ -23,7 +23,7 @@ public class DriverAddRequestMapper
         .driverLicenseNumber(request.getDriverLicenseNumber())
         .taxiLicense(request.getTaxiLicense())
         .address(request.getAddress())
-        .deposit(request.getDeposit())
+        .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .comment(request.getComment())
         .build();
     }

@@ -33,7 +33,6 @@ import lombok.AllArgsConstructor;
 public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
   private final InvoiceCalculationAddPort addPort;
-
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
@@ -134,6 +133,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
             invoice -> {
               final var driverId = invoice.getDriverId();
               final var driver = driverQuery.getById(driverId);
+              if (!driver.getNeedInvoicesByEmail()) {
+                return;
+              }
               final var recipient = driver.getEmail();
               final var attachment = invoicePdfService.getPdfInputStream(invoice);
               final var properties = new HashMap<String, Object>();

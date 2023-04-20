@@ -26,6 +26,6 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private LocalDate driverLicenseExp;
   private String taxiLicense;
   private String address;
-  private BigDecimal deposit;
+  private Boolean needInvoicesByEmail;
   private String comment;
 }

@@ -18,9 +18,10 @@ public class DriverAdapterMapper {
         .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
         .companyAddress(entity.getCompanyAddress())
         .driverLicenseNumber(entity.getDriverLicenseNumber())
+        .driverLicenseExp(entity.getDriverLicenseExp())
         .taxiLicense(entity.getTaxiLicense())
         .address(entity.getAddress())
-        .deposit(entity.getDeposit())
+        .needInvoicesByEmail(entity.getNeedInvoicesByEmail())
         .comment(entity.getComment())
         .qFirmId(entity.getQFirmId())
         .build();
@@ -42,7 +43,7 @@ public class DriverAdapterMapper {
         .driverLicenseExp(domain.getDriverLicenseExp())
         .taxiLicense(domain.getTaxiLicense())
         .address(domain.getAddress())
-        .deposit(domain.getDeposit())
+        .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .comment(domain.getComment())
         .qFirmId(domain.getQFirmId())
         .build();

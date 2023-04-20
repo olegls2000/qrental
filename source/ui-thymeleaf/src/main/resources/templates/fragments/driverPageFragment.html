@@ -1,7 +1,7 @@
 <div th:fragment="driverPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
     <h2 class="py-3">Drivers</h2>
-    <table  class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered">
         <tr>
             <th>
                 <a class="btn btn-sm btn-success"
@@ -12,12 +12,12 @@
                     Add New Driver
                 </a>
             </th>
-            <th>Call Sign</th>
             <th>Last Name</th>
             <th>First Name</th>
             <th>Isikukood</th>
-            <th>Deposit</th>
             <th>Phone</th>
+            <th>Email</th>
+            <th>Need Invoices by email</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(drivers)}">
@@ -34,13 +34,15 @@
                     <span class="bi-trash"></span>
                     Delete</a>
             </td>
-            <td th:text="${driver.id}"></td>
-            <td th:text="${driver.lastName}"></td>
-            <td th:text="${driver.firstName}"></td>
-            <td th:text="${driver.isikukood}"></td>
-            <td th:text="${driver.deposit}"></td>
-            <td th:text="${driver.phone}"></td>
-            <td th:text="${driver.comment}"></td>
+            <td th:text="${driver.lastName}">??</td>
+            <td th:text="${driver.firstName}">??</td>
+            <td th:text="${driver.isikukood}">??</td>
+            <td th:text="${driver.phone}">??</td>
+            <td th:text="${driver.email}">??</td>
+            <td>
+                <span th:text="${driver.needInvoicesByEmail} ? 'Yes' : 'No'"></span>
+            </td>
+            <td th:text="${driver.comment}">??</td>
         </tr>
     </table>
 </div>

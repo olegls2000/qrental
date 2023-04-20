@@ -24,6 +24,6 @@ public class DriverAddRequest extends AbstractAddRequest {
   private LocalDate driverLicenseExp = LocalDate.now();
   private String taxiLicense;
   private String address;
+  private Boolean needInvoicesByEmail;
   private String comment;
-  private BigDecimal deposit;
 }

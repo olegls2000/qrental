@@ -26,14 +26,6 @@
                        type="checkbox"/>
             </div>
         </div>
-        <div class="col">
-            <div class="mb-3">
-                <label for="deposit">Deposit</label>
-                <input class="form-control" id="deposit" placeholder="Enter Deposit -EUR"
-                       th:field="*{deposit}"
-                       type="number"/>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -73,7 +65,9 @@
                        type="text"/>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col">
             <div class="mb-3">
                 <label for="email">E-mail</label>
@@ -82,7 +76,17 @@
                        type="email"/>
             </div>
         </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
+                    email</label>
+                <input class="form-check-input" id="needInvoicesByEmailId"
+                       th:field="*{needInvoicesByEmail}"
+                       type="checkbox"/>
+            </div>
+        </div>
     </div>
+
 
     <div class="row">
         <div class="col">

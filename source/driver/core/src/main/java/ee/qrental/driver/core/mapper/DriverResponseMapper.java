@@ -5,10 +5,14 @@ import static java.lang.String.format;
 import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.domain.Driver;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driver> {
+
   @Override
   public DriverResponse toResponse(final Driver domain) {
+
     return DriverResponse.builder()
         .id(domain.getId())
         .active(domain.getActive())
@@ -26,7 +30,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .driverLicenseExp(domain.getDriverLicenseExp())
         .taxiLicense(domain.getTaxiLicense())
         .comment(domain.getComment())
-        .deposit(domain.getDeposit())
+        .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .qFirmId(domain.getQFirmId())
         .build();
   }

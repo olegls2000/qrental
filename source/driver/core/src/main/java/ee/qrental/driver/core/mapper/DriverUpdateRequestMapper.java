@@ -9,7 +9,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
   @Override
   public Driver toDomain(final DriverUpdateRequest request) {
     return Driver.builder()
-        .id(null)
+        .id(request.getId())
         .active(request.getActive())
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
@@ -20,9 +20,10 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .companyRegistrationNumber(request.getRegNumber())
         .companyAddress(request.getCompanyAddress())
         .driverLicenseNumber(request.getDriverLicenseNumber())
+        .driverLicenseExp(request.getDriverLicenseExp())
         .taxiLicense(request.getTaxiLicense())
         .address(request.getAddress())
-        .deposit(request.getDeposit())
+        .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .comment(request.getComment())
         .build();
   }
@@ -41,9 +42,10 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .regNumber(domain.getCompanyRegistrationNumber())
         .companyAddress(domain.getCompanyAddress())
         .driverLicenseNumber(domain.getDriverLicenseNumber())
+        .driverLicenseExp(domain.getDriverLicenseExp())
         .taxiLicense(domain.getTaxiLicense())
         .address(domain.getAddress())
-        .deposit(domain.getDeposit())
+        .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .comment(domain.getComment())
         .build();
   }
