@@ -16,16 +16,15 @@
            th:field="*{id}"
            type="text"
            hidden/>
-
+    <p class="fs-5">Activation:</p>
+    <div class="mb-3">
+        <input class="form-check-input" id="activeId"
+               th:field="*{active}"
+               type="checkbox"/>
+        <label class="form-check-label text-muted" for="activeId">Activated</label>
+    </div>
+    <p class="fs-5">Q-info:</p>
     <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-check-label text-muted" for="activeId">Active Driver</label>
-                <input class="form-check-input" id="activeId"
-                       th:field="*{active}"
-                       type="checkbox"/>
-            </div>
-        </div>
         <div class="col">
             <div class="mb-3">
                 <label class="form-label text-muted"
@@ -41,7 +40,7 @@
         </div>
         <div class="col">
             <div class="mb-3">
-                <label for="deposit">Deposit</label>
+                <label class="form-label text-muted" for="deposit">Deposit</label>
                 <input class="form-control" id="deposit" placeholder="Enter Deposit -EUR"
                        th:field="*{deposit}"
                        type="number"/>
@@ -49,10 +48,11 @@
         </div>
     </div>
 
+    <p class="fs-5">Drivers info:</p>
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label for="firstName">First Name</label>
+                <label class="form-check-label text-muted" for="firstName">First Name</label>
                 <input class="form-control" id="firstName" placeholder="Enter First Name" required
                        th:field="*{firstName}"
                        type="text"/>
@@ -60,128 +60,112 @@
         </div>
         <div class="col">
             <div class="mb-3">
-                <label for="lastName">Last Name</label>
+                <label class="form-check-label text-muted" for="lastName">Last Name</label>
                 <input class="form-control" id="lastName" placeholder="Enter Last Name" required
                        th:field="*{lastName}"
                        type="text"/>
             </div>
         </div>
-    </div>
-
-    <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label for="isikukood">Isikukood</label>
+                <label class="form-check-label text-muted" for="isikukood">Isikukood</label>
                 <input class="form-control" id="isikukood" placeholder="Enter Isikukood" required
                        th:field="*{isikukood}"
                        type="number"/>
             </div>
         </div>
-
-        <div class="col">
-            <div class="mb-3">
-                <label for="phone">Phone</label>
-                <input class="form-control" id="phone" placeholder="Enter Phone" required
-                       th:field="*{phone}"
-                       type="text"/>
-            </div>
-        </div>
     </div>
-
+    <div class="mb-3">
+        <label class="form-check-label text-muted" for="address">Address</label>
+        <input class="form-control" id="address" placeholder="Enter Address"
+               required
+               th:field="*{address}"
+               type="text"/>
+    </div>
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label for="email">E-mail</label>
-                <input class="form-control" id="email" placeholder="Enter E-mail" required
-                       th:field="*{email}"
-                       type="email"/>
-            </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
-                    email</label>
-                <input class="form-check-input" id="needInvoicesByEmailId"
-                       th:field="*{needInvoicesByEmail}"
-                       type="checkbox"/>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label for="company">Compnay</label>
-                <input class="form-control" id="company" placeholder="Enter Company Name"
-                       th:field="*{company}"
-                       type="text"/>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="mb-3">
-                <label for="regNumber">RegNumber</label>
-                <input class="form-control" id="regNumber" placeholder="Enter Reg Number"
-                       th:field="*{regNumber}"
-                       type="text"/>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="mb-3">
-                <label for="companyAddress">CompanyAddress</label>
-                <input class="form-control" id="companyAddress" placeholder="Enter Company Address"
-                       th:field="*{companyAddress}"
-                       type="text"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label for="driverLicenseNumber">Driver License Number</label>
+                <label class="form-check-label text-muted" for="driverLicenseNumber">License Number</label>
                 <input class="form-control" id="driverLicenseNumber"
-                       placeholder="Enter Driver License Number"
+                       placeholder="Enter License Number"
                        required
                        th:field="*{driverLicenseNumber}"
                        type="text"/>
             </div>
         </div>
-
         <div class="col">
             <div class="mb-3">
-                <label for="driverLicenseExp">Driver License Exp</label>
+                <label class="form-check-label text-muted" for="driverLicenseExp">License Expiration date</label>
                 <input class="form-control" id="driverLicenseExp"
-                       placeholder="Enter Driver License Exp"
+                       placeholder="Enter License Exp"
                        required
                        th:field="*{driverLicenseExp}"
                        type="date"/>
             </div>
         </div>
-
         <div class="col">
             <div class="mb-3">
-                <label for="taxiLicense">Driver TAXI License </label>
+                <label class="form-check-label text-muted" for="taxiLicense">Taxi License </label>
                 <input class="form-control" id="taxiLicense"
-                       placeholder="Enter Driver TAXI License "
-
+                       placeholder="Enter Taxi License"
                        th:field="*{taxiLicense}"
                        type="text"/>
             </div>
         </div>
     </div>
-
-    <div class="col">
-        <label for="address">Driver Address</label>
-        <input class="form-control" id="address" placeholder="Enter Driver Address"
-               required
-               th:field="*{address}"
-               type="text"/>
+    <p class="fs-5">Drivers contact info:</p>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="phone">Phone</label>
+                <input class="form-control" id="phone" placeholder="Enter Phone" required
+                       th:field="*{phone}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="email">E-mail</label>
+                <input class="form-control" id="email" placeholder="Enter E-mail" required
+                       th:field="*{email}"
+                       type="email"/>
+            </div>
+        </div>
     </div>
-
-
+    <div class="mb-3">
+        <input class="form-check-input" id="needInvoicesByEmailId"
+               th:field="*{needInvoicesByEmail}"
+               type="checkbox"/>
+        <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
+            email</label>
+    </div>
+    <p class="fs-5">Drivers company:</p>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="company">Name</label>
+                <input class="form-control" id="company" placeholder="Enter Name"
+                       th:field="*{company}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="regNumber">Registration Number</label>
+                <input class="form-control" id="regNumber" placeholder="Enter Registration Number"
+                       th:field="*{regNumber}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyAddress">Address</label>
+                <input class="form-control" id="companyAddress" placeholder="Enter Address"
+                       th:field="*{companyAddress}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>
@@ -191,7 +175,6 @@
                       th:field="*{comment}"/>
         </div>
     </div>
-
     <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Update',
             cancelHref='/drivers'
