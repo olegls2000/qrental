@@ -153,12 +153,18 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-check-label text-muted" for="companyAddress">Address</label>
-                    <input class="form-control" id="companyAddress" placeholder="Enter Address"
-                           th:field="*{companyAddress}"
+                    <label class="form-check-label text-muted" for="companyVat">VAT</label>
+                    <input class="form-control" id="companyVat" placeholder="Enter VAT"
+                           th:field="*{companyVat}"
                            type="text"/>
                 </div>
             </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="companyAddress">Address</label>
+            <input class="form-control" id="companyAddress" placeholder="Enter Address"
+                   th:field="*{companyAddress}"
+                   type="text"/>
         </div>
         <div class="form-group">
             <div class="mb-3">
@@ -169,6 +175,7 @@
                           th:field="*{comment}"/>
             </div>
         </div>
+
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Add',
             cancelHref='/drivers'

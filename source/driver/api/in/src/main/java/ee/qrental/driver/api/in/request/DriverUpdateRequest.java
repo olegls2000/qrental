@@ -23,6 +23,7 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private String company;
   private String regNumber;
   private String companyAddress;
+  private String companyVat;
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp;
   private String taxiLicense;

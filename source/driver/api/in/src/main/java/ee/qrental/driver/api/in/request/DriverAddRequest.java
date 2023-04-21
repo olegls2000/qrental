@@ -20,6 +20,7 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String company;
   private String regNumber;
   private String companyAddress;
+  private String companyVat;
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp = LocalDate.now();
   private String taxiLicense;

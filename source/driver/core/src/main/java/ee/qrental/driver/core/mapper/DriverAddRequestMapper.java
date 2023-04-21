@@ -18,6 +18,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .email(request.getEmail())
         .companyName(request.getCompany())
         .companyRegistrationNumber(request.getRegNumber())
+        .companyVat(request.getCompanyVat())
         .companyAddress(request.getCompanyAddress())
         .driverLicenseNumber(request.getDriverLicenseNumber())
         .taxiLicense(request.getTaxiLicense())
