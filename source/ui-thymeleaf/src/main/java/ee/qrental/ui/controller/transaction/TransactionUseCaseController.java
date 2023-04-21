@@ -31,8 +31,7 @@ public class TransactionUseCaseController {
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new TransactionAddRequest());
-    model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
-    model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
+    addTransactionTypes(model);
     model.addAttribute("drivers", driverQuery.getAll());
 
     return "forms/addTransaction";
@@ -50,12 +49,15 @@ public class TransactionUseCaseController {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDriverId(driverId);
     model.addAttribute("addRequest", addRequest);
-    model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
-    model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
+    addTransactionTypes(model);
     model.addAttribute("driverInfo", driverQuery.getObjectInfo(driverId));
     model.addAttribute("driverId", driverId);
 
     return "forms/addTransactionWithDriver";
+  }
+  private void addTransactionTypes(Model model) {
+    model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
+    model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
   }
 
   @PostMapping(value = "/add/driver")
@@ -69,7 +71,7 @@ public class TransactionUseCaseController {
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, Model model) {
     model.addAttribute("updateRequest", transactionQuery.getUpdateRequestById(id));
-    model.addAttribute("transactionTypes", transactionTypeQuery.getAll());
+    addTransactionTypes(model);
     model.addAttribute("drivers", driverQuery.getAll());
 
     return "forms/updateTransaction";
@@ -87,7 +89,7 @@ public class TransactionUseCaseController {
     final var updateRequest = transactionQuery.getUpdateRequestById(id);
     final var driverId = updateRequest.getDriverId();
     model.addAttribute("updateRequest", updateRequest);
-    model.addAttribute("transactionTypes", transactionTypeQuery.getAll());
+    addTransactionTypes(model);
     model.addAttribute("driverInfo", driverQuery.getObjectInfo(driverId));
     model.addAttribute("driverId", driverId);
 

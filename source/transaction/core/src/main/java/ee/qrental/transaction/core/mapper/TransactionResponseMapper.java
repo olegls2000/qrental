@@ -15,11 +15,22 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetDriverQuery driverQuery;
 
+  private Integer getCallSign(final Long driverId) {
+    // TODO move logic to Call Sign domain
+    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    if (callSignLink == null) {
+      System.out.println(
+          String.format("Driver with id %d doesnt have active Call Sign Links", driverId));
+      return null;
+    }
+
+    return callSignLink.getCallSign();
+  }
+
   @Override
   public TransactionResponse toResponse(final Transaction domain) {
     final var driverId = domain.getDriverId();
-    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-    final var callSign = callSignLink.getCallSign();
+    final var callSign = getCallSign(driverId);
     final var driverInfo = driverQuery.getObjectInfo(driverId);
 
     return TransactionResponse.builder()

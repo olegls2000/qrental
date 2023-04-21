@@ -13,6 +13,7 @@
             const negativeSelect = document.getElementById("negativeTransactionTypeId");
             negativeSelect.selectedIndex = -1;
         }
+
         function discardPositiveSelect() {
             const positiveSelect = document.getElementById("positiveTransactionTypeId");
             positiveSelect.selectedIndex = -1;
@@ -21,18 +22,26 @@
     <form method="post"
           th:action="@{/transactions/add/driver}"
           th:object="${addRequest}">
-        <div class="mb-3">
-            <p class="fs-6 text-center"
-               th:text="|for driver: ${driverInfo}|">???</p>
-        </div>
         <input id="driverId" required
                th:field="*{driverId}"
                type="number"
                hidden/>
-        <input id="dateStampId" required
-               th:field="*{dateStamp}"
-               type="date"
-               hidden=""/>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <p class="fs-6 text-center"
+                       th:text="|Driver: ${driverInfo}|">???</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateId">Date</label>
+                    <input class="form-control" id="dateId" placeholder="Enter date" required
+                           th:field="*{date}"
+                           type="date"/>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <div class="mb-3">
@@ -63,17 +72,23 @@
                 </div>
             </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label text-muted" for="amountId">Amount</label>
-            <input class="form-control" id="amountId" placeholder="Enter  amount" required
-                   th:field="*{amount}"
-                   type="number" step=0.01>
-        </div>
-        <div class="mb-3">
-            <label class="form-label text-muted" for="dateId">Date</label>
-            <input class="form-control" id="dateId" placeholder="Enter date" required
-                   th:field="*{date}"
-                   type="date"/>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="amountId">Amount</label>
+                    <input class="form-control" id="amountId" placeholder="Enter  amount" required
+                           th:field="*{amount}"
+                           type="number" step=0.01>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 mt-4">
+                    <input class="form-check-input" id="withVatId"
+                           th:field="*{withVat}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="withVatId">With VAT</label>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>

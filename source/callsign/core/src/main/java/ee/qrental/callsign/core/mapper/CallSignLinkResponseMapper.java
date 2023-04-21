@@ -16,6 +16,9 @@ public class CallSignLinkResponseMapper
 
   @Override
   public CallSignLinkResponse toResponse(final CallSignLink domain) {
+    if (domain == null) {
+      return null;
+    }
     return CallSignLinkResponse.builder()
         .id(domain.getId())
         .callSign(domain.getCallSign().getCallSign())

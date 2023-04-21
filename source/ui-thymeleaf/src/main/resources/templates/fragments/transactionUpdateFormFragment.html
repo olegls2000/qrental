@@ -14,64 +14,98 @@
            th:field="*{id}"
            type="text"
            hidden/>
+    <script>
+        function discardNegativeSelect() {
+            const negativeSelect = document.getElementById("negativeTransactionTypeId");
+            negativeSelect.selectedIndex = -1;
+        }
 
-    <div class="mb-3">
-        <label class="form-label text-muted text-muted" for="driverId">Driver</label>
-        <select id="driverId" class="form-select"
-                th:field="*{driverId}">
-            <option th:each="driver : ${drivers}"
-                    th:value="${driver.id}"
-                    th:text="| ${driver.lastName} ${driver.firstName} - ${driver.isikukood}|"></option>
-        </select>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-label text-muted text-muted" for="transactionTypeId">Transaction
-                    type</label>
-                <select id="transactionTypeId" class="form-select"
-                        th:field="*{transactionTypeId}">
-                    <option th:each="transactionType : ${transactionTypes}"
-                            th:value="${transactionType.id}"
-                            th:text="${transactionType.name}"></option>
-                </select>
+        function discardPositiveSelect() {
+            const positiveSelect = document.getElementById("positiveTransactionTypeId");
+            positiveSelect.selectedIndex = -1;
+        }
+    </script>
+    <form method="post"
+          th:action="@{/transactions/add}"
+          th:object="${updateRequest}">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="driverId">Driver</label>
+                    <select id="driverId" class="form-select" required
+                            th:field="*{driverId}">
+                        <option th:value="''" th:text="Select"></option>
+                        <option th:each="driver : ${drivers}"
+                                th:value="${driver.id}"
+                                th:text="|${driver.lastName} ${driver.firstName}  - ${driver.isikukood}|">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateId">Date</label>
+                    <input class="form-control" id="dateId" placeholder="Enter date" required
+                           th:field="*{date}"
+                           type="date"/>
+                </div>
             </div>
         </div>
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-label text-muted" for="amountId">Amount</label>
-                <input class="form-control" id="amountId" placeholder="Enter  amount" required
-                       th:field="*{amount}"
-                       type="number" step=0.01/>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-danger"
+                           for="negativeTransactionTypeId">Negative</label>
+                    <select id="negativeTransactionTypeId"
+                            class="form-select bg-opacity-10 bg-danger text-danger"
+                            onchange="discardPositiveSelect()"
+                            th:field="*{transactionTypeId}">
+                        <option th:each="transactionType : ${negativeTransactionTypes}"
+                                th:value="${transactionType.id}"
+                                th:text="${transactionType.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-success"
+                           for="positiveTransactionTypeId">Positive</label>
+                    <select id="positiveTransactionTypeId"
+                            class="form-select bg-opacity-10 bg-success text-success"
+                            onchange="discardNegativeSelect()"
+                            th:field="*{transactionTypeId}">
+                        <option th:each="transactionType : ${positiveTransactionTypes}"
+                                th:value="${transactionType.id}"
+                                th:text="${transactionType.name}"></option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-label text-muted" for="dateId">Date</label>
-                <input class="form-control" id="dateId" placeholder="Enter date" required
-                       th:field="*{date}"
-                       type="date"/>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="amountId">Amount</label>
+                    <input class="form-control" id="amountId" placeholder="Enter  amount" required
+                           th:field="*{amount}"
+                           type="number" step=0.01>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 mt-4">
+                    <input class="form-check-input" id="withVatId"
+                           th:field="*{withVat}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="withVatId">With VAT</label>
+                </div>
             </div>
         </div>
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-check-label text-muted" for="withVatId">With VAT</label>
-                <input class="form-check-input" id="withVatId"
-                       th:field="*{withVat}"
-                       type="checkbox"/>
-            </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
         </div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label text-muted" for="commentId">Comment</label>
-        <textarea class="form-control"
-                  id="commentId"
-                  placeholder="Enter Comment"
-                  th:field="*{comment}"/>
-    </div>
     <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Update',
             cancelHref='/transactions'
