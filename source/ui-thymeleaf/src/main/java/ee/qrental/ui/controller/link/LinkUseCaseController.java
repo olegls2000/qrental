@@ -1,5 +1,8 @@
 package ee.qrental.ui.controller.link;
 
+import static ee.qrental.ui.controller.ControllerUtils.LINK_ROOT_PATH;
+
+import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.link.api.in.query.GetLinkQuery;
 import ee.qrental.link.api.in.request.LinkAddRequest;
 import ee.qrental.link.api.in.request.LinkDeleteRequest;
@@ -7,13 +10,11 @@ import ee.qrental.link.api.in.request.LinkUpdateRequest;
 import ee.qrental.link.api.in.usecase.LinkAddUseCase;
 import ee.qrental.link.api.in.usecase.LinkDeleteUseCase;
 import ee.qrental.link.api.in.usecase.LinkUpdateUseCase;
+import ee.qrental.transaction.api.in.query.GetBalanceQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import static ee.qrental.ui.controller.ControllerUtils.LINK_ROOT_PATH;
-
 
 @Controller
 @RequestMapping(LINK_ROOT_PATH)
@@ -24,10 +25,14 @@ public class LinkUseCaseController {
   private final LinkUpdateUseCase updateUseCase;
   private final LinkDeleteUseCase deleteUseCase;
   private final GetLinkQuery linkQuery;
+  private final GetCarQuery carQuery;
+  private final GetBalanceQuery balanceQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new LinkAddRequest());
+    addDriverBalanceesListToModel(model);
+    addCarListToModel(model);
 
     return "forms/addLink";
   }
@@ -42,6 +47,8 @@ public class LinkUseCaseController {
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", linkQuery.getUpdateRequestById(id));
+    addDriverBalanceesListToModel(model);
+    addCarListToModel(model);
 
     return "forms/updateLink";
   }
@@ -66,5 +73,15 @@ public class LinkUseCaseController {
     deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + LINK_ROOT_PATH;
+  }
+
+  private void addCarListToModel(final Model model) {
+    final var cars = carQuery.getAll();
+    model.addAttribute("cars", cars);
+  }
+
+  private void addDriverBalanceesListToModel(final Model model) {
+    final var drivers = balanceQuery.getAll();
+    model.addAttribute("drivers", drivers);
   }
 }

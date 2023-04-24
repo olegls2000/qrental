@@ -50,8 +50,8 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label text-muted" for="dateEndId"> Date End</label>
-                    <input class="form-control" id="dateEndId" placeholder="Enter  Date End"
+                    <label class="form-label text-muted" for="dateEndId">Date End</label>
+                    <input class="form-control" id="dateEndId" placeholder="Enter Date End"
                            th:field="*{dateEnd}"
                            type="date"/>
                 </div>
@@ -65,7 +65,6 @@
                       th:field="*{comment}"/>
         </div>
 
-
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Add',
             cancelHref='/links'
@@ -73,5 +72,3 @@
         </div>
     </form>
 </div>
-
-
