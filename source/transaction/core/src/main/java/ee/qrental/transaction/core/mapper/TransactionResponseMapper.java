@@ -54,7 +54,8 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
     final var realAmount = domain.getRealAmount();
     final var date = domain.getDate().toString();
     final var weekNumber = domain.getWeekNumber();
-    final var callSign = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    final var callSign = callSignLink.getCallSign();
     final var driverInfo = driverQuery.getObjectInfo(driverId);
 
     return format(
