@@ -10,9 +10,9 @@ spring:
         format_sql: true
         enable_lazy_load_no_trans: true
   mail:
-    username: pasechnik.o.n@gmail.com
-    password: tcyxeqswupeeyrqq
-    host: smtp.gmail.com
+    username: billing@qrent.ee
+    password: shzlahiyqdwcbzqk
+    host: smtp.zone.eu
     port: 587
     protocol: smtp
     properties:
