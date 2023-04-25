@@ -37,6 +37,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .id(domain.getId())
         .realAmount(domain.getRealAmount())
         .type(domain.getType().getName())
+        .typeDescription(domain.getType().getDescription())
         .driverId(domain.getDriverId())
         .driverInfo(driverInfo)
         .callSign(callSign)

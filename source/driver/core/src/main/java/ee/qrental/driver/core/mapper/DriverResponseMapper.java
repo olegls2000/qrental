@@ -5,13 +5,18 @@ import static java.lang.String.format;
 import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.domain.Driver;
+import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driver> {
 
+  private final GetFirmQuery firmQuery;
+
   @Override
   public DriverResponse toResponse(final Driver domain) {
+    final var qFirmId = domain.getQFirmId();
+    final var qFirmName = firmQuery.getById(qFirmId).getFirmName();
 
     return DriverResponse.builder()
         .id(domain.getId())
@@ -31,7 +36,8 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .taxiLicense(domain.getTaxiLicense())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .deposit(domain.getDeposit())
-        .qFirmId(domain.getQFirmId())
+        .qFirmId(qFirmId)
+        .qFirmName(qFirmName)
         .comment(domain.getComment())
         .build();
   }

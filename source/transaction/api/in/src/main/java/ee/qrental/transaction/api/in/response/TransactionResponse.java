@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class TransactionResponse {
   private Long id;
   private String type;
+  private String typeDescription;
   private String driverInfo;
   private Long driverId;
   private Integer callSign;

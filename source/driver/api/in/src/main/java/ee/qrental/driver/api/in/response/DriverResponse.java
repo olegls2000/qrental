@@ -27,5 +27,6 @@ public class DriverResponse {
   private Boolean needInvoicesByEmail;
   private BigDecimal deposit;
   private Long qFirmId;
+  private String qFirmName;
   private String comment;
 }

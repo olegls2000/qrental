@@ -46,7 +46,8 @@ public class InvoiceToPdfModelMapper {
     final var driverCompanyVat = invoice.getDriverCompanyVat();
     final var summ = totalAmount.add(vatAmount);
     final var items =
-        invoice.getItems().stream().collect(toMap(InvoiceItem::getType, InvoiceItem::getAmount));
+        invoice.getItems().stream()
+            .collect(toMap(InvoiceItem::getDescription, InvoiceItem::getAmount));
 
     return InvoicePdfModel.builder()
         .number(number)

@@ -81,8 +81,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         final var driverInfo =
             String.format(
                 "%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
-        final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-        final var driversCalSign = driversCallSignLink.getCallSign();
+        final var driversCalSign = getActiveCallSign(driverId);
         if (driversTransactions.isEmpty()) {
           System.out.println(
               String.format(
@@ -128,6 +127,15 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     }
     addPort.add(domain);
     sendEmails(domain);
+  }
+
+  private Integer getActiveCallSign(final Long driverId) {
+    final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    if (driversCallSignLink == null) {
+      System.out.println("No Active call sign was found for driver with ID: " + driverId);
+      return -1;
+    }
+    return driversCallSignLink.getCallSign();
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
@@ -180,7 +188,12 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private InvoiceItem getInvoiceItem(String type, List<TransactionResponse> transactions) {
     final var amount =
         transactions.stream().map(TransactionResponse::getRealAmount).reduce(BigDecimal::add).get();
+    final var transactionTypeDescription = transactions.get(0).getTypeDescription();
 
-    return InvoiceItem.builder().type(type).amount(amount).build();
+    return InvoiceItem.builder()
+        .type(type)
+        .description(transactionTypeDescription)
+        .amount(amount)
+        .build();
   }
 }

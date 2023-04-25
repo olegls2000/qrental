@@ -39,7 +39,11 @@ public class InvoiceAdapterMapper {
   }
 
   public InvoiceItem mapToItemDomain(final InvoiceItemJakartaEntity entity) {
-    return InvoiceItem.builder().amount(entity.getAmount()).type(entity.getType()).build();
+    return InvoiceItem.builder()
+        .amount(entity.getAmount())
+        .type(entity.getType())
+        .description(entity.getDescription())
+        .build();
   }
 
   public InvoiceJakartaEntity mapToEntity(final Invoice domain) {
@@ -72,6 +76,7 @@ public class InvoiceAdapterMapper {
     return InvoiceItemJakartaEntity.builder()
         .amount(entity.getAmount())
         .type(entity.getType())
+        .description(entity.getDescription())
         .build();
   }
 }

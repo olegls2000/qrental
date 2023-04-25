@@ -29,6 +29,9 @@ public class InvoiceItemJakartaEntity {
   @Column(name = "type")
   private String type;
 
+  @Column(name = "description")
+  private String description;
+
   @ManyToOne
   @JoinColumn(name = "invoice_id")
   private InvoiceJakartaEntity invoice;

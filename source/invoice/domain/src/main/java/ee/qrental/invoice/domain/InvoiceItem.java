@@ -10,4 +10,5 @@ public class InvoiceItem {
 
   private BigDecimal amount;
   private String type;
+  private String description;
 }
