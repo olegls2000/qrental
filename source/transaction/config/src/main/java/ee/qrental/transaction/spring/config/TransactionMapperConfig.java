@@ -17,7 +17,8 @@ public class TransactionMapperConfig {
 
   @Bean
   TransactionResponseMapper getTransactionResponseMapper(
-      final GetCallSignLinkQuery callSignLinkQuery, final GetDriverQuery driverQuery) {
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetDriverQuery driverQuery) {
     return new TransactionResponseMapper(callSignLinkQuery, driverQuery);
   }
 

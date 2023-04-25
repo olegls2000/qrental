@@ -9,8 +9,11 @@ import java.time.LocalDate;
 @Getter
 public class LinkResponse {
   private Long id;
+  private String carInfo;
   private Long carId;
+  private String driverInfo;
   private Long driverId;
+  private Integer callSign;
   private LocalDate dateStart;
   private LocalDate dateEnd;
   private String comment;

@@ -9,9 +9,9 @@
                 Add new Transaction
             </a>
         </th>
-        <th>Transaction Type</th>
-        <th>Driver</th>
         <th>Call Sign</th>
+        <th>Driver</th>
+        <th>Transaction Type</th>
         <th>Amount</th>
         <th>Week</th>
         <th>Date</th>
@@ -19,7 +19,7 @@
         <th>Comment</th>
     </tr>
     <tr th:if="${#lists.isEmpty(transactions)}">
-        <td colspan="5">No Transactions</td>
+        <td colspan="6">No Transactions</td>
     </tr>
     <tr th:each="transaction : ${transactions}">
         <td>
@@ -32,9 +32,9 @@
                 <span class="bi-trash"></span>
                 Delete</a>
         </td>
-        <td th:text="${transaction.type}">???</td>
-        <td th:text="${transaction.driverInfo}">???</td>
         <td th:text="${transaction.callSign}" >???</td>
+        <td th:text="${transaction.driverInfo}">???</td>
+        <td th:text="${transaction.type}">???</td>
         <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
             th:classappend="${transaction.realAmount<0} ?
                 'text-danger bg-danger border-danger'

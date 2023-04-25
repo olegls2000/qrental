@@ -1,17 +1,18 @@
 package ee.qrental.email.core.service;
 
-import static ee.qrental.email.api.in.request.EmailType.INVOICE;
-
 import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.core.service.messagestrategy.LetterBuildStrategy;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.io.IOException;
+
+import static ee.qrental.email.api.in.request.EmailType.INVOICE;
 
 @AllArgsConstructor
 public class InvoiceLetterBuildStrategy implements LetterBuildStrategy {
@@ -28,7 +29,7 @@ public class InvoiceLetterBuildStrategy implements LetterBuildStrategy {
       throws MessagingException, IOException {
     final var invoiceNumber = emailSendRequest.getProperties().get("invoiceNumber").toString();
     final var recipients = emailSendRequest.getRecipients().toArray(new String[0]);
-    final var from = "finance@q-rental.ee";
+    final var from = "billing@qrent.ee";
     final var subject = "Invoice: " + invoiceNumber;
     final var attachmentFileName = String.format("Invoice-%s.pdf", invoiceNumber);
     final var attachment = new ByteArrayResource(emailSendRequest.getAttachment().readAllBytes());

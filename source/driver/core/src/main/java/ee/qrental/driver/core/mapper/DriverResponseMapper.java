@@ -1,12 +1,12 @@
 package ee.qrental.driver.core.mapper;
 
-import static java.lang.String.format;
-
 import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.domain.Driver;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
+
+import static java.lang.String.format;
 
 @AllArgsConstructor
 public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driver> {
@@ -44,6 +44,6 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
 
   @Override
   public String toObjectInfo(Driver domain) {
-    return format("%s %s", domain.getLastName(), domain.getFirstName());
+    return format("%s %s ", domain.getFirstName(), domain.getLastName());
   }
 }

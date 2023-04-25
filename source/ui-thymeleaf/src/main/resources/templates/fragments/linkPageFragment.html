@@ -29,9 +29,9 @@
                     Add new Link
                 </a>
             </th>
-            <th>Car Number</th>
             <th>Call Sign</th>
             <th>Driver</th>
+            <th>Car Number</th>
             <th>Date Start</th>
             <th>Date End</th>
             <th>Comment</th>
@@ -50,9 +50,9 @@
                     <span class="bi-trash"></span>
                     Delete</a>
             </td>
-            <td th:text="${link.carId}"> ... </td>
-            <td th:text="${link.id}"> callsign </td>
-            <td th:text="${link.driverId}"> ... </td>
+            <td th:text="${link.callSign}"> callsign </td>
+            <td th:text="${link.driverInfo}"> ... </td>
+            <td th:text="${link.carInfo}"> ... </td>
             <td th:text="${link.dateStart}"></td>
             <td th:text="${link.dateEnd}"></td>
             <td th:text="${link.comment}"></td>

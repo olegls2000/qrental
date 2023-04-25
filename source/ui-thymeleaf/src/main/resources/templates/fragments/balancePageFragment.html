@@ -7,8 +7,8 @@
         <tr>
             <th></th>
             <th>Call Sign</th>
-            <th>Last Name</th>
             <th>First Name</th>
+            <th>Last Name</th>
             <th>Total, EUR</th>
         </tr>
         <tr th:if="${#lists.isEmpty(balances)}">
@@ -21,9 +21,9 @@
                     <span class="bi bi-card-checklist"></span>
                     Details</a>
             </td>
-            <td    th:text="${transaction?.callSign}" ></td>
-            <td th:text="${balance.lastName}"></td>
+            <td th:text="${transaction?.callSign}">...</td>
             <td th:text="${balance.firstName}"></td>
+            <td th:text="${balance.lastName}"></td>
             <td th:text="${balance.total}"
                 class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
                 th:classappend="${balance.total<0} ?
