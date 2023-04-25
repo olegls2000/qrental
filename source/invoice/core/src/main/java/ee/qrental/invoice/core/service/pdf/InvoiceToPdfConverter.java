@@ -1,13 +1,12 @@
-package ee.qrental.invoice.core.service;
+package ee.qrental.invoice.core.service.pdf;
 
 import static com.lowagie.text.Font.BOLDITALIC;
 import static com.lowagie.text.Font.COURIER;
+import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
 import static java.awt.Color.white;
 import static java.lang.String.format;
-import static java.time.format.DateTimeFormatter.ofLocalizedDate;
-import static java.time.format.FormatStyle.SHORT;
 
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
@@ -15,80 +14,53 @@ import com.lowagie.text.Image;
 import com.lowagie.text.alignment.HorizontalAlignment;
 import com.lowagie.text.alignment.VerticalAlignment;
 import com.lowagie.text.pdf.PdfWriter;
-import ee.qrental.common.core.utils.QTimeUtils;
-import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
-import ee.qrental.invoice.api.out.InvoiceLoadPort;
-import ee.qrental.invoice.domain.Invoice;
-import ee.qrental.invoice.domain.InvoiceItem;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 @AllArgsConstructor
-public class InvoicePdfService{
+public class InvoiceToPdfConverter {
 
   @SneakyThrows
-  public InputStream getPdfInputStream(final Invoice invoice) {
-    final var number = invoice.getNumber();
-    final var creationDate = invoice.getCreated().format(ofLocalizedDate(SHORT));
-    final var weekNumber = invoice.getWeekNumber();
-    final var year = invoice.getCreated().getYear();
-    final var startDate =
-        QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
-    final var endDate =
-        QTimeUtils.getLastDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
-    final var driverCompany = invoice.getDriverCompany();
-    final var driverInfo = invoice.getDriverInfo();
-    final var driverCompanyRegNumber = invoice.getDriverCompanyRegNumber();
-    final var driverCompanyAddress = invoice.getDriverCompanyAddress();
-    final var qFirmEmail = invoice.getQFirmEmail();
-    final var qFirmPostAddress = invoice.getQFirmPostAddress();
-    final var qFirmPhone = invoice.getQFirmPhone();
-    final var qFirmName = invoice.getQFirmName();
-    final var qFirmRegNumber = invoice.getQFirmRegNumber();
-    final var qFirmVatNumber = invoice.getQFirmVatNumber();
-    final var qFirmIban = invoice.getQFirmIban();
-    final var qFirmBank = invoice.getQFirmBank();
-    final var invoiceTotalAmount =
-        invoice.getItems().stream()
-            .map(InvoiceItem::getAmount)
-            .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
-            .reduce(BigDecimal::add)
-            .orElseThrow(() -> new RuntimeException("No Negative Transactions during Invoice period."));
-    final var driverCompanyVat = invoice.getDriverCompanyVat();
-    final var vatAmount = invoiceTotalAmount.divide(BigDecimal.valueOf(5));
-    final var arveSum = invoiceTotalAmount.add(vatAmount);
-    final var invoicePdfDoc = new Document(PageSize.A4, 40f, 40f, 50f, 50f);
+  public InputStream getPdfInputStream(final InvoicePdfModel model) {
+    final var invoicePdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
     final var invoicePdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(invoicePdfDoc, invoicePdfOutputStream);
-    final var header = getHeader(number, creationDate, startDate, endDate);
+    final var header =
+        getHeader(
+            model.getNumber(), model.getCreationDate(), model.getStartDate(), model.getEndDate());
     final var requisites =
         getRequisites(
-            driverCompany,
-            driverCompanyAddress,
-            driverCompanyRegNumber,
-            driverCompanyVat,
-            driverInfo);
-    final var itemsTable = getItemsTable(invoice);
-    final var invoiceSumma = getSumms(invoiceTotalAmount, vatAmount, arveSum);
-    final var invoiceTotal = getTotal(arveSum);
+            model.getDriverCompany(),
+            model.getDriverCompanyAddress(),
+            model.getDriverCompanyRegNumber(),
+            model.getDriverCompanyVat(),
+            model.getDriverInfo());
+    final var itemsTable = getItemsTable(model.getItems());
+    final var invoiceSumma =
+        getSumms(
+            model.getTotalAmount(),
+            model.getVatPercentage(),
+            model.getVatAmount(),
+            model.getSumm());
+    final var invoiceTotal = getTotal(model.getSumm());
     final var interest = getInterest();
     final var footer =
         getFooter(
-            qFirmName,
-            qFirmPostAddress,
-            qFirmBank,
-            qFirmRegNumber,
-            qFirmEmail,
-            qFirmIban,
-            qFirmVatNumber,
-            qFirmPhone);
-
+                model.getQFirmName(),
+                model.getQFirmPostAddress(),
+                model.getQFirmBank(),
+                model.getQFirmRegNumber(),
+                model.getQFirmEmail(),
+                model.getQFirmIban(),
+                model.getQFirmVatNumber(),
+                model.getQFirmPhone());
     invoicePdfDoc.open();
     invoicePdfDoc.add(header);
     invoicePdfDoc.add(new Paragraph("\n"));
@@ -180,7 +152,7 @@ public class InvoicePdfService{
     return requisites;
   }
 
-  private Table getItemsTable(final Invoice invoice) {
+  private Table getItemsTable(final Map<String, BigDecimal> items) {
     final var table = new Table(2);
     table.setWidths(new float[] {3, 1});
     table.setPadding(2f);
@@ -190,13 +162,16 @@ public class InvoicePdfService{
     table.setBorderColor(Color.BLACK);
     table.addCell(getItemTablHeaderCell("Selgitus"));
     table.addCell(getItemTablHeaderCell("Summa"));
-    invoice.getItems().forEach(item -> addRow(item, table));
+    items.entrySet().forEach(item -> addRow(item, table));
 
     return table;
   }
 
   private Table getSumms(
-      final BigDecimal invoiceTotalAmount, final BigDecimal vatAmount, final BigDecimal arveSum) {
+      final BigDecimal invoiceTotalAmount,
+      final BigDecimal vatPercentage,
+      final BigDecimal vatAmount,
+      final BigDecimal arveSum) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -206,7 +181,8 @@ public class InvoicePdfService{
     table.setBorder(NO_BORDER);
     table.addCell(getSummLabelCell("Summa"));
     table.addCell(getSummValueCell(invoiceTotalAmount));
-    table.addCell(getSummLabelCell("Käibemaks (20%)"));
+    final var vatLabel = "Käibemaks (" + vatPercentage + "%)";
+    table.addCell(getSummLabelCell(vatLabel));
     table.addCell(getSummValueCell(vatAmount));
     table.addCell(getSummLabelCell("Arve summa"));
     table.addCell(getSummValueCell(arveSum));
@@ -326,15 +302,15 @@ public class InvoicePdfService{
     return cell;
   }
 
-  private void addRow(final InvoiceItem item, final Table table) {
+  private void addRow(final Map.Entry<String, BigDecimal> item, final Table table) {
     final var descriptionCell =
-        new Cell(new Paragraph(item.getType(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
+        new Cell(new Paragraph(item.getKey(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
     descriptionCell.setHorizontalAlignment(HorizontalAlignment.LEFT);
     table.addCell(descriptionCell);
     final var sumCell =
         new Cell(
             new Paragraph(
-                getFormattedString(item.getAmount()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+                getFormattedString(item.getValue()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     sumCell.setHorizontalAlignment(RIGHT);
     table.addCell(sumCell);
   }

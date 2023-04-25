@@ -32,4 +32,8 @@ public class Invoice {
   private LocalDate created;
   private String comment;
   private List<InvoiceItem> items;
+
+  public Boolean withVat() {
+    return qFirmVatNumber != null;
+  }
 }

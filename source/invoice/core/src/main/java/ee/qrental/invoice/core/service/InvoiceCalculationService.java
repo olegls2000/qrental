@@ -14,6 +14,8 @@ import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
 import ee.qrental.invoice.api.out.InvoiceCalculationAddPort;
 import ee.qrental.invoice.core.mapper.InvoiceCalculationAddRequestMapper;
+import ee.qrental.invoice.core.service.pdf.InvoiceToPdfConverter;
+import ee.qrental.invoice.core.service.pdf.InvoiceToPdfModelMapper;
 import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceCalculation;
@@ -23,6 +25,7 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +41,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
   private final EmailSendUseCase emailSendUseCase;
-  private final InvoicePdfService invoicePdfService;
+  private final InvoiceToPdfConverter invoiceToPdfConverter;
+  private final InvoiceToPdfModelMapper mapper;
   private final InvoiceCalculationAddRequestMapper addRequestMapper;
   private final InvoiceCalculationBusinessRuleValidator businessRuleValidator;
   private final InvoiceCalculationPeriodService datesCalculationService;
@@ -137,7 +141,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 return;
               }
               final var recipient = driver.getEmail();
-              final var attachment = invoicePdfService.getPdfInputStream(invoice);
+              final var attachment = getAttachment(invoice);
               final var properties = new HashMap<String, Object>();
               properties.put("invoiceNumber", invoice.getNumber());
 
@@ -150,6 +154,12 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                       .build();
               emailSendUseCase.sendEmail(emailSendRequest);
             });
+  }
+
+  private InputStream getAttachment(final Invoice invoice) {
+    final var invoicePdfModel = mapper.getPdfModel(invoice);
+
+    return invoiceToPdfConverter.getPdfInputStream(invoicePdfModel);
   }
 
   private String getInvoiceNumber(final Week week, final Integer callSign) {

@@ -10,6 +10,8 @@ import ee.qrental.invoice.api.in.usecase.InvoiceSendByEmailUseCase;
 import ee.qrental.invoice.api.out.*;
 import ee.qrental.invoice.core.mapper.*;
 import ee.qrental.invoice.core.service.*;
+import ee.qrental.invoice.core.service.pdf.InvoiceToPdfConverter;
+import ee.qrental.invoice.core.service.pdf.InvoiceToPdfModelMapper;
 import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
 import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -47,8 +49,13 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  InvoicePdfService getInvoicePdfService() {
-    return new InvoicePdfService();
+  InvoiceToPdfConverter getInvoiceToPdfConverter() {
+    return new InvoiceToPdfConverter();
+  }
+
+  @Bean
+  InvoiceToPdfModelMapper getInvoiceToPdfModelMapper() {
+    return new InvoiceToPdfModelMapper();
   }
 
   @Bean
@@ -69,7 +76,8 @@ public class InvoiceServiceConfig {
       final InvoiceCalculationBusinessRuleValidator businessRuleValidator,
       final InvoiceCalculationPeriodService datesCalculationService,
       final EmailSendUseCase emailSendUseCase,
-      final InvoicePdfService invoicePdfUseCase) {
+      final InvoiceToPdfConverter invoiceToPdfConverter,
+      final InvoiceToPdfModelMapper invoiceToPdfModelMapper) {
     return new InvoiceCalculationService(
         addPort,
         transactionQuery,
@@ -77,7 +85,8 @@ public class InvoiceServiceConfig {
         callSignLinkQuery,
         firmQuery,
         emailSendUseCase,
-        invoicePdfUseCase,
+        invoiceToPdfConverter,
+        invoiceToPdfModelMapper,
         addRequestMapper,
         businessRuleValidator,
         datesCalculationService);
@@ -101,7 +110,9 @@ public class InvoiceServiceConfig {
 
   @Bean
   InvoicePdfUseCase getInvoicePdfUseCase(
-      final InvoiceLoadPort loadPort, final InvoicePdfService pdfService) {
-    return new InvoicePdfUseCaseImpl(loadPort, pdfService);
+      final InvoiceLoadPort loadPort,
+      final InvoiceToPdfConverter converter,
+      final InvoiceToPdfModelMapper mapper) {
+    return new InvoicePdfUseCaseImpl(loadPort, converter, mapper);
   }
 }
