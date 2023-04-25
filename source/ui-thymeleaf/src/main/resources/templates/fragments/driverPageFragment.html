@@ -21,6 +21,7 @@
             <th>Q Firm</th>
             <th>Deposit</th>
             <th>Comment</th>
+            <th>Driver Portal</th>
         </tr>
         <tr th:if="${#lists.isEmpty(drivers)}">
             <td colspan="5">No drivers</td>
@@ -36,6 +37,7 @@
                     <span class="bi-trash"></span>
                     Delete</a>
             </td>
+
             <td th:text="${driver.lastName}">??</td>
             <td th:text="${driver.firstName}">??</td>
             <td th:text="${driver.isikukood}">??</td>
@@ -47,6 +49,12 @@
             <td th:text="${driver.qFirmName}">??</td>
             <td th:text="${driver.deposit}">??</td>
             <td th:text="${driver.comment}">??</td>
+            <td>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/balances/driver/{id}(id=${driver.id})}">
+                    <span class="bi bi-card-checklist"></span>
+                    Details</a>
+            </td>
         </tr>
     </table>
 </div>

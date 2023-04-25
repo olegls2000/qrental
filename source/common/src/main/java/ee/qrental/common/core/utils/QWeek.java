@@ -1,38 +1,38 @@
 package ee.qrental.common.core.utils;
 
-import static java.lang.String.format;
-
 import lombok.Getter;
+
+import static java.lang.String.format;
 
 public enum QWeek {
   ALL("all", 0),
-  FIRST("Jan", 1),
-  SECOND("Jan", 2),
-  THIRD("Jan", 3),
-  FORTH("Jan", 4),
-  FIFTH("Jan-Feb", 5),
-  SIXTH("Feb", 6),
-  SEVENTH("Feb", 7),
-  EIGHTH("Feb", 8),
-  NINTH("Feb-Mar", 9),
-  TENTH("Mar", 10),
-  ELEVENTH("Mar", 11),
-  TWELFTH("Mar", 12),
-  THIRTEENTH("Mar", 13),
-  FOURTEENTH("Apr", 14),
-  FIFTEENTH("Apr", 15),
-  SIXTEENTH("Apr", 16),
-  SEVENTEENTH("Apr", 17),
-  EIGHTEENTH("May", 18),
-  NINETEENTH("May", 19),
-  TWENTIETH("May", 20),
-  TWENTY_FIRST("May", 21),
-  TWENTY_SECOND("May-Jun", 22),
-  TWENTY_THIRD("Jun", 23),
-  TWENTY_FORTH("Jun", 24),
-  TWENTY_FIFTH("Jun", 25),
-  TWENTY_SIXTH("Jun-Jul", 26),
-  TWENTY_SEVENTH("Jul", 27),
+  FIRST("Jan 2-8", 1),
+  SECOND("Jan 9-15", 2),
+  THIRD("Jan 16-22", 3),
+  FORTH("Jan 23-29", 4),
+  FIFTH("Jan-Feb 30-5", 5),
+  SIXTH("Feb 6-12", 6),
+  SEVENTH("Feb 13-19", 7),
+  EIGHTH("Feb 20-26", 8),
+  NINTH("Feb-Mar 27-5", 9),
+  TENTH("Mar 6-12", 10),
+  ELEVENTH("Mar 13-19", 11),
+  TWELFTH("Mar 20-26", 12),
+  THIRTEENTH("Mar-Apr 27-2", 13),
+  FOURTEENTH("Apr 3-9", 14),
+  FIFTEENTH("Apr 10-16", 15),
+  SIXTEENTH("Apr 17-23", 16),
+  SEVENTEENTH("Apr 24-30", 17),
+  EIGHTEENTH("May 1-7", 18),
+  NINETEENTH("May 8-14", 19),
+  TWENTIETH("May 15-21", 20),
+  TWENTY_FIRST("May 22-28", 21),
+  TWENTY_SECOND("May-Jun 29-4", 22),
+  TWENTY_THIRD("Jun 5-11", 23),
+  TWENTY_FORTH("Jun 12-18", 24),
+  TWENTY_FIFTH("Jun 19-25", 25),
+  TWENTY_SIXTH("Jun-Jul 26-2", 26),
+  TWENTY_SEVENTH("Jul 3-9", 27),
   ;
   private String month;
 

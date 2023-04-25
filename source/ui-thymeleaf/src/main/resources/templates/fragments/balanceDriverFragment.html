@@ -11,11 +11,39 @@
                         </a>
                     </div>
                 </div>
+
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>
+                            <a class="btn btn-sm btn-warning"
+                               th:href="@{/drivers/update-form/{id}(id=${driverId})}">
+                                <span class="bi-pencil-square"></span>
+                                <small th:text="|Driver: ${driverInfo}|"> Driver Name </small>
+                            </a>
+                        </th>
+
+                        <th>
+                            <a class="btn btn-sm btn-warning "
+                               th:href="@{/call-sign-links/update-form/{id}(id=${driverId})}">
+                                <span class="bi-pencil-square"></span>
+                                Call Sign</a>
+                        </th>
+                        <th>
+                            <a class="btn btn-sm btn-warning"
+                               th:href="@{/links/update-form/{id}(id=${driverId})}">
+                                <span class="bi-pencil-square"></span>
+                                Link</a>
+                        </th>
+                        <th>Phone: ---</th>
+                        <th>Deposit: ---</th>
+
+                    </tr>
+                </table>
+
+
                 <div class="row">
                     <div class="col-8 align-self-start">
                         <h4 class="py-3" th:text="|Driver: ${driverInfo}|">Driver Name</h4>
-                        <h6 class="py-2" th:text="|Call Sign:|">Call Sign</h6>
-                        <h6 class="py-2" th:text="|Phone: |">Phone </h6>
                     </div>
                     <div class="col align-self-end">
                         <small th:text="|Total balance: ${total} EURO|"
@@ -38,14 +66,35 @@
             <form th:replace="fragments/transactionDriverSearchFormFragment.html :: searchForm"></form>
         </div>
     </div>
-    <div class="row justify-content-md-center mb-3">
-        <div class="col-md-auto">
-            <small th:text="|Summ: ${viewTotal} EURO|"
-                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+
+    <div>
+        <div class="row justify-content-md-center mb-3">
+            <div class="col-md-auto">
+                <small th:text="|Beginning of period:  -EURO|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                   th:classappend="${viewTotal<0} ?
+                       th:classappend="${viewTotal<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
+            </div>
+
+            <div class="col-md-auto">
+                <small th:text="|Summ: ${viewTotal} EURO|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                       th:classappend="${viewTotal<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+            </div>
+
+            <div class="col-md-auto">
+                <small th:text="|End of period:  -EURO|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                       th:classappend="${viewTotal<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+            </div>
         </div>
     </div>
     <table class="table table-striped table-bordered">
