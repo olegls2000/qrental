@@ -7,4 +7,4 @@ ee.qrental.transaction.spring.config.type.TransactionTypeAdapterConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeMapperConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeServiceConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeRepositoryConfig,\
-ee.qrental.transaction.spring.config.balance.BalanceServiceConfig
+ee.qrental.transaction.spring.config.balance.DriverBalanceServiceConfig

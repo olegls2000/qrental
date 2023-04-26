@@ -2,7 +2,7 @@ package ee.qrental.ui.controller.link;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.link.api.in.query.GetLinkQuery;
-import ee.qrental.transaction.api.in.query.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.GetDriverBalanceQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +21,10 @@ public class LinkQueryController {
 
   private final GetCarQuery carQuery;
 
-  private final GetBalanceQuery balanceQuery;
+  private final GetDriverBalanceQuery balanceQuery;
 
   @GetMapping
   public String getLinkView(final Model model) {
-   // model.addAttribute("links", linkQuery.getAll());
     addLinkListToModel(model);
     addCarListToModel(model);
     addDriverListToModel(model);

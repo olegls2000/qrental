@@ -37,4 +37,16 @@ public class InvoiceRepositoryConfig {
       final InvoiceTransactionSpringDataRepository springDataRepository) {
     return new InvoiceTransactionRepositoryImpl(springDataRepository);
   }
+
+  @Bean
+  WeekBalanceRepository getWeekBalanceRepository(
+      final WeekBalanceSpringDataRepository springDataRepository) {
+    return new WeekBalanceRepositoryImpl(springDataRepository);
+  }
+
+  @Bean
+  WeekBalanceTransactionRepository getWeekBalanceTransactionRepository(
+      final WeekBalanceTransactionSpringDataRepository springDataRepository) {
+    return new WeekBalanceTransactionRepositoryImpl(springDataRepository);
+  }
 }

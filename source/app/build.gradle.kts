@@ -53,6 +53,12 @@ dependencies {
     implementation(project(":source:transaction:persistence:repository"))
     implementation(project(":source:transaction:persistence:flyway"))
 
+    implementation(project(":source:balance:config"))
+    implementation(project(":source:balance:core"))
+    implementation(project(":source:balance:persistence:adapter"))
+    implementation(project(":source:balance:persistence:repository"))
+    implementation(project(":source:balance:persistence:flyway"))
+
     implementation(project(":source:email:api:in"))
     implementation(project(":source:email:core"))
     implementation(project(":source:email:config"))

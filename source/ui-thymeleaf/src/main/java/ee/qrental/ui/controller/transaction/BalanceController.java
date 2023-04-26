@@ -3,7 +3,7 @@ package ee.qrental.ui.controller.transaction;
 import static ee.qrental.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.transaction.api.in.query.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.GetDriverBalanceQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class BalanceController {
 
-  private final GetBalanceQuery balanceQuery;
+  private final GetDriverBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
 

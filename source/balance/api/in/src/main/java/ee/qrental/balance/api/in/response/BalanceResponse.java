@@ -1,0 +1,24 @@
+package ee.qrental.balance.api.in.response;
+
+import java.time.LocalDate;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+@Getter
+public class BalanceResponse {
+  private Long id;
+  private String number;
+  private Integer weekNumber;
+  private String driverCompany;
+  private Integer driverCallSign;
+  private String driverCompanyRegNumber;
+  private String driverCompanyAddress;
+  private String qFirmName;
+  private String qFirmRegNumber;
+  private String qFirmVatNumber;
+  private String qFirmIban;
+  private String qFirmBank;
+  private LocalDate created;
+  private String comment;
+}
