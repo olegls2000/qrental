@@ -1,5 +1,7 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.balance.api.in.query.GetBalanceCalculationQuery;
+import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
@@ -67,29 +69,33 @@ public class InvoiceServiceConfig {
 
   @Bean
   InvoiceCalculationService getInvoiceCalculationService(
-      final InvoiceCalculationAddPort addPort,
+      final InvoiceCalculationAddRequestMapper invoiceCalculationAddRequestMapper,
+      final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator,
+      final InvoiceCalculationAddPort invoiceCalculationAddPort,
+      final InvoiceCalculationPeriodService invoiceCalculationPeriodService,
+      final InvoiceToPdfConverter invoiceToPdfConverter,
+      final InvoiceToPdfModelMapper invoiceToPdfModelMapper,
       final GetTransactionQuery transactionQuery,
       final GetDriverQuery driverQuery,
       final GetCallSignLinkQuery callSignLinkQuery,
       final GetFirmQuery firmQuery,
-      final InvoiceCalculationAddRequestMapper addRequestMapper,
-      final InvoiceCalculationBusinessRuleValidator businessRuleValidator,
-      final InvoiceCalculationPeriodService datesCalculationService,
+      final GetBalanceCalculationQuery balanceCalculationQuery,
       final EmailSendUseCase emailSendUseCase,
-      final InvoiceToPdfConverter invoiceToPdfConverter,
-      final InvoiceToPdfModelMapper invoiceToPdfModelMapper) {
+      final BalanceCalculationAddUseCase balanceCalculationAddUseCase) {
     return new InvoiceCalculationService(
-        addPort,
+        invoiceCalculationAddRequestMapper,
+        invoiceCalculationBusinessRuleValidator,
+        invoiceCalculationAddPort,
+        invoiceCalculationPeriodService,
+        invoiceToPdfConverter,
+        invoiceToPdfModelMapper,
         transactionQuery,
         driverQuery,
         callSignLinkQuery,
         firmQuery,
+        balanceCalculationQuery,
         emailSendUseCase,
-        invoiceToPdfConverter,
-        invoiceToPdfModelMapper,
-        addRequestMapper,
-        businessRuleValidator,
-        datesCalculationService);
+        balanceCalculationAddUseCase);
   }
 
   @Bean

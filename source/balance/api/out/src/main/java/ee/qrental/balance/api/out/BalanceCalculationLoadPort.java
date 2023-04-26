@@ -6,4 +6,6 @@ import java.time.LocalDate;
 
 public interface BalanceCalculationLoadPort extends LoadPort<BalanceCalculation> {
   LocalDate loadLastCalculationDate();
+
+  BalanceCalculation loadByActionDate(final LocalDate actionDate);
 }

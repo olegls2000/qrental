@@ -6,6 +6,8 @@ import ee.qrental.balance.api.in.query.GetBalanceCalculationQuery;
 import ee.qrental.balance.api.in.response.BalanceCalculationResponse;
 import ee.qrental.balance.api.out.BalanceCalculationLoadPort;
 import ee.qrental.balance.core.mapper.BalanceCalculationResponseMapper;
+
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -18,6 +20,11 @@ public class BalanceCalculationQueryService implements GetBalanceCalculationQuer
   @Override
   public List<BalanceCalculationResponse> getAll() {
     return loadPort.loadAll().stream().map(responseMapper::toResponse).collect(toList());
+  }
+
+  @Override
+  public BalanceCalculationResponse getOneByActionDate(final LocalDate actionDate) {
+    return  responseMapper.toResponse(loadPort.loadByActionDate(actionDate));
   }
 
   @Override

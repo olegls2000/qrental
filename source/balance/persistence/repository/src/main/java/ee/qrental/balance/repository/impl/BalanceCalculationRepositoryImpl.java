@@ -31,4 +31,9 @@ public class BalanceCalculationRepositoryImpl implements BalanceCalculationRepos
   public LocalDate getLastCalculationDate() {
     return springDataRepository.getLastCalculationDate();
   }
+
+  @Override
+  public BalanceCalculationJakartaEntity findOneByActionDate(final LocalDate actionDate) {
+     return springDataRepository.findByActionDate(actionDate);
+  }
 }

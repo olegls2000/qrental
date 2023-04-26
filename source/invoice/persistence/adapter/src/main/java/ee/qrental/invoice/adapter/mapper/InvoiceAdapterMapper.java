@@ -33,6 +33,7 @@ public class InvoiceAdapterMapper {
         .qFirmPostAddress(entity.getQFirmPostAddress())
         .qFirmPhone(entity.getQFirmPhone())
         .created(entity.getCreated())
+        .balance(entity.getBalance())
         .comment(entity.getComment())
         .items(entity.getItems().stream().map(this::mapToItemDomain).collect(toList()))
         .build();
@@ -68,6 +69,7 @@ public class InvoiceAdapterMapper {
         .qFirmPostAddress(domain.getQFirmPostAddress())
         .qFirmPhone(domain.getQFirmPhone())
         .created(domain.getCreated())
+        .balance(domain.getBalance())
         .comment(domain.getComment())
         .build();
   }

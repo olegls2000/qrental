@@ -21,6 +21,12 @@ public class BalanceCalculationLoadAdapter implements BalanceCalculationLoadPort
     return loadedOrDefault(repository.getLastCalculationDate(), LocalDate.of(2023, 02, 01));
   }
 
+  @Override
+  public BalanceCalculation loadByActionDate(final LocalDate actionDate) {
+    final var entity = repository.findOneByActionDate(actionDate);
+    return mapper.mapToDomain(entity);
+  }
+
   private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {
     return loadedDate == null ? defaultDate : loadedDate;
   }

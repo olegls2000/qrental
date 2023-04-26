@@ -12,4 +12,6 @@ public interface BalanceCalculationSpringDataRepository
       value = "select action_date from balance_calculation order by action_date desc limit 1",
       nativeQuery = true)
   LocalDate getLastCalculationDate();
+
+  BalanceCalculationJakartaEntity findByActionDate(final LocalDate actionDate);
 }

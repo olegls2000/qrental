@@ -32,7 +32,7 @@ public class InvoiceToPdfModelMapper {
     final var qFirmVatNumber = invoice.getQFirmVatNumber();
     final var qFirmBank = invoice.getQFirmBank();
     final var qFirmIban = invoice.getQFirmIban();
-    final var totalAmount =
+    final var sum =
         invoice.getItems().stream()
             .map(InvoiceItem::getAmount)
             .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
@@ -41,13 +41,20 @@ public class InvoiceToPdfModelMapper {
                 () -> new RuntimeException("No Negative Transactions during Invoice period."));
 
     final var vatPercentage = invoice.withVat() ? BigDecimal.valueOf(20) : BigDecimal.ZERO;
-    final var vatAmount = totalAmount.multiply(vatPercentage.movePointLeft(2));
+    final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
 
     final var driverCompanyVat = invoice.getDriverCompanyVat();
-    final var summ = totalAmount.add(vatAmount);
+    final var sumWithVat = sum.add(vatAmount);
     final var items =
         invoice.getItems().stream()
             .collect(toMap(InvoiceItem::getDescription, InvoiceItem::getAmount));
+
+    final var balanceAmount = invoice.getBalance();
+    final var debt = getDebt(balanceAmount);
+    final var advancePayment = getAdvancePayment(balanceAmount);
+    final var total = sumWithVat.add(debt).subtract(advancePayment);
+    final var fee = BigDecimal.ZERO;
+    final var totalWithFee = total.add(fee);
 
     return InvoicePdfModel.builder()
         .number(number)
@@ -69,11 +76,30 @@ public class InvoiceToPdfModelMapper {
         .qFirmVatNumber(qFirmVatNumber)
         .qFirmBank(qFirmBank)
         .qFirmIban(qFirmIban)
-        .totalAmount(totalAmount)
+        .sum(sum)
         .vatPercentage(vatPercentage)
         .vatAmount(vatAmount)
-        .summ(summ)
+        .sumWithVat(sumWithVat)
         .items(items)
+        .debt(debt)
+        .advancePayment(advancePayment)
+        .total(total)
+        .fee(fee)
+        .totalWithFee(totalWithFee)
         .build();
+  }
+
+  private BigDecimal getDebt(final BigDecimal balanceAmount) {
+    if (balanceAmount.signum() < 0) {
+      return balanceAmount.negate();
+    }
+    return BigDecimal.ZERO;
+  }
+
+  private BigDecimal getAdvancePayment(final BigDecimal balanceAmount) {
+    if (balanceAmount.signum() > 0) {
+      return balanceAmount;
+    }
+    return BigDecimal.ZERO;
   }
 }

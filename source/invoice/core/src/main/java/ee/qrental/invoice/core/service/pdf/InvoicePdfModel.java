@@ -1,7 +1,6 @@
 package ee.qrental.invoice.core.service.pdf;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Map;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -27,10 +26,15 @@ public class InvoicePdfModel {
   private String qFirmVatNumber;
   private String qFirmIban;
   private String qFirmBank;
-  private BigDecimal totalAmount;
+  private BigDecimal sum;
   private BigDecimal vatPercentage;
   private BigDecimal vatAmount;
   private String driverCompanyVat;
-  private BigDecimal summ;
+  private BigDecimal sumWithVat;
   private Map<String, BigDecimal> items;
+  private BigDecimal debt;
+  private BigDecimal advancePayment;
+  private BigDecimal total;
+  private BigDecimal fee;
+  private BigDecimal totalWithFee;
 }

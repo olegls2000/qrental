@@ -9,6 +9,7 @@ dependencies{
     implementation(project(":source:callsign:api:in"))
     implementation(project(":source:firm:api:in"))
     implementation(project(":source:email:api:in"))
+    implementation(project(":source:balance:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

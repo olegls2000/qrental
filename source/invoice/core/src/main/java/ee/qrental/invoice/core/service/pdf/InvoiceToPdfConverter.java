@@ -45,22 +45,24 @@ public class InvoiceToPdfConverter {
     final var itemsTable = getItemsTable(model.getItems());
     final var invoiceSumma =
         getSumms(
-            model.getTotalAmount(),
-            model.getVatPercentage(),
-            model.getVatAmount(),
-            model.getSumm());
-    final var invoiceTotal = getTotal(model.getSumm());
+            model.getSum(), model.getVatPercentage(), model.getVatAmount(), model.getSumWithVat());
+    final var invoiceTotal =
+        getTotal(
+            model.getSumWithVat(),
+            model.getDebt(),
+            model.getAdvancePayment(),
+            model.getTotalWithFee());
     final var interest = getInterest();
     final var footer =
         getFooter(
-                model.getQFirmName(),
-                model.getQFirmPostAddress(),
-                model.getQFirmBank(),
-                model.getQFirmRegNumber(),
-                model.getQFirmEmail(),
-                model.getQFirmIban(),
-                model.getQFirmVatNumber(),
-                model.getQFirmPhone());
+            model.getQFirmName(),
+            model.getQFirmPostAddress(),
+            model.getQFirmBank(),
+            model.getQFirmRegNumber(),
+            model.getQFirmEmail(),
+            model.getQFirmIban(),
+            model.getQFirmVatNumber(),
+            model.getQFirmPhone());
     invoicePdfDoc.open();
     invoicePdfDoc.add(header);
     invoicePdfDoc.add(new Paragraph("\n"));
@@ -227,7 +229,11 @@ public class InvoiceToPdfConverter {
     return table;
   }
 
-  private Table getTotal(final BigDecimal arveSum) {
+  private Table getTotal(
+      final BigDecimal total,
+      final BigDecimal debt,
+      final BigDecimal advancePayment,
+      final BigDecimal totalWithFee) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -236,13 +242,13 @@ public class InvoiceToPdfConverter {
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
-    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalValueCell(advancePayment));
     table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus"));
-    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalValueCell(debt));
     table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
-    table.addCell(getTotalValueCell(null));
-    table.addCell(getTotalLabelCell("Tasuda kokku"));
-    table.addCell(getTotalValueCell(arveSum));
+    table.addCell(getTotalValueCell(total));
+    table.addCell(getTotalLabelCell("Tasuda kokku( kohustused + viivised)"));
+    table.addCell(getTotalValueCell(totalWithFee));
 
     return table;
   }

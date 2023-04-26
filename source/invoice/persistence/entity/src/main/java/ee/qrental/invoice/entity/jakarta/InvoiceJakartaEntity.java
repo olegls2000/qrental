@@ -3,6 +3,8 @@ package ee.qrental.invoice.entity.jakarta;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -80,6 +82,9 @@ public class InvoiceJakartaEntity {
 
   @Column(name = "created")
   private LocalDate created;
+
+  @Column(name = "balance")
+  private BigDecimal balance;
 
   @Column(name = "comment")
   private String comment;

@@ -1,5 +1,6 @@
 package ee.qrental.invoice.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Invoice {
   private String qFirmPostAddress;
   private String qFirmPhone;
   private LocalDate created;
+  private BigDecimal balance;
   private String comment;
   private List<InvoiceItem> items;
 

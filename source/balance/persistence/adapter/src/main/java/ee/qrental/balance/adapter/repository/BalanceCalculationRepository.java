@@ -12,4 +12,6 @@ public interface BalanceCalculationRepository {
   BalanceCalculationJakartaEntity getReferenceById(final Long id);
 
   LocalDate getLastCalculationDate();
+
+  BalanceCalculationJakartaEntity findOneByActionDate(final LocalDate actionDate);
 }
