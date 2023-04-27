@@ -6,6 +6,7 @@ import ee.qrental.balance.api.in.query.GetBalanceQuery;
 import ee.qrental.balance.api.in.response.BalanceResponse;
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.core.mapper.BalanceResponseMapper;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -23,5 +24,16 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BalanceResponse getById(final Long id) {
     return mapper.toResponse(loadPort.loadById(id));
+  }
+
+  @Override
+  public BalanceResponse getByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber) {
+    if (year == 2023 && weekNumber < 10) {
+      return BalanceResponse.builder().amount(BigDecimal.ZERO).build();
+    }
+
+    return mapper.toResponse(
+        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
   }
 }

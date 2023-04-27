@@ -25,6 +25,6 @@ public class BalanceTransactionJakartaEntity {
   private Long transactionId;
 
   @ManyToOne
-  @JoinColumn(name = "week_balance_id")
-  private BalanceJakartaEntity weekBalance;
+  @JoinColumn(name = "balance_id")
+  private BalanceJakartaEntity balance;
 }

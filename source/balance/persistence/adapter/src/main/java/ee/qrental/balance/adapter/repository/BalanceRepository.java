@@ -9,4 +9,6 @@ public interface BalanceRepository {
   BalanceJakartaEntity save(final BalanceJakartaEntity entity);
 
   BalanceJakartaEntity getReferenceById(final Long id);
+
+  BalanceJakartaEntity getByDriverIdAndYearAndWeekNumber(Long driverId, Integer year, Integer weekNumber);
 }

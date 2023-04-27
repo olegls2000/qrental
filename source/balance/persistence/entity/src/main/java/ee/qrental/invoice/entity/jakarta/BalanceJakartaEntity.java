@@ -35,4 +35,7 @@ public class BalanceJakartaEntity {
 
   @Column(name = "week_number")
   private Integer weekNumber;
+
+  @Column(name = "year")
+  private Integer year;
 }

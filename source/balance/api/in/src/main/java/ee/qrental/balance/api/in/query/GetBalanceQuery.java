@@ -7,4 +7,7 @@ public interface GetBalanceQuery {
   List<BalanceResponse> getAll();
 
   BalanceResponse getById(final Long id);
+
+  BalanceResponse getByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber);
 }

@@ -1,13 +1,9 @@
 package ee.qrental.invoice.core.service;
 
 import static java.util.Collections.singletonList;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.balance.api.in.query.GetBalanceCalculationQuery;
-import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
-import ee.qrental.balance.api.in.response.BalanceResponse;
-import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
+import ee.qrental.balance.api.in.query.GetBalanceQuery;
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -32,7 +28,6 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +45,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
-  private final GetBalanceCalculationQuery balanceCalculationQuery;
+  private final GetBalanceQuery balanceQuery;
   private final EmailSendUseCase emailSendUseCase;
-  private final BalanceCalculationAddUseCase balanceCalculationAddUseCase;
 
   @Transactional
   @Override
@@ -67,18 +61,20 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(actionDate);
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
-      final var driverVsBalanceMap = getDriverVsBalance(week);
       final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
-      final var weekTransactions = transactionQuery.getAllByFilter(filter);
+      // TODO move to PeriodFilter
+      final var weekNegativeTransactions =
+          transactionQuery.getAllByFilter(filter).stream()
+              .filter(tx -> tx.getRealAmount().compareTo(BigDecimal.ZERO) < 0)
+              .collect(toList());
 
       final var driverVsTransaction =
-          weekTransactions.stream().collect(groupingBy(TransactionResponse::getDriverId));
+          weekNegativeTransactions.stream().collect(groupingBy(TransactionResponse::getDriverId));
 
       if (driverVsTransaction.isEmpty()) {
-        System.out.println(
-            String.format(
-                "Invoices for Week %d: was not created. No transactions in period: [%s, %s]",
-                week.weekNumber(), week.start(), week.end()));
+        System.out.printf(
+            "Invoices for Week %d: was not created. No transactions in period: [%s, %s]%n",
+            week.weekNumber(), week.start(), week.end());
         continue;
       }
 
@@ -92,17 +88,19 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 "%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
         final var driversCalSign = getActiveCallSign(driverId);
         if (driversTransactions.isEmpty()) {
-          System.out.println(
-              String.format(
-                  "Invoice for Week %d and Driver with call Sign %d: was not created. No transactions in period: [%s, %s]",
-                  week.weekNumber(), driversCalSign, week.start(), week.end()));
+          System.out.printf(
+              "Invoice for Week %d and Driver with call Sign %d: was not created. No transactions in period: [%s, %s]%n",
+              week.weekNumber(), driversCalSign, week.start(), week.end());
           continue;
         }
         final var qFirmId = driver.getQFirmId();
         final var qFirm = firmQuery.getById(qFirmId);
 
         final var invoiceNumber = getInvoiceNumber(week, driversCalSign);
-        final var balance = driverVsBalanceMap.get(driverId);
+        final var previousWeek = week.weekNumber() - 1;
+        final var balance =
+            balanceQuery.getByDriverIdAndYearAndWeekNumber(
+                driverId, week.getYear(), previousWeek);
         final var balanceAmount = balance.getAmount();
         final var invoiceItems = getInvoiceItems(driversTransactions);
         final var invoice =
@@ -139,21 +137,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     }
     invoiceCalculationAddPort.add(domain);
     sendEmails(domain);
-  }
-
-  private Map<Long, BalanceResponse> getDriverVsBalance(final Week week) {
-    final var balanceCalculationActionDate = week.start().minus(1l, ChronoUnit.DAYS);
-    var balanceCalculation =
-        balanceCalculationQuery.getOneByActionDate(balanceCalculationActionDate);
-    if (balanceCalculation == null) {
-      balanceCalculationAddUseCase.add(new BalanceCalculationAddRequest());
-      balanceCalculation = balanceCalculationQuery.getOneByActionDate(balanceCalculationActionDate);
-    }
-    final var driverVsBalanceMap =
-        balanceCalculation.getBalances().stream()
-            .collect(toMap(BalanceResponse::getDriverId, identity()));
-
-    return driverVsBalanceMap;
   }
 
   private Integer getActiveCallSign(final Long driverId) {

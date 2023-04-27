@@ -7,7 +7,6 @@ import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.core.mapper.*;
 import ee.qrental.balance.core.service.*;
 import ee.qrental.balance.core.validator.BalanceCalculationBusinessRuleValidator;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,19 +29,17 @@ public class BalanceServiceConfig {
 
   @Bean
   BalanceCalculationService getBalanceCalculationService(
+      final BalanceCalculationPeriodService balanceCalculationPeriodService,
       final BalanceCalculationAddRequestMapper addRequestMapper,
       final BalanceCalculationBusinessRuleValidator businessRuleValidator,
-      final BalanceCalculationPeriodService datesCalculationService,
       final BalanceCalculationAddPort addPort,
-      final GetTransactionQuery transactionQuery,
-      final GetDriverQuery driverQuery) {
+      final GetTransactionQuery transactionQuery) {
     return new BalanceCalculationService(
+        balanceCalculationPeriodService,
         addRequestMapper,
         businessRuleValidator,
-        datesCalculationService,
         addPort,
-        transactionQuery,
-        driverQuery);
+        transactionQuery);
   }
 
   @Bean

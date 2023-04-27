@@ -21,7 +21,14 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public Balance loadById(Long id) {
+  public Balance loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+
+  @Override
+  public Balance loadByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber) {
+    return mapper.mapToDomain(
+        repository.getByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
   }
 }

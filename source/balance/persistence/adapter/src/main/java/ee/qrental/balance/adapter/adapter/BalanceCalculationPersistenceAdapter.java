@@ -10,6 +10,7 @@ import ee.qrental.balance.domain.BalanceCalculation;
 import ee.qrental.balance.domain.BalanceCalculationResult;
 import ee.qrental.invoice.entity.jakarta.BalanceCalculationJakartaEntity;
 import ee.qrental.invoice.entity.jakarta.BalanceCalculationResultJakartaEntity;
+import ee.qrental.invoice.entity.jakarta.BalanceJakartaEntity;
 import ee.qrental.invoice.entity.jakarta.BalanceTransactionJakartaEntity;
 import lombok.AllArgsConstructor;
 
@@ -20,20 +21,24 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
   private final BalanceCalculationResultRepository balanceCalculationResultRepository;
   private final BalanceRepository balanceRepository;
   private final BalanceTransactionRepository balanceTransactionRepository;
-
   private final BalanceAdapterMapper balanceMapper;
 
   @Override
   public BalanceCalculation add(final BalanceCalculation domain) {
-    final BalanceCalculationJakartaEntity balanceCalculationEntity =
+    final var balanceCalculationEntity =
         BalanceCalculationJakartaEntity.builder()
             .actionDate(domain.getActionDate())
             .comment(domain.getComment())
             .build();
-
     final var balanceCalculationEntitySaved =
         balanceCalculationRepository.save(balanceCalculationEntity);
+    saveBalanceCalculationResults(domain, balanceCalculationEntitySaved);
+    return null;
+  }
 
+  private void saveBalanceCalculationResults(
+      final BalanceCalculation domain,
+      final BalanceCalculationJakartaEntity balanceCalculationEntitySaved) {
     final var balanceCalculationResults = domain.getResults();
     for (BalanceCalculationResult result : balanceCalculationResults) {
       final var balance = result.getBalance();
@@ -47,13 +52,20 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
               .build();
       balanceCalculationResultRepository.save(balanceCalculationResultEntity);
 
-      final var transactionIds = result.getTransactionIds();
-      for (Long transactionId : transactionIds) {
-        final var balanceTransactionEntity =
-            BalanceTransactionJakartaEntity.builder().transactionId(transactionId).build();
-        balanceTransactionRepository.save(balanceTransactionEntity);
-      }
+      saveBalanceTransactions(result, balanceEntitySaved);
     }
-    return null;
+  }
+
+  private void saveBalanceTransactions(
+      BalanceCalculationResult result, BalanceJakartaEntity balanceEntitySaved) {
+    final var transactionIds = result.getTransactionIds();
+    for (Long transactionId : transactionIds) {
+      final var balanceTransactionEntity =
+          BalanceTransactionJakartaEntity.builder()
+              .balance(balanceEntitySaved)
+              .transactionId(transactionId)
+              .build();
+      balanceTransactionRepository.save(balanceTransactionEntity);
+    }
   }
 }

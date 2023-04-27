@@ -16,6 +16,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class QTimeUtils {
 
+  public static final LocalDate START_CALCULATION_DATE = LocalDate.of(2023, 03, 06);
+
   public static int getWeekNumber(final LocalDate date) {
     return date.get(WeekFields.of(getDefault()).weekOfWeekBasedYear());
   }

@@ -1,7 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
-import ee.qrental.balance.api.in.query.GetBalanceCalculationQuery;
-import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
+import ee.qrental.balance.api.in.query.GetBalanceQuery;
 import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
@@ -79,9 +78,8 @@ public class InvoiceServiceConfig {
       final GetDriverQuery driverQuery,
       final GetCallSignLinkQuery callSignLinkQuery,
       final GetFirmQuery firmQuery,
-      final GetBalanceCalculationQuery balanceCalculationQuery,
       final EmailSendUseCase emailSendUseCase,
-      final BalanceCalculationAddUseCase balanceCalculationAddUseCase) {
+      final GetBalanceQuery balanceQuery) {
     return new InvoiceCalculationService(
         invoiceCalculationAddRequestMapper,
         invoiceCalculationBusinessRuleValidator,
@@ -93,9 +91,8 @@ public class InvoiceServiceConfig {
         driverQuery,
         callSignLinkQuery,
         firmQuery,
-        balanceCalculationQuery,
-        emailSendUseCase,
-        balanceCalculationAddUseCase);
+        balanceQuery,
+        emailSendUseCase);
   }
 
   @Bean

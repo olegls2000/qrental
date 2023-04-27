@@ -25,4 +25,10 @@ public class BalanceRepositoryImpl implements BalanceRepository {
   public BalanceJakartaEntity getReferenceById(final Long id) {
     return springDataRepository.getReferenceById(id);
   }
+
+  @Override
+  public BalanceJakartaEntity getByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber) {
+    return springDataRepository.findByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
+  }
 }
