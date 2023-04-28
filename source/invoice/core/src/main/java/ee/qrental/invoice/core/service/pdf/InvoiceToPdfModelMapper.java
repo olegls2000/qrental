@@ -38,7 +38,7 @@ public class InvoiceToPdfModelMapper {
             .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
             .reduce(BigDecimal::add)
             .orElseThrow(
-                () -> new RuntimeException("No Negative Transactions during Invoice period."));
+                () -> new RuntimeException("No Negative Transactions during Invoice period.")).negate();
 
     final var vatPercentage = invoice.withVat() ? BigDecimal.valueOf(20) : BigDecimal.ZERO;
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));

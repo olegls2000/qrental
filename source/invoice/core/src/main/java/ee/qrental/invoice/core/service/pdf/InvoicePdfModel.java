@@ -26,11 +26,11 @@ public class InvoicePdfModel {
   private String qFirmVatNumber;
   private String qFirmIban;
   private String qFirmBank;
-  private BigDecimal sum;
   private BigDecimal vatPercentage;
+  private BigDecimal sum;
   private BigDecimal vatAmount;
-  private String driverCompanyVat;
   private BigDecimal sumWithVat;
+  private String driverCompanyVat;
   private Map<String, BigDecimal> items;
   private BigDecimal debt;
   private BigDecimal advancePayment;

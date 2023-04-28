@@ -48,11 +48,10 @@ public class InvoiceToPdfConverter {
             model.getSum(), model.getVatPercentage(), model.getVatAmount(), model.getSumWithVat());
     final var invoiceTotal =
         getTotal(
-            model.getSumWithVat(),
+            model.getTotal(),
             model.getDebt(),
-            model.getAdvancePayment(),
-            model.getTotalWithFee());
-    final var interest = getInterest();
+            model.getAdvancePayment());
+    final var interest = getInterest(model.getTotalWithFee());
     final var footer =
         getFooter(
             model.getQFirmName(),
@@ -211,7 +210,7 @@ public class InvoiceToPdfConverter {
     return cell;
   }
 
-  private Table getInterest() {
+  private Table getInterest(final BigDecimal totalWithFee) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -224,7 +223,7 @@ public class InvoiceToPdfConverter {
     table.addCell(getTotalLabelCell("Viisiste üldsumma"));
     table.addCell(getTotalValueCell(null));
     table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
-    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalValueCell(totalWithFee));
 
     return table;
   }
@@ -232,8 +231,7 @@ public class InvoiceToPdfConverter {
   private Table getTotal(
       final BigDecimal total,
       final BigDecimal debt,
-      final BigDecimal advancePayment,
-      final BigDecimal totalWithFee) {
+      final BigDecimal advancePayment) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -247,8 +245,6 @@ public class InvoiceToPdfConverter {
     table.addCell(getTotalValueCell(debt));
     table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
     table.addCell(getTotalValueCell(total));
-    table.addCell(getTotalLabelCell("Tasuda kokku( kohustused + viivised)"));
-    table.addCell(getTotalValueCell(totalWithFee));
 
     return table;
   }
