@@ -1,6 +1,7 @@
 package ee.qrental.balance.spring.config;
 
 import ee.qrental.balance.api.in.query.GetBalanceQuery;
+import ee.qrental.balance.api.out.BalanceAddPort;
 import ee.qrental.balance.api.out.BalanceCalculationAddPort;
 import ee.qrental.balance.api.out.BalanceCalculationLoadPort;
 import ee.qrental.balance.api.out.BalanceLoadPort;
@@ -33,12 +34,16 @@ public class BalanceServiceConfig {
       final BalanceCalculationAddRequestMapper addRequestMapper,
       final BalanceCalculationBusinessRuleValidator businessRuleValidator,
       final BalanceCalculationAddPort addPort,
+      final BalanceLoadPort loadPort,
+      final BalanceAddPort balanceAddPort,
       final GetTransactionQuery transactionQuery) {
     return new BalanceCalculationService(
         balanceCalculationPeriodService,
         addRequestMapper,
         businessRuleValidator,
         addPort,
+        loadPort,
+        balanceAddPort,
         transactionQuery);
   }
 

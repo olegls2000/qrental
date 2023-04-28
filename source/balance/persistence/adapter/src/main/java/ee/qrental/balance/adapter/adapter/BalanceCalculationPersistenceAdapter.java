@@ -43,16 +43,16 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
     for (BalanceCalculationResult result : balanceCalculationResults) {
       final var balance = result.getBalance();
       final var balanceEntity = balanceMapper.mapToEntity(balance);
-      final var balanceEntitySaved = balanceRepository.save(balanceEntity);
+      //final var balanceEntitySaved = balanceRepository.save(balanceEntity);
       final var balanceCalculationResultEntity =
           BalanceCalculationResultJakartaEntity.builder()
               .id(null)
               .calculation(balanceCalculationEntitySaved)
-              .balance(balanceEntitySaved)
+              .balance(balanceEntity)
               .build();
       balanceCalculationResultRepository.save(balanceCalculationResultEntity);
 
-      saveBalanceTransactions(result, balanceEntitySaved);
+      saveBalanceTransactions(result, balanceEntity);
     }
   }
 

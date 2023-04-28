@@ -29,10 +29,6 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BalanceResponse getByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
-    if (year == 2023 && weekNumber < 10) {
-      return BalanceResponse.builder().amount(BigDecimal.ZERO).build();
-    }
-
     return mapper.toResponse(
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
   }
