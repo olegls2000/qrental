@@ -13,6 +13,7 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .id(domain.getId())
         .weekNumber(domain.getWeekNumber())
         .created(domain.getCreated())
+        .amount(domain.getAmount())
         .build();
   }
 
