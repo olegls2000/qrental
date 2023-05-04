@@ -61,6 +61,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(actionDate);
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
+      final var weekNumber = week.weekNumber();
       final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
       // TODO move to PeriodFilter
       final var weekNegativeTransactions =
@@ -74,7 +75,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
       if (driverVsTransaction.isEmpty()) {
         System.out.printf(
             "Invoices for Week %d: was not created. No transactions in period: [%s, %s]%n",
-            week.weekNumber(), week.start(), week.end());
+                weekNumber, week.start(), week.end());
         continue;
       }
 
@@ -90,24 +91,27 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         if (driversTransactions.isEmpty()) {
           System.out.printf(
               "Invoice for Week %d and Driver with call Sign %d: was not created. No transactions in period: [%s, %s]%n",
-              week.weekNumber(), driversCalSign, week.start(), week.end());
+                  weekNumber, driversCalSign, week.start(), week.end());
           continue;
         }
         final var qFirmId = driver.getQFirmId();
         final var qFirm = firmQuery.getById(qFirmId);
 
         final var invoiceNumber = getInvoiceNumber(week, driversCalSign);
-        final var previousWeek = week.weekNumber() - 1;
-        final var balance =
-            balanceQuery.getByDriverIdAndYearAndWeekNumber(
-                driverId, week.getYear(), previousWeek);
-        final var balanceAmount = balance.getAmount();
+        final var previousWeek = weekNumber - 1;
+        final var previousWeekBalance =
+            balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeek);
+        final var previousWeekBalanceAmount = previousWeekBalance.getAmount();
+
+        final var currentWeekBalance =
+                balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), weekNumber);
+        final var fee = currentWeekBalance.getFee();
         final var invoiceItems = getInvoiceItems(driversTransactions);
         final var invoice =
             Invoice.builder()
                 .id(null)
                 .number(invoiceNumber)
-                .weekNumber(week.weekNumber())
+                .weekNumber(weekNumber)
                 .driverId(driverId)
                 .driverCompany(driver.getCompanyName())
                 .driverInfo(driverInfo)
@@ -122,7 +126,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 .qFirmRegNumber(qFirm.getRegNumber())
                 .qFirmVatNumber(qFirm.getVatNumber())
                 .created(actionDate)
-                .balance(balanceAmount)
+                .balance(previousWeekBalanceAmount)
+                .fee(fee)
                 .items(invoiceItems)
                 .build();
         final var transactionIds =

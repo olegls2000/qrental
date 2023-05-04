@@ -1,9 +1,11 @@
 package ee.qrental.balance.adapter.mapper;
 
+import ee.qrental.balance.domain.Balance;
 import ee.qrental.balance.domain.BalanceCalculation;
 import ee.qrental.balance.domain.BalanceCalculationResult;
 import ee.qrental.invoice.entity.jakarta.BalanceCalculationJakartaEntity;
 import ee.qrental.invoice.entity.jakarta.BalanceCalculationResultJakartaEntity;
+import ee.qrental.invoice.entity.jakarta.BalanceJakartaEntity;
 
 public class BalanceCalculationAdapterMapper {
 
@@ -22,6 +24,21 @@ public class BalanceCalculationAdapterMapper {
   private BalanceCalculationResult mapToDomain(
       final BalanceCalculationResultJakartaEntity resultEntity) {
 
-    return BalanceCalculationResult.builder().build();
+    return BalanceCalculationResult.builder()
+            .balance(mapToDomain(resultEntity.getBalance()))
+            .build();
+  }
+
+  private Balance mapToDomain(
+          final BalanceJakartaEntity balanceEntity) {
+    return Balance.builder()
+        .id(balanceEntity.getId())
+        .year(balanceEntity.getYear())
+        .weekNumber(balanceEntity.getWeekNumber())
+        .created(balanceEntity.getCreated())
+        .driverId(balanceEntity.getDriverId())
+        .amount(balanceEntity.getAmount())
+        .fee(balanceEntity.getFee())
+        .build();
   }
 }

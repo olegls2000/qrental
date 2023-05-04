@@ -14,6 +14,7 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .weekNumber(domain.getWeekNumber())
         .created(domain.getCreated())
         .amount(domain.getAmount())
+        .fee(domain.getFee())
         .build();
   }
 

@@ -32,24 +32,34 @@ public class BalanceServiceConfig {
   BalanceCalculationService getBalanceCalculationService(
       final BalanceCalculationPeriodService balanceCalculationPeriodService,
       final BalanceCalculationAddRequestMapper addRequestMapper,
-      final BalanceCalculationBusinessRuleValidator businessRuleValidator,
       final BalanceCalculationAddPort addPort,
-      final BalanceLoadPort loadPort,
       final BalanceAddPort balanceAddPort,
-      final GetTransactionQuery transactionQuery) {
+      final GetTransactionQuery transactionQuery,
+      final AmountCalculator amountCalculator,
+      final FeeCalculator feeCalculator) {
     return new BalanceCalculationService(
         balanceCalculationPeriodService,
         addRequestMapper,
-        businessRuleValidator,
         addPort,
-        loadPort,
         balanceAddPort,
-        transactionQuery);
+        transactionQuery,
+        amountCalculator,
+        feeCalculator);
   }
 
   @Bean
   BalanceCalculationPeriodService getBalanceCalculationPeriodService(
       final BalanceCalculationLoadPort loadPort) {
     return new BalanceCalculationPeriodService(loadPort);
+  }
+
+  @Bean
+  AmountCalculator getAmountCalculator(final BalanceLoadPort loadPort) {
+    return new AmountCalculator(loadPort);
+  }
+
+  @Bean
+  FeeCalculator getFeeCalculator(final BalanceLoadPort loadPort) {
+    return new FeeCalculator(loadPort);
   }
 }

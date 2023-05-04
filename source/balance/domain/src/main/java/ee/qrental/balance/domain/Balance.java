@@ -16,4 +16,5 @@ public class Balance {
   private Long driverId;
   private LocalDate created;
   private BigDecimal amount;
+  private BigDecimal fee;
 }

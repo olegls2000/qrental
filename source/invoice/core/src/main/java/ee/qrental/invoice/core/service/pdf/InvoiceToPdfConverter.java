@@ -46,12 +46,13 @@ public class InvoiceToPdfConverter {
     final var invoiceSumma =
         getSumms(
             model.getSum(), model.getVatPercentage(), model.getVatAmount(), model.getSumWithVat());
-    final var invoiceTotal =
-        getTotal(
-            model.getTotal(),
-            model.getDebt(),
-            model.getAdvancePayment());
-    final var interest = getInterest(model.getTotalWithFee());
+    final var invoiceTotal = getTotal(model.getTotal(), model.getDebt(), model.getAdvancePayment());
+    final var interest =
+        getInterest(
+            model.getFeeStartDate(),
+            model.getFeeEndDate(),
+            model.getFee(),
+            model.getTotalWithFee());
     final var footer =
         getFooter(
             model.getQFirmName(),
@@ -210,7 +211,11 @@ public class InvoiceToPdfConverter {
     return cell;
   }
 
-  private Table getInterest(final BigDecimal totalWithFee) {
+  private Table getInterest(
+      final String feeStartPeriod,
+      final String feeEndPeriod,
+      final BigDecimal fee,
+      final BigDecimal totalWithFee) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -218,10 +223,12 @@ public class InvoiceToPdfConverter {
     table.setWidth(50f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
-    table.addCell(getTotalLabelCell("Vivised dd.MM.yyyy - dd.MM.yyyy perioodi eest"));
+    table.addCell(
+        getTotalLabelCell(
+            String.format("Vivised %s - %s perioodi eest", feeStartPeriod, feeEndPeriod)));
     table.addCell(getTotalValueCell(null));
     table.addCell(getTotalLabelCell("Viisiste üldsumma"));
-    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalValueCell(fee));
     table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
     table.addCell(getTotalValueCell(totalWithFee));
 
@@ -229,9 +236,7 @@ public class InvoiceToPdfConverter {
   }
 
   private Table getTotal(
-      final BigDecimal total,
-      final BigDecimal debt,
-      final BigDecimal advancePayment) {
+      final BigDecimal total, final BigDecimal debt, final BigDecimal advancePayment) {
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);

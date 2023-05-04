@@ -11,15 +11,23 @@ import java.math.BigDecimal;
 
 public class InvoiceToPdfModelMapper {
 
+  private static final BigDecimal VAT_RATE = BigDecimal.valueOf(20);
+
   public InvoicePdfModel getPdfModel(final Invoice invoice) {
     final var number = invoice.getNumber();
     final var creationDate = invoice.getCreated().format(ofLocalizedDate(SHORT));
     final var weekNumber = invoice.getWeekNumber();
+    final var previousWeekNumber = weekNumber - 1;
     final var year = invoice.getCreated().getYear();
     final var startDate =
         QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
     final var endDate =
         QTimeUtils.getLastDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
+    final var feeStartDate =
+        QTimeUtils.getFirstDayOfWeekInYear(year, previousWeekNumber).format(ofLocalizedDate(SHORT));
+    final var feeEndDate =
+        QTimeUtils.getLastDayOfWeekInYear(year, previousWeekNumber).format(ofLocalizedDate(SHORT));
+
     final var driverInfo = invoice.getDriverInfo();
     final var driverCompany = invoice.getDriverCompany();
     final var driverCompanyRegNumber = invoice.getDriverCompanyRegNumber();
@@ -35,12 +43,14 @@ public class InvoiceToPdfModelMapper {
     final var sum =
         invoice.getItems().stream()
             .map(InvoiceItem::getAmount)
-            .filter(amount -> amount.compareTo(BigDecimal.ZERO) < 0)
             .reduce(BigDecimal::add)
             .orElseThrow(
-                () -> new RuntimeException("No Negative Transactions during Invoice period.")).negate();
+                () ->
+                    new RuntimeException(
+                        "Invoice has no Items. Please check invoice creation logic."))
+            .negate();
 
-    final var vatPercentage = invoice.withVat() ? BigDecimal.valueOf(20) : BigDecimal.ZERO;
+    final var vatPercentage = invoice.withVat() ? VAT_RATE : BigDecimal.ZERO;
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
 
     final var driverCompanyVat = invoice.getDriverCompanyVat();
@@ -53,7 +63,7 @@ public class InvoiceToPdfModelMapper {
     final var debt = getDebt(balanceAmount);
     final var advancePayment = getAdvancePayment(balanceAmount);
     final var total = sumWithVat.add(debt).subtract(advancePayment);
-    final var fee = BigDecimal.ZERO;
+    final var fee = invoice.getFee();
     final var totalWithFee = total.add(fee);
 
     return InvoicePdfModel.builder()
@@ -63,6 +73,8 @@ public class InvoiceToPdfModelMapper {
         .year(year)
         .startDate(startDate)
         .endDate(endDate)
+        .feeStartDate(feeStartDate)
+        .feeEndDate(feeEndDate)
         .driverInfo(driverInfo)
         .driverCompany(driverCompany)
         .driverCompanyRegNumber(driverCompanyRegNumber)

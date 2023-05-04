@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class BalanceResponse {
   private Long id;
   private BigDecimal amount;
+  private BigDecimal fee;
   private Integer weekNumber;
   private Long driverId;
   private LocalDate created;

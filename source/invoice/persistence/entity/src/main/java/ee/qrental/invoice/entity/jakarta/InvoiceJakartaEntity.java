@@ -3,7 +3,6 @@ package ee.qrental.invoice.entity.jakarta;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -85,6 +84,9 @@ public class InvoiceJakartaEntity {
 
   @Column(name = "balance")
   private BigDecimal balance;
+
+  @Column(name = "fee")
+  private BigDecimal fee;
 
   @Column(name = "comment")
   private String comment;

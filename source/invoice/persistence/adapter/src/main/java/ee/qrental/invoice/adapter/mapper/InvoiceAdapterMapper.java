@@ -34,6 +34,7 @@ public class InvoiceAdapterMapper {
         .qFirmPhone(entity.getQFirmPhone())
         .created(entity.getCreated())
         .balance(entity.getBalance())
+        .fee(entity.getFee())
         .comment(entity.getComment())
         .items(entity.getItems().stream().map(this::mapToItemDomain).collect(toList()))
         .build();
@@ -70,6 +71,7 @@ public class InvoiceAdapterMapper {
         .qFirmPhone(domain.getQFirmPhone())
         .created(domain.getCreated())
         .balance(domain.getBalance())
+        .fee(domain.getFee())
         .comment(domain.getComment())
         .build();
   }

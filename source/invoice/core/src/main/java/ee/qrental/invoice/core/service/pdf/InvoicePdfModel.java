@@ -14,6 +14,8 @@ public class InvoicePdfModel {
   private Integer year;
   private String startDate;
   private String endDate;
+  private String feeStartDate;
+  private String feeEndDate;
   private String driverCompany;
   private String driverInfo;
   private String driverCompanyRegNumber;

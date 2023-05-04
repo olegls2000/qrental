@@ -16,6 +16,7 @@ public class BalanceAdapterMapper {
         .driverId(entity.getDriverId())
         .created(entity.getCreated())
         .amount(entity.getAmount())
+        .fee(entity.getFee())
         .build();
   }
 
@@ -27,6 +28,7 @@ public class BalanceAdapterMapper {
         .driverId(domain.getDriverId())
         .created(domain.getCreated())
         .amount(domain.getAmount())
+        .fee(domain.getFee())
         .build();
   }
 }

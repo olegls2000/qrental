@@ -21,4 +21,11 @@ public class BalanceCalculationQueryController {
 
     return "balanceCalculations";
   }
+
+  @GetMapping(value = "/calculations/{id}")
+  public String getBalanceCalculationView(@PathVariable("id") long id, final Model model) {
+    model.addAttribute("balances", balanceCalculationQuery.getById(id).getBalances());
+
+    return "detailView/balanceCalculation";
+  }
 }
