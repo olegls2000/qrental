@@ -25,7 +25,6 @@ public class FeeCalculator {
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
     final var feeBalanceFromPreviousWeek = balanceFromPreviousWeek.getFee();
-
     final var filter =
         PeriodAndDriverFilter.builder()
             .driverId(driverId)
@@ -38,6 +37,7 @@ public class FeeCalculator {
             .map(tr -> tr.getRealAmount())
             .reduce(BigDecimal::add)
             .orElse(ZERO);
+
     return feeTransactionsSum.add(feeBalanceFromPreviousWeek);
   }
 }

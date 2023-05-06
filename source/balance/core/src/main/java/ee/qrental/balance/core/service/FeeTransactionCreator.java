@@ -21,7 +21,6 @@ public class FeeTransactionCreator {
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
-  private final GetTransactionQuery transactionQuery;
 
   public void creteFeeTransactionIfNecessary(final Week week, final Long driverId) {
     final var feeAmount = getFeeAmountBasedOnPreviousWekBalance(week, driverId);
@@ -32,31 +31,6 @@ public class FeeTransactionCreator {
     final var feeTransactionAddRequest =
         getTransactionRequest(feeAmount, driverId, week.weekNumber());
     transactionAddUseCase.add(feeTransactionAddRequest);
-  }
-
-  public BigDecimal calculateFeeBalance(final Week week, final Long driverId) {
-    final var currentWeekNumber = week.weekNumber();
-    if (currentWeekNumber == 10 || currentWeekNumber == 11) {
-      return ZERO;
-    }
-    final var previousWeekNumber = currentWeekNumber - 1;
-    final var balanceFromPreviousWeek =
-        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
-    final var feeBalanceFromPreviousWeek = balanceFromPreviousWeek.getFee();
-
-    final var filter =
-        PeriodAndDriverFilter.builder()
-            .driverId(driverId)
-            .dateStart(week.start())
-            .datEnd(week.end())
-            .build();
-    final var feeSum =
-        transactionQuery.getAllByFilter(filter).stream()
-            .filter(tr -> tr.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
-            .map(tr -> tr.getRealAmount())
-            .reduce(BigDecimal::add)
-            .get();
-    return feeSum.add(feeBalanceFromPreviousWeek);
   }
 
   private TransactionAddRequest getTransactionRequest(
