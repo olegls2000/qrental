@@ -1,5 +1,6 @@
 package ee.qrental.balance.core.service;
 
+import static ee.qrental.balance.core.service.FeeTransactionCreator.TRANSACTION_TYPE_NAME_FEE_DEBT;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
@@ -9,6 +10,7 @@ import ee.qrental.balance.api.out.BalanceCalculationAddPort;
 import ee.qrental.balance.core.mapper.BalanceCalculationAddRequestMapper;
 import ee.qrental.balance.domain.Balance;
 import ee.qrental.balance.domain.BalanceCalculationResult;
+import ee.qrental.common.core.utils.Week;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -29,6 +31,8 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final AmountCalculator amountCalculator;
   private final FeeCalculator feeCalculator;
 
+  private final FeeTransactionCreator feeTransactionCreator;
+
   @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
@@ -37,35 +41,50 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(actionDate);
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
-      final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
-      final var weekTransactions = transactionQuery.getAllByFilter(filter);
-      final var driverVsTransaction =
-          weekTransactions.stream().collect(groupingBy(TransactionResponse::getDriverId));
-      for (Map.Entry<Long, List<TransactionResponse>> entry : driverVsTransaction.entrySet()) {
+      final var weekTransactions = getNotFeeTransactionsMapForWeek(week);
+      for (Map.Entry<Long, List<TransactionResponse>> entry : weekTransactions.entrySet()) {
         final var driverId = entry.getKey();
+        feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
         final var driversTransactions = entry.getValue();
-        final var amount = amountCalculator.calculate(week, driverId, driversTransactions);
-        final var fee = feeCalculator.calculate(week, driverId);
-        final var balance =
-            Balance.builder()
-                .driverId(driverId)
-                .weekNumber(week.weekNumber())
-                .year(week.getYear())
-                .created(LocalDate.now())
-                .amount(amount)
-                .fee(fee)
-                .build();
+        final var balance = getBalance(week, driverId, driversTransactions);
         final var savedBalance = balanceAddPort.add(balance);
-        final var transactionIds =
-            driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
-        final var result =
-            BalanceCalculationResult.builder()
-                .balance(savedBalance)
-                .transactionIds(transactionIds)
-                .build();
-        domain.getResults().add(result);
+        final var balanceCalculationResult = getBalanceCalculationResult(driversTransactions, savedBalance);
+        domain.getResults().add(balanceCalculationResult);
       }
     }
     balanceCalculationAddPort.add(domain);
+  }
+
+  private BalanceCalculationResult getBalanceCalculationResult(List<TransactionResponse> driversTransactions, Balance savedBalance) {
+    final var transactionIds =
+        driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
+    final var result =
+        BalanceCalculationResult.builder()
+            .balance(savedBalance)
+            .transactionIds(transactionIds)
+            .build();
+    return result;
+  }
+
+  private Map<Long, List<TransactionResponse>> getNotFeeTransactionsMapForWeek(final Week week) {
+    final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
+    return transactionQuery.getAllByFilter(filter).stream()
+        .filter(tx -> !tx.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
+        .collect(groupingBy(TransactionResponse::getDriverId));
+  }
+
+  private Balance getBalance(
+      final Week week, final Long driverId, final List<TransactionResponse> driversTransactions) {
+    final var amount = amountCalculator.calculate(week, driverId, driversTransactions);
+    final var feeBalance = feeCalculator.calculate(week, driverId);
+
+    return Balance.builder()
+        .driverId(driverId)
+        .weekNumber(week.weekNumber())
+        .year(week.getYear())
+        .created(LocalDate.now())
+        .amount(amount)
+        .fee(feeBalance)
+        .build();
   }
 }

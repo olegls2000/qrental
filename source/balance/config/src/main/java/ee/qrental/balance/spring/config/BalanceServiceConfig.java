@@ -7,8 +7,9 @@ import ee.qrental.balance.api.out.BalanceCalculationLoadPort;
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.core.mapper.*;
 import ee.qrental.balance.core.service.*;
-import ee.qrental.balance.core.validator.BalanceCalculationBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,7 +37,8 @@ public class BalanceServiceConfig {
       final BalanceAddPort balanceAddPort,
       final GetTransactionQuery transactionQuery,
       final AmountCalculator amountCalculator,
-      final FeeCalculator feeCalculator) {
+      final FeeCalculator feeCalculator,
+      final FeeTransactionCreator feeTransactionCreator) {
     return new BalanceCalculationService(
         balanceCalculationPeriodService,
         addRequestMapper,
@@ -44,7 +46,8 @@ public class BalanceServiceConfig {
         balanceAddPort,
         transactionQuery,
         amountCalculator,
-        feeCalculator);
+        feeCalculator,
+        feeTransactionCreator);
   }
 
   @Bean
@@ -59,7 +62,18 @@ public class BalanceServiceConfig {
   }
 
   @Bean
-  FeeCalculator getFeeCalculator(final BalanceLoadPort loadPort) {
-    return new FeeCalculator(loadPort);
+  FeeCalculator getFeeCalculator(
+      final BalanceLoadPort loadPort, final GetTransactionQuery transactionQuery) {
+    return new FeeCalculator(loadPort, transactionQuery);
+  }
+
+  @Bean
+  FeeTransactionCreator getFeeTransactionCreator(
+      final BalanceLoadPort loadPort,
+      final TransactionAddUseCase transactionAddUseCase,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final GetTransactionQuery transactionQuery) {
+    return new FeeTransactionCreator(
+        loadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery);
   }
 }
