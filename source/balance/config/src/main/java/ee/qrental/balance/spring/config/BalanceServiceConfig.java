@@ -71,9 +71,7 @@ public class BalanceServiceConfig {
   FeeTransactionCreator getFeeTransactionCreator(
       final BalanceLoadPort loadPort,
       final TransactionAddUseCase transactionAddUseCase,
-      final GetTransactionTypeQuery transactionTypeQuery,
-      final GetTransactionQuery transactionQuery) {
-    return new FeeTransactionCreator(
-        loadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery);
+      final GetTransactionTypeQuery transactionTypeQuery) {
+    return new FeeTransactionCreator(loadPort, transactionAddUseCase, transactionTypeQuery);
   }
 }
