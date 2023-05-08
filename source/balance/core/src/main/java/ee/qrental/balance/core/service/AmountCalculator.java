@@ -1,5 +1,7 @@
 package ee.qrental.balance.core.service;
 
+import static java.math.BigDecimal.ZERO;
+
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -18,7 +20,7 @@ public class AmountCalculator {
         driversTransactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal::add)
-            .get();
+            .orElse(ZERO);
     final var previousWeekNumber = week.weekNumber() - 1;
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);

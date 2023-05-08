@@ -7,6 +7,7 @@ import ee.qrental.balance.api.out.BalanceCalculationLoadPort;
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.core.mapper.*;
 import ee.qrental.balance.core.service.*;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
@@ -38,7 +39,8 @@ public class BalanceServiceConfig {
       final GetTransactionQuery transactionQuery,
       final AmountCalculator amountCalculator,
       final FeeCalculator feeCalculator,
-      final FeeTransactionCreator feeTransactionCreator) {
+      final FeeTransactionCreator feeTransactionCreator,
+      final GetDriverQuery driverQuery) {
     return new BalanceCalculationService(
         balanceCalculationPeriodService,
         addRequestMapper,
@@ -47,7 +49,8 @@ public class BalanceServiceConfig {
         transactionQuery,
         amountCalculator,
         feeCalculator,
-        feeTransactionCreator);
+        feeTransactionCreator,
+        driverQuery);
   }
 
   @Bean

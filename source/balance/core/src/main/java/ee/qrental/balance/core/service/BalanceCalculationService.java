@@ -1,6 +1,7 @@
 package ee.qrental.balance.core.service;
 
 import static ee.qrental.balance.core.service.FeeTransactionCreator.TRANSACTION_TYPE_NAME_FEE_DEBT;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
@@ -11,6 +12,8 @@ import ee.qrental.balance.core.mapper.BalanceCalculationAddRequestMapper;
 import ee.qrental.balance.domain.Balance;
 import ee.qrental.balance.domain.BalanceCalculationResult;
 import ee.qrental.common.core.utils.Week;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -30,8 +33,8 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final GetTransactionQuery transactionQuery;
   private final AmountCalculator amountCalculator;
   private final FeeCalculator feeCalculator;
-
   private final FeeTransactionCreator feeTransactionCreator;
+  private final GetDriverQuery driverQuery;
 
   @Transactional
   @Override
@@ -39,23 +42,30 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var domain = addRequestMapper.toDomain(addRequest);
     final var actionDate = addRequest.getActionDate();
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(actionDate);
+
+    final var drivers = driverQuery.getAll();
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
       final var weekTransactions = getNotFeeTransactionsMapForWeek(week);
-      for (Map.Entry<Long, List<TransactionResponse>> entry : weekTransactions.entrySet()) {
-        final var driverId = entry.getKey();
-        feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
-        final var driversTransactions = entry.getValue();
-        final var balance = getBalance(week, driverId, driversTransactions);
-        final var savedBalance = balanceAddPort.add(balance);
-        final var balanceCalculationResult = getBalanceCalculationResult(driversTransactions, savedBalance);
-        domain.getResults().add(balanceCalculationResult);
-      }
+      drivers.stream()
+          .map(DriverResponse::getId)
+          .forEach(
+              driverId -> {
+                feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
+                final var driversTransactions =
+                    weekTransactions.getOrDefault(driverId, emptyList());
+                final var balance = getBalance(week, driverId, driversTransactions);
+                final var savedBalance = balanceAddPort.add(balance);
+                final var balanceCalculationResult =
+                    getBalanceCalculationResult(driversTransactions, savedBalance);
+                domain.getResults().add(balanceCalculationResult);
+              });
     }
     balanceCalculationAddPort.add(domain);
   }
 
-  private BalanceCalculationResult getBalanceCalculationResult(List<TransactionResponse> driversTransactions, Balance savedBalance) {
+  private BalanceCalculationResult getBalanceCalculationResult(
+      List<TransactionResponse> driversTransactions, Balance savedBalance) {
     final var transactionIds =
         driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
     final var result =
