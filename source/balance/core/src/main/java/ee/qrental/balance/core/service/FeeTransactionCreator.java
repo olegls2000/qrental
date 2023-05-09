@@ -5,9 +5,7 @@ import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.common.core.utils.Week;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import java.math.BigDecimal;
@@ -22,15 +20,17 @@ public class FeeTransactionCreator {
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
 
-  public void creteFeeTransactionIfNecessary(final Week week, final Long driverId) {
+  public BigDecimal creteFeeTransactionIfNecessary(final Week week, final Long driverId) {
     final var feeAmount = getFeeAmountBasedOnPreviousWekBalance(week, driverId);
     if (feeAmount.compareTo(ZERO) == 0) {
       System.out.println("Fee ebt transaction is not required.");
-      return;
+      return ZERO;
     }
     final var feeTransactionAddRequest =
         getTransactionRequest(feeAmount, driverId, week.weekNumber());
-    transactionAddUseCase.add(feeTransactionAddRequest);
+    final var id = transactionAddUseCase.add(feeTransactionAddRequest);
+    System.out.println("Fee transaction with id = " + id + " was crated");
+    return feeAmount;
   }
 
   private TransactionAddRequest getTransactionRequest(
@@ -51,7 +51,7 @@ public class FeeTransactionCreator {
 
   private BigDecimal getFeeAmountBasedOnPreviousWekBalance(final Week week, final Long driverId) {
     final var currentWeekNumber = week.weekNumber();
-    if (currentWeekNumber == 10 || currentWeekNumber == 11) {
+    if (currentWeekNumber == 10) {
       return ZERO;
     }
     final var previousWeekNumber = currentWeekNumber - 1;

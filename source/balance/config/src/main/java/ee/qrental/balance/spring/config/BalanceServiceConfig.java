@@ -65,9 +65,8 @@ public class BalanceServiceConfig {
   }
 
   @Bean
-  FeeCalculator getFeeCalculator(
-      final BalanceLoadPort loadPort, final GetTransactionQuery transactionQuery) {
-    return new FeeCalculator(loadPort, transactionQuery);
+  FeeCalculator getFeeCalculator(final BalanceLoadPort loadPort) {
+    return new FeeCalculator(loadPort);
   }
 
   @Bean

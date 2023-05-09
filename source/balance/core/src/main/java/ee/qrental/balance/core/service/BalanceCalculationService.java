@@ -18,6 +18,7 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +52,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
           .map(DriverResponse::getId)
           .forEach(
               driverId -> {
-                feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
+                final var feeTransactionSum =
+                    feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
                 final var driversTransactions =
                     weekTransactions.getOrDefault(driverId, emptyList());
-                final var balance = getBalance(week, driverId, driversTransactions);
+                final var balance =
+                    getBalance(week, driverId, driversTransactions, feeTransactionSum);
                 final var savedBalance = balanceAddPort.add(balance);
                 final var balanceCalculationResult =
                     getBalanceCalculationResult(driversTransactions, savedBalance);
@@ -84,9 +87,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   }
 
   private Balance getBalance(
-      final Week week, final Long driverId, final List<TransactionResponse> driversTransactions) {
+      final Week week,
+      final Long driverId,
+      final List<TransactionResponse> driversTransactions,
+      final BigDecimal feeTransactionSum) {
     final var amount = amountCalculator.calculate(week, driverId, driversTransactions);
-    final var feeBalance = feeCalculator.calculate(week, driverId);
+    final var feeBalance = feeCalculator.calculate(week, driverId, feeTransactionSum);
 
     return Balance.builder()
         .driverId(driverId)
