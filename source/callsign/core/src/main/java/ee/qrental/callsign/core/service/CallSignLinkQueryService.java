@@ -8,6 +8,8 @@ import ee.qrental.callsign.api.in.request.CallSignLinkUpdateRequest;
 import ee.qrental.callsign.api.out.CallSignLinkLoadPort;
 import ee.qrental.callsign.core.mapper.CallSignLinkResponseMapper;
 import ee.qrental.callsign.core.mapper.CallSignLinkUpdateRequestMapper;
+
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -41,5 +43,10 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   @Override
   public CallSignLinkResponse getActiveCallSignLinkByDriverId(final Long driverId) {
     return mapper.toResponse(loadPort.loadActiveByDriverId(driverId));
+  }
+
+  @Override
+  public CallSignLinkResponse getCallSignLinkByDriverIdAndDate(final Long driverId, final LocalDate date) {
+    return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, date));
   }
 }

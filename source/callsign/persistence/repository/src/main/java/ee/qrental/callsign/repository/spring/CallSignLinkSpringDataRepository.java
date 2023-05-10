@@ -1,6 +1,7 @@
 package ee.qrental.callsign.repository.spring;
 
 import ee.qrental.callsign.entity.jakarta.CallSignLinkJakartaEntity;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,14 @@ public interface CallSignLinkSpringDataRepository
       nativeQuery = true)
   CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(
       @Param("driverId") final Long driverId);
+
+  @Query(
+      value =
+          "SELECT csl.* FROM call_sign_link csl "
+              + "where  csl.driver_id = :driverId "
+              + "and csl.date_start < :date "
+              + "and (csl.date_end is null or csl.date_end > :date)",
+      nativeQuery = true)
+  CallSignLinkJakartaEntity findOneByDriverIdAndDate(
+      @Param("driverId") final Long driverId, @Param("date") final LocalDate date);
 }

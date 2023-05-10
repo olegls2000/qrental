@@ -1,6 +1,7 @@
 package ee.qrental.callsign.adapter.repository;
 
 import ee.qrental.callsign.entity.jakarta.CallSignLinkJakartaEntity;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CallSignLinkRepository {
@@ -17,4 +18,7 @@ public interface CallSignLinkRepository {
   CallSignLinkJakartaEntity findOneByDateEndIsNullAndCallSignId(final Long callSignId);
 
   CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(final Long driverId);
+
+
+  CallSignLinkJakartaEntity findOneByDriverIdAndDate(final Long driverId, final LocalDate date);
 }

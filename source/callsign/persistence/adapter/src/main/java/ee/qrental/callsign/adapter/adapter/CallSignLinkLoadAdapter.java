@@ -6,6 +6,7 @@ import ee.qrental.callsign.adapter.mapper.CallSignLinkAdapterMapper;
 import ee.qrental.callsign.adapter.repository.CallSignLinkRepository;
 import ee.qrental.callsign.api.out.CallSignLinkLoadPort;
 import ee.qrental.callsign.domain.CallSignLink;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -40,5 +41,10 @@ public class CallSignLinkLoadAdapter implements CallSignLinkLoadPort {
   @Override
   public CallSignLink loadActiveByDriverId(final Long driverId) {
     return mapper.mapToDomain(repository.findOneByDateEndIsNullAndDriverId(driverId));
+  }
+
+  @Override
+  public CallSignLink loadByDriverIdAndDate(final Long driverId, final LocalDate date) {
+    return mapper.mapToDomain(repository.findOneByDriverIdAndDate(driverId, date));
   }
 }

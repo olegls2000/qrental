@@ -28,6 +28,7 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
       final var weekNumber = week.weekNumber();
-      final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
+      final var weekStartDay = week.start();
+      final var weekEndDay = week.end();
+      final var filter = PeriodFilter.builder().dateStart(weekStartDay).datEnd(weekEndDay).build();
       // TODO move to PeriodFilter
       final var weekNegativeTransactions =
           transactionQuery.getAllByFilter(filter).stream()
@@ -75,7 +78,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
       if (driverVsTransaction.isEmpty()) {
         System.out.printf(
             "Invoices for Week %d: was not created. No transactions in period: [%s, %s]%n",
-                weekNumber, week.start(), week.end());
+            weekNumber, weekStartDay, weekEndDay);
         continue;
       }
 
@@ -87,11 +90,11 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         final var driverInfo =
             String.format(
                 "%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
-        final var driversCalSign = getActiveCallSign(driverId);
+        final var driversCalSign = getActiveCallSign(driverId, weekStartDay);
         if (driversTransactions.isEmpty()) {
           System.out.printf(
               "Invoice for Week %d and Driver with call Sign %d: was not created. No transactions in period: [%s, %s]%n",
-                  weekNumber, driversCalSign, week.start(), week.end());
+              weekNumber, driversCalSign, weekStartDay, weekEndDay);
           continue;
         }
         final var qFirmId = driver.getQFirmId();
@@ -104,7 +107,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         final var previousWeekBalanceAmount = previousWeekBalance.getAmount();
 
         final var currentWeekBalance =
-                balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), weekNumber);
+            balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), weekNumber);
         final var fee = currentWeekBalance.getFee();
         final var invoiceItems = getInvoiceItems(driversTransactions);
         final var invoice =
@@ -144,11 +147,12 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     sendEmails(domain);
   }
 
-  private Integer getActiveCallSign(final Long driverId) {
-    final var driversCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+  private Integer getActiveCallSign(final Long driverId, final LocalDate date) {
+    final var driversCallSignLink =
+        callSignLinkQuery.getCallSignLinkByDriverIdAndDate(driverId, date);
     if (driversCallSignLink == null) {
       System.out.println("No Active call sign was found for driver with ID: " + driverId);
-      return -1;
+      return Integer.MIN_VALUE;
     }
     return driversCallSignLink.getCallSign();
   }

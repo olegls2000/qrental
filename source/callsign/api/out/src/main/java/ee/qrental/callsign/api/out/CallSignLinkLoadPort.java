@@ -2,6 +2,8 @@ package ee.qrental.callsign.api.out;
 
 import ee.qrental.callsign.domain.CallSignLink;
 import ee.qrental.common.core.out.port.LoadPort;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CallSignLinkLoadPort extends LoadPort<CallSignLink> {
@@ -11,4 +13,6 @@ public interface CallSignLinkLoadPort extends LoadPort<CallSignLink> {
   CallSignLink loadActiveByCallSignId(final Long callSignId);
 
   CallSignLink loadActiveByDriverId(final Long driverId);
+
+  CallSignLink loadByDriverIdAndDate(final Long driverId, final LocalDate date);
 }

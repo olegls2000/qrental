@@ -3,6 +3,7 @@ package ee.qrental.callsign.repository.impl;
 import ee.qrental.callsign.adapter.repository.CallSignLinkRepository;
 import ee.qrental.callsign.entity.jakarta.CallSignLinkJakartaEntity;
 import ee.qrental.callsign.repository.spring.CallSignLinkSpringDataRepository;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -44,5 +45,11 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
   @Override
   public CallSignLinkJakartaEntity findOneByDateEndIsNullAndDriverId(final Long driverId) {
     return springDataRepository.findOneByDateEndIsNullAndDriverId(driverId);
+  }
+
+  @Override
+  public CallSignLinkJakartaEntity findOneByDriverIdAndDate(
+      final Long driverId, final LocalDate date) {
+    return springDataRepository.findOneByDriverIdAndDate(driverId, date);
   }
 }
