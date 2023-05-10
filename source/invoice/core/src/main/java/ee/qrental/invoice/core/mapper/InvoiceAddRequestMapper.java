@@ -3,7 +3,6 @@ package ee.qrental.invoice.core.mapper;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.common.core.utils.QWeek;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -25,15 +24,12 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
 
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
-  private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
 
   @Override
   public Invoice toDomain(InvoiceAddRequest request) {
     final var driverId = request.getDriverId();
     final var driver = driverQuery.getById(driverId);
-    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-    final var callSign = callSignLink.getCallSign();
     final var year = request.getYear();
     final var week = request.getWeek();
 
@@ -45,10 +41,9 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
 
     return Invoice.builder()
         .id(null)
-        .number(getInvoiceNumber(year, week, callSign))
+        .number(getInvoiceNumber(year, week, driverId))
         .weekNumber(week.getNumber())
         .driverId(driverId)
-        .driverCallSign(callSign)
         .driverCompany(driver.getCompanyName())
         .driverCompanyAddress(driver.getCompanyAddress())
         .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
@@ -64,9 +59,9 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
         .build();
   }
 
-  private String getInvoiceNumber(final Integer year, final QWeek week, final Integer callSign) {
+  private String getInvoiceNumber(final Integer year, final QWeek week, final Long driverId) {
     final var weekNumber = week.getNumber();
-    return String.format("%d%d%d", year, weekNumber, callSign);
+    return String.format("%d%d%d", year, weekNumber, driverId);
   }
 
   private List<InvoiceItem> getInvoiceItems(final YearAndWeekAndDriverFilter filter) {

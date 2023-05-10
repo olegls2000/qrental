@@ -4,11 +4,9 @@
     <h2 class="py-3">Invoices</h2>
     <table class="table table-striped table-bordered">
         <tr>
-            <th>Pdf actions</th>
+            <th>Actions</th>
             <th>Number</th>
-            <th>Total, EURO</th>
             <th>Week</th>
-            <th>Driver Call-sign</th>
             <th>Driver Company</th>
             <th>Q Firma</th>
             <th>Created</th>
@@ -30,7 +28,6 @@
             </td>
             <td th:text="${invoice.number}"></td>
             <td th:text="${invoice.weekNumber}"></td>
-            <td th:text="${invoice.driverCallSign}"></td>
             <td th:text="${invoice.driverCompany}"></td>
             <td th:text="${invoice.qFirmName}"></td>
             <td th:text="${invoice.created}"></td>

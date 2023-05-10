@@ -1,7 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
 import ee.qrental.balance.api.in.query.GetBalanceQuery;
-import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
@@ -76,7 +75,6 @@ public class InvoiceServiceConfig {
       final InvoiceToPdfModelMapper invoiceToPdfModelMapper,
       final GetTransactionQuery transactionQuery,
       final GetDriverQuery driverQuery,
-      final GetCallSignLinkQuery callSignLinkQuery,
       final GetFirmQuery firmQuery,
       final EmailSendUseCase emailSendUseCase,
       final GetBalanceQuery balanceQuery) {
@@ -89,7 +87,6 @@ public class InvoiceServiceConfig {
         invoiceToPdfModelMapper,
         transactionQuery,
         driverQuery,
-        callSignLinkQuery,
         firmQuery,
         balanceQuery,
         emailSendUseCase);

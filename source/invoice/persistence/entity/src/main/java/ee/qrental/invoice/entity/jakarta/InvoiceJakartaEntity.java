@@ -34,9 +34,6 @@ public class InvoiceJakartaEntity {
   @Column(name = "driver_id")
   private Long driverId;
 
-  @Column(name = "driver_call_sign")
-  private Integer driverCallSign;
-
   @Column(name = "driver_company")
   private String driverCompany;
 

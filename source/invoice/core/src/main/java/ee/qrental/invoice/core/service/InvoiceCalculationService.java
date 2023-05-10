@@ -4,7 +4,6 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.balance.api.in.query.GetBalanceQuery;
-import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.request.EmailSendRequest;
@@ -28,7 +27,6 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +42,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final InvoiceToPdfModelMapper invoiceToPdfModelMapper;
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
-  private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetFirmQuery firmQuery;
   private final GetBalanceQuery balanceQuery;
   private final EmailSendUseCase emailSendUseCase;
@@ -90,17 +87,16 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         final var driverInfo =
             String.format(
                 "%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
-        final var driversCalSign = getActiveCallSign(driverId, weekStartDay);
         if (driversTransactions.isEmpty()) {
           System.out.printf(
-              "Invoice for Week %d and Driver with call Sign %d: was not created. No transactions in period: [%s, %s]%n",
-              weekNumber, driversCalSign, weekStartDay, weekEndDay);
+              "Invoice for Week %d and Driver %s: was not created. No transactions in period: [%s, %s]%n",
+              weekNumber, driverInfo, weekStartDay, weekEndDay);
           continue;
         }
         final var qFirmId = driver.getQFirmId();
         final var qFirm = firmQuery.getById(qFirmId);
 
-        final var invoiceNumber = getInvoiceNumber(week, driversCalSign);
+        final var invoiceNumber = getInvoiceNumber(week, driverId);
         final var previousWeek = weekNumber - 1;
         final var previousWeekBalance =
             balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeek);
@@ -120,7 +116,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 .driverInfo(driverInfo)
                 .driverCompanyAddress(driver.getCompanyAddress())
                 .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
-                .driverCallSign(driversCalSign)
                 .driverCompanyVat(driverCompanyVat)
                 .qFirmId(qFirmId)
                 .qFirmName(qFirm.getFirmName())
@@ -145,16 +140,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     }
     invoiceCalculationAddPort.add(domain);
     sendEmails(domain);
-  }
-
-  private Integer getActiveCallSign(final Long driverId, final LocalDate date) {
-    final var driversCallSignLink =
-        callSignLinkQuery.getCallSignLinkByDriverIdAndDate(driverId, date);
-    if (driversCallSignLink == null) {
-      System.out.println("No Active call sign was found for driver with ID: " + driverId);
-      return Integer.MIN_VALUE;
-    }
-    return driversCallSignLink.getCallSign();
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
@@ -189,10 +174,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     return invoiceToPdfConverter.getPdfInputStream(invoicePdfModel);
   }
 
-  private String getInvoiceNumber(final Week week, final Integer callSign) {
+  private String getInvoiceNumber(final Week week, final Long driverId) {
     final var year = week.getYear();
     final var weekNumber = week.weekNumber();
-    return String.format("%d%d%d", year, weekNumber, callSign);
+    return String.format("%d%d%d", year, weekNumber, driverId);
   }
 
   private List<InvoiceItem> getInvoiceItems(final List<TransactionResponse> transactions) {

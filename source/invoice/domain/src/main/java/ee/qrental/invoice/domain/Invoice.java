@@ -15,7 +15,6 @@ public class Invoice {
   private String number;
   private Integer weekNumber;
   private Long driverId;
-  private Integer driverCallSign;
   private String driverCompany;
   private String driverInfo;
   private String driverCompanyRegNumber;
