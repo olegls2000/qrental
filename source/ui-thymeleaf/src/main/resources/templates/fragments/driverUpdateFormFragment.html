@@ -16,12 +16,20 @@
            th:field="*{id}"
            type="text"
            hidden/>
-    <p class="fs-5">Activation:</p>
-    <div class="mb-3">
-        <input class="form-check-input" id="activeId"
-               th:field="*{active}"
-               type="checkbox"/>
-        <label class="form-check-label text-muted" for="activeId">Activated</label>
+    <p class="fs-5">Setup:</p>
+    <div class="row">
+        <div class="col"> <div class="mb-3">
+            <input class="form-check-input" id="activeId"
+                   th:field="*{active}"
+                   type="checkbox"/>
+            <label class="form-check-label text-muted" for="activeId">Activated</label>
+        </div></div>
+        <div class="col"> <div class="mb-3">
+            <input class="form-check-input" id="needFeeId"
+                   th:field="*{needFee}"
+                   type="checkbox"/>
+            <label class="form-check-label text-muted" for="needFeeId">Need Fee</label>
+        </div></div>
     </div>
     <p class="fs-5">Q-info:</p>
     <div class="row">

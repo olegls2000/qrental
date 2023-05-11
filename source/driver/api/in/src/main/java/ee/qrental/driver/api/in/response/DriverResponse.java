@@ -25,6 +25,7 @@ public class DriverResponse {
   private String companyVat;
   private String taxiLicense;
   private Boolean needInvoicesByEmail;
+  private Boolean needFee;
   private BigDecimal deposit;
   private Long qFirmId;
   private String qFirmName;

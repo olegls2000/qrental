@@ -26,6 +26,7 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String taxiLicense;
   private String address;
   private Boolean needInvoicesByEmail;
+  private Boolean needFee;
   private BigDecimal deposit;
   private Long qFirmId;
   private String comment;

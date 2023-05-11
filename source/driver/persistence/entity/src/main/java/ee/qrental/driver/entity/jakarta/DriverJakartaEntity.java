@@ -68,6 +68,9 @@ public class DriverJakartaEntity {
   @Column(name = "need_invoices_by_email")
   private Boolean needInvoicesByEmail;
 
+  @Column(name = "need_fee")
+  private Boolean needFee;
+
   @Column(name = "q_firm_id")
   private Long qFirmId;
 

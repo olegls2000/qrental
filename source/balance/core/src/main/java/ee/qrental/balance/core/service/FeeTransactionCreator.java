@@ -5,6 +5,7 @@ import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.common.core.utils.Week;
+import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
@@ -20,16 +21,31 @@ public class FeeTransactionCreator {
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
 
-  public BigDecimal creteFeeTransactionIfNecessary(final Week week, final Long driverId) {
+  public BigDecimal creteFeeTransactionIfNecessary(final Week week, final DriverResponse driver) {
+    if (!driver.getNeedFee()) {
+      System.out.println(
+          "Fee charging is not activated for Driver (" + driver.getIsikukood() + ")");
+      return ZERO;
+    }
+    final var driverId = driver.getId();
     final var feeAmount = getFeeAmountBasedOnPreviousWekBalance(week, driverId);
     if (feeAmount.compareTo(ZERO) == 0) {
-      System.out.println("Fee ebt transaction is not required.");
+      System.out.println(
+          "Driver ("
+              + driver.getIsikukood()
+              + ") doesn't have negative balance for Previous week. Fee debt transaction is not required.");
       return ZERO;
     }
     final var feeTransactionAddRequest =
         getTransactionRequest(feeAmount, driverId, week.weekNumber());
     final var id = transactionAddUseCase.add(feeTransactionAddRequest);
-    System.out.println("Fee transaction with id = " + id + " was crated");
+    System.out.println(
+        "Fee transaction with id = "
+            + id
+            + " was crated for Driver ("
+            + driver.getIsikukood()
+            + ")");
+
     return feeAmount;
   }
 

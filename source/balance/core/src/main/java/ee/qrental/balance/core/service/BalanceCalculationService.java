@@ -13,7 +13,6 @@ import ee.qrental.balance.domain.Balance;
 import ee.qrental.balance.domain.BalanceCalculationResult;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -49,11 +48,11 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final var week = weekIterator.next();
       final var weekTransactions = getNotFeeTransactionsMapForWeek(week);
       drivers.stream()
-          .map(DriverResponse::getId)
           .forEach(
-              driverId -> {
+              driver -> {
                 final var feeTransactionSum =
-                    feeTransactionCreator.creteFeeTransactionIfNecessary(week, driverId);
+                    feeTransactionCreator.creteFeeTransactionIfNecessary(week, driver);
+                final var driverId = driver.getId();
                 final var driversTransactions =
                     weekTransactions.getOrDefault(driverId, emptyList());
                 final var balance =

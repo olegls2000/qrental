@@ -18,6 +18,7 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Need Invoices by email</th>
+            <th>Charge Fee</th>
             <th>Q Firm</th>
             <th>Deposit</th>
             <th>Comment</th>
@@ -45,6 +46,9 @@
             <td th:text="${driver.email}">??</td>
             <td>
                 <span th:text="${driver.needInvoicesByEmail} ? 'Yes' : 'No'"></span>
+            </td>
+            <td>
+                <span th:text="${driver.needFee} ? 'Yes' : 'No'"></span>
             </td>
             <td th:text="${driver.qFirmName}">??</td>
             <td th:text="${driver.deposit}">??</td>

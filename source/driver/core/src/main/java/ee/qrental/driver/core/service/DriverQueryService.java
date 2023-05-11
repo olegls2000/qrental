@@ -20,7 +20,11 @@ public class DriverQueryService implements GetDriverQuery {
 
   @Override
   public List<DriverResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(
+            (driver1, driver2) -> driver1.getLastName().compareToIgnoreCase(driver2.getLastName()))
+        .collect(toList());
   }
 
   @Override
