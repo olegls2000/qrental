@@ -51,7 +51,8 @@ public class InvoiceToPdfConverter {
         getInterest(
             model.getFeeStartDate(),
             model.getFeeEndDate(),
-            model.getFee(),
+            model.getCurrentWeekFee(),
+            model.getPreviousWeekBalanceFee(),
             model.getTotalWithFee());
     final var footer =
         getFooter(
@@ -214,8 +215,10 @@ public class InvoiceToPdfConverter {
   private Table getInterest(
       final String feeStartPeriod,
       final String feeEndPeriod,
-      final BigDecimal fee,
+      final BigDecimal currentWeekFee,
+      final BigDecimal previousWeekBalanceFee,
       final BigDecimal totalWithFee) {
+    final var totalFeeAmount = previousWeekBalanceFee.add(currentWeekFee);
     final var table = new Table(2);
     table.setWidths(new float[] {2, 1});
     table.setSpacing(-1f);
@@ -226,9 +229,9 @@ public class InvoiceToPdfConverter {
     table.addCell(
         getTotalLabelCell(
             String.format("Vivised %s - %s perioodi eest", feeStartPeriod, feeEndPeriod)));
-    table.addCell(getTotalValueCell(null));
+    table.addCell(getTotalValueCell(currentWeekFee));
     table.addCell(getTotalLabelCell("Viisiste üldsumma"));
-    table.addCell(getTotalValueCell(fee));
+    table.addCell(getTotalValueCell(totalFeeAmount));
     table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
     table.addCell(getTotalValueCell(totalWithFee));
 

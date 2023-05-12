@@ -82,8 +82,11 @@ public class InvoiceJakartaEntity {
   @Column(name = "balance")
   private BigDecimal balance;
 
-  @Column(name = "fee")
-  private BigDecimal fee;
+  @Column(name = "current_week_fee")
+  private BigDecimal currentWeekFee;
+
+  @Column(name = "previous_week_balance_fee")
+  private BigDecimal previousWeekBalanceFee;
 
   @Column(name = "comment")
   private String comment;

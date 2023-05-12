@@ -31,7 +31,8 @@ public class Invoice {
   private String qFirmPhone;
   private LocalDate created;
   private BigDecimal balance;
-  private BigDecimal fee;
+  private BigDecimal currentWeekFee;
+  private BigDecimal previousWeekBalanceFee;
   private String comment;
   private List<InvoiceItem> items;
 

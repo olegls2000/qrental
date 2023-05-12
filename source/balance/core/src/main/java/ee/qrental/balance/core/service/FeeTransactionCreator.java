@@ -1,5 +1,6 @@
 package ee.qrental.balance.core.service;
 
+import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYPE_NAME_FEE_DEBT;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 
@@ -15,7 +16,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FeeTransactionCreator {
-  public static final String TRANSACTION_TYPE_NAME_FEE_DEBT = "fee debt";
   private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.07d);
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
@@ -37,7 +37,7 @@ public class FeeTransactionCreator {
       return ZERO;
     }
     final var feeTransactionAddRequest =
-        getTransactionRequest(feeAmount, driverId, week.weekNumber());
+        getTransactionRequest(feeAmount, driverId, week.weekNumber(), week.end());
     final var id = transactionAddUseCase.add(feeTransactionAddRequest);
     System.out.println(
         "Fee transaction with id = "
@@ -50,12 +50,15 @@ public class FeeTransactionCreator {
   }
 
   private TransactionAddRequest getTransactionRequest(
-      final BigDecimal feeAmount, final Long driverId, final Integer weekNumber) {
+      final BigDecimal feeAmount,
+      final Long driverId,
+      final Integer weekNumber,
+      final LocalDate transactionDate) {
     final var feeDebtTransactionType =
         transactionTypeQuery.getByName(TRANSACTION_TYPE_NAME_FEE_DEBT);
     final var feeTransactionAddRequest = new TransactionAddRequest();
     feeTransactionAddRequest.setAmount(feeAmount);
-    feeTransactionAddRequest.setDate(LocalDate.now());
+    feeTransactionAddRequest.setDate(transactionDate);
     feeTransactionAddRequest.setWithVat(FALSE);
     feeTransactionAddRequest.setTransactionTypeId(feeDebtTransactionType.getId());
     feeTransactionAddRequest.setDriverId(driverId);

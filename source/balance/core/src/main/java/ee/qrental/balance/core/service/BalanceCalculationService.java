@@ -1,6 +1,6 @@
 package ee.qrental.balance.core.service;
 
-import static ee.qrental.balance.core.service.FeeTransactionCreator.TRANSACTION_TYPE_NAME_FEE_DEBT;
+import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYPE_NAME_FEE_DEBT;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 

@@ -63,8 +63,9 @@ public class InvoiceToPdfModelMapper {
     final var debt = getDebt(balanceAmount);
     final var advancePayment = getAdvancePayment(balanceAmount);
     final var total = sumWithVat.add(debt).subtract(advancePayment);
-    final var fee = invoice.getFee();
-    final var totalWithFee = total.add(fee);
+    final var currentWeekFee = invoice.getCurrentWeekFee();
+    final var previousWeekBalanceFee = invoice.getPreviousWeekBalanceFee();
+    final var totalWithFee = total.add(currentWeekFee).add(previousWeekBalanceFee);
 
     return InvoicePdfModel.builder()
         .number(number)
@@ -96,7 +97,8 @@ public class InvoiceToPdfModelMapper {
         .debt(debt)
         .advancePayment(advancePayment)
         .total(total)
-        .fee(fee)
+        .previousWeekBalanceFee(previousWeekBalanceFee)
+        .currentWeekFee(currentWeekFee)
         .totalWithFee(totalWithFee)
         .build();
   }

@@ -33,7 +33,8 @@ public class InvoiceAdapterMapper {
         .qFirmPhone(entity.getQFirmPhone())
         .created(entity.getCreated())
         .balance(entity.getBalance())
-        .fee(entity.getFee())
+        .currentWeekFee(entity.getCurrentWeekFee())
+        .previousWeekBalanceFee(entity.getPreviousWeekBalanceFee())
         .comment(entity.getComment())
         .items(entity.getItems().stream().map(this::mapToItemDomain).collect(toList()))
         .build();
@@ -69,7 +70,8 @@ public class InvoiceAdapterMapper {
         .qFirmPhone(domain.getQFirmPhone())
         .created(domain.getCreated())
         .balance(domain.getBalance())
-        .fee(domain.getFee())
+        .currentWeekFee(domain.getCurrentWeekFee())
+        .previousWeekBalanceFee(domain.getPreviousWeekBalanceFee())
         .comment(domain.getComment())
         .build();
   }
