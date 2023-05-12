@@ -36,6 +36,6 @@ public class Invoice {
   private List<InvoiceItem> items;
 
   public Boolean withVat() {
-    return qFirmVatNumber != null;
+    return qFirmVatNumber != null && !qFirmVatNumber.isBlank();
   }
 }
