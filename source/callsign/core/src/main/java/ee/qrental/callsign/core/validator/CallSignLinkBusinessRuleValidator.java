@@ -51,10 +51,13 @@ public class CallSignLinkBusinessRuleValidator implements QValidator<CallSignLin
   private void checkIsDriverFree(
       final CallSignLink domain, final ViolationsCollector violationCollector) {
     final var driverId = domain.getDriverId();
-    final var callSign = domain.getCallSign().getCallSign();
     final var activeCallSignLink = loadPort.loadActiveByDriverId(driverId);
-    violationCollector.collect(
-        format("Driver: %s already uses by active Link and can not be linked.", driverQuery.getObjectInfo(driverId)));
+    if (activeCallSignLink != null) {
+      violationCollector.collect(
+          format(
+              "Driver: %s already uses by active Link and can not be linked.",
+              driverQuery.getObjectInfo(driverId)));
+    }
   }
 
   private void checkExistence(final Long id, final ViolationsCollector violationCollector) {

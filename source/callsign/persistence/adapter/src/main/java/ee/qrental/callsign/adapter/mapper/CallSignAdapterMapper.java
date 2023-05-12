@@ -6,6 +6,9 @@ import ee.qrental.callsign.entity.jakarta.CallSignJakartaEntity;
 public class CallSignAdapterMapper {
 
   public CallSign mapToDomain(final CallSignJakartaEntity entity) {
+    if(entity == null) {
+      return null;
+    }
     return CallSign.builder()
         .id(entity.getId())
         .callSign(entity.getCallSign())
