@@ -7,6 +7,7 @@ import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
 import static java.awt.Color.white;
 import static java.lang.String.format;
+import static java.math.BigDecimal.ROUND_DOWN;
 
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
@@ -26,6 +27,13 @@ import lombok.SneakyThrows;
 
 @AllArgsConstructor
 public class InvoiceToPdfConverter {
+
+  private static String getTextOrEmpty(final String text) {
+    if (text == null || text.isBlank()) {
+      return "--";
+    }
+    return text;
+  }
 
   @SneakyThrows
   public InputStream getPdfInputStream(final InvoicePdfModel model) {
@@ -142,15 +150,15 @@ public class InvoiceToPdfConverter {
     requisites.setHorizontalAlignment(HorizontalAlignment.LEFT);
     requisites.setBorder(NO_BORDER);
     requisites.addCell(getRequisitLabelCell("Maksja"));
-    requisites.addCell(getRequisitValueCell(invoiceDriverCompany));
+    requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompany)));
     requisites.addCell(getRequisitLabelCell("Adress"));
-    requisites.addCell(getRequisitValueCell(invoiceDriverCompanyAddress));
+    requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompanyAddress)));
     requisites.addCell(getRequisitLabelCell("Äriregistri nr."));
-    requisites.addCell(getRequisitValueCell(invoiceDriverCompanyRegNumber));
+    requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompanyRegNumber)));
     requisites.addCell(getRequisitLabelCell("KMKR nr."));
-    requisites.addCell(getRequisitValueCell(driverCompanyVat));
+    requisites.addCell(getRequisitValueCell(getTextOrEmpty(driverCompanyVat)));
     requisites.addCell(getRequisitLabelCell("Arvesaja"));
-    requisites.addCell(getRequisitValueCell(driverInfo));
+    requisites.addCell(getRequisitValueCell(getTextOrEmpty(driverInfo)));
 
     return requisites;
   }
@@ -162,7 +170,8 @@ public class InvoiceToPdfConverter {
     table.setSpacing(1f);
     table.setWidth(100f);
     table.setHorizontalAlignment(HorizontalAlignment.LEFT);
-    table.setBorderColor(Color.BLACK);
+    table.setBorderColor(Color.DARK_GRAY);
+    table.setBorderWidth(1f);
     table.addCell(getItemTablHeaderCell("Selgitus"));
     table.addCell(getItemTablHeaderCell("Summa"));
     items.entrySet().forEach(item -> addRow(item, table));
@@ -176,10 +185,10 @@ public class InvoiceToPdfConverter {
       final BigDecimal vatAmount,
       final BigDecimal arveSum) {
     final var table = new Table(2);
-    table.setWidths(new float[] {2, 1});
+    table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(50f);
+    table.setWidth(60f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(getSummLabelCell("Summa"));
@@ -220,10 +229,10 @@ public class InvoiceToPdfConverter {
       final BigDecimal totalWithFee) {
     final var totalFeeAmount = previousWeekBalanceFee.add(currentWeekFee);
     final var table = new Table(2);
-    table.setWidths(new float[] {2, 1});
+    table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(50f);
+    table.setWidth(60f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(
@@ -241,10 +250,10 @@ public class InvoiceToPdfConverter {
   private Table getTotal(
       final BigDecimal total, final BigDecimal debt, final BigDecimal advancePayment) {
     final var table = new Table(2);
-    table.setWidths(new float[] {2, 1});
+    table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(50f);
+    table.setWidth(60f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
@@ -293,13 +302,13 @@ public class InvoiceToPdfConverter {
     table.setBorder(NO_BORDER);
 
     table.addCell(getFooterCell(qFirmName));
-    table.addCell(getFooterCell(format("Adress: %s", qFirmAddress)));
-    table.addCell(getFooterCell(format("Äriregistri nr.: %s", qFirmBank)));
-    table.addCell(getFooterCell(format("Äriregistri nr.: %s", qFirmRegNumber)));
-    table.addCell(getFooterCell(format("E-mail: %s", qFirmEmail)));
-    table.addCell(getFooterCell(format("IBAN: %s", qFirmIban)));
-    table.addCell(getFooterCell(format("KMKR: %s", qFirmVatNumber)));
-    table.addCell(getFooterCell(format("Telefon: %s", qFirmPhone)));
+    table.addCell(getFooterCell(format("Adress: %s", getTextOrEmpty(qFirmAddress))));
+    table.addCell(getFooterCell(format("Äriregistri nr.: %s", getTextOrEmpty(qFirmBank))));
+    table.addCell(getFooterCell(format("Äriregistri nr.: %s", getTextOrEmpty(qFirmRegNumber))));
+    table.addCell(getFooterCell(format("E-mail: %s", getTextOrEmpty(qFirmEmail))));
+    table.addCell(getFooterCell(format("IBAN: %s", getTextOrEmpty(qFirmIban))));
+    table.addCell(getFooterCell(format("KMKR: %s", getTextOrEmpty(qFirmVatNumber))));
+    table.addCell(getFooterCell(format("Telefon: %s", getTextOrEmpty(qFirmPhone))));
 
     return table;
   }
@@ -316,12 +325,16 @@ public class InvoiceToPdfConverter {
     final var descriptionCell =
         new Cell(new Paragraph(item.getKey(), new Font(Font.TIMES_ROMAN, 12, Font.NORMAL)));
     descriptionCell.setHorizontalAlignment(HorizontalAlignment.LEFT);
+    descriptionCell.setBorderColor(Color.DARK_GRAY);
+    descriptionCell.setBorderWidth(1f);
     table.addCell(descriptionCell);
     final var sumCell =
         new Cell(
             new Paragraph(
                 getFormattedString(item.getValue()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     sumCell.setHorizontalAlignment(RIGHT);
+    sumCell.setBorderColor(Color.DARK_GRAY);
+    sumCell.setBorderWidth(1f);
     table.addCell(sumCell);
   }
 
@@ -329,6 +342,8 @@ public class InvoiceToPdfConverter {
     final var cell = new Cell(new Phrase(value, new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     cell.setHeader(true);
     cell.setBackgroundColor(Color.LIGHT_GRAY);
+    cell.setBorderColor(Color.DARK_GRAY);
+    cell.setBorderWidth(1f);
     cell.setVerticalAlignment(VerticalAlignment.CENTER);
     cell.setHorizontalAlignment(HorizontalAlignment.CENTER);
 
@@ -354,9 +369,9 @@ public class InvoiceToPdfConverter {
 
   private String getFormattedString(final BigDecimal number) {
     if (number == null) {
-      return "---- eur";
+      return "-- eur";
     }
-    final var numberFinal = number.setScale(2, BigDecimal.ROUND_DOWN).abs();
+    final var numberFinal = number.setScale(2, ROUND_DOWN).abs();
     DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);
