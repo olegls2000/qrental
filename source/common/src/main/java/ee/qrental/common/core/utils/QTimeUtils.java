@@ -3,7 +3,7 @@ package ee.qrental.common.core.utils;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.time.LocalDate.of;
-import static java.time.Month.JUNE;
+import static java.time.Month.*;
 import static java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR;
 import static java.time.temporal.TemporalAdjusters.*;
 import static java.util.Locale.getDefault;
@@ -16,7 +16,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class QTimeUtils {
 
-  public static final LocalDate START_CALCULATION_DATE = LocalDate.of(2023, 03, 06);
+  public static final LocalDate INVOICE_START_CALCULATION_DATE = LocalDate.of(2023, MARCH, 06);
+  public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 02);
 
   public static int getWeekNumber(final LocalDate date) {
     return date.get(WeekFields.of(getDefault()).weekOfWeekBasedYear());

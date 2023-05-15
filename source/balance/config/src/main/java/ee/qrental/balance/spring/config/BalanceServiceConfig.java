@@ -40,7 +40,8 @@ public class BalanceServiceConfig {
       final AmountCalculator amountCalculator,
       final FeeCalculator feeCalculator,
       final FeeTransactionCreator feeTransactionCreator,
-      final GetDriverQuery driverQuery) {
+      final GetDriverQuery driverQuery,
+      final BalanceLoadPort loadPort) {
     return new BalanceCalculationService(
         balanceCalculationPeriodService,
         addRequestMapper,
@@ -50,7 +51,8 @@ public class BalanceServiceConfig {
         amountCalculator,
         feeCalculator,
         feeTransactionCreator,
-        driverQuery);
+        driverQuery,
+        loadPort);
   }
 
   @Bean
@@ -60,13 +62,13 @@ public class BalanceServiceConfig {
   }
 
   @Bean
-  AmountCalculator getAmountCalculator(final BalanceLoadPort loadPort) {
-    return new AmountCalculator(loadPort);
+  AmountCalculator getAmountCalculator() {
+    return new AmountCalculator();
   }
 
   @Bean
-  FeeCalculator getFeeCalculator(final BalanceLoadPort loadPort) {
-    return new FeeCalculator(loadPort);
+  FeeCalculator getFeeCalculator() {
+    return new FeeCalculator();
   }
 
   @Bean

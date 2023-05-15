@@ -2,8 +2,7 @@ package ee.qrental.balance.core.service;
 
 import static java.math.BigDecimal.ZERO;
 
-import ee.qrental.balance.api.out.BalanceLoadPort;
-import ee.qrental.common.core.utils.Week;
+import ee.qrental.balance.domain.Balance;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,19 +11,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AmountCalculator {
 
-  private final BalanceLoadPort loadPort;
-
   public BigDecimal calculate(
-      final Week week, final Long driverId, final List<TransactionResponse> driversTransactions) {
+      final List<TransactionResponse> driversTransactions, final Balance previousWeekBalance) {
     final var transactionsSum =
         driversTransactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal::add)
             .orElse(ZERO);
-    final var previousWeekNumber = week.weekNumber() - 1;
-    final var balanceFromPreviousWeek =
-        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
-    final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
+    final var amountFromPreviousWeek = previousWeekBalance.getAmount();
 
     return transactionsSum.add(amountFromPreviousWeek);
   }

@@ -1,6 +1,6 @@
 package ee.qrental.invoice.adapter.adapter;
 
-import static ee.qrental.common.core.utils.QTimeUtils.START_CALCULATION_DATE;
+import static ee.qrental.common.core.utils.QTimeUtils.INVOICE_START_CALCULATION_DATE;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.invoice.adapter.mapper.InvoiceCalculationAdapterMapper;
@@ -19,7 +19,7 @@ public class InvoiceCalculationLoadAdapter implements InvoiceCalculationLoadPort
 
   @Override
   public LocalDate loadLastCalculationDate() {
-    return loadedOrDefault(repository.getLastCalculationDate(), START_CALCULATION_DATE);
+    return loadedOrDefault(repository.getLastCalculationDate(), INVOICE_START_CALCULATION_DATE);
   }
 
   private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {

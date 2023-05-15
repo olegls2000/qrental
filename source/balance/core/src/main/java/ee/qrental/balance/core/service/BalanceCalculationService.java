@@ -8,6 +8,7 @@ import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
 import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
 import ee.qrental.balance.api.out.BalanceAddPort;
 import ee.qrental.balance.api.out.BalanceCalculationAddPort;
+import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.core.mapper.BalanceCalculationAddRequestMapper;
 import ee.qrental.balance.domain.Balance;
 import ee.qrental.balance.domain.BalanceCalculationResult;
@@ -35,10 +36,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final FeeCalculator feeCalculator;
   private final FeeTransactionCreator feeTransactionCreator;
   private final GetDriverQuery driverQuery;
+  private final BalanceLoadPort loadPort;
 
   @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
+    final var calculationStartTime = System.currentTimeMillis();
     final var domain = addRequestMapper.toDomain(addRequest);
     final var actionDate = addRequest.getActionDate();
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(actionDate);
@@ -61,9 +64,15 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                 final var balanceCalculationResult =
                     getBalanceCalculationResult(driversTransactions, savedBalance);
                 domain.getResults().add(balanceCalculationResult);
+                System.out.printf(
+                    "Balance for Driver with id: %d and week %d was calculated",
+                    driverId, week.weekNumber());
               });
     }
     balanceCalculationAddPort.add(domain);
+    final var calculationEndTime = System.currentTimeMillis();
+    final var calculationDuration = calculationEndTime - calculationStartTime;
+    System.out.printf("Calculation took %d milli seconds", calculationDuration);
   }
 
   private BalanceCalculationResult getBalanceCalculationResult(
@@ -90,8 +99,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final Long driverId,
       final List<TransactionResponse> driversTransactions,
       final BigDecimal feeTransactionSum) {
-    final var amount = amountCalculator.calculate(week, driverId, driversTransactions);
-    final var feeBalance = feeCalculator.calculate(week, driverId, feeTransactionSum);
+    final var previousWeekNumber = week.weekNumber() - 1;
+    final var previousWeekBalance =
+        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
+
+    final var amount = amountCalculator.calculate(driversTransactions, previousWeekBalance);
+    final var feeBalance = feeCalculator.calculate(feeTransactionSum, previousWeekBalance);
 
     return Balance.builder()
         .driverId(driverId)

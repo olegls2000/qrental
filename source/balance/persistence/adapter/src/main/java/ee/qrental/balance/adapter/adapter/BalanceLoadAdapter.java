@@ -31,7 +31,7 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   @Override
   public Balance loadByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
-    if (year == 2023 && weekNumber < 10) {
+    if (year == 2023 && weekNumber < 1) {
       return Balance.builder()
               .amount(ZERO)
               .fee(ZERO).build();
