@@ -1,5 +1,6 @@
 package ee.qrental.invoice.core.service.pdf;
 
+import static java.math.BigDecimal.ZERO;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
@@ -50,7 +51,8 @@ public class InvoiceToPdfModelMapper {
                         "Invoice has no Items. Please check invoice creation logic."))
             .negate();
 
-    final var vatPercentage = invoice.withVat() ? VAT_RATE : BigDecimal.ZERO;
+    final var withVat = invoice.withVat();
+    final var vatPercentage = withVat ? VAT_RATE : ZERO;
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
 
     final var driverCompanyVat = invoice.getDriverCompanyVat();
@@ -60,7 +62,7 @@ public class InvoiceToPdfModelMapper {
             .collect(toMap(InvoiceItem::getDescription, InvoiceItem::getAmount));
 
     final var balanceAmount = invoice.getBalance();
-    final var debt = getDebt(balanceAmount);
+    final var debt = getDebt(balanceAmount, vatPercentage);
     final var advancePayment = getAdvancePayment(balanceAmount);
     final var total = sumWithVat.add(debt).subtract(advancePayment);
     final var currentWeekFee = invoice.getCurrentWeekFee();
@@ -103,17 +105,21 @@ public class InvoiceToPdfModelMapper {
         .build();
   }
 
-  private BigDecimal getDebt(final BigDecimal balanceAmount) {
+  private BigDecimal getDebt(final BigDecimal balanceAmount, final BigDecimal vatPercentage) {
     if (balanceAmount.signum() < 0) {
-      return balanceAmount.negate();
+      final var debt = balanceAmount.negate();
+      final var debtVat = debt.multiply(vatPercentage.movePointLeft(2));
+
+      return debt.add(debtVat);
     }
-    return BigDecimal.ZERO;
+
+    return ZERO;
   }
 
   private BigDecimal getAdvancePayment(final BigDecimal balanceAmount) {
     if (balanceAmount.signum() > 0) {
       return balanceAmount;
     }
-    return BigDecimal.ZERO;
+    return ZERO;
   }
 }

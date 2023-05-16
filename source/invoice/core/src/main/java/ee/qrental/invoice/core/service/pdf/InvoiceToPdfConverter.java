@@ -54,7 +54,9 @@ public class InvoiceToPdfConverter {
     final var invoiceSumma =
         getSumms(
             model.getSum(), model.getVatPercentage(), model.getVatAmount(), model.getSumWithVat());
-    final var invoiceTotal = getTotal(model.getTotal(), model.getDebt(), model.getAdvancePayment());
+    final var invoiceTotal =
+        getTotal(
+            model.getTotal(), model.getDebt(), model.getAdvancePayment(), model.getVatPercentage());
     final var interest =
         getInterest(
             model.getFeeStartDate(),
@@ -188,7 +190,7 @@ public class InvoiceToPdfConverter {
     table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(60f);
+    table.setWidth(70f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(getSummLabelCell("Summa"));
@@ -232,7 +234,7 @@ public class InvoiceToPdfConverter {
     table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(60f);
+    table.setWidth(70f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(
@@ -248,17 +250,21 @@ public class InvoiceToPdfConverter {
   }
 
   private Table getTotal(
-      final BigDecimal total, final BigDecimal debt, final BigDecimal advancePayment) {
+      final BigDecimal total,
+      final BigDecimal debt,
+      final BigDecimal advancePayment,
+      final BigDecimal vatPercentage) {
     final var table = new Table(2);
     table.setWidths(new float[] {8, 2});
     table.setSpacing(-1f);
     table.setPadding(0f);
-    table.setWidth(60f);
+    table.setWidth(70f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(advancePayment));
-    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus"));
+    table.addCell(
+        getTotalLabelCell("Eelmise perioodi võlgnevus (koos käibemaksuga " + vatPercentage + "%)"));
     table.addCell(getTotalValueCell(debt));
     table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
     table.addCell(getTotalValueCell(total));
