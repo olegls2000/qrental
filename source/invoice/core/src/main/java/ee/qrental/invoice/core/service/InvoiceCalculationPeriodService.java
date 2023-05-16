@@ -20,6 +20,9 @@ public class InvoiceCalculationPeriodService {
   }
 
   private LocalDate getEndCalculationDate(final LocalDate actionDate) {
-    return getLastSundayFromDate(actionDate);
+    final var latestSundayFromActionDate = getLastSundayFromDate(actionDate);
+    final var endCalculationDate = latestSundayFromActionDate.minusWeeks(2);
+
+    return endCalculationDate;
   }
 }
