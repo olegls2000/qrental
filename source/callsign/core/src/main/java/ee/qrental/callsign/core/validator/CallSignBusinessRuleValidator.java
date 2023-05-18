@@ -56,6 +56,9 @@ public class CallSignBusinessRuleValidator implements QValidator<CallSign> {
       final CallSign domain, final ViolationsCollector violationCollector) {
     final var callSign = domain.getCallSign();
     final var domainFromDb = loadPort.loadByCallSign(callSign);
+    if (domainFromDb == null) {
+      return;
+    }
     if (Objects.equals(domainFromDb.getId(), domain.getId())) {
       return;
     }

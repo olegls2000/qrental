@@ -30,6 +30,9 @@ public class CarResponse {
   private Boolean gps;
   private LocalDate technicalInspectionEnd;
   private LocalDate gasInspectionEnd;
-  private String comment;
   private LocalDate dateEndLpg;
+  private String insuranceRagStatus;
+  private String technicalInspectionRagStatus;
+  private String gasInspectionRagStatus;
+  private String comment;
 }
