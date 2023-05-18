@@ -1,5 +1,22 @@
 package ee.qrental.invoice.core.service.pdf;
 
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.*;
+import com.lowagie.text.alignment.HorizontalAlignment;
+import com.lowagie.text.alignment.VerticalAlignment;
+import com.lowagie.text.pdf.PdfWriter;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Map;
+
 import static com.lowagie.text.Font.BOLDITALIC;
 import static com.lowagie.text.Font.COURIER;
 import static com.lowagie.text.PageSize.A4;
@@ -9,28 +26,12 @@ import static java.awt.Color.white;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ROUND_DOWN;
 
-import com.lowagie.text.*;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.alignment.HorizontalAlignment;
-import com.lowagie.text.alignment.VerticalAlignment;
-import com.lowagie.text.pdf.PdfWriter;
-import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-
 @AllArgsConstructor
 public class InvoiceToPdfConverter {
 
   private static String getTextOrEmpty(final String text) {
     if (text == null || text.isBlank()) {
-      return "--";
+      return "---";
     }
     return text;
   }
@@ -153,13 +154,13 @@ public class InvoiceToPdfConverter {
     requisites.setBorder(NO_BORDER);
     requisites.addCell(getRequisitLabelCell("Maksja"));
     requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompany)));
-    requisites.addCell(getRequisitLabelCell("Adress"));
+    requisites.addCell(getRequisitLabelCell("Aadress"));
     requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompanyAddress)));
     requisites.addCell(getRequisitLabelCell("Äriregistri nr."));
     requisites.addCell(getRequisitValueCell(getTextOrEmpty(invoiceDriverCompanyRegNumber)));
     requisites.addCell(getRequisitLabelCell("KMKR nr."));
     requisites.addCell(getRequisitValueCell(getTextOrEmpty(driverCompanyVat)));
-    requisites.addCell(getRequisitLabelCell("Arvesaja"));
+    requisites.addCell(getRequisitLabelCell("Arve saaja"));
     requisites.addCell(getRequisitValueCell(getTextOrEmpty(driverInfo)));
 
     return requisites;
@@ -239,9 +240,9 @@ public class InvoiceToPdfConverter {
     table.setBorder(NO_BORDER);
     table.addCell(
         getTotalLabelCell(
-            String.format("Vivised %s - %s perioodi eest", feeStartPeriod, feeEndPeriod)));
+            String.format("Viivised %s - %s perioodi eest", feeStartPeriod, feeEndPeriod)));
     table.addCell(getTotalValueCell(currentWeekFee));
-    table.addCell(getTotalLabelCell("Viisiste üldsumma"));
+    table.addCell(getTotalLabelCell("Viiviste üldsumma"));
     table.addCell(getTotalValueCell(totalFeeAmount));
     table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
     table.addCell(getTotalValueCell(totalWithFee));
@@ -308,10 +309,10 @@ public class InvoiceToPdfConverter {
     table.setBorder(NO_BORDER);
 
     table.addCell(getFooterCell(qFirmName));
-    table.addCell(getFooterCell(format("Adress: %s", getTextOrEmpty(qFirmAddress))));
-    table.addCell(getFooterCell(format("Äriregistri nr.: %s", getTextOrEmpty(qFirmBank))));
+    table.addCell(getFooterCell(format("Aadress: %s", getTextOrEmpty(qFirmAddress))));
+    table.addCell(getFooterCell(format("Bank: %s", getTextOrEmpty(qFirmBank))));
     table.addCell(getFooterCell(format("Äriregistri nr.: %s", getTextOrEmpty(qFirmRegNumber))));
-    table.addCell(getFooterCell(format("E-mail: %s", getTextOrEmpty(qFirmEmail))));
+    table.addCell(getFooterCell(format("E-post: %s", getTextOrEmpty(qFirmEmail))));
     table.addCell(getFooterCell(format("IBAN: %s", getTextOrEmpty(qFirmIban))));
     table.addCell(getFooterCell(format("KMKR: %s", getTextOrEmpty(qFirmVatNumber))));
     table.addCell(getFooterCell(format("Telefon: %s", getTextOrEmpty(qFirmPhone))));

@@ -12,8 +12,9 @@
                     Add New Driver
                 </a>
             </th>
-            <th>Last Name</th>
+            <th>Call Sign</th>
             <th>First Name</th>
+            <th>Last Name</th>
             <th>Isikukood</th>
             <th>Phone</th>
             <th>Email</th>
@@ -39,8 +40,9 @@
                     Delete</a>
             </td>
 
-            <td th:text="${driver.lastName}">??</td>
+            <td th:text="${driver.callSign}">??</td>
             <td th:text="${driver.firstName}">??</td>
+            <td th:text="${driver.lastName}">??</td>
             <td th:text="${driver.isikukood}">??</td>
             <td th:text="${driver.phone}">??</td>
             <td th:text="${driver.email}">??</td>
@@ -57,7 +59,7 @@
                 <a class="btn btn-sm btn-info"
                    th:href="@{/balances/driver/{id}(id=${driver.id})}">
                     <span class="bi bi-card-checklist"></span>
-                    Details</a>
+                    Portal</a>
             </td>
         </tr>
     </table>
