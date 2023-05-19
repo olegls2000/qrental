@@ -2,7 +2,7 @@ package ee.qrental.ui.controller.callsign;
 
 import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_ROOT_PATH;
 
-import ee.qrental.callsign.api.in.query.GetCallSignQuery;
+import ee.qrental.driver.api.in.query.GetCallSignQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

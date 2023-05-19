@@ -2,15 +2,15 @@ package ee.qrental.ui.controller.callsign;
 
 import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_LINK_ROOT_PATH;
 
-import ee.qrental.callsign.api.in.query.GetCallSignLinkQuery;
-import ee.qrental.callsign.api.in.query.GetCallSignQuery;
-import ee.qrental.callsign.api.in.request.CallSignLinkAddRequest;
-import ee.qrental.callsign.api.in.request.CallSignLinkDeleteRequest;
-import ee.qrental.callsign.api.in.request.CallSignLinkUpdateRequest;
-import ee.qrental.callsign.api.in.usecase.CallSignLinkAddUseCase;
-import ee.qrental.callsign.api.in.usecase.CallSignLinkDeleteUseCase;
-import ee.qrental.callsign.api.in.usecase.CallSignLinkUpdateUseCase;
+import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
+import ee.qrental.driver.api.in.query.GetCallSignQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.driver.api.in.request.CallSignLinkAddRequest;
+import ee.qrental.driver.api.in.request.CallSignLinkDeleteRequest;
+import ee.qrental.driver.api.in.request.CallSignLinkUpdateRequest;
+import ee.qrental.driver.api.in.usecase.CallSignLinkAddUseCase;
+import ee.qrental.driver.api.in.usecase.CallSignLinkDeleteUseCase;
+import ee.qrental.driver.api.in.usecase.CallSignLinkUpdateUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

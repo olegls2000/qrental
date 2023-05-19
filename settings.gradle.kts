@@ -66,17 +66,6 @@ include("source:constant:persistence:repository")
 include("source:constant:persistence:flyway")
 include("source:constant:config")
 
-//Call-sign domain:
-include("source:callsign:api:in")
-include("source:callsign:api:out")
-include("source:callsign:domain")
-include("source:callsign:core")
-include("source:callsign:persistence:adapter")
-include("source:callsign:persistence:entity")
-include("source:callsign:persistence:repository")
-include("source:callsign:persistence:flyway")
-include("source:callsign:config")
-
 //Invoice domain:
 include("source:invoice:api:in")
 include("source:invoice:api:out")

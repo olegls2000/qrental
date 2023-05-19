@@ -6,8 +6,6 @@ dependencies {
     implementation(project(":source:link:persistence:adapter"))
     implementation(project(":source:link:persistence:repository"))
     implementation("org.springframework:spring-context-support")
-    implementation(project(mapOf("path" to ":source:callsign:api:in")))
-    implementation(project(mapOf("path" to ":source:driver:api:in")))
     implementation(project(mapOf("path" to ":source:driver:api:in")))
     implementation(project(mapOf("path" to ":source:car:api:in")))
     compileOnly(libs.q.lombok)

@@ -7,8 +7,6 @@ dependencies {
     implementation(project(":source:driver:persistence:flyway"))
     implementation(project(":source:car:config"))
     implementation(project(":source:car:persistence:flyway"))
-    implementation(project(":source:callsign:config"))
-    implementation(project(":source:callsign:persistence:flyway"))
     implementation(project(":source:invoice:config"))
     implementation(project(":source:invoice:persistence:flyway"))
     implementation(project(":source:firm:config"))

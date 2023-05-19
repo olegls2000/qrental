@@ -2,4 +2,14 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 ee.qrental.driver.spring.config.DriverAdapterConfig,\
 ee.qrental.driver.spring.config.DriverMapperConfig,\
 ee.qrental.driver.spring.config.DriverServiceConfig,\
-ee.qrental.driver.spring.config.DriverRepositoryConfig
+ee.qrental.driver.spring.config.DriverRepositoryConfig,\
+ee.qrental.driver.spring.config.CallSignLinkAdapterConfig,\
+ee.qrental.driver.spring.config.CallSignLinkMapperConfig,\
+ee.qrental.driver.spring.config.CallSignLinkServiceConfig,\
+ee.qrental.driver.spring.config.CallSignLinkValidatorConfig,\
+ee.qrental.driver.spring.config.CallSignLinkRepositoryConfig,\
+ee.qrental.driver.spring.config.CallSignAdapterConfig,\
+ee.qrental.driver.spring.config.CallSignMapperConfig,\
+ee.qrental.driver.spring.config.CallSignRepositoryConfig,\
+ee.qrental.driver.spring.config.CallSignServiceConfig,\
+ee.qrental.driver.spring.config.CallSignValidatorConfig

@@ -1,15 +1,14 @@
 package ee.qrental.ui.controller.callsign;
 
 import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_ROOT_PATH;
-import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
 
-import ee.qrental.callsign.api.in.query.GetCallSignQuery;
-import ee.qrental.callsign.api.in.request.CallSignAddRequest;
-import ee.qrental.callsign.api.in.request.CallSignDeleteRequest;
-import ee.qrental.callsign.api.in.request.CallSignUpdateRequest;
-import ee.qrental.callsign.api.in.usecase.CallSignAddUseCase;
-import ee.qrental.callsign.api.in.usecase.CallSignDeleteUseCase;
-import ee.qrental.callsign.api.in.usecase.CallSignUpdateUseCase;
+import ee.qrental.driver.api.in.query.GetCallSignQuery;
+import ee.qrental.driver.api.in.request.CallSignAddRequest;
+import ee.qrental.driver.api.in.request.CallSignDeleteRequest;
+import ee.qrental.driver.api.in.request.CallSignUpdateRequest;
+import ee.qrental.driver.api.in.usecase.CallSignAddUseCase;
+import ee.qrental.driver.api.in.usecase.CallSignDeleteUseCase;
+import ee.qrental.driver.api.in.usecase.CallSignUpdateUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
