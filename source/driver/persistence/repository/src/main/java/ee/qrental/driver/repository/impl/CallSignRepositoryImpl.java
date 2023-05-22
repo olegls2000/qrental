@@ -3,6 +3,8 @@ package ee.qrental.driver.repository.impl;
 import ee.qrental.driver.adapter.repository.CallSignRepository;
 import ee.qrental.driver.entity.jakarta.CallSignJakartaEntity;
 import ee.qrental.driver.repository.spring.CallSignSpringDataRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -14,6 +16,11 @@ public class CallSignRepositoryImpl implements CallSignRepository {
   @Override
   public List<CallSignJakartaEntity> findAll() {
     return springDataRepository.findAll();
+  }
+
+  @Override
+  public List<CallSignJakartaEntity> findAvailable(final LocalDate nowDate) {
+    return springDataRepository.findAvailable(nowDate);
   }
 
   @Override

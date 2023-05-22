@@ -10,5 +10,7 @@ public interface DriverRepository {
 
   DriverJakartaEntity getReferenceById(final Long id);
 
+  DriverJakartaEntity getByIsikukood(final Long isikukood);
+
   void deleteById(final Long id);
 }

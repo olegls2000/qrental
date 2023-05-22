@@ -18,8 +18,8 @@ public class CallSignLinkAdapterMapper
     }
     return CallSignLink.builder()
         .id(entity.getId())
-        .driverId(entity.getDriverId())
         .callSign(callSignAdapterMapper.mapToDomain(entity.getCallSign()))
+        .driverId(entity.getDriver().getId())
         .dateStart(entity.getDateStart())
         .dateEnd(entity.getDateEnd())
         .comment(entity.getComment())
@@ -31,7 +31,6 @@ public class CallSignLinkAdapterMapper
 
     return CallSignLinkJakartaEntity.builder()
         .id(domain.getId())
-        .driverId(domain.getDriverId())
         .callSign(callSignAdapterMapper.mapToEntity(domain.getCallSign()))
         .dateStart(domain.getDateStart())
         .dateEnd(domain.getDateEnd())

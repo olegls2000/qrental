@@ -5,6 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,9 @@ public class DriverJakartaEntity {
   @Column(name = "email")
   private String email;
 
+  @Column(name = "address")
+  private String address;
+
   @Column(name = "company_name")
   private String companyName;
 
@@ -62,9 +66,6 @@ public class DriverJakartaEntity {
   @Column(name = "taxi_license")
   private String taxiLicense;
 
-  @Column(name = "address")
-  private String address;
-
   @Column(name = "need_invoices_by_email")
   private Boolean needInvoicesByEmail;
 
@@ -79,4 +80,7 @@ public class DriverJakartaEntity {
 
   @Column(name = "comment")
   private String comment;
+
+  @OneToMany(mappedBy = "driver")
+  private List<CallSignLinkJakartaEntity> callSignLinks;
 }

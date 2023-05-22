@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DriverAddRequest extends AbstractAddRequest {
   private Boolean active;
+  private Long callSignId;
   private String firstName;
   private String lastName;
   private Long isikukood;

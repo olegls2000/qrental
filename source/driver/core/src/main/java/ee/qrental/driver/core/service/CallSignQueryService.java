@@ -37,4 +37,9 @@ public class CallSignQueryService implements GetCallSignQuery {
   public CallSignUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
   }
+
+  @Override
+  public List<CallSignResponse> getAvailable() {
+    return loadPort.loadAvailable().stream().map(mapper::toResponse).collect(toList());
+  }
 }

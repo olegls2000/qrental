@@ -8,6 +8,7 @@ import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.api.out.DriverLoadPort;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -20,10 +21,10 @@ public class DriverQueryService implements GetDriverQuery {
 
   @Override
   public List<DriverResponse> getAll() {
+
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
-        .sorted(
-            (driver1, driver2) -> driver1.getLastName().compareToIgnoreCase(driver2.getLastName()))
+        .sorted(getCallSignOrLastNameComparator())
         .collect(toList());
   }
 
@@ -40,5 +41,21 @@ public class DriverQueryService implements GetDriverQuery {
   @Override
   public DriverUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
+  }
+
+  private Comparator<DriverResponse> getCallSignOrLastNameComparator() {
+    return (driver1, driver2) -> {
+      final var callSign1 = driver1.getCallSign();
+      final var callSign2 = driver2.getCallSign();
+      if (callSign1 == null) {
+        if (callSign2 == null) {
+          return driver1.getLastName().compareToIgnoreCase(driver2.getLastName());
+        }
+        return 1;
+      } else if (callSign2 == null) {
+        return -1;
+      }
+      return callSign1.compareTo(callSign2);
+    };
   }
 }

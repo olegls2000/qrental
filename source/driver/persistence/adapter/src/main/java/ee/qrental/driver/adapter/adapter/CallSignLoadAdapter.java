@@ -6,6 +6,7 @@ import ee.qrental.driver.adapter.mapper.CallSignAdapterMapper;
 import ee.qrental.driver.adapter.repository.CallSignRepository;
 import ee.qrental.driver.api.out.CallSignLoadPort;
 import ee.qrental.driver.domain.CallSign;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -18,6 +19,13 @@ public class CallSignLoadAdapter implements CallSignLoadPort {
   @Override
   public List<CallSign> loadAll() {
     return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
+  public List<CallSign> loadAvailable() {
+    final var nowDate = LocalDate.now();
+
+    return repository.findAvailable(nowDate).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override

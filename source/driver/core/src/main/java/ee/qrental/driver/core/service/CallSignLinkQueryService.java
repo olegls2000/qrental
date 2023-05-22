@@ -9,6 +9,7 @@ import ee.qrental.driver.api.out.CallSignLinkLoadPort;
 import ee.qrental.driver.core.mapper.CallSignLinkResponseMapper;
 import ee.qrental.driver.core.mapper.CallSignLinkUpdateRequestMapper;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,10 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
 
   @Override
   public List<CallSignLinkResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(getCallSignOrEndDateComparator())
+        .collect(toList());
   }
 
   @Override
@@ -48,5 +52,14 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   public CallSignLinkResponse getCallSignLinkByDriverIdAndDate(
       final Long driverId, final LocalDate date) {
     return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, date));
+  }
+
+  private Comparator<CallSignLinkResponse> getCallSignOrEndDateComparator() {
+    return (callSignLink1, callSignLink2) -> {
+      final var callSign1 = callSignLink1.getCallSign();
+      final var callSign2 = callSignLink2.getCallSign();
+
+      return callSign1.compareTo(callSign2);
+    };
   }
 }

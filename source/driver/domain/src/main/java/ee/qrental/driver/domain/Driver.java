@@ -28,4 +28,9 @@ public class Driver {
   private BigDecimal deposit;
   private Long qFirmId;
   private String comment;
+  private CallSign callSign;
+
+  public boolean withCallSign() {
+    return callSign != null;
+  }
 }

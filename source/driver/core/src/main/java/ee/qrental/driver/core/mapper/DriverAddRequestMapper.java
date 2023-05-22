@@ -2,6 +2,7 @@ package ee.qrental.driver.core.mapper;
 
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
+import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
 
 public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest, Driver> {
@@ -28,6 +29,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .deposit(request.getDeposit())
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
+        .callSign(CallSign.builder().id(request.getCallSignId()).build())
         .build();
   }
 }

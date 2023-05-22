@@ -1,6 +1,5 @@
 package ee.qrental.driver.domain;
 
-import ee.qrental.driver.domain.CallSign;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +15,14 @@ public class CallSignLink {
   private LocalDate dateStart;
   private LocalDate dateEnd;
   private String comment;
+
+  public boolean isActive() {
+    if (dateEnd == null) {
+      return true;
+    }
+    if (dateEnd.isAfter(LocalDate.now())) {
+      return true;
+    }
+    return false;
+  }
 }

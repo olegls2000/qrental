@@ -2,6 +2,7 @@ package ee.qrental.ui.controller.driver;
 
 import static ee.qrental.ui.controller.ControllerUtils.DRIVER_ROOT_PATH;
 
+import ee.qrental.driver.api.in.query.GetCallSignQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.api.in.request.DriverDeleteRequest;
@@ -25,17 +26,20 @@ public class DriverUseCaseController {
   private final DriverDeleteUseCase deleteUseCase;
   private final GetDriverQuery driverQuery;
   private final GetFirmQuery firmQuery;
+  private final GetCallSignQuery callSignQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new DriverAddRequest());
     addQFirmsToModel(model);
+    addAvailableCallSignsToModel(model);
+
     return "forms/addDriver";
   }
 
   @PostMapping(value = "/add")
-  public String addDriverDriver(@ModelAttribute final DriverAddRequest driverInfo) {
-    addUseCase.add(driverInfo);
+  public String addDriver(@ModelAttribute final DriverAddRequest addRequest) {
+    addUseCase.add(addRequest);
 
     return "redirect:" + DRIVER_ROOT_PATH;
   }
@@ -44,11 +48,19 @@ public class DriverUseCaseController {
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", driverQuery.getUpdateRequestById(id));
     addQFirmsToModel(model);
+    addAvailableCallSignsToModel(model);
+
     return "forms/updateDriver";
   }
 
   private void addQFirmsToModel(Model model) {
     model.addAttribute("qFirms", firmQuery.getAll());
+  }
+
+  private void addAvailableCallSignsToModel(Model model) {
+
+
+    model.addAttribute("callSigns", callSignQuery.getAvailable());
   }
 
   @PostMapping("/update")
@@ -67,7 +79,7 @@ public class DriverUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteForm(final DriverDeleteRequest deleteRequest) {
+  public String deleteDriver(final DriverDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + DRIVER_ROOT_PATH;

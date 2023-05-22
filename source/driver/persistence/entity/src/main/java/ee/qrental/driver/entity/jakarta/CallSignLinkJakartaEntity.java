@@ -22,9 +22,6 @@ public class CallSignLinkJakartaEntity {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @Column(name = "driver_id")
-  private Long driverId;
-
   @Column(name = "date_start")
   private LocalDate dateStart;
 
@@ -37,4 +34,8 @@ public class CallSignLinkJakartaEntity {
   @ManyToOne
   @JoinColumn(name = "call_sign_id")
   private CallSignJakartaEntity callSign;
+
+  @ManyToOne
+  @JoinColumn(name = "driver_id")
+  private DriverJakartaEntity driver;
 }

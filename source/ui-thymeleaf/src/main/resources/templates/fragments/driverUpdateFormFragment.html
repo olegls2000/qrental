@@ -18,18 +18,37 @@
            hidden/>
     <p class="fs-5">Setup:</p>
     <div class="row">
-        <div class="col"> <div class="mb-3">
-            <input class="form-check-input" id="activeId"
-                   th:field="*{active}"
-                   type="checkbox"/>
-            <label class="form-check-label text-muted" for="activeId">Activated</label>
-        </div></div>
-        <div class="col"> <div class="mb-3">
-            <input class="form-check-input" id="needFeeId"
-                   th:field="*{needFee}"
-                   type="checkbox"/>
-            <label class="form-check-label text-muted" for="needFeeId">Need Fee</label>
-        </div></div>
+        <div class="col">
+            <div class="mb-3">
+                <input class="form-check-input" id="activeId"
+                       th:field="*{active}"
+                       type="checkbox"/>
+                <label class="form-check-label text-muted" for="activeId">Activated</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <input class="form-check-input" id="needFeeId"
+                       th:field="*{needFee}"
+                       type="checkbox"/>
+                <label class="form-check-label text-muted" for="needFeeId">Need Fee</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted"
+                       for="callSignId">Select Call Sign</label>
+                <select id="callSignId"
+                        class="form-select"
+                        th:field="*{callSignId}">
+                    <option th:value="null">No Call Sign</option>
+                    <option th:each="callSign : ${callSigns}"
+                            th:value="${callSign.id}"
+                            th:text="${callSign.callSign}">??</option>
+
+                </select>
+            </div>
+        </div>
     </div>
     <p class="fs-5">Q-info:</p>
     <div class="row">
