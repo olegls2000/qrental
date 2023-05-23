@@ -9,7 +9,7 @@ public interface BalanceCalculationSpringDataRepository
     extends JpaRepository<BalanceCalculationJakartaEntity, Long> {
 
   @Query(
-      value = "select action_date from balance_calculation order by action_date desc limit 1",
+      value = "select end_date from balance_calculation order by end_date desc limit 1",
       nativeQuery = true)
   LocalDate getLastCalculationDate();
 

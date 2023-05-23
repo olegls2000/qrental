@@ -11,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class BalanceCalculation {
   private Long id;
+  private LocalDate startDate;
+  private LocalDate endDate;
   private LocalDate actionDate;
   private List<BalanceCalculationResult> results;
   private String comment;

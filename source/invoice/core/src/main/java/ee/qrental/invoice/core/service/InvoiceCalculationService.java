@@ -51,14 +51,18 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   @Transactional
   @Override
   public void add(final InvoiceCalculationAddRequest addRequest) {
+    final var calculationStartTime = System.currentTimeMillis();
+    final var actionDate = addRequest.getActionDate();
     final var domain = invoiceCalculationAddRequestMapper.toDomain(addRequest);
+    final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(actionDate);
+    domain.setStartDate(weekIterator.getStartPeriod());
+    domain.setEndDate(weekIterator.getEndPeriod());
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {
       addRequest.setViolations(violationsCollector.getViolations());
       return;
     }
-    final var actionDate = addRequest.getActionDate();
-    final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(actionDate);
+
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
       final var weekNumber = week.weekNumber();
@@ -149,6 +153,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     }
     invoiceCalculationAddPort.add(domain);
     sendEmails(domain);
+    final var calculationEndTime = System.currentTimeMillis();
+    final var calculationDuration = calculationEndTime - calculationStartTime;
+    System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
+
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {

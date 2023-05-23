@@ -42,9 +42,11 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
-    final var domain = addRequestMapper.toDomain(addRequest);
     final var actionDate = addRequest.getActionDate();
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(actionDate);
+    final var domain = addRequestMapper.toDomain(addRequest);
+    domain.setStartDate(weekIterator.getStartPeriod());
+    domain.setEndDate(weekIterator.getEndPeriod());
 
     final var drivers = driverQuery.getAll();
     while (weekIterator.hasNext()) {
@@ -65,14 +67,14 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                     getBalanceCalculationResult(driversTransactions, savedBalance);
                 domain.getResults().add(balanceCalculationResult);
                 System.out.printf(
-                    "Balance for Driver with id: %d and week %d was calculated",
+                    "Balance for Driver with id: %d and week %d was calculated. ",
                     driverId, week.weekNumber());
               });
     }
     balanceCalculationAddPort.add(domain);
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
-    System.out.printf("Calculation took %d milli seconds", calculationDuration);
+    System.out.printf("Balance Calculation took %d milli seconds", calculationDuration);
   }
 
   private BalanceCalculationResult getBalanceCalculationResult(

@@ -15,6 +15,8 @@ public class BalanceCalculationAdapterMapper {
     }
     return BalanceCalculation.builder()
         .id(entity.getId())
+        .startDate(entity.getStartDate())
+        .endDate(entity.getEndDate())
         .actionDate(entity.getActionDate())
         .results(entity.getResults().stream().map(this::mapToDomain).toList())
         .comment(entity.getComment())
@@ -25,12 +27,11 @@ public class BalanceCalculationAdapterMapper {
       final BalanceCalculationResultJakartaEntity resultEntity) {
 
     return BalanceCalculationResult.builder()
-            .balance(mapToDomain(resultEntity.getBalance()))
-            .build();
+        .balance(mapToDomain(resultEntity.getBalance()))
+        .build();
   }
 
-  private Balance mapToDomain(
-          final BalanceJakartaEntity balanceEntity) {
+  private Balance mapToDomain(final BalanceJakartaEntity balanceEntity) {
     return Balance.builder()
         .id(balanceEntity.getId())
         .year(balanceEntity.getYear())

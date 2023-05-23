@@ -19,7 +19,6 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
 
   private final BalanceCalculationRepository balanceCalculationRepository;
   private final BalanceCalculationResultRepository balanceCalculationResultRepository;
-  private final BalanceRepository balanceRepository;
   private final BalanceTransactionRepository balanceTransactionRepository;
   private final BalanceAdapterMapper balanceMapper;
 
@@ -28,6 +27,8 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
     final var balanceCalculationEntity =
         BalanceCalculationJakartaEntity.builder()
             .actionDate(domain.getActionDate())
+            .startDate(domain.getStartDate())
+            .endDate(domain.getEndDate())
             .comment(domain.getComment())
             .build();
     final var balanceCalculationEntitySaved =
@@ -43,8 +44,7 @@ public class BalanceCalculationPersistenceAdapter implements BalanceCalculationA
     for (BalanceCalculationResult result : balanceCalculationResults) {
       final var balance = result.getBalance();
       final var balanceEntity = balanceMapper.mapToEntity(balance);
-      //final var balanceEntitySaved = balanceRepository.save(balanceEntity);
-      final var balanceCalculationResultEntity =
+    final var balanceCalculationResultEntity =
           BalanceCalculationResultJakartaEntity.builder()
               .id(null)
               .calculation(balanceCalculationEntitySaved)

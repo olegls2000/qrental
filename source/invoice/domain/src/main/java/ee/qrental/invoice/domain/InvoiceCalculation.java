@@ -11,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class InvoiceCalculation {
   private Long id;
+  private LocalDate startDate;
+  private LocalDate endDate;
   private LocalDate actionDate;
   private List<InvoiceCalculationResult> results;
   private String comment;

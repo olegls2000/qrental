@@ -13,6 +13,8 @@ public class InvoiceCalculationAdapterMapper {
     }
     return InvoiceCalculation.builder()
         .id(entity.getId())
+        .startDate(entity.getStartDate())
+        .endDate(entity.getEndDate())
         .actionDate(entity.getActionDate())
         .results(entity.getResults().stream().map(this::mapToDomain).toList())
         .comment(entity.getComment())

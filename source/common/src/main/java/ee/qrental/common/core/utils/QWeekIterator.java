@@ -1,10 +1,14 @@
 package ee.qrental.common.core.utils;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 
 public class QWeekIterator {
 
+  @Getter
   private final LocalDate endPeriod;
+  @Getter
   private LocalDate startPeriod;
 
   public QWeekIterator(LocalDate startPeriod, LocalDate endPeriod) {

@@ -27,6 +27,8 @@ public class InvoiceCalculationPersistenceAdapter
     final InvoiceCalculationJakartaEntity invoiceCalculationEntity =
         InvoiceCalculationJakartaEntity.builder()
             .actionDate(domain.getActionDate())
+            .startDate(domain.getStartDate())
+            .endDate(domain.getEndDate())
             .comment(domain.getComment())
             .build();
 

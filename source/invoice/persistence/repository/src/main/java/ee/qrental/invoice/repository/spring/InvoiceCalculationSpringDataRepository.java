@@ -9,7 +9,7 @@ public interface InvoiceCalculationSpringDataRepository
     extends JpaRepository<InvoiceCalculationJakartaEntity, Long> {
 
   @Query(
-      value = "select action_date from invoice_calculation order by action_date desc limit 1",
+      value = "select end_date from invoice_calculation order by end_date desc limit 1",
       nativeQuery = true)
   LocalDate getLastCalculationDate();
 }

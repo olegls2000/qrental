@@ -33,14 +33,12 @@ public class BalanceAdapterConfig {
   BalanceCalculationPersistenceAdapter getBalanceCalculationPersistenceAdapter(
       final BalanceCalculationRepository balanceCalculationRepository,
       final BalanceCalculationResultRepository balanceCalculationResultRepository,
-      final BalanceRepository balanceRepository,
       final BalanceTransactionRepository balanceTransactionRepository,
       final BalanceAdapterMapper balanceMapper) {
 
     return new BalanceCalculationPersistenceAdapter(
         balanceCalculationRepository,
         balanceCalculationResultRepository,
-        balanceRepository,
         balanceTransactionRepository,
         balanceMapper);
   }
