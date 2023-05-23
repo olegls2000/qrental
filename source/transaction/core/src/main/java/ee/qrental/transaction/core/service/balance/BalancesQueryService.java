@@ -9,6 +9,7 @@ import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -20,7 +21,10 @@ public class BalancesQueryService implements GetDriverBalanceQuery {
 
   @Override
   public List<BalanceResponse> getAll() {
-    return driverQuery.getAll().stream().map(this::getBalanceByDriverId).collect(toList());
+    return driverQuery.getAll().stream()
+        .map(this::getBalanceByDriverId)
+        .sorted(Comparator.comparing(BalanceResponse::getTotal))
+        .collect(toList());
   }
 
   @Override
@@ -35,8 +39,10 @@ public class BalancesQueryService implements GetDriverBalanceQuery {
     return BalanceResponse.builder()
         .driverId(driverId)
         .total(total)
+        .callSign(driver.getCallSign())
         .firstName(driver.getFirstName())
         .lastName(driver.getLastName())
+        .phone(driver.getPhone())
         .build();
   }
 

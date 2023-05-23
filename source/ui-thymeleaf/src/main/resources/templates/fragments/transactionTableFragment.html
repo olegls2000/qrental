@@ -6,9 +6,9 @@
                role="button"
                aria-controls="offcanvasExample">
                 <span class="bi-plus-circle"></span>
-                Add new Transaction
             </a>
         </th>
+        <th></th>
         <th>Call Sign</th>
         <th>Driver</th>
         <th>Transaction Type</th>
@@ -25,14 +25,14 @@
         <td>
             <a class="btn btn-sm btn-warning"
                th:href="@{/transactions/update-form/{id}(id=${transaction.id})}">
-                <span class="bi-pencil-square"></span>
-                Edit</a>
+                <span class="bi-pencil-square"></span></a>
+        </td>
+        <td>
             <a class="btn btn-sm btn-danger"
                th:href="@{/transactions/delete-form/{id}(id=${transaction.id})}">
-                <span class="bi-trash"></span>
-                Delete</a>
+                <span class="bi-trash"></span></a>
         </td>
-        <td th:text="${transaction.callSign}" >???</td>
+        <td th:text="${transaction.callSign}">???</td>
         <td th:text="${transaction.driverInfo}">???</td>
         <td th:text="${transaction.type}">???</td>
         <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"

@@ -29,7 +29,7 @@ public class TransactionUpdateRequestMapper
         .id(domain.getId())
         .transactionTypeId(domain.getType().getId())
         .driverId(domain.getDriverId())
-        .amount(domain.getRealAmount())
+        .amount(domain.getAmount())
         .withVat(domain.getWithVat())
         .comment(domain.getComment())
         .date(domain.getDate())

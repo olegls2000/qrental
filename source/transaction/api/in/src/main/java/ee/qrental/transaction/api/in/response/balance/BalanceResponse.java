@@ -11,5 +11,6 @@ public class BalanceResponse {
   private Integer callSign;
   private String firstName;
   private String lastName;
+  private String phone;
   private BigDecimal total;
 }

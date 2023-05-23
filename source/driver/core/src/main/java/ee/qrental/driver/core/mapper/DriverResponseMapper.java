@@ -1,5 +1,6 @@
 package ee.qrental.driver.core.mapper;
 
+import static ee.qrental.common.core.utils.QStringUtils.contract;
 import static java.lang.String.format;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
@@ -16,12 +17,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
   private static final int EMAIL_VALUE_MAX_LENGTH = 20;
   private final GetFirmQuery firmQuery;
 
-  private static String contract(final String value, int maxLength) {
-    if (value.length() > maxLength) {
-      return value.substring(0, maxLength - 2) + "..";
-    }
-    return value;
-  }
+
 
   @Override
   public DriverResponse toResponse(final Driver domain) {

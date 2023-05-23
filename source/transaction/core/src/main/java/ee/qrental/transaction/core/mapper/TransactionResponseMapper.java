@@ -1,5 +1,6 @@
 package ee.qrental.transaction.core.mapper;
 
+import static ee.qrental.common.core.utils.QStringUtils.contract;
 import static java.lang.String.format;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
@@ -11,27 +12,17 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TransactionResponseMapper implements ResponseMapper<TransactionResponse, Transaction> {
+  private static final int COMMENT_MAX_SIZE = 26;
 
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetDriverQuery driverQuery;
 
-  private Integer getCallSign(final Long driverId) {
-    // TODO move logic to Call Sign domain
-    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-    if (callSignLink == null) {
-      System.out.println(
-          String.format("Driver with id %d doesnt have active Call Sign Links", driverId));
-      return null;
-    }
-
-    return callSignLink.getCallSign();
-  }
-
   @Override
   public TransactionResponse toResponse(final Transaction domain) {
     final var driverId = domain.getDriverId();
-    final var callSign = getCallSign(driverId);
-    final var driverInfo = driverQuery.getObjectInfo(driverId);
+    final var driver = driverQuery.getById(driverId);
+    final var callSign = driver.getCallSign();
+    final var driverInfo = format("%s %s ", driver.getFirstName(), driver.getLastName());
 
     return TransactionResponse.builder()
         .id(domain.getId())
@@ -44,7 +35,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .date(domain.getDate())
         .weekNumber(domain.getWeekNumber())
         .withVat(domain.getWithVat())
-        .comment(domain.getComment())
+        .comment(contract(domain.getComment(), COMMENT_MAX_SIZE))
         .build();
   }
 
@@ -55,9 +46,9 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
     final var realAmount = domain.getRealAmount();
     final var date = domain.getDate().toString();
     final var weekNumber = domain.getWeekNumber();
-    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-    final var callSign = callSignLink.getCallSign();
-    final var driverInfo = driverQuery.getObjectInfo(driverId);
+    final var driver = driverQuery.getById(driverId);
+    final var callSign = driver.getCallSign();
+    final var driverInfo = format("%s %s ", driver.getFirstName(), driver.getLastName());
 
     return format(
         "Transaction: %s %s EURO, "
