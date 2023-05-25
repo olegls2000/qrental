@@ -34,10 +34,10 @@ public class TransactionQueryController {
 
   @PostMapping
   public String getPageWithFilteredTransactions(
-      @ModelAttribute final YearAndWeekAndDriverFilter filterRequest, final Model model) {
+      @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest, final Model model) {
     addFilterOptionsToModel(model);
-    addTransactionDataToModel(transactionQuery.getAllByFilter(filterRequest), model);
-
+    addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
+    model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     return "transactions";
   }
 
