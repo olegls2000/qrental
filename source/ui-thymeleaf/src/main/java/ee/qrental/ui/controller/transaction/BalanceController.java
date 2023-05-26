@@ -47,6 +47,7 @@ public class BalanceController {
     TransactionFilterRequestUtils.addFilterOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     addDriverDataToModel(id, model);
+    model.addAttribute("transactionFilterRequest", transactionFilterRequest);
 
     return "detailView/balanceDriver";
   }
