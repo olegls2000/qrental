@@ -36,13 +36,22 @@
         </div>
         <div class="col">
             <div class="mb-3">
+                <label class="form-label text-muted" for="currentCallSignId">Call Sign</label>
+                <input class="form-control" id="currentCallSignId"
+                       th:field="*{currentCallSign}"
+                       type="number"
+                       disabled/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
                 <label class="form-label text-muted"
-                       for="callSignId">Select Call Sign</label>
+                       for="callSignId">New Call Sign</label>
                 <select id="callSignId"
                         class="form-select"
-                        th:field="*{callSignId}">
+                        th:field="*{toBeCallSignId}">
                     <option th:value="null">No Call Sign</option>
-                    <option th:each="callSign : ${callSigns}"
+                    <option th:each="callSign : ${availableCallSigns}"
                             th:value="${callSign.id}"
                             th:text="${callSign.callSign}">??</option>
 

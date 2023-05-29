@@ -30,7 +30,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .deposit(request.getDeposit())
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
-        .callSign(CallSign.builder().id(request.getCallSignId()).build())
+        .callSign(CallSign.builder().id(request.getToBeCallSignId()).build())
         .build();
   }
 
@@ -39,6 +39,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
     return DriverUpdateRequest.builder()
         .id(domain.getId())
         .active(domain.getActive())
+        .currentCallSign(domain.getCallSign().getCallSign())
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
         .isikukood(domain.getIsikukood())

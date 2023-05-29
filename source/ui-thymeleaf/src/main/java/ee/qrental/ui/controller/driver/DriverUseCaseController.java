@@ -58,9 +58,7 @@ public class DriverUseCaseController {
   }
 
   private void addAvailableCallSignsToModel(Model model) {
-
-
-    model.addAttribute("callSigns", callSignQuery.getAvailable());
+    model.addAttribute("availableCallSigns", callSignQuery.getAvailable());
   }
 
   @PostMapping("/update")
