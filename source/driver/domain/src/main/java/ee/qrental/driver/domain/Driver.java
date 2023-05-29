@@ -33,4 +33,12 @@ public class Driver {
   public boolean withCallSign() {
     return callSign != null;
   }
+
+  public Integer getCallSignValue() {
+    return callSign == null ? null : callSign.getCallSign();
+  }
+
+  public Long getCallSignId() {
+    return callSign == null ? null : callSign.getId();
+  }
 }

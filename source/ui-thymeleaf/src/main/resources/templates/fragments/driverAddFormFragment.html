@@ -36,7 +36,7 @@
                             class="form-select"
                             th:field="*{callSignId}">
                         <option th:value="null">No Call Sign</option>
-                        <option th:each="callSign : ${availableCallSigns}"
+                        <option th:each="callSign : ${callSigns}"
                                 th:value="${callSign.id}"
                                 th:text="${callSign.callSign}">??</option>
                     </select>
