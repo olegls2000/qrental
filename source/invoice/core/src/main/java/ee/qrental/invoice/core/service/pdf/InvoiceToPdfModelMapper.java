@@ -45,10 +45,7 @@ public class InvoiceToPdfModelMapper {
         invoice.getItems().stream()
             .map(InvoiceItem::getAmount)
             .reduce(BigDecimal::add)
-            .orElseThrow(
-                () ->
-                    new RuntimeException(
-                        "Invoice with number: "+invoice.getNumber()+" has no Items. Please check invoice creation logic."))
+            .orElse(ZERO)
             .negate();
 
     final var withVat = invoice.withVat();
