@@ -48,7 +48,7 @@ public class InvoiceToPdfModelMapper {
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Invoice has no Items. Please check invoice creation logic."))
+                        "Invoice with number: "+invoice.getNumber()+" has no Items. Please check invoice creation logic."))
             .negate();
 
     final var withVat = invoice.withVat();
