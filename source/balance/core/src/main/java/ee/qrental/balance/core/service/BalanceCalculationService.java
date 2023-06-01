@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -55,16 +56,16 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       drivers.stream()
           .forEach(
               driver -> {
-                final var feeTransactionSum =
+                final var feeTransactionOpt =
                     feeTransactionCreator.creteFeeTransactionIfNecessary(week, driver);
                 final var driverId = driver.getId();
                 final var driversTransactions =
                     weekTransactions.getOrDefault(driverId, emptyList());
                 final var balance =
-                    getBalance(week, driverId, driversTransactions, feeTransactionSum);
+                    getBalance(week, driverId, driversTransactions, feeTransactionOpt);
                 final var savedBalance = balanceAddPort.add(balance);
                 final var balanceCalculationResult =
-                    getBalanceCalculationResult(driversTransactions, savedBalance);
+                    getBalanceCalculationResult(feeTransactionOpt, driversTransactions, savedBalance);
                 domain.getResults().add(balanceCalculationResult);
                 System.out.printf(
                     "Balance for Driver with id: %d and week %d was calculated. ",
@@ -78,9 +79,14 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   }
 
   private BalanceCalculationResult getBalanceCalculationResult(
-      List<TransactionResponse> driversTransactions, Balance savedBalance) {
+      Optional<TransactionResponse> feeTransactionOpt,
+      List<TransactionResponse> driversTransactions,
+      Balance savedBalance) {
     final var transactionIds =
         driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
+    if (feeTransactionOpt.isPresent()) {
+      transactionIds.add(feeTransactionOpt.get().getId());
+    }
     final var result =
         BalanceCalculationResult.builder()
             .balance(savedBalance)
@@ -100,12 +106,16 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final Week week,
       final Long driverId,
       final List<TransactionResponse> driversTransactions,
-      final BigDecimal feeTransactionSum) {
+      final Optional<TransactionResponse> feeTransactionOpt) {
     final var previousWeekNumber = week.weekNumber() - 1;
     final var previousWeekBalance =
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
 
     final var amount = amountCalculator.calculate(driversTransactions, previousWeekBalance);
+    final var feeTransactionSum =
+        feeTransactionOpt
+            .orElse(TransactionResponse.builder().id(null).realAmount(BigDecimal.ZERO).build())
+            .getRealAmount();
     final var feeBalance = feeCalculator.calculate(feeTransactionSum, previousWeekBalance);
 
     return Balance.builder()

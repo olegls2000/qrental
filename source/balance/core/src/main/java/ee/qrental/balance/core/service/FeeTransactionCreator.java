@@ -9,9 +9,11 @@ import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
+import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -21,11 +23,12 @@ public class FeeTransactionCreator {
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
 
-  public BigDecimal creteFeeTransactionIfNecessary(final Week week, final DriverResponse driver) {
+  public Optional<TransactionResponse> creteFeeTransactionIfNecessary(
+      final Week week, final DriverResponse driver) {
     if (!driver.getNeedFee()) {
       System.out.println(
           "Fee charging is not activated for Driver (" + driver.getIsikukood() + ")");
-      return ZERO;
+      return Optional.empty();
     }
     final var driverId = driver.getId();
     final var feeAmount = getFeeAmountBasedOnPreviousWekBalance(week, driverId);
@@ -34,7 +37,7 @@ public class FeeTransactionCreator {
           "Driver ("
               + driver.getIsikukood()
               + ") doesn't have negative balance for Previous week. Fee debt transaction is not required.");
-      return ZERO;
+      return Optional.empty();
     }
     final var feeTransactionAddRequest =
         getTransactionRequest(feeAmount, driverId, week.weekNumber(), week.end());
@@ -45,8 +48,7 @@ public class FeeTransactionCreator {
             + " was crated for Driver ("
             + driver.getIsikukood()
             + ")");
-
-    return feeAmount;
+    return Optional.of(TransactionResponse.builder().id(id).realAmount(feeAmount).build());
   }
 
   private TransactionAddRequest getTransactionRequest(
@@ -70,9 +72,6 @@ public class FeeTransactionCreator {
 
   private BigDecimal getFeeAmountBasedOnPreviousWekBalance(final Week week, final Long driverId) {
     final var currentWeekNumber = week.weekNumber();
-    if (currentWeekNumber == 10) {
-      return ZERO;
-    }
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
