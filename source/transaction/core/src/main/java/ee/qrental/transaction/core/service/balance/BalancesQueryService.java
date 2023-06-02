@@ -9,7 +9,6 @@ import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -23,8 +22,17 @@ public class BalancesQueryService implements GetDriverBalanceQuery {
   public List<BalanceResponse> getAll() {
     return driverQuery.getAll().stream()
         .map(this::getBalanceByDriverId)
-        .sorted(Comparator.comparing(BalanceResponse::getTotal))
+        .sorted(this::getBalanceComparator)
         .collect(toList());
+  }
+
+  private int getBalanceComparator(BalanceResponse bal1, BalanceResponse bal2) {
+    final var callSign1 = bal1.getCallSign();
+    final var callSign2 = bal1.getCallSign();
+    if (callSign1 != null && callSign2 != null) {
+      return callSign1 - callSign2;
+    }
+    return 0;
   }
 
   @Override
