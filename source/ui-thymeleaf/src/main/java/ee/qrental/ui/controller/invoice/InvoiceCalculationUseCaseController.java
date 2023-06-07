@@ -2,9 +2,9 @@ package ee.qrental.ui.controller.invoice;
 
 import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
 
+import ee.qrental.common.core.utils.QWeek;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
-import ee.qrental.invoice.api.in.usecase.InvoiceCalculationDeleteUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(INVOICE_ROOT_PATH)
@@ -23,6 +25,8 @@ public class InvoiceCalculationUseCaseController {
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     addAddRequestToModel(new InvoiceCalculationAddRequest(), model);
+    model.addAttribute("years", List.of(2023));
+    model.addAttribute("weeks", QWeek.values());
 
     return "forms/addInvoiceCalculation";
   }

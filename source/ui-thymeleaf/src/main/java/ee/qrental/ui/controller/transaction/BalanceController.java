@@ -32,7 +32,7 @@ public class BalanceController {
   @GetMapping(value = "/driver/{id}")
   public String getDriverTransactionsView(@PathVariable("id") long id, final Model model) {
     TransactionFilterRequestUtils.addCleanFilterRequestToModel(id, model);
-    TransactionFilterRequestUtils.addFilterOptionsToModel(model);
+    TransactionFilterRequestUtils.addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByDriverId(id), model);
     addDriverDataToModel(id, model);
 
@@ -44,7 +44,7 @@ public class BalanceController {
       @PathVariable("id") long id,
       @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest,
       final Model model) {
-    TransactionFilterRequestUtils.addFilterOptionsToModel(model);
+    TransactionFilterRequestUtils.addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     addDriverDataToModel(id, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);

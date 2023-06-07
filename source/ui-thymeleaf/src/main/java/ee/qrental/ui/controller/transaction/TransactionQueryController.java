@@ -2,7 +2,7 @@ package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
-import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addFilterOptionsToModel;
+import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
@@ -26,7 +26,7 @@ public class TransactionQueryController {
   @GetMapping
   public String getPageWithAllTransactions(final Model model) {
     addCleanFilterRequestToModel(model);
-    addFilterOptionsToModel(model);
+    addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAll(), model);
 
     return "transactions";
@@ -35,7 +35,7 @@ public class TransactionQueryController {
   @PostMapping
   public String getPageWithFilteredTransactions(
       @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest, final Model model) {
-    addFilterOptionsToModel(model);
+    addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     return "transactions";

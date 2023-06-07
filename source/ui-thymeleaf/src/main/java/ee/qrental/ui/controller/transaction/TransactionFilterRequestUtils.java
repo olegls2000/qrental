@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 @UtilityClass
 public class TransactionFilterRequestUtils {
 
-    static void addFilterOptionsToModel(final Model model) {
+    static void addWeekOptionsToModel(final Model model) {
         model.addAttribute("years", List.of(2023));
     model.addAttribute("weeks", QWeek.values());
     }

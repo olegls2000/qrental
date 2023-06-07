@@ -1,6 +1,8 @@
 package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
+import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
+import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
 import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
 import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
@@ -22,6 +24,7 @@ public class BalanceCalculationUseCaseController {
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     addAddRequestToModel(new BalanceCalculationAddRequest(), model);
+    addWeekOptionsToModel(model);
 
     return "forms/addBalanceCalculation";
   }

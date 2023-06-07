@@ -52,8 +52,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   public void add(final InvoiceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
     final var actionDate = addRequest.getActionDate();
+      final var lastYear = addRequest.getLastYear();
+      final var lastWeek = addRequest.getLastWeek();
     final var domain = invoiceCalculationAddRequestMapper.toDomain(addRequest);
-    final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(actionDate);
+    final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(lastYear, lastWeek);
     domain.setStartDate(weekIterator.getStartPeriod());
     domain.setEndDate(weekIterator.getEndPeriod());
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
