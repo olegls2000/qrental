@@ -9,14 +9,22 @@
     <title>Invoice</title>
 </head>
 <body>
-<div> Invoice: <b th:text="${number}"></b></div>
-<p>Good day.</p>
-<p>Please see in the attachment an Invoice: </p>
-<p><b th:text="${number}"></b></p>
-<p>
-    Wish you a good time, QRenal Group Financial department.
-</p>
-<div> In case of any questions, please contact us: +372 555 55 55</div>
-<div> emal: info@qrent.ee</div>
+
+<p> Tere,</p>
+<p> Kirja manuses leiate nimetatud nädala arve.</p>
+<div> Arve: <b th:text="${invoiceNumber}"></b></div>
+<p> </p>
+<div> Lugupidamisega,</div>
+<div> Q Rental Group.</div>
+
+<div> *******</div>
+
+<p>Здравствуйте,</p>
+<p>   В приложении к письму Вы найдете счет за указанную неделю.</p>
+<div> Arve: <b th:text="${invoiceNumber}"></b></div>
+<p> </p>
+<div> С уважением,</div>
+<div> Q Rental Group.</div>
+
 </body>
 </html>

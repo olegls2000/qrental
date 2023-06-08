@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 
 import static com.lowagie.text.Font.BOLDITALIC;
+
 import static com.lowagie.text.Font.COURIER;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
@@ -265,7 +266,7 @@ public class InvoiceToPdfConverter {
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(advancePayment));
     table.addCell(
-        getTotalLabelCell("Eelmise perioodi võlgnevus (koos käibemaksuga " + vatPercentage + "%)"));
+        getTotalLabelCell("Eelmise perioodi võlgnevus "));
     table.addCell(getTotalValueCell(debt));
     table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
     table.addCell(getTotalValueCell(total));
@@ -321,7 +322,7 @@ public class InvoiceToPdfConverter {
   }
 
   private Cell getFooterCell(final String text) {
-    final var cell = new Cell(new Paragraph(text, new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)));
+    final var cell = new Cell(new Paragraph(text, new Font(COURIER, 10, Font.NORMAL)));
     cell.setBorder(NO_BORDER);
     cell.setHorizontalAlignment(HorizontalAlignment.LEFT);
 
