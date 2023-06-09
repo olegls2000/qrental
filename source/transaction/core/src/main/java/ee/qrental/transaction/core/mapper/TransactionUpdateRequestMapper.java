@@ -15,7 +15,7 @@ public class TransactionUpdateRequestMapper
     return Transaction.builder()
         .id(request.getId())
         .driverId(request.getDriverId())
-        .type(TransactionType.builder().id(request.getTransactionTypeId()).build())
+        .type(TransactionType.builder().id(getTransactionTypeId(request)).build())
         .amount(request.getAmount())
         .date(request.getDate())
         .withVat(request.getWithVat())
@@ -23,16 +23,39 @@ public class TransactionUpdateRequestMapper
         .build();
   }
 
+  private Long getTransactionTypeId(final TransactionUpdateRequest updateRequest) {
+    final var positiveTransactionTypeId = updateRequest.getPositiveTransactionTypeId();
+    if (positiveTransactionTypeId != null) {
+      return positiveTransactionTypeId;
+    }
+
+    return updateRequest.getNegativeTransactionTypeId();
+  }
+
   @Override
   public TransactionUpdateRequest toRequest(Transaction domain) {
-    return TransactionUpdateRequest.builder()
-        .id(domain.getId())
-        .transactionTypeId(domain.getType().getId())
-        .driverId(domain.getDriverId())
-        .amount(domain.getAmount())
-        .withVat(domain.getWithVat())
-        .comment(domain.getComment())
-        .date(domain.getDate())
-        .build();
+    final var updateRequest =
+        TransactionUpdateRequest.builder()
+            .id(domain.getId())
+            .driverId(domain.getDriverId())
+            .amount(domain.getAmount())
+            .withVat(domain.getWithVat())
+            .comment(domain.getComment())
+            .date(domain.getDate())
+            .build();
+    setTransactionTypeToUpdateRequest(domain, updateRequest);
+
+    return updateRequest;
+  }
+
+  private void setTransactionTypeToUpdateRequest(
+      final Transaction domain, final TransactionUpdateRequest updateRequest) {
+    final var isNegative = domain.getType().getNegative();
+    final var transactionTypeId = domain.getType().getId();
+    if (isNegative) {
+      updateRequest.setNegativeTransactionTypeId(transactionTypeId);
+    } else {
+      updateRequest.setPositiveTransactionTypeId(transactionTypeId);
+    }
   }
 }
