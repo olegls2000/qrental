@@ -53,7 +53,7 @@
                 <select id="negativeTransactionTypeId"
                         class="form-select bg-opacity-10 bg-danger text-danger"
                         onchange="discardPositiveSelect()"
-                        th:field="*{transactionTypeId}">
+                        th:field="*{negativeTransactionTypeId}">
                     <option th:value="''" th:text="Select"></option>
                     <option th:each="transactionType : ${negativeTransactionTypes}"
                             th:value="${transactionType.id}"
@@ -68,7 +68,7 @@
                 <select id="positiveTransactionTypeId"
                         class="form-select bg-opacity-10 bg-success text-success"
                         onchange="discardNegativeSelect()"
-                        th:field="*{transactionTypeId}">
+                        th:field="*{positiveTransactionTypeId}">
                     <option th:value="''" th:text="Select"></option>
                     <option th:each="transactionType : ${positiveTransactionTypes}"
                             th:value="${transactionType.id}"

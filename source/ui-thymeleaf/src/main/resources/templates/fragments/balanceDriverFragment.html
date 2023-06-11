@@ -105,13 +105,13 @@
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
-                    Add a new Transaction
                 </a>
             </th>
-            <th>Date</th>
-            <th>Week</th>
             <th>Transaction Type</th>
             <th>Amount</th>
+            <th>Week</th>
+            <th>Date</th>
+            <th>With VAT</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactions)}">
@@ -121,15 +121,11 @@
             <td>
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/transactions/update-form/driver/{id}(id=${transaction.id})}">
-                    <span class="bi-pencil-square"></span>
-                    Edit</a>
+                    <span class="bi-pencil-square"></span></a>
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/transactions/delete-form/driver/{id}(id=${transaction.id})}">
-                    <span class="bi-trash"></span>
-                    Delete</a>
+                    <span class="bi-trash"></span></a>
             </td>
-            <td th:text="${transaction.date}">???</td>
-            <td th:text="${transaction.weekNumber}">???</td>
             <td th:text="${transaction.type}">???</td>
             <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
                 th:classappend="${transaction.realAmount<0} ?
@@ -137,6 +133,9 @@
                                  : 'text-success bg-success border-success'"
                 th:text="${transaction.realAmount}">???
             </td>
+            <td th:text="${transaction.weekNumber}">???</td>
+            <td th:text="${transaction.date}">???</td>
+            <td th:text="${transaction.withVat}">???</td>
             <td th:text="${transaction.comment}">???</td>
         </tr>
     </table>
