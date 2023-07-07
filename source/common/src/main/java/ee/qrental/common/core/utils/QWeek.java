@@ -33,6 +33,12 @@ public enum QWeek {
   TWENTY_FIFTH("Jun 19-25", 25),
   TWENTY_SIXTH("Jun-Jul 26-2", 26),
   TWENTY_SEVENTH("Jul 3-9", 27),
+  TWENTY_EIGHTH("Jul 10-16", 28),
+  TWENTY_NINTH("Jul 17-23", 29),
+  THIRTIETH("Jul 24-30", 30),
+  THIRTY_FIRST("Jul-Aug 31-6", 31),
+  THIRTY_SECOND("Aug 7-13", 32),
+  THIRTY_THIRD("Aug 14-20", 33),
   ;
   private String month;
 
