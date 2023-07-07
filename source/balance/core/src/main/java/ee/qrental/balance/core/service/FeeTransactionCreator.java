@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FeeTransactionCreator {
   private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.07d);
+  private static final BigDecimal FEE_CALCULATION_THRESHOLD = BigDecimal.valueOf(-100);
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
@@ -76,8 +77,10 @@ public class FeeTransactionCreator {
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
     final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
-    if (amountFromPreviousWeek.compareTo(ZERO) < 0) {
-
+    if (amountFromPreviousWeek.compareTo(FEE_CALCULATION_THRESHOLD) < 0) {
+      System.out.printf(
+          "Debt from previous week is bigger then %s EURO (Debt: %s EUR), fee will be calculated",
+          FEE_CALCULATION_THRESHOLD, amountFromPreviousWeek);
       return amountFromPreviousWeek.multiply(WEEKLY_INTEREST).negate();
     }
 
