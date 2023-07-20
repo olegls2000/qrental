@@ -1,5 +1,7 @@
+
 plugins {
-    id("org.springframework.boot") version "3.0.5"
+    id("org.springframework.boot") version "3.1.1"
+    id ("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 dependencies {
     implementation(project(":source:ui-thymeleaf"))
@@ -22,6 +24,7 @@ dependencies {
     implementation(project(":source:email:config"))
 
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 tasks.withType<Jar>() {
