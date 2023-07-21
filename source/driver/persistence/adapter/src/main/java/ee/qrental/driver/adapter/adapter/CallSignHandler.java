@@ -35,7 +35,7 @@ public class CallSignHandler {
   public void updateHandle(final Driver domain, final DriverJakartaEntity driverSaved) {
     final var driverId = domain.getId();
     final var activeCallSignLink =
-        callSignLinkRepository.findActiveByDriverIdAndDate(driverId, LocalDate.now());
+        callSignLinkRepository.findActiveByDriverIdAndNowDate(driverId, LocalDate.now());
     final var callSignFromDomain = domain.getCallSign().getId();
     if (callSignFromDomain == null && activeCallSignLink == null) {
       System.out.printf("Call Sign for Driver with id=%d was not assigned, no changes required", driverId);

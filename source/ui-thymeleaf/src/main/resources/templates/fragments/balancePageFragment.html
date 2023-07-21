@@ -10,7 +10,8 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Phone</th>
-            <th>Total, EUR</th>
+            <th>Raw Total, EUR</th>
+            <th>Fee, EUR</th>
         </tr>
         <tr th:if="${#lists.isEmpty(balances)}">
             <td colspan="5">No balances available</td>
@@ -26,9 +27,14 @@
             <td th:text="${balance.firstName}"></td>
             <td th:text="${balance.lastName}"></td>
             <td th:text="${balance.phone}"></td>
-            <td th:text="${balance.total}"
+            <td th:text="${balance.rawTotal}"
                 class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
-                th:classappend="${balance.total<0} ?
+                th:classappend="${balance.rawTotal<0} ?
+                'text-danger bg-danger border-danger'
+                : 'text-success bg-success border-success'"></td>
+            <td th:text="${balance.fee}"
+                class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+                th:classappend="${balance.fee<0} ?
                 'text-danger bg-danger border-danger'
                 : 'text-success bg-success border-success'"></td>
         </tr>

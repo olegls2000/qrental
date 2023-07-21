@@ -48,8 +48,8 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
   }
 
   @Override
-  public CallSignLinkJakartaEntity findActiveByDriverIdAndDate(
+  public CallSignLinkJakartaEntity findActiveByDriverIdAndNowDate(
       final Long driverId, final LocalDate nowDate) {
-    return springDataRepository.findActiveByDriverIdAndDate(driverId, nowDate);
+    return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
   }
 }

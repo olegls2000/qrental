@@ -66,7 +66,7 @@ public class DriverAdapterMapper {
 
   private CallSign getActiveCallSign(final Long driverId) {
     final var callSignLinkEntityActive =
-        callSignLinkRepository.findActiveByDriverIdAndDate(driverId, LocalDate.now());
+        callSignLinkRepository.findActiveByDriverIdAndNowDate(driverId, LocalDate.now());
     if (callSignLinkEntityActive == null) {
 
       return null;

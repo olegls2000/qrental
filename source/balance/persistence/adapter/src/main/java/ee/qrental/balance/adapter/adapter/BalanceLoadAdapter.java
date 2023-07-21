@@ -7,8 +7,6 @@ import ee.qrental.balance.adapter.mapper.BalanceAdapterMapper;
 import ee.qrental.balance.adapter.repository.BalanceRepository;
 import ee.qrental.balance.api.out.BalanceLoadPort;
 import ee.qrental.balance.domain.Balance;
-
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -32,11 +30,16 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   public Balance loadByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
     if (year == 2023 && weekNumber < 1) {
-      return Balance.builder()
-              .amount(ZERO)
-              .fee(ZERO).build();
+      return Balance.builder().amount(ZERO).fee(ZERO).build();
     }
     return mapper.mapToDomain(
         repository.getByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
+  }
+
+  @Override
+  public Balance loadLatestByDriver(final Long driverId) {
+    final var latestBalance = repository.getLatestByDriverId(driverId);
+
+    return mapper.mapToDomain(latestBalance);
   }
 }

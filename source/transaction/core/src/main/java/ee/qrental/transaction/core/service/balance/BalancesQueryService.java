@@ -1,17 +1,16 @@
 package ee.qrental.transaction.core.service.balance;
 
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetDriverBalanceQuery;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
-import lombok.AllArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BalancesQueryService implements GetDriverBalanceQuery {

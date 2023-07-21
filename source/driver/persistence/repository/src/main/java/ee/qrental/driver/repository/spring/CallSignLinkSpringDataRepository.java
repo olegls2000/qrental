@@ -39,6 +39,6 @@ public interface CallSignLinkSpringDataRepository
               + "and csl.date_start <= :nowDate "
               + "and (csl.date_end is null or csl.date_end > :nowDate)",
       nativeQuery = true)
-  CallSignLinkJakartaEntity findActiveByDriverIdAndDate(
+  CallSignLinkJakartaEntity findActiveByDriverIdAndNowDate(
       @Param("driverId") final Long driverId, @Param("nowDate") final LocalDate nowDate);
 }

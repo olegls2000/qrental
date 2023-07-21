@@ -31,15 +31,21 @@ public class LinkResponseMapper implements ResponseMapper<LinkResponse, Link> {
 
   @Override
   public LinkResponse toResponse(final Link domain) {
+    if(domain == null){
+      return null;
+    }
+
     final var carId = domain.getCarId();
     final var driverId = domain.getDriverId();
     final var callSign = getCallSign(driverId);
     final var carInfo = carQuery.getObjectInfo(carId);
+    final var car = carQuery.getById(carId);
     final var driverInfo = driverQuery.getObjectInfo(driverId);
     return LinkResponse.builder()
         .id(domain.getId())
         .carId(domain.getCarId())
         .carInfo(carInfo)
+        .registrationNumber(car.getRegNumber())
         .driverId(domain.getDriverId())
         .driverInfo(driverInfo)
         .callSign(callSign)

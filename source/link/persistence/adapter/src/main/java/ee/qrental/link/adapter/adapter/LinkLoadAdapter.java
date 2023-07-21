@@ -6,6 +6,7 @@ import ee.qrental.link.adapter.mapper.LinkAdapterMapper;
 import ee.qrental.link.adapter.repository.LinkRepository;
 import ee.qrental.link.api.out.LinkLoadPort;
 import ee.qrental.link.domain.Link;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,14 @@ public class LinkLoadAdapter implements LinkLoadPort {
   }
 
   @Override
-  public Link loadById(Long id) {
+  public Link loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+
+  @Override
+  public Link loadActiveByDriverId(final Long driverId) {
+    final var nowDate = LocalDate.now();
+
+    return mapper.mapToDomain(repository.findActiveByDriverIdAndNowDate(driverId, nowDate));
   }
 }

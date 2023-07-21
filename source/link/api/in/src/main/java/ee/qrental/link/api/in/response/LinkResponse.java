@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class LinkResponse {
   private Long id;
   private String carInfo;
+  private String registrationNumber;
   private Long carId;
   private String driverInfo;
   private Long driverId;

@@ -45,6 +45,6 @@ public class CallSignLinkLoadAdapter implements CallSignLinkLoadPort {
 
   @Override
   public CallSignLink loadByDriverIdAndDate(final Long driverId, final LocalDate date) {
-    return mapper.mapToDomain(repository.findActiveByDriverIdAndDate(driverId, date));
+    return mapper.mapToDomain(repository.findActiveByDriverIdAndNowDate(driverId, date));
   }
 }

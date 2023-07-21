@@ -19,8 +19,10 @@ public class BalanceServiceConfig {
 
   @Bean
   GetBalanceQuery getBalanceQueryService(
-      final BalanceLoadPort loadPort, final BalanceResponseMapper mapper) {
-    return new BalanceQueryService(loadPort, mapper);
+      final BalanceLoadPort loadPort,
+      final BalanceResponseMapper mapper,
+      final GetTransactionQuery transactionQuery) {
+    return new BalanceQueryService(loadPort, mapper, transactionQuery);
   }
 
   @Bean

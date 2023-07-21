@@ -5,6 +5,7 @@ import ee.qrental.link.entity.jakarta.LinkJakartaEntity;
 import ee.qrental.link.repository.spring.LinkSpringDataRepository;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -30,5 +31,11 @@ public class LinkRepositoryImpl implements LinkRepository {
     @Override
     public void deleteById(final Long id) {
         springDataRepository.deleteById(id);
+    }
+
+    @Override
+    public LinkJakartaEntity findActiveByDriverIdAndNowDate(
+            final Long driverId, final LocalDate nowDate) {
+        return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
     }
 }
