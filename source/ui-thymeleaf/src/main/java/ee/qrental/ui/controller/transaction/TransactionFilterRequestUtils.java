@@ -18,6 +18,8 @@ public class TransactionFilterRequestUtils {
     static void addCleanFilterRequestToModel(final Long driverId, final Model model) {
     final var transactionFilterRequest = new YearAndWeekAndDriverFilter();
         transactionFilterRequest.setDriverId(driverId);
+        transactionFilterRequest.setWeek(QWeek.ALL);
+        transactionFilterRequest.setYear(2023);
         model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     }
 
@@ -25,5 +27,4 @@ public class TransactionFilterRequestUtils {
     final var transactionFilterRequest = new YearAndWeekAndDriverFilter();
         model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     }
-
 }

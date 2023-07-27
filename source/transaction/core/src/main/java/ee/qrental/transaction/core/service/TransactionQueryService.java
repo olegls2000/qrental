@@ -65,7 +65,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   public List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter) {
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByDriverIdAndBetweenDays(
-            filter.getDriverId(), filter.getDateStart(), filter.getDatEnd()));
+            filter.getDriverId(), filter.getDateStart(), filter.getDateEnd()));
   }
 
   @Override

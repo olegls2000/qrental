@@ -16,6 +16,7 @@ public class Transaction {
   private BigDecimal amount;
   private LocalDate date;
   private Boolean withVat;
+  private Boolean calculated;
   private String comment;
 
   public BigDecimal getRealAmount() {
@@ -24,5 +25,9 @@ public class Transaction {
 
   public Integer getWeekNumber() {
     return QTimeUtils.getWeekNumber(date);
+  }
+
+  public Boolean isRaw() {
+    return !calculated;
   }
 }

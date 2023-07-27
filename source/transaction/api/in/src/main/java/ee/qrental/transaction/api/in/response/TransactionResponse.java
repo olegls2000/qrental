@@ -18,5 +18,6 @@ public class TransactionResponse {
   private Integer weekNumber;
   private LocalDate date;
   private Boolean withVat;
+  private Boolean raw;
   private String comment;
 }

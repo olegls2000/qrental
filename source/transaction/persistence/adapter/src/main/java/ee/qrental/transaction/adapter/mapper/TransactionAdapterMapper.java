@@ -1,5 +1,6 @@
 package ee.qrental.transaction.adapter.mapper;
 
+import ee.qrental.transaction.adapter.repository.TransactionBalanceRepository;
 import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.entity.jakarta.TransactionJakartaEntity;
 import lombok.AllArgsConstructor;
@@ -8,8 +9,11 @@ import lombok.AllArgsConstructor;
 public class TransactionAdapterMapper {
 
   private final TransactionTypeAdapterMapper transactionTypeAdapterMapper;
+  private final TransactionBalanceRepository transactionBalanceRepository;
 
   public Transaction mapToDomain(final TransactionJakartaEntity entity) {
+    final var calculated =
+        transactionBalanceRepository.isTransactionCalculatedInBalance(entity.getId());
 
     return Transaction.builder()
         .id(entity.getId())
@@ -18,6 +22,7 @@ public class TransactionAdapterMapper {
         .type(transactionTypeAdapterMapper.mapToDomain(entity.getType()))
         .date(entity.getDate())
         .withVat(entity.getWithVat())
+        .calculated(calculated)
         .comment(entity.getComment())
         .build();
   }

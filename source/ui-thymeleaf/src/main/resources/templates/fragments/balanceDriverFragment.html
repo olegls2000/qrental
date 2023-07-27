@@ -1,4 +1,5 @@
 <div th:fragment="assembledBalanceDriver" class="row mt-5">
+
     <div class="col"></div>
     <div class="col-10">
         <div class="card">
@@ -26,13 +27,20 @@
                         <th class="align-middle">
                             <div class="row">
                                 <div class="col-2">
-                                    <a class="btn btn-sm btn-warning "
-                                       th:href="@{/call-sign-links/update-form/{id}(id=${driverId})}">
-                                        <span class="bi-pencil-square"></span></a>
+                                    <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+                                       th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                                        <span class="bi-pencil-square"></span>
+                                    </a>
+                                    <a th:if="${callSignLinkId == null}" class="btn btn-sm btn-success"
+                                       th:href="@{/call-sign-links/add-form}"
+                                       role="button"
+                                       aria-controls="offcanvasExample">
+                                        <span class="bi-plus-circle"></span>
+                                    </a>
                                 </div>
                                 <div class="col">
                                     <div class="align-self-start">
-                                        <span class="py-3" th:text="|Call-sign: ${driverCallSign}|">???</span>
+                                        <span class="py-3" th:text="|Call-sign: ${callSign}|">???</span>
                                     </div>
                                 </div>
                             </div>
@@ -40,9 +48,16 @@
                         <th class="align-middle">
                             <div class="row">
                                 <div class="col-2">
-                                    <a class="btn btn-sm btn-warning"
-                                       th:href="@{/links/update-form/{id}(id=${driverId})}">
-                                        <span class="bi-pencil-square"></span></a>
+                                    <a th:if="${carLinkId != null}" class="btn btn-sm btn-warning "
+                                       th:href="@{/links/update-form/{id}(id=${carLinkId})}">
+                                        <span class="bi-pencil-square"></span>
+                                    </a>
+                                    <a th:if="${carLinkId == null}" class="btn btn-sm btn-success"
+                                       th:href="@{/links/add-form}"
+                                       role="button"
+                                       aria-controls="offcanvasExample">
+                                        <span class="bi-plus-circle"></span>
+                                    </a>
                                 </div>
                                 <div class="col">
                                     <div class="align-self-start">
@@ -53,7 +68,12 @@
                         </th>
                     </tr>
                 </table>
-                <div class="row justify-content-md-center mb-2">
+                <div class="row justify-content-md-center mb-3">
+                    <div class="col-md-auto">
+                        <small th:text="|Latest Balance week: ${latestBalanceWeek}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
+                    </div>
                     <div class="col-md-auto">
                         <small th:text="|Total Raw Balance: ${rawBalanceTotal} EURO|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
@@ -63,7 +83,7 @@
                                  : 'text-success bg-success border-success'">???</small>
                     </div>
                     <div class="col-md-auto">
-                        <small th:text="|Total Fee balance: ${feeTotal} EURO|"
+                        <small th:text="|Total Fee Balance: ${feeTotal} EURO|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
                                th:classappend="${feeTotal<0} ?
@@ -83,9 +103,8 @@
             <form th:replace="fragments/transactionDriverSearchFormFragment.html :: searchForm"></form>
         </div>
     </div>
-
-    <div>
-        <div class="row justify-content-md-center mb-3">
+    <div th:if="${transactionFilterRequest.week.number != 0}">
+        <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
             <div class="col-md-auto">
                 <small th:text="|Beginning of period: ${periodStartAmount} EURO|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
@@ -134,10 +153,10 @@
         </tr>
         <tr th:each="transaction : ${transactions}">
             <td>
-                <a class="btn btn-sm btn-warning"
+                <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
                    th:href="@{/transactions/update-form/driver/{id}(id=${transaction.id})}">
                     <span class="bi-pencil-square"></span></a>
-                <a class="btn btn-sm btn-danger"
+                <a th:if="${transaction.raw == true}" class="btn btn-sm btn-danger"
                    th:href="@{/transactions/delete-form/driver/{id}(id=${transaction.id})}">
                     <span class="bi-trash"></span></a>
             </td>

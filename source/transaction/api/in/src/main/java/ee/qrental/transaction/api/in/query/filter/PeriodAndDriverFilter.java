@@ -14,6 +14,6 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class PeriodAndDriverFilter {
   private LocalDate dateStart;
-  private LocalDate datEnd;
+  private LocalDate dateEnd;
   private Long driverId;
 }

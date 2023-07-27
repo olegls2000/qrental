@@ -4,7 +4,6 @@ import static ee.qrental.common.core.utils.QStringUtils.contract;
 import static java.lang.String.format;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
-import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.domain.Transaction;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 public class TransactionResponseMapper implements ResponseMapper<TransactionResponse, Transaction> {
   private static final int COMMENT_MAX_SIZE = 26;
 
-  private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetDriverQuery driverQuery;
 
   @Override
@@ -35,6 +33,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .date(domain.getDate())
         .weekNumber(domain.getWeekNumber())
         .withVat(domain.getWithVat())
+        .raw(domain.isRaw())
         .comment(contract(domain.getComment(), COMMENT_MAX_SIZE))
         .build();
   }

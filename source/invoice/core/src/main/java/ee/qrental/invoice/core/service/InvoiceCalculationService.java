@@ -85,7 +85,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     PeriodAndDriverFilter.builder()
                         .driverId(driver.getId())
                         .dateStart(weekStartDay)
-                        .datEnd(weekEndDay)
+                        .dateEnd(weekEndDay)
                         .build();
                 final var driversTransactions =
                     transactionQuery.getAllByFilter(filter).stream()

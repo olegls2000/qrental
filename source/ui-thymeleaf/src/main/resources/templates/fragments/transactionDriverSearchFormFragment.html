@@ -22,8 +22,8 @@
         </div>
         <div class="col">
             <div class="mb-3">
-                <label class="form-label text-muted" for="weekId">Select Week</label>
-                <select id="weekId" class="form-select"
+                <label class="form-label text-muted" for="periodFilterWeekSelectId">Select Week</label>
+                <select id="periodFilterWeekSelectId" class="form-select"
                         th:field="*{week}">
                     <option th:each="week: ${weeks}"
                             th:value="${week}"
@@ -34,7 +34,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-4">
-            <input class="btn btn-sm btn-success"
+            <input id="periodFilterSubmitId" class="btn btn-sm btn-success"
                    type="submit"
                    value="Apply Filter">
             <i class="fa fa-home"></i>

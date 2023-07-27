@@ -4,6 +4,7 @@ import static ee.qrental.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.balance.api.in.query.GetBalanceQuery;
+import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.link.api.in.query.GetLinkQuery;
@@ -26,6 +27,7 @@ public class BalanceController {
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
+  private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetLinkQuery linkQuery;
   private final DriverBalanceAssembler driverBalanceAssembler;
 
@@ -43,6 +45,9 @@ public class BalanceController {
     final var transactions = transactionQuery.getAllByDriverId(id);
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
+    addCallSignDataToModel(id, model);
+    addCarDataToModel(id, model);
+    addTotalFinancialDataToModel(id, model);
 
     return "detailView/balanceDriver";
   }
@@ -56,6 +61,9 @@ public class BalanceController {
     final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
+    addCallSignDataToModel(id, model);
+    addCarDataToModel(id, model);
+    addTotalFinancialDataToModel(id, model);
     addBalancePeriodDataToModel(model, transactionFilterRequest, transactions);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
 
@@ -66,29 +74,23 @@ public class BalanceController {
       final Model model,
       final YearAndWeekAndDriverFilter transactionFilterRequest,
       final List<TransactionResponse> periodTransactions) {
-
     final var driverId = transactionFilterRequest.getDriverId();
     final var year = transactionFilterRequest.getYear();
     final var weekNumber = transactionFilterRequest.getWeek().getNumber();
     final var previousWeek = weekNumber - 1;
 
-    final var periodStartBalance =
-        balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
     final var periodStartBalanceAmount =
-        periodStartBalance != null ? periodStartBalance.getAmount() : ZERO;
+        balanceQuery.getRawBalanceTotalByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
     model.addAttribute("periodStartAmount", periodStartBalanceAmount);
 
-    final var periodEndBalance =
-        balanceQuery.getByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
-    final var periodEndBalanceAmount =
-        periodEndBalance != null ? periodEndBalance.getAmount() : ZERO;
-    model.addAttribute("periodEndAmount", periodEndBalanceAmount);
-
-    final var periodTotalAmount = periodTransactions.stream()
+    final var periodTotalAmount =
+        periodTransactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-
     model.addAttribute("periodTotalAmount", periodTotalAmount);
+
+    final var periodEndBalanceAmount = periodStartBalanceAmount.add(periodTotalAmount);
+    model.addAttribute("periodEndAmount", periodEndBalanceAmount);
   }
 
   private void addTransactionDataToModel(
@@ -99,24 +101,47 @@ public class BalanceController {
 
   private void addDriverDataToModel(final Long driverId, final Model model) {
     final var driver = driverQuery.getById(driverId);
-    final var carRegistrationNumber = getRegistrationNumber(driverId);
     model.addAttribute("driverId", driver.getId());
     model.addAttribute("driverFirstName", driver.getFirstName());
     model.addAttribute("driverLastName", driver.getLastName());
-    model.addAttribute("driverCallSign", driver.getCallSign());
     model.addAttribute("driverPhone", driver.getPhone());
     model.addAttribute("driverDeposit", getDeposit(driver));
-    model.addAttribute("carRegistrationNumber", carRegistrationNumber);
-    model.addAttribute("rawBalanceTotal", balanceQuery.getRawBalanceTotalByDriver(driverId));
-    model.addAttribute("feeTotal", balanceQuery.getFeeByDriver(driverId));
   }
 
-  private String getRegistrationNumber(final Long driverId) {
+  private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
+    model.addAttribute("rawBalanceTotal", balanceQuery.getRawBalanceTotalByDriver(driverId));
+    model.addAttribute("feeTotal", balanceQuery.getFeeByDriver(driverId));
+    final var latestBalance = balanceQuery.getLatestBalanceByDriver(driverId);
+    if (latestBalance == null) {
+      model.addAttribute("latestBalanceWeek", "was not calculated");
+
+      return;
+    }
+    model.addAttribute("latestBalanceWeek", latestBalance.getWeekNumber());
+  }
+
+  private void addCallSignDataToModel(final Long driverId, final Model model) {
+    final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
+    if (callSignLink == null) {
+      model.addAttribute("callSign", "not assigned");
+      model.addAttribute("callSignLinkId", null);
+
+      return;
+    }
+    model.addAttribute("callSign", callSignLink.getCallSign());
+    model.addAttribute("callSignLinkId", callSignLink.getId());
+  }
+
+  private void addCarDataToModel(final Long driverId, final Model model) {
     final var link = linkQuery.getActiveLinkByDriverId(driverId);
     if (link == null) {
-      return "no car in renting";
+      model.addAttribute("carRegistrationNumber", "no car in renting");
+      model.addAttribute("carLinkId", null);
+
+      return;
     }
-    return link.getRegistrationNumber();
+    model.addAttribute("carRegistrationNumber", link.getRegistrationNumber());
+    model.addAttribute("carLinkId", link.getId());
   }
 
   private BigDecimal getDeposit(final DriverResponse driver) {
