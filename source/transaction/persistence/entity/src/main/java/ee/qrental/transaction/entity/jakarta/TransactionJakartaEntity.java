@@ -2,6 +2,7 @@ package ee.qrental.transaction.entity.jakarta;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import ee.qrental.transaction.entity.jakarta.type.TransactionTypeJakartaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -88,17 +88,6 @@ include("source:transaction:persistence:repository")
 include("source:transaction:persistence:flyway")
 include("source:transaction:config")
 
-//Balance domain:
-include("source:balance:api:in")
-include("source:balance:api:out")
-include("source:balance:domain")
-include("source:balance:core")
-include("source:balance:persistence:adapter")
-include("source:balance:persistence:entity")
-include("source:balance:persistence:repository")
-include("source:balance:persistence:flyway")
-include("source:balance:config")
-
 //Email domain:
 include("source:email:api:in")
 include("source:email:core")

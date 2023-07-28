@@ -3,6 +3,8 @@ package ee.qrental.transaction.domain;
 import ee.qrental.common.core.utils.QTimeUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import ee.qrental.transaction.domain.type.TransactionType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

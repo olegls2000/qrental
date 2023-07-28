@@ -1,7 +1,7 @@
 package ee.qrental.ui.controller.transaction;
 
-import ee.qrental.balance.api.in.request.BalanceCalculationAddRequest;
-import ee.qrental.balance.api.in.usecase.BalanceCalculationAddUseCase;
+import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
+import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;
 import ee.qrental.common.core.utils.QWeek;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

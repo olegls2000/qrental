@@ -2,9 +2,9 @@ package ee.qrental.ui.controller.transaction.assembler;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.balance.api.in.query.GetBalanceQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.ui.controller.transaction.model.DriversBalanceModel;
 import java.util.List;
 import lombok.AllArgsConstructor;

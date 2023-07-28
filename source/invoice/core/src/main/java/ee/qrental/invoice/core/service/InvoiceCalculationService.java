@@ -5,7 +5,6 @@ import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.balance.api.in.query.GetBalanceQuery;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.request.EmailSendRequest;
@@ -23,6 +22,7 @@ import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceCalculation;
 import ee.qrental.invoice.domain.InvoiceCalculationResult;
 import ee.qrental.invoice.domain.InvoiceItem;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;

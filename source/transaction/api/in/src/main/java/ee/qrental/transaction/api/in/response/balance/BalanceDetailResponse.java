@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class BalanceDetailResponse {
-
   private Long total;
   private String driverInfo;
   private List<TransactionResponse> transactions;

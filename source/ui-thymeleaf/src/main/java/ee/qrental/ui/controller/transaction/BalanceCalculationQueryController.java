@@ -2,7 +2,8 @@ package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.*;
 
-import ee.qrental.balance.api.in.query.GetBalanceCalculationQuery;
+
+import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

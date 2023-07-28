@@ -3,7 +3,6 @@ package ee.qrental.transaction.adapter.adapter;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.adapter.mapper.TransactionAdapterMapper;
-import ee.qrental.transaction.adapter.repository.TransactionBalanceRepository;
 import ee.qrental.transaction.adapter.repository.TransactionRepository;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
@@ -20,7 +19,6 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
 
   @Override
   public Transaction loadById(final Long id) {
-
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
 

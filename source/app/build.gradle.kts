@@ -19,8 +19,6 @@ dependencies {
     implementation(project(":source:constant:persistence:flyway"))
     implementation(project(":source:transaction:config"))
     implementation(project(":source:transaction:persistence:flyway"))
-    implementation(project(":source:balance:config"))
-    implementation(project(":source:balance:persistence:flyway"))
     implementation(project(":source:email:config"))
 
     implementation("org.springframework.boot:spring-boot-starter")

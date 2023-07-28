@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
-import ee.qrental.transaction.domain.TransactionType;
+import ee.qrental.transaction.domain.type.TransactionType;
 
 public class TransactionTypeResponseMapper
     implements ResponseMapper<TransactionTypeResponse, TransactionType> {

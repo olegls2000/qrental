@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TransactionMapperConfig {
+
   @Bean
   TransactionAddRequestMapper getTransactionAddRequestMapper() {
     return new TransactionAddRequestMapper();

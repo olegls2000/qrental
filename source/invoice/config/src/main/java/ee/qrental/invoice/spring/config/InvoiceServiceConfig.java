@@ -1,6 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
-import ee.qrental.balance.api.in.query.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;

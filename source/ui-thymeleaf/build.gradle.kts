@@ -2,7 +2,6 @@ dependencies {
     implementation(project(":source:car:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:transaction:api:in"))
-    implementation(project(":source:balance:api:in"))
     implementation(project(":source:invoice:api:in"))
     implementation(project(":source:firm:api:in"))
     implementation(project(":source:link:api:in"))

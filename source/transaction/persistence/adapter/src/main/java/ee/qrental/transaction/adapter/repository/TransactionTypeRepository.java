@@ -1,6 +1,6 @@
 package ee.qrental.transaction.adapter.repository;
 
-import ee.qrental.transaction.entity.jakarta.TransactionTypeJakartaEntity;
+import ee.qrental.transaction.entity.jakarta.type.TransactionTypeJakartaEntity;
 import java.util.List;
 
 public interface TransactionTypeRepository {

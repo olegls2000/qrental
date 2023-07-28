@@ -4,7 +4,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeUpdateRequest;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;

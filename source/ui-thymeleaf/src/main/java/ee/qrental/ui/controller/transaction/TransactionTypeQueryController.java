@@ -2,7 +2,7 @@ package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_TYPE_ROOT_PATH;
 
-import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

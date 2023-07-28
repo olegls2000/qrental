@@ -4,7 +4,7 @@ import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.TransactionDeleteRequest;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;

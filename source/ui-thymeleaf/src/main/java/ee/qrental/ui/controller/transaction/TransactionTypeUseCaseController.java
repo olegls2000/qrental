@@ -2,7 +2,7 @@ package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_TYPE_ROOT_PATH;
 
-import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeAddRequest;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeDeleteRequest;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeUpdateRequest;

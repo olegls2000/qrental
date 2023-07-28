@@ -3,7 +3,7 @@ package ee.qrental.ui.controller.transaction;
 import static ee.qrental.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 import static java.math.BigDecimal.ZERO;
 
-import ee.qrental.balance.api.in.query.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;

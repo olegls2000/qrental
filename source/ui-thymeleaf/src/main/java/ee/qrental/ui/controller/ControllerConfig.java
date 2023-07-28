@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller;
 
-import ee.qrental.balance.api.in.query.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import org.springframework.context.annotation.Bean;

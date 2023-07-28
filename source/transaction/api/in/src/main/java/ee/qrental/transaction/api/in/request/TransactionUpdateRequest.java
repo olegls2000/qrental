@@ -13,7 +13,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class TransactionUpdateRequest extends AbstractUpdateRequest {
-
     private Long positiveTransactionTypeId;
     private Long negativeTransactionTypeId;
     private Long driverId;

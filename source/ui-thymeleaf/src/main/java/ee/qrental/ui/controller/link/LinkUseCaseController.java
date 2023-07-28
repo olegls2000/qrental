@@ -10,7 +10,7 @@ import ee.qrental.link.api.in.request.LinkUpdateRequest;
 import ee.qrental.link.api.in.usecase.LinkAddUseCase;
 import ee.qrental.link.api.in.usecase.LinkDeleteUseCase;
 import ee.qrental.link.api.in.usecase.LinkUpdateUseCase;
-import ee.qrental.transaction.api.in.query.GetDriverBalanceQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +26,7 @@ public class LinkUseCaseController {
   private final LinkDeleteUseCase deleteUseCase;
   private final GetLinkQuery linkQuery;
   private final GetCarQuery carQuery;
-  private final GetDriverBalanceQuery balanceQuery;
+  private final GetBalanceQuery balanceQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
@@ -81,7 +81,7 @@ public class LinkUseCaseController {
   }
 
   private void addDriverBalanceesListToModel(final Model model) {
-    final var drivers = balanceQuery.getAll();
+    final var drivers = balanceQuery.getAllBalanceTotalsWithDriver();
     model.addAttribute("drivers", drivers);
   }
 }

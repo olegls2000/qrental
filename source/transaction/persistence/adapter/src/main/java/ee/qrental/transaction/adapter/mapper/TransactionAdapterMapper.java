@@ -1,6 +1,7 @@
 package ee.qrental.transaction.adapter.mapper;
 
-import ee.qrental.transaction.adapter.repository.TransactionBalanceRepository;
+import ee.qrental.transaction.adapter.mapper.type.TransactionTypeAdapterMapper;
+import ee.qrental.transaction.adapter.repository.balance.BalanceTransactionRepository;
 import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.entity.jakarta.TransactionJakartaEntity;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.AllArgsConstructor;
 public class TransactionAdapterMapper {
 
   private final TransactionTypeAdapterMapper transactionTypeAdapterMapper;
-  private final TransactionBalanceRepository transactionBalanceRepository;
+  private final BalanceTransactionRepository transactionBalanceRepository;
 
   public Transaction mapToDomain(final TransactionJakartaEntity entity) {
     final var calculated =

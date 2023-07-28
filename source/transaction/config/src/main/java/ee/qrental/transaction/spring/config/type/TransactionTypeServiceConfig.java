@@ -1,6 +1,6 @@
 package ee.qrental.transaction.spring.config.type;
 
-import ee.qrental.transaction.api.in.query.GetTransactionTypeQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.out.type.TransactionTypeAddPort;
 import ee.qrental.transaction.api.out.type.TransactionTypeDeletePort;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
