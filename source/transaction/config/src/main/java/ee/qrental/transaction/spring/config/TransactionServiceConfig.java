@@ -13,6 +13,8 @@ import ee.qrental.transaction.core.service.TransactionUseCaseService;
 import ee.qrental.transaction.core.service.strategy.*;
 import java.util.Arrays;
 import java.util.List;
+
+import ee.qrental.transaction.core.validator.TransactionBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,10 +46,10 @@ public class TransactionServiceConfig {
       final TransactionAddPort addPort,
       final TransactionUpdatePort updatePort,
       final TransactionDeletePort deletePort,
-      final TransactionLoadPort loadPort,
       final TransactionAddRequestMapper addRequestMapper,
-      final TransactionUpdateRequestMapper updateRequestMapper) {
+      final TransactionUpdateRequestMapper updateRequestMapper,
+      final TransactionBusinessRuleValidator businessRuleValidator) {
     return new TransactionUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort, updatePort, deletePort, addRequestMapper, updateRequestMapper, businessRuleValidator);
   }
 }

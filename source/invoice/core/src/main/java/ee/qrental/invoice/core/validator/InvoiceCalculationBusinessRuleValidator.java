@@ -35,7 +35,7 @@ public class InvoiceCalculationBusinessRuleValidator implements QValidator<Invoi
   }
 
   @Override
-  public ViolationsCollector validateDelete(final InvoiceCalculation domain) {
+  public ViolationsCollector validateDelete(final Long id) {
     return new ViolationsCollector();
   }
 

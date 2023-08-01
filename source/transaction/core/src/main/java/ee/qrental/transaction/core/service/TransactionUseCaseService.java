@@ -12,6 +12,7 @@ import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.TransactionUpdatePort;
 import ee.qrental.transaction.core.mapper.TransactionAddRequestMapper;
 import ee.qrental.transaction.core.mapper.TransactionUpdateRequestMapper;
+import ee.qrental.transaction.core.validator.TransactionBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -21,29 +22,44 @@ public class TransactionUseCaseService
   private final TransactionAddPort addPort;
   private final TransactionUpdatePort updatePort;
   private final TransactionDeletePort deletePort;
-  private final TransactionLoadPort loadPort;
   private final TransactionAddRequestMapper addRequestMapper;
   private final TransactionUpdateRequestMapper updateRequestMapper;
+  private final TransactionBusinessRuleValidator businessRuleValidator;
 
   @Override
   public Long add(final TransactionAddRequest request) {
+    final var domain = addRequestMapper.toDomain(request);
+    final var violationsCollector = businessRuleValidator.validateAdd(domain);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return null;
+    }
+
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 
   @Override
   public void update(final TransactionUpdateRequest request) {
-    checkExistence(request.getId());
-    updatePort.update(updateRequestMapper.toDomain(request));
-  }
+    final var domain = updateRequestMapper.toDomain(request);
+    final var violationsCollector = businessRuleValidator.validateUpdate(domain);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
 
-  private void checkExistence(final Long id) {
-    if (loadPort.loadById(id) == null) {
-      throw new RuntimeException("Update of Transaction failed. No Transaction with id = " + id);
+      return;
     }
+    updatePort.update(updateRequestMapper.toDomain(request));
   }
 
   @Override
   public void delete(final TransactionDeleteRequest request) {
-    deletePort.delete(request.getId());
+    final var transactionId = request.getId();
+    final var violationsCollector = businessRuleValidator.validateDelete(transactionId);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return;
+    }
+    deletePort.delete(transactionId);
   }
 }

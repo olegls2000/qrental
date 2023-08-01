@@ -3,6 +3,7 @@ ee.qrental.transaction.spring.config.TransactionAdapterConfig,\
 ee.qrental.transaction.spring.config.TransactionMapperConfig,\
 ee.qrental.transaction.spring.config.TransactionServiceConfig,\
 ee.qrental.transaction.spring.config.TransactionRepositoryConfig,\
+ee.qrental.transaction.spring.config.TransactionValidatorConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeAdapterConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeMapperConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeServiceConfig,\

@@ -5,6 +5,7 @@ import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceAmountWithDriverResponse;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface GetBalanceQuery {
@@ -22,6 +23,7 @@ public interface GetBalanceQuery {
   BigDecimal getFeeByDriver(final Long driverId);
 
   BalanceResponse getLatestBalanceByDriver(final Long driverId);
+  LocalDate getLatestCalculatedDate();
 
   List<BalanceAmountWithDriverResponse> getAllBalanceTotalsWithDriver();
 }

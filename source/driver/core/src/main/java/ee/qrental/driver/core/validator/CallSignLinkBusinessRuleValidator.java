@@ -32,7 +32,7 @@ public class CallSignLinkBusinessRuleValidator implements QValidator<CallSignLin
   }
 
   @Override
-  public ViolationsCollector validateDelete(CallSignLink domain) {
+  public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
     return violationsCollector;
   }

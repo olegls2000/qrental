@@ -149,6 +149,11 @@ public class BalanceQueryService implements GetBalanceQuery {
     return balanceResponseMapper.toResponse(latestBalance);
   }
 
+  @Override
+  public LocalDate getLatestCalculatedDate() {
+    return balanceLoadPort.loadLatestCalculatedDate();
+  }
+
   private BigDecimal getSumOfTransactionByFilter(final PeriodAndDriverFilter filter){
     final var rawTransactions =  transactionLoadPort.loadAllByDriverIdAndBetweenDays(
             filter.getDriverId(), filter.getDateStart(), filter.getDateEnd());;

@@ -34,9 +34,9 @@ public class CallSignBusinessRuleValidator implements QValidator<CallSign> {
   }
 
   @Override
-  public ViolationsCollector validateDelete(CallSign domain) {
+  public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
-    checkReferences(domain, violationsCollector);
+    checkReferences(id, violationsCollector);
 
     return violationsCollector;
   }
@@ -67,16 +67,16 @@ public class CallSignBusinessRuleValidator implements QValidator<CallSign> {
   }
 
   private void checkReferences(
-      final CallSign domain, final ViolationsCollector violationCollector) {
-    final var callSignId = domain.getId();
-    final var callSignLinks = callSignLinkLoadPort.loadByCallSignId(callSignId);
+      final Long id, final ViolationsCollector violationCollector) {
+
+    final var callSignLinks = callSignLinkLoadPort.loadByCallSignId(id);
     if (callSignLinks.isEmpty()) {
       return;
     }
     violationCollector.collect(
         format(
-            "Call Sign: %d can not be deleted, because it uses in %d Call Sign Links",
-            domain.getCallSign(), callSignLinks.size()));
+            "Call Sign with id: %d can not be deleted, because it uses in %d Call Sign Links",
+            id, callSignLinks.size()));
   }
 
   private void checkExistence(final Long id, final ViolationsCollector violationCollector) {

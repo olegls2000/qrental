@@ -3,10 +3,13 @@ package ee.qrental.transaction.adapter.adapter.balance;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.transaction.adapter.mapper.balance.BalanceAdapterMapper;
 import ee.qrental.transaction.adapter.repository.balance.BalanceRepository;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.balance.Balance;
+
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -41,5 +44,15 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
     final var latestBalance = repository.getLatestByDriverId(driverId);
 
     return mapper.mapToDomain(latestBalance);
+  }
+
+  @Override
+  public LocalDate loadLatestCalculatedDate(){
+    final var latestBalance = repository.getLatest();
+    final var latestBalanceYear = latestBalance.getYear();
+    final var latestBalanceWeekNumber = latestBalance.getWeekNumber();
+    final var latestBalanceSunday = QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
+
+    return  latestBalanceSunday;
   }
 }

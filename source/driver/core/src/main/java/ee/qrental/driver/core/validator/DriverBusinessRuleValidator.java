@@ -26,7 +26,7 @@ public class DriverBusinessRuleValidator implements QValidator<Driver> {
   }
 
   @Override
-  public ViolationsCollector validateDelete(Driver domain) {
+  public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
 
     return violationsCollector;

@@ -2,12 +2,17 @@
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
     <ul th:replace="fragments/transactionTabFragment :: transactionTabs('transactions')"></ul>
     <h2 class="py-3">Transactions</h2>
-
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Latest Balance Week: ${latestCalculatedWeek} (${latestCalculatedDate})|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-primary bg-primary border-primary">???</small>
+        </div>
+    </div>
     <div class="row justify-content-md-center mb-3">
         <div class="col-md-auto">
             <form th:replace="fragments/transactionSearchFormFragment.html :: searchForm"></form>
         </div>
     </div>
     <table th:replace="fragments/transactionTableFragment.html :: transactionTable"></table>
-
 </div>

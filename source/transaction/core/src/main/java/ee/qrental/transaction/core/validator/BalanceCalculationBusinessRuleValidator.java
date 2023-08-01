@@ -35,7 +35,7 @@ public class BalanceCalculationBusinessRuleValidator implements QValidator<Balan
   }
 
   @Override
-  public ViolationsCollector validateDelete(final BalanceCalculation domain) {
+  public ViolationsCollector validateDelete(final Long id) {
     return new ViolationsCollector();
   }
 

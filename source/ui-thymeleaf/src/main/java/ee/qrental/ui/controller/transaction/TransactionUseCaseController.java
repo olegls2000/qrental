@@ -38,8 +38,15 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping(value = "/add")
-  public String addTransaction(@ModelAttribute final TransactionAddRequest addRequest) {
+  public String addTransaction(
+          @ModelAttribute final TransactionAddRequest addRequest,
+         final Model model) {
     addUseCase.add(addRequest);
+    if (addRequest.hasViolations()) {
+      addAddRequestToModel(addRequest, model);
+
+      return "forms/addTransaction";
+    }
 
     return "redirect:" + TRANSACTION_ROOT_PATH;
   }
@@ -136,5 +143,9 @@ public class TransactionUseCaseController {
     deleteUseCase.delete(transactionDeleteCommand);
 
     return "redirect:/balances/driver/" + driverId;
+  }
+
+  private void addAddRequestToModel(final TransactionAddRequest addRequest, final Model model) {
+    model.addAttribute("addRequest", addRequest);
   }
 }

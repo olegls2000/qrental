@@ -15,4 +15,5 @@ public interface BalanceRepository {
       final Long driverId, final Integer year, final Integer weekNumber);
 
   BalanceJakartaEntity getLatestByDriverId(final Long driverId);
+  BalanceJakartaEntity getLatest();
 }
