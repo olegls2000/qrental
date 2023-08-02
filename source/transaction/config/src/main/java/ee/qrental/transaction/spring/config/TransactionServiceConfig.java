@@ -24,7 +24,7 @@ public class TransactionServiceConfig {
       final TransactionLoadPort transactionLoadPort) {
     return Arrays.asList(
         new TransactionLoadStrategyByDriverAndYear(transactionLoadPort),
-        new TransactionLoadStrategyByDriverAndYearAndWeek(transactionLoadPort),
+        new TransactionLoadStrategyByDriverAndYearAndWeekAndFee(transactionLoadPort),
         new TransactionLoadStrategyByYear(transactionLoadPort),
         new TransactionLoadStrategyByYearAndWeek(transactionLoadPort));
   }

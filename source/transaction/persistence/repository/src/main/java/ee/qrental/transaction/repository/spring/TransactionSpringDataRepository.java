@@ -25,4 +25,32 @@ public interface TransactionSpringDataRepository
               + "where clr.calculation_id = :calculationId)",
       nativeQuery = true)
   List<TransactionJakartaEntity> findAllByCalculationId(@Param("calculationId") Long calculationId);
+
+  @Query(
+          value =
+                  "SELECT * FROM transaction tx "
+                          + "WHERE tx.transaction_type_id  in ("
+                          + "select txt.id from transaction_type txt "
+                          + "where txt.name <> 'fee debt') "
+                          + "and tx.driver_id = :driverId "
+                          + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+          nativeQuery = true)
+  List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
+          @Param("dateStart") LocalDate dateStart,
+          @Param("dateEnd") LocalDate dateEnd,
+          @Param("driverId") Long driverId);
+
+  @Query(
+          value =
+                  "SELECT * FROM transaction tx "
+                          + "WHERE tx.transaction_type_id  in ("
+                          + "select txt.id from transaction_type txt "
+                          + "where txt.name = 'fee debt') "
+                          + "and tx.driver_id = :driverId "
+                          + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+          nativeQuery = true)
+  List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(
+          @Param("dateStart") LocalDate dateStart,
+          @Param("dateEnd") LocalDate dateEnd,
+          @Param("driverId") Long driverId);
 }

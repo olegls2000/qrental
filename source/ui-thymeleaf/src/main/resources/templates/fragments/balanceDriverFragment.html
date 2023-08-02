@@ -72,7 +72,7 @@
                     <div class="col-md-auto">
                         <small th:text="|Latest Balance week: ${latestBalanceWeek}|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
+                               border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
                     </div>
                     <div class="col-md-auto">
                         <small th:text="|Total Raw Balance: ${rawBalanceTotal} EURO|"
@@ -106,26 +106,62 @@
     <div th:if="${transactionFilterRequest.week.number != 0}">
         <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
             <div class="col-md-auto">
-                <small th:text="|Beginning of period: ${periodStartAmount} EURO|"
+                <small th:text="|Period Balance data, EURO:|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
+            </div>
+            <div class="col-md-auto">
+                <small th:text="|Beginning of period: ${balancePeriodStartAmount}|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${periodStartAmount<0} ?
+                       th:classappend="${balancePeriodStartAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
             </div>
             <div class="col-md-auto">
-                <small th:text="|Period total: ${periodTotalAmount} EURO|"
+                <small th:text="|Period total: ${balancePeriodTotalAmount}|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${periodTotalAmount<0} ?
+                       th:classappend="${balancePeriodTotalAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
             </div>
             <div class="col-md-auto">
-                <small th:text="|End of period: ${periodEndAmount} EURO|"
+                <small th:text="|End of period: ${balancePeriodEndAmount} |"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${periodEndAmount<0} ?
+                       th:classappend="${balancePeriodEndAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+            </div>
+        </div>
+        <div id="periodFeeDataId" class="row justify-content-md-center mb-3">
+            <div class="col-md-auto">
+                <small th:text="|Period Fee data, EURO:|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
+            </div>
+            <div class="col-md-auto">
+                <small th:text="|Beginning of period: ${feePeriodStartAmount}|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                       th:classappend="${feePeriodStartAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+            </div>
+            <div class="col-md-auto">
+                <small th:text="|Period total: ${feePeriodTotalAmount}|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                       th:classappend="${feePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+            </div>
+            <div class="col-md-auto">
+                <small th:text="|End of period: ${feePeriodEndAmount}|"
+                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                       th:classappend="${feePeriodEndAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
             </div>

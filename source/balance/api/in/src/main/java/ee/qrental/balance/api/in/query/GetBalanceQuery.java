@@ -19,4 +19,8 @@ public interface GetBalanceQuery {
   BigDecimal getFeeByDriver(final Long driverId);
 
   BalanceResponse getLatestBalanceByDriver(final Long driverId);
+  BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
+          final Long driverId,
+          final Integer year,
+          final Integer weekNumber);
 }

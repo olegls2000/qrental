@@ -16,4 +16,17 @@ public interface BalanceSpringDataRepository extends JpaRepository<BalanceJakart
               + "order by year desc, week_number desc limit 1",
       nativeQuery = true)
   BalanceJakartaEntity findLatestByDriverId(@Param("driverId") final Long driverId);
+
+  @Query(
+          value =
+                  "select bl.* from balance bl "
+                         + "where bl.driver_id = :driverId " 
+                         + "and bl.year <= :year "
+                         + "and week_number <= :weekNumber "
+                          + "order by year desc, week_number desc limit 1",
+          nativeQuery = true)
+    BalanceJakartaEntity findLatestByDriverIdAndYearAndWeekNumber(
+          @Param("driverId") final Long driverId,
+          @Param("year") final Integer year,
+          @Param("weekNumber") final Integer weekNumber);
 }

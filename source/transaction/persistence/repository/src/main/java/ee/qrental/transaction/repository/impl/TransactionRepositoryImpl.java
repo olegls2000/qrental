@@ -40,6 +40,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
+  public List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(LocalDate dateStart, LocalDate dateEnd, Long driverId) {
+    return springDataRepository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
+  }
+
+  @Override
   public List<TransactionJakartaEntity> findAllByCalculationId(final Long calculationId) {
     return springDataRepository.findAllByCalculationId(calculationId);
   }
@@ -52,5 +57,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   @Override
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);
+  }
+
+  @Override
+  public List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(LocalDate dateStart, LocalDate dateEnd, Long driverId) {
+    return springDataRepository.findAllFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
   }
 }
