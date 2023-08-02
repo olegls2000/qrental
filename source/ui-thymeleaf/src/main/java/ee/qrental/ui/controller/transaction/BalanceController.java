@@ -9,7 +9,8 @@ import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.link.api.in.query.GetLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.FeeOption;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
@@ -55,24 +56,35 @@ public class BalanceController {
   @PostMapping(value = "/driver/{id}")
   public String getFilteredDriverTransactionsView(
       @PathVariable("id") long id,
-      @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest,
+      @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
       final Model model) {
+    setUpFeeParameter(transactionFilterRequest);
     TransactionFilterRequestUtils.addWeekOptionsToModel(model);
     final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
+
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
     addCallSignDataToModel(id, model);
     addCarDataToModel(id, model);
     addTotalFinancialDataToModel(id, model);
-    addBalancePeriodDataToModel(model, transactionFilterRequest, transactions);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
+    if (transactionFilterRequest.getWeek() != QWeek.ALL){
+      addBalancePeriodDataToModel(model, transactionFilterRequest, transactions);
+      addFeePeriodDataToModel(model, transactionFilterRequest);
+    }
 
     return "detailView/balanceDriver";
   }
 
+  private void setUpFeeParameter(final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest) {
+    if (transactionFilterRequest.getWeek() != QWeek.ALL) {
+      transactionFilterRequest.setFeeOption(FeeOption.WITHOUT_FEE);
+    }
+  }
+
   private void addBalancePeriodDataToModel(
       final Model model,
-      final YearAndWeekAndDriverFilter transactionFilterRequest,
+      final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
       final List<TransactionResponse> periodTransactions) {
     final var driverId = transactionFilterRequest.getDriverId();
     final var year = transactionFilterRequest.getYear();
@@ -81,16 +93,40 @@ public class BalanceController {
 
     final var periodStartBalanceAmount =
         balanceQuery.getRawBalanceTotalByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
-    model.addAttribute("periodStartAmount", periodStartBalanceAmount);
+    model.addAttribute("balancePeriodStartAmount", periodStartBalanceAmount);
 
     final var periodTotalAmount =
         periodTransactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-    model.addAttribute("periodTotalAmount", periodTotalAmount);
+    model.addAttribute("balancePeriodTotalAmount", periodTotalAmount);
 
     final var periodEndBalanceAmount = periodStartBalanceAmount.add(periodTotalAmount);
-    model.addAttribute("periodEndAmount", periodEndBalanceAmount);
+    model.addAttribute("balancePeriodEndAmount", periodEndBalanceAmount);
+  }
+
+  private void addFeePeriodDataToModel(
+      final Model model,
+      final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest) {
+    final var driverId = transactionFilterRequest.getDriverId();
+    final var year = transactionFilterRequest.getYear();
+    final var weekNumber = transactionFilterRequest.getWeek().getNumber();
+    final var previousWeek = weekNumber - 1;
+    final var latestBalance =
+        balanceQuery.getLatestBalanceByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
+    final var feeFromLatestBalance = latestBalance.getFee().negate();
+    model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
+
+    transactionFilterRequest.setFeeOption(FeeOption.ONLY_FEE);
+    final var periodFeeTransactions = transactionQuery.getAllByFilter(transactionFilterRequest);
+    final var periodFeeTotalAmount =
+            periodFeeTransactions.stream()
+            .map(TransactionResponse::getRealAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    model.addAttribute("feePeriodTotalAmount", periodFeeTotalAmount);
+
+    final var periodFeeEndBalanceAmount = feeFromLatestBalance.add(periodFeeTotalAmount);
+    model.addAttribute("feePeriodEndAmount", periodFeeEndBalanceAmount);
   }
 
   private void addTransactionDataToModel(

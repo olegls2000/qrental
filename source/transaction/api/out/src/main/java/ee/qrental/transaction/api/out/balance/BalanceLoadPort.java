@@ -13,4 +13,6 @@ public interface BalanceLoadPort extends LoadPort<Balance> {
   Balance loadLatestByDriver(final Long driverId);
 
   LocalDate loadLatestCalculatedDate();
+
+  Balance loadLatestByIdAndYearAndWeekNumber(final Long driverId, final Integer year, final Integer weekNumber);
 }

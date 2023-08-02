@@ -16,6 +16,9 @@ public interface TransactionRepository {
   List<TransactionJakartaEntity> findAllByDateBetweenAndDriverId(
       final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
 
+  List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
+          final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
+
   List<TransactionJakartaEntity> findAllByCalculationId(final Long calculationId);
 
   TransactionJakartaEntity getReferenceById(Long id);
@@ -23,4 +26,9 @@ public interface TransactionRepository {
   TransactionJakartaEntity save(final TransactionJakartaEntity entity);
 
   void deleteById(final Long id);
+
+  List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(
+          final LocalDate dateStart,
+          final LocalDate dateEnd,
+          final Long driverId);
 }

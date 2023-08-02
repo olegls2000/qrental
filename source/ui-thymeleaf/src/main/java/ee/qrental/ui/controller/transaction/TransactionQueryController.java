@@ -8,6 +8,7 @@ import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,8 @@ public class TransactionQueryController {
 
   @PostMapping
   public String getPageWithFilteredTransactions(
-      @ModelAttribute final YearAndWeekAndDriverFilter transactionFilterRequest, final Model model) {
+          @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
+          final Model model) {
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);

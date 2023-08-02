@@ -34,7 +34,7 @@
                 : 'text-success bg-success border-success'"></td>
             <td th:text="${balance.fee}"
                 class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
-                th:classappend="${balance.fee<0} ?
+                th:classappend="${balance.fee>0} ?
                 'text-danger bg-danger border-danger'
                 : 'text-success bg-success border-success'"></td>
         </tr>

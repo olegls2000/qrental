@@ -12,8 +12,9 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString
-public class YearAndWeekAndDriverFilter {
+public class YearAndWeekAndDriverAndFeeFilter {
     private Integer year;
     private QWeek week;
     private Long driverId;
+    private FeeOption feeOption = FeeOption.WITH_FEE;
 }

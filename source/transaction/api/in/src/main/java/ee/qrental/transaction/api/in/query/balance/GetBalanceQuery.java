@@ -26,4 +26,8 @@ public interface GetBalanceQuery {
   LocalDate getLatestCalculatedDate();
 
   List<BalanceAmountWithDriverResponse> getAllBalanceTotalsWithDriver();
+  BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
+          final Long driverId,
+          final Integer year,
+          final Integer weekNumber);
 }

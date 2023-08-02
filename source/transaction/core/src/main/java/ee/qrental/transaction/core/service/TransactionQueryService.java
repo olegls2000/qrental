@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
-import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
@@ -51,7 +51,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverFilter filter) {
+  public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter) {
     return mapToTransactionResponseList(
         loadStrategies.stream()
             .filter(strategy -> strategy.canApply(filter))

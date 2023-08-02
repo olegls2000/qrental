@@ -33,6 +33,11 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
   }
 
   @Override
+  public List<Transaction> loadAllNonFeeByDriverId(Long driverId) {
+    return repository.findByDriverId(driverId).stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
   public List<Transaction> loadAllBetweenDays(final LocalDate dateStart, final LocalDate dateEnd) {
     return repository.findAllByDateBetween(dateStart, dateEnd).stream()
         .map(mapper::mapToDomain)
@@ -45,6 +50,20 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
     return repository.findAllByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
         .map(mapper::mapToDomain)
         .collect(toList());
+  }
+
+  @Override
+  public List<Transaction> loadAllNonFeeByDriverIdAndBetweenDays(Long driverId, LocalDate dateStart, LocalDate dateEnd) {
+    return repository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
+            .map(mapper::mapToDomain)
+            .collect(toList());
+  }
+
+  @Override
+  public List<Transaction> loadAllFeeByDriverIdAndBetweenDays(Long driverId, LocalDate dateStart, LocalDate dateEnd) {
+    return repository.findAllFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
+            .map(mapper::mapToDomain)
+            .collect(toList());
   }
 
   @Override

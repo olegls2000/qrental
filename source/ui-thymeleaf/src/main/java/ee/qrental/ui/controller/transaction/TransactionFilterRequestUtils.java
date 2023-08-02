@@ -3,7 +3,9 @@ package ee.qrental.ui.controller.transaction;
 import ee.qrental.common.core.utils.QWeek;
 
 import java.util.List;
-import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
+
+import ee.qrental.transaction.api.in.query.filter.FeeOption;
+import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import lombok.experimental.UtilityClass;
 import org.springframework.ui.Model;
 
@@ -16,15 +18,16 @@ public class TransactionFilterRequestUtils {
     }
 
     static void addCleanFilterRequestToModel(final Long driverId, final Model model) {
-    final var transactionFilterRequest = new YearAndWeekAndDriverFilter();
+    final var transactionFilterRequest = new YearAndWeekAndDriverAndFeeFilter();
         transactionFilterRequest.setDriverId(driverId);
         transactionFilterRequest.setWeek(QWeek.ALL);
         transactionFilterRequest.setYear(2023);
+        transactionFilterRequest.setFeeOption(FeeOption.WITH_FEE);
         model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     }
 
     static void addCleanFilterRequestToModel(final Model model) {
-    final var transactionFilterRequest = new YearAndWeekAndDriverFilter();
+    final var transactionFilterRequest = new YearAndWeekAndDriverAndFeeFilter();
         model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     }
 }

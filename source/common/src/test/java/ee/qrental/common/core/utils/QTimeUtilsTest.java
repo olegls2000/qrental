@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 class QTimeUtilsTest {

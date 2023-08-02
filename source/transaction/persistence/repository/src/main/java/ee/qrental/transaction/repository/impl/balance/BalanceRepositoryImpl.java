@@ -38,6 +38,12 @@ public class BalanceRepositoryImpl implements BalanceRepository {
   }
 
   @Override
+  public BalanceJakartaEntity getLatestByDriverIdAndYearAndWeekNumber(
+          final Long driverId, final Integer year, final Integer weekNumber) {
+    return springDataRepository.findLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
+  }
+
+  @Override
   public BalanceJakartaEntity getLatest() {
     return springDataRepository.findLatest();
   }
