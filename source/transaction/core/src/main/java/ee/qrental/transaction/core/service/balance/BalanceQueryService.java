@@ -7,13 +7,13 @@ import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
-import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceAmountWithDriverResponse;
+import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceResponseMapper;
-import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.Transaction;
+import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +33,14 @@ public class BalanceQueryService implements GetBalanceQuery {
             .map(this::getBalanceByDriverId)
             .sorted(this::getBalanceComparator)
             .collect(toList());
+  }
+
+  @Override
+  public BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
+          final Long driverId, final Integer year, final Integer weekNumber) {
+    final var latestBalance = balanceLoadPort.loadLatestByIdAndYearAndWeekNumber(driverId, year, weekNumber);
+
+    return balanceResponseMapper.toResponse(latestBalance);
   }
 
   private int getBalanceComparator(BalanceAmountWithDriverResponse bal1, BalanceAmountWithDriverResponse bal2) {

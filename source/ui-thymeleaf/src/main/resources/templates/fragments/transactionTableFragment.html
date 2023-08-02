@@ -23,12 +23,12 @@
     </tr>
     <tr th:each="transaction : ${transactions}">
         <td>
-            <a class="btn btn-sm btn-warning"
+            <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
                th:href="@{/transactions/update-form/{id}(id=${transaction.id})}">
                 <span class="bi-pencil-square"></span></a>
         </td>
         <td>
-            <a class="btn btn-sm btn-danger"
+            <a th:if="${transaction.raw == true}" class="btn btn-sm btn-danger"
                th:href="@{/transactions/delete-form/{id}(id=${transaction.id})}">
                 <span class="bi-trash"></span></a>
         </td>

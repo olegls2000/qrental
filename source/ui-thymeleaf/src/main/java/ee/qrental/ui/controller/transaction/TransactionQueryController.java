@@ -7,7 +7,6 @@ import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.util.List;
@@ -45,6 +44,7 @@ public class TransactionQueryController {
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     addLatestDataToModel(model);
+
     return "transactions";
   }
 
