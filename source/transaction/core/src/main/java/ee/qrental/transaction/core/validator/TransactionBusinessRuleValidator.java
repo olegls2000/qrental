@@ -62,7 +62,7 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     if (transactionDate.isBefore(balanceLatestCalculatedDate)
         || transactionDate.equals(balanceLatestCalculatedDate)) {
       final var formattedTransactionDate = transactionDate.format(ofLocalizedDate(MEDIUM));
-      final var formattedBalanceCalculatedDate = transactionDate.format(ofLocalizedDate(MEDIUM));
+      final var formattedBalanceCalculatedDate = balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
       violationCollector.collect(
           format(
               "Transaction date %s must be after the latest calculated Balance date: %s",

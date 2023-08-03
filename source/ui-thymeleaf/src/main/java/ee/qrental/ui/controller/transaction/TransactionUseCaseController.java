@@ -39,8 +39,7 @@ public class TransactionUseCaseController {
 
   @PostMapping(value = "/add")
   public String addTransaction(
-          @ModelAttribute final TransactionAddRequest addRequest,
-         final Model model) {
+      @ModelAttribute final TransactionAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
@@ -62,6 +61,7 @@ public class TransactionUseCaseController {
 
     return "forms/addTransactionWithDriver";
   }
+
   private void addTransactionTypes(Model model) {
     model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
     model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
@@ -76,7 +76,7 @@ public class TransactionUseCaseController {
   }
 
   @GetMapping(value = "/update-form/{id}")
-  public String updateForm(@PathVariable("id") long id, Model model) {
+  public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", transactionQuery.getUpdateRequestById(id));
     addTransactionTypes(model);
     model.addAttribute("drivers", driverQuery.getAll());
@@ -85,8 +85,14 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping("/update")
-  public String updateTransactionTransaction(final TransactionUpdateRequest updateRequest) {
+  public String updateTransactionTransaction(
+      final TransactionUpdateRequest updateRequest, final Model model) {
     updateUseCase.update(updateRequest);
+    if (updateRequest.hasViolations()) {
+      addUpdateRequestToModel(updateRequest, model);
+
+      return "forms/updateTransaction";
+    }
 
     return "redirect:" + TRANSACTION_ROOT_PATH;
   }
@@ -147,5 +153,10 @@ public class TransactionUseCaseController {
 
   private void addAddRequestToModel(final TransactionAddRequest addRequest, final Model model) {
     model.addAttribute("addRequest", addRequest);
+  }
+
+  private void addUpdateRequestToModel(
+      final TransactionUpdateRequest updateRequest, final Model model) {
+    model.addAttribute("updateRequest", updateRequest);
   }
 }

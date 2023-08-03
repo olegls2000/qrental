@@ -1,4 +1,4 @@
-<div th:fragment="commonForm(title, content)" class="row mt-5">
+<div th:fragment="commonForm(title, content, request)" class="row mt-5">
     <div class="col"></div>
     <div class="col-6">
         <div class="card">
@@ -8,6 +8,15 @@
                    aria-label="Close"
                    href="#" onclick="history.back();">
                 </a>
+                <div th:if="${request.hasViolations}"
+                     class="mt-3 mb-3">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-danger fs-6"
+                            th:each="violation : ${request.violations}"
+                            th:text="${violation}">???
+                        </li>
+                    </ul>
+                </div>
                 <div th:insert="${content}"></div>
             </div>
         </div>
