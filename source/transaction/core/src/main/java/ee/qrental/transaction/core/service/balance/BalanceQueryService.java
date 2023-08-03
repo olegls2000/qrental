@@ -86,7 +86,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   public BalanceResponse getByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
     return balanceResponseMapper.toResponse(
-        balanceLoadPort.loadByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
+        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber));
   }
 
   @Override
@@ -101,7 +101,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(
           final Long driverId, final Integer year, final Integer weekNumber) {
-    final var balance = balanceLoadPort.loadByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
+    final var balance = balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber);
     if(balance != null) {
       
       return balance.getAmount();
@@ -159,7 +159,7 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   @Override
   public LocalDate getLatestCalculatedDate() {
-    return balanceLoadPort.loadLatestCalculatedDate();
+    return balanceLoadPort.loadLatestCalculatedDateOrDefault();
   }
 
   private BigDecimal getSumOfTransactionByFilter(final PeriodAndDriverFilter filter){

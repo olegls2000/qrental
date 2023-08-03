@@ -1,5 +1,6 @@
 package ee.qrental.transaction.adapter.adapter.balance;
 
+import static ee.qrental.common.core.utils.QTimeUtils.BALANCE_START_CALCULATION_DATE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
@@ -8,7 +9,6 @@ import ee.qrental.transaction.adapter.mapper.balance.BalanceAdapterMapper;
 import ee.qrental.transaction.adapter.repository.balance.BalanceRepository;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.balance.Balance;
-
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -30,10 +30,12 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public Balance loadByDriverIdAndYearAndWeekNumber(
+  public Balance loadByDriverIdAndYearAndWeekNumberOrDefault(
       final Long driverId, final Integer year, final Integer weekNumber) {
     if (year == 2023 && weekNumber < 1) {
-      return Balance.builder().amount(ZERO).fee(ZERO).build();
+      final var defaultBalance = Balance.builder().amount(ZERO).fee(ZERO).build();
+
+      return defaultBalance;
     }
     return mapper.mapToDomain(
         repository.getByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber));
@@ -55,8 +57,13 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public LocalDate loadLatestCalculatedDate(){
+  public LocalDate loadLatestCalculatedDateOrDefault(){
     final var latestBalance = repository.getLatest();
+    if(latestBalance == null) {
+      final var defaultLatestCalculatedDate = BALANCE_START_CALCULATION_DATE;
+
+      return defaultLatestCalculatedDate;
+    }
     final var latestBalanceYear = latestBalance.getYear();
     final var latestBalanceWeekNumber = latestBalance.getWeekNumber();
     final var latestBalanceSunday = QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);

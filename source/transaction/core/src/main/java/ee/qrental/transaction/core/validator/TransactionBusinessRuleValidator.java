@@ -10,8 +10,7 @@ import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
+
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
 
   @Override
   public ViolationsCollector validateAdd(final Transaction domain) {
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDate();
+    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
     final var violationsCollector = new ViolationsCollector();
     checkDateForAdd(latestBalanceCalculatedDate, domain, violationsCollector);
 
@@ -34,7 +33,7 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     final var violationsCollector = new ViolationsCollector();
     final var transactionId = domain.getId();
     final var transactionFromDb = transactionLoadPort.loadById(transactionId);
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDate();
+    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
 
     checkExistence(domain.getId(), transactionFromDb, violationsCollector);
     checkIfUpdateAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
@@ -46,7 +45,7 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
   @Override
   public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDate();
+    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
     final var transactionFromDb = transactionLoadPort.loadById(id);
     checkIfDeleteAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
 

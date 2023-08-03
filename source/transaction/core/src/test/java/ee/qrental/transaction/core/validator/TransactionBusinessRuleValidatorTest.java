@@ -24,7 +24,7 @@ class TransactionBusinessRuleValidatorTest {
         balanceLoadPort = mock(BalanceLoadPort.class);
         instanceUnderTest = new TransactionBusinessRuleValidator(transactionLoadPort, balanceLoadPort);
 
-        when(balanceLoadPort.loadLatestCalculatedDate()).thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
     }
 
     @Test

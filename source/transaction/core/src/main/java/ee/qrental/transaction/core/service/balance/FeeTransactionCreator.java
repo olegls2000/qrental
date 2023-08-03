@@ -75,7 +75,7 @@ public class FeeTransactionCreator {
     final var currentWeekNumber = week.weekNumber();
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
-        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
+        loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
     final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
     if (amountFromPreviousWeek.compareTo(FEE_CALCULATION_THRESHOLD) < 0) {
       System.out.printf(

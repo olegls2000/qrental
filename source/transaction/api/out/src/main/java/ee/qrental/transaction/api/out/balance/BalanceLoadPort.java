@@ -7,12 +7,12 @@ import ee.qrental.transaction.domain.balance.Balance;
 import java.time.LocalDate;
 
 public interface BalanceLoadPort extends LoadPort<Balance> {
-  Balance loadByDriverIdAndYearAndWeekNumber(
+  Balance loadByDriverIdAndYearAndWeekNumberOrDefault(
       final Long driverId, final Integer year, final Integer weekNumber);
 
   Balance loadLatestByDriver(final Long driverId);
 
-  LocalDate loadLatestCalculatedDate();
+  LocalDate loadLatestCalculatedDateOrDefault();
 
   Balance loadLatestByIdAndYearAndWeekNumber(final Long driverId, final Integer year, final Integer weekNumber);
 }

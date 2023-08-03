@@ -112,7 +112,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final Optional<TransactionResponse> feeTransactionOpt) {
     final var previousWeekNumber = week.weekNumber() - 1;
     final var previousWeekBalance =
-        loadPort.loadByDriverIdAndYearAndWeekNumber(driverId, week.getYear(), previousWeekNumber);
+        loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
 
     final var amount = amountCalculator.calculate(driversTransactions, previousWeekBalance);
     final var feeTransactionSum =
