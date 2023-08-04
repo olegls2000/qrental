@@ -9,6 +9,7 @@ import ee.qrental.transaction.adapter.mapper.balance.BalanceAdapterMapper;
 import ee.qrental.transaction.adapter.repository.balance.BalanceRepository;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.balance.Balance;
+import ee.qrental.transaction.entity.jakarta.balance.BalanceJakartaEntity;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -59,6 +60,18 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   @Override
   public LocalDate loadLatestCalculatedDateOrDefault(){
     final var latestBalance = repository.getLatest();
+    
+    return  getLatestOrDefault(latestBalance);
+  }
+
+  @Override
+  public LocalDate loadLatestCalculatedDateOrDefaultByDriverId(Long driverId) {
+    final var latestBalance = repository.getLatestByDriverId(driverId);
+
+    return  getLatestOrDefault(latestBalance);
+  }
+  
+  private LocalDate getLatestOrDefault(final BalanceJakartaEntity latestBalance){
     if(latestBalance == null) {
       final var defaultLatestCalculatedDate = BALANCE_START_CALCULATION_DATE;
 

@@ -21,7 +21,8 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
 
   @Override
   public ViolationsCollector validateAdd(final Transaction domain) {
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
+    final var driverId = domain.getDriverId();
+    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(driverId);
     final var violationsCollector = new ViolationsCollector();
     checkDateForAdd(latestBalanceCalculatedDate, domain, violationsCollector);
 

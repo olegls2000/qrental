@@ -22,7 +22,7 @@ public class QTimeUtils {
   public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 01);
 
   public static int getWeekNumber(final LocalDate date) {
-    return date.get(WeekFields.of(Locale.GERMAN).weekOfWeekBasedYear());
+    return date.get(WeekFields.of(Locale.UK).weekOfWeekBasedYear());
   }
 
   public static LocalDate getFirstDayOfYear(final Integer year) {

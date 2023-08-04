@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Trigger Balance calculation',
             closeRef='/transactions',
-            content=~{fragments/balanceCalculationAddFormFragment.html :: addForm}
+            content=~{fragments/balanceCalculationAddFormFragment.html :: addForm},
+            request=${addRequest}
         )">
     </div>
 </div>
