@@ -1,7 +1,8 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Driver',
-            content=~{fragments/driverAddFormFragment.html :: addForm}
+            content=~{fragments/driverAddFormFragment.html :: addForm},
+            request=${addRequest}
         )">
     </div>
 </div>
@@ -158,6 +159,58 @@
                    type="checkbox"/>
             <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
                 email</label>
+        </div>
+
+        <p class="fs-5">Drivers communication type:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byTelegramId"
+                           th:field="*{byTelegram}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byTelegramId">Telegram</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byWhatsAppId"
+                           th:field="*{byWhatsApp}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byWhatsAppId">WhatsApp</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byViberId"
+                           th:field="*{byViber}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Viber</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byEmailId"
+                           th:field="*{byEmail}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Email</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="bySmsId"
+                           th:field="*{bySms}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Sms</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byPhoneId"
+                           th:field="*{byPhone}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Phone</label>
+                </div>
+            </div>
         </div>
         <p class="fs-5">Drivers company:</p>
         <div class="row">

@@ -53,8 +53,15 @@ public class DriverUseCaseController {
   }
 
   @PostMapping(value = "/add")
-  public String addDriver(@ModelAttribute final DriverAddRequest addRequest) {
+  public String addDriver(@ModelAttribute final DriverAddRequest addRequest,
+                          final Model model) {
     addUseCase.add(addRequest);
+
+    if (addRequest.hasViolations()) {
+      model.addAttribute("addRequest", addRequest);
+
+      return "forms/addDriver";
+    }
 
     return "redirect:" + DRIVER_ROOT_PATH;
   }
@@ -86,9 +93,14 @@ public class DriverUseCaseController {
   }
 
   @PostMapping("/update")
-  public String updateDriver(final DriverUpdateRequest driverUpdateRequest) {
-    updateUseCase.update(driverUpdateRequest);
+  public String updateDriver(final DriverUpdateRequest updateRequest,
+           final Model model) {
+    updateUseCase.update(updateRequest);
+    if (updateRequest.hasViolations()) {
+      model.addAttribute("updateRequest", updateRequest);
 
+      return "forms/updateDriver";
+    }
     return "redirect:" + DRIVER_ROOT_PATH;
   }
 

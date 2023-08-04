@@ -39,7 +39,8 @@ public class TransactionUseCaseController {
 
   @PostMapping(value = "/add")
   public String addTransaction(
-      @ModelAttribute final TransactionAddRequest addRequest, final Model model) {
+      @ModelAttribute final TransactionAddRequest addRequest,
+      final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);

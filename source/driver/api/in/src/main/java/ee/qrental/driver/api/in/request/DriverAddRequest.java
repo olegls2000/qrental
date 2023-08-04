@@ -28,6 +28,12 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String address;
   private Boolean needInvoicesByEmail;
   private Boolean needFee;
+  private Boolean byTelegram;
+  private Boolean byWhatsApp;
+  private Boolean byViber;
+  private Boolean byEmail;
+  private Boolean bySms;
+  private Boolean byPhone;
   private BigDecimal deposit;
   private Long qFirmId;
   private String comment;
