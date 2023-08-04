@@ -10,11 +10,11 @@ public class QDateFormatter implements Formatter<LocalDate> {
 
   @Override
   public LocalDate parse(final String text, final Locale locale) {
-    return LocalDate.parse(text, ofPattern("yyyy-MM-dd"));
+    return LocalDate.parse(text, ofPattern("dd-MM-yyyy"));
   }
 
   @Override
   public String print(final LocalDate object, final Locale locale) {
-    return object.format(ofPattern("yyyy-MM-dd"));
+    return object.format(ofPattern("dd-MM-yyyy"));
   }
 }

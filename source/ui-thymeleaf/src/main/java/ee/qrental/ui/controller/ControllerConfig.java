@@ -6,13 +6,16 @@ import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.Formatter;
+
+import java.time.LocalDate;
 
 @Configuration
 @ComponentScan(basePackages = "ee.qrental.ui.controller")
 public class ControllerConfig {
 
   @Bean
-  QDateFormatter getQDateFormatter() {
+  Formatter<LocalDate> getQDateFormatter() {
     return new QDateFormatter();
   }
 

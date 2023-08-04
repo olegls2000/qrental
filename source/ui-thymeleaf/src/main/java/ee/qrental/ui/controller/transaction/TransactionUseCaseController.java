@@ -111,8 +111,15 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping("/update/driver")
-  public String updateTransactionWithDriver(final TransactionUpdateRequest updateRequest) {
+  public String updateTransactionWithDriver(
+          final TransactionUpdateRequest updateRequest,
+          final Model model) {
     updateUseCase.update(updateRequest);
+    if (updateRequest.hasViolations()) {
+      addUpdateRequestToModel(updateRequest, model);
+
+      return "forms/updateTransactionWithDriver";
+    }
     final var driverId = updateRequest.getDriverId();
 
     return "redirect:/balances/driver/" + driverId;
@@ -127,8 +134,15 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteForm(final TransactionDeleteRequest transactionDeleteCommand) {
-    deleteUseCase.delete(transactionDeleteCommand);
+  public String deleteForm(
+          final TransactionDeleteRequest deleteRequest,
+          final Model model) {
+    deleteUseCase.delete(deleteRequest);
+    if (deleteRequest.hasViolations()) {
+     model.addAttribute("deleteRequest", deleteRequest);
+
+      return "forms/updateTransaction";
+    }
 
     return "redirect:" + TRANSACTION_ROOT_PATH;
   }
