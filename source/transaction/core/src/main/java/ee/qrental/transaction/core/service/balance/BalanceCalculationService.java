@@ -4,7 +4,13 @@ import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYP
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 
+import ee.qrental.common.core.utils.Week;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
+import ee.qrental.transaction.api.in.response.TransactionResponse;
+//import jakarta.transaction.Transactional;
 import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;
 import ee.qrental.transaction.api.out.balance.BalanceAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationAddPort;
@@ -12,12 +18,6 @@ import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
-import ee.qrental.common.core.utils.Week;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
-import ee.qrental.transaction.api.in.response.TransactionResponse;
-//import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +43,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
-    final var actionDate = addRequest.getActionDate();
+    addRequest.setActionDate(LocalDate.now());
     final var lastYear = addRequest.getLastYear();
     final var lastWeek = addRequest.getLastWeek();
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(lastYear, lastWeek);

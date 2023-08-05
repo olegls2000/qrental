@@ -17,8 +17,8 @@
         <tr th:each="callSignLink : ${callSignLinks}">
             <td th:text="${callSignLink.driverInfo}"></td>
             <td th:text="${callSignLink.callSign}"></td>
-            <td th:text="${callSignLink.dateStart}"></td>
-            <td th:text="${callSignLink.dateEnd}"></td>
+            <td th:text="${qDateFormatter.format(callSignLink.dateStart)}"></td>
+            <td th:text="${qDateFormatter.format(callSignLink.dateEnd)}"></td>
             <td th:text="${callSignLink.comment}"></td>
         </tr>
     </table>

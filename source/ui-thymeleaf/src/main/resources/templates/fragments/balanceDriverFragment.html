@@ -204,7 +204,7 @@
                 th:text="${transaction.realAmount}">???
             </td>
             <td th:text="${transaction.weekNumber}">???</td>
-            <td th:text="${transaction.date}">???</td>
+            <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
             <td th:text="${transaction.withVat}">???</td>
             <td th:text="${transaction.comment}">???</td>
         </tr>

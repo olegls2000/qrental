@@ -1,6 +1,5 @@
 package ee.qrental.transaction.adapter.adapter.balance;
 
-import static ee.qrental.common.core.utils.QTimeUtils.BALANCE_START_CALCULATION_DATE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
@@ -61,21 +60,19 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   public LocalDate loadLatestCalculatedDateOrDefault(){
     final var latestBalance = repository.getLatest();
     
-    return  getLatestOrDefault(latestBalance);
+    return  getLatestOrNull(latestBalance);
   }
 
   @Override
   public LocalDate loadLatestCalculatedDateOrDefaultByDriverId(Long driverId) {
     final var latestBalance = repository.getLatestByDriverId(driverId);
 
-    return  getLatestOrDefault(latestBalance);
+    return  getLatestOrNull(latestBalance);
   }
   
-  private LocalDate getLatestOrDefault(final BalanceJakartaEntity latestBalance){
+  private LocalDate getLatestOrNull(final BalanceJakartaEntity latestBalance){
     if(latestBalance == null) {
-      final var defaultLatestCalculatedDate = BALANCE_START_CALCULATION_DATE;
-
-      return defaultLatestCalculatedDate;
+      return null;
     }
     final var latestBalanceYear = latestBalance.getYear();
     final var latestBalanceWeekNumber = latestBalance.getWeekNumber();

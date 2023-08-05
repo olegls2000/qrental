@@ -1,6 +1,8 @@
 package ee.qrental.ui.controller;
 
+import java.time.format.DateTimeFormatter;
 import lombok.experimental.UtilityClass;
+import org.springframework.ui.Model;
 
 @UtilityClass
 public class ControllerUtils {
@@ -15,4 +17,9 @@ public class ControllerUtils {
   public static final String INVOICE_ROOT_PATH = "/invoices";
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
+  
+  public static void setQDateFormatter(final Model model){
+    model.addAttribute("qDateFormatter", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+  }
 }

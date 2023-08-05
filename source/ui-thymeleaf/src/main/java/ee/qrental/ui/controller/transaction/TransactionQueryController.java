@@ -1,6 +1,7 @@
 package ee.qrental.ui.controller.transaction;
 
 import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
+import static ee.qrental.ui.controller.ControllerUtils.setQDateFormatter;
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
@@ -28,6 +29,7 @@ public class TransactionQueryController {
 
   @GetMapping
   public String getPageWithAllTransactions(final Model model) {
+    setQDateFormatter(model);
     addCleanFilterRequestToModel(model);
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAll(), model);
@@ -55,8 +57,13 @@ public class TransactionQueryController {
 
   private void addLatestDataToModel( final Model model) {
     final var latestCalculatedDate = balanceQuery.getLatestCalculatedDate();
+    if(latestCalculatedDate == null){
+      model.addAttribute("latestBalanceWeek", "Balance was not calculated");
+
+      return;
+    }
     final var latestCalculatedWeek = QTimeUtils.getWeekNumber(latestCalculatedDate);
-    model.addAttribute("latestCalculatedDate", latestCalculatedDate);
-    model.addAttribute("latestCalculatedWeek", latestCalculatedWeek);
+    final var value = String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
+    model.addAttribute("latestBalanceWeek", value);
   }
 }

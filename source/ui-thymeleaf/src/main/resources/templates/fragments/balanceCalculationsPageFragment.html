@@ -25,7 +25,7 @@
                    th:href="@{/transactions/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span>
                 Details</a></td>
-            <td th:text="${calculation.actionDate}">???</td>
+            <td th:text="${qDateFormatter.format(calculation.actionDate)}">???</td>
             <td th:text="${calculation.comment}">???</td>
         </tr>
     </table>

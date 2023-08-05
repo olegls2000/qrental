@@ -1,6 +1,7 @@
 package ee.qrental.ui.controller.callsign;
 
 import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_LINK_ROOT_PATH;
+import static ee.qrental.ui.controller.ControllerUtils.setQDateFormatter;
 
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class CallSignLinkQueryController {
 
   @GetMapping
   public String getCallSignLinkView(final Model model) {
+    setQDateFormatter(model);
     model.addAttribute("callSignLinks", callSignLinkQuery.getAll());
     return "callSignLinks";
   }

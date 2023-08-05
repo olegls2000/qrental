@@ -18,6 +18,7 @@ public class BalanceCalculationQueryController {
 
   @GetMapping("/calculations")
   public String getCalculationView(final Model model) {
+    setQDateFormatter(model);
     model.addAttribute("calculations", balanceCalculationQuery.getAll());
 
     return "balanceCalculations";
