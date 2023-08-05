@@ -160,8 +160,13 @@ public class TransactionUseCaseController {
   @PostMapping("/delete/driver/{driverId}")
   public String deleteTransactionWithDriver(
       @PathVariable("driverId") long driverId,
-      final TransactionDeleteRequest transactionDeleteCommand) {
-    deleteUseCase.delete(transactionDeleteCommand);
+      final TransactionDeleteRequest deleteRequest, Model model) {
+    deleteUseCase.delete(deleteRequest);
+    if (deleteRequest.hasViolations()) {
+      model.addAttribute("deleteRequest", deleteRequest);
+
+      return "forms/deleteTransactionWithDriver";
+    }
 
     return "redirect:/balances/driver/" + driverId;
   }

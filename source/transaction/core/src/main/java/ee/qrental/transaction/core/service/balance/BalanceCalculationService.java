@@ -43,7 +43,6 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
-    addRequest.setActionDate(LocalDate.now());
     final var lastYear = addRequest.getLastYear();
     final var lastWeek = addRequest.getLastWeek();
     final var weekIterator = balanceCalculationPeriodService.getWeekIterator(lastYear, lastWeek);

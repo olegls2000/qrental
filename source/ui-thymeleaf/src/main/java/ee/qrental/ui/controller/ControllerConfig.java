@@ -14,11 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = "ee.qrental.ui.controller")
-public class ControllerConfig implements WebMvcConfigurer {
-  public void addFormatters(FormatterRegistry registry) {
-    registry.addFormatter(getQDateFormatter());
-  }
-  
+public class ControllerConfig {
+
   @Bean
   Formatter<LocalDate> getQDateFormatter() {
     return new QDateFormatter();
