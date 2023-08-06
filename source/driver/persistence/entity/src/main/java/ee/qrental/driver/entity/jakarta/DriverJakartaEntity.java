@@ -72,6 +72,24 @@ public class DriverJakartaEntity {
   @Column(name = "need_fee")
   private Boolean needFee;
 
+  @Column(name = "by_telegram")
+  private Boolean byTelegram;
+
+  @Column(name = "by_whatsapp")
+  private Boolean byWhatsApp;
+
+  @Column(name = "by_viber")
+  private Boolean byViber;
+
+  @Column(name = "by_email")
+  private Boolean byEmail;
+
+  @Column(name = "by_sms")
+  private Boolean bySms;
+
+  @Column(name = "by_phone")
+  private Boolean byPhone;
+
   @Column(name = "q_firm_id")
   private Long qFirmId;
 

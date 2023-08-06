@@ -5,7 +5,8 @@ import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
 
-public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
+public class
+DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
 
   @Override
   public Driver toDomain(final DriverUpdateRequest request) {
@@ -27,6 +28,12 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .needFee(request.getNeedFee())
+        .byTelegram(request.getByTelegram())
+        .byWhatsApp(request.getByWhatsApp())
+        .byViber(request.getByViber())
+        .byEmail(request.getByEmail())
+        .bySms(request.getBySms())
+        .byPhone(request.getByPhone())
         .deposit(request.getDeposit())
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
@@ -36,7 +43,6 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
 
   @Override
   public DriverUpdateRequest toRequest(final Driver domain) {
-
     return DriverUpdateRequest.builder()
         .id(domain.getId())
         .active(domain.getActive())
@@ -57,6 +63,12 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .address(domain.getAddress())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .needFee(domain.getNeedFee())
+        .byTelegram(domain.getByTelegram())
+        .byWhatsApp(domain.getByWhatsApp())
+        .byViber(domain.getByViber())
+        .byEmail(domain.getByEmail())
+        .bySms(domain.getBySms())
+        .byPhone(domain.getByPhone())
         .qFirmId(domain.getQFirmId())
         .comment(domain.getComment())
         .build();

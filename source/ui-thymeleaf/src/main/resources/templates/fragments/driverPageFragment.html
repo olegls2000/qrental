@@ -1,6 +1,5 @@
 <div th:fragment="driverPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
-
     <ul th:replace="fragments/driverTabFragment.html :: driverTabs('drivers')"></ul>
 
     <h2 class="py-3">Drivers</h2>
@@ -21,6 +20,7 @@
             <th>Isikukood</th>
             <th>Phone</th>
             <th>Email</th>
+            <th>Contact Types</th>
             <th>Invoices by email</th>
             <th>Charge Fee</th>
             <th>Q Firm</th>
@@ -47,6 +47,18 @@
             <td th:text="${driver.isikukood}">??</td>
             <td th:text="${driver.phone}">??</td>
             <td th:text="${driver.email}">??</td>
+            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+               th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                <span class="bi-pencil-square"></span>
+            </a>
+            <td>
+                <i th:if="${driver.byTelegram}" class="bi bi-telegram"></i>
+                <i th:if="${driver.byWhatsApp}" class="bi bi-whatsapp"></i>
+                <i th:if="${driver.byViber}" class="bi bi-vimeo"></i>
+                <i th:if="${driver.byEmail}" class="bi bi-chat-left-dots"></i>
+                <i th:if="${driver.bySms}" class="bi bi-envelope-at"></i>
+                <i th:if="${driver.byPhone}" class="bi bi-telephone"></i>
+            </td>
             <td>
                 <span th:text="${driver.needInvoicesByEmail} ? 'Yes' : 'No'"></span>
             </td>
