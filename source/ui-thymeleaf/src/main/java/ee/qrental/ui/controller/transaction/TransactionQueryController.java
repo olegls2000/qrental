@@ -42,6 +42,7 @@ public class TransactionQueryController {
   public String getPageWithFilteredTransactions(
           @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
           final Model model) {
+    setQDateFormatter(model);
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
@@ -63,7 +64,7 @@ public class TransactionQueryController {
       return;
     }
     final var latestCalculatedWeek = QTimeUtils.getWeekNumber(latestCalculatedDate);
-    final var value = String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
-    model.addAttribute("latestBalanceWeek", value);
+    final var latestBalanceWeek = String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
+    model.addAttribute("latestBalanceWeek", latestBalanceWeek);
   }
 }

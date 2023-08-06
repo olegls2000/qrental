@@ -5,12 +5,12 @@ import static ee.qrental.ui.controller.ControllerUtils.setQDateFormatter;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.common.core.utils.QWeek;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.link.api.in.query.GetLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.FeeOption;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -61,6 +61,7 @@ public class BalanceController {
       @PathVariable("id") long id,
       @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
       final Model model) {
+    setQDateFormatter(model);
     setUpFeeParameter(transactionFilterRequest);
     TransactionFilterRequestUtils.addWeekOptionsToModel(model);
     final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
@@ -117,7 +118,10 @@ public class BalanceController {
     final var previousWeek = weekNumber - 1;
     final var latestBalance =
         balanceQuery.getLatestBalanceByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
-    final var feeFromLatestBalance = latestBalance.getFee().negate();
+     var feeFromLatestBalance = ZERO;
+    if(latestBalance != null) {
+      feeFromLatestBalance = latestBalance.getFee().negate();
+    }
     model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
 
     transactionFilterRequest.setFeeOption(FeeOption.ONLY_FEE);
