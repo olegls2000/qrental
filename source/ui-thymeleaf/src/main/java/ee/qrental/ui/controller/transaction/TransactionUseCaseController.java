@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.transaction;
 
-import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -69,8 +69,13 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping(value = "/add/driver")
-  public String addTransactionWithDriver(@ModelAttribute final TransactionAddRequest addRequest) {
+  public String addTransactionWithDriver(@ModelAttribute final TransactionAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
+    if (addRequest.hasViolations()) {
+      addAddRequestToModel(addRequest, model);
+
+      return "forms/addTransaction";
+    }
     final var driverId = addRequest.getDriverId();
 
     return "redirect:/balances/driver/" + driverId;

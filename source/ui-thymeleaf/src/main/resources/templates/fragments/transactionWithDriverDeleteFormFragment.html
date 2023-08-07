@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete a Transaction',
             closeRef='/balances/driver/'+${driverId},
-            content=~{fragments/transactionWithDriverDeleteFormFragment.html :: deleteForm}
+            content=~{fragments/transactionWithDriverDeleteFormFragment.html :: deleteForm},
+            request=${deleteRequest}
         )">
     </div>
 </div>

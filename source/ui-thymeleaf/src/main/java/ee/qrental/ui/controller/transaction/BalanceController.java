@@ -1,7 +1,7 @@
 package ee.qrental.ui.controller.transaction;
 
-import static ee.qrental.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
-import static ee.qrental.ui.controller.ControllerUtils.setQDateFormatter;
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
+import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.common.core.utils.QWeek;
@@ -14,6 +14,7 @@ import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.FeeOption;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
+import ee.qrental.ui.controller.formatter.QDateFormatter;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class BalanceController {
 
+  private final QDateFormatter qDateFormatter;
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
@@ -45,7 +47,7 @@ public class BalanceController {
   public String getDriverTransactionsView(@PathVariable("id") long id, final Model model) {
     TransactionFilterRequestUtils.addCleanFilterRequestToModel(id, model);
     TransactionFilterRequestUtils.addWeekOptionsToModel(model);
-    setQDateFormatter(model);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var transactions = transactionQuery.getAllByDriverId(id);
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
@@ -61,7 +63,8 @@ public class BalanceController {
       @PathVariable("id") long id,
       @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
       final Model model) {
-    setQDateFormatter(model);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+
     setUpFeeParameter(transactionFilterRequest);
     TransactionFilterRequestUtils.addWeekOptionsToModel(model);
     final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);

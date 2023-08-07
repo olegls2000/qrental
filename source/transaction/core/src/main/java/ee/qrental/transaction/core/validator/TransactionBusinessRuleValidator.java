@@ -10,7 +10,6 @@ import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,8 +21,11 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
   @Override
   public ViolationsCollector validateAdd(final Transaction domain) {
     final var driverId = domain.getDriverId();
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(driverId);
     final var violationsCollector = new ViolationsCollector();
+    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(driverId);
+    if(latestBalanceCalculatedDate == null){
+      return violationsCollector;
+    }
     checkDateForAdd(latestBalanceCalculatedDate, domain, violationsCollector);
 
     return violationsCollector;
@@ -35,7 +37,9 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     final var transactionId = domain.getId();
     final var transactionFromDb = transactionLoadPort.loadById(transactionId);
     final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
-
+    if (latestBalanceCalculatedDate == null){
+      return violationsCollector;
+    }
     checkExistence(domain.getId(), transactionFromDb, violationsCollector);
     checkIfUpdateAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
     checkNewDate(latestBalanceCalculatedDate, domain, violationsCollector);
@@ -47,6 +51,9 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
   public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
     final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
+    if(latestBalanceCalculatedDate == null){
+      return violationsCollector;
+    }
     final var transactionFromDb = transactionLoadPort.loadById(id);
     checkIfDeleteAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
 

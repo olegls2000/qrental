@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static ee.qrental.ui.controller.ControllerUtils.CAR_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.CAR_ROOT_PATH;
 
 @Controller
 @RequestMapping(CAR_ROOT_PATH)

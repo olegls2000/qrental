@@ -17,8 +17,6 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
   private static final int EMAIL_VALUE_MAX_LENGTH = 20;
   private final GetFirmQuery firmQuery;
 
-
-
   @Override
   public DriverResponse toResponse(final Driver domain) {
     final var qFirmId = domain.getQFirmId();

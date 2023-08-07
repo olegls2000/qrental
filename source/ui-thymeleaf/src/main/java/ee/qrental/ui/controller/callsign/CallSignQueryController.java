@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.callsign;
 
-import static ee.qrental.ui.controller.ControllerUtils.CALL_SIGN_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.CALL_SIGN_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetCallSignQuery;
 import lombok.AllArgsConstructor;

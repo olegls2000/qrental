@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
 
 @Controller
 @RequestMapping(TRANSACTION_ROOT_PATH)

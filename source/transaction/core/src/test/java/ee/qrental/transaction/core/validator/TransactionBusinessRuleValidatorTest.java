@@ -28,9 +28,31 @@ class TransactionBusinessRuleValidatorTest {
     }
 
     @Test
+    public void testAddIfBalanceWasNotCalculated(){
+        // given
+        final var transaction =  Transaction.builder()
+                .date(LocalDate.of(2023, Month.JANUARY, 25))
+                .driverId(2L)
+                .build();
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+                .thenReturn(null);
+
+        // when
+        final var violationsCollector =  instanceUnderTest.validateAdd(transaction);
+
+        // then
+        assertFalse(violationsCollector.hasViolations());
+    }
+
+    @Test
     public void testAddIfTransactionDateBeforeCalculationDate(){
         // given
-       final var transaction =  Transaction.builder().date(LocalDate.of(2023, Month.JANUARY, 25)).build();
+       final var transaction =  Transaction.builder()
+               .date(LocalDate.of(2023, Month.JANUARY, 25))
+               .driverId(2L)
+               .build();
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+                .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
 
         // when
        final var violationsCollector =  instanceUnderTest.validateAdd(transaction);
@@ -43,8 +65,12 @@ class TransactionBusinessRuleValidatorTest {
     @Test
     public void testAddIfTransactionDateEqualToCalculationDate(){
         // given
-        final var transaction =  Transaction.builder().date(LocalDate.of(2023, Month.JANUARY, 26)).build();
-
+        final var transaction =  Transaction.builder()
+                .date(LocalDate.of(2023, Month.JANUARY, 26))
+                .driverId(2L)
+                .build();
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+                .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
         // when
         final var violationsCollector =  instanceUnderTest.validateAdd(transaction);
 
@@ -64,6 +90,25 @@ class TransactionBusinessRuleValidatorTest {
         // then
         assertFalse(violationsCollector.hasViolations());
     }
+    @Test
+    public void testUpdateIfBalanceWasNotCalculated(){
+        // given
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(null);
+        final var transactionNew =  Transaction.builder()
+                .id(1L)
+                .date(LocalDate.of(2023, Month.JANUARY, 28))
+                .build();
+        final var transactionFromDb = Transaction.builder()
+                .id(1L)
+                .date(LocalDate.of(2023, Month.JANUARY, 25)).build();
+        when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+
+        // when
+        final var violationsCollector =  instanceUnderTest.validateUpdate(transactionNew);
+
+        // then
+        assertFalse(violationsCollector.hasViolations());
+  }
 
     @Test
     public void testUpdateIfTransactionDateBeforeCalculationDate(){
@@ -187,6 +232,22 @@ class TransactionBusinessRuleValidatorTest {
     }
 
     @Test
+    public void testDeleteIfBalanceWasNotCalculated(){
+        // given
+        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(null);
+        final var transactionFromDb = Transaction.builder()
+                .id(1L)
+                .date(LocalDate.of(2023, Month.JANUARY, 25)).build();
+        when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+
+        // when
+        final var violationsCollector =  instanceUnderTest.validateDelete(1L);
+
+        // then
+        assertFalse(violationsCollector.hasViolations());
+}
+    
+    @Test
     public void testDeleteIfTransactionDateBeforeCalculationDate(){
         // given
         final var transactionFromDb = Transaction.builder()
@@ -203,6 +264,7 @@ class TransactionBusinessRuleValidatorTest {
         assertTrue(violationsCollector.getViolations().get(0)
                 .equals("Delete for the Transaction with id=1 is prohibited. Transaction is already calculated in Balance"));
     }
+
     @Test
     public void testDeleteIfTransactionDateEqualToCalculationDate(){
         // given

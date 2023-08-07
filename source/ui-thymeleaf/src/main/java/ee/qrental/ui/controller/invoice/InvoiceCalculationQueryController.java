@@ -1,10 +1,8 @@
 package ee.qrental.ui.controller.invoice;
 
-import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.INVOICE_ROOT_PATH;
 
 import ee.qrental.invoice.api.in.query.GetInvoiceCalculationQuery;
-import ee.qrental.invoice.api.in.usecase.*;
-import java.io.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

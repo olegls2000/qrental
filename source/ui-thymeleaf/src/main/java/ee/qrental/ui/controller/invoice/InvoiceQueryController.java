@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.invoice;
 
-import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.INVOICE_ROOT_PATH;
 
 import ee.qrental.invoice.api.in.query.GetInvoiceQuery;
 import ee.qrental.invoice.api.in.request.InvoiceSendByEmailRequest;

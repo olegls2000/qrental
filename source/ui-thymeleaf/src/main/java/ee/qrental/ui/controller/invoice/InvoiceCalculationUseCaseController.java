@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.qrental.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.INVOICE_ROOT_PATH;
 
 @Controller
 @RequestMapping(INVOICE_ROOT_PATH)

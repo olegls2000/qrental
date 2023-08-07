@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.constant;
 
-import static ee.qrental.ui.controller.ControllerUtils.CONSTANT_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.CONSTANT_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.request.ConstantAddRequest;

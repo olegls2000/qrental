@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.link;
 
-import static ee.qrental.ui.controller.ControllerUtils.LINK_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.LINK_ROOT_PATH;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.link.api.in.query.GetLinkQuery;

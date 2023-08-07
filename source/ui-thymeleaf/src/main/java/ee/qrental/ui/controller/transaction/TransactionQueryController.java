@@ -1,7 +1,7 @@
 package ee.qrental.ui.controller.transaction;
 
-import static ee.qrental.ui.controller.ControllerUtils.TRANSACTION_ROOT_PATH;
-import static ee.qrental.ui.controller.ControllerUtils.setQDateFormatter;
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
+import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
 import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
@@ -11,6 +11,8 @@ import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.util.List;
+
+import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class TransactionQueryController {
 
+  private final QDateFormatter qDateFormatter;
   private final GetTransactionQuery transactionQuery;
   private final GetBalanceQuery balanceQuery;
 
   @GetMapping
   public String getPageWithAllTransactions(final Model model) {
-    setQDateFormatter(model);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addCleanFilterRequestToModel(model);
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAll(), model);
@@ -42,7 +45,7 @@ public class TransactionQueryController {
   public String getPageWithFilteredTransactions(
           @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
           final Model model) {
-    setQDateFormatter(model);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
