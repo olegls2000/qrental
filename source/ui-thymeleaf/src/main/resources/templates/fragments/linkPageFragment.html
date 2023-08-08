@@ -50,12 +50,12 @@
                     <span class="bi-trash"></span>
                     Delete</a>
             </td>
-            <td th:text="${link.callSign}"> callsign </td>
-            <td th:text="${link.driverInfo}"> ... </td>
-            <td th:text="${link.carInfo}"> ... </td>
-            <td th:text="${link.dateStart}"></td>
-            <td th:text="${link.dateEnd}"></td>
-            <td th:text="${link.comment}"></td>
+            <td th:text="${link.callSign}">???</td>
+            <td th:text="${link.driverInfo}">???</td>
+            <td th:text="${link.carInfo}">???</td>
+            <td th:text="${qDateFormatter.format(link.dateStart)}">???</td>
+            <td th:text="${qDateFormatter.format(link.dateEnd)}">???</td>
+            <td th:text="${link.comment}">???</td>
         </tr>
     </table>
 </div>

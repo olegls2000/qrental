@@ -2,16 +2,16 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Potential Driver',
             closeRef='/',
-            content=~{fragments/driverPotentialAddFormFragment.html :: addForm}
+            content=~{fragments/driverPotentialAddFormFragment.html :: addForm},
+            request=${addRequest}
         )">
     </div>
 </div>
 
-
 <div th:fragment="addForm">
     <form method="post"
           th:action="@{/drivers-potential/add}"
-          th:object="${driverPotentialAddCommand}">
+          th:object="${addRequest}">
 
         <div class="row">
             <div class="col">

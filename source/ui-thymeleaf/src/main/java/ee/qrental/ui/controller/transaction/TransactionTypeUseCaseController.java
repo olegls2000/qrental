@@ -33,8 +33,13 @@ public class TransactionTypeUseCaseController {
 
   @PostMapping(value = "/add")
   public String addTransactionTransactionType(
-      @ModelAttribute final TransactionTypeAddRequest transactionTypeInfo) {
-    addUseCase.add(transactionTypeInfo);
+      @ModelAttribute final TransactionTypeAddRequest addRequest, final Model model) {
+    addUseCase.add(addRequest);
+    if (addRequest.hasViolations()) {
+      model.addAttribute("addRequest", addRequest);
+
+      return "forms/addTransactionType";
+    }
 
     return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }
@@ -48,8 +53,13 @@ public class TransactionTypeUseCaseController {
 
   @PostMapping("/update")
   public String updateTransactionTransactionType(
-      final TransactionTypeUpdateRequest transactionTypeUpdateRequest) {
-    updateUseCase.update(transactionTypeUpdateRequest);
+      final TransactionTypeUpdateRequest updateRequest, final Model model) {
+    updateUseCase.update(updateRequest);
+    if (updateRequest.hasViolations()) {
+      model.addAttribute("updateRequest", updateRequest);
+
+      return "forms/updateTransactionType";
+    }
 
     return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }
@@ -63,8 +73,13 @@ public class TransactionTypeUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteForm(final TransactionTypeDeleteRequest deleteRequest) {
+  public String deleteForm(final TransactionTypeDeleteRequest deleteRequest, final Model model) {
     deleteUseCase.delete(deleteRequest);
+    if (deleteRequest.hasViolations()) {
+      model.addAttribute("deleteRequest", deleteRequest);
+
+      return "forms/deleteTransactionType";
+    }
 
     return "redirect:" + TRANSACTION_TYPE_ROOT_PATH;
   }

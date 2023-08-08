@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Send the Invoice by Email',
             closeRef='/invoices',
-            content=~{fragments/invoiceEmailFormFragment.html :: confirmationForm}
+            content=~{fragments/invoiceEmailFormFragment.html :: confirmationForm},
+            request=${emailSendRequest}
         )">
     </div>
 </div>

@@ -81,8 +81,15 @@ public class CallSignUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteForm(final CallSignDeleteRequest deleteRequest) {
+  public String deleteForm(final CallSignDeleteRequest deleteRequest,
+                           final Model model) {
     callSignDeleteUseCase.delete(deleteRequest);
+
+    if (deleteRequest.hasViolations()) {
+      model.addAttribute("deleteRequest", deleteRequest);
+
+      return "forms/deleteCallSign";
+    }
 
     return "redirect:" + CALL_SIGN_ROOT_PATH;
   }

@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Constant',
             closeRef='/constants',
-            content=~{fragments/constantAddFormFragment.html :: addForm}
+            content=~{fragments/constantAddFormFragment.html :: addForm},
+            request=${addRequest}
         )">
     </div>
 </div>

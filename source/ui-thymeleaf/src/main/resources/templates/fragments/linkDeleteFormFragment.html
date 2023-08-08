@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete a Link',
             closeRef='/links',
-            content=~{fragments/linkDeleteFormFragment.html :: deleteForm}
+            content=~{fragments/linkDeleteFormFragment.html :: deleteForm},
+            request=${deleteRequest}
         )">
     </div>
 </div>

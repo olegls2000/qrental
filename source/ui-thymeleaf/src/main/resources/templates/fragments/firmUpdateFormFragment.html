@@ -2,7 +2,8 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Update a Firm',
             closeRef='/firms',
-            content=~{fragments/firmUpdateFormFragment.html :: updateForm}
+            content=~{fragments/firmUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
         )">
     </div>
 </div>
