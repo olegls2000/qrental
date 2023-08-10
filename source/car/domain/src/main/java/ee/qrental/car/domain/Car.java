@@ -50,6 +50,10 @@ public class Car {
   }
 
   public RagStatus getGasInspectionRagStatus() {
+    if(gasInspectionEnd == null) {
+      return RagStatus.GREEN;
+    }
+
     final var daysBetween = DAYS.between(LocalDate.now(), gasInspectionEnd);
 
     return getRagStatusByDuration(daysBetween);

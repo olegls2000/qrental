@@ -1,16 +1,15 @@
 package ee.qrental.car.core.service;
 
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.request.CarUpdateRequest;
 import ee.qrental.car.api.in.response.CarResponse;
 import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.core.mapper.CarResponseMapper;
 import ee.qrental.car.core.mapper.CarUpdateRequestMapper;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CarQueryService implements GetCarQuery {
@@ -21,7 +20,10 @@ public class CarQueryService implements GetCarQuery {
 
   @Override
   public List<CarResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted((car1, car2) -> car1.getRegNumber().compareTo(car2.getRegNumber()))
+        .collect(toList());
   }
 
   @Override
