@@ -1,5 +1,6 @@
 package ee.qrental.transaction.core.service.balance;
 
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.common.core.utils.QTimeUtils;
@@ -128,18 +129,28 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   private BigDecimal getRawTransactionsSum(final Balance latestBalance, final Long driverId) {
-    final var latestBalanceYear = latestBalance != null ? latestBalance.getYear() : 2023;
-    final var latestBalanceWeek = latestBalance != null ? latestBalance.getWeekNumber() : 1;
-    final var latestBalanceEndOfWeekDay =
-        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeek);
+    final var earliestNotCalculatedDate = getEarliestNotCalculatedDate(latestBalance);
     final var rawTransactionFilter =
         PeriodAndDriverFilter.builder()
             .driverId(driverId)
-            .dateStart(latestBalanceEndOfWeekDay)
+            .dateStart(earliestNotCalculatedDate)
             .dateEnd(LocalDate.now())
             .build();
 
     return getSumOfTransactionByFilter(rawTransactionFilter);
+  }
+
+  private LocalDate getEarliestNotCalculatedDate(final Balance latestBalance){
+    if (latestBalance == null){
+      return LocalDate.now().with(firstDayOfYear());
+    }
+
+    final var latestBalanceYear = latestBalance.getYear();
+    final var latestBalanceWeek = latestBalance.getWeekNumber();
+    final var latestCalculatedDate = QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeek);
+    final var earliestNotCalculatedDate = latestCalculatedDate.plusDays(1L);
+
+    return earliestNotCalculatedDate;
   }
 
   @Override

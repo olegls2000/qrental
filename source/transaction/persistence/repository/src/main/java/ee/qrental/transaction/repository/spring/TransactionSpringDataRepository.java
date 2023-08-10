@@ -14,8 +14,16 @@ public interface TransactionSpringDataRepository
 
   List<TransactionJakartaEntity> findAllByDateBetween(LocalDate dateStart, LocalDate dateEnd);
 
+  @Query(
+          value =
+                  "SELECT * FROM transaction tx "
+                          + "WHERE tx.driver_id = :driverId "
+                          + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+          nativeQuery = true)
   List<TransactionJakartaEntity> findAllByDateBetweenAndDriverId(
-      LocalDate dateStart, LocalDate dateEnd, Long driverId);
+          @Param("dateStart") LocalDate dateStart,
+          @Param("dateEnd") LocalDate dateEnd,
+          @Param("driverId") Long driverId);
 
   @Query(
       value =
