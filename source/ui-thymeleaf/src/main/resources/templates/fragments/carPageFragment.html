@@ -9,7 +9,6 @@
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
-                    Add New Car
                 </a>
             </th>
             <th>REG Number</th>
@@ -29,14 +28,14 @@
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/cars/update-form/{id}(id=${car.id})}">
                     <span class="bi-pencil-square"></span>
-                    Edit</a>
+                </a>
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/cars/delete-form/{id}(id=${car.id})}">
                     <span class="bi-trash"></span>
-                    Delete</a>
+                </a>
             </td>
             <td th:text="${car.regNumber}"></td>
-            <td th:text="${car.releaseDate}"></td>
+            <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
             <td th:text="${car.manufacturer}"></td>
             <td th:text="${car.model}"></td>
             <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
@@ -49,17 +48,17 @@
                 <td th:case="'RED'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-danger bg-danger border-danger"
-                    th:text="${car.insuranceDateEnd}">???
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-secondary bg-warning border-warning"
-                    th:text="${car.insuranceDateEnd}">???
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-success bg-success border-success"
-                    th:text="${car.insuranceDateEnd}">???
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
             </th:block>
 
@@ -67,17 +66,17 @@
                 <td th:case="'RED'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-danger bg-danger border-danger"
-                    th:text="${car.technicalInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-secondary bg-warning border-warning"
-                    th:text="${car.technicalInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-success bg-success border-success"
-                    th:text="${car.technicalInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
             </th:block>
 
@@ -85,17 +84,17 @@
                 <td th:case="'RED'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-danger bg-danger border-danger"
-                    th:text="${car.gasInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-secondary bg-warning border-warning"
-                    th:text="${car.gasInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
                     class="text-center bg-opacity-10 border border-opacity-10 rounded-2
                     text-success bg-success border-success"
-                    th:text="${car.gasInspectionEnd}">???
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>
             </th:block>
         </tr>
