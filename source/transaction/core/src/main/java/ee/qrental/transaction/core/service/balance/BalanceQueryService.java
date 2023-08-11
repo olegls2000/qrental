@@ -104,7 +104,7 @@ public class BalanceQueryService implements GetBalanceQuery {
           final Long driverId, final Integer year, final Integer weekNumber) {
     final var balance = balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber);
     if(balance != null) {
-      
+
       return balance.getAmount();
     }
 
@@ -124,8 +124,11 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var earliestNotCalculatedWeek = latestCalculatedWeek + 1;
     final var startDate = QTimeUtils.getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
     final var filter = filterBuilder.dateStart(startDate).build();  
+    final var fromBalance = latestBalance.getAmount();
+    final var rawTransactionSum = getSumOfTransactionByFilter(filter);
+    final var rawBalanceTotal = fromBalance.add(rawTransactionSum);
 
-    return getSumOfTransactionByFilter(filter);
+    return rawBalanceTotal;
   }
 
   private BigDecimal getRawTransactionsSum(final Balance latestBalance, final Long driverId) {
