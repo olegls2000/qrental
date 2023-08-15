@@ -7,8 +7,11 @@ ee.qrental.driver.spring.config.DriverRepositoryConfig,\
 ee.qrental.driver.spring.config.CallSignLinkAdapterConfig,\
 ee.qrental.driver.spring.config.CallSignLinkMapperConfig,\
 ee.qrental.driver.spring.config.CallSignLinkServiceConfig,\
-ee.qrental.driver.spring.config.CallSignLinkValidatorConfig,\
-ee.qrental.driver.spring.config.CallSignLinkRepositoryConfig,\
+ee.qrental.driver.spring.config.FirmLinkAdapterConfig,\
+ee.qrental.driver.spring.config.FirmLinkMapperConfig,\
+ee.qrental.driver.spring.config.FirmLinkServiceConfig,\
+ee.qrental.driver.spring.config.FirmLinkValidatorConfig,\
+ee.qrental.driver.spring.config.FirmLinkRepositoryConfig,\
 ee.qrental.driver.spring.config.CallSignAdapterConfig,\
 ee.qrental.driver.spring.config.CallSignMapperConfig,\
 ee.qrental.driver.spring.config.CallSignRepositoryConfig,\

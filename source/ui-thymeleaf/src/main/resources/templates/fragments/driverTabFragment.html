@@ -4,11 +4,15 @@
        href="/drivers">Drivers</a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'callSigns'} ? active : ''"
+       href="/call-signs">Call Signs</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" th:classappend="${activeTab == 'callSignLinks'} ? active : ''"
        href="/call-sign-links">Call Sign Links</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'callSigns'} ? active : ''"
-       href="/call-signs">Call Signs</a>
+    <a class="nav-link" th:classappend="${activeTab == 'firmLinks'} ? active : ''"
+       href="/firm-links">Firm Links</a>
   </li>
 </ul>
