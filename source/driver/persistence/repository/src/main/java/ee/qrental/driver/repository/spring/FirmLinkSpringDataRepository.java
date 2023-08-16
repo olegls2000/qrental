@@ -23,7 +23,7 @@ public interface FirmLinkSpringDataRepository
               + "and fl.firm_id = :firmId",
       nativeQuery = true)
   FirmLinkJakartaEntity findOneByDateEndIsNullAndFirmId(
-      @Param("firmId") final Long callSignId);
+      @Param("firmId") final Long firmId);
 
   @Query(
       value =
@@ -35,12 +35,13 @@ public interface FirmLinkSpringDataRepository
       @Param("driverId") final Long driverId);
 
   @Query(
-      value =
-          "SELECT fl.* FROM firm_link fl "
-              + "where  fl.driver_id = :driverId "
-              + "and fl.date_start <= :nowDate "
-              + "and (fl.date_end is null or fl.date_end > :nowDate)",
-      nativeQuery = true)
-  FirmLinkJakartaEntity findActiveByDriverIdAndNowDate(
-      @Param("driverId") final Long driverId, @Param("nowDate") final LocalDate nowDate);
+          value =
+                  "SELECT fl.* FROM firm_link fl "
+                          + "where  fl.driver_id = :driverId "
+                          + "and fl.date_start <= :requiredDate "
+                          + "and (fl.date_end is null or fl.date_end >= :requiredDate)",
+          nativeQuery = true)
+  FirmLinkJakartaEntity findOneByDriverIdAndRequiredDate(
+          @Param("driverId") final Long driverId,
+          @Param("requiredDate") final LocalDate requiredDate);
 }

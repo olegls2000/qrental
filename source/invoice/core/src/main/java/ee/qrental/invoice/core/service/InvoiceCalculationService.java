@@ -7,10 +7,13 @@ import static java.util.stream.Collectors.*;
 
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.driver.api.in.query.GetFirmLinkQuery;
+import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.api.in.request.EmailType;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
+import ee.qrental.firm.api.in.response.FirmResponse;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
 import ee.qrental.invoice.api.out.InvoiceCalculationAddPort;
@@ -22,13 +25,15 @@ import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceCalculation;
 import ee.qrental.invoice.domain.InvoiceCalculationResult;
 import ee.qrental.invoice.domain.InvoiceItem;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -46,6 +51,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetFirmQuery firmQuery;
   private final GetBalanceQuery balanceQuery;
   private final EmailSendUseCase emailSendUseCase;
+  private final GetFirmLinkQuery firmLinkQuery;
+
 
   @Transactional
   @Override
@@ -76,9 +83,14 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var weekBalance =
                     balanceQuery.getByDriverIdAndYearAndWeekNumber(
                         driverId, week.getYear(), weekNumber);
+                if (weekBalance == null) {
+                  throw new RuntimeException("Invoice calculation is impossible for the week: "+weekNumber+", please calculate a Balance first");
+                }
+
                 if (weekBalance.getAmount().compareTo(ZERO) >= 0) {
                   System.out.printf(
-                      "Driver with id=%d has positive balance, invoice is not required.\n", driverId);
+                      "Driver with id=%d has positive balance, invoice is not required.\n",
+                      driverId);
                   return;
                 }
                 final var filter =
@@ -96,8 +108,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     String.format(
                         "%s %s, %d",
                         driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
-                final var qFirmId = driver.getQFirmId();
-                final var qFirm = firmQuery.getById(qFirmId);
+                final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekNumber);
                 final var invoiceNumber = getInvoiceNumber(week, driverId);
                 final var previousWeek = weekNumber - 1;
                 final var previousWeekBalance =
@@ -124,7 +135,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .driverCompanyAddress(driver.getCompanyAddress())
                         .driverCompanyRegNumber(driver.getCompanyRegistrationNumber())
                         .driverCompanyVat(driverCompanyVat)
-                        .qFirmId(qFirmId)
+                        .qFirmId(qFirm.getId())
                         .qFirmName(qFirm.getFirmName())
                         .qFirmPostAddress(qFirm.getPostAddress())
                         .qFirmEmail(qFirm.getEmail())
@@ -154,6 +165,27 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
+  }
+
+  private FirmResponse getQFirmForInvoice(final DriverResponse driver,
+                                          final LocalDate weekStartDay,
+                                          final Integer weekNumber){
+      final var firmLink =
+              firmLinkQuery.getOneByDriverIdAndRequiredDate(driver.getId(), weekStartDay);
+      if (firmLink == null) {
+          System.out.printf("Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice",
+                  String.format("%s %s", driver.getFirstName(), driver.getLastName()),
+                  weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                  weekNumber);
+          final var qFirmId = driver.getQFirmId();
+          final var qFirm = firmQuery.getById(qFirmId);
+
+          return qFirm;
+      }
+      final var qFirmId = firmLink.getFirmId();
+      final var qFirm = firmQuery.getById(qFirmId);
+
+      return qFirm;
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {

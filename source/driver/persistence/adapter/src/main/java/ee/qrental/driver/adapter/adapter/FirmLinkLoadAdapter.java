@@ -5,9 +5,9 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.driver.adapter.mapper.FirmLinkAdapterMapper;
 import ee.qrental.driver.adapter.repository.FirmLinkRepository;
 import ee.qrental.driver.api.out.FirmLinkLoadPort;
-import java.util.List;
-
 import ee.qrental.driver.domain.FirmLink;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -24,5 +24,9 @@ public class FirmLinkLoadAdapter implements FirmLinkLoadPort {
   @Override
   public FirmLink loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+  @Override
+  public FirmLink loadOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate) {
+    return mapper.mapToDomain(repository.findOneByDriverIdAndRequiredDate(driverId, requiredDate));
   }
 }

@@ -10,4 +10,6 @@ import java.time.LocalDate;
 
 public interface GetFirmLinkQuery
     extends BaseGetQuery<FirmLinkUpdateRequest, FirmLinkResponse> {
+
+    FirmLinkResponse getOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate);
 }

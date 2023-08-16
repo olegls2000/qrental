@@ -29,8 +29,9 @@ public class FirmLinkRepositoryImpl implements FirmLinkRepository {
   }
 
   @Override
-  public FirmLinkJakartaEntity findActiveByDriverIdAndNowDate(final Long driverId, final LocalDate nowDate) {
-    return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
+  public FirmLinkJakartaEntity findOneByDriverIdAndRequiredDate(
+          final Long driverId, final LocalDate requiredDate) {
+    return springDataRepository.findOneByDriverIdAndRequiredDate(driverId, requiredDate);
   }
 
   @Override
