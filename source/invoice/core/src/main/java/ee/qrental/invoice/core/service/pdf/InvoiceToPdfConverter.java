@@ -147,10 +147,10 @@ public class InvoiceToPdfConverter {
       final String driverCompanyVat,
       final String driverInfo) {
     final var requisites = new Table(2);
-    requisites.setWidths(new float[] {1, 2});
+    requisites.setWidths(new float[] {1, 4});
     requisites.setPadding(0f);
     requisites.setSpacing(-1f);
-    requisites.setWidth(60f);
+    requisites.setWidth(100f);
     requisites.setHorizontalAlignment(HorizontalAlignment.LEFT);
     requisites.setBorder(NO_BORDER);
     requisites.addCell(getRequisitLabelCell("Maksja"));
