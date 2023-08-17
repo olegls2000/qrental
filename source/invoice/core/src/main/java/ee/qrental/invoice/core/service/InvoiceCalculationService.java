@@ -53,7 +53,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final EmailSendUseCase emailSendUseCase;
   private final GetFirmLinkQuery firmLinkQuery;
 
-
   @Transactional
   @Override
   public void add(final InvoiceCalculationAddRequest addRequest) {

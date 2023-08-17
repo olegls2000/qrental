@@ -12,9 +12,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driver> {
-
-  private static final int STRING_VALUE_MAX_LENGTH = 14;
-  private static final int EMAIL_VALUE_MAX_LENGTH = 20;
   private final GetFirmQuery firmQuery;
 
   @Override
@@ -30,12 +27,12 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
         .isikukood(domain.getIsikukood())
-        .phone(contract(domain.getPhone(), STRING_VALUE_MAX_LENGTH))
-        .email(contract(domain.getEmail(), EMAIL_VALUE_MAX_LENGTH))
-        .address(contract(domain.getAddress(), STRING_VALUE_MAX_LENGTH))
-        .companyName(contract(domain.getCompanyName(), STRING_VALUE_MAX_LENGTH))
+        .phone(domain.getPhone())
+        .email(domain.getEmail())
+        .address(domain.getAddress())
+        .companyName(domain.getCompanyName())
         .companyRegistrationNumber(domain.getCompanyRegistrationNumber())
-        .companyAddress(contract(domain.getCompanyAddress(), STRING_VALUE_MAX_LENGTH))
+        .companyAddress(domain.getCompanyAddress())
         .companyVat(domain.getCompanyVat())
         .driverLicenseNumber(domain.getDriverLicenseNumber())
         .driverLicenseExp(domain.getDriverLicenseExp())
@@ -50,8 +47,8 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
          .byPhone(domain.getByPhone())
         .deposit(domain.getDeposit())
         .qFirmId(qFirmId)
-        .qFirmName(contract(qFirmName, STRING_VALUE_MAX_LENGTH))
-        .comment(contract(domain.getComment(), STRING_VALUE_MAX_LENGTH))
+        .qFirmName(qFirmName)
+        .comment(domain.getComment())
         .build();
   }
 
