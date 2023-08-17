@@ -40,6 +40,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
+
+  private static final BigDecimal VAT_RATE = BigDecimal.valueOf(0.83333333333333333333d);
+
   private final InvoiceCalculationAddRequestMapper invoiceCalculationAddRequestMapper;
   private final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator;
   private final InvoiceCalculationAddPort invoiceCalculationAddPort;
@@ -83,9 +86,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     balanceQuery.getByDriverIdAndYearAndWeekNumber(
                         driverId, week.getYear(), weekNumber);
                 if (weekBalance == null) {
-                  throw new RuntimeException("Invoice calculation is impossible for the week: "+weekNumber+", please calculate a Balance first");
+                  throw new RuntimeException("Invoice calculation is impossible for the week: "
+                          + weekNumber + ", please calculate a Balance first");
                 }
-
                 if (weekBalance.getAmount().compareTo(ZERO) >= 0) {
                   System.out.printf(
                       "Driver with id=%d has positive balance, invoice is not required.\n",
@@ -122,7 +125,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .reduce(BigDecimal::add)
                         .orElse(ZERO)
                         .negate();
-                final var invoiceItems = getInvoiceItems(driversTransactions);
+                final var invoiceItems = getInvoiceItems(driversTransactions, qFirm);
                 final var invoice =
                     Invoice.builder()
                         .id(null)
@@ -225,23 +228,28 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     return String.format("%d%d%d", year, weekNumber, driverId);
   }
 
-  private List<InvoiceItem> getInvoiceItems(final List<TransactionResponse> transactions) {
+  private List<InvoiceItem> getInvoiceItems(final List<TransactionResponse> transactions, final FirmResponse firm) {
+    final var withVat = isFirmWithVAT(firm);
     final var typeVsTransactions =
         transactions.stream()
             .filter(tx -> !tx.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
             .collect(groupingBy(TransactionResponse::getType));
 
     return typeVsTransactions.entrySet().stream()
-        .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue()))
+        .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue(), withVat))
         .collect(toList());
   }
 
-  private InvoiceItem getInvoiceItem(String type, List<TransactionResponse> transactions) {
+  private InvoiceItem getInvoiceItem(final String type,
+                                     final List<TransactionResponse> transactions,
+                                     final boolean withVat) {
+    final var vatRate = withVat ? VAT_RATE : BigDecimal.ONE;
     final var amount =
         transactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal::add)
-            .orElse(ZERO);
+            .orElse(ZERO)
+            .multiply(vatRate);
     final var transactionTypeDescription = transactions.get(0).getTypeDescription();
 
     return InvoiceItem.builder()
@@ -249,5 +257,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         .description(transactionTypeDescription)
         .amount(amount)
         .build();
+  }
+
+  private boolean isFirmWithVAT(final FirmResponse firm){
+      return firm.getVatNumber() != null || firm.getVatNumber().length() != 0;
   }
 }
