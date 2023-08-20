@@ -1,13 +1,13 @@
 package ee.qrental.transaction.core.service.balance;
 
-import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYPE_NAME_FEE_DEBT;
-import static java.util.Collections.emptyList;
+import static ee.qrental.transaction.api.in.TransactionConstants.*;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 //import jakarta.transaction.Transactional;
@@ -21,7 +21,6 @@ import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 
@@ -36,6 +35,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final BalanceAmountCalculator amountCalculator;
   private final BalanceFeeCalculator feeCalculator;
   private final FeeTransactionCreator feeTransactionCreator;
+  private final FeeDebtReplenishService feeDebtReplenishService;
   private final GetDriverQuery driverQuery;
   private final BalanceLoadPort loadPort;
 
@@ -53,17 +53,16 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var drivers = driverQuery.getAll();
     while (weekIterator.hasNext()) {
       final var week = weekIterator.next();
-      final var weekTransactions = getNotFeeTransactionsMapForWeek(week);
       drivers.stream()
           .forEach(
               driver -> {
                 final var feeTransactionOpt =
                     feeTransactionCreator.creteFeeTransactionIfNecessary(week, driver);
                 final var driverId = driver.getId();
-                final var driversTransactions =
-                    weekTransactions.getOrDefault(driverId, emptyList());
+                final var driversTransactions = getListOfNonFeeTransactions(week, driverId);
+                final var feeReplenishTransactions = feeDebtReplenishService.replenish(week, driver);
                 final var balance =
-                    getBalance(week, driverId, driversTransactions, feeTransactionOpt);
+                    getBalance(week, driverId, driversTransactions, feeTransactionOpt, feeReplenishTransactions);
                 final var savedBalance = balanceAddPort.add(balance);
                 final var balanceCalculationResult =
                     getBalanceCalculationResult(
@@ -97,18 +96,26 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     return result;
   }
 
-  private Map<Long, List<TransactionResponse>> getNotFeeTransactionsMapForWeek(final Week week) {
-    final var filter = PeriodFilter.builder().dateStart(week.start()).datEnd(week.end()).build();
-    return transactionQuery.getAllByFilter(filter).stream()
-        .filter(tx -> !tx.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
-        .collect(groupingBy(TransactionResponse::getDriverId));
+  private List<TransactionResponse> getListOfNonFeeTransactions(final Week week, final Long driverId){
+    final var filter = PeriodAndDriverFilter.builder()
+            .dateStart(week.start())
+            .dateEnd(week.end())
+            .driverId(driverId)
+            .build();
+
+    return transactionQuery.getAllByFilter(filter)
+            .stream()
+            .filter(tx -> isNotFeeType(tx.getType()))
+            .sorted(comparing(TransactionResponse::getRealAmount))
+            .toList();
   }
 
   private Balance getBalance(
       final Week week,
       final Long driverId,
       final List<TransactionResponse> driversTransactions,
-      final Optional<TransactionResponse> feeTransactionOpt) {
+      final Optional<TransactionResponse> feeTransactionOpt,
+      final List<TransactionResponse> feeReplenishTransactions) {
     final var previousWeekNumber = week.weekNumber() - 1;
     final var previousWeekBalance =
         loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
@@ -118,7 +125,15 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         feeTransactionOpt
             .orElse(TransactionResponse.builder().id(null).realAmount(BigDecimal.ZERO).build())
             .getRealAmount();
-    final var feeBalance = feeCalculator.calculate(feeTransactionSum, previousWeekBalance);
+
+    final var replenishFeeSum =
+        feeReplenishTransactions.stream()
+            .map(TransactionResponse::getRealAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    final var feeWeekTotal = feeTransactionSum.add(replenishFeeSum);
+
+    final var feeBalance = feeCalculator.calculate(feeWeekTotal, previousWeekBalance);
 
     return Balance.builder()
         .driverId(driverId)

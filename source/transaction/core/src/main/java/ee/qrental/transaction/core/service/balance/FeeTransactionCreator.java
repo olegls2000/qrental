@@ -18,8 +18,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FeeTransactionCreator {
-  private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.07d);
-  private static final BigDecimal FEE_CALCULATION_THRESHOLD = BigDecimal.valueOf(-100);
+  private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.0175d);
+  private static final BigDecimal FEE_CALCULATION_THRESHOLD = ZERO;
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;

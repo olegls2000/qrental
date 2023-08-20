@@ -1,6 +1,6 @@
 package ee.qrental.invoice.core.service;
 
-import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYPE_NAME_FEE_DEBT;
+import static ee.qrental.transaction.api.in.TransactionConstants.*;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
@@ -120,7 +120,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var previousWeekFeeBalanceAmount = previousWeekBalance.getFee();
                 final var currentWeekFee =
                     driversTransactions.stream()
-                        .filter(tx -> tx.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
+                        .filter(tx -> isFeeType(tx.getType()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
                         .orElse(ZERO)
@@ -232,7 +232,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var withVat = isFirmWithVAT(firm);
     final var typeVsTransactions =
         transactions.stream()
-            .filter(tx -> !tx.getType().equals(TRANSACTION_TYPE_NAME_FEE_DEBT))
+            .filter(tx -> isNotFeeType(tx.getType()))
             .collect(groupingBy(TransactionResponse::getType));
 
     return typeVsTransactions.entrySet().stream()

@@ -46,6 +46,7 @@ public class BalanceServiceConfig {
       final BalanceAmountCalculator amountCalculator,
       final BalanceFeeCalculator feeCalculator,
       final FeeTransactionCreator feeTransactionCreator,
+      final FeeDebtReplenishService replenishService,
       final GetDriverQuery driverQuery,
       final BalanceLoadPort loadPort) {
     return new BalanceCalculationService(
@@ -57,6 +58,7 @@ public class BalanceServiceConfig {
         amountCalculator,
         feeCalculator,
         feeTransactionCreator,
+        replenishService,
         driverQuery,
         loadPort);
   }
@@ -83,5 +85,17 @@ public class BalanceServiceConfig {
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery) {
     return new FeeTransactionCreator(loadPort, transactionAddUseCase, transactionTypeQuery);
+  }
+  @Bean
+  FeeDebtReplenishService getFeeDebtReplenishService(
+          final BalanceLoadPort loadPort,
+          final TransactionAddUseCase transactionAddUseCase,
+          final GetTransactionTypeQuery transactionTypeQuery,
+          final GetTransactionQuery transactionQuery) {
+    return new FeeDebtReplenishService(
+            loadPort,
+            transactionAddUseCase,
+            transactionTypeQuery,
+            transactionQuery);
   }
 }

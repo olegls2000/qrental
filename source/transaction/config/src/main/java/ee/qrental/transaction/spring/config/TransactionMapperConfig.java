@@ -1,6 +1,7 @@
 package ee.qrental.transaction.spring.config;
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.TransactionAddRequestMapper;
 import ee.qrental.transaction.core.mapper.TransactionResponseMapper;
 import ee.qrental.transaction.core.mapper.TransactionUpdateRequestMapper;
@@ -11,8 +12,9 @@ import org.springframework.context.annotation.Configuration;
 public class TransactionMapperConfig {
 
   @Bean
-  TransactionAddRequestMapper getTransactionAddRequestMapper() {
-    return new TransactionAddRequestMapper();
+  TransactionAddRequestMapper getTransactionAddRequestMapper(
+          final TransactionTypeLoadPort transactionTypeLoadPort) {
+    return new TransactionAddRequestMapper(transactionTypeLoadPort);
   }
 
   @Bean
