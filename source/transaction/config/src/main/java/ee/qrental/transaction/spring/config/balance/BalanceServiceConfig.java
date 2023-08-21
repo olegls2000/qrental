@@ -43,10 +43,8 @@ public class BalanceServiceConfig {
       final BalanceCalculationAddPort addPort,
       final BalanceAddPort balanceAddPort,
       final GetTransactionQuery transactionQuery,
-      final BalanceAmountCalculator amountCalculator,
-      final BalanceFeeCalculator feeCalculator,
-      final FeeTransactionCreator feeTransactionCreator,
-      final FeeDebtReplenishService replenishService,
+      final FeeCalculationService feeTransactionCreator,
+      final FeeReplenishService replenishService,
       final GetDriverQuery driverQuery,
       final BalanceLoadPort loadPort) {
     return new BalanceCalculationService(
@@ -55,8 +53,6 @@ public class BalanceServiceConfig {
         addPort,
         balanceAddPort,
         transactionQuery,
-        amountCalculator,
-        feeCalculator,
         feeTransactionCreator,
         replenishService,
         driverQuery,
@@ -70,29 +66,19 @@ public class BalanceServiceConfig {
   }
 
   @Bean
-  BalanceAmountCalculator getAmountCalculator() {
-    return new BalanceAmountCalculator();
-  }
-
-  @Bean
-  BalanceFeeCalculator getFeeCalculator() {
-    return new BalanceFeeCalculator();
-  }
-
-  @Bean
-  FeeTransactionCreator getFeeTransactionCreator(
+  FeeCalculationService getFeeTransactionCreator(
       final BalanceLoadPort loadPort,
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery) {
-    return new FeeTransactionCreator(loadPort, transactionAddUseCase, transactionTypeQuery);
+    return new FeeCalculationService(loadPort, transactionAddUseCase, transactionTypeQuery);
   }
   @Bean
-  FeeDebtReplenishService getFeeDebtReplenishService(
+  FeeReplenishService getFeeDebtReplenishService(
           final BalanceLoadPort loadPort,
           final TransactionAddUseCase transactionAddUseCase,
           final GetTransactionTypeQuery transactionTypeQuery,
           final GetTransactionQuery transactionQuery) {
-    return new FeeDebtReplenishService(
+    return new FeeReplenishService(
             loadPort,
             transactionAddUseCase,
             transactionTypeQuery,

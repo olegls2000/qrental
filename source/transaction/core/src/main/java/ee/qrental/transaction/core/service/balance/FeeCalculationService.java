@@ -4,32 +4,30 @@ import static ee.qrental.transaction.api.in.TransactionConstants.TRANSACTION_TYP
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 
-import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
-import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
+import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class FeeTransactionCreator {
+public class FeeCalculationService {
   private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.0175d);
   private static final BigDecimal FEE_CALCULATION_THRESHOLD = ZERO;
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
 
-  public Optional<TransactionResponse> creteFeeTransactionIfNecessary(
+  public void calculate(
       final Week week, final DriverResponse driver) {
     if (!driver.getNeedFee()) {
       System.out.println(
           "Fee charging is not activated for Driver (" + driver.getIsikukood() + ")");
-      return Optional.empty();
+      return;
     }
     final var driverId = driver.getId();
     final var feeAmount = getFeeAmountBasedOnPreviousWekBalance(week, driverId);
@@ -38,18 +36,11 @@ public class FeeTransactionCreator {
           "Driver ("
               + driver.getIsikukood()
               + ") doesn't have negative balance for Previous week. Fee debt transaction is not required.");
-      return Optional.empty();
+      return;
     }
     final var feeTransactionAddRequest =
         getTransactionRequest(feeAmount, driverId, week.weekNumber(), week.end());
-    final var id = transactionAddUseCase.add(feeTransactionAddRequest);
-    System.out.println(
-        "Fee transaction with id = "
-            + id
-            + " was crated for Driver ("
-            + driver.getIsikukood()
-            + ")");
-    return Optional.of(TransactionResponse.builder().id(id).realAmount(feeAmount).build());
+transactionAddUseCase.add(feeTransactionAddRequest);
   }
 
   private TransactionAddRequest getTransactionRequest(
