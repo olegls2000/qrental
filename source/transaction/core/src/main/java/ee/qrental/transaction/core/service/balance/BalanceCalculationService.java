@@ -20,6 +20,7 @@ import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -66,7 +67,11 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                 final var savedBalance = balanceAddPort.add(balance);
                 final var balanceCalculationResult =
                     getBalanceCalculationResult(
-                        feeTransactionOpt, driversTransactions, savedBalance);
+                        driversTransactions,
+                            savedBalance,
+                            feeTransactionOpt,
+                            feeReplenishTransactions,
+                            Collections.emptyList());
                 domain.getResults().add(balanceCalculationResult);
                 System.out.printf(
                     "Balance for Driver with id: %d and week %d was calculated. ",
@@ -80,9 +85,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   }
 
   private BalanceCalculationResult getBalanceCalculationResult(
-      Optional<TransactionResponse> feeTransactionOpt,
-      List<TransactionResponse> driversTransactions,
-      Balance savedBalance) {
+     final List<TransactionResponse> driversTransactions,
+     final  Balance savedBalance,
+     final Optional<TransactionResponse> feeTransactionOpt,
+     final List<TransactionResponse> feeReplenishTransactions,
+     final List<TransactionResponse> compensationTransactions
+      ) {
     final var transactionIds =
         driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
     if (feeTransactionOpt.isPresent()) {
@@ -131,7 +139,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    final var feeWeekTotal = feeTransactionSum.add(replenishFeeSum);
+    final var feeWeekTotal = feeTransactionSum.subtract(replenishFeeSum);
 
     final var feeBalance = feeCalculator.calculate(feeWeekTotal, previousWeekBalance);
 

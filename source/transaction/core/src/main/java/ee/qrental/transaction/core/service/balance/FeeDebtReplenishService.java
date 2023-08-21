@@ -16,7 +16,6 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -44,7 +43,7 @@ public class FeeDebtReplenishService {
 
         final var positiveSortedTransactions = getListOfPositiveNonFeeTransactions(week, driverId);
         for(final TransactionResponse transaction: positiveSortedTransactions){
-            feeAmountToReplenish  = replenishAndGetNewFeeDebt(transaction, feeAmountToReplenish, feeReplenishTransactions);
+            feeAmountToReplenish  = replenishAndGetNewFeeDebt(week, transaction, feeAmountToReplenish, feeReplenishTransactions);
             if(feeAmountToReplenish.compareTo(ZERO) <= 0) {
                 return feeReplenishTransactions;
             }
@@ -68,6 +67,7 @@ public class FeeDebtReplenishService {
     }
 
     private BigDecimal replenishAndGetNewFeeDebt(
+            final Week week,
             final TransactionResponse donorTransaction,
             final BigDecimal feeAmountToReplenish,
             final List<TransactionResponse> feeReplenishTransactions) {
@@ -80,7 +80,7 @@ public class FeeDebtReplenishService {
             final var feeReplenishTransaction = getFeeReplenishTransaction(
                     feeAmountToReplenish,
                     donorTransaction.getDriverId(),
-                    donorTransaction.getWeekNumber());
+                    week);
            final var feeReplenishTransactionId = transactionAddUseCase.add(feeReplenishTransaction);
             feeReplenishTransactions.add(TransactionResponse.builder().id(feeReplenishTransactionId)
                     .realAmount(feeAmountToReplenish)
@@ -88,7 +88,7 @@ public class FeeDebtReplenishService {
             final var compensationTransaction = getCompensationTransaction(
                     feeAmountToReplenish,
                     donorTransaction.getDriverId(),
-                    donorTransaction.getWeekNumber(),
+                    week,
                     feeReplenishTransactionId,
                     donorTransaction.getId());
             transactionAddUseCase.add(compensationTransaction);
@@ -99,7 +99,7 @@ public class FeeDebtReplenishService {
         final var feeReplenishTransaction = getFeeReplenishTransaction(
                 possibleReplenishmentAmount,
                 donorTransaction.getDriverId(),
-                donorTransaction.getWeekNumber());
+                week);
         final var feeReplenishTransactionId = transactionAddUseCase.add(feeReplenishTransaction);
         feeReplenishTransactions.add(TransactionResponse.builder().id(feeReplenishTransactionId)
                 .realAmount(possibleReplenishmentAmount)
@@ -107,7 +107,7 @@ public class FeeDebtReplenishService {
         final var compensationTransaction = getCompensationTransaction(
                 possibleReplenishmentAmount,
                 donorTransaction.getDriverId(),
-                donorTransaction.getWeekNumber(),
+                week,
                 feeReplenishTransactionId,
                 donorTransaction.getId());
         transactionAddUseCase.add(compensationTransaction);
@@ -118,13 +118,13 @@ public class FeeDebtReplenishService {
     private  TransactionAddRequest  getCompensationTransaction(
             final BigDecimal compensationAmount,
             final Long driverId,
-            final int weekNumber,
+            final Week week,
             final Long feeReplenishTransactionId,
             final Long donorTransactionId){
         final var compensationTransactionAddRequest =  getTransactionRequest(
                 compensationAmount,
                 driverId,
-                weekNumber,
+                week,
                 TRANSACTION_TYPE_COMPENSATION,
                 format("Compensation. Automatically created transaction, during Balance Calculation, for the compensation of Fee replenishment." +
                                 "Fee replenishment Transaction ID: %d, Donor Transaction ID: %d",
@@ -137,11 +137,11 @@ public class FeeDebtReplenishService {
   private  TransactionAddRequest  getFeeReplenishTransaction(
           final BigDecimal feeReplenishmentAmount,
           final Long driverId,
-          final int weekNumber){
+          final Week week){
      final var feeReplenishTransactionAddRequest =  getTransactionRequest(
              feeReplenishmentAmount,
               driverId,
-              weekNumber,
+              week,
               TRANSACTION_TYPE_NAME_FEE_REPLENISH,
               "Replenishment. Automatically created transaction, during Balance Calculation, for the replenishing Fee debt");
 
@@ -151,7 +151,7 @@ public class FeeDebtReplenishService {
     private TransactionAddRequest getTransactionRequest(
             final BigDecimal amount,
             final Long driverId,
-            final Integer weekNumber,
+            final Week week,
             final String transactionTypeName,
             final String comment) {
         final var transactionType =
@@ -161,11 +161,11 @@ public class FeeDebtReplenishService {
         }
         final var transactionAddRequest = new TransactionAddRequest();
         transactionAddRequest.setAmount(amount);
-        transactionAddRequest.setDate(LocalDate.now());
+        transactionAddRequest.setDate(week.end());
         transactionAddRequest.setWithVat(FALSE);
         transactionAddRequest.setTransactionTypeId(transactionType.getId());
         transactionAddRequest.setDriverId(driverId);
-        transactionAddRequest.setWeekNumber(weekNumber);
+        transactionAddRequest.setWeekNumber(week.weekNumber());
         transactionAddRequest.setComment(comment);
 
         return transactionAddRequest;
