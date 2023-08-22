@@ -1,6 +1,7 @@
 package ee.qrental.invoice.core.service;
 
 import static ee.qrental.transaction.api.in.TransactionConstants.*;
+import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
@@ -97,11 +98,11 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 }
                 final var filter =
                     PeriodAndDriverFilter.builder()
-                        .driverId(driver.getId())
+                        .driverId(driverId)
                         .dateStart(weekStartDay)
                         .dateEnd(weekEndDay)
                         .build();
-                final var driversTransactions =
+                final var driversNegativeTransactions =
                     transactionQuery.getAllByFilter(filter).stream()
                         .filter(tx -> tx.getRealAmount().compareTo(BigDecimal.ZERO) < 0)
                         .toList();
@@ -119,13 +120,13 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var previousWeekBalanceAmount = previousWeekBalance.getAmount();
                 final var previousWeekFeeBalanceAmount = previousWeekBalance.getFee();
                 final var currentWeekFee =
-                    driversTransactions.stream()
+                    driversNegativeTransactions.stream()
                         .filter(tx -> isFeeType(tx.getType()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
                         .orElse(ZERO)
                         .negate();
-                final var invoiceItems = getInvoiceItems(driversTransactions, qFirm);
+                final var invoiceItems = getInvoiceItems(driversNegativeTransactions, qFirm);
                 final var invoice =
                     Invoice.builder()
                         .id(null)
@@ -153,7 +154,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .items(invoiceItems)
                         .build();
                 final var transactionIds =
-                    driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
+                    driversNegativeTransactions.stream().map(TransactionResponse::getId).collect(toSet());
                 final var result =
                     InvoiceCalculationResult.builder()
                         .invoice(invoice)
@@ -229,21 +230,21 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private List<InvoiceItem> getInvoiceItems(final List<TransactionResponse> transactions, final FirmResponse firm) {
-    final var withVat = isFirmWithVAT(firm);
+    final var withoutVat = isFirmWithoutVAT(firm);
     final var typeVsTransactions =
         transactions.stream()
             .filter(tx -> isNotFeeType(tx.getType()))
             .collect(groupingBy(TransactionResponse::getType));
 
     return typeVsTransactions.entrySet().stream()
-        .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue(), withVat))
+        .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue(), withoutVat))
         .collect(toList());
   }
 
   private InvoiceItem getInvoiceItem(final String type,
                                      final List<TransactionResponse> transactions,
-                                     final boolean withVat) {
-    final var vatRate = withVat ? VAT_RATE : BigDecimal.ONE;
+                                     final boolean withoutVat) {
+    final var vatRate = withoutVat ? ONE : VAT_RATE;
     final var amount =
         transactions.stream()
             .map(TransactionResponse::getRealAmount)
@@ -259,7 +260,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         .build();
   }
 
-  private boolean isFirmWithVAT(final FirmResponse firm){
-      return firm.getVatNumber() != null || firm.getVatNumber().length() != 0;
+  private boolean isFirmWithoutVAT(final FirmResponse firm){
+      return firm.getVatNumber() == null || firm.getVatNumber().isEmpty();
   }
 }
