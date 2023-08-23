@@ -20,18 +20,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FeeReplenishService {
 
-  private final BalanceLoadPort loadPort;
+  private final BalanceLoadPort balanceLoadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetTransactionQuery transactionQuery;
 
   public void replenish(final Week week, final Long driverId) {
-    var feeAmountToReplenish = getFeeAmountToReplenish(driverId, week);
-    if (feeAmountToReplenish.compareTo(ZERO) >= 0) {
+    var feeBalanceFromPreviousWeek = getFeeAmountFromPreviousWeek(driverId, week);
+    if (feeBalanceFromPreviousWeek.compareTo(ZERO) >= 0) {
       System.out.println("Fee replenish is not required in Week: " + week.weekNumber());
 
       return;
     }
+    var feeAmountToReplenish = feeBalanceFromPreviousWeek.abs();
     final var donorTransactions = getListOfPositiveNonFeeTransactions(week, driverId);
     for (final TransactionResponse donorTransaction : donorTransactions) {
       feeAmountToReplenish =
@@ -44,15 +45,15 @@ public class FeeReplenishService {
     }
   }
 
-  private BigDecimal getFeeAmountToReplenish(final Long driverId, final Week week) {
+  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final Week week) {
     final var currentWeekNumber = week.weekNumber();
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
-        loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
+        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
             driverId, week.getYear(), previousWeekNumber);
-    var feeAmountToReplenish = balanceFromPreviousWeek.getFee();
+    var feeBalanceFromPreviousWeek = balanceFromPreviousWeek.getFee();
 
-    return feeAmountToReplenish;
+    return feeBalanceFromPreviousWeek;
   }
 
   private List<TransactionResponse> getListOfPositiveNonFeeTransactions(
@@ -80,6 +81,8 @@ public class FeeReplenishService {
       throw new RuntimeException(
           "You are trying to replenish Fee Debt from Negative Transaction. Check Transaction selection Logic!");
     }
+
+
     final var leftover = transactionAmount.add(feeAmountToReplenish);
     if (leftover.compareTo(ZERO) >= 0) {
       replenishAndCompensate(

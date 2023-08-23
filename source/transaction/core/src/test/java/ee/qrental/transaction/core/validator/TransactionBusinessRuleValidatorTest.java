@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 class TransactionBusinessRuleValidatorTest {
     private TransactionBusinessRuleValidator instanceUnderTest;
-
     private  TransactionLoadPort transactionLoadPort;
     private  BalanceLoadPort balanceLoadPort;
     
