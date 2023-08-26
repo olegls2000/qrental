@@ -141,6 +141,64 @@ class FeeReplenishServiceTest {
         assertEquals( 2, replenishTransactionAddRequest.getWeekNumber());
     }
 
+    @Test
+    void testReplenishIfFeeBalanceIsNegativeAndFeeDebtIsBiggerThenPositiveTransactionAmount(){
+        // given
+        final var driverId = 2L;
+        final var week = new Week(
+                LocalDate.of(2023, Month.JANUARY, 9),
+                LocalDate.of(2023, Month.JANUARY, 16),
+                2);
+        final var balance = Balance.builder().fee(BigDecimal.valueOf(-10)).build();
+        when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
+                .thenReturn(balance);
+
+        final var donorTransaction = TransactionResponse.builder().realAmount(BigDecimal.valueOf(15)).build();
+        when(transactionQuery.getAllByFilter(any(PeriodAndDriverFilter.class)))
+                .thenReturn(singletonList(donorTransaction));
+
+        final var replenishTransactionType = TransactionTypeResponse.builder()
+                .id(33L)
+                .name("fee replenish")
+                .build();
+        when(transactionTypeQuery.getByName("fee replenish"))
+                .thenReturn(replenishTransactionType);
+
+        final var compensationTransactionType = TransactionTypeResponse.builder()
+                .id(44L)
+                .name("compensation")
+                .build();
+        when(transactionTypeQuery.getByName("compensation"))
+                .thenReturn(compensationTransactionType);
+
+        // when
+        instanceUnderTest.replenish(week, 2L);
+
+        // then
+        final var transactionAddRequestCaptor = ArgumentCaptor.forClass(TransactionAddRequest.class);
+        verify(transactionAddUseCase, times(2)).add(transactionAddRequestCaptor.capture());
+        final var transactionAddRequests = transactionAddRequestCaptor.getAllValues();
+        final var compensationTransactionAddRequest =
+                transactionAddRequests.stream()
+                        .filter(
+                                transactionAddRequest -> transactionAddRequest.getTransactionTypeId().equals(44L))
+                        .findFirst()
+                        .get();
+        assertNotNull(compensationTransactionAddRequest);
+        assertEquals( BigDecimal.valueOf(10), compensationTransactionAddRequest.getAmount());
+        assertEquals( 2, compensationTransactionAddRequest.getWeekNumber());
+
+        final var replenishTransactionAddRequest =
+                transactionAddRequests.stream()
+                        .filter(
+                                transactionAddRequest -> transactionAddRequest.getTransactionTypeId().equals(33L))
+                        .findFirst()
+                        .get();
+        assertNotNull(replenishTransactionAddRequest);
+        assertEquals( BigDecimal.valueOf(10), replenishTransactionAddRequest.getAmount());
+        assertEquals( 2, replenishTransactionAddRequest.getWeekNumber());
+    }
+
     void test(){
         // given
 

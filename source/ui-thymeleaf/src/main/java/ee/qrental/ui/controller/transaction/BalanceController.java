@@ -123,7 +123,7 @@ public class BalanceController {
         balanceQuery.getLatestBalanceByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
      var feeFromLatestBalance = ZERO;
     if(latestBalance != null) {
-      feeFromLatestBalance = latestBalance.getFee().negate();
+      feeFromLatestBalance = latestBalance.getFee();
     }
     model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
 

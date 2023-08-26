@@ -39,7 +39,7 @@ public interface TransactionSpringDataRepository
                   "SELECT * FROM transaction tx "
                           + "WHERE tx.transaction_type_id  in ("
                           + "select txt.id from transaction_type txt "
-                          + "where txt.name <> 'fee debt') "
+                          + "where txt.name <> 'fee debt' and txt.name <> 'fee replenish') "
                           + "and tx.driver_id = :driverId "
                           + "and tx.date >= :dateStart and tx.date <= :dateEnd",
           nativeQuery = true)
@@ -53,7 +53,7 @@ public interface TransactionSpringDataRepository
                   "SELECT * FROM transaction tx "
                           + "WHERE tx.transaction_type_id  in ("
                           + "select txt.id from transaction_type txt "
-                          + "where txt.name = 'fee debt') "
+                          + "where txt.name in ('fee debt', 'fee replenish')) "
                           + "and tx.driver_id = :driverId "
                           + "and tx.date >= :dateStart and tx.date <= :dateEnd",
           nativeQuery = true)
