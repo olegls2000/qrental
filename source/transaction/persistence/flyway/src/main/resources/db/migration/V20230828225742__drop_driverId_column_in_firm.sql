@@ -1,0 +1,1 @@
+alter table firm drop column driver_id;
