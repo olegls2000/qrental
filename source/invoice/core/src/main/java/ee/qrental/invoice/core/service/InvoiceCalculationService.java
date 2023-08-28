@@ -105,6 +105,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var driversNegativeTransactions =
                     transactionQuery.getAllByFilter(filter).stream()
                         .filter(tx -> tx.getRealAmount().compareTo(BigDecimal.ZERO) < 0)
+                        .filter(tx -> !tx.getType().equals("compensation"))
                         .toList();
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =
