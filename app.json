@@ -1,0 +1,5 @@
+{
+  "name": "Q Rental",
+  "description": "Billing Application",
+  "addons": ["heroku-postgresql"]
+}
