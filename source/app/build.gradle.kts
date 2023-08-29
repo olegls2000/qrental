@@ -1,7 +1,5 @@
-
 plugins {
     id("org.springframework.boot") version "3.1.1"
-    id ("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 dependencies {
     implementation(project(":source:ui-thymeleaf"))
