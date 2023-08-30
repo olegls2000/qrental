@@ -28,6 +28,11 @@ public class ConstantRepositoryImpl implements ConstantRepository {
     }
 
     @Override
+    public ConstantJakartaEntity findByName(final String name) {
+        return springDataRepository.findByConstant(name);
+    }
+
+    @Override
     public void deleteById(final Long id) {
         springDataRepository.deleteById(id);
     }
