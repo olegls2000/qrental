@@ -1,18 +1,15 @@
 package ee.qrental.constant.core.service;
 
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.request.ConstantUpdateRequest;
 import ee.qrental.constant.api.in.response.ConstantResponse;
 import ee.qrental.constant.api.out.ConstantLoadPort;
 import ee.qrental.constant.core.mapper.ConstantResponseMapper;
 import ee.qrental.constant.core.mapper.ConstantUpdateRequestMapper;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
-
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ConstantQueryService implements GetConstantQuery {
@@ -39,5 +36,10 @@ public class ConstantQueryService implements GetConstantQuery {
   @Override
   public ConstantUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
+  }
+
+  @Override
+  public ConstantResponse getByName(final String name) {
+    return mapper.toResponse(loadPort.loadByName(name));
   }
 }

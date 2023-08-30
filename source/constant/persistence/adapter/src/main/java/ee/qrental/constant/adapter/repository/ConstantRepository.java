@@ -9,6 +9,7 @@ public interface ConstantRepository {
   ConstantJakartaEntity save(final ConstantJakartaEntity entity);
 
   ConstantJakartaEntity getReferenceById(final Long id);
+  ConstantJakartaEntity findByName(final String name);
 
   void deleteById(final Long id);
 }
