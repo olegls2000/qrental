@@ -1,0 +1,1 @@
+web: sh java -jar source/app/build/libs/app.jar -Dserver.port=$PORT
