@@ -1,4 +1,8 @@
+server:
+  port: ${PORT:8181}
 spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
   jpa:
     #show-sql: true
     properties:
