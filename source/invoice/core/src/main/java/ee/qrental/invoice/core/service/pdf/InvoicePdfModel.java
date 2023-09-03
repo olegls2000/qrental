@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class InvoicePdfModel {
   private String number;
-  private String creationDate;
   private Integer weekNumber;
   private Integer year;
   private String startDate;

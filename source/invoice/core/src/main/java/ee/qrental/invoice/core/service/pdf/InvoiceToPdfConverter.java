@@ -43,8 +43,7 @@ public class InvoiceToPdfConverter {
     final var invoicePdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(invoicePdfDoc, invoicePdfOutputStream);
     final var header =
-        getHeader(
-            model.getNumber(), model.getCreationDate(), model.getStartDate(), model.getEndDate());
+        getHeader(model.getNumber(), model.getStartDate(), model.getEndDate());
     final var requisites =
         getRequisites(
             model.getDriverCompany(),
@@ -99,7 +98,6 @@ public class InvoiceToPdfConverter {
   @SneakyThrows
   private Table getHeader(
       final String invoiceNumber,
-      final String invoiceDate,
       final String startDate,
       final String endDate) {
     final var header = new Table(2);
@@ -125,7 +123,7 @@ public class InvoiceToPdfConverter {
     header.addCell(cell1);
 
     final var cell2 =
-        new Cell(new Paragraph("Data : " + invoiceDate, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
+        new Cell(new Paragraph("Data : " + startDate, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
     cell2.setBorder(NO_BORDER);
     header.addCell(cell2);
 

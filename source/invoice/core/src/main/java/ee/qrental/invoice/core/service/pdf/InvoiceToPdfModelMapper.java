@@ -16,7 +16,6 @@ public class InvoiceToPdfModelMapper {
 
   public InvoicePdfModel getPdfModel(final Invoice invoice) {
     final var number = invoice.getNumber();
-    final var creationDate = invoice.getCreated().format(ofLocalizedDate(SHORT));
     final var weekNumber = invoice.getWeekNumber();
     final var previousWeekNumber = weekNumber - 1;
     final var year = invoice.getCreated().getYear();
@@ -63,12 +62,12 @@ public class InvoiceToPdfModelMapper {
     final var advancePayment = getAdvancePayment(balanceAmount);
     final var total = sumWithVat.add(debt).subtract(advancePayment);
     final var currentWeekFee = invoice.getCurrentWeekFee();
-    final var previousWeekBalanceFee = invoice.getPreviousWeekBalanceFee();
+    final var previousWeekBalanceFee = invoice.getPreviousWeekBalanceFee().negate();
+
     final var totalWithFee = total.add(currentWeekFee).add(previousWeekBalanceFee);
 
     return InvoicePdfModel.builder()
         .number(number)
-        .creationDate(creationDate)
         .weekNumber(weekNumber)
         .year(year)
         .startDate(startDate)
