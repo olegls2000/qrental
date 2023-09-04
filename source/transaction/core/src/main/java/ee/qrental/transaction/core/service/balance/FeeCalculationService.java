@@ -76,20 +76,19 @@ transactionAddUseCase.add(feeTransactionAddRequest);
       System.out.printf(
           "Debt from previous week is bigger then %s EURO (Debt: %s EUR), fee will be calculated",
           FEE_CALCULATION_THRESHOLD, amountFromPreviousWeek);
-      final var nominalWeeklyFee = amountFromPreviousWeek.multiply(WEEKLY_INTEREST).abs();
+
+      final var weeklyInterestConstant = constantQuery.getByName(FEE_WEEKLY_INTEREST);
+      if(weeklyInterestConstant == null) {
+        throw new RuntimeException("Please create a Constant: 'fee weekly interest' with appropriate value");
+      }
+      final var weeklyInterest = weeklyInterestConstant.getValue();
+      final var nominalWeeklyFee = amountFromPreviousWeek.multiply(weeklyInterest).abs();
       final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeek);
       if(totalFeeDebt.compareTo(amountFromPreviousWeek.abs()) < 0){
         return nominalWeeklyFee;
       }
       final var feeOverdue = totalFeeDebt.subtract(amountFromPreviousWeek);
       return nominalWeeklyFee.subtract(feeOverdue);
-      final var weeklyInterestConstant = constantQuery.getByName(FEE_WEEKLY_INTEREST);
-      if(weeklyInterestConstant == null) {
-        throw new RuntimeException("Please create a Constant: 'fee weekly interest' with appropriate value");
-      }
-      final var weeklyInterest = weeklyInterestConstant.getValue();
-
-      return amountFromPreviousWeek.multiply(weeklyInterest).negate();
     }
 
     return ZERO;
