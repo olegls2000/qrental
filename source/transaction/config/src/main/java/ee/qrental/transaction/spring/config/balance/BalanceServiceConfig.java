@@ -1,5 +1,6 @@
 package ee.qrental.transaction.spring.config.balance;
 
+import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
@@ -69,8 +70,9 @@ public class BalanceServiceConfig {
   FeeCalculationService getFeeTransactionCreator(
       final BalanceLoadPort loadPort,
       final TransactionAddUseCase transactionAddUseCase,
-      final GetTransactionTypeQuery transactionTypeQuery) {
-    return new FeeCalculationService(loadPort, transactionAddUseCase, transactionTypeQuery);
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final GetConstantQuery constantQuery) {
+    return new FeeCalculationService(loadPort, transactionAddUseCase, transactionTypeQuery, constantQuery);
   }
   @Bean
   FeeReplenishService getFeeDebtReplenishService(

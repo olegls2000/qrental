@@ -38,7 +38,7 @@ public class FeeReplenishService {
       feeAmountToReplenish =
           replenishAndGetNewFeeAmountToReplenish(
               week, donorTransaction, feeAmountToReplenish);
-      if (feeAmountToReplenish.compareTo(ZERO) >= 0) {
+      if (feeAmountToReplenish.compareTo(ZERO) <= 0) {
 
         return;
       }
@@ -83,24 +83,26 @@ public class FeeReplenishService {
     }
 
 
-    final var leftover = transactionAmount.add(feeAmountToReplenish);
-    if (leftover.compareTo(ZERO) >= 0) {
+    final var leftoverToReplenish = feeAmountToReplenish.subtract(transactionAmount);
+    if (leftoverToReplenish.compareTo(ZERO) >= 0) {
+      final var possibleReplenishmentAmount = transactionAmount;
       replenishAndCompensate(
-                feeAmountToReplenish,
+              possibleReplenishmentAmount,
                 donorTransaction.getDriverId(),
                 week,
                 donorTransaction.getId());
 
-      return ZERO;
+      return leftoverToReplenish;
     }
-    final var possibleReplenishmentAmount = transactionAmount;
+
+    final var possibleReplenishmentAmount = feeAmountToReplenish;
     replenishAndCompensate(
         possibleReplenishmentAmount,
         donorTransaction.getDriverId(),
         week,
         donorTransaction.getId());
 
-    return leftover;
+    return leftoverToReplenish;
   }
 
   private void replenishAndCompensate(
