@@ -39,7 +39,7 @@ public class FeeCalculationService {
       return;
     }
     final var feeTransactionAddRequest =
-        getTransactionRequest(feeAmount, driverId, week.weekNumber(), week.end());
+        getTransactionRequest(feeAmount.abs(), driverId, week.weekNumber(), week.end());
 transactionAddUseCase.add(feeTransactionAddRequest);
   }
 
@@ -68,11 +68,19 @@ transactionAddUseCase.add(feeTransactionAddRequest);
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
     final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
+    final var feeAmountFromPreviousWeek = balanceFromPreviousWeek.getFee();
+
     if (amountFromPreviousWeek.compareTo(FEE_CALCULATION_THRESHOLD) < 0) {
       System.out.printf(
           "Debt from previous week is bigger then %s EURO (Debt: %s EUR), fee will be calculated",
           FEE_CALCULATION_THRESHOLD, amountFromPreviousWeek);
-      return amountFromPreviousWeek.multiply(WEEKLY_INTEREST).negate();
+      final var nominalWeeklyFee = amountFromPreviousWeek.multiply(WEEKLY_INTEREST).abs();
+      final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeek);
+      if(totalFeeDebt.compareTo(amountFromPreviousWeek.abs()) < 0){
+        return nominalWeeklyFee;
+      }
+      final var feeOverdue = totalFeeDebt.subtract(amountFromPreviousWeek);
+      return nominalWeeklyFee.subtract(feeOverdue);
     }
 
     return ZERO;
