@@ -93,4 +93,16 @@ include("source:email:api:in")
 include("source:email:core")
 include("source:email:config")
 
+//User domain:
+include("source:user:api:in")
+include("source:user:api:out")
+include("source:user:domain")
+include("source:user:core")
+include("source:user:persistence:adapter")
+include("source:user:persistence:entity")
+include("source:user:persistence:repository")
+include("source:user:persistence:flyway")
+include("source:user:config")
+
+
 include("source:ui-thymeleaf")
