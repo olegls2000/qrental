@@ -21,7 +21,12 @@ public class ConstantLoadAdapter implements ConstantLoadPort {
   }
 
   @Override
-  public Constant loadById(Long id) {
+  public Constant loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+
+  @Override
+  public Constant loadByName(final String name) {
+    return mapper.mapToDomain(repository.findByName(name));
   }
 }

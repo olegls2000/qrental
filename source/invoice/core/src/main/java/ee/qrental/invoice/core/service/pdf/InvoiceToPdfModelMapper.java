@@ -58,7 +58,7 @@ public class InvoiceToPdfModelMapper {
             .collect(toMap(InvoiceItem::getDescription, InvoiceItem::getAmount));
 
     final var balanceAmount = invoice.getBalance();
-    final var debt = getDebt(balanceAmount, vatPercentage);
+    final var debt = getDebt(balanceAmount);
     final var advancePayment = getAdvancePayment(balanceAmount);
     final var total = sumWithVat.add(debt).subtract(advancePayment);
     final var currentWeekFee = invoice.getCurrentWeekFee();
@@ -101,12 +101,10 @@ public class InvoiceToPdfModelMapper {
         .build();
   }
 
-  private BigDecimal getDebt(final BigDecimal balanceAmount, final BigDecimal vatPercentage) {
+  private BigDecimal getDebt(final BigDecimal balanceAmount) {
     if (balanceAmount.signum() < 0) {
       final var debt = balanceAmount.negate();
-      final var debtVat = debt.multiply(vatPercentage.movePointLeft(2));
-
-      return debt.add(debtVat);
+      return debt;
     }
 
     return ZERO;

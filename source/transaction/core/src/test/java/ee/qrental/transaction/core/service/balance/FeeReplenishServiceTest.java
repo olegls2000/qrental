@@ -120,7 +120,7 @@ class FeeReplenishServiceTest {
         final var transactionAddRequestCaptor = ArgumentCaptor.forClass(TransactionAddRequest.class);
         verify(transactionAddUseCase, times(2)).add(transactionAddRequestCaptor.capture());
         final var transactionAddRequests = transactionAddRequestCaptor.getAllValues();
-    final var compensationTransactionAddRequest =
+        final var compensationTransactionAddRequest =
         transactionAddRequests.stream()
             .filter(
                 transactionAddRequest -> transactionAddRequest.getTransactionTypeId().equals(44L))

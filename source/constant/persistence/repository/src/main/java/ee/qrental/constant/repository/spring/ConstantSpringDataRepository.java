@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConstantSpringDataRepository
         extends JpaRepository<ConstantJakartaEntity, Long> {
+    ConstantJakartaEntity findByConstant(final String constant);
 }

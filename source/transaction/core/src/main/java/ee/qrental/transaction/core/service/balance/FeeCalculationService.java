@@ -5,6 +5,7 @@ import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.common.core.utils.Week;
+import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
@@ -16,11 +17,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FeeCalculationService {
-  private static final BigDecimal WEEKLY_INTEREST = BigDecimal.valueOf(0.0175d);
+  private static final String FEE_WEEKLY_INTEREST = "fee weekly interest";
   private static final BigDecimal FEE_CALCULATION_THRESHOLD = ZERO;
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
+  private final GetConstantQuery constantQuery;
 
   public void calculate(
       final Week week, final DriverResponse driver) {
@@ -39,7 +41,7 @@ public class FeeCalculationService {
       return;
     }
     final var feeTransactionAddRequest =
-        getTransactionRequest(feeAmount, driverId, week.weekNumber(), week.end());
+        getTransactionRequest(feeAmount.abs(), driverId, week.weekNumber(), week.end());
 transactionAddUseCase.add(feeTransactionAddRequest);
   }
 
@@ -68,11 +70,26 @@ transactionAddUseCase.add(feeTransactionAddRequest);
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
     final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
+    final var feeAmountFromPreviousWeek = balanceFromPreviousWeek.getFee();
+
     if (amountFromPreviousWeek.compareTo(FEE_CALCULATION_THRESHOLD) < 0) {
       System.out.printf(
           "Debt from previous week is bigger then %s EURO (Debt: %s EUR), fee will be calculated",
           FEE_CALCULATION_THRESHOLD, amountFromPreviousWeek);
-      return amountFromPreviousWeek.multiply(WEEKLY_INTEREST).negate();
+      final var amountFromPreviousWeekAbs = amountFromPreviousWeek.abs();
+   final var feeAmountFromPreviousWeekAbs = feeAmountFromPreviousWeek.abs();
+      final var weeklyInterestConstant = constantQuery.getByName(FEE_WEEKLY_INTEREST);
+      if(weeklyInterestConstant == null) {
+        throw new RuntimeException("Please create a Constant: 'fee weekly interest' with appropriate value");
+      }
+      final var weeklyInterest = weeklyInterestConstant.getValue();
+      final var nominalWeeklyFee = amountFromPreviousWeekAbs.multiply(weeklyInterest);
+      final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeekAbs);
+      if(totalFeeDebt.compareTo(amountFromPreviousWeekAbs) < 0){
+        return nominalWeeklyFee;
+      }
+      final var feeOverdue = totalFeeDebt.subtract(amountFromPreviousWeekAbs);
+      return nominalWeeklyFee.subtract(feeOverdue);
     }
 
     return ZERO;
