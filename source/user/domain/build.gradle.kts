@@ -4,5 +4,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-domain.jar")
+    archiveFileName.set("user-domain.jar")
 }

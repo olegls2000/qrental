@@ -1,20 +1,22 @@
 package ee.qrental.user.entity.jakarta;
 
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
+@Entity
+@Table(name = "role")
+@SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "role")
 public class RoleJakartaEntity {
 
     @Id
@@ -23,4 +25,7 @@ public class RoleJakartaEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "comment")
+    private String comment;
 }

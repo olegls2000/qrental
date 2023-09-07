@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-ee.qrental.user.repository.UserSpringDataConfig
+ee.qrental.user.repository.UserAccountSpringDataConfig

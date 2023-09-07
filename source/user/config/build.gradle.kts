@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":source:user:persistence:adapter"))
     implementation(project(":source:user:persistence:repository"))
     implementation(project(":source:firm:api:in"))
+    implementation(project(":source:email:api:in"))
     implementation("org.springframework:spring-context-support")
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

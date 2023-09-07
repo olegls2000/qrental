@@ -1,0 +1,38 @@
+<div th:fragment="rolePage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/userTabFragment.html :: userTabs('roles')"></ul>
+
+    <h2 class="py-3">Roles</h2>
+    <table class="table table-sm table-striped table-bordered align-middle">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/roles/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th></th>
+            <th>Name</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(roles)}">
+            <td colspan="5">No roles</td>
+        </tr>
+        <tr th:each="role : ${roles}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/roles/update-form/{id}(id=${role.id})}">
+                    <span class="bi-pencil-square"></span></a>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/roles/delete-form/{id}(id=${role.id})}">
+                    <span class="bi-trash"></span></a>
+            </td>
+            <td th:text="${role.name}">??</td>
+            <td th:text="${role.comment}">??</td>
+        </tr>
+    </table>
+</div>

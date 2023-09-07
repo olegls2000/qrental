@@ -1,0 +1,44 @@
+<div th:fragment="userPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/userTabFragment.html :: userTabs('users')"></ul>
+
+    <h2 class="py-3">Users</h2>
+    <table class="table table-sm table-striped table-bordered align-middle">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/users/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th></th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Roles count</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="5">No users</td>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/users/update-form/{id}(id=${user.id})}">
+                    <span class="bi-pencil-square"></span></a>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/users/delete-form/{id}(id=${user.id})}">
+                    <span class="bi-trash"></span></a>
+            </td>
+            <td th:text="${user.username}">??</td>
+            <td th:text="${user.email}">??</td>
+            <td th:text="${user.firstName}">??</td>
+            <td th:text="${user.lastName}">??</td>
+            <td th:text="${user.rolesCount}">??</td>
+        </tr>
+    </table>
+</div>

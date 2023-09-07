@@ -1,16 +1,16 @@
 dependencies {
     implementation(project(":source:common"))
-    implementation(project(":source:driver:api:in"))
-    implementation(project(":source:driver:api:out"))
-    implementation(project(":source:driver:domain"))
-    implementation(project(":source:firm:api:in"))
+    implementation(project(":source:user:api:in"))
+    implementation(project(":source:user:api:out"))
+    implementation(project(":source:user:domain"))
 
+    implementation(project(":source:email:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
+    implementation(libs.q.jakarta.transaction)
 }
 
-
 tasks.jar {
-    archiveFileName.set("driver-core.jar")
+    archiveFileName.set("user-core.jar")
 }

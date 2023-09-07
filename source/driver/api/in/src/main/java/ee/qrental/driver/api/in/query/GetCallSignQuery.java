@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface GetCallSignQuery extends BaseGetQuery<CallSignUpdateRequest, CallSignResponse> {
 
-    List<CallSignResponse> getAvailable();
+  List<CallSignResponse> getAvailable();
 }

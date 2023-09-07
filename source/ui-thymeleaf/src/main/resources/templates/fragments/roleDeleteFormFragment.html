@@ -1,0 +1,29 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Role',
+            closeRef='/roles',
+            content=~{fragments/roleDeleteFormFragment.html :: deleteForm},
+            request=${deleteRequest}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/roles/delete}"
+      th:object="${deleteRequest}"
+      method="post">
+    <input id="roleId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text=${objectInfo}>??</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/roles'
+        )">
+    </div>
+</form>

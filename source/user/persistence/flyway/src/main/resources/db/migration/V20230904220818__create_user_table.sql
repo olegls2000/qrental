@@ -1,4 +1,4 @@
-create table if not exists user
+create table if not exists user_account
 (
     id         serial primary key,
     first_name varchar(40) not null,
