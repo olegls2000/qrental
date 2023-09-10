@@ -167,7 +167,7 @@
             </div>
         </div>
     </div>
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered table-hover">
         <tr>
             <th>
                 <a class="btn btn-sm btn-success"
@@ -187,7 +187,8 @@
         <tr th:if="${#lists.isEmpty(transactions)}">
             <td colspan="5">No Transactions</td>
         </tr>
-        <tr th:each="transaction : ${transactions}">
+        <tr th:each="transaction : ${transactions}"
+            data-bs-toggle="tooltip" th:attr="title=${transaction.comment}" >
             <td>
                 <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
                    th:href="@{/transactions/update-form/driver/{id}(id=${transaction.id})}">
@@ -206,7 +207,7 @@
             <td th:text="${transaction.weekNumber}">???</td>
             <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
             <td th:text="${transaction.withVat}">???</td>
-            <td th:text="${transaction.comment}">???</td>
+            <td th:text="${transaction.commentShorten}">???</td>
         </tr>
     </table>
 </div>

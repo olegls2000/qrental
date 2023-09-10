@@ -34,7 +34,8 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .weekNumber(domain.getWeekNumber())
         .withVat(domain.getWithVat())
         .raw(domain.isRaw())
-        .comment(contract(domain.getComment(), COMMENT_MAX_SIZE))
+        .comment(domain.getComment())
+        .commentShorten(contract(domain.getComment(), COMMENT_MAX_SIZE))
         .build();
   }
 

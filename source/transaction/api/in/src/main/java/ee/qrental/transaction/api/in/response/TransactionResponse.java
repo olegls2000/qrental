@@ -20,4 +20,5 @@ public class TransactionResponse {
   private Boolean withVat;
   private Boolean raw;
   private String comment;
+  private String commentShorten;
 }
