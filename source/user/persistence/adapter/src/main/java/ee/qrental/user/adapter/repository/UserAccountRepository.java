@@ -6,6 +6,7 @@ import java.util.List;
 public interface UserAccountRepository {
   
   List<UserAccountJakartaEntity> findAll();
+  List<UserAccountJakartaEntity> findByRoleId(final Long roleId);
 
   UserAccountJakartaEntity save(final UserAccountJakartaEntity entity);
 
@@ -15,4 +16,5 @@ public interface UserAccountRepository {
 
   UserAccountJakartaEntity findByUsername(final String username);
   UserAccountJakartaEntity findByEmail(final String email);
+
 }

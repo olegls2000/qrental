@@ -75,8 +75,13 @@ public class RoleUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteRole(final RoleDeleteRequest deleteRequest) {
+  public String deleteRole(final RoleDeleteRequest deleteRequest, final Model model) {
     deleteUseCase.delete(deleteRequest);
+    if (deleteRequest.hasViolations()) {
+      model.addAttribute("deleteRequest", deleteRequest);
+
+      return "forms/deleteRole";
+    }
 
     return "redirect:" + ROLE_ROOT_PATH;
   }

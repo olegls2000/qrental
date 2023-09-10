@@ -38,4 +38,9 @@ public class UserAccountLoadAdapter implements UserAccountLoadPort {
     
     return mapper.mapToDomain(entity);
   }
+
+  @Override
+  public List<UserAccount> loadByRoleId(final Long roleId) {
+    return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+  }
 }

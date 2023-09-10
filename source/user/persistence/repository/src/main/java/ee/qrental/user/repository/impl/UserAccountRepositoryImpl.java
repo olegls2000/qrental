@@ -17,6 +17,11 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
   }
 
   @Override
+  public List<UserAccountJakartaEntity> findByRoleId(final Long roleId) {
+    return springDataRepository.findAllByRoleId(roleId);
+  }
+
+  @Override
   public UserAccountJakartaEntity save(final UserAccountJakartaEntity entity) {
     return springDataRepository.save(entity);
   }
