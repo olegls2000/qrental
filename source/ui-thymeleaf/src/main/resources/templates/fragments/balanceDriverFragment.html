@@ -66,6 +66,27 @@
                                 </div>
                             </div>
                         </th>
+                        <th class="align-middle">
+                            <div class="row">
+                                <div class="col-2">
+                                    <a class="btn btn-sm btn-success"
+                                       th:href="@{/links/add-form}"
+                                       role="button"
+                                       aria-controls="offcanvasExample">
+                                        <span class="bi-plus-circle"></span></a>
+                                </div>
+                                <div class="col">
+                                    <div class="align-self-start">
+                                        <span class="py-3">Current Contract:</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-sm btn-info"
+                                       th:href="@{/invoices/pdf/{id}(id=${carLinkIdd})}">
+                                        <span class="bi-file-earmark-pdf"></span></a>
+                                </div>
+                            </div>
+                        </th>
                     </tr>
                 </table>
                 <div class="row justify-content-md-center mb-3">
@@ -188,7 +209,7 @@
             <td colspan="5">No Transactions</td>
         </tr>
         <tr th:each="transaction : ${transactions}"
-            data-bs-toggle="tooltip" th:attr="title=${transaction.comment}" >
+            data-bs-toggle="tooltip" th:attr="title=${transaction.comment}">
             <td>
                 <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
                    th:href="@{/transactions/update-form/driver/{id}(id=${transaction.id})}">

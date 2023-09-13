@@ -77,6 +77,17 @@ include("source:invoice:persistence:repository")
 include("source:invoice:persistence:flyway")
 include("source:invoice:config")
 
+//Contract domain:
+include("source:contract:api:in")
+include("source:contract:api:out")
+include("source:contract:domain")
+include("source:contract:core")
+include("source:contract:persistence:adapter")
+include("source:contract:persistence:entity")
+include("source:contract:persistence:repository")
+include("source:contract:persistence:flyway")
+include("source:contract:config")
+
 //Transaction domain:
 include("source:transaction:api:in")
 include("source:transaction:api:out")

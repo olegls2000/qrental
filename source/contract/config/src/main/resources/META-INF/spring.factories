@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.contract.spring.config.ContractAdapterConfig,\
+ee.qrental.contract.spring.config.ContractMapperConfig,\
+ee.qrental.contract.spring.config.ContractServiceConfig,\
+ee.qrental.contract.spring.config.ContractRepositoryConfig,\
+ee.qrental.contract.spring.config.ContractValidatorConfig
