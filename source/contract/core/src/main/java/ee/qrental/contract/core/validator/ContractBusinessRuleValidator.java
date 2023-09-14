@@ -1,5 +1,7 @@
 package ee.qrental.contract.core.validator;
 
+import static java.lang.String.format;
+
 import ee.qrental.common.core.in.validation.QValidator;
 import ee.qrental.common.core.in.validation.ViolationsCollector;
 import ee.qrental.contract.api.out.ContractLoadPort;
@@ -33,13 +35,12 @@ public class ContractBusinessRuleValidator implements QValidator<Contract> {
   }
 
   private void checkUniqueness(final Contract domain, final ViolationsCollector violationCollector) {
-    final var invoiceFromDb =
-        loadPort.loadByWeekAndDriverAndFirm(
-            domain.getWeekNumber(), domain.getDriverId(), domain.getQFirmId());
-    if (invoiceFromDb == null) {
+    final var number = domain.getNumber();
+    final var contractFromDb = loadPort.loadByNumber(number);
+    if (contractFromDb == null) {
       return;
     }
-    violationCollector.collect("Contract for used Driver, Week, and Q-firm, already exist");
+    violationCollector.collect(format("Contract with number: %s already exists.", number));
   }
 
   private void checkExistence(final Long id, final ViolationsCollector violationCollector) {

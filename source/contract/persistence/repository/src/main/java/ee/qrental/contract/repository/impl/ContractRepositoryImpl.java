@@ -31,4 +31,8 @@ public class ContractRepositoryImpl implements ContractRepository {
     springDataRepository.deleteById(id);
   }
 
+  @Override
+  public ContractJakartaEntity getByNumber(final String number) {
+    return springDataRepository.findByNumber(number);
+  }
 }

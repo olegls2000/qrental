@@ -11,6 +11,7 @@ public class ControllerUtils {
   public static final String FIRM_LINK_ROOT_PATH = "/firm-links";
   public static final String CAR_ROOT_PATH = "/cars";
   public static final String DRIVER_ROOT_PATH = "/drivers";
+  public static final String CONTRACT_ROOT_PATH = "/contracts";
   public static final String USER_ROOT_PATH = "/users";
   public static final String ROLE_ROOT_PATH = "/roles";
   public static final String FIRM_ROOT_PATH = "/firms";

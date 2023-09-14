@@ -18,7 +18,6 @@ import ee.qrental.contract.core.mapper.ContractAddRequestMapper;
 import ee.qrental.contract.core.mapper.ContractUpdateRequestMapper;
 import ee.qrental.contract.core.validator.ContractBusinessRuleValidator;
 import jakarta.transaction.Transactional;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
 @Transactional(SUPPORTS)

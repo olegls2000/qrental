@@ -70,7 +70,7 @@
                             <div class="row">
                                 <div class="col-2">
                                     <a class="btn btn-sm btn-success"
-                                       th:href="@{/links/add-form}"
+                                       th:href="${'/contracts/add-form/'+ {driverId} + '/' + {qFirmId}}"
                                        role="button"
                                        aria-controls="offcanvasExample">
                                         <span class="bi-plus-circle"></span></a>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col">
                                     <a class="btn btn-sm btn-info"
-                                       th:href="@{/invoices/pdf/{id}(id=${carLinkIdd})}">
+                                       th:href="@{/contracts/pdf/{id}(id=${contractId})}">
                                         <span class="bi-file-earmark-pdf"></span></a>
                                 </div>
                             </div>

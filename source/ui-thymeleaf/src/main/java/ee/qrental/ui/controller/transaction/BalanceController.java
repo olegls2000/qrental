@@ -152,6 +152,7 @@ public class BalanceController {
     model.addAttribute("driverLastName", driver.getLastName());
     model.addAttribute("driverPhone", driver.getPhone());
     model.addAttribute("driverDeposit", getDeposit(driver));
+    model.addAttribute("qFirmId", driver.getQFirmId());
   }
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {

@@ -9,6 +9,8 @@ dependencies {
     implementation(project(":source:car:persistence:flyway"))
     implementation(project(":source:invoice:config"))
     implementation(project(":source:invoice:persistence:flyway"))
+    implementation(project(":source:contract:config"))
+    implementation(project(":source:contract:persistence:flyway"))
     implementation(project(":source:firm:config"))
     implementation(project(":source:firm:persistence:flyway"))
     implementation(project(":source:link:config"))

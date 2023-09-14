@@ -1,10 +1,9 @@
 package ee.qrental.contract.adapter.mapper;
 
-import static java.util.stream.Collectors.toList;
+
+import static java.util.Arrays.asList;
 
 import ee.qrental.contract.domain.Contract;
-import ee.qrental.contract.domain.InvoiceItem;
-import ee.qrental.invoice.entity.jakarta.InvoiceItemJakartaEntity;
 import ee.qrental.contract.entity.jakarta.ContractJakartaEntity;
 
 public class ContractAdapterMapper {
@@ -12,75 +11,79 @@ public class ContractAdapterMapper {
   public Contract mapToDomain(final ContractJakartaEntity entity) {
     if (entity == null) {
       return null;
-    }  
+    }
     return Contract.builder()
         .id(entity.getId())
         .number(entity.getNumber())
-        .weekNumber(entity.getWeekNumber())
+        .renterName(entity.getRenterName())
+        .renterRegistrationNumber(entity.getRenterRegistrationNumber())
+        .renterCeoName(entity.getRenterCeoName())
+        .renterCeoIsikukood(entity.getRenterCeoIsikukood())
+        .renterPhone(entity.getRenterPhone())
+        .renterEmail(entity.getRenterEmail())
         .driverId(entity.getDriverId())
-        .driverCompany(entity.getDriverCompany())
-        .driverInfo(entity.getDriverInfo())
-        .driverCompanyRegNumber(entity.getDriverCompanyRegNumber())
-        .driverCompanyAddress(entity.getDriverCompanyAddress())
+        .driverIsikukood(entity.getDriverIsikukood())
+        .driverLicenceNumber(entity.getDriverLicenceNumber())
         .qFirmId(entity.getQFirmId())
         .qFirmName(entity.getQFirmName())
-        .qFirmRegNumber(entity.getQFirmRegNumber())
-        .qFirmVatNumber(entity.getQFirmVatNumber())
-        .qFirmIban(entity.getQFirmIban())
-        .qFirmBank(entity.getQFirmBank())
-        .qFirmEmail(entity.getQFirmEmail())
+        .qFirmRegistrationNumber(entity.getQFirmRegistrationNumber())
         .qFirmPostAddress(entity.getQFirmPostAddress())
-        .qFirmPhone(entity.getQFirmPhone())
-        .created(entity.getCreated())
-        .balance(entity.getBalance())
-        .currentWeekFee(entity.getCurrentWeekFee())
-        .previousWeekBalanceFee(entity.getPreviousWeekBalanceFee())
-        .comment(entity.getComment())
-        .items(entity.getItems().stream().map(this::mapToItemDomain).collect(toList()))
-        .build();
-  }
-
-  public InvoiceItem mapToItemDomain(final InvoiceItemJakartaEntity entity) {
-    return InvoiceItem.builder()
-        .amount(entity.getAmount())
-        .type(entity.getType())
-        .description(entity.getDescription())
+        .qFirmEmail(entity.getQFirmEmail())
+        .qFirmCeo(entity.getRenterCeoName())
+         .qFirmCeoDeputies(asList(entity.getQFirmCeoDeputy1(), entity.getQFirmCeoDeputy2(), entity.getQFirmCeoDeputy3()))
+         .created(entity.getCreated())
         .build();
   }
 
   public ContractJakartaEntity mapToEntity(final Contract domain) {
+
     return ContractJakartaEntity.builder()
-        .id(domain.getId())
-        .id(domain.getId())
-        .number(domain.getNumber())
-        .weekNumber(domain.getWeekNumber())
-        .driverId(domain.getDriverId())
-        .driverCompany(domain.getDriverCompany())
-        .driverInfo(domain.getDriverInfo())
-        .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())
-        .driverCompanyAddress(domain.getDriverCompanyAddress())
-        .qFirmId(domain.getQFirmId())
-        .qFirmName(domain.getQFirmName())
-        .qFirmRegNumber(domain.getQFirmRegNumber())
-        .qFirmVatNumber(domain.getQFirmVatNumber())
-        .qFirmIban(domain.getQFirmIban())
-        .qFirmBank(domain.getQFirmBank())
-        .qFirmEmail(domain.getQFirmEmail())
-        .qFirmPostAddress(domain.getQFirmPostAddress())
-        .qFirmPhone(domain.getQFirmPhone())
-        .created(domain.getCreated())
-        .balance(domain.getBalance())
-        .currentWeekFee(domain.getCurrentWeekFee())
-        .previousWeekBalanceFee(domain.getPreviousWeekBalanceFee())
-        .comment(domain.getComment())
+            .id(domain.getId())
+            .number(domain.getNumber())
+            .renterName(domain.getRenterName())
+            .renterRegistrationNumber(domain.getRenterRegistrationNumber())
+            .renterCeoName(domain.getRenterCeoName())
+            .renterCeoIsikukood(domain.getRenterCeoIsikukood())
+            .renterPhone(domain.getRenterPhone())
+            .renterEmail(domain.getRenterEmail())
+            .driverId(domain.getDriverId())
+            .driverIsikukood(domain.getDriverIsikukood())
+            .driverLicenceNumber(domain.getDriverLicenceNumber())
+            .qFirmId(domain.getQFirmId())
+            .qFirmName(domain.getQFirmName())
+            .qFirmRegistrationNumber(domain.getQFirmRegistrationNumber())
+            .qFirmPostAddress(domain.getQFirmPostAddress())
+            .qFirmEmail(domain.getQFirmEmail())
+            .qFirmCeo(domain.getRenterCeoName())
+            .qFirmCeoDeputy1(getQfirmCeoDeputy1(domain))
+            .qFirmCeoDeputy2(getQfirmCeoDeputy2(domain))
+            .qFirmCeoDeputy3(getQfirmCeoDeputy3(domain))
+            .created(domain.getCreated())
         .build();
   }
+  
+  private String getQfirmCeoDeputy1(final Contract contract){
+    final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
+    if(qFirmCeoDeputies!= null && qFirmCeoDeputies.size()>0) {
+      return qFirmCeoDeputies.get(0);
+    }
+    return null;
+  }
 
-  public InvoiceItemJakartaEntity mapToItemEntity(final InvoiceItem entity) {
-    return InvoiceItemJakartaEntity.builder()
-        .amount(entity.getAmount())
-        .type(entity.getType())
-        .description(entity.getDescription())
-        .build();
+  private String getQfirmCeoDeputy2(final Contract contract){
+    final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
+    if(qFirmCeoDeputies!= null && qFirmCeoDeputies.size()>1) {
+      return qFirmCeoDeputies.get(1);
+    }
+
+    return null;
+  }
+
+  private String getQfirmCeoDeputy3(final Contract contract){
+    final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
+    if(qFirmCeoDeputies!= null && qFirmCeoDeputies.size()>2) {
+      return qFirmCeoDeputies.get(2);
+    }
+    return null;
   }
 }

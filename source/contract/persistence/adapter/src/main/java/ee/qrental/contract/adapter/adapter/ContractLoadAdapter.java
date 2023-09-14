@@ -21,8 +21,16 @@ public class ContractLoadAdapter implements ContractLoadPort {
   }
 
   @Override
-  public Contract loadById(Long id) {
-    return mapper.mapToDomain(repository.getReferenceById(id));
+  public Contract loadById(final Long id) {
+   final var entity =  repository.getReferenceById(id);
+
+   return mapper.mapToDomain(entity);
   }
 
+  @Override
+  public Contract loadByNumber(final String number) {
+    final var entity =  repository.getByNumber(number);
+   
+    return mapper.mapToDomain(entity);
+  }
 }

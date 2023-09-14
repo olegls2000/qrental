@@ -8,8 +8,6 @@ create table contract
     renter_ceo_isikukood       varchar,
     renter_phone               varchar not null,
     renter_email               varchar not null,
-
-
     driver_id                  integer not null
         references driver,
     driver_isikukood           numeric not null,
@@ -21,5 +19,9 @@ create table contract
     q_firm_registration_number varchar not null,
     q_firm_post_address        varchar not null,
     q_firm_email               varchar not null,
+    q_firm_ceo                 varchar not null,
+    q_firm_ceo_deputy1         varchar,
+    q_firm_ceo_deputy2         varchar,
+    q_firm_ceo_deputy3         varchar,
     created                    date    not null
 );

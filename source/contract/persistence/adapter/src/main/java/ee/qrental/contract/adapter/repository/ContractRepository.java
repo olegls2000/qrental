@@ -11,4 +11,6 @@ public interface ContractRepository {
   ContractJakartaEntity getReferenceById(final Long id);
 
   void deleteById(final Long id);
+
+  ContractJakartaEntity getByNumber(final String number);
 }

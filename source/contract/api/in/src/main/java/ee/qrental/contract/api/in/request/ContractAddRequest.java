@@ -11,4 +11,5 @@ import lombok.Setter;
 @Setter
 public class ContractAddRequest extends AbstractAddRequest {
   private Long driverId;
+  private Long qFirmId;
 }

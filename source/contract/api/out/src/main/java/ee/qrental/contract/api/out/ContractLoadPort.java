@@ -4,4 +4,5 @@ import ee.qrental.common.core.out.port.LoadPort;
 import ee.qrental.contract.domain.Contract;
 
 public interface ContractLoadPort extends LoadPort<Contract> {
+   Contract loadByNumber(String number);
 }

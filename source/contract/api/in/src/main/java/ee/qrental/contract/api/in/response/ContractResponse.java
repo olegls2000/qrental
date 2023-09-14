@@ -11,12 +11,10 @@ public class ContractResponse {
   private Long id;
   private String number;
   private String renterName;
-  private Integer renterRegistrationNumber;
+  private String renterRegistrationNumber;
   private String renterCeoName;
-  private String renterCeoIsikukood;
-  private String renterPhone;
-  private String renterEmail;
-  private String driverLicence;
-  private Integer driverIsikukood;
+  private Long driverIsikukood;
+  private String qFirmName;
+  private String qFirmCeo;
   private LocalDate created;
 }

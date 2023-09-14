@@ -1,6 +1,7 @@
 package ee.qrental.contract.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,6 @@ public class Contract {
   private String qFirmPostAddress;
   private String qFirmEmail;
   private String qFirmCeo;
-  private List<String> qFirmCeoDeputies;
+  private List<String> qFirmCeoDeputies = new ArrayList<>();
   private LocalDate created;
 }

@@ -1,0 +1,33 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Contract',
+            content=~{fragments/contractAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/contracts/add}"
+          th:object="${addRequest}">
+
+        <input id="driverId" required
+               th:field="*{driverId}"
+               type="text"
+               hidden/>
+
+        <input id="qFirmId" required
+               th:field="*{qFirmId}"
+               type="text"
+               hidden/>
+
+         <p class="fs-5">Q-info:</p>
+        <p class="fs-5">Drivers info:</p>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add',
+            cancelHref='/contracts'
+        )">
+        </div>
+    </form>
+</div>

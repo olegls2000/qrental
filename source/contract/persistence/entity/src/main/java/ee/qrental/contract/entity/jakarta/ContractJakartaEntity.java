@@ -67,6 +67,18 @@ public class ContractJakartaEntity {
   @Column(name = "q_firm_email")
   private String qFirmEmail;
 
+  @Column(name = "q_firm_ceo")
+  private String qFirmCeo;
+
+  @Column(name = "q_firm_ceo_deputy1")
+  private String qFirmCeoDeputy1;
+
+  @Column(name = "q_firm_ceo_deputy2")
+  private String qFirmCeoDeputy2;
+
+  @Column(name = "q_firm_ceo_deputy3")
+  private String qFirmCeoDeputy3;
+
   @Column(name = "created")
   private LocalDate created;
 }
