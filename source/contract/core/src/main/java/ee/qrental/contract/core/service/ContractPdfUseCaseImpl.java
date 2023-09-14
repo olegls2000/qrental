@@ -1,10 +1,9 @@
 package ee.qrental.contract.core.service;
 
-import ee.qrental.contract.core.service.pdf.ContractToPdfModelMapper;
-import ee.qrental.invoice.api.in.usecase.InvoicePdfUseCase;
-import ee.qrental.invoice.api.out.InvoiceLoadPort;
+import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
+import ee.qrental.contract.api.out.ContractLoadPort;
 import ee.qrental.contract.core.service.pdf.ContractToPdfConverter;
-
+import ee.qrental.contract.core.service.pdf.ContractToPdfModelMapper;
 import java.io.InputStream;
 import lombok.AllArgsConstructor;
 
@@ -17,9 +16,9 @@ public class ContractPdfUseCaseImpl implements ContractPdfUseCase {
 
   @Override
   public InputStream getPdfInputStreamById(final Long id) {
-    final var invoice = loadPort.loadById(id);
-    final var invoicePdfModel = mapper.getPdfModel(invoice);
+    final var domain = loadPort.loadById(id);
+    final var pdfModel = mapper.getPdfModel(domain);
 
-    return converter.getPdfInputStream(invoicePdfModel);
+    return converter.getPdfInputStream(pdfModel);
   }
 }

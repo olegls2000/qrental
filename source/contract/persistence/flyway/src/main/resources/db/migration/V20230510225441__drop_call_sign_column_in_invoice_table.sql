@@ -1,1 +1,0 @@
-alter table invoice drop column driver_call_sign;

@@ -1,7 +1,6 @@
 package ee.qrental.contract.core.service.pdf;
 
-import java.math.BigDecimal;
-import java.util.Map;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -9,34 +8,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ContractPdfModel {
   private String number;
-  private Integer weekNumber;
-  private Integer year;
-  private String startDate;
-  private String endDate;
-  private String feeStartDate;
-  private String feeEndDate;
-  private String driverCompany;
-  private String driverInfo;
-  private String driverCompanyRegNumber;
-  private String driverCompanyAddress;
-  private String qFirmName;
-  private String qFirmEmail;
-  private String qFirmPhone;
-  private String qFirmPostAddress;
-  private String qFirmRegNumber;
-  private String qFirmVatNumber;
-  private String qFirmIban;
-  private String qFirmBank;
-  private BigDecimal vatPercentage;
-  private BigDecimal sum;
-  private BigDecimal vatAmount;
-  private BigDecimal sumWithVat;
-  private String driverCompanyVat;
-  private Map<String, BigDecimal> items;
-  private BigDecimal debt;
-  private BigDecimal advancePayment;
-  private BigDecimal total;
-  private BigDecimal currentWeekFee;
-  private BigDecimal previousWeekBalanceFee;
-  private BigDecimal totalWithFee;
+  private String renterName;
+  private String renterRegistrationNumber;
+  private String renterCeoName;
+  private Long renterCeoIsikukood;
+  private String renterPhone;
+  private String renterEmail;
+  private Long driverIsikukood;
+  private String driverLicenceNumber;
+  private LocalDate created;
 }

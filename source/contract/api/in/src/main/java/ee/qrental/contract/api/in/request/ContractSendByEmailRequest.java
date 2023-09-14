@@ -10,6 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class ContractSendByEmailRequest {
-
   private Long id;
 }

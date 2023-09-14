@@ -1,5 +1,8 @@
 package ee.qrental.contract.spring.config;
 
+import ee.qrental.contract.api.in.query.GetContractQuery;
+import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
+import ee.qrental.contract.api.in.usecase.ContractSendByEmailUseCase;
 import ee.qrental.contract.api.out.ContractAddPort;
 import ee.qrental.contract.api.out.ContractDeletePort;
 import ee.qrental.contract.api.out.ContractLoadPort;
@@ -11,15 +14,10 @@ import ee.qrental.contract.core.service.ContractPdfUseCaseImpl;
 import ee.qrental.contract.core.service.ContractQueryService;
 import ee.qrental.contract.core.service.ContractSendByEmailService;
 import ee.qrental.contract.core.service.ContractUseCaseService;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.email.api.in.usecase.EmailSendUseCase;
-import ee.qrental.contract.api.in.query.GetContractQuery;
-import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
-import ee.qrental.contract.api.in.usecase.ContractSendByEmailUseCase;
-
 import ee.qrental.contract.core.service.pdf.ContractToPdfConverter;
 import ee.qrental.contract.core.service.pdf.ContractToPdfModelMapper;
 import ee.qrental.contract.core.validator.ContractBusinessRuleValidator;
+import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -67,10 +65,9 @@ public class ContractServiceConfig {
   ContractSendByEmailUseCase getContractSendByEmailUseCase(
       final EmailSendUseCase emailSendUseCase,
       final ContractLoadPort invoiceLoadPort,
-      final GetDriverQuery driverQuery,
-      ContractPdfUseCase invoicePdfUseCase) {
+      final ContractPdfUseCase invoicePdfUseCase) {
     return new ContractSendByEmailService(
-        emailSendUseCase, invoiceLoadPort, invoicePdfUseCase, driverQuery);
+        emailSendUseCase, invoiceLoadPort, invoicePdfUseCase);
   }
 
   @Bean

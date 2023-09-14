@@ -1,6 +1,5 @@
 package ee.qrental.contract.domain;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
@@ -14,12 +13,20 @@ public class Contract {
   private Long id;
   private String number;
   private String renterName;
-  private Integer renterRegistrationNumber;
+  private String renterRegistrationNumber;
   private String renterCeoName;
-  private String renterCeoIsikukood;
+  private Long renterCeoIsikukood;
   private String renterPhone;
   private String renterEmail;
-  private String driverLicence;
-  private Integer driverIsikukood;
+  private Long driverId;
+  private Long driverIsikukood;
+  private String driverLicenceNumber;
+  private Long qFirmId;
+  private String qFirmName;
+  private String qFirmRegistrationNumber;
+  private String qFirmPostAddress;
+  private String qFirmEmail;
+  private String qFirmCeo;
+  private List<String> qFirmCeoDeputies;
   private LocalDate created;
 }

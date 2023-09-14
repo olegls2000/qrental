@@ -11,15 +11,5 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class ContractUpdateRequest extends AbstractUpdateRequest {
-
   private Long id;
-  private String driverCompany;
-  private String driverCompanyRegNumber;
-  private String driverCompanyAddress;
-  private String qFirmName;
-  private String qFirmRegNumber;
-  private String qFirmVatNumber;
-  private String qFirmIban;
-  private String qFirmBank;
-  private String comment;
 }

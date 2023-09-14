@@ -20,8 +20,8 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
   @Override
   public String toObjectInfo(final Contract domain) {
     return format(
-        "Receiver: %s, Sender: %s, Week: %d",
-        domain.getDriverCompany(), domain.getQFirmName(), domain.getWeekNumber());
+        "Number: %s, Renter: %s",
+        domain.getNumber(), domain.getRenterName());
   }
 
 }

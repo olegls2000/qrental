@@ -38,8 +38,6 @@ public class ContractUseCaseService
   public Long add(final ContractAddRequest request) {
 
     final var contract = addRequestMapper.toDomain(request);
-    final var contractNumber = getContractNumber(currentDate, request);
-    contract.setNumber(contractNumber);
     final var violationsCollector = businessRuleValidator.validateAdd(contract);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
