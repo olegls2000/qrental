@@ -13,4 +13,6 @@ public interface ContractRepository {
   void deleteById(final Long id);
 
   ContractJakartaEntity getByNumber(final String number);
+
+  ContractJakartaEntity findLatestByDriverId(final Long driverId);
 }

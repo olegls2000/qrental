@@ -48,6 +48,15 @@ public class DriverJakartaEntity {
   @Column(name = "company_name")
   private String companyName;
 
+  @Column(name = "company_ceo_first_name")
+  private String companyCeoFirstName;
+
+  @Column(name = "company_ceo_last_name")
+  private String companyCeoLastName;
+
+  @Column(name = "company_ceo_tax_number")
+  private Long companyCeoTaxNumber;
+
   @Column(name = "company_registration_number")
   private String companyRegistrationNumber;
 

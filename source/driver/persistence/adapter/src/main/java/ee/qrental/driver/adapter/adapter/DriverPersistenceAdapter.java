@@ -43,11 +43,14 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
     entity.setActive(domain.getActive());
     entity.setFirstName(domain.getFirstName());
     entity.setLastName(domain.getLastName());
-    entity.setIsikukood(domain.getIsikukood());
+    entity.setIsikukood(domain.getTaxNumber());
     entity.setPhone(domain.getPhone());
     entity.setEmail(domain.getEmail());
     entity.setAddress(domain.getAddress());
     entity.setCompanyName(domain.getCompanyName());
+    entity.setCompanyCeoFirstName(domain.getCompanyCeoFirstName());
+    entity.setCompanyCeoLastName(domain.getCompanyCeoLastName());
+    entity.setCompanyCeoTaxNumber(domain.getCompanyCeoTaxNumber());
     entity.setCompanyRegistrationNumber(domain.getCompanyRegistrationNumber());
     entity.setCompanyAddress(domain.getCompanyAddress());
     entity.setCompanyVat(domain.getCompanyVat());

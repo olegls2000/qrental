@@ -11,10 +11,10 @@ public class ContractToPdfModelMapper {
         .renterName(contract.getRenterName())
         .renterRegistrationNumber(contract.getRenterRegistrationNumber())
         .renterCeoName(contract.getRenterCeoName())
-        .renterCeoIsikukood(contract.getRenterCeoIsikukood())
+        .renterCeoIsikukood(contract.getRenterCeoTaxNumber())
         .renterPhone(contract.getRenterPhone())
         .renterEmail(contract.getRenterEmail())
-        .driverIsikukood(contract.getDriverIsikukood())
+        .driverIsikukood(contract.getDriverTaxNumber())
         .driverLicenceNumber(contract.getDriverLicenceNumber())
         .created(contract.getCreated())
         .build();

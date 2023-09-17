@@ -24,11 +24,11 @@
         <div class="row">
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label text-muted" for="firmNameId">Firm name</label>
+                    <label class="form-label text-muted" for="firmNameId">Name</label>
                     <input class="form-control" id="firmNameId"
-                           placeholder="Enter Firm name"
+                           placeholder="Enter name"
                            required
-                           th:field="*{firmName}"
+                           th:field="*{name}"
                            type="text"/>
                 </div>
             </div>
@@ -44,9 +44,90 @@
         <div class="row">
             <div class="col">
                 <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoLastNameId">CEO first name</label>
+                    <input class="form-control" id="ceoLastNameId"
+                           placeholder="Enter first name"
+                           required
+                           th:field="*{ceoFirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoFirstNameId">CEO last name</label>
+                    <input class="form-control" id="ceoFirstNameId"
+                           placeholder="Enter last name" required
+                           th:field="*{ceoLastName}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy1FirstNameId">CEO deputy 1 first name</label>
+                    <input class="form-control" id="ceoDeputy1FirstNameId"
+                           placeholder="Enter first name"
+                           th:field="*{ceoDeputy1FirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy1LastNameId">CEO deputy 1 last name</label>
+                    <input class="form-control" id="ceoDeputy1LastNameId"
+                           placeholder="Enter last name"
+                           th:field="*{ceoDeputy1LastName}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy2FirstNameId">CEO deputy 2 first name</label>
+                    <input class="form-control" id="ceoDeputy2FirstNameId"
+                           placeholder="Enter first name"
+                           th:field="*{ceoDeputy2FirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy2LastNameId">CEO deputy 2 last name</label>
+                    <input class="form-control" id="ceoDeputy2LastNameId"
+                           placeholder="Enter last name"
+                           th:field="*{ceoDeputy2LastName}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy3FirstNameId">CEO deputy 3 first name</label>
+                    <input class="form-control" id="ceoDeputy3FirstNameId"
+                           placeholder="Enter first name"
+                           th:field="*{ceoDeputy3FirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="ceoDeputy3LastNameId">CEO deputy 3 last name</label>
+                    <input class="form-control" id="ceoDeputy3LastNameId"
+                           placeholder="Enter last name"
+                           th:field="*{ceoDeputy3LastName}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
                     <label class="form-label text-muted" for="regNumberId">REG Number</label>
                     <input class="form-control" id="regNumberID" placeholder="Enter REG Number" required
-                           th:field="*{regNumber}"
+                           th:field="*{registrationNumber}"
                            type="number"/>
                 </div>
             </div>

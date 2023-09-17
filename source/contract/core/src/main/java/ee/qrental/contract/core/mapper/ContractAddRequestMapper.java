@@ -10,7 +10,6 @@ import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import java.time.LocalDate;
-import java.util.Arrays;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -28,7 +27,6 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
     final var renterName = getRenterName(driver);
     final var renterRegistrationNumber = getRenterRegistrationNumber(driver);
 
-
     final var qFirmId = request.getQFirmId();
     final var qFirm = firmQuery.getById(qFirmId);
 
@@ -37,21 +35,21 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .number(contractNumber)
         .renterName(renterName)
         .renterRegistrationNumber(renterRegistrationNumber)
-        .renterCeoName("Default CEO")
-        .renterCeoIsikukood(38010100202L)
+        .renterCeoName(driver.getCompanyCeoName())
+        .renterCeoTaxNumber(driver.getCompanyCeoTaxNumber())
         .renterPhone(driver.getPhone())
         .renterEmail(driver.getEmail())
         .driverId(driverId)
-        .driverIsikukood(driver.getIsikukood())
+        .driverTaxNumber(driver.getIsikukood())
         .driverLicenceNumber(driver.getDriverLicenseNumber())
         .qFirmId(qFirmId)
-        .qFirmName(qFirm.getFirmName())
-        .qFirmRegistrationNumber(qFirm.getRegNumber())
+        .qFirmName(qFirm.getName())
+        .qFirmRegistrationNumber(qFirm.getRegistrationNumber())
         .qFirmPostAddress(qFirm.getPostAddress())
         .qFirmEmail(qFirm.getEmail())
-            .qFirmCeo("Default CEO")
-            .qFirmCeoDeputies(Arrays.asList("XX", "YY"))
-            .created(currentDate)
+        .qFirmCeo(qFirm.getCeoName())
+        .qFirmCeoDeputies(qFirm.getDeputies())
+        .created(currentDate)
         .build();
   }
 

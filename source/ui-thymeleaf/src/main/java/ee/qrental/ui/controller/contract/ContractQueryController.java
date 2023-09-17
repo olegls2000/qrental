@@ -5,17 +5,14 @@ import static ee.qrental.ui.controller.util.ControllerUtils.CONTRACT_ROOT_PATH;
 import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.contract.api.in.request.ContractSendByEmailRequest;
 import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
-import ee.qrental.invoice.api.in.request.InvoiceSendByEmailRequest;
+import ee.qrental.contract.api.in.usecase.ContractSendByEmailUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(CONTRACT_ROOT_PATH)
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ContractQueryController {
 
   private final GetContractQuery contractQuery;
+  private final ContractSendByEmailUseCase contractSendByEmailUseCase;
   private final ContractPdfUseCase pdfUseCase;
 
   @GetMapping
@@ -42,9 +40,17 @@ public class ContractQueryController {
 
   @GetMapping(value = "/email/send-form/{id}")
   public String addForm(@PathVariable("id") long id, final Model model) {
-    final var contract = contractQuery.getById(id);
-    model.addAttribute("emailSendRequest", ContractSendByEmailRequest.builder().id(id).build());
+    final var emailSendRequest = new ContractSendByEmailRequest();
+    emailSendRequest.setId(id);
+    model.addAttribute("emailSendRequest", emailSendRequest);
 
-    return "forms/emailSendInvoice";
+    return "forms/emailSendContract";
+  }
+
+  @PostMapping("/email/send")
+  public String sendByEmail(final ContractSendByEmailRequest emailSendRequest){
+    contractSendByEmailUseCase.sendByEmail(emailSendRequest);
+
+    return "redirect:" + CONTRACT_ROOT_PATH;
   }
 }

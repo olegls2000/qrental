@@ -35,4 +35,9 @@ public class ContractRepositoryImpl implements ContractRepository {
   public ContractJakartaEntity getByNumber(final String number) {
     return springDataRepository.findByNumber(number);
   }
+
+  @Override
+  public ContractJakartaEntity findLatestByDriverId(final Long driverId) {
+    return springDataRepository.findLatestByDriverId(driverId);
+  }
 }

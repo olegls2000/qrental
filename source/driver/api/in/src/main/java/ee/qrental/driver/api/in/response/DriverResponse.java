@@ -21,6 +21,8 @@ public class DriverResponse {
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp;
   private String companyRegistrationNumber;
+  private String companyCeoName;
+  private Long companyCeoTaxNumber;
   private String companyAddress;
   private String companyVat;
   private String taxiLicense;

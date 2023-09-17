@@ -1,0 +1,37 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Send the Contract by Email',
+            closeRef='/contracts',
+            content=~{fragments/contractEmailFormFragment.html :: confirmationForm},
+            request=${emailSendRequest}
+        )">
+    </div>
+</div>
+
+<form th:fragment="confirmationForm"
+      th:action="@{/contracts/email/send}"
+      th:object="${emailSendRequest}"
+      method="post">
+    <input id="contractId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <p id="infoTextId" class="fs-6 text-center">Are you sure wants to send the Contract by email to
+                    Driver? </p>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <input class="btn btn-success"
+                   type="submit"
+                   value="Send">
+        </div>
+        <div class="col-2">
+            <a class="btn btn-secondary" href="/contracts">Cancel</a>
+        </div>
+    </div>
+</form>

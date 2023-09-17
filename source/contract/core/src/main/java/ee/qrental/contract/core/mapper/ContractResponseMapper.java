@@ -15,7 +15,7 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
         .renterName(domain.getRenterName())
         .renterRegistrationNumber(domain.getRenterRegistrationNumber())
         .renterCeoName(domain.getRenterCeoName())
-        .driverIsikukood(domain.getDriverIsikukood())
+        .driverIsikukood(domain.getDriverTaxNumber())
         .qFirmName(domain.getQFirmName())
         .qFirmCeo(domain.getQFirmCeo())
             .created(domain.getCreated())

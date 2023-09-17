@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ContractAdapterConfig {
   @Bean
-  ContractAdapterMapper getContractAdapterMapper() {
-    return new ContractAdapterMapper();
+  ContractAdapterMapper getContractAdapterMapper(final ContractRepository repository) {
+    return new ContractAdapterMapper(repository);
   }
 
   @Bean

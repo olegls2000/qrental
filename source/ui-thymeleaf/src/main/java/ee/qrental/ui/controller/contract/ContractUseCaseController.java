@@ -3,6 +3,7 @@ package ee.qrental.ui.controller.contract;
 import static ee.qrental.ui.controller.util.ControllerUtils.CONTRACT_ROOT_PATH;
 import static ee.qrental.ui.controller.util.ControllerUtils.DRIVER_ROOT_PATH;
 
+import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.contract.api.in.request.ContractAddRequest;
 import ee.qrental.contract.api.in.request.ContractDeleteRequest;
 import ee.qrental.contract.api.in.request.ContractUpdateRequest;
@@ -11,7 +12,6 @@ import ee.qrental.contract.api.in.usecase.ContractDeleteUseCase;
 import ee.qrental.contract.api.in.usecase.ContractUpdateUseCase;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.request.DriverDeleteRequest;
-import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,6 +26,7 @@ public class ContractUseCaseController {
   private final ContractAddUseCase addUseCase;
   private final ContractUpdateUseCase updateUseCase;
   private final ContractDeleteUseCase deleteUseCase;
+  private final GetContractQuery contractQuery;
   private final GetDriverQuery driverQuery;
   private final GetFirmQuery firmQuery;
 
@@ -41,10 +42,22 @@ public class ContractUseCaseController {
     return "forms/addContract";
   }
 
+  private void addActiveContractToModel(final Long driverId, final Model model) {
+    final var activeContract = contractQuery.getActiveContractByDriverId(driverId);
+    if (activeContract == null) {
+      model.addAttribute("activeContract", "not assigned");
+      model.addAttribute("activeContractId", null);
+
+      return;
+    }
+    model.addAttribute("activeContract", activeContract.getNumber());
+    model.addAttribute("activeContractId", activeContract.getId());
+  }
+
   private void addAddRequestToModel(Model model, final Long driverId, final Long qFirmId) {
-   final var addRequest =  new ContractAddRequest();
-   addRequest.setDriverId(driverId);
-   addRequest.setQFirmId(qFirmId);
+    final var addRequest = new ContractAddRequest();
+    addRequest.setDriverId(driverId);
+    addRequest.setQFirmId(qFirmId);
 
     model.addAttribute("addRequest", addRequest);
   }
@@ -52,9 +65,10 @@ public class ContractUseCaseController {
   @PostMapping(value = "/add")
   public String addDriver(@ModelAttribute final ContractAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
-
     if (addRequest.hasViolations()) {
       model.addAttribute("addRequest", addRequest);
+      addQFirmInfoToModel(model, addRequest.getQFirmId());
+      addDriverInfoToModel(model, addRequest.getDriverId());
 
       return "forms/addContract";
     }
@@ -69,6 +83,7 @@ public class ContractUseCaseController {
 
   private void addQFirmInfoToModel(final Model model, final Long qFirmId) {
     final var qFirm = firmQuery.getById(qFirmId);
+
     model.addAttribute("qFirm", qFirm);
   }
 

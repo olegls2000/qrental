@@ -77,12 +77,12 @@
                                 </div>
                                 <div class="col">
                                     <div class="align-self-start">
-                                        <span class="py-3">Current Contract:</span>
+                                        <span class="py-3" th:text="|Contract: ${activeContract}|">???</span>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <a class="btn btn-sm btn-info"
-                                       th:href="@{/contracts/pdf/{id}(id=${contractId})}">
+                                    <a th:if="${activeContractId != null}" class="btn btn-sm btn-info"
+                                       th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
                                         <span class="bi-file-earmark-pdf"></span></a>
                                 </div>
                             </div>

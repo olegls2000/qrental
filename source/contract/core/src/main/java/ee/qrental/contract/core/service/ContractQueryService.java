@@ -37,4 +37,9 @@ public class ContractQueryService implements GetContractQuery {
   public ContractUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
   }
+
+  @Override
+  public ContractResponse getActiveContractByDriverId(Long driverId) {
+    return mapper.toResponse(loadPort.loadActiveByDriverId(driverId));
+  }
 }

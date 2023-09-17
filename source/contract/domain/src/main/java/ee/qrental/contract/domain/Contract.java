@@ -16,11 +16,11 @@ public class Contract {
   private String renterName;
   private String renterRegistrationNumber;
   private String renterCeoName;
-  private Long renterCeoIsikukood;
+  private Long renterCeoTaxNumber;
   private String renterPhone;
   private String renterEmail;
   private Long driverId;
-  private Long driverIsikukood;
+  private Long driverTaxNumber;
   private String driverLicenceNumber;
   private Long qFirmId;
   private String qFirmName;
@@ -30,4 +30,5 @@ public class Contract {
   private String qFirmCeo;
   private List<String> qFirmCeoDeputies = new ArrayList<>();
   private LocalDate created;
+  private boolean active;
 }

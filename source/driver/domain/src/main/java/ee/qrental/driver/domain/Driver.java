@@ -12,13 +12,16 @@ public class Driver {
   private Boolean active;
   private String firstName;
   private String lastName;
-  private Long isikukood;
+  private Long taxNumber;
   private String phone;
   private String email;
   private String address;
   private String driverLicenseNumber;
   private LocalDate driverLicenseExp;
   private String companyName;
+  private String companyCeoFirstName;
+  private String companyCeoLastName;
+  private Long companyCeoTaxNumber;
   private String companyRegistrationNumber;
   private String companyAddress;
   private String companyVat;

@@ -15,10 +15,13 @@ public class DriverAddRequest extends AbstractAddRequest {
   private Long callSignId;
   private String firstName;
   private String lastName;
-  private Long isikukood;
+  private Long taxNumber;
   private String phone;
   private String email;
-  private String company;
+  private String companyName;
+  private String companyCeoFirstName;
+  private String companyCeoLastName;
+  private Long companyCeoTaxNumber;
   private String regNumber;
   private String companyAddress;
   private String companyVat;

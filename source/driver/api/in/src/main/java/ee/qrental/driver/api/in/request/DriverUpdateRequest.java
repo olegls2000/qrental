@@ -18,11 +18,14 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Integer callSign;
   private String firstName;
   private String lastName;
-  private Long isikukood;
+  private Long taxNumber;
   private String phone;
   private String email;
   private Long qFirmId;
-  private String company;
+  private String companyName;
+  private String companyCeoFirstName;
+  private String companyCeoLastName;
+  private Long companyCeoTaxNumber;
   private String regNumber;
   private String companyAddress;
   private String companyVat;

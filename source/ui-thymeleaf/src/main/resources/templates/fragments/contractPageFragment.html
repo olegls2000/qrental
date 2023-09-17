@@ -6,6 +6,7 @@
         <tr>
             <th>Actions</th>
             <th>Number</th>
+            <th>Active</th>
             <th>Renter Company</th>
             <th>Renter Company Reg. number</th>
             <th>Renter Company CEOr</th>
@@ -29,6 +30,7 @@
                     Send</a>
             </td>
             <td th:text="${contract.number}"></td>
+            <td th:text="${contract.active}"></td>
             <td th:text="${contract.renterName}"></td>
             <td th:text="${contract.renterRegistrationNumber}"></td>
             <td th:text="${contract.renterCeoName}"></td>

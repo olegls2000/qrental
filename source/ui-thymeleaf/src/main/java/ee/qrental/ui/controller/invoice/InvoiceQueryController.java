@@ -41,8 +41,9 @@ public class InvoiceQueryController {
 
   @GetMapping(value = "/email/send-form/{id}")
   public String addForm(@PathVariable("id") long id, final Model model) {
-    final var invoice = invoiceQuery.getById(id);
-    model.addAttribute("emailSendRequest", InvoiceSendByEmailRequest.builder().id(id).build());
+    final var emailSendRequest = new InvoiceSendByEmailRequest();
+    emailSendRequest.setId(id);
+    model.addAttribute("emailSendRequest", emailSendRequest);
 
     return "forms/emailSendInvoice";
   }

@@ -33,4 +33,9 @@ public class ContractLoadAdapter implements ContractLoadPort {
    
     return mapper.mapToDomain(entity);
   }
+
+  @Override
+  public Contract loadActiveByDriverId(Long driverId) {
+    return mapper.mapToDomain(repository.findLatestByDriverId(driverId));
+  }
 }

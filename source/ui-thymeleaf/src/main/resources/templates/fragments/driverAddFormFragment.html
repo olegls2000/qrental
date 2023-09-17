@@ -55,7 +55,7 @@
                             th:field="*{qFirmId}">
                         <option th:each="qFirm : ${qFirms}"
                                 th:value="${qFirm.id}"
-                                th:text="${qFirm.firmName}">??</option>
+                                th:text="${qFirm.name}">??</option>
                     </select>
                 </div>
             </div>
@@ -89,9 +89,9 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-check-label text-muted" for="isikukood">Isikukood</label>
-                    <input class="form-control" id="isikukood" placeholder="Enter Isikukood" required
-                           th:field="*{isikukood}"
+                    <label class="form-check-label text-muted" for="taxNumber">Tax number</label>
+                    <input class="form-control" id="taxNumber" placeholder="Enter tax number" required
+                           th:field="*{taxNumber}"
                            type="number"/>
                 </div>
             </div>
@@ -216,9 +216,9 @@
         <div class="row">
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-check-label text-muted" for="company">Name</label>
-                    <input class="form-control" id="company" placeholder="Enter Name"
-                           th:field="*{company}"
+                    <label class="form-check-label text-muted" for="companyName">Company name</label>
+                    <input class="form-control" id="companyName" placeholder="Enter Company Name"
+                           th:field="*{companyName}"
                            type="text"/>
                 </div>
             </div>
@@ -236,6 +236,32 @@
                     <input class="form-control" id="companyVat" placeholder="Enter VAT"
                            th:field="*{companyVat}"
                            type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoFirstName">CEO first name</label>
+                    <input class="form-control" id="companyCeoFirstName" placeholder="Enter first name"
+                           th:field="*{companyCeoFirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoLastName">CEO last name</label>
+                    <input class="form-control" id="companyCeoLastName" placeholder="Enter last name"
+                           th:field="*{companyCeoLastName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoTaxNumber">CEO tax numbe</label>
+                    <input class="form-control" id="companyCeoTaxNumber" placeholder="Enter tax number"
+                           th:field="*{companyCeoTaxNumber}"
+                           type="number"/>
                 </div>
             </div>
         </div>

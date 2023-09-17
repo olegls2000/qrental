@@ -5,4 +5,5 @@ import ee.qrental.contract.domain.Contract;
 
 public interface ContractLoadPort extends LoadPort<Contract> {
    Contract loadByNumber(String number);
+   Contract loadActiveByDriverId(final Long driverId);
 }

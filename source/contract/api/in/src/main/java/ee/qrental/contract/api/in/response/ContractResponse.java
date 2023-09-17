@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class ContractResponse {
   private Long id;
+  private boolean active;
   private String number;
   private String renterName;
   private String renterRegistrationNumber;

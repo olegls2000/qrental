@@ -5,8 +5,7 @@ import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
 
-public class
-DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
+public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
 
   @Override
   public Driver toDomain(final DriverUpdateRequest request) {
@@ -15,10 +14,14 @@ DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Dr
         .active(request.getActive())
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
-        .isikukood(request.getIsikukood())
+        .taxNumber(request.getTaxNumber())
         .phone(request.getPhone())
         .email(request.getEmail())
-        .companyName(request.getCompany())
+        .companyName(request.getCompanyName())
+        .companyName(request.getCompanyName())
+        .companyCeoFirstName(request.getCompanyCeoFirstName())
+        .companyCeoLastName(request.getCompanyCeoLastName())
+        .companyCeoTaxNumber(request.getCompanyCeoTaxNumber())
         .companyRegistrationNumber(request.getRegNumber())
         .companyAddress(request.getCompanyAddress())
         .companyVat(request.getCompanyVat())
@@ -50,10 +53,14 @@ DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Dr
         .callSign(domain.getCallSignValue())
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
-        .isikukood(domain.getIsikukood())
+        .taxNumber(domain.getTaxNumber())
         .phone(domain.getPhone())
         .email(domain.getEmail())
-        .company(domain.getCompanyName())
+        .companyName(domain.getCompanyName())
+        .companyName(domain.getCompanyName())
+        .companyCeoFirstName(domain.getCompanyCeoFirstName())
+        .companyCeoLastName(domain.getCompanyCeoLastName())
+        .companyCeoTaxNumber(domain.getCompanyCeoTaxNumber())
         .regNumber(domain.getCompanyRegistrationNumber())
         .companyAddress(domain.getCompanyAddress())
         .companyVat(domain.getCompanyVat())

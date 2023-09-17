@@ -11,19 +11,90 @@
     <form method="post"
           th:action="@{/contracts/add}"
           th:object="${addRequest}">
-
         <input id="driverId" required
                th:field="*{driverId}"
                type="text"
                hidden/>
+        <p class="fs-5">Drivers info:</p>
+        <table class="table table-sm">
+            <tbody>
+            <tr>
+                <td>Company name:</td>
+                <td th:text="${driver.companyName}">???</td>
+            </tr>
+            <tr>
+                <td>Company CEO:</td>
+                <td th:text="${driver.companyCeoName}">???</td>
+            </tr>
+            <tr>
+                <td>Company CEO tax number:</td>
+                <td th:text="${driver.companyCeoTaxNumber}">???</td>
+            </tr>
+            <tr>
+                <td>Company registration number:</td>
+                <td th:text="${driver.companyRegistrationNumber}">???</td>
+            </tr>
+            <tr>
+                <td>Company address:</td>
+                <td th:text="${driver.companyAddress}">???</td>
+            </tr>
+            <tr>
+                <td>Driver first name:</td>
+                <td th:text="${driver.firstName}">???</td>
+            </tr>
+            <tr>
+                <td>Driver last name:</td>
+                <td th:text="${driver.lastName}">???</td>
+            </tr>
+            <tr>
+                <td>Driver tax number:</td>
+                <td th:text="${driver.isikukood}">???</td>
+            </tr>
+            <tr>
+                <td>Driver driving licence number:</td>
+                <td th:text="${driver.driverLicenseNumber}">???</td>
+            </tr>
+            <tr>
+                <td>Driver email:</td>
+                <td th:text="${driver.email}">???</td>
+            </tr>
+            <tr>
+                <td>Driver phone:</td>
+                <td th:text="${driver.phone}">???</td>
+            </tr>
+            </tbody>
+        </table>
 
         <input id="qFirmId" required
                th:field="*{qFirmId}"
                type="text"
                hidden/>
+        <p class="fs-5">Q-info:</p>
+        <table class="table table-sm">
+            <tbody>
+            <tr>
+                <td>Company name:</td>
+                <td th:text="${qFirm.name}">???</td>
+            </tr>
+            <tr>
+                <td>Company CEO:</td>
+                <td th:text="${qFirm.ceoName}">???</td>
+            </tr>
+            <tr>
+                <td>Company registration number:</td>
+                <td th:text="${qFirm.registrationNumber}">???</td>
+            </tr>
+            <tr>
+                <td>Company address:</td>
+                <td th:text="${qFirm.postAddress}">???</td>
+            </tr>
+            <tr>
+                <td>Company email:</td>
+                <td th:text="${qFirm.email}">???</td>
+            </tr>
+            </tbody>
+        </table>
 
-         <p class="fs-5">Q-info:</p>
-        <p class="fs-5">Drivers info:</p>
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Add',
             cancelHref='/contracts'

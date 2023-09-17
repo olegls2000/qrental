@@ -5,6 +5,7 @@ import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.common.core.utils.QWeek;
+import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
@@ -33,6 +34,7 @@ public class BalanceController {
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
+  private final GetContractQuery contractQuery;
   private final GetLinkQuery linkQuery;
   private final DriverBalanceAssembler driverBalanceAssembler;
 
@@ -52,6 +54,7 @@ public class BalanceController {
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
     addCallSignDataToModel(id, model);
+    addContractDataToModel(id, model);
     addCarDataToModel(id, model);
     addTotalFinancialDataToModel(id, model);
 
@@ -72,6 +75,7 @@ public class BalanceController {
     addTransactionDataToModel(id, transactions, model);
     addDriverDataToModel(id, model);
     addCallSignDataToModel(id, model);
+    addContractDataToModel(id, model);
     addCarDataToModel(id, model);
     addTotalFinancialDataToModel(id, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
@@ -177,6 +181,18 @@ public class BalanceController {
     }
     model.addAttribute("callSign", callSignLink.getCallSign());
     model.addAttribute("callSignLinkId", callSignLink.getId());
+  }
+
+  private void addContractDataToModel(final Long driverId, final Model model) {
+    final var activeContract = contractQuery.getActiveContractByDriverId(driverId);
+    if (activeContract == null) {
+      model.addAttribute("activeContract", "absent");
+      model.addAttribute("activeContractId", null);
+
+      return;
+    }
+    model.addAttribute("activeContract", activeContract.getNumber());
+    model.addAttribute("activeContractId", activeContract.getId());
   }
 
   private void addCarDataToModel(final Long driverId, final Model model) {
