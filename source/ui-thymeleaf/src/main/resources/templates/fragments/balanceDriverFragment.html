@@ -4,89 +4,71 @@
     <div class="col-10">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Drivers balance data</h4>
+                <h4 class="card-title">Driver portal</h4>
                 <div class="col">
                     <a class="btn-close position-absolute top-0 end-0 m-2"
                        aria-label="Close"
                        href="/balances"></a>
                 </div>
-                <table class="table table-striped table-bordered">
+                <table class="table table-sm table-borderless align-middle mt-4 mb-4">
                     <tr>
-                        <th class="align-middle">
-                            <div class="row">
-                                <div class="col-2">
-                                    <a class="btn btn-sm btn-warning"
-                                       th:href="@{/drivers/update-form/{id}(id=${driverId})}">
-                                        <span class="bi-pencil-square"></span></a>
-                                </div>
-                                <div class="col">
-                                    <span th:text="|${driverFirstName} ${driverLastName}, ${driverPhone}, deposit: ${driverDeposit} EURO|">???</span>
-                                </div>
-                            </div>
-                        </th>
-                        <th class="align-middle">
-                            <div class="row">
-                                <div class="col-2">
-                                    <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
-                                       th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
-                                        <span class="bi-pencil-square"></span>
-                                    </a>
-                                    <a th:if="${callSignLinkId == null}" class="btn btn-sm btn-success"
-                                       th:href="@{/call-sign-links/add-form}"
-                                       role="button"
-                                       aria-controls="offcanvasExample">
-                                        <span class="bi-plus-circle"></span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <div class="align-self-start">
-                                        <span class="py-3" th:text="|Call-sign: ${callSign}|">???</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                        <th class="align-middle">
-                            <div class="row">
-                                <div class="col-2">
-                                    <a th:if="${carLinkId != null}" class="btn btn-sm btn-warning "
-                                       th:href="@{/links/update-form/{id}(id=${carLinkId})}">
-                                        <span class="bi-pencil-square"></span>
-                                    </a>
-                                    <a th:if="${carLinkId == null}" class="btn btn-sm btn-success"
-                                       th:href="@{/links/add-form}"
-                                       role="button"
-                                       aria-controls="offcanvasExample">
-                                        <span class="bi-plus-circle"></span>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <div class="align-self-start">
-                                        <span class="py-3" th:text="|Car: ${carRegistrationNumber}|">???</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                        <th class="align-middle">
-                            <div class="row">
-                                <div class="col-2">
-                                    <a class="btn btn-sm btn-success"
-                                       th:href="${'/contracts/add-form/'+ {driverId} + '/' + {qFirmId}}"
-                                       role="button"
-                                       aria-controls="offcanvasExample">
-                                        <span class="bi-plus-circle"></span></a>
-                                </div>
-                                <div class="col">
-                                    <div class="align-self-start">
-                                        <span class="py-3" th:text="|Contract: ${activeContract}|">???</span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <a th:if="${activeContractId != null}" class="btn btn-sm btn-info"
-                                       th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
-                                        <span class="bi-file-earmark-pdf"></span></a>
-                                </div>
-                            </div>
-                        </th>
+                        <th scope="col" colspan="2">Driver info:</th>
+                        <th scope="col" colspan="2">Call sign:</th>
+                        <th scope="col" colspan="2">Car:</th>
+                        <th scope="col" colspan="3">Contract:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a class="btn btn-sm btn-warning"
+                               th:href="@{/drivers/update-form/{id}(id=${driverId})}">
+                                <span class="bi-pencil-square"></span></a>
+                        </td>
+                        <td>
+                            <span class="py-3"
+                                  th:text="|${driverFirstName} ${driverLastName}, ${driverPhone}, deposit: ${driverDeposit} EURO|">???</span>
+                        </td>
+
+                        <td>
+                            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+                               th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                                <span class="bi-pencil-square"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="py-3" th:text="${callSign}">???</span>
+                        </td>
+                        <td>
+                            <a th:if="${carLinkId != null}" class="btn btn-sm btn-warning "
+                               th:href="@{/links/update-form/{id}(id=${carLinkId})}">
+                                <span class="bi-pencil-square"></span>
+                            </a>
+                            <a th:if="${carLinkId == null}" class="btn btn-sm btn-success"
+                               th:href="@{/links/add-form}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="py-3" th:text="${carRegistrationNumber}">???</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-success"
+                               th:href="${'/contracts/add-form/'+ {driverId} + '/' + {qFirmId}}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span></a>
+                        </td>
+                        <td>
+                            <span th:text="${activeContract}">???</span>
+                        </td>
+                        <td>
+                            <a th:if="${activeContractId != null}" class="btn btn-sm btn-info"
+                               th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                                <span class="bi-file-earmark-pdf"></span>
+                            </a>
+
+                        </td>
                     </tr>
                 </table>
                 <div class="row justify-content-md-center mb-3">
