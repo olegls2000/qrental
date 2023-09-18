@@ -1,8 +1,6 @@
 package ee.qrental.contract.core.service;
 
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
-import static java.lang.String.format;
-import static java.time.format.DateTimeFormatter.ofPattern;
 
 import ee.qrental.contract.api.in.request.ContractAddRequest;
 import ee.qrental.contract.api.in.request.ContractDeleteRequest;
@@ -35,11 +33,11 @@ public class ContractUseCaseService
 
   @Override
   public Long add(final ContractAddRequest request) {
-
     final var contract = addRequestMapper.toDomain(request);
     final var violationsCollector = businessRuleValidator.validateAdd(contract);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
+
       return null;
     }
     final var savedContract = addPort.add(contract);

@@ -1,7 +1,6 @@
 package ee.qrental.ui.controller.contract;
 
 import static ee.qrental.ui.controller.util.ControllerUtils.CONTRACT_ROOT_PATH;
-import static ee.qrental.ui.controller.util.ControllerUtils.DRIVER_ROOT_PATH;
 
 import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.contract.api.in.request.ContractAddRequest;
@@ -73,7 +72,7 @@ public class ContractUseCaseController {
       return "forms/addContract";
     }
 
-    return "redirect:" + DRIVER_ROOT_PATH;
+    return "redirect:" + CONTRACT_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")

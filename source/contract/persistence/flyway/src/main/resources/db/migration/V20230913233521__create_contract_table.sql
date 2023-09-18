@@ -12,7 +12,6 @@ create table contract
         references driver,
     driver_isikukood           numeric not null,
     driver_licence_number      varchar not null,
-
     q_firm_id                  integer not null
         references firm,
     q_firm_name                varchar not null,

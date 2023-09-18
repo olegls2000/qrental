@@ -38,6 +38,7 @@ public class ContractBusinessRuleValidator implements QValidator<Contract> {
     final var number = domain.getNumber();
     final var contractFromDb = loadPort.loadByNumber(number);
     if (contractFromDb == null) {
+
       return;
     }
     violationCollector.collect(format("Contract with number: %s already exists.", number));

@@ -43,7 +43,7 @@ public class FirmResponseMapper implements ResponseMapper<FirmResponse, Firm> {
     }
     final var deputy3FirstName = domain.getCeoDeputy3FirstName();
     final var deputy3LastName = domain.getCeoDeputy3LastName();
-    if (deputy1LastName != null) {
+    if (deputy3LastName != null) {
       result.add(format("%s %s", deputy3FirstName, deputy3LastName));
     }
 

@@ -14,6 +14,7 @@ public class ContractAdapterMapper {
 
   public Contract mapToDomain(final ContractJakartaEntity entity) {
     if (entity == null) {
+
       return null;
     }
     final var active = getContractActiveState(entity);
@@ -48,6 +49,7 @@ public class ContractAdapterMapper {
 
   private boolean getContractActiveState(final ContractJakartaEntity entity) {
     final var activeContract = repository.findLatestByDriverId(entity.getDriverId());
+
     return activeContract.getNumber().equals(entity.getNumber());
   }
 
@@ -81,6 +83,7 @@ public class ContractAdapterMapper {
   private String getQfirmCeoDeputy1(final Contract contract) {
     final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
     if (qFirmCeoDeputies != null && qFirmCeoDeputies.size() > 0) {
+
       return qFirmCeoDeputies.get(0);
     }
     return null;
@@ -89,6 +92,7 @@ public class ContractAdapterMapper {
   private String getQfirmCeoDeputy2(final Contract contract) {
     final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
     if (qFirmCeoDeputies != null && qFirmCeoDeputies.size() > 1) {
+
       return qFirmCeoDeputies.get(1);
     }
 
@@ -98,8 +102,10 @@ public class ContractAdapterMapper {
   private String getQfirmCeoDeputy3(final Contract contract) {
     final var qFirmCeoDeputies = contract.getQFirmCeoDeputies();
     if (qFirmCeoDeputies != null && qFirmCeoDeputies.size() > 2) {
+
       return qFirmCeoDeputies.get(2);
     }
+
     return null;
   }
 }
