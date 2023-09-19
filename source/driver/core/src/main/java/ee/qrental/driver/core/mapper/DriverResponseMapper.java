@@ -32,6 +32,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .companyName(domain.getCompanyName())
         .companyCeoName(
             format("%s %s", domain.getCompanyCeoFirstName(), domain.getCompanyCeoLastName()))
+        .companyCeoTaxNumber(domain.getCompanyCeoTaxNumber())
         .companyRegistrationNumber(domain.getCompanyRegistrationNumber())
         .companyAddress(domain.getCompanyAddress())
         .companyVat(domain.getCompanyVat())
