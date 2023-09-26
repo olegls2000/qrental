@@ -20,6 +20,8 @@ public interface GetBalanceQuery {
 
   BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(final Long driverId, final Integer year, final Integer weekNumber);
 
+  BigDecimal getRawFeeTotalByDriver(final Long driverId);
+
   BigDecimal getFeeByDriver(final Long driverId);
 
   BalanceResponse getLatestBalanceByDriver(final Long driverId);

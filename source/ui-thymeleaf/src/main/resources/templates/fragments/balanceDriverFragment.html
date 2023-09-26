@@ -86,10 +86,10 @@
                                  : 'text-success bg-success border-success'">???</small>
                     </div>
                     <div class="col-md-auto">
-                        <small th:text="|Total Fee Balance: ${feeTotal} EURO|"
+                        <small th:text="|Total Raw Fee Balance: ${rawFeeTotal} EURO|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                               th:classappend="${feeTotal<0} ?
+                               th:classappend="${rawFeeTotal<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
                     </div>

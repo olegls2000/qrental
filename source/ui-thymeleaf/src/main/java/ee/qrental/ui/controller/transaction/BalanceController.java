@@ -161,7 +161,7 @@ public class BalanceController {
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
     model.addAttribute("rawBalanceTotal", balanceQuery.getRawBalanceTotalByDriver(driverId));
-    model.addAttribute("feeTotal", balanceQuery.getFeeByDriver(driverId));
+    model.addAttribute("rawFeeTotal", balanceQuery.getRawFeeTotalByDriver(driverId));
     final var latestBalance = balanceQuery.getLatestBalanceByDriver(driverId);
     if (latestBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");

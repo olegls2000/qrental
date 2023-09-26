@@ -23,11 +23,13 @@ public class BalanceServiceConfig {
 
   @Bean
   GetBalanceQuery getBalanceQueryService(
-           final GetDriverQuery driverQuery,
-   final BalanceLoadPort balanceLoadPort,
-   final TransactionLoadPort transactionLoadPort,
-   final BalanceResponseMapper balanceResponseMapper) {
-    return new BalanceQueryService(driverQuery, balanceLoadPort, transactionLoadPort, balanceResponseMapper);
+      final GetDriverQuery driverQuery,
+      final GetConstantQuery constantQuery,
+      final BalanceLoadPort balanceLoadPort,
+      final TransactionLoadPort transactionLoadPort,
+      final BalanceResponseMapper balanceResponseMapper) {
+    return new BalanceQueryService(
+        driverQuery, constantQuery, balanceLoadPort, transactionLoadPort, balanceResponseMapper);
   }
 
   @Bean
@@ -72,18 +74,17 @@ public class BalanceServiceConfig {
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery,
       final GetConstantQuery constantQuery) {
-    return new FeeCalculationService(loadPort, transactionAddUseCase, transactionTypeQuery, constantQuery);
+    return new FeeCalculationService(
+        loadPort, transactionAddUseCase, transactionTypeQuery, constantQuery);
   }
+
   @Bean
   FeeReplenishService getFeeDebtReplenishService(
-          final BalanceLoadPort loadPort,
-          final TransactionAddUseCase transactionAddUseCase,
-          final GetTransactionTypeQuery transactionTypeQuery,
-          final GetTransactionQuery transactionQuery) {
+      final BalanceLoadPort loadPort,
+      final TransactionAddUseCase transactionAddUseCase,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final GetTransactionQuery transactionQuery) {
     return new FeeReplenishService(
-            loadPort,
-            transactionAddUseCase,
-            transactionTypeQuery,
-            transactionQuery);
+        loadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery);
   }
 }
