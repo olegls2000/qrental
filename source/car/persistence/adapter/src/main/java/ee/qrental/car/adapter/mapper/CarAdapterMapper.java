@@ -31,6 +31,11 @@ public class CarAdapterMapper {
                 .gasInspectionEnd(entity.getGasInspectionEnd())
                 .comment(entity.getComment())
                 .dateEndLpg(entity.getDateEndLpg())
+                .byQrent(entity.getByQrent())
+                .byBolt(entity.getByBolt())
+                .byForus(entity.getByForus())
+                .byUber(entity.getByUber())
+                .byTallink(entity.getByTallink())
                 .build();
     }
 
@@ -60,6 +65,11 @@ public class CarAdapterMapper {
                 .gasInspectionEnd(domain.getGasInspectionEnd())
                 .comment(domain.getComment())
                 .dateEndLpg(domain.getDateEndLpg())
+                .byQrent(domain.getByQrent())
+                .byBolt(domain.getByBolt())
+                .byForus(domain.getByForus())
+                .byUber(domain.getByUber())
+                .byTallink(domain.getByTallink())
                 .build();
     }
 }

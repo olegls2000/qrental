@@ -91,4 +91,21 @@ public class CarJakartaEntity {
 
     @Column(name = "date_end_lpg")
     private LocalDate dateEndLpg;
+
+    @Column(name = "by_qrent")
+    private Boolean byQrent;
+
+    @Column(name = "by_bolt")
+    private Boolean byBolt;
+
+    @Column(name = "by_forus")
+    private Boolean byForus;
+
+    @Column(name = "by_uber")
+    private Boolean byUber;
+
+    @Column(name = "by_tallink")
+    private Boolean byTallink;
+
+
 }

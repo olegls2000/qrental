@@ -1,11 +1,12 @@
 package ee.qrental.car.api.in.request;
 
 import ee.qrental.common.core.in.request.AbstractUpdateRequest;
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -35,4 +36,9 @@ public class CarUpdateRequest extends AbstractUpdateRequest {
   private LocalDate gasInspectionEnd;
   private String comment;
   private LocalDate dateEndLpg;
+  private Boolean byQrent;
+  private Boolean byBolt;
+  private Boolean byForus;
+  private Boolean byUber;
+  private Boolean byTallink;
 }

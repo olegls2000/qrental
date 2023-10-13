@@ -1,10 +1,11 @@
 package ee.qrental.car.domain;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @SuperBuilder
 @Getter
@@ -36,6 +37,11 @@ public class Car {
   private RagStatus technicalInspectionRagStatus;
   private RagStatus gasInspectionRagStatus;
   private String comment;
+  private Boolean byQrent;
+  private Boolean byBolt;
+  private Boolean byForus;
+  private Boolean byUber;
+  private Boolean byTallink;
 
   public RagStatus getInsuranceRagStatus() {
     final var daysBetween = DAYS.between(LocalDate.now(), insuranceDateEnd);

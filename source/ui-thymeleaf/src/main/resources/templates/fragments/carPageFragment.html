@@ -12,7 +12,9 @@
                 </a>
             </th>
             <th>REG Number</th>
+            <th>Branding</th>
             <th>Age</th>
+            <th>Warranty</th>
             <th>Manufacturer</th>
             <th>Model</th>
             <th>Gear Type</th>
@@ -35,7 +37,9 @@
                 </a>
             </td>
             <td th:text="${car.regNumber}"></td>
+            <td th:text="---"></td>
             <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
+            <td th:text="---"></td>
             <td th:text="${car.manufacturer}"></td>
             <td th:text="${car.model}"></td>
             <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"

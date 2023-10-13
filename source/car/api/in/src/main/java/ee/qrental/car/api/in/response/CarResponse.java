@@ -35,4 +35,9 @@ public class CarResponse {
   private String technicalInspectionRagStatus;
   private String gasInspectionRagStatus;
   private String comment;
+  private Boolean byQrent;
+  private Boolean byBolt;
+  private Boolean byForus;
+  private Boolean byUber;
+  private Boolean byTallink;
 }

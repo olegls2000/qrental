@@ -34,6 +34,11 @@ public class CarAddRequestMapper
                 .gasInspectionEnd(request.getGasInspectionEnd())
                 .comment(request.getComment())
                 .dateEndLpg(request.getDateEndLpg())
+                .byQrent(request.getByQrent())
+                .byBolt(request.getByBolt())
+                .byForus(request.getByForus())
+                .byUber(request.getByUber())
+                .byTallink(request.getByTallink())
                 .build();
     }
 }

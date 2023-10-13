@@ -33,6 +33,11 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
                 .gasInspectionEnd(request.getGasInspectionEnd())
                 .comment(request.getComment())
                 .dateEndLpg(request.getDateEndLpg())
+                .byQrent(request.getByQrent())
+                .byBolt(request.getByBolt())
+                .byForus(request.getByForus())
+                .byUber(request.getByUber())
+                .byTallink(request.getByTallink())
                 .build();
     }
 
@@ -63,6 +68,11 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
                 .gasInspectionEnd(domain.getGasInspectionEnd())
                 .comment(domain.getComment())
                 .dateEndLpg(domain.getDateEndLpg())
+                .byQrent(domain.getByQrent())
+                .byBolt(domain.getByBolt())
+                .byForus(domain.getByForus())
+                .byUber(domain.getByUber())
+                .byTallink(domain.getByTallink())
                 .build();
     }
 }
