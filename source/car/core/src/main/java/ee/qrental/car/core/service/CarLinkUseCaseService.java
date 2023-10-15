@@ -5,7 +5,7 @@ import ee.qrental.car.api.in.request.CarLinkDeleteRequest;
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.api.in.usecase.CarLinkAddUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkDeleteUseCase;
-import ee.qrental.car.api.in.usecase.LinkUpdateUseCase;
+import ee.qrental.car.api.in.usecase.CarLinkUpdateUseCase;
 import ee.qrental.car.api.out.CarLinkAddPort;
 import ee.qrental.car.api.out.CarLinkDeletePort;
 import ee.qrental.car.api.out.CarLinkLoadPort;
@@ -15,7 +15,7 @@ import ee.qrental.car.core.mapper.CarLinkUpdateRequestMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CarLinkUseCaseService implements CarLinkAddUseCase, LinkUpdateUseCase, CarLinkDeleteUseCase {
+public class CarLinkUseCaseService implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase {
 
   private final CarLinkAddPort addPort;
   private final CarLinkUpdatePort updatePort;

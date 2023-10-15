@@ -1,15 +1,15 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete a Link',
-            closeRef='/links',
-            content=~{fragments/linkDeleteFormFragment.html :: deleteForm},
+            closeRef='/car-links',
+            content=~{fragments/carLinkDeleteFormFragment.html :: deleteForm},
             request=${deleteRequest}
         )">
     </div>
 </div>
 
 <form th:fragment="deleteForm"
-      th:action="@{/links/delete}"
+      th:action="@{/car-links/delete}"
       th:object="${deleteRequest}"
       method="post">
     <input id="linkId" required
@@ -19,11 +19,11 @@
     <div class="mb-3">
         <p class="fs-4 ">Please confirm that you want to delete next data:</p>
         <p class="fs-6 text-center"
-           th:text="${objectInfo}">Link info</p>
+           th:text="${objectInfo}">Car-link info</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
             submitValue='Delete',
-            cancelHref='/links'
+            cancelHref='/car-links'
         )">
     </div>
 </form>

@@ -1,10 +1,10 @@
 package ee.qrental.ui.controller.link;
 
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
-import static ee.qrental.ui.controller.util.ControllerUtils.LINK_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.CAR_LINK_ROOT_PATH;
 
-import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
+import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(LINK_ROOT_PATH)
+@RequestMapping(CAR_LINK_ROOT_PATH)
 @AllArgsConstructor
-public class LinkQueryController {
+public class CarLinkQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetCarLinkQuery linkQuery;
   private final GetCarQuery carQuery;
@@ -29,7 +29,7 @@ public class LinkQueryController {
     addCarListToModel(model);
     addDriverListToModel(model);
 
-    return "links";
+    return "carLinks";
   }
 
   private void addLinkListToModel(final Model model) {

@@ -3,8 +3,6 @@
 
     <ul th:replace="fragments/carTabFragment.html :: carTabs('carLinks')"></ul>
 
-    <ul th:replace="fragments/linkTabFragment :: linkTabs('links')"></ul>
-
 
     <div class="card">
         <div class="card-body">
@@ -25,7 +23,7 @@
         <tr>
             <th>
                 <a class="btn btn-sm btn-success"
-                   href="/links/add-form"
+                   href="/car-links/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
@@ -45,11 +43,11 @@
         <tr th:each="link : ${links}">
             <td>
                 <a class="btn btn-sm btn-warning"
-                   th:href="@{/links/update-form/{id}(id=${link.id})}">
+                   th:href="@{/car-links/update-form/{id}(id=${link.id})}">
                     <span class="bi-pencil-square"></span>
                     Edit</a>
                 <a class="btn btn-sm btn-danger"
-                   th:href="@{/links/delete-form/{id}(id=${link.id})}">
+                   th:href="@{/car-links/delete-form/{id}(id=${link.id})}">
                     <span class="bi-trash"></span>
                     Delete</a>
             </td>

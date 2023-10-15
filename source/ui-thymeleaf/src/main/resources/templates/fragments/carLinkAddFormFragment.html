@@ -2,14 +2,14 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Add a new Link',
             closeRef='/links',
-            content=~{fragments/linkAddFormFragment.html :: addForm},
+            content=~{fragments/carLinkAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
     </div>
 </div>
 <div th:fragment="addForm">
     <form method="post"
-          th:action="@{/links/add}"
+          th:action="@{/car-links/add}"
           th:object="${addRequest}">
         <div class="mb-3">
             <span th:text="${driver.firstName}">???</span>

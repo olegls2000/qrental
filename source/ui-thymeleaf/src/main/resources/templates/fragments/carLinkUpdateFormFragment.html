@@ -1,14 +1,14 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Update a Link',
+            title='Update a Car Link',
             closeRef='/links',
-            content=~{fragments/linkUpdateFormFragment.html :: updateForm},
+            content=~{fragments/carLinkUpdateFormFragment.html :: updateForm},
             request=${updateRequest}
         )">
     </div>
 </div>
 <form th:fragment="updateForm"
-      th:action="@{/links/update}"
+      th:action="@{/car-links/update}"
       th:object="${updateRequest}"
       method="post">
     <div class="mb-3">
