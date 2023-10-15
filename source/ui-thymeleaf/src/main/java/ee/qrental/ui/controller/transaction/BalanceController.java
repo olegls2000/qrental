@@ -9,7 +9,7 @@ import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
-import ee.qrental.link.api.in.query.GetLinkQuery;
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.FeeOption;
@@ -35,7 +35,7 @@ public class BalanceController {
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetContractQuery contractQuery;
-  private final GetLinkQuery linkQuery;
+  private final GetCarLinkQuery linkQuery;
   private final DriverBalanceAssembler driverBalanceAssembler;
 
   @GetMapping

@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-ee.qrental.link.spring.config.LinkAdapterConfig,\
-ee.qrental.link.spring.config.LinkMapperConfig,\
-ee.qrental.link.spring.config.LinkServiceConfig,\
-ee.qrental.link.spring.config.LinkValidatorConfig,\
-ee.qrental.link.spring.config.LinkRepositoryConfig

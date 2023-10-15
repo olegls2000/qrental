@@ -6,7 +6,6 @@ dependencies {
     implementation(project(":source:invoice:api:in"))
     implementation(project(":source:contract:api:in"))
     implementation(project(":source:firm:api:in"))
-    implementation(project(":source:link:api:in"))
     implementation(project(":source:constant:api:in"))
     implementation(project(":source:common"))
 

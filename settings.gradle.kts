@@ -44,17 +44,6 @@ include("source:firm:persistence:repository")
 include("source:firm:persistence:flyway")
 include("source:firm:config")
 
-//Link domain:
-include("source:link:api:in")
-include("source:link:api:out")
-include("source:link:domain")
-include("source:link:core")
-include("source:link:persistence:adapter")
-include("source:link:persistence:entity")
-include("source:link:persistence:repository")
-include("source:link:persistence:flyway")
-include("source:link:config")
-
 //Constant domain:
 include("source:constant:api:in")
 include("source:constant:api:out")

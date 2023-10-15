@@ -13,8 +13,6 @@ dependencies {
     implementation(project(":source:contract:persistence:flyway"))
     implementation(project(":source:firm:config"))
     implementation(project(":source:firm:persistence:flyway"))
-    implementation(project(":source:link:config"))
-    implementation(project(":source:link:persistence:flyway"))
     implementation(project(":source:constant:config"))
     implementation(project(":source:constant:persistence:flyway"))
     implementation(project(":source:transaction:config"))

@@ -4,7 +4,7 @@ import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_
 import static ee.qrental.ui.controller.util.ControllerUtils.LINK_ROOT_PATH;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
-import ee.qrental.link.api.in.query.GetLinkQuery;
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class LinkQueryController {
   private final QDateFormatter qDateFormatter;
-  private final GetLinkQuery linkQuery;
+  private final GetCarLinkQuery linkQuery;
   private final GetCarQuery carQuery;
   private final GetBalanceQuery balanceQuery;
 
