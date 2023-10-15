@@ -11,21 +11,18 @@
       th:action="@{/links/update}"
       th:object="${updateRequest}"
       method="post">
-
+    <div class="mb-3">
+        <span th:text="${driver.firstName}">???</span>
+        <span th:text="${driver.lastName}">???</span>
+    </div>
     <input id="linkId" required
            th:field="*{id}"
            type="number"
            hidden/>
-
-    <div class="mb-3">
-        <label class="form-label text-muted" for="driverId">Driver</label>
-        <select id="driverId" class="form-select"
-                th:field="*{driverId}">
-            <option th:each="driver : ${drivers}"
-                    th:value="${driver.driverId}"
-                    th:text="|${driver.firstName} ${driver.lastName}. Total: ${driver.total} EURO|"></option>
-        </select>
-    </div>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="number"
+           hidden/>
     <div class="mb-3">
         <label class="form-label text-muted" for="carId">Car</label>
         <select id="carId" class="form-select"
@@ -38,7 +35,7 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label class="form-label text-muted" for="dateStart"> Date Start</label>
+                <label class="form-label text-muted" for="dateStart">Date Start</label>
                 <input class="form-control" id="dateStart" placeholder="Enter Start Date" required
                        th:field="*{dateStart}"
                        type="date"/>
@@ -46,7 +43,7 @@
         </div>
         <div class="col">
             <div class="mb-3">
-                <label class="form-label text-muted" for="dateEnd"> Date End</label>
+                <label class="form-label text-muted" for="dateEnd">Date End</label>
                 <input class="form-control" id="dateEnd" placeholder="Enter  Date End"
                        th:field="*{dateEnd}"
                        type="date"/>

@@ -17,7 +17,7 @@ public class CallSignBusinessRuleValidator implements QValidator<CallSign> {
   private final CallSignLinkLoadPort callSignLinkLoadPort;
 
   @Override
-  public ViolationsCollector validateAdd(CallSign domain) {
+  public ViolationsCollector validateAdd(final CallSign domain) {
     final var violationsCollector = new ViolationsCollector();
     checkUniquenessForAdd(domain, violationsCollector);
 
@@ -25,7 +25,7 @@ public class CallSignBusinessRuleValidator implements QValidator<CallSign> {
   }
 
   @Override
-  public ViolationsCollector validateUpdate(CallSign domain) {
+  public ViolationsCollector validateUpdate(final CallSign domain) {
     final var violationsCollector = new ViolationsCollector();
     checkExistence(domain.getId(), violationsCollector);
     checkUniquenessForUpdate(domain, violationsCollector);

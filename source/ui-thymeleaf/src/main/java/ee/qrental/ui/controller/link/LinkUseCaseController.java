@@ -3,6 +3,7 @@ package ee.qrental.ui.controller.link;
 import static ee.qrental.ui.controller.util.ControllerUtils.LINK_ROOT_PATH;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.link.api.in.query.GetLinkQuery;
 import ee.qrental.link.api.in.request.LinkAddRequest;
 import ee.qrental.link.api.in.request.LinkDeleteRequest;
@@ -10,7 +11,6 @@ import ee.qrental.link.api.in.request.LinkUpdateRequest;
 import ee.qrental.link.api.in.usecase.LinkAddUseCase;
 import ee.qrental.link.api.in.usecase.LinkDeleteUseCase;
 import ee.qrental.link.api.in.usecase.LinkUpdateUseCase;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,28 +26,38 @@ public class LinkUseCaseController {
   private final LinkDeleteUseCase deleteUseCase;
   private final GetLinkQuery linkQuery;
   private final GetCarQuery carQuery;
-  private final GetBalanceQuery balanceQuery;
+  private final GetDriverQuery driverQuery;
 
-  @GetMapping(value = "/add-form")
-  public String addForm(final Model model) {
-    model.addAttribute("addRequest", new LinkAddRequest());
-    addDriverBalanceesListToModel(model);
+  @GetMapping(value = "/add-form/{driverId}")
+  public String addForm(@PathVariable("driverId") long driverId, final Model model) {
+    final var addRequest = new LinkAddRequest();
+    addRequest.setDriverId(driverId);
+    model.addAttribute("addRequest", addRequest);
+    addDriverInfoToModel(driverId, model);
     addCarListToModel(model);
 
     return "forms/addLink";
   }
 
   @PostMapping(value = "/add")
-  public String addLinkLink(@ModelAttribute final LinkAddRequest linkInfo) {
-    addUseCase.add(linkInfo);
+  public String addLinkLink(@ModelAttribute final LinkAddRequest addRequest, final Model model) {
+    addUseCase.add(addRequest);
+
+    if (addRequest.hasViolations()) {
+      model.addAttribute("addRequest", addRequest);
+
+      return "forms/addLink";
+    }
 
     return "redirect:" + LINK_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
+    final var updateRequest = linkQuery.getUpdateRequestById(id);
+    final var driverId = updateRequest.getDriverId();
     model.addAttribute("updateRequest", linkQuery.getUpdateRequestById(id));
-    addDriverBalanceesListToModel(model);
+    addDriverInfoToModel(driverId, model);
     addCarListToModel(model);
 
     return "forms/updateLink";
@@ -80,8 +90,8 @@ public class LinkUseCaseController {
     model.addAttribute("cars", cars);
   }
 
-  private void addDriverBalanceesListToModel(final Model model) {
-    final var drivers = balanceQuery.getAllBalanceTotalsWithDriver();
-    model.addAttribute("drivers", drivers);
+  private void addDriverInfoToModel(final Long driverId, final Model model) {
+    final var driver = driverQuery.getById(driverId);
+    model.addAttribute("driver", driver);
   }
 }

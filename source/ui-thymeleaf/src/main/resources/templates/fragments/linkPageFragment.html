@@ -1,5 +1,8 @@
 <div th:fragment="linkPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('carLinks')"></ul>
+
     <ul th:replace="fragments/linkTabFragment :: linkTabs('links')"></ul>
 
 

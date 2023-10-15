@@ -14,4 +14,6 @@ public interface LinkRepository {
   void deleteById(final Long id);
 
   LinkJakartaEntity findActiveByDriverIdAndNowDate(final Long driverId, final LocalDate nowDate);
+
+  List<LinkJakartaEntity> findActiveByCarIdAndNowDate(final Long carId, final LocalDate nowDate);
 }

@@ -11,31 +11,37 @@ import java.util.List;
 @AllArgsConstructor
 public class LinkRepositoryImpl implements LinkRepository {
 
-    private final LinkSpringDataRepository springDataRepository;
+  private final LinkSpringDataRepository springDataRepository;
 
-    @Override
-    public List<LinkJakartaEntity> findAll() {
-        return springDataRepository.findAll();
-    }
+  @Override
+  public List<LinkJakartaEntity> findAll() {
+    return springDataRepository.findAll();
+  }
 
-    @Override
-    public LinkJakartaEntity save(final LinkJakartaEntity entity) {
-        return springDataRepository.save(entity);
-    }
+  @Override
+  public LinkJakartaEntity save(final LinkJakartaEntity entity) {
+    return springDataRepository.save(entity);
+  }
 
-    @Override
-    public LinkJakartaEntity getReferenceById(final Long id) {
-        return springDataRepository.getReferenceById(id);
-    }
+  @Override
+  public LinkJakartaEntity getReferenceById(final Long id) {
+    return springDataRepository.getReferenceById(id);
+  }
 
-    @Override
-    public void deleteById(final Long id) {
-        springDataRepository.deleteById(id);
-    }
+  @Override
+  public void deleteById(final Long id) {
+    springDataRepository.deleteById(id);
+  }
 
-    @Override
-    public LinkJakartaEntity findActiveByDriverIdAndNowDate(
-            final Long driverId, final LocalDate nowDate) {
-        return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
-    }
+  @Override
+  public LinkJakartaEntity findActiveByDriverIdAndNowDate(
+      final Long driverId, final LocalDate nowDate) {
+    return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
+  }
+
+  @Override
+  public List<LinkJakartaEntity> findActiveByCarIdAndNowDate(
+      final Long carId, final LocalDate nowDate) {
+    return springDataRepository.findActiveByCarIdAndNowDate(carId, nowDate);
+  }
 }

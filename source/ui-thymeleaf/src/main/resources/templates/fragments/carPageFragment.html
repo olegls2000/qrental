@@ -1,5 +1,7 @@
 <div th:fragment="carPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('cars')"></ul>
+
     <h2 class="py-3">Cars</h2>
     <table class="table table-striped table-bordered">
         <tr>

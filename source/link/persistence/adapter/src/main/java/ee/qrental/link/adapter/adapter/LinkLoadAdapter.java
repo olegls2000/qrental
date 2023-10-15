@@ -32,4 +32,13 @@ public class LinkLoadAdapter implements LinkLoadPort {
 
     return mapper.mapToDomain(repository.findActiveByDriverIdAndNowDate(driverId, nowDate));
   }
+
+  @Override
+  public List<Link> loadActiveByCarId(final Long carId) {
+    final var nowDate = LocalDate.now();
+
+    return repository.findActiveByCarIdAndNowDate(carId, nowDate).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
 }

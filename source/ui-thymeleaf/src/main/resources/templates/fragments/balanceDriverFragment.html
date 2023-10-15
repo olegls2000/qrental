@@ -43,7 +43,7 @@
                                 <span class="bi-pencil-square"></span>
                             </a>
                             <a th:if="${carLinkId == null}" class="btn btn-sm btn-success"
-                               th:href="@{/links/add-form}"
+                               th:href="@{/links/add-form/{id}(id=${driverId})}"
                                role="button"
                                aria-controls="offcanvasExample">
                                 <span class="bi-plus-circle"></span>
