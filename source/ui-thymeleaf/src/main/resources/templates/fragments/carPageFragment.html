@@ -39,7 +39,14 @@
                 </a>
             </td>
             <td th:text="${car.regNumber}"></td>
-            <td th:text="---"></td>
+
+            <td>
+                <i th:if="${car.byQrent}" > Q </i>
+                <i th:if="${car.byBolt}" class="bi bi-type-bold"></i>
+                <i th:if="${car.byForus}" > F </i>
+                <i th:if="${car.byUber}" > U </i>
+                <i th:if="${car.byTallink}" > T </i>
+            </td>
             <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
             <td th:text="---"></td>
             <td th:text="${car.manufacturer}"></td>
