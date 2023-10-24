@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "link")
+@Table(name = "car_link")
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

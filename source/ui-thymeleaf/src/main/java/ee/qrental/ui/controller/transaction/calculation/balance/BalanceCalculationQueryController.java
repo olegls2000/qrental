@@ -1,8 +1,7 @@
-package ee.qrental.ui.controller.transaction;
+package ee.qrental.ui.controller.transaction.calculation.balance;
 
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.*;
-
 
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
@@ -18,7 +17,7 @@ public class BalanceCalculationQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
 
-  @GetMapping("/calculations")
+  @GetMapping("/balance-calculations")
   public String getCalculationView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
 
@@ -27,7 +26,7 @@ public class BalanceCalculationQueryController {
     return "balanceCalculations";
   }
 
-  @GetMapping(value = "/calculations/{id}")
+  @GetMapping(value = "/balance-calculations/{id}")
   public String getBalanceCalculationView(@PathVariable("id") long id, final Model model) {
     model.addAttribute("balances", balanceCalculationQuery.getById(id).getBalances());
 

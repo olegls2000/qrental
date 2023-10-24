@@ -10,6 +10,7 @@ dependencyResolutionManagement {
 
 include("source:app")
 include("source:common")
+include("source:task")
 
 //Driver domain:
 include("source:driver:api:in")
@@ -103,6 +104,5 @@ include("source:user:persistence:entity")
 include("source:user:persistence:repository")
 include("source:user:persistence:flyway")
 include("source:user:config")
-
 
 include("source:ui-thymeleaf")

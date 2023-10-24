@@ -14,7 +14,9 @@ public interface CarLinkRepository {
 
   void deleteById(final Long id);
 
-  CarLinkJakartaEntity findActiveByDriverIdAndNowDate(final Long driverId, final LocalDate nowDate);
+  CarLinkJakartaEntity findActiveByDriverIdAndDate(final Long driverId, final LocalDate date);
 
-  List<CarLinkJakartaEntity> findActiveByCarIdAndNowDate(final Long carId, final LocalDate nowDate);
+  List<CarLinkJakartaEntity> findActiveByDate(final LocalDate date);
+
+  List<CarLinkJakartaEntity> findActiveByCarIdAndDate(final Long carId, final LocalDate date);
 }

@@ -12,19 +12,27 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
       value =
           "SELECT ln.* FROM link ln "
               + "where  ln.driver_id = :driverId "
-              + "and ln.date_start <= :nowDate "
-              + "and (ln.date_end is null or ln.date_end > :nowDate)",
+              + "and ln.date_start <= :date "
+              + "and (ln.date_end is null or ln.date_end > :date)",
       nativeQuery = true)
-  CarLinkJakartaEntity findActiveByDriverIdAndNowDate(
-      @Param("driverId") final Long driverId, @Param("nowDate") final LocalDate nowDate);
+  CarLinkJakartaEntity findActiveByDriverIdAndDate(
+      @Param("driverId") final Long driverId, @Param("date") final LocalDate date);
 
   @Query(
       value =
           "SELECT ln.* FROM link ln "
               + "where  ln.car_id = :car_id "
-              + "and ln.date_start <= :nowDate "
-              + "and (ln.date_end is null or ln.date_end > :nowDate)",
+              + "and ln.date_start <= :date "
+              + "and (ln.date_end is null or ln.date_end > :date)",
       nativeQuery = true)
-  List<CarLinkJakartaEntity> findActiveByCarIdAndNowDate(
-      @Param("car_id") final Long carId, @Param("nowDate") final LocalDate nowDate);
+  List<CarLinkJakartaEntity> findActiveByCarIdAndDate(
+      @Param("car_id") final Long carId, @Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT ln.* FROM link ln "
+              + "where ln.date_start <= :date "
+              + "and (ln.date_end is null or ln.date_end > :date)",
+      nativeQuery = true)
+  List<CarLinkJakartaEntity> findActiveByDate(@Param("date") final LocalDate date);
 }

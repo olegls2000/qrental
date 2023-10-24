@@ -86,7 +86,7 @@ public class CarLinkUseCaseController {
   }
 
   private void addCarListToModel(final Model model) {
-    final var cars = carQuery.getAll();
+    final var cars = carQuery.getAvailableCars();
     model.addAttribute("cars", cars);
   }
 

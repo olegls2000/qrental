@@ -15,17 +15,21 @@ public class CarLinkAddBusinessRuleValidator {
   public ViolationsCollector validate(final CarLinkAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
     checkIfCarAvailable(addRequest, violationsCollector);
-    checkIfLinkStartDateAfterLatestBalanceCalculationDate(addRequest, violationsCollector);
+    checkIfLinkStartDateAfterLatestRentCalculationDate(addRequest, violationsCollector);
     checkIfLinkStartDateAfterLatestLink(addRequest, violationsCollector);
 
     return violationsCollector;
   }
 
   private void checkIfLinkStartDateAfterLatestLink(
-      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {}
+      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {
 
-  private void checkIfLinkStartDateAfterLatestBalanceCalculationDate(
-      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {}
+  }
+
+  private void checkIfLinkStartDateAfterLatestRentCalculationDate(
+      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {
+
+  }
 
   private void checkIfCarAvailable(
       final CarLinkAddRequest addRequest, final ViolationsCollector violationCollector) {

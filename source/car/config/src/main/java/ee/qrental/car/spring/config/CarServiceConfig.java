@@ -1,10 +1,7 @@
 package ee.qrental.car.spring.config;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
-import ee.qrental.car.api.out.CarAddPort;
-import ee.qrental.car.api.out.CarDeletePort;
-import ee.qrental.car.api.out.CarLoadPort;
-import ee.qrental.car.api.out.CarUpdatePort;
+import ee.qrental.car.api.out.*;
 import ee.qrental.car.core.mapper.CarAddRequestMapper;
 import ee.qrental.car.core.mapper.CarResponseMapper;
 import ee.qrental.car.core.mapper.CarUpdateRequestMapper;
@@ -18,10 +15,11 @@ public class CarServiceConfig {
 
   @Bean
   public GetCarQuery getCarQueryService(
-      final CarLoadPort loadPort,
-      final CarResponseMapper mapper,
-      final CarUpdateRequestMapper updateRequestMapper) {
-    return new CarQueryService(loadPort, mapper, updateRequestMapper);
+      final CarLoadPort carLoadPort,
+      final CarResponseMapper carMapper,
+      final CarUpdateRequestMapper carUpdateRequestMapper,
+      final CarLinkLoadPort carLinkLoadPort) {
+    return new CarQueryService(carLoadPort, carMapper, carUpdateRequestMapper, carLinkLoadPort);
   }
 
   @Bean

@@ -1,4 +1,4 @@
-package ee.qrental.ui.controller.transaction;
+package ee.qrental.ui.controller.transaction.calculation.balance;
 
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;

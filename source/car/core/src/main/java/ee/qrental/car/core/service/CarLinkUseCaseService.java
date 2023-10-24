@@ -12,10 +12,12 @@ import ee.qrental.car.api.out.CarLinkLoadPort;
 import ee.qrental.car.api.out.CarLinkUpdatePort;
 import ee.qrental.car.core.mapper.CarLinkAddRequestMapper;
 import ee.qrental.car.core.mapper.CarLinkUpdateRequestMapper;
+import ee.qrental.car.core.validator.CarLinkAddBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CarLinkUseCaseService implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase {
+public class CarLinkUseCaseService
+    implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase {
 
   private final CarLinkAddPort addPort;
   private final CarLinkUpdatePort updatePort;
@@ -23,9 +25,17 @@ public class CarLinkUseCaseService implements CarLinkAddUseCase, CarLinkUpdateUs
   private final CarLinkLoadPort loadPort;
   private final CarLinkAddRequestMapper addRequestMapper;
   private final CarLinkUpdateRequestMapper updateRequestMapper;
+  private final CarLinkAddBusinessRuleValidator addBusinessRuleValidator;
 
   @Override
   public Long add(final CarLinkAddRequest request) {
+    final var violationsCollector = addBusinessRuleValidator.validate(request);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return null;
+    }
+
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 

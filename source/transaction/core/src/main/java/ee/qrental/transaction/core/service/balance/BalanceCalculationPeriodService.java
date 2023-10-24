@@ -3,9 +3,9 @@ package ee.qrental.transaction.core.service.balance;
 import static ee.qrental.common.core.utils.QTimeUtils.getLastDayOfWeekInYear;
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.common.core.utils.QWeek;
 import ee.qrental.common.core.utils.QWeekIterator;
+import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
@@ -16,7 +16,6 @@ public class BalanceCalculationPeriodService {
 
   public QWeekIterator getWeekIterator(final Integer lastYear, final QWeek lastWeek) {
     final var startDate = loadPort.loadLastCalculationDate().plus(1, DAYS);
-    ;
     final var endDate = getEndCalculationDate(lastYear, lastWeek);
 
     return new QWeekIterator(startDate, endDate);

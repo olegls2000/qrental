@@ -9,7 +9,11 @@
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'calculations'} ? active : ''"
-       href="/transactions/calculations">Calculations</a>
+    <a class="nav-link" th:classappend="${activeTab == 'balanceCalculations'} ? active : ''"
+       href="/transactions/balance-calculations">Balance Calculations</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'rentCalculations'} ? active : ''"
+       href="/transactions/rent-calculations">Rent Calculations</a>
   </li>
 </ul>

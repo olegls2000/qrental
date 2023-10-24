@@ -6,13 +6,11 @@ import static java.time.LocalDate.of;
 import static java.time.Month.*;
 import static java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR;
 import static java.time.temporal.TemporalAdjusters.*;
-import static java.util.Locale.getDefault;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -20,6 +18,7 @@ public class QTimeUtils {
 
   public static final LocalDate INVOICE_START_CALCULATION_DATE = LocalDate.of(2023, MARCH, 05);
   public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 01);
+  public static final LocalDate RENT_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 01);
 
   public static int getWeekNumber(final LocalDate date) {
     return date.get(WeekFields.of(Locale.UK).weekOfWeekBasedYear());

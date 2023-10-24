@@ -1,18 +1,17 @@
-package ee.qrental.ui.controller.transaction;
+package ee.qrental.ui.controller.transaction.transaction;
 
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
-import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
-import static ee.qrental.ui.controller.transaction.TransactionFilterRequestUtils.addWeekOptionsToModel;
+import static ee.qrental.ui.controller.util.TransactionFilterRequestUtils.addCleanFilterRequestToModel;
+import static ee.qrental.ui.controller.util.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
-import java.util.List;
-
 import ee.qrental.ui.controller.formatter.QDateFormatter;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

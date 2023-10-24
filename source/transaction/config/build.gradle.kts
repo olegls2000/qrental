@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":source:transaction:persistence:repository"))
 
     implementation(project(":source:driver:api:in"))
+    implementation(project(":source:car:api:in"))
     implementation(project(":source:constant:api:in"))
 
     implementation("org.springframework:spring-context-support")

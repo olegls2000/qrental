@@ -10,6 +10,7 @@ import ee.qrental.car.core.mapper.CarLinkResponseMapper;
 import ee.qrental.car.core.mapper.CarLinkUpdateRequestMapper;
 import ee.qrental.car.core.service.CarLinkQueryService;
 import ee.qrental.car.core.service.CarLinkUseCaseService;
+import ee.qrental.car.core.validator.CarLinkAddBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +32,15 @@ public class LinkServiceConfig {
       final CarLinkDeletePort deletePort,
       final CarLinkLoadPort loadPort,
       final CarLinkAddRequestMapper addRequestMapper,
-      final CarLinkUpdateRequestMapper updateRequestMapper) {
+      final CarLinkUpdateRequestMapper updateRequestMapper,
+      final CarLinkAddBusinessRuleValidator addBusinessRuleValidator) {
     return new CarLinkUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        addBusinessRuleValidator);
   }
 }

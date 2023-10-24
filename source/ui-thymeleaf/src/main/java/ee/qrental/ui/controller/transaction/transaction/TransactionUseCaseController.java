@@ -1,4 +1,4 @@
-package ee.qrental.ui.controller.transaction;
+package ee.qrental.ui.controller.transaction.transaction;
 
 import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
 

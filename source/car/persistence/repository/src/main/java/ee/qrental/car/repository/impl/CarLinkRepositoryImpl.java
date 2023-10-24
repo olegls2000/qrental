@@ -34,14 +34,18 @@ public class CarLinkRepositoryImpl implements CarLinkRepository {
   }
 
   @Override
-  public CarLinkJakartaEntity findActiveByDriverIdAndNowDate(
-      final Long driverId, final LocalDate nowDate) {
-    return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
+  public CarLinkJakartaEntity findActiveByDriverIdAndDate(
+      final Long driverId, final LocalDate date) {
+    return springDataRepository.findActiveByDriverIdAndDate(driverId, date);
   }
 
   @Override
-  public List<CarLinkJakartaEntity> findActiveByCarIdAndNowDate(
-      final Long carId, final LocalDate nowDate) {
-    return springDataRepository.findActiveByCarIdAndNowDate(carId, nowDate);
+  public List<CarLinkJakartaEntity> findActiveByDate(final LocalDate date) {
+    return springDataRepository.findActiveByDate(date);
+  }
+  @Override
+  public List<CarLinkJakartaEntity> findActiveByCarIdAndDate(
+      final Long carId, final LocalDate date) {
+    return springDataRepository.findActiveByCarIdAndDate(carId, date);
   }
 }

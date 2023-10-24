@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":source:user:config"))
     implementation(project(":source:user:persistence:flyway"))
     implementation(project(":source:email:config"))
+    implementation(project(":source:task"))
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
