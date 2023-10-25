@@ -85,8 +85,7 @@ public class CallSignLinkUseCaseController {
 
   @PostMapping("/update")
   public String updateCallSignCallSignLink(
-      final Model model,
-      final CallSignLinkUpdateRequest updateRequest) {
+      final Model model, final CallSignLinkUpdateRequest updateRequest) {
 
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
@@ -95,9 +94,8 @@ public class CallSignLinkUseCaseController {
 
       return "forms/updateCallSignLink";
     }
-    final var redirectPage = BALANCE_ROOT_PATH + "/driver/" + updateRequest.getDriverId();
 
-    return "redirect:" + redirectPage;
+    return "redirect:" + BALANCE_ROOT_PATH + "/driver/" + updateRequest.getDriverId();
   }
 
   private void addUpdateRequestToModel(
@@ -115,8 +113,10 @@ public class CallSignLinkUseCaseController {
 
   @PostMapping("/delete")
   public String deleteForm(final CallSignLinkDeleteRequest deleteRequest) {
+    final var callSignToDelete = callSignLinkQuery.getById(deleteRequest.getId());
+    final var driverId = callSignToDelete.getDriverId();
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:" + CALL_SIGN_LINK_ROOT_PATH;
+    return "redirect:" + BALANCE_ROOT_PATH + "/driver/" + driverId;
   }
 }
