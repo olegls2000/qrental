@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakartaEntity, Long> {
   @Query(
       value =
-          "SELECT ln.* FROM link ln "
+          "SELECT ln.* FROM car_link ln "
               + "where  ln.driver_id = :driverId "
               + "and ln.date_start <= :date "
               + "and (ln.date_end is null or ln.date_end > :date)",
@@ -20,7 +20,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
 
   @Query(
       value =
-          "SELECT ln.* FROM link ln "
+          "SELECT ln.* FROM car_link ln "
               + "where  ln.car_id = :car_id "
               + "and ln.date_start <= :date "
               + "and (ln.date_end is null or ln.date_end > :date)",
@@ -30,7 +30,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
 
   @Query(
       value =
-          "SELECT ln.* FROM link ln "
+          "SELECT ln.* FROM car_link ln "
               + "where ln.date_start <= :date "
               + "and (ln.date_end is null or ln.date_end > :date)",
       nativeQuery = true)
