@@ -31,7 +31,7 @@ public class CarLinkResponseMapper implements ResponseMapper<CarLinkResponse, Ca
 
   @Override
   public CarLinkResponse toResponse(final CarLink domain) {
-    if(domain == null){
+    if (domain == null) {
       return null;
     }
 
@@ -63,6 +63,8 @@ public class CarLinkResponseMapper implements ResponseMapper<CarLinkResponse, Ca
     final var callSign = callSignLink.getCallSign();
     final var driverInfo = driverQuery.getObjectInfo(driverId);
     final var carInfo = carQuery.getObjectInfo(carId);
-    return format("%s %s %s ", callSign, carInfo, driverInfo);
+    return format(
+        "Call sign: %s, Car: %s, Driver: %s active from %s",
+        callSign, carInfo, driverInfo, domain.getDateStart());
   }
 }

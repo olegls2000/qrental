@@ -1,6 +1,5 @@
 package ee.qrental.driver.spring.config;
 
-import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.out.*;
 import ee.qrental.driver.core.validator.CallSignLinkBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,7 @@ public class CallSignLinkValidatorConfig {
 
   @Bean
   CallSignLinkBusinessRuleValidator getCallSignLinkBusinessRuleValidator(
-      final CallSignLinkLoadPort loadPort, final GetDriverQuery driverQuery) {
-    return new CallSignLinkBusinessRuleValidator(loadPort, driverQuery);
+      final CallSignLinkLoadPort loadPort) {
+    return new CallSignLinkBusinessRuleValidator(loadPort);
   }
 }

@@ -13,7 +13,11 @@ import ee.qrental.driver.api.out.CallSignLinkUpdatePort;
 import ee.qrental.driver.core.mapper.CallSignLinkAddRequestMapper;
 import ee.qrental.driver.core.mapper.CallSignLinkUpdateRequestMapper;
 import ee.qrental.driver.core.validator.CallSignLinkBusinessRuleValidator;
+import ee.qrental.driver.domain.CallSign;
+import ee.qrental.driver.domain.CallSignLink;
 import lombok.AllArgsConstructor;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 public class CallSignLinkUseCaseService
@@ -48,11 +52,24 @@ public class CallSignLinkUseCaseService
 
       return;
     }
-    updatePort.update(updateRequestMapper.toDomain(request));
+    final var linkToStop = loadPort.loadById(request.getId());
+    linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
+    updatePort.update(linkToStop);
+
+    final var linkToCreate =
+        CallSignLink.builder()
+            .callSign(CallSign.builder().id(request.getCallSignId()).build())
+            .dateStart(LocalDate.now())
+            .driverId(request.getDriverId())
+            .build();
+
+    addPort.add(linkToCreate);
   }
 
   @Override
   public void delete(final CallSignLinkDeleteRequest request) {
-    deletePort.delete(request.getId());
+    final var linkToStop = loadPort.loadById(request.getId());
+    linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
+    updatePort.update(linkToStop);
   }
 }

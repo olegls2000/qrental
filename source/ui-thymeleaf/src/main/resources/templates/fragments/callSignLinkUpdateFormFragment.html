@@ -1,6 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Update a  Call Sign Link',
+            title='Change Drivers Call Sign',
             closeRef='/call-sign-links',
             content=~{fragments/callSignLinkUpdateFormFragment.html :: updateForm},
             request=${updateRequest}
@@ -16,19 +16,29 @@
            th:field="*{id}"
            type="text"
            hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="number"
+           hidden/>
 
-    <div class="mb-3">
-        <label class="form-label text-muted" for="driverId">Driver</label>
-        <select id="driverId" class="form-select"
-                th:field="*{driverId}">
-            <option th:each="driver : ${drivers}"
-                    th:value="${driver.id}"
-                    th:text="|${driver.firstName} ${driver.lastName} - ${driver.isikukood}|"></option>
-        </select>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <span class="fs-5">Driver:</span>
+                <span class="fs-5" th:text="${driver.firstName}">???</span>
+                <span class="fs-5" th:text="${driver.lastName}">???</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <span class="fs-5">Current Call Sign:</span>
+                <span class="fs-5" th:text="${currentCallSign}">???</span>
+            </div>
+        </div>
     </div>
     <div class="col">
         <div class="mb-3">
-            <label class="form-label text-muted" for="callSignId">Call Sign</label>
+            <label class="form-label text-muted" for="callSignId">Available Call Signs</label>
             <select id="callSignId" class="form-select"
                     th:field="*{callSignId}">
                 <option th:each="callSign : ${callSigns}"

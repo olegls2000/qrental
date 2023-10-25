@@ -1,6 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Add a new Call Sign Link',
+            title='Create a Link of Call Sign to the Driver',
             content=~{fragments/callSignLinkAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
@@ -11,18 +11,26 @@
     <form method="post"
           th:action="@{/call-sign-links/add}"
           th:object="${addRequest}">
-        <div class="mb-3">
-            <label class="form-label text-muted" for="driverId">Driver</label>
-            <select id="driverId" class="form-select"
-                    th:field="*{driverId}">
-                <option th:each="driver : ${drivers}"
-                        th:value="${driver.id}"
-                        th:text="|${driver.firstName} ${driver.lastName} - ${driver.isikukood}|"></option>
-            </select>
+        <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <span class="fs-5" th:text="${driver.firstName}">???</span>
+                    <span class="fs-5" th:text="${driver.lastName}">???</span>
+                </div>v
+            </div>
+
         </div>
+
+        <input id="driverId" required
+               th:field="*{driverId}"
+               type="number"
+               hidden/>
         <div class="col">
             <div class="mb-3">
-                <label class="form-label text-muted" for="callSignId">Call Sign</label>
+                <label class="form-label text-muted" for="callSignId">Available Call Signs</label>
                 <select id="callSignId" class="form-select"
                         th:field="*{callSignId}">
                     <option th:each="callSign : ${callSigns}"
@@ -57,7 +65,7 @@
                       th:field="*{comment}"/>
         </div>
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Add',
+            submitValue='Link',
             cancelHref='/call-sign-links'
         )">
         </div>

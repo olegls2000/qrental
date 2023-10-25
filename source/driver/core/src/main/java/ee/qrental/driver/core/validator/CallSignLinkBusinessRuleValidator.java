@@ -4,7 +4,6 @@ import static java.lang.String.format;
 
 import ee.qrental.common.core.in.validation.QValidator;
 import ee.qrental.common.core.in.validation.ViolationsCollector;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.out.CallSignLinkLoadPort;
 import ee.qrental.driver.domain.CallSignLink;
 import lombok.AllArgsConstructor;
@@ -13,13 +12,11 @@ import lombok.AllArgsConstructor;
 public class CallSignLinkBusinessRuleValidator implements QValidator<CallSignLink> {
 
   private final CallSignLinkLoadPort loadPort;
-  private final GetDriverQuery driverQuery;
 
   @Override
   public ViolationsCollector validateAdd(CallSignLink domain) {
     final var violationsCollector = new ViolationsCollector();
     checkIsCallSignFree(domain, violationsCollector);
-    checkIsDriverFree(domain, violationsCollector);
 
     return violationsCollector;
   }
@@ -45,18 +42,6 @@ public class CallSignLinkBusinessRuleValidator implements QValidator<CallSignLin
     if (activeCallSignLink != null) {
       violationCollector.collect(
           format("Call Sign: '%d' already uses by active Link and can not be linked.", callSign));
-    }
-  }
-
-  private void checkIsDriverFree(
-      final CallSignLink domain, final ViolationsCollector violationCollector) {
-    final var driverId = domain.getDriverId();
-    final var activeCallSignLink = loadPort.loadActiveByDriverId(driverId);
-    if (activeCallSignLink != null) {
-      violationCollector.collect(
-          format(
-              "Driver: %s already uses by active Link and can not be linked.",
-              driverQuery.getObjectInfo(driverId)));
     }
   }
 

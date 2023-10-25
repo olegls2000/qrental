@@ -1,6 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Delete a Link',
+            title='Stop active Car Link',
             closeRef='/car-links',
             content=~{fragments/carLinkDeleteFormFragment.html :: deleteForm},
             request=${deleteRequest}
@@ -16,13 +16,13 @@
            th:field="*{id}"
            type="text"
            hidden/>
-    <div class="mb-3">
-        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
-        <p class="fs-6 text-center"
-           th:text="${objectInfo}">Car-link info</p>
+    <div class="mb-5 mt-5">
+        <p class="fs-5 text-center">Please confirm that you want to stop by today selected Car Link:</p>
+        <p class="fs-4 text-center"
+           th:text="${objectInfo}">???</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
-            submitValue='Delete',
+            submitValue='Stop Car Link',
             cancelHref='/car-links'
         )">
     </div>

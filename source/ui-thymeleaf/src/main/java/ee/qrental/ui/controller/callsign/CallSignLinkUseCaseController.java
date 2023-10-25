@@ -1,5 +1,6 @@
 package ee.qrental.ui.controller.callsign;
 
+import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
 import static ee.qrental.ui.controller.util.ControllerUtils.CALL_SIGN_LINK_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
@@ -28,23 +29,25 @@ public class CallSignLinkUseCaseController {
   private final GetDriverQuery driverQuery;
   private final GetCallSignQuery callSignQuery;
 
-  private void addDriverListToModel(final Model model) {
-    final var drivers = driverQuery.getAll();
-    model.addAttribute("drivers", drivers);
-  }
-
-  private void addCallSignListToModel(final Model model) {
-    final var callSigns = callSignQuery.getAll();
+  private void addAvailableCallSignsToModel(final Model model) {
+    final var callSigns = callSignQuery.getAvailable();
     model.addAttribute("callSigns", callSigns);
   }
 
-  @GetMapping(value = "/add-form")
-  public String addForm(final Model model) {
-    addAddRequestToModel(model, new CallSignLinkAddRequest());
-    addDriverListToModel(model);
-    addCallSignListToModel(model);
+  @GetMapping(value = "/add-form/{id}")
+  public String addForm(final Model model, @PathVariable("id") long driverId) {
+    final var addRequest = new CallSignLinkAddRequest();
+    addRequest.setDriverId(driverId);
+    addAddRequestToModel(model, addRequest);
+    addDriverInfoToModel(driverId, model);
+    addAvailableCallSignsToModel(model);
 
     return "forms/addCallSignLink";
+  }
+
+  private void addDriverInfoToModel(final Long driverId, final Model model) {
+    final var driver = driverQuery.getById(driverId);
+    model.addAttribute("driver", driver);
   }
 
   @PostMapping(value = "/add")
@@ -54,8 +57,8 @@ public class CallSignLinkUseCaseController {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(model, addRequest);
-      addDriverListToModel(model);
-      addCallSignListToModel(model);
+      addDriverInfoToModel(addRequest.getDriverId(), model);
+      addAvailableCallSignsToModel(model);
 
       return "forms/addCallSignLink";
     }
@@ -69,27 +72,32 @@ public class CallSignLinkUseCaseController {
 
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(final Model model, @PathVariable("id") long id) {
-    addUpdateRequestToModel(model, callSignLinkQuery.getUpdateRequestById(id));
-    addDriverListToModel(model);
-    addCallSignListToModel(model);
+    final var updateRequest = callSignLinkQuery.getUpdateRequestById(id);
+    final var driverId = updateRequest.getDriverId();
+    final var currentCallSign = callSignQuery.getById(updateRequest.getCallSignId()).getCallSign();
+    addUpdateRequestToModel(model, updateRequest);
+    addDriverInfoToModel(driverId, model);
+    addAvailableCallSignsToModel(model);
+    model.addAttribute("currentCallSign", currentCallSign);
 
     return "forms/updateCallSignLink";
   }
 
   @PostMapping("/update")
   public String updateCallSignCallSignLink(
-      final Model model, final CallSignLinkUpdateRequest updateRequest) {
+      final Model model,
+      final CallSignLinkUpdateRequest updateRequest) {
 
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       addUpdateRequestToModel(model, updateRequest);
-      addDriverListToModel(model);
-      addCallSignListToModel(model);
+      addAvailableCallSignsToModel(model);
 
       return "forms/updateCallSignLink";
     }
+    final var redirectPage = BALANCE_ROOT_PATH + "/driver/" + updateRequest.getDriverId();
 
-    return "redirect:" + CALL_SIGN_LINK_ROOT_PATH;
+    return "redirect:" + redirectPage;
   }
 
   private void addUpdateRequestToModel(

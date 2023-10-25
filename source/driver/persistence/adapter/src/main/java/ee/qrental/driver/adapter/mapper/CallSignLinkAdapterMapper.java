@@ -3,6 +3,7 @@ package ee.qrental.driver.adapter.mapper;
 import ee.qrental.common.core.out.mapper.DomainMapper;
 import ee.qrental.driver.domain.CallSignLink;
 import ee.qrental.driver.entity.jakarta.CallSignLinkJakartaEntity;
+import ee.qrental.driver.entity.jakarta.DriverJakartaEntity;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -32,6 +33,7 @@ public class CallSignLinkAdapterMapper
     return CallSignLinkJakartaEntity.builder()
         .id(domain.getId())
         .callSign(callSignAdapterMapper.mapToEntity(domain.getCallSign()))
+        .driver(DriverJakartaEntity.builder().id(domain.getDriverId()).build())
         .dateStart(domain.getDateStart())
         .dateEnd(domain.getDateEnd())
         .comment(domain.getComment())

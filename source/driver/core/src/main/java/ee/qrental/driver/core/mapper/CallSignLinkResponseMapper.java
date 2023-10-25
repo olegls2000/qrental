@@ -34,8 +34,9 @@ public class CallSignLinkResponseMapper
   @Override
   public String toObjectInfo(CallSignLink domain) {
     final var driverInfo = driverQuery.getObjectInfo(domain.getDriverId());
+    final var callSign = domain.getCallSign().getCallSign();
     return format(
-        "Call Sign Link for Driver %s. From %s till %s.",
-        driverInfo, domain.getDateStart(), domain.getDateEnd());
+        "Link for Call Sign: %d and Driver %s active from %s",
+        callSign, driverInfo, domain.getDateStart());
   }
 }
