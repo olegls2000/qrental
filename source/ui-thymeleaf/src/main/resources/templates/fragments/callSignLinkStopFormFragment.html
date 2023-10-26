@@ -2,22 +2,27 @@
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Stop active Call Sign Link',
             closeRef='/call-sign-links',
-            content=~{fragments/callSignLinkDeleteFormFragment.html :: deleteForm},
-            request=${deleteRequest}
+            content=~{fragments/callSignLinkStopFormFragment.html :: stopForm},
+            request=${stopRequest}
         )">
     </div>
 </div>
 
-<form th:fragment="deleteForm"
-      th:action="@{/call-sign-links/delete}"
-      th:object="${deleteRequest}"
+<form th:fragment="stopForm"
+      th:action="@{/call-sign-links/stop}"
+      th:object="${stopRequest}"
       method="post">
     <input id="callSignLinkId" required
            th:field="*{id}"
            type="text"
            hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="text"
+           hidden/>
     <div class="mb-5 mt-5">
-        <p class="fs-5 text-center">Please confirm that you want to stop (end date will be yesterday) selected Call Sign Link:</p>
+        <p class="fs-5 text-center">Please confirm that you want to stop (end date will be yesterday) selected Call Sign
+            Link:</p>
         <p class="fs-4 text-center"
            th:text=${objectInfo}>???</p>
     </div>

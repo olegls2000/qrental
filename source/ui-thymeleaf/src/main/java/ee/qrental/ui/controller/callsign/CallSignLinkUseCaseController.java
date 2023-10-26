@@ -7,10 +7,10 @@ import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetCallSignQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.request.CallSignLinkAddRequest;
-import ee.qrental.driver.api.in.request.CallSignLinkDeleteRequest;
+import ee.qrental.driver.api.in.request.CallSignLinkStopRequest;
 import ee.qrental.driver.api.in.request.CallSignLinkUpdateRequest;
 import ee.qrental.driver.api.in.usecase.CallSignLinkAddUseCase;
-import ee.qrental.driver.api.in.usecase.CallSignLinkDeleteUseCase;
+import ee.qrental.driver.api.in.usecase.CallSignLinkStopUseCase;
 import ee.qrental.driver.api.in.usecase.CallSignLinkUpdateUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,15 +24,10 @@ public class CallSignLinkUseCaseController {
 
   private final CallSignLinkAddUseCase addUseCase;
   private final CallSignLinkUpdateUseCase updateUseCase;
-  private final CallSignLinkDeleteUseCase deleteUseCase;
+  private final CallSignLinkStopUseCase stopUseCase;
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetDriverQuery driverQuery;
   private final GetCallSignQuery callSignQuery;
-
-  private void addAvailableCallSignsToModel(final Model model) {
-    final var callSigns = callSignQuery.getAvailable();
-    model.addAttribute("callSigns", callSigns);
-  }
 
   @GetMapping(value = "/add-form/{id}")
   public String addForm(final Model model, @PathVariable("id") long driverId) {
@@ -64,6 +59,11 @@ public class CallSignLinkUseCaseController {
     }
 
     return getDriverPortalRedirectUrl(addRequest.getDriverId());
+  }
+
+  private void addAvailableCallSignsToModel(final Model model) {
+    final var callSigns = callSignQuery.getAvailable();
+    model.addAttribute("callSigns", callSigns);
   }
 
   private void addAddRequestToModel(final Model model, final CallSignLinkAddRequest addRequest) {
@@ -102,24 +102,24 @@ public class CallSignLinkUseCaseController {
     model.addAttribute("updateRequest", updateRequest);
   }
 
-  @GetMapping(value = "/delete-form/{id}")
-  public String deleteForm(final Model model, @PathVariable("id") long id) {
-    model.addAttribute("deleteRequest", new CallSignLinkDeleteRequest(id));
+  @GetMapping(value = "/stop-form/{id}/driver/{driverId}")
+  public String stopForm(
+      final Model model, @PathVariable("id") long id, @PathVariable("driverId") long driverId) {
+    model.addAttribute("stopRequest", new CallSignLinkStopRequest(id, driverId));
     model.addAttribute("objectInfo", callSignLinkQuery.getObjectInfo(id));
 
-    return "forms/deleteCallSignLink";
+    return "forms/stopCallSignLink";
   }
 
-  @PostMapping("/delete")
-  public String deleteForm(final CallSignLinkDeleteRequest deleteRequest) {
-    final var callSignToDelete = callSignLinkQuery.getById(deleteRequest.getId());
-    final var driverId = callSignToDelete.getDriverId();
-    deleteUseCase.delete(deleteRequest);
-    
+  @PostMapping("/stop")
+  public String stop(final CallSignLinkStopRequest stopRequest) {
+    final var driverId = stopRequest.getDriverId();
+    stopUseCase.stop(stopRequest);
+
     return getDriverPortalRedirectUrl(driverId);
   }
 
-  private static String getDriverPortalRedirectUrl(final Long driverId){
+  private static String getDriverPortalRedirectUrl(final Long driverId) {
     return "redirect:" + BALANCE_ROOT_PATH + "/driver/" + driverId;
   }
 }

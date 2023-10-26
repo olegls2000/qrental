@@ -1,4 +1,4 @@
-<div th:fragment="deleteButtons(submitValue, cancelHref)"
+<div th:fragment="deleteButtons(submitValue)"
      class="row justify-content-center">
     <div class="col-2">
         <input class="btn btn-danger"
@@ -7,10 +7,6 @@
                value="Update">
     </div>
     <div class="col-2">
-        <a class="btn btn-secondary"
-           th:href="${cancelHref}"
-           href="/">
-            Cancel
-        </a>
+        <a class="btn btn-secondary" href="#" onclick="history.back();">Cancel</a>
     </div>
 </div>
