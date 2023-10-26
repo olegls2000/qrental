@@ -1,7 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Add a new Link',
-            closeRef='/links',
+            title='Create a Link between Car and Driver',
             content=~{fragments/carLinkAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
@@ -11,28 +10,30 @@
     <form method="post"
           th:action="@{/car-links/add}"
           th:object="${addRequest}">
-        <div class="mb-3">
-            <span th:text="${driver.firstName}">???</span>
-            <span th:text="${driver.lastName}">???</span>
+        <div class="row mb-4 mt-4">
+            <div class="col">
+                <span class="fs-5">Driver:</span>
+                <span class="fs-5" th:text="${driver.firstName}">???</span>
+                <span class="fs-5" th:text="${driver.lastName}">???</span>
+            </div>
         </div>
         <input id="driverId" required
                th:field="*{driverId}"
                type="number"
                hidden/>
         <div class="mb-3">
-            <label class="form-label text-muted" for="carId">Car</label>
+            <label class="form-label text-muted" for="carId">Available Car</label>
             <select id="carId" class="form-select"
                     th:field="*{carId}">
                 <option th:each="car: ${cars}"
                         th:value="${car.id}"
                         th:text="|${car.regNumber}|">???</option>
-
             </select>
         </div>
         <div class="row">
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label text-muted" for="dateStartId"> Date Start</label>
+                    <label class="form-label text-muted" for="dateStartId">Start Date</label>
                     <input class="form-control" id="dateStartId"
                            placeholder="Enter Start Date" required
                            th:field="*{dateStart}"
@@ -41,7 +42,7 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-label text-muted" for="dateEndId">Date End</label>
+                    <label class="form-label text-muted" for="dateEndId">End Date</label>
                     <input class="form-control" id="dateEndId" placeholder="Enter Date End"
                            th:field="*{dateEnd}"
                            type="date"/>
@@ -56,8 +57,7 @@
                       th:field="*{comment}"/>
         </div>
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Add',
-            cancelHref='/links'
+            submitValue='Link'
         )">
         </div>
     </form>

@@ -31,8 +31,8 @@
         </div>
         <div class="col">
             <div>
-                <span class="fs-5">Current Call Sign:</span>
-                <span class="fs-5" th:text="${currentCallSign}">???</span>
+                <span class="fs-5">Linked Call Sign:</span>
+                <span class="fs-5" th:text="${linkedCallSign}">???</span>
             </div>
         </div>
     </div>
@@ -74,8 +74,7 @@
     </div>
 
     <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Update',
-            cancelHref='/call-sign-links'
+            submitValue='Update'
         )">
     </div>
 </form>

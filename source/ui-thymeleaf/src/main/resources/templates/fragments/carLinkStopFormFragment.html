@@ -1,29 +1,32 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Stop active Car Link',
-            closeRef='/car-links',
-            content=~{fragments/carLinkDeleteFormFragment.html :: deleteForm},
-            request=${deleteRequest}
+            content=~{fragments/carLinkStopFormFragment.html :: stopForm},
+            request=${stopRequest}
         )">
     </div>
 </div>
 
-<form th:fragment="deleteForm"
-      th:action="@{/car-links/delete}"
-      th:object="${deleteRequest}"
+<form th:fragment="stopForm"
+      th:action="@{/car-links/stop}"
+      th:object="${stopRequest}"
       method="post">
     <input id="linkId" required
            th:field="*{id}"
            type="text"
            hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="text"
+           hidden/>
     <div class="mb-5 mt-5">
-        <p class="fs-5 text-center">Please confirm that you want to stop by today selected Car Link:</p>
+        <p class="fs-5 text-center">Please confirm that you want to stop (End Date will be yesterday) selected Car
+            Link:</p>
         <p class="fs-4 text-center"
            th:text="${objectInfo}">???</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
-            submitValue='Stop Car Link',
-            cancelHref='/car-links'
+            submitValue='Stop'
         )">
     </div>
 </form>

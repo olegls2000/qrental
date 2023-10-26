@@ -46,7 +46,7 @@ public class CallSignLinkUseCaseController {
   }
 
   @PostMapping(value = "/add")
-  public String addCallSignLink(
+  public String add(
       @ModelAttribute final CallSignLinkAddRequest addRequest, final Model model) {
 
     addUseCase.add(addRequest);
@@ -74,11 +74,11 @@ public class CallSignLinkUseCaseController {
   public String updateForm(final Model model, @PathVariable("id") long id) {
     final var updateRequest = callSignLinkQuery.getUpdateRequestById(id);
     final var driverId = updateRequest.getDriverId();
-    final var currentCallSign = callSignQuery.getById(updateRequest.getCallSignId()).getCallSign();
+    final var linkedCallSign = callSignQuery.getById(updateRequest.getCallSignId()).getCallSign();
     addUpdateRequestToModel(model, updateRequest);
     addDriverInfoToModel(driverId, model);
     addAvailableCallSignsToModel(model);
-    model.addAttribute("currentCallSign", currentCallSign);
+    model.addAttribute("linkedCallSign", linkedCallSign);
 
     return "forms/updateCallSignLink";
   }

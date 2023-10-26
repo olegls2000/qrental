@@ -2,9 +2,11 @@ package ee.qrental.car.core.service;
 
 import ee.qrental.car.api.in.request.CarLinkAddRequest;
 import ee.qrental.car.api.in.request.CarLinkDeleteRequest;
+import ee.qrental.car.api.in.request.CarLinkStopRequest;
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.api.in.usecase.CarLinkAddUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkDeleteUseCase;
+import ee.qrental.car.api.in.usecase.CarLinkStopUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkUpdateUseCase;
 import ee.qrental.car.api.out.CarLinkAddPort;
 import ee.qrental.car.api.out.CarLinkDeletePort;
@@ -15,9 +17,11 @@ import ee.qrental.car.core.mapper.CarLinkUpdateRequestMapper;
 import ee.qrental.car.core.validator.CarLinkAddBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 public class CarLinkUseCaseService
-    implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase {
+    implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase, CarLinkStopUseCase {
 
   private final CarLinkAddPort addPort;
   private final CarLinkUpdatePort updatePort;
@@ -54,5 +58,12 @@ public class CarLinkUseCaseService
     if (loadPort.loadById(id) == null) {
       throw new RuntimeException("Update of Link failed. No Record with id = " + id);
     }
+  }
+
+  @Override
+  public void stop(final CarLinkStopRequest request) {
+    final var linkToStop = loadPort.loadById(request.getId());
+    linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
+    updatePort.update(linkToStop);
   }
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 public class CarLinkAddRequest extends AbstractAddRequest {
   private Long carId;
   private Long driverId;
-  private LocalDate dateStart;
+  private LocalDate dateStart = LocalDate.now();
   private LocalDate dateEnd;
   private String comment;
 }

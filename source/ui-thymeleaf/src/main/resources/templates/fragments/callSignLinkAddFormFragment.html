@@ -1,6 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Create a Link of Call Sign to the Driver',
+            title='Create a Link between Call Sign and Driver',
             content=~{fragments/callSignLinkAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
@@ -59,8 +59,7 @@
                       th:field="*{comment}"/>
         </div>
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Link',
-            cancelHref='/call-sign-links'
+            submitValue='Link'
         )">
         </div>
     </form>

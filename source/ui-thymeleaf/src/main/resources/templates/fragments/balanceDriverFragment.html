@@ -67,7 +67,7 @@
                         </td>
                         <td>
                             <a th:if="${carLinkId != null}" class="btn btn-sm btn-danger"
-                               th:href="@{/car-links/delete-form/{id}(id=${carLinkId})}">
+                               th:href="@{/car-links/stop-form/{id}/driver/{driverId}(id=${carLinkId}, driverId=${driverId})}">
                                 <span class="bi bi-x-circle"></span>
                             </a>
                         </td>
