@@ -63,7 +63,7 @@ public class CallSignLinkUseCaseController {
       return "forms/addCallSignLink";
     }
 
-    return "redirect:" + CALL_SIGN_LINK_ROOT_PATH;
+    return getDriverPortalRedirectUrl(addRequest.getDriverId());
   }
 
   private void addAddRequestToModel(final Model model, final CallSignLinkAddRequest addRequest) {
@@ -94,8 +94,7 @@ public class CallSignLinkUseCaseController {
 
       return "forms/updateCallSignLink";
     }
-
-    return "redirect:" + BALANCE_ROOT_PATH + "/driver/" + updateRequest.getDriverId();
+    return getDriverPortalRedirectUrl(updateRequest.getDriverId());
   }
 
   private void addUpdateRequestToModel(
@@ -116,7 +115,11 @@ public class CallSignLinkUseCaseController {
     final var callSignToDelete = callSignLinkQuery.getById(deleteRequest.getId());
     final var driverId = callSignToDelete.getDriverId();
     deleteUseCase.delete(deleteRequest);
+    
+    return getDriverPortalRedirectUrl(driverId);
+  }
 
+  private static String getDriverPortalRedirectUrl(final Long driverId){
     return "redirect:" + BALANCE_ROOT_PATH + "/driver/" + driverId;
   }
 }

@@ -11,19 +11,13 @@
     <form method="post"
           th:action="@{/call-sign-links/add}"
           th:object="${addRequest}">
-        <div class="row">
-            <div class="col">
-
+        <div class="row mb-4 mt-4">
+              <div class="col">
+                  <span class="fs-5">Driver:</span>
+                  <span class="fs-5" th:text="${driver.firstName}">???</span>
+                  <span class="fs-5" th:text="${driver.lastName}">???</span>
             </div>
-            <div class="col">
-                <div class="mb-3">
-                    <span class="fs-5" th:text="${driver.firstName}">???</span>
-                    <span class="fs-5" th:text="${driver.lastName}">???</span>
-                </div>v
-            </div>
-
         </div>
-
         <input id="driverId" required
                th:field="*{driverId}"
                type="number"

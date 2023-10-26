@@ -46,7 +46,7 @@
                             <span class="py-3" th:text="${callSign}">???</span>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-danger"
+                            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-danger"
                                th:href="@{/call-sign-links/delete-form/{id}(id=${callSignLinkId})}">
                                 <span class="bi bi-x-circle"></span>
                             </a>
@@ -67,7 +67,7 @@
                             <span class="py-3" th:text="${carRegistrationNumber}">???</span>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-danger"
+                            <a th:if="${carLinkId != null}" class="btn btn-sm btn-danger"
                                th:href="@{/car-links/delete-form/{id}(id=${carLinkId})}">
                                 <span class="bi bi-x-circle"></span>
                             </a>
