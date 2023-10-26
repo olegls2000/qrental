@@ -1,14 +1,14 @@
 <div th:fragment="linkPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
 
-    <ul th:replace="fragments/carTabFragment.html :: carTabs('carLinks')"></ul>
-
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('activeCarlinks')"></ul>
+<!--
 
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-5 align-self-start">
-                    <h2 class="py-3" th:text="|Links|">Links</h2>
+                    <h2 class="py-3" th:text="|Links|">???</h2>
                 </div>
                 <div class="col align-self-md-end">
                     <small th:text="|Total Active: ${#lists.size(links)} Links|"
@@ -18,17 +18,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
     <table class="table table-striped table-bordered">
         <tr>
             <th>
-                <a class="btn btn-sm btn-success"
-                   href="/car-links/add-form"
-                   role="button"
-                   aria-controls="offcanvasExample">
-                    <span class="bi-plus-circle"></span>
-                    Add new Link
-                </a>
             </th>
             <th>Call Sign</th>
             <th>Driver</th>
@@ -42,10 +35,6 @@
         </tr>
         <tr th:each="link : ${links}">
             <td>
-                <a class="btn btn-sm btn-warning"
-                   th:href="@{/car-links/update-form/{id}(id=${link.id})}">
-                    <span class="bi-pencil-square"></span>
-                    Edit</a>
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/car-links/delete-form/{id}(id=${link.id})}">
                     <span class="bi-trash"></span>

@@ -18,7 +18,6 @@ public class CarLinkResponseMapper implements ResponseMapper<CarLinkResponse, Ca
   private final GetCarQuery carQuery;
 
   private Integer getCallSign(final Long driverId) {
-    // TODO move logic to Call Sign domain
     final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
     if (callSignLink == null) {
       System.out.println(
@@ -59,12 +58,18 @@ public class CarLinkResponseMapper implements ResponseMapper<CarLinkResponse, Ca
   public String toObjectInfo(final CarLink domain) {
     final var driverId = domain.getDriverId();
     final var carId = domain.getCarId();
+    var callSignInfo = "";
     final var callSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(driverId);
-    final var callSign = callSignLink.getCallSign();
+
+    if (callSignLink != null) {
+      final var callSign = callSignLink.getCallSign();
+      callSignInfo = "Call sign: " + callSign + ", ";
+    }
+
     final var driverInfo = driverQuery.getObjectInfo(driverId);
     final var carInfo = carQuery.getObjectInfo(carId);
-    return format(
-        "Call sign: %s, Car: %s, Driver: %s active from %s",
-        callSign, carInfo, driverInfo, domain.getDateStart());
+    return callSignInfo
+        + format(
+            "Driver: %s and Car: %s active from %s", driverInfo, carInfo, domain.getDateStart());
   }
 }
