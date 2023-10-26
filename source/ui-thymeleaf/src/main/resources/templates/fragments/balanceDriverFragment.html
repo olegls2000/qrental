@@ -10,6 +10,77 @@
                        aria-label="Close"
                        href="/balances"></a>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Driver info</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a class="btn btn-sm btn-warning"
+                                   th:href="@{/drivers/update-form/{id}(id=${driverId})}">
+                                    <span class="bi-pencil-square"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Call sign:</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text" th:text="${callSign}">???</p>
+
+                                <div id="call-sign-edit-block-id">
+                                    <a th:if="${callSignLinkId == null}" class="btn btn-sm btn-success"
+                                       data-toggle="tooltip"
+                                       data-placement="top" title="Start a new Call Sign Link from today"
+                                       th:href="@{/call-sign-links/add-form/{id}(id=${driverId})}"
+                                       role="button"
+                                       aria-controls="offcanvasExample">
+                                        <span class="bi-plus-circle"></span>
+                                    </a>
+                                    <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+                                       th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                                        <span class="bi-pencil-square"></span>
+                                    </a>
+                                </div>
+
+                                <div id="call-sign-stop-block-id">
+                                    <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-danger"
+                                       th:href="@{/call-sign-links/delete-form/{id}(id=${callSignLinkId})}">
+                                        <span class="bi bi-x-circle"></span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <table class="table table-sm table-bordered align-middle mt-4 mb-4">
                     <tr>
                         <th scope="col" colspan="2">Driver info:</th>
