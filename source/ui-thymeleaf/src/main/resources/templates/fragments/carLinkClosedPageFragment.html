@@ -1,8 +1,7 @@
 <div th:fragment="linkPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
 
-    <ul th:replace="fragments/carTabFragment.html :: carTabs('activeCarlinks')"></ul>
-<!--
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('closedCarLinks')"></ul>
 
     <div class="card">
         <div class="card-body">
@@ -11,14 +10,14 @@
                     <h2 class="py-3" th:text="|Links|">???</h2>
                 </div>
                 <div class="col align-self-md-end">
-                    <small th:text="|Total Active: ${#lists.size(links)} Links|"
+                    <small th:text="|Total Closed Links: ${#lists.size(links)}|"
                            class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
                            th:classappend="'text-success bg-success border-success'">???</small>
                 </div>
             </div>
         </div>
-    </div>-->
+    </div>
     <table class="table table-striped table-bordered">
         <tr>
             <th>
@@ -31,14 +30,13 @@
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(links)}">
-            <td colspan="5">No Links</td>
+            <td colspan="5">No Closed Links</td>
         </tr>
         <tr th:each="link : ${links}">
-            <td>
+           <td>
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/car-links/delete-form/{id}(id=${link.id})}">
-                    <span class="bi-trash"></span>
-                    Delete</a>
+                    <span class="bi-trash"></span></a>
             </td>
             <td th:text="${link.callSign}">???</td>
             <td th:text="${link.driverInfo}">???</td>

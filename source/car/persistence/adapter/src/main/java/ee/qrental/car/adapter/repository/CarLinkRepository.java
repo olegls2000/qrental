@@ -18,5 +18,7 @@ public interface CarLinkRepository {
 
   List<CarLinkJakartaEntity> findActiveByDate(final LocalDate date);
 
+  List<CarLinkJakartaEntity> findClosedByDate(final LocalDate date);
+
   List<CarLinkJakartaEntity> findActiveByCarIdAndDate(final Long carId, final LocalDate date);
 }

@@ -72,4 +72,12 @@ public class CarLinkQueryService implements GetCarLinkQuery {
         .map(mapper::toResponse)
         .collect(toList());
   }
+
+  @Override
+  public List<CarLinkResponse> getClosedByDate(final LocalDate date) {
+
+    return loadPort.loadClosedByDate(date).stream()
+            .map(mapper::toResponse)
+            .collect(toList());
+  }
 }

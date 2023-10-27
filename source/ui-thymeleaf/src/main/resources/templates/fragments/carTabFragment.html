@@ -4,11 +4,11 @@
        href="/cars">Cars</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'activeCarlinks'} ? active : ''"
-       href="/car-links">Car Links</a>
+    <a class="nav-link" th:classappend="${activeTab == 'activeCarLinks'} ? active : ''"
+       href="/car-links/active">Active Car Links</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'closedCarLinks'} ?  active : ''"
-       href="/car-links">Closed Car Links</a>
+    <a class="nav-link" th:classappend="${activeTab == 'closedCarlinks'} ?  active : ''"
+       href="/car-links/closed">Closed Car Links</a>
   </li>
 </ul>
