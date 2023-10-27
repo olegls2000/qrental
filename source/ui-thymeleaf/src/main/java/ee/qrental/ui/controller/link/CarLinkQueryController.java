@@ -24,6 +24,10 @@ public class CarLinkQueryController {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var links = linkQuery.getActiveByDate(now());
     model.addAttribute("links", links);
+    model.addAttribute("activeLinksCount", links.size());
+
+    final var coledLinks = linkQuery.getClosedByDate(now());
+    model.addAttribute("closedLinksCount", coledLinks.size());
 
     return "carLinksActive";
   }
@@ -31,8 +35,14 @@ public class CarLinkQueryController {
   @GetMapping(value = "/closed")
   public String geHistoryLinkView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var links = linkQuery.getClosedByDate(now());
-    model.addAttribute("links", links);
+    final var coledLinks = linkQuery.getClosedByDate(now());
+    model.addAttribute("links", coledLinks);
+
+
+    final var activeLinks = linkQuery.getActiveByDate(now());
+
+    model.addAttribute("activeLinksCount", activeLinks.size());
+    model.addAttribute("closedLinksCount", coledLinks.size());
 
     return "carLinksClosed";
   }

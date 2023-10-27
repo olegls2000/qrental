@@ -5,10 +5,15 @@
   </li>
   <li class="nav-item">
     <a class="nav-link" th:classappend="${activeTab == 'activeCarLinks'} ? active : ''"
-       href="/car-links/active">Active Car Links</a>
+       href="/car-links/active">Active Car Links
+      <span class="badge rounded-pill bg-dark" th:text="${activeLinksCount}">???</span>
+    </a>
+
   </li>
   <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'closedCarlinks'} ?  active : ''"
-       href="/car-links/closed">Closed Car Links</a>
+    <a class="nav-link" th:classappend="${activeTab == 'closedCarLinks'} ?  active : ''"
+       href="/car-links/closed">Closed Car Links
+      <span class="badge rounded-pill bg-dark" th:text="${closedLinksCount}">???</span>
+    </a>
   </li>
 </ul>
