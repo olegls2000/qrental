@@ -12,7 +12,6 @@
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
-                    Add new Call Sign
                 </a>
             </th>
             <th>Call Sign</th>
@@ -26,11 +25,11 @@
                 <a class="btn btn-sm btn-warning "
                    th:href="@{/call-signs/update-form/{id}(id=${callSign.id})}">
                     <span class="bi-pencil-square"></span>
-                    Edit</a>
+                    </a>
                 <a class="btn btn-sm btn-danger "
                    th:href="@{/call-signs/delete-form/{id}(id=${callSign.id})}">
                     <span class="bi-trash"></span>
-                    Delete</a>
+                    </a>
             </td>
             <td th:text="${callSign.callSign}"></td>
             <td th:text="${callSign.comment}"></td>

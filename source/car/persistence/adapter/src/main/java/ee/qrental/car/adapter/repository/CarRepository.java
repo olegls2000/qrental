@@ -1,10 +1,14 @@
 package ee.qrental.car.adapter.repository;
 
 import ee.qrental.car.entity.jakarta.CarJakartaEntity;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CarRepository {
   List<CarJakartaEntity> findAll();
+
+  List<CarJakartaEntity> findNotAvailableByDate(final LocalDate date);
 
   CarJakartaEntity save(final CarJakartaEntity entity);
 

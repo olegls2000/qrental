@@ -1,15 +1,14 @@
 package ee.qrental.car.adapter.adapter;
 
-import ee.qrental.car.adapter.mapper.CarAdapterMapper;
+import static java.util.stream.Collectors.toList;
 
+import ee.qrental.car.adapter.mapper.CarAdapterMapper;
+import ee.qrental.car.adapter.repository.CarRepository;
 import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.domain.Car;
-import lombok.AllArgsConstructor;
-
+import java.time.LocalDate;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import ee.qrental.car.adapter.repository.CarRepository;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CarLoadAdapter implements CarLoadPort {
@@ -25,5 +24,10 @@ public class CarLoadAdapter implements CarLoadPort {
   @Override
   public Car loadById(Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+
+  @Override
+  public List<Car> loadNotAvailableByDate(final LocalDate date) {
+    return repository.findNotAvailableByDate(date).stream().map(mapper::mapToDomain).collect(toList());
   }
 }

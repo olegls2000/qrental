@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
+import ee.qrental.car.api.in.query.filter.CarFilter;
 import ee.qrental.car.api.in.request.CarUpdateRequest;
 import ee.qrental.car.api.in.response.CarResponse;
 import ee.qrental.car.api.out.CarLinkLoadPort;
@@ -11,6 +12,7 @@ import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.core.mapper.CarResponseMapper;
 import ee.qrental.car.core.mapper.CarUpdateRequestMapper;
 import ee.qrental.car.domain.CarLink;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -63,5 +65,27 @@ public class CarQueryService implements GetCarQuery {
         allCars.stream().filter(car -> !activeCarIds.contains(car.getId())).collect(toList());
 
     return notActiveCars.stream().map(car -> mapper.toResponse(car)).collect(toList());
+  }
+
+  public List<CarResponse> getNotAvailableCars() {
+
+    return loadPort.loadNotAvailableByDate(LocalDate.now()).stream()
+        .map(car -> mapper.toResponse(car))
+        .collect(toList());
+  }
+
+  @Override
+  public List<CarResponse> getAllByFilter(final CarFilter filterRequest) {
+
+    switch (filterRequest.getState()) {
+      case YES -> {
+        return getAvailableCars();
+      }
+      case NO -> {
+        return getNotAvailableCars();
+      }
+    }
+
+    return getAll();
   }
 }
