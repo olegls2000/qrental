@@ -17,17 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class CarLinkQueryController {
   private final QDateFormatter qDateFormatter;
-  private final GetCarLinkQuery linkQuery;
+  private final GetCarLinkQuery carLinkQuery;
 
   @GetMapping(value = "/active")
   public String getActiveLinkView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var links = linkQuery.getActiveByDate(now());
+    final var links = carLinkQuery.getActiveByDate(now());
     model.addAttribute("links", links);
-    model.addAttribute("activeLinksCount", links.size());
-
-    final var coledLinks = linkQuery.getClosedByDate(now());
-    model.addAttribute("closedLinksCount", coledLinks.size());
+    populatedLinksCounts(model);
 
     return "carLinksActive";
   }
@@ -35,15 +32,17 @@ public class CarLinkQueryController {
   @GetMapping(value = "/closed")
   public String geHistoryLinkView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var coledLinks = linkQuery.getClosedByDate(now());
+    final var coledLinks = carLinkQuery.getClosedByDate(now());
     model.addAttribute("links", coledLinks);
-
-
-    final var activeLinks = linkQuery.getActiveByDate(now());
-
-    model.addAttribute("activeLinksCount", activeLinks.size());
-    model.addAttribute("closedLinksCount", coledLinks.size());
+    populatedLinksCounts(model);
 
     return "carLinksClosed";
+  }
+
+  private void populatedLinksCounts(final Model model) {
+    final var activeLinksCount = carLinkQuery.getCountActive();
+    model.addAttribute("activeLinksCount", activeLinksCount);
+    final var closedLinksCount = carLinkQuery.getCountClosed();
+    model.addAttribute("closedLinksCount", closedLinksCount);
   }
 }

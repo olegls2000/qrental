@@ -50,10 +50,20 @@ public class CarLinkLoadAdapter implements CarLinkLoadPort {
   }
 
   @Override
+  public Long loadCountActiveByDate(final LocalDate date) {
+    return repository.findCountActiveByDate(date);
+  }
+
+  @Override
   public List<CarLink> loadClosedByDate(LocalDate date) {
     return repository.findClosedByDate(date).stream()
             .map(mapper::mapToDomain)
             .collect(toList());
+  }
+
+  @Override
+  public Long loadCountClosedByDate(final LocalDate date) {
+    return repository.findCountClosedByDate(date);
   }
 
   @Override

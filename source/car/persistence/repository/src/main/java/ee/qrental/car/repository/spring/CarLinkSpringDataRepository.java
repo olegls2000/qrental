@@ -37,9 +37,23 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
   List<CarLinkJakartaEntity> findActiveByDate(@Param("date") final LocalDate date);
 
   @Query(
-          value =
-                  "SELECT ln.* FROM car_link ln "
-                          + "where ln.date_end is not null and ln.date_end < :date",
-          nativeQuery = true)
+      value =
+          "SELECT count(*) FROM car_link ln "
+              + "where ln.date_start <= :date "
+              + "and (ln.date_end is null or ln.date_end > :date)",
+      nativeQuery = true)
+  Long findCountActiveByDate(@Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT ln.* FROM car_link ln " + "where ln.date_end is not null and ln.date_end < :date",
+      nativeQuery = true)
   List<CarLinkJakartaEntity> findClosedByDate(@Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT count(*) FROM car_link ln "
+              + "where ln.date_end is not null and ln.date_end < :date",
+      nativeQuery = true)
+  Long findCountClosedByDate(@Param("date") final LocalDate date);
 }

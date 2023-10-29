@@ -1,14 +1,13 @@
 package ee.qrental.ui.controller.link;
 
-import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
-import static ee.qrental.ui.controller.util.ControllerUtils.CAR_LINK_ROOT_PATH;
-
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.request.CarLinkAddRequest;
+import ee.qrental.car.api.in.request.CarLinkDeleteRequest;
 import ee.qrental.car.api.in.request.CarLinkStopRequest;
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.api.in.usecase.CarLinkAddUseCase;
+import ee.qrental.car.api.in.usecase.CarLinkDeleteUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkStopUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkUpdateUseCase;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -16,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import static ee.qrental.ui.controller.util.ControllerUtils.*;
 
 @Controller
 @RequestMapping(CAR_LINK_ROOT_PATH)
@@ -25,6 +26,7 @@ public class CarLinkUseCaseController {
   private final CarLinkAddUseCase addUseCase;
   private final CarLinkUpdateUseCase updateUseCase;
   private final CarLinkStopUseCase stopUseCase;
+  private final CarLinkDeleteUseCase deleteUseCase;
   private final GetCarLinkQuery carLinkQuery;
   private final GetCarQuery carQuery;
   private final GetDriverQuery driverQuery;
@@ -95,6 +97,27 @@ public class CarLinkUseCaseController {
     stopUseCase.stop(stopRequest);
 
     return getDriverPortalRedirectUrl(driverId);
+  }
+
+  @GetMapping(value = "/delete-form/{id}")
+  public String deleteForm(final Model model, @PathVariable("id") long id) {
+    model.addAttribute("deleteRequest", new CarLinkDeleteRequest(id));
+    model.addAttribute("objectInfo", carLinkQuery.getObjectInfo(id));
+
+    return "forms/deleteCarLink";
+  }
+
+  @PostMapping("/delete")
+  public String stop(final CarLinkDeleteRequest deleteRequest, final Model model) {
+    deleteUseCase.delete(deleteRequest);
+    if (deleteRequest.hasViolations()) {
+      model.addAttribute("deleteRequest", deleteRequest);
+      model.addAttribute("objectInfo", carLinkQuery.getObjectInfo(deleteRequest.getId()));
+
+      return "forms/deleteCarLink";
+    }
+
+    return "redirect:" + CAR_LINK_ROOT_PATH + "/closed";
   }
 
   private void addCarListToModel(final Model model) {
