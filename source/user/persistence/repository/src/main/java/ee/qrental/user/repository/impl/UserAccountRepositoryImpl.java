@@ -22,6 +22,11 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
   }
 
   @Override
+  public List<UserAccountJakartaEntity> findByRoleName(final String roleName) {
+    return springDataRepository.findAllByRoleName(roleName);
+  }
+
+  @Override
   public UserAccountJakartaEntity save(final UserAccountJakartaEntity entity) {
     return springDataRepository.save(entity);
   }
@@ -30,7 +35,7 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
   public UserAccountJakartaEntity getReferenceById(final Long id) {
     return springDataRepository.getReferenceById(id);
   }
-  
+
   @Override
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);

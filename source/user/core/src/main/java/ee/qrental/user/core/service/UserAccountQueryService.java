@@ -50,4 +50,12 @@ public class UserAccountQueryService implements GetUserAccountQuery {
       return lastName1.compareTo(lastName2);
     };
   }
+
+  @Override
+  public List<UserAccountResponse> getAllByRoleName(String roleName) {
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(getLastNameComparator())
+        .collect(toList());
+  }
 }

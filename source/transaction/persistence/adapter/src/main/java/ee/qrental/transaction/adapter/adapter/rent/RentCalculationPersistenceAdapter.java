@@ -33,12 +33,13 @@ public class RentCalculationPersistenceAdapter implements RentCalculationAddPort
   private void saveRentCalculationResults(
       final RentCalculation domain, final RentCalculationJakartaEntity rentCalculationEntitySaved) {
     final var rentCalculationResults = domain.getResults();
-    //TODO
-    for (RentCalculationResult result : rentCalculationResults) {
+    for (final RentCalculationResult result : rentCalculationResults) {
       final var rentCalculationResultEntity =
           RentCalculationResultJakartaEntity.builder()
               .id(null)
               .rentCalculation(rentCalculationEntitySaved)
+              .carLinkId(result.getCarLinkId())
+              .transactionId(result.getTransactionId())
               .build();
       rentCalculationResultRepository.save(rentCalculationResultEntity);
     }

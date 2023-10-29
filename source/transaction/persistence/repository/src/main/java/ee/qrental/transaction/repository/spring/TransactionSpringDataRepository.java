@@ -61,4 +61,7 @@ public interface TransactionSpringDataRepository
           @Param("dateStart") LocalDate dateStart,
           @Param("dateEnd") LocalDate dateEnd,
           @Param("driverId") Long driverId);
+
+
+  List<TransactionJakartaEntity> findAllByIdIn(List<Long> ids);
 }

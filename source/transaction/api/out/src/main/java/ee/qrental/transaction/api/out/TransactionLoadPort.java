@@ -9,6 +9,8 @@ public interface TransactionLoadPort extends LoadPort<Transaction> {
 
   List<Transaction> loadAllByDriverId(final Long driverId);
 
+  List<Transaction> loadAllByIds(final List<Long> ids);
+
   List<Transaction> loadAllNonFeeByDriverId(final Long driverId);
 
   List<Transaction> loadAllBetweenDays(final LocalDate dateStart, final LocalDate dateEnd);
@@ -17,10 +19,10 @@ public interface TransactionLoadPort extends LoadPort<Transaction> {
       final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllNonFeeByDriverIdAndBetweenDays(
-          final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
+      final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllFeeByDriverIdAndBetweenDays(
-          final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
+      final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllByCalculationId(final Long calculationId);
 }

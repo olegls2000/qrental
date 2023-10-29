@@ -9,8 +9,12 @@ public class RentCalculationAddRequestMapper
     implements AddRequestMapper<RentCalculationAddRequest, RentCalculation> {
 
   public RentCalculation toDomain(final RentCalculationAddRequest request) {
+    final var actionDate = request.getActionDate();
+
     return RentCalculation.builder()
-        .actionDate(request.getActionDate())
+        .actionDate(actionDate)
+        .startDate(actionDate)
+        .endDate(actionDate.plusDays(6))
         .results(new ArrayList<>())
         .comment(request.getComment())
         .build();

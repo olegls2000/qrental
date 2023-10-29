@@ -28,19 +28,24 @@ public class UserAccountLoadAdapter implements UserAccountLoadPort {
   @Override
   public UserAccount loadByEmail(final String email) {
     final var entity = repository.findByEmail(email);
-    
+
     return mapper.mapToDomain(entity);
   }
 
   @Override
   public UserAccount loadByUsername(final String username) {
     final var entity = repository.findByUsername(username);
-    
+
     return mapper.mapToDomain(entity);
   }
 
   @Override
   public List<UserAccount> loadByRoleId(final Long roleId) {
     return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
+  public List<UserAccount> loadByRoleName(final String roleName) {
+    return repository.findByRoleName(roleName).stream().map(mapper::mapToDomain).collect(toList());
   }
 }

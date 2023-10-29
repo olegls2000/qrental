@@ -7,6 +7,8 @@ dependencies{
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:car:api:in"))
     implementation(project(":source:constant:api:in"))
+    implementation(project(":source:email:api:in"))
+    implementation(project(":source:user:api:in"))
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 

@@ -31,4 +31,6 @@ public interface TransactionRepository {
           final LocalDate dateStart,
           final LocalDate dateEnd,
           final Long driverId);
+
+  List<TransactionJakartaEntity> findByIds(final List<Long> ids);
 }

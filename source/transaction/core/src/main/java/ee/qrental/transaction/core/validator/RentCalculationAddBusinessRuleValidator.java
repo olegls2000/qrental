@@ -2,8 +2,9 @@ package ee.qrental.transaction.core.validator;
 
 import ee.qrental.common.core.in.validation.ViolationsCollector;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
-import java.time.DayOfWeek;
 import lombok.AllArgsConstructor;
+
+import java.time.DayOfWeek;
 
 @AllArgsConstructor
 public class RentCalculationAddBusinessRuleValidator {
@@ -15,7 +16,7 @@ public class RentCalculationAddBusinessRuleValidator {
     if (dayOfWeek != DayOfWeek.MONDAY) {
       violationsCollector.collect("Calculation must be started on Monday!");
     }
-
+    // ADD check and skipper if calculation is done for this week
     return violationsCollector;
   }
 }

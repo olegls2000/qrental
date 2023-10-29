@@ -46,6 +46,11 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
+  public List<TransactionResponse> getAllByIds(List<Long> ids) {
+    return mapToTransactionResponseList(transactionLoadPort.loadAllByIds(ids));
+  }
+
+  @Override
   public List<TransactionResponse> getAllByCalculationId(final Long calculationId) {
     return mapToTransactionResponseList(transactionLoadPort.loadAllByCalculationId(calculationId));
   }

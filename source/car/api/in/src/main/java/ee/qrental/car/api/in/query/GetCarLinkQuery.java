@@ -10,11 +10,11 @@ import java.util.List;
 public interface GetCarLinkQuery extends BaseGetQuery<CarLinkUpdateRequest, CarLinkResponse> {
   CarLinkResponse getActiveLinkByDriverId(final Long driverId);
 
-  List<CarLinkResponse> getActiveByDate(final LocalDate date);
+  List<CarLinkResponse> getActive();
+
   List<CarLinkResponse> getClosedByDate(final LocalDate date);
 
   Long getCountActive();
 
   Long getCountClosed();
-
 }

@@ -13,6 +13,8 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByDriverId(final Long driverId);
 
+  List<TransactionResponse> getAllByIds(final List<Long> ids);
+
   List<TransactionResponse> getAllByCalculationId(final Long calculationId);
 
   List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter);

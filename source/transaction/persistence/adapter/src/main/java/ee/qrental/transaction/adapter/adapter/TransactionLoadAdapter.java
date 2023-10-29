@@ -33,6 +33,11 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
   }
 
   @Override
+  public List<Transaction> loadAllByIds(final List<Long> ids) {
+    return repository.findByIds(ids).stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
   public List<Transaction> loadAllNonFeeByDriverId(Long driverId) {
     return repository.findByDriverId(driverId).stream().map(mapper::mapToDomain).collect(toList());
   }

@@ -22,7 +22,7 @@ public class CarLinkQueryController {
   @GetMapping(value = "/active")
   public String getActiveLinkView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var carLinksActive = carLinkQuery.getActiveByDate(now());
+    final var carLinksActive = carLinkQuery.getActive();
     model.addAttribute("carLinksActive", carLinksActive);
     populatedLinksCounts(model);
 

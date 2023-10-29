@@ -2,6 +2,8 @@ package ee.qrental.transaction.spring.config.rent;
 
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
+import ee.qrental.email.api.in.usecase.EmailSendUseCase;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.out.rent.RentCalculationAddPort;
 import ee.qrental.transaction.api.out.rent.RentCalculationLoadPort;
@@ -12,6 +14,7 @@ import ee.qrental.transaction.core.service.TransactionUseCaseService;
 import ee.qrental.transaction.core.service.rent.RentCalculationQueryService;
 import ee.qrental.transaction.core.service.rent.RentCalculationService;
 import ee.qrental.transaction.core.validator.RentCalculationAddBusinessRuleValidator;
+import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,19 +31,25 @@ public class RentServiceConfig {
   RentCalculationService getRentCalculationService(
       final GetCarLinkQuery carLinkQuery,
       final GetCarQuery carQuery,
+      final GetTransactionQuery transactionQuery,
       final TransactionUseCaseService transactionUseCaseService,
       final RentCalculationAddPort rentCalculationAddPort,
       final RentCalculationAddRequestMapper addRequestMapper,
       final TransactionTypeLoadPort transactionTypeLoadPort,
-      final RentCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
+      final RentCalculationAddBusinessRuleValidator addBusinessRuleValidator,
+      final EmailSendUseCase emailSendUseCase,
+      final GetUserAccountQuery userAccountQuery) {
 
     return new RentCalculationService(
         carLinkQuery,
         carQuery,
+        transactionQuery,
         transactionUseCaseService,
         rentCalculationAddPort,
         addRequestMapper,
         transactionTypeLoadPort,
-        addBusinessRuleValidator);
+        addBusinessRuleValidator,
+        emailSendUseCase,
+        userAccountQuery);
   }
 }
