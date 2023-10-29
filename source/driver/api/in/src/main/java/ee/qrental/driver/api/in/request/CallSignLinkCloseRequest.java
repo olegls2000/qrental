@@ -1,16 +1,18 @@
-package ee.qrental.car.api.in.request;
+package ee.qrental.driver.api.in.request;
 
 import ee.qrental.common.core.in.request.AbstractRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CarLinkStopRequest extends AbstractRequest {
+@SuperBuilder
+public class CallSignLinkCloseRequest extends AbstractRequest {
   private Long id;
   private Long driverId;
 }

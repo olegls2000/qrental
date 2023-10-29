@@ -1,7 +1,7 @@
 <div th:fragment="linkPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
-    <ul th:replace="fragments/driverTabFragment.html :: carTabs('closedCarLinks')"></ul>
-    <h2 class="py-3">Cars Links (Closed)</h2>
+    <ul th:replace="fragments/driverTabFragment.html :: driverTabs('callSignLinksClosed')"></ul>
+    <h2 class="py-3">Call Sign Links (Closed)</h2>
 
     <table class="table table-striped table-bordered">
         <tr>

@@ -23,6 +23,11 @@
                    th:href="@{/balances/driver/{id}(id=${link.driverId})}">
                     <span class="bi bi-card-checklist"></span>
                     Driver's Portal</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/car-links/close-form/{id}/driver/{driverId}(id=${link.id}, driverId=${link.driverId})}">
+                    <span class="bi bi-x-circle"></span>
+                    Close
+                </a>
             </td>
             <td th:text="${link.callSign}">???</td>
             <td th:text="${link.driverInfo}">???</td>

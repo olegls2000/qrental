@@ -1,14 +1,14 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Delete Closed Car Link',
-            content=~{fragments/carLinkDeleteFormFragment.html :: deleteForm},
+            title='Delete Closed Call Sign Link',
+            content=~{fragments/callSignLinkDeleteFormFragment.html :: deleteForm},
             request=${deleteRequest}
         )">
     </div>
 </div>
 
 <form th:fragment="deleteForm"
-      th:action="@{/car-links/delete}"
+      th:action="@{/call-sign-links/delete}"
       th:object="${deleteRequest}"
       method="post">
     <input id="linkId" required
@@ -16,7 +16,7 @@
            type="text"
            hidden/>
     <div class="mb-5 mt-5">
-        <p class="fs-5 text-center">Please confirm that you want permanently delete selected Car
+        <p class="fs-5 text-center">Please confirm that you want permanently delete selected Call Sign
             Link:</p>
         <p class="fs-4 text-center"
            th:text="${objectInfo}">???</p>

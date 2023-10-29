@@ -1,15 +1,15 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Stop active Car Link',
-            content=~{fragments/carLinkStopFormFragment.html :: stopForm},
-            request=${stopRequest}
+            title='Close active Car Link',
+            content=~{fragments/carLinkCloseFormFragment.html :: closeForm},
+            request=${closeRequest}
         )">
     </div>
 </div>
 
-<form th:fragment="stopForm"
+<form th:fragment="closeForm"
       th:action="@{/car-links/close}"
-      th:object="${stopRequest}"
+      th:object="${closeRequest}"
       method="post">
     <input id="linkId" required
            th:field="*{id}"

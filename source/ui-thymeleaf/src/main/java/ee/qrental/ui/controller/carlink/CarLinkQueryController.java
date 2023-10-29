@@ -1,4 +1,4 @@
-package ee.qrental.ui.controller.link;
+package ee.qrental.ui.controller.carlink;
 
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.CAR_LINK_ROOT_PATH;

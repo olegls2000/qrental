@@ -1,22 +1,22 @@
-package ee.qrental.ui.controller.link;
+package ee.qrental.ui.controller.carlink;
+
+import static ee.qrental.ui.controller.util.ControllerUtils.*;
 
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.request.CarLinkAddRequest;
+import ee.qrental.car.api.in.request.CarLinkCloseRequest;
 import ee.qrental.car.api.in.request.CarLinkDeleteRequest;
-import ee.qrental.car.api.in.request.CarLinkStopRequest;
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.api.in.usecase.CarLinkAddUseCase;
+import ee.qrental.car.api.in.usecase.CarLinkCloseUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkDeleteUseCase;
-import ee.qrental.car.api.in.usecase.CarLinkStopUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkUpdateUseCase;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import static ee.qrental.ui.controller.util.ControllerUtils.*;
 
 @Controller
 @RequestMapping(CAR_LINK_ROOT_PATH)
@@ -25,7 +25,7 @@ public class CarLinkUseCaseController {
 
   private final CarLinkAddUseCase addUseCase;
   private final CarLinkUpdateUseCase updateUseCase;
-  private final CarLinkStopUseCase stopUseCase;
+  private final CarLinkCloseUseCase closeUseCase;
   private final CarLinkDeleteUseCase deleteUseCase;
   private final GetCarLinkQuery carLinkQuery;
   private final GetCarQuery carQuery;
@@ -85,16 +85,16 @@ public class CarLinkUseCaseController {
   @GetMapping(value = "/close-form/{id}/driver/{driverId}")
   public String closeForm(
       final Model model, @PathVariable("id") long id, @PathVariable("driverId") long driverId) {
-    model.addAttribute("stopRequest", new CarLinkStopRequest(id, driverId));
+    model.addAttribute("closeRequest", new CarLinkCloseRequest(id, driverId));
     model.addAttribute("objectInfo", carLinkQuery.getObjectInfo(id));
 
-    return "forms/stopCarLink";
+    return "forms/closeCarLink";
   }
 
   @PostMapping("/close")
-  public String close(final CarLinkStopRequest stopRequest) {
-    final var driverId = stopRequest.getDriverId();
-    stopUseCase.close(stopRequest);
+  public String close(final CarLinkCloseRequest closeRequest) {
+    final var driverId = closeRequest.getDriverId();
+    closeUseCase.close(closeRequest);
 
     return getDriverPortalRedirectUrl(driverId);
   }

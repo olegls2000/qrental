@@ -2,11 +2,11 @@ package ee.qrental.car.core.service;
 
 import ee.qrental.car.api.in.request.CarLinkAddRequest;
 import ee.qrental.car.api.in.request.CarLinkDeleteRequest;
-import ee.qrental.car.api.in.request.CarLinkStopRequest;
+import ee.qrental.car.api.in.request.CarLinkCloseRequest;
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.api.in.usecase.CarLinkAddUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkDeleteUseCase;
-import ee.qrental.car.api.in.usecase.CarLinkStopUseCase;
+import ee.qrental.car.api.in.usecase.CarLinkCloseUseCase;
 import ee.qrental.car.api.in.usecase.CarLinkUpdateUseCase;
 import ee.qrental.car.api.out.CarLinkAddPort;
 import ee.qrental.car.api.out.CarLinkDeletePort;
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 public class CarLinkUseCaseService
-    implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase, CarLinkStopUseCase {
+    implements CarLinkAddUseCase, CarLinkUpdateUseCase, CarLinkDeleteUseCase, CarLinkCloseUseCase {
 
   private final CarLinkAddPort addPort;
   private final CarLinkUpdatePort updatePort;
@@ -61,9 +61,9 @@ public class CarLinkUseCaseService
   }
 
   @Override
-  public void close(final CarLinkStopRequest request) {
-    final var linkToStop = loadPort.loadById(request.getId());
-    linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
-    updatePort.update(linkToStop);
+  public void close(final CarLinkCloseRequest request) {
+    final var linkToClose = loadPort.loadById(request.getId());
+    linkToClose.setDateEnd(LocalDate.now().minusDays(1L));
+    updatePort.update(linkToClose);
   }
 }

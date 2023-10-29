@@ -6,6 +6,7 @@ import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.contract.api.in.request.ContractSendByEmailRequest;
 import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
 import ee.qrental.contract.api.in.usecase.ContractSendByEmailUseCase;
+import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -22,10 +23,12 @@ public class ContractQueryController {
   private final GetContractQuery contractQuery;
   private final ContractSendByEmailUseCase contractSendByEmailUseCase;
   private final ContractPdfUseCase pdfUseCase;
+  private final GetCallSignLinkQuery callSignLinkQuery;
 
   @GetMapping
   public String getDriverView(final Model model) {
     model.addAttribute("contracts", contractQuery.getAll());
+    populateLinksCounts(model);
 
     return "contracts";
   }
@@ -52,5 +55,12 @@ public class ContractQueryController {
     contractSendByEmailUseCase.sendByEmail(emailSendRequest);
 
     return "redirect:" + CONTRACT_ROOT_PATH;
+  }
+
+  private void populateLinksCounts(final Model model) {
+    final var activeLinksCount = callSignLinkQuery.getCountActive();
+    model.addAttribute("activeLinksCount", activeLinksCount);
+    final var closedLinksCount = callSignLinkQuery.getCountClosed();
+    model.addAttribute("closedLinksCount", closedLinksCount);
   }
 }

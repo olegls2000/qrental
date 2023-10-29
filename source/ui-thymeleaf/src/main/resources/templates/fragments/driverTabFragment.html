@@ -9,12 +9,12 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'callSignLinksActive'} ? active : ''"
-           href="/call-sign-links">Active Call Sign Links
+           href="/call-sign-links/active">Active Call Sign Links
             <span class="badge rounded-pill bg-success" th:text="${activeLinksCount}">???</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'callSignLinksClosed'} ? active : ''"
-           href="/call-sign-links">Closed Call Sign Links
+           href="/call-sign-links/closed">Closed Call Sign Links
             <span class="badge rounded-pill bg-dark" th:text="${closedLinksCount}">???</span>
         </a>
     </li>

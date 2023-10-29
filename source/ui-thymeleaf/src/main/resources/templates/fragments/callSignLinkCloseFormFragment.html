@@ -1,16 +1,16 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Stop active Call Sign Link',
+            title='Close active Call Sign Link',
             closeRef='/call-sign-links',
-            content=~{fragments/callSignLinkStopFormFragment.html :: stopForm},
-            request=${stopRequest}
+            content=~{fragments/callSignLinkCloseFormFragment.html :: closeForm},
+            request=${closeRequest}
         )">
     </div>
 </div>
 
-<form th:fragment="stopForm"
+<form th:fragment="closeForm"
       th:action="@{/call-sign-links/close}"
-      th:object="${stopRequest}"
+      th:object="${closeRequest}"
       method="post">
     <input id="callSignLinkId" required
            th:field="*{id}"
@@ -27,8 +27,7 @@
            th:text=${objectInfo}>???</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
-            submitValue='Close',
-            cancelHref='/call-sign-links'
+            submitValue='Close'
         )">
     </div>
 </form>
