@@ -39,9 +39,36 @@
                 </a>
             </td>
             <td th:text="${car.regNumber}"></td>
-            <td th:text="---"></td>
+
+            <td>
+                <i th:if="${car.byQrent}" > Q </i>
+                <i th:if="${car.byBolt}" class="bi bi-type-bold"></i>
+                <i th:if="${car.byForus}" > F </i>
+                <i th:if="${car.byUber}" > U </i>
+                <i th:if="${car.byTallink}" > T </i>
+            </td>
             <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
-            <td th:text="---"></td>
+
+
+            <th:block th:switch="${car.warrantyRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.releaseDate)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.releaseDate)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.releaseDate)}">???
+                </td>
+            </th:block>
+
+
             <td th:text="${car.manufacturer}"></td>
             <td th:text="${car.model}"></td>
             <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"

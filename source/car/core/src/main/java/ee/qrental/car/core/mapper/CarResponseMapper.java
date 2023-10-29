@@ -36,6 +36,7 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
                 .insuranceRagStatus(domain.getInsuranceRagStatus().name())
                 .technicalInspectionRagStatus(domain.getTechnicalInspectionRagStatus().name())
                 .gasInspectionRagStatus(domain.getGasInspectionRagStatus().name())
+                .warrantyRagStatus(domain.getWarrantyRagStatus().name())
                 .comment(domain.getComment())
                 .byQrent(domain.getByQrent())
                 .byBolt(domain.getByBolt())
