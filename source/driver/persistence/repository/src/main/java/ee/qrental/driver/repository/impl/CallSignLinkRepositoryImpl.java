@@ -52,4 +52,24 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
       final Long driverId, final LocalDate nowDate) {
     return springDataRepository.findActiveByDriverIdAndNowDate(driverId, nowDate);
   }
+
+  @Override
+  public List<CallSignLinkJakartaEntity> findActiveByDate(final LocalDate date) {
+    return springDataRepository.findActiveByDate(date);
+  }
+
+  @Override
+  public Long findCountActiveByDate(final LocalDate date) {
+    return springDataRepository.findCountActiveByDate(date);
+  }
+
+  @Override
+  public List<CallSignLinkJakartaEntity> findClosedByDate(final LocalDate date) {
+    return springDataRepository.findClosedByDate(date);
+  }
+
+  @Override
+  public Long findCountClosedByDate(final LocalDate date) {
+    return springDataRepository.findCountClosedByDate(date);
+  }
 }

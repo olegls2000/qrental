@@ -41,4 +41,34 @@ public interface CallSignLinkSpringDataRepository
       nativeQuery = true)
   CallSignLinkJakartaEntity findActiveByDriverIdAndNowDate(
       @Param("driverId") final Long driverId, @Param("nowDate") final LocalDate nowDate);
+
+  @Query(
+      value =
+          "SELECT csl.* FROM call_sign_link csl "
+              + "where csl.date_start <= :date "
+              + "and (csl.date_end is null or csl.date_end > :date)",
+      nativeQuery = true)
+  List<CallSignLinkJakartaEntity> findActiveByDate(@Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT count(*) FROM call_sign_link csl "
+              + "where csl.date_start <= :date "
+              + "and (csl.date_end is null or csl.date_end > :date)",
+      nativeQuery = true)
+  Long findCountActiveByDate(@Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT csl.* FROM call_sign_link csl "
+              + "where csl.date_end is not null and csl.date_end < :date",
+      nativeQuery = true)
+  List<CallSignLinkJakartaEntity> findClosedByDate(@Param("date") final LocalDate date);
+
+  @Query(
+      value =
+          "SELECT count(*) FROM call_sign_link csl "
+              + "where csl.date_end is not null and csl.date_end < :date",
+      nativeQuery = true)
+  Long findCountClosedByDate(@Param("date") final LocalDate date);
 }

@@ -1,0 +1,38 @@
+<div th:fragment="linkPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/driverTabFragment.html :: driverTabs('callSignLinksActive')"></ul>
+
+    <h2 class="py-3">Call Sign Links (Active)</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+            </th>
+            <th>Call Sign</th>
+            <th>Driver</th>
+            <th>Date Start</th>
+            <th>Date End</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(callSignLinksActive)}">
+            <td colspan="5">No Links</td>
+        </tr>
+        <tr th:each="callSignLink : ${callSignLinksActive}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/balances/driver/{id}(id=${callSignLink.driverId})}">
+                    <span class="bi bi-card-checklist"></span>
+                    Driver's Portal</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/call-sign-links/stop-form/{id}/driver/{driverId}(id=${callSignLink.id}, driverId=${callSignLink.driverId})}">
+                    <span class="bi bi-x-circle"></span>
+                    Close
+                </a>
+            </td>
+            <td th:text="${callSignLink.callSign}">???</td>
+            <td th:text="${callSignLink.driverInfo}">???</td>
+            <td th:text="${qDateFormatter.format(callSignLink.dateStart)}">???</td>
+            <td th:text="${qDateFormatter.format(callSignLink.dateEnd)}">???</td>
+            <td th:text="${link.comment}">???</td>
+        </tr>
+    </table>
+</div>

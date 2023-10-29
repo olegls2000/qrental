@@ -1,6 +1,6 @@
 <div th:fragment="linkPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
-    <ul th:replace="fragments/carTabFragment.html :: carTabs('activeCarLinks')"></ul>
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('carLinksActive')"></ul>
 
     <h2 class="py-3">Cars Links (Active)</h2>
     <table class="table table-striped table-bordered">
@@ -14,10 +14,10 @@
             <th>Date End</th>
             <th>Comment</th>
         </tr>
-        <tr th:if="${#lists.isEmpty(links)}">
+        <tr th:if="${#lists.isEmpty(carLinksActive)}">
             <td colspan="5">No Links</td>
         </tr>
-        <tr th:each="link : ${links}">
+        <tr th:each="link : ${carLinksActive}">
             <td>
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/balances/driver/{id}(id=${link.driverId})}">

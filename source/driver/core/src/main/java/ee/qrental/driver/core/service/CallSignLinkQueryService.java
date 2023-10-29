@@ -54,6 +54,30 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
     return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, date));
   }
 
+  @Override
+  public List<CallSignLinkResponse> getActive() {
+    return loadPort.loadActiveByDate(LocalDate.now()).stream()
+        .map(mapper::toResponse)
+        .collect(toList());
+  }
+
+  @Override
+  public List<CallSignLinkResponse> getClosed() {
+    return loadPort.loadClosedByDate(LocalDate.now()).stream()
+        .map(mapper::toResponse)
+        .collect(toList());
+  }
+
+  @Override
+  public Long getCountActive() {
+    return loadPort.loadCountActiveByDate(LocalDate.now());
+  }
+
+  @Override
+  public Long getCountClosed() {
+    return loadPort.loadCountClosedByDate(LocalDate.now());
+  }
+
   private Comparator<CallSignLinkResponse> getCallSignOrEndDateComparator() {
     return (callSignLink1, callSignLink2) -> {
       final var callSign1 = callSignLink1.getCallSign();

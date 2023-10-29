@@ -18,11 +18,30 @@ public class CallSignLinkQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetCallSignLinkQuery callSignLinkQuery;
 
-  @GetMapping
-  public String getCallSignLinkView(final Model model) {
+  @GetMapping(value = "/active")
+  public String getActiveLinkView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    model.addAttribute("callSignLinks", callSignLinkQuery.getAll());
+    final var callSignLinksActive = callSignLinkQuery.getActive();
+    model.addAttribute("callSignLinksActive", callSignLinksActive);
+    populateLinksCounts(model);
 
-    return "callSignLinks";
+    return "callSignLinksActive";
+  }
+
+  @GetMapping(value = "/closed")
+  public String geHistoryLinkView(final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    final var callSignLinksClosed = callSignLinkQuery.getClosed();
+    model.addAttribute("callSignLinksClosed", callSignLinksClosed);
+    populateLinksCounts(model);
+
+    return "callSignLinksClosed";
+  }
+
+  private void populateLinksCounts(final Model model) {
+    final var activeLinksCount = callSignLinkQuery.getCountActive();
+    model.addAttribute("activeLinksCount", activeLinksCount);
+    final var closedLinksCount = callSignLinkQuery.getCountClosed();
+    model.addAttribute("closedLinksCount", closedLinksCount);
   }
 }
