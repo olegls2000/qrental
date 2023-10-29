@@ -76,7 +76,7 @@ public class CallSignLinkUseCaseService
   }
 
   @Override
-  public void stop(final CallSignLinkStopRequest request) {
+  public void close(final CallSignLinkStopRequest request) {
     final var linkToStop = loadPort.loadById(request.getId());
     linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
     updatePort.update(linkToStop);

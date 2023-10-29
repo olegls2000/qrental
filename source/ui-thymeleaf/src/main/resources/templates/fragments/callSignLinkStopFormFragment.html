@@ -9,7 +9,7 @@
 </div>
 
 <form th:fragment="stopForm"
-      th:action="@{/call-sign-links/stop}"
+      th:action="@{/call-sign-links/close}"
       th:object="${stopRequest}"
       method="post">
     <input id="callSignLinkId" required
@@ -21,13 +21,13 @@
            type="text"
            hidden/>
     <div class="mb-5 mt-5">
-        <p class="fs-5 text-center">Please confirm that you want to stop (end date will be yesterday) selected Call Sign
+        <p class="fs-5 text-center">Please confirm that you want to close (end date will be yesterday) selected Call Sign
             Link:</p>
         <p class="fs-4 text-center"
            th:text=${objectInfo}>???</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
-            submitValue='Stop',
+            submitValue='Close',
             cancelHref='/call-sign-links'
         )">
     </div>

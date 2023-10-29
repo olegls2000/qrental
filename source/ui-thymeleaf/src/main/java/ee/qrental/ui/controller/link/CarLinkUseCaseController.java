@@ -82,8 +82,8 @@ public class CarLinkUseCaseController {
     return getDriverPortalRedirectUrl(updateRequest.getDriverId());
   }
 
-  @GetMapping(value = "/stop-form/{id}/driver/{driverId}")
-  public String stopForm(
+  @GetMapping(value = "/close-form/{id}/driver/{driverId}")
+  public String closeForm(
       final Model model, @PathVariable("id") long id, @PathVariable("driverId") long driverId) {
     model.addAttribute("stopRequest", new CarLinkStopRequest(id, driverId));
     model.addAttribute("objectInfo", carLinkQuery.getObjectInfo(id));
@@ -91,10 +91,10 @@ public class CarLinkUseCaseController {
     return "forms/stopCarLink";
   }
 
-  @PostMapping("/stop")
-  public String stop(final CarLinkStopRequest stopRequest) {
+  @PostMapping("/close")
+  public String close(final CarLinkStopRequest stopRequest) {
     final var driverId = stopRequest.getDriverId();
-    stopUseCase.stop(stopRequest);
+    stopUseCase.close(stopRequest);
 
     return getDriverPortalRedirectUrl(driverId);
   }
@@ -108,7 +108,7 @@ public class CarLinkUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String stop(final CarLinkDeleteRequest deleteRequest, final Model model) {
+  public String delete(final CarLinkDeleteRequest deleteRequest, final Model model) {
     deleteUseCase.delete(deleteRequest);
     if (deleteRequest.hasViolations()) {
       model.addAttribute("deleteRequest", deleteRequest);

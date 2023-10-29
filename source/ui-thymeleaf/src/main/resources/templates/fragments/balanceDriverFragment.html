@@ -46,7 +46,7 @@
                         </td>
                         <td>
                             <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-danger"
-                               th:href="@{/call-sign-links/stop-form/{id}/driver/{driverId}(id=${callSignLinkId}, driverId=${driverId})}">
+                               th:href="@{/call-sign-links/close-form/{id}/driver/{driverId}(id=${callSignLinkId}, driverId=${driverId})}">
                                 <span class="bi bi-x-circle"></span>
                             </a>
                         </td>
@@ -67,7 +67,7 @@
                         </td>
                         <td>
                             <a th:if="${carLinkId != null}" class="btn btn-sm btn-danger"
-                               th:href="@{/car-links/stop-form/{id}/driver/{driverId}(id=${carLinkId}, driverId=${driverId})}">
+                               th:href="@{/car-links/close-form/{id}/driver/{driverId}(id=${carLinkId}, driverId=${driverId})}">
                                 <span class="bi bi-x-circle"></span>
                             </a>
                         </td>

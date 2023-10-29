@@ -102,8 +102,8 @@ public class CallSignLinkUseCaseController {
     model.addAttribute("updateRequest", updateRequest);
   }
 
-  @GetMapping(value = "/stop-form/{id}/driver/{driverId}")
-  public String stopForm(
+  @GetMapping(value = "/close-form/{id}/driver/{driverId}")
+  public String closeForm(
       final Model model, @PathVariable("id") long id, @PathVariable("driverId") long driverId) {
     model.addAttribute("stopRequest", new CallSignLinkStopRequest(id, driverId));
     model.addAttribute("objectInfo", callSignLinkQuery.getObjectInfo(id));
@@ -111,10 +111,10 @@ public class CallSignLinkUseCaseController {
     return "forms/stopCallSignLink";
   }
 
-  @PostMapping("/stop")
-  public String stop(final CallSignLinkStopRequest stopRequest) {
+  @PostMapping("/close")
+  public String close(final CallSignLinkStopRequest stopRequest) {
     final var driverId = stopRequest.getDriverId();
-    stopUseCase.stop(stopRequest);
+    stopUseCase.close(stopRequest);
 
     return getDriverPortalRedirectUrl(driverId);
   }

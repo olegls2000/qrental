@@ -61,7 +61,7 @@ public class CarLinkUseCaseService
   }
 
   @Override
-  public void stop(final CarLinkStopRequest request) {
+  public void close(final CarLinkStopRequest request) {
     final var linkToStop = loadPort.loadById(request.getId());
     linkToStop.setDateEnd(LocalDate.now().minusDays(1L));
     updatePort.update(linkToStop);
