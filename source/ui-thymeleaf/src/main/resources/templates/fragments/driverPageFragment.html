@@ -5,7 +5,7 @@
     <h2 class="py-3">Drivers</h2>
     <table class="table table-sm table-striped table-bordered align-middle">
         <tr>
-            <th>
+            <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
                    href="/drivers/add-form"
                    role="button"
@@ -13,7 +13,7 @@
                     <span class="bi-plus-circle"></span>
                 </a>
             </th>
-            <th></th>
+            <th style="width: 1% !important;">Delete</th>
             <th>Call Sign</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -31,12 +31,12 @@
             <td colspan="5">No drivers</td>
         </tr>
         <tr th:each="driver : ${drivers}">
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/drivers/update-form/{id}(id=${driver.id})}">
                     <span class="bi-pencil-square"></span></a>
             </td>
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/drivers/delete-form/{id}(id=${driver.id})}">
                     <span class="bi-trash"></span></a>
