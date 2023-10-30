@@ -5,19 +5,19 @@
     <h2 class="py-3">Call Sign Links (Active)</h2>
     <table class="table table-striped table-bordered">
         <tr>
-            <th>Close</th>
+            <th style="width: 1% !important;">Close</th>
             <th>Call Sign</th>
             <th>Driver</th>
             <th>Date Start</th>
             <th>Date End</th>
             <th>Comment</th>
-            <th>Driver's portal</th>
+            <th style="width: 1% !important;">Portal</th>
         </tr>
         <tr th:if="${#lists.isEmpty(callSignLinksActive)}">
             <td colspan="5">No Links</td>
         </tr>
         <tr th:each="callSignLink : ${callSignLinksActive}">
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/call-sign-links/close-form/{id}/driver/{driverId}(id=${callSignLink.id}, driverId=${callSignLink.driverId})}">
                     <span class="bi bi-x-circle"></span>
@@ -28,7 +28,7 @@
             <td th:text="${qDateFormatter.format(callSignLink.dateStart)}">???</td>
             <td th:text="${qDateFormatter.format(callSignLink.dateEnd)}">???</td>
             <td th:text="${callSignLink.comment}">???</td>
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-info"
                    th:href="@{/balances/driver/{id}(id=${callSignLink.driverId})}">
                     <span class="bi bi-card-checklist"></span></a>

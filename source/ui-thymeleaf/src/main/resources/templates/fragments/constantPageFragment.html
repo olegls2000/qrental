@@ -2,18 +2,18 @@
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
     <ul th:replace="fragments/settingsTabFragment :: settingsTab('constants')"></ul>
 
-    <h2 class="py-5">Constants</h2>
+    <h2 class="py-3">Constants</h2>
     <table class="table table-striped table-bordered">
         <tr>
-            <th>
+            <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
                    href="/constants/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
-                    Add new Constant
                 </a>
             </th>
+            <th style="width: 1% !important;">Delete</th>
             <th>Constant</th>
             <th>Negative</th>
             <th>Value</th>
@@ -23,15 +23,17 @@
             <td colspan="5">No Constants</td>
         </tr>
         <tr th:each="constant : ${constants}">
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/constants/update-form/{id}(id=${constant.id})}">
                     <span class="bi-pencil-square"></span>
-                    Edit</a>
+                </a>
+            </td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/constants/delete-form/{id}(id=${constant.id})}">
                     <span class="bi-trash"></span>
-                    Delete</a>
+                </a>
             </td>
             <td th:text="${constant.constant}"></td>
             <td th:if="${constant.negative}"

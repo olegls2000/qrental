@@ -5,7 +5,7 @@
     <h2 class="py-3">Roles</h2>
     <table class="table table-sm table-striped table-bordered align-middle">
         <tr>
-            <th>
+            <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
                    href="/roles/add-form"
                    role="button"
@@ -13,7 +13,7 @@
                     <span class="bi-plus-circle"></span>
                 </a>
             </th>
-            <th></th>
+            <th style="width: 1% !important;">Delete</th>
             <th>Name</th>
             <th>Comment</th>
         </tr>
@@ -21,12 +21,12 @@
             <td colspan="5">No roles</td>
         </tr>
         <tr th:each="role : ${roles}">
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/roles/update-form/{id}(id=${role.id})}">
                     <span class="bi-pencil-square"></span></a>
             </td>
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/roles/delete-form/{id}(id=${role.id})}">
                     <span class="bi-trash"></span></a>

@@ -5,7 +5,7 @@
     <h2 class="py-3">Users</h2>
     <table class="table table-sm table-striped table-bordered align-middle">
         <tr>
-            <th>
+            <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
                    href="/users/add-form"
                    role="button"
@@ -13,7 +13,7 @@
                     <span class="bi-plus-circle"></span>
                 </a>
             </th>
-            <th></th>
+            <th style="width: 1% !important;">Delete</th>
             <th>Username</th>
             <th>Email</th>
             <th>First Name</th>
@@ -24,12 +24,12 @@
             <td colspan="5">No users</td>
         </tr>
         <tr th:each="user : ${users}">
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/users/update-form/{id}(id=${user.id})}">
                     <span class="bi-pencil-square"></span></a>
             </td>
-            <td>
+            <td class="text-center">
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/users/delete-form/{id}(id=${user.id})}">
                     <span class="bi-trash"></span></a>
