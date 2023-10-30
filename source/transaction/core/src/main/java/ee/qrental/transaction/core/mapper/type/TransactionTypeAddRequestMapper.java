@@ -8,12 +8,14 @@ public class TransactionTypeAddRequestMapper
     implements AddRequestMapper<TransactionTypeAddRequest, TransactionType> {
 
   @Override
-  public TransactionType toDomain(TransactionTypeAddRequest request) {
+  public TransactionType toDomain(final TransactionTypeAddRequest request) {
     return TransactionType.builder()
         .id(null)
         .name(request.getName())
         .negative(request.getNegative())
+        .feeAble(request.getFeeAble())
         .description(request.getDescription())
+        .descriptionRus(request.getDescriptionRus())
         .comment(request.getComment())
         .build();
   }

@@ -10,12 +10,13 @@
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
-                    Add a new Type
                 </a>
             </th>
             <th>Name</th>
             <th>Negative</th>
-            <th>Nimi ( estonian language )</th>
+            <th>Fee able</th>
+            <th>Nimi (estonian language)</th>
+            <th>Имя (russian language)</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactionTypes)}">
@@ -26,18 +27,24 @@
                 <a class="btn btn-sm btn-warning"
                    th:href="@{/transaction-types/update-form/{id}(id=${transactionType.id})}">
                     <span class="bi-pencil-square"></span>
-                    Edit</a>
+                </a>
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/transaction-types/delete-form/{id}(id=${transactionType.id})}">
                     <span class="bi-trash"></span>
-                    Delete</a>
+                </a>
             </td>
             <td th:text="${transactionType.name}"></td>
             <td th:if="${transactionType.negative}"
-                class = "text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">Negative</td>
+                class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
+                Negative
+            </td>
             <td th:unless="${transactionType.negative}"
-                class = "text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">Positive</td>
+                class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
+                Positive
+            </td>
+            <td th:text="${transactionType.feeAble}"></td>
             <td th:text="${transactionType.description}"></td>
+            <td th:text="${transactionType.descriptionRus}"></td>
             <td th:text="${transactionType.comment}"></td>
         </tr>
     </table>

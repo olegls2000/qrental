@@ -15,7 +15,9 @@ public class TransactionTypeResponseMapper
         .id(domain.getId())
         .name(domain.getName())
         .negative(domain.getNegative())
+        .feeAble(domain.getFeeAble())
         .description(domain.getDescription())
+        .descriptionRus(domain.getDescriptionRus())
         .comment(domain.getComment())
         .build();
   }

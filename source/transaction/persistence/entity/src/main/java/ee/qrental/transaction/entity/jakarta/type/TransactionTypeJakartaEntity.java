@@ -33,6 +33,12 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "negative")
   private Boolean negative;
 
+  @Column(name = "fee_able")
+  private Boolean feeAble;
+
+  @Column(name = "description_rus")
+  private String descriptionRus;
+
   @Column(name = "comment")
   private String comment;
 

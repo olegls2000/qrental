@@ -36,12 +36,24 @@
                        type="text"/>
             </div>
         </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="descriptionRusID">Тип транзакции (Rus)</label>
+            <input class="form-control" id="descriptionRusID" placeholder="Enter Tr.Type on Estonian Language"
+                   th:field="*{descriptionRus}"
+                   type="text"/>
+        </div>
     </div>
 
     <div class="mb-3">
         <label class="form-check-label text-muted" for="negativeId">Negative</label>
         <input class="form-check-input" id="negativeId"
                th:field="*{negative}"
+               type="checkbox"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-check-label text-muted" for="feeAbleId">Fee able</label>
+        <input class="form-check-input" id="feeAbleId"
+               th:field="*{feeAble}"
                type="checkbox"/>
     </div>
 

@@ -12,8 +12,10 @@ public class TransactionTypeUpdateRequestMapper
     return TransactionType.builder()
         .id(request.getId())
         .name(request.getName())
+        .feeAble(request.getFeeAble())
         .negative(request.getNegative())
         .description(request.getDescription())
+        .descriptionRus(request.getDescriptionRus())
         .comment(request.getComment())
         .build();
   }
@@ -24,7 +26,9 @@ public class TransactionTypeUpdateRequestMapper
         .id(domain.getId())
         .name(domain.getName())
         .negative(domain.getNegative())
+        .feeAble(domain.getFeeAble())
         .description(domain.getDescription())
+        .descriptionRus(domain.getDescriptionRus())
         .comment(domain.getComment())
         .build();
   }

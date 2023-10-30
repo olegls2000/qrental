@@ -9,7 +9,9 @@ public class TransactionTypeAdapterMapper {
         .id(entity.getId())
         .name(entity.getName())
         .negative(entity.getNegative())
+        .feeAble(entity.getFeeAble())
         .description(entity.getDescription())
+        .descriptionRus(entity.getDescriptionRus())
         .comment(entity.getComment())
         .build();
   }
@@ -19,7 +21,9 @@ public class TransactionTypeAdapterMapper {
         .id(domain.getId())
         .name(domain.getName())
         .description(domain.getDescription())
+        .descriptionRus(domain.getDescriptionRus())
         .negative(domain.getNegative())
+        .feeAble(domain.getFeeAble())
         .comment(domain.getComment())
         .build();
   }

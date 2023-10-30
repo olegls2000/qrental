@@ -12,6 +12,8 @@ public class TransactionTypeAddRequest extends AbstractAddRequest {
 
   private String name;
   private String description;
+  private String descriptionRus;
   private Boolean negative;
+  private Boolean feeAble;
   private String comment;
 }
