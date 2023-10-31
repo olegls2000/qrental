@@ -5,14 +5,20 @@ import static ee.qrental.transaction.core.utils.FeeUtils.FEE_WEEKLY_INTEREST;
 import static ee.qrental.transaction.core.utils.FeeUtils.getWeekFeeInterest;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
+import static java.util.stream.Collectors.toList;
 
+import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
+import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -23,6 +29,7 @@ public class FeeCalculationService {
   private final BalanceLoadPort loadPort;
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
+  private final GetTransactionQuery transactionQuery;
   private final GetConstantQuery constantQuery;
 
   public void calculate(final Week week, final DriverResponse driver) {
@@ -70,7 +77,7 @@ public class FeeCalculationService {
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
             driverId, week.getYear(), previousWeekNumber);
-    final var amountFromPreviousWeek = balanceFromPreviousWeek.getAmount();
+    final var amountFromPreviousWeek = getFeeAbleAmountFromPreviousWeek(balanceFromPreviousWeek);
     final var feeAmountFromPreviousWeek = balanceFromPreviousWeek.getFee();
 
     if (amountFromPreviousWeek.compareTo(FEE_CALCULATION_THRESHOLD) < 0) {
@@ -91,5 +98,28 @@ public class FeeCalculationService {
     }
 
     return ZERO;
+  }
+
+  private BigDecimal getFeeAbleAmountFromPreviousWeek(final Balance balance) {
+    final var year = balance.getYear();
+    final var weekNumber = balance.getWeekNumber();
+    final var driverId = balance.getDriverId();
+    final var transactionFilter =
+        PeriodAndDriverFilter.builder()
+            .driverId(driverId)
+            .dateStart(QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber))
+            .dateEnd(QTimeUtils.getLastDayOfWeekInYear(year, weekNumber))
+            .build();
+
+    final var feeAbleTransactionTypes =
+        transactionTypeQuery.getAll().stream()
+            .filter(TransactionTypeResponse::getFeeAble)
+            .map(TransactionTypeResponse::getName)
+            .collect(toList());
+
+    return transactionQuery.getAllByFilter(transactionFilter).stream()
+        .filter(tr -> feeAbleTransactionTypes.contains(tr.getType()))
+        .map(tr -> tr.getRealAmount())
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }
