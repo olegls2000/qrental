@@ -73,9 +73,10 @@ public class BalanceServiceConfig {
       final BalanceLoadPort loadPort,
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery,
+      final GetTransactionQuery transactionQuery,
       final GetConstantQuery constantQuery) {
     return new FeeCalculationService(
-        loadPort, transactionAddUseCase, transactionTypeQuery, constantQuery);
+        loadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery, constantQuery);
   }
 
   @Bean
