@@ -10,6 +10,8 @@ import ee.qrental.transaction.core.mapper.type.TransactionTypeResponseMapper;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeUpdateRequestMapper;
 import ee.qrental.transaction.core.service.type.TransactionTypeQueryService;
 import ee.qrental.transaction.core.service.type.TransactionTypeUseCaseService;
+import ee.qrental.transaction.core.validator.TransactionTypeAddBusinessRuleValidator;
+import ee.qrental.transaction.core.validator.TransactionTypeUpdateBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +33,17 @@ public class TransactionTypeServiceConfig {
       final TransactionTypeDeletePort deletePort,
       final TransactionTypeLoadPort loadPort,
       final TransactionTypeAddRequestMapper addRequestMapper,
-      final TransactionTypeUpdateRequestMapper updateRequestMapper) {
+      final TransactionTypeUpdateRequestMapper updateRequestMapper,
+      final TransactionTypeAddBusinessRuleValidator addBusinessRuleValidator,
+      final TransactionTypeUpdateBusinessRuleValidator updateBusinessRuleValidator) {
     return new TransactionTypeUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        addBusinessRuleValidator,
+        updateBusinessRuleValidator);
   }
 }

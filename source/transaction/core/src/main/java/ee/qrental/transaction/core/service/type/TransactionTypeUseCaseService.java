@@ -12,6 +12,8 @@ import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.api.out.type.TransactionTypeUpdatePort;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeAddRequestMapper;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeUpdateRequestMapper;
+import ee.qrental.transaction.core.validator.TransactionTypeAddBusinessRuleValidator;
+import ee.qrental.transaction.core.validator.TransactionTypeUpdateBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -26,15 +28,29 @@ public class TransactionTypeUseCaseService
   private final TransactionTypeLoadPort loadPort;
   private final TransactionTypeAddRequestMapper addRequestMapper;
   private final TransactionTypeUpdateRequestMapper updateRequestMapper;
+  private final TransactionTypeAddBusinessRuleValidator addBusinessRuleValidator;
+  private final TransactionTypeUpdateBusinessRuleValidator updateBusinessRuleValidator;
 
   @Override
   public Long add(final TransactionTypeAddRequest request) {
+    final var violationsCollector = addBusinessRuleValidator.validate(request);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return null;
+    }
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 
   @Override
   public void update(final TransactionTypeUpdateRequest request) {
     checkExistence(request.getId());
+    final var violationsCollector = updateBusinessRuleValidator.validate(request);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return;
+    }
     updatePort.update(updateRequestMapper.toDomain(request));
   }
 
