@@ -1,7 +1,7 @@
 package ee.qrental.constant.core.mapper;
 
 import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
-import ee.qrental.constant.api.in.request.ConstantUpdateRequest;
+import ee.qrental.constant.api.in.request.constant.ConstantUpdateRequest;
 import ee.qrental.constant.domain.Constant;
 
 public class ConstantUpdateRequestMapper implements UpdateRequestMapper<ConstantUpdateRequest, Constant> {

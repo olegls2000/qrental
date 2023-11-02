@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.utils;
 
-import ee.qrental.constant.api.in.response.ConstantResponse;
+import ee.qrental.constant.api.in.response.constant.ConstantResponse;
 import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;

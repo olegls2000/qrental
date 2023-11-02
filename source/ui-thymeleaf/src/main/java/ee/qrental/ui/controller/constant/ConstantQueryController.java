@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.constant;
 
-import ee.qrental.constant.api.in.query.GetConstantQuery;
+import ee.qrental.constant.api.in.query.constant.GetConstantQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

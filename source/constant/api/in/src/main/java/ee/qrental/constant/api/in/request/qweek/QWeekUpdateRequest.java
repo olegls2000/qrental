@@ -1,19 +1,16 @@
-package ee.qrental.constant.api.in.request;
+package ee.qrental.constant.api.in.request.qweek;
 
 import ee.qrental.common.core.in.request.AbstractUpdateRequest;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class ConstantUpdateRequest extends AbstractUpdateRequest {
-  private String constant;
-  private BigDecimal value;
+public class QWeekUpdateRequest extends AbstractUpdateRequest {
   private String description;
-  private Boolean negative;
 }

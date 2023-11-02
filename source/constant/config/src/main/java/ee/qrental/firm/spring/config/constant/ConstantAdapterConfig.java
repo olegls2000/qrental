@@ -1,4 +1,4 @@
-package ee.qrental.firm.spring.config;
+package ee.qrental.firm.spring.config.constant;
 
 import ee.qrental.constant.adapter.adapter.ConstantLoadAdapter;
 import ee.qrental.constant.adapter.adapter.ConstantPersistenceAdapter;

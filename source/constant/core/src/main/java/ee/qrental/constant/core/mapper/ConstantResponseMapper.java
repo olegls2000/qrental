@@ -1,7 +1,7 @@
 package ee.qrental.constant.core.mapper;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
-import ee.qrental.constant.api.in.response.ConstantResponse;
+import ee.qrental.constant.api.in.response.constant.ConstantResponse;
 import ee.qrental.constant.domain.Constant;
 
 import static java.lang.String.format;

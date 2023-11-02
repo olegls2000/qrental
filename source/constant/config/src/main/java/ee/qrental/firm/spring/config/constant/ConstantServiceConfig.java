@@ -1,10 +1,10 @@
-package ee.qrental.firm.spring.config;
+package ee.qrental.firm.spring.config.constant;
 
-import ee.qrental.constant.api.in.query.GetConstantQuery;
-import ee.qrental.constant.api.out.ConstantAddPort;
-import ee.qrental.constant.api.out.ConstantDeletePort;
-import ee.qrental.constant.api.out.ConstantLoadPort;
-import ee.qrental.constant.api.out.ConstantUpdatePort;
+import ee.qrental.constant.api.in.query.constant.GetConstantQuery;
+import ee.qrental.constant.api.out.constant.ConstantAddPort;
+import ee.qrental.constant.api.out.constant.ConstantDeletePort;
+import ee.qrental.constant.api.out.constant.ConstantLoadPort;
+import ee.qrental.constant.api.out.constant.ConstantUpdatePort;
 import ee.qrental.constant.core.mapper.ConstantAddRequestMapper;
 import ee.qrental.constant.core.mapper.ConstantResponseMapper;
 import ee.qrental.constant.core.mapper.ConstantUpdateRequestMapper;

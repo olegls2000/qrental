@@ -1,7 +1,7 @@
 package ee.qrental.constant.core.mapper;
 
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
-import ee.qrental.constant.api.in.request.ConstantAddRequest;
+import ee.qrental.constant.api.in.request.constant.ConstantAddRequest;
 import ee.qrental.constant.domain.Constant;
 
 public class ConstantAddRequestMapper

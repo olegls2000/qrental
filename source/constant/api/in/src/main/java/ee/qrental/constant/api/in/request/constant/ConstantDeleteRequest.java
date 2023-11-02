@@ -1,4 +1,4 @@
-package ee.qrental.constant.api.in.request;
+package ee.qrental.constant.api.in.request.constant;
 
 import ee.qrental.common.core.in.request.AbstractDeleteRequest;
 

@@ -1,4 +1,4 @@
-package ee.qrental.firm.spring.config;
+package ee.qrental.firm.spring.config.constant;
 
 import ee.qrental.constant.adapter.repository.ConstantRepository;
 import ee.qrental.constant.repository.impl.ConstantRepositoryImpl;

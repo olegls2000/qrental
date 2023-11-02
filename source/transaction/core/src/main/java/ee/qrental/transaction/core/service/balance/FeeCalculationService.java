@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.Week;
-import ee.qrental.constant.api.in.query.GetConstantQuery;
+import ee.qrental.constant.api.in.query.constant.GetConstantQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;

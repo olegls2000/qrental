@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrental.constant.adapter.mapper.ConstantAdapterMapper;
 import ee.qrental.constant.adapter.repository.ConstantRepository;
-import ee.qrental.constant.api.out.ConstantLoadPort;
+import ee.qrental.constant.api.out.constant.ConstantLoadPort;
 import ee.qrental.constant.domain.Constant;
 import java.util.List;
 import lombok.AllArgsConstructor;

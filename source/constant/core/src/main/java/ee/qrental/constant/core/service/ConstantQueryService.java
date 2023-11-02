@@ -2,10 +2,10 @@ package ee.qrental.constant.core.service;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.constant.api.in.query.GetConstantQuery;
-import ee.qrental.constant.api.in.request.ConstantUpdateRequest;
-import ee.qrental.constant.api.in.response.ConstantResponse;
-import ee.qrental.constant.api.out.ConstantLoadPort;
+import ee.qrental.constant.api.in.query.constant.GetConstantQuery;
+import ee.qrental.constant.api.in.request.constant.ConstantUpdateRequest;
+import ee.qrental.constant.api.in.response.constant.ConstantResponse;
+import ee.qrental.constant.api.out.constant.ConstantLoadPort;
 import ee.qrental.constant.core.mapper.ConstantResponseMapper;
 import ee.qrental.constant.core.mapper.ConstantUpdateRequestMapper;
 import java.util.List;

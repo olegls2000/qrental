@@ -1,4 +1,4 @@
-package ee.qrental.constant.api.in.response;
+package ee.qrental.constant.api.in.response.constant;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

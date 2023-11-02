@@ -1,4 +1,4 @@
-package ee.qrental.constant.api.out;
+package ee.qrental.constant.api.out.constant;
 
 import ee.qrental.common.core.out.port.LoadPort;
 import ee.qrental.constant.domain.Constant;
