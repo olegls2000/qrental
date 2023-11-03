@@ -1,7 +1,7 @@
 package ee.qrental.constant.core.mapper;
 
 import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
-import ee.qrental.constant.api.in.request.qweek.QWeekUpdateRequest;
+import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.domain.QWeek;
 
 public class QWeekUpdateRequestMapper implements UpdateRequestMapper<QWeekUpdateRequest, QWeek> {

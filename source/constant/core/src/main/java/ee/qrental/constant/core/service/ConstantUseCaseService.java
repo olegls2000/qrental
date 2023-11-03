@@ -1,15 +1,15 @@
 package ee.qrental.constant.core.service;
 
-import ee.qrental.constant.api.in.request.constant.ConstantAddRequest;
-import ee.qrental.constant.api.in.request.constant.ConstantDeleteRequest;
-import ee.qrental.constant.api.in.request.constant.ConstantUpdateRequest;
-import ee.qrental.constant.api.in.usecase.constant.ConstantAddUseCase;
-import ee.qrental.constant.api.in.usecase.constant.ConstantDeleteUseCase;
-import ee.qrental.constant.api.in.usecase.constant.ConstantUpdateUseCase;
-import ee.qrental.constant.api.out.constant.ConstantAddPort;
-import ee.qrental.constant.api.out.constant.ConstantDeletePort;
-import ee.qrental.constant.api.out.constant.ConstantLoadPort;
-import ee.qrental.constant.api.out.constant.ConstantUpdatePort;
+import ee.qrental.constant.api.in.request.ConstantAddRequest;
+import ee.qrental.constant.api.in.request.ConstantDeleteRequest;
+import ee.qrental.constant.api.in.request.ConstantUpdateRequest;
+import ee.qrental.constant.api.in.usecase.ConstantAddUseCase;
+import ee.qrental.constant.api.in.usecase.ConstantDeleteUseCase;
+import ee.qrental.constant.api.in.usecase.ConstantUpdateUseCase;
+import ee.qrental.constant.api.out.ConstantAddPort;
+import ee.qrental.constant.api.out.ConstantDeletePort;
+import ee.qrental.constant.api.out.ConstantLoadPort;
+import ee.qrental.constant.api.out.ConstantUpdatePort;
 import ee.qrental.constant.core.mapper.ConstantAddRequestMapper;
 import ee.qrental.constant.core.mapper.ConstantUpdateRequestMapper;
 import lombok.AllArgsConstructor;

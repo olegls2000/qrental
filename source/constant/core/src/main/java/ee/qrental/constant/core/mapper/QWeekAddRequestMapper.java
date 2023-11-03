@@ -5,7 +5,7 @@ import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
-import ee.qrental.constant.api.in.request.qweek.QWeekAddRequest;
+import ee.qrental.constant.api.in.request.QWeekAddRequest;
 import ee.qrental.constant.domain.QWeek;
 
 public class QWeekAddRequestMapper implements AddRequestMapper<QWeekAddRequest, QWeek> {
@@ -14,7 +14,7 @@ public class QWeekAddRequestMapper implements AddRequestMapper<QWeekAddRequest, 
 
   @Override
   public QWeek toDomain(final QWeekAddRequest request) {
-    final var actionDate = request.getActionDate();
+    final var actionDate = request.getWeekDate();
     final var weekNumber = getWeekNumber(actionDate);
     final var year = actionDate.getYear();
     final var description = getDescription(year, weekNumber);

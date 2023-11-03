@@ -38,8 +38,8 @@
             </td>
             <td th:text="${week.year}"></td>
             <td th:text="${week.number}"></td>
-            <td th:text="${week.start}"></td>
-            <td th:text="${week.end}"></td>
+            <td th:text="${qDateFormatter.format(week.start)}">???</td>
+            <td th:text="${qDateFormatter.format(week.end)}">???</td>
             <td th:text="${week.description}"></td>
         </tr>
     </table>

@@ -1,15 +1,15 @@
 package ee.qrental.constant.core.service;
 
-import ee.qrental.constant.api.in.request.qweek.QWeekAddRequest;
-import ee.qrental.constant.api.in.request.qweek.QWeekDeleteRequest;
-import ee.qrental.constant.api.in.request.qweek.QWeekUpdateRequest;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekAddUseCase;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekDeleteUseCase;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekUpdateUseCase;
-import ee.qrental.constant.api.out.qweek.QWeekAddPort;
-import ee.qrental.constant.api.out.qweek.QWeekDeletePort;
-import ee.qrental.constant.api.out.qweek.QWeekLoadPort;
-import ee.qrental.constant.api.out.qweek.QWeekUpdatePort;
+import ee.qrental.constant.api.in.request.QWeekAddRequest;
+import ee.qrental.constant.api.in.request.QWeekDeleteRequest;
+import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
+import ee.qrental.constant.api.in.usecase.QWeekAddUseCase;
+import ee.qrental.constant.api.in.usecase.QWeekDeleteUseCase;
+import ee.qrental.constant.api.in.usecase.QWeekUpdateUseCase;
+import ee.qrental.constant.api.out.QWeekAddPort;
+import ee.qrental.constant.api.out.QWeekDeletePort;
+import ee.qrental.constant.api.out.QWeekLoadPort;
+import ee.qrental.constant.api.out.QWeekUpdatePort;
 import ee.qrental.constant.core.mapper.QWeekAddRequestMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
 import lombok.AllArgsConstructor;

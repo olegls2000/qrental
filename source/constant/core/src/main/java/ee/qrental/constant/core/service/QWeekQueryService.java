@@ -2,10 +2,10 @@ package ee.qrental.constant.core.service;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.constant.api.in.query.qweek.GetQWeekQuery;
-import ee.qrental.constant.api.in.request.qweek.QWeekUpdateRequest;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
-import ee.qrental.constant.api.out.qweek.QWeekLoadPort;
+import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
 import java.util.List;

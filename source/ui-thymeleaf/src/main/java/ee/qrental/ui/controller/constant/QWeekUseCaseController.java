@@ -1,20 +1,14 @@
 package ee.qrental.ui.controller.constant;
 
-import static ee.qrental.ui.controller.util.ControllerUtils.CONSTANT_ROOT_PATH;
 import static ee.qrental.ui.controller.util.ControllerUtils.WEEK_ROOT_PATH;
 
-import ee.qrental.constant.api.in.query.constant.GetConstantQuery;
-import ee.qrental.constant.api.in.query.qweek.GetQWeekQuery;
-import ee.qrental.constant.api.in.request.constant.ConstantAddRequest;
-import ee.qrental.constant.api.in.request.constant.ConstantDeleteRequest;
-import ee.qrental.constant.api.in.request.constant.ConstantUpdateRequest;
-import ee.qrental.constant.api.in.request.qweek.QWeekAddRequest;
-import ee.qrental.constant.api.in.usecase.constant.ConstantAddUseCase;
-import ee.qrental.constant.api.in.usecase.constant.ConstantDeleteUseCase;
-import ee.qrental.constant.api.in.usecase.constant.ConstantUpdateUseCase;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekAddUseCase;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekDeleteUseCase;
-import ee.qrental.constant.api.in.usecase.qweek.QWeekUpdateUseCase;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.request.QWeekAddRequest;
+import ee.qrental.constant.api.in.request.QWeekDeleteRequest;
+import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
+import ee.qrental.constant.api.in.usecase.QWeekAddUseCase;
+import ee.qrental.constant.api.in.usecase.QWeekDeleteUseCase;
+import ee.qrental.constant.api.in.usecase.QWeekUpdateUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,52 +32,52 @@ public class QWeekUseCaseController {
   }
 
   @PostMapping(value = "/add")
-  public String addConstantConstant(@ModelAttribute final ConstantAddRequest addRequest, final Model model) {
+  public String addQWeekQWeek(@ModelAttribute final QWeekAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       model.addAttribute("addRequest", addRequest);
 
-      return "forms/addConstant";
+      return "forms/addQWeek";
     }
 
-    return "redirect:" + CONSTANT_ROOT_PATH;
+    return "redirect:" + WEEK_ROOT_PATH;
   }
 
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
-    model.addAttribute("updateRequest", constantQuery.getUpdateRequestById(id));
+    model.addAttribute("updateRequest", weekQuery.getUpdateRequestById(id));
 
-    return "forms/updateConstant";
+    return "forms/updateQWeek";
   }
 
   @PostMapping("/update")
-  public String updateConstantConstant(final ConstantUpdateRequest updateRequest, final Model model) {
+  public String updateQWeek(final QWeekUpdateRequest updateRequest, final Model model) {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);
 
-      return "forms/updateConstant";
+      return "forms/updateQWeek";
     }
 
-    return "redirect:" + CONSTANT_ROOT_PATH;
+    return "redirect:" + WEEK_ROOT_PATH;
   }
 
   @GetMapping(value = "/delete-form/{id}")
   public String deleteForm(@PathVariable("id") long id, final Model model) {
-    model.addAttribute("deleteRequest", new ConstantDeleteRequest(id));
-    model.addAttribute("objectInfo", constantQuery.getObjectInfo(id));
+    model.addAttribute("deleteRequest", new QWeekDeleteRequest(id));
+    model.addAttribute("objectInfo", weekQuery.getObjectInfo(id));
 
-    return "forms/deleteConstant";
+    return "forms/deleteQWeek";
   }
 
   @PostMapping("/delete")
-  public String deleteForm(final ConstantDeleteRequest deleteRequest, final Model model) {
+  public String deleteForm(final QWeekDeleteRequest deleteRequest, final Model model) {
     deleteUseCase.delete(deleteRequest);
     if (deleteRequest.hasViolations()) {
       model.addAttribute("deleteRequest", deleteRequest);
 
-      return "forms/deleteConstant";
+      return "forms/deleteQWeek";
     }
-    return "redirect:" + CONSTANT_ROOT_PATH;
+    return "redirect:" + WEEK_ROOT_PATH;
   }
 }

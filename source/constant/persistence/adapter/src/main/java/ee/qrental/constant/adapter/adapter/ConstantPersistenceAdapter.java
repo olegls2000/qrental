@@ -2,9 +2,9 @@ package ee.qrental.constant.adapter.adapter;
 
 import ee.qrental.constant.adapter.mapper.ConstantAdapterMapper;
 import ee.qrental.constant.adapter.repository.ConstantRepository;
-import ee.qrental.constant.api.out.constant.ConstantAddPort;
-import ee.qrental.constant.api.out.constant.ConstantDeletePort;
-import ee.qrental.constant.api.out.constant.ConstantUpdatePort;
+import ee.qrental.constant.api.out.ConstantAddPort;
+import ee.qrental.constant.api.out.ConstantDeletePort;
+import ee.qrental.constant.api.out.ConstantUpdatePort;
 import ee.qrental.constant.domain.Constant;
 import lombok.AllArgsConstructor;
 
