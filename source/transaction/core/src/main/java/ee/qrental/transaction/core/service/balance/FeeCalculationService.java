@@ -103,6 +103,9 @@ public class FeeCalculationService {
   private BigDecimal getFeeAbleAmountFromPreviousWeek(final Balance balance) {
     final var year = balance.getYear();
     final var weekNumber = balance.getWeekNumber();
+    if (weekNumber == 0 && year == 2023) {
+      return balance.getAmount();
+    }
     final var driverId = balance.getDriverId();
     final var transactionFilter =
         PeriodAndDriverFilter.builder()
