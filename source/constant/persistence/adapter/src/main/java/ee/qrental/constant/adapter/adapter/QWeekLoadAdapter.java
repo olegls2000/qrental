@@ -2,16 +2,11 @@ package ee.qrental.constant.adapter.adapter;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.constant.adapter.mapper.ConstantAdapterMapper;
 import ee.qrental.constant.adapter.mapper.QWeekAdapterMapper;
-import ee.qrental.constant.adapter.repository.ConstantRepository;
 import ee.qrental.constant.adapter.repository.QWeekRepository;
-import ee.qrental.constant.api.out.ConstantLoadPort;
 import ee.qrental.constant.api.out.QWeekLoadPort;
-import ee.qrental.constant.domain.Constant;
-import java.util.List;
-
 import ee.qrental.constant.domain.QWeek;
+import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -30,4 +25,8 @@ public class QWeekLoadAdapter implements QWeekLoadPort {
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
 
+  @Override
+  public QWeek loadByYearAndNumber(final Integer year, final Integer number) {
+    return mapper.mapToDomain(repository.findByYearAndWeekNumber(year, number));
+  }
 }

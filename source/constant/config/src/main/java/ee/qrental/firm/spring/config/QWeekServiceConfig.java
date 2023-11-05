@@ -8,6 +8,7 @@ import ee.qrental.constant.api.out.QWeekUpdatePort;
 import ee.qrental.constant.core.mapper.*;
 import ee.qrental.constant.core.service.QWeekQueryService;
 import ee.qrental.constant.core.service.QWeekUseCaseService;
+import ee.qrental.constant.core.validator.QWeekAddBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,8 +30,9 @@ public class QWeekServiceConfig {
       final QWeekDeletePort deletePort,
       final QWeekLoadPort loadPort,
       final QWeekAddRequestMapper addRequestMapper,
-      final QWeekUpdateRequestMapper updateRequestMapper) {
+      final QWeekUpdateRequestMapper updateRequestMapper,
+      final QWeekAddBusinessRuleValidator addBusinessRuleValidator) {
     return new QWeekUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper, addBusinessRuleValidator);
   }
 }

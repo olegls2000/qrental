@@ -25,8 +25,7 @@
         </tr>
         <tr th:each="week : ${weeks}">
             <td class="text-center">
-                <a class="btn btn-sm btn-warning"
-                   th:href="@{/weeks/update-form/{id}(id=${week.id})}">
+                <a class="btn btn-sm btn-secondary" href="#">
                     <span class="bi-pencil-square"></span>
                 </a>
             </td>

@@ -1,5 +1,6 @@
 package ee.qrental.constant.core.service;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -20,7 +21,10 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public List<QWeekResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber))
+        .collect(toList());
   }
 
   @Override

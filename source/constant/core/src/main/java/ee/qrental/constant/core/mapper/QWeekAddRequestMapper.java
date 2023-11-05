@@ -27,7 +27,7 @@ public class QWeekAddRequestMapper implements AddRequestMapper<QWeekAddRequest, 
     final var startDescription = ofPattern(WEEK_PATTERN).format(start);
     final var end = getLastDayOfWeekInYear(year, weekNumber);
     final var endDescription = ofPattern(WEEK_PATTERN).format(end);
-    final var description = format("%s...$s", startDescription, endDescription);
+    final var description = format("%s ... %s", startDescription, endDescription);
 
     return description;
   }

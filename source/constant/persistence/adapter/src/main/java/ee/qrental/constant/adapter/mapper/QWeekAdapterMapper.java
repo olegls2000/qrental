@@ -6,12 +6,14 @@ import ee.qrental.constant.entity.jakarta.QWeekJakartaEntity;
 public class QWeekAdapterMapper {
 
   public QWeek mapToDomain(final QWeekJakartaEntity entity) {
-    final var year = entity.getYear();
-    final var number = entity.getNumber();
+    if (entity == null) {
+      return null;
+    }
 
     return QWeek.builder()
         .id(entity.getId())
-        .year(year)
+        .year(entity.getYear())
+        .number(entity.getNumber())
         .description(entity.getDescription())
         .build();
   }

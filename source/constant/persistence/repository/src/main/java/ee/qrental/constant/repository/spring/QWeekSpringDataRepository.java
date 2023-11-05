@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QWeekSpringDataRepository
         extends JpaRepository<QWeekJakartaEntity, Long> {
+
+    QWeekJakartaEntity findByYearAndNumber(final Integer year, final Integer number);
 }

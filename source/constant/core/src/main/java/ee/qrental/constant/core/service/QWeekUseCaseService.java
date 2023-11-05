@@ -12,6 +12,7 @@ import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.api.out.QWeekUpdatePort;
 import ee.qrental.constant.core.mapper.QWeekAddRequestMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
+import ee.qrental.constant.core.validator.QWeekAddBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -24,9 +25,16 @@ public class QWeekUseCaseService
   private final QWeekLoadPort loadPort;
   private final QWeekAddRequestMapper addRequestMapper;
   private final QWeekUpdateRequestMapper updateRequestMapper;
+  private final QWeekAddBusinessRuleValidator addBusinessRuleValidator;
 
   @Override
   public Long add(final QWeekAddRequest request) {
+    final var violationsCollector = addBusinessRuleValidator.validate(request);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return null;
+    }
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 
