@@ -11,13 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(TRANSACTION_ROOT_PATH)
+@RequestMapping(BALANCE_ROOT_PATH)
 @AllArgsConstructor
 public class BalanceCalculationQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
 
-  @GetMapping("/balance-calculations")
+  @GetMapping("/calculations")
   public String getCalculationView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
 
@@ -26,7 +26,7 @@ public class BalanceCalculationQueryController {
     return "balanceCalculations";
   }
 
-  @GetMapping(value = "/balance-calculations/{id}")
+  @GetMapping(value = "/calculations/{id}")
   public String getBalanceCalculationView(@PathVariable("id") long id, final Model model) {
     model.addAttribute("balances", balanceCalculationQuery.getById(id).getBalances());
 

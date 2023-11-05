@@ -33,7 +33,8 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   public Balance loadByDriverIdAndYearAndWeekNumberOrDefault(
       final Long driverId, final Integer year, final Integer weekNumber) {
     if (year == 2023 && weekNumber < 1) {
-      final var defaultBalance = Balance.builder().amount(ZERO).fee(ZERO).build();
+      final var defaultBalance =
+          Balance.builder().amount(ZERO).year(year).weekNumber(weekNumber).fee(ZERO).build();
 
       return defaultBalance;
     }
@@ -50,34 +51,36 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
 
   @Override
   public Balance loadLatestByIdAndYearAndWeekNumber(
-          final Long driverId, final Integer year, final Integer weekNumber) {
-    final var latestBalance = repository.getLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
+      final Long driverId, final Integer year, final Integer weekNumber) {
+    final var latestBalance =
+        repository.getLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
 
     return mapper.mapToDomain(latestBalance);
   }
 
   @Override
-  public LocalDate loadLatestCalculatedDateOrDefault(){
+  public LocalDate loadLatestCalculatedDateOrDefault() {
     final var latestBalance = repository.getLatest();
-    
-    return  getLatestOrNull(latestBalance);
+
+    return getLatestOrNull(latestBalance);
   }
 
   @Override
   public LocalDate loadLatestCalculatedDateOrDefaultByDriverId(Long driverId) {
     final var latestBalance = repository.getLatestByDriverId(driverId);
 
-    return  getLatestOrNull(latestBalance);
+    return getLatestOrNull(latestBalance);
   }
-  
-  private LocalDate getLatestOrNull(final BalanceJakartaEntity latestBalance){
-    if(latestBalance == null) {
+
+  private LocalDate getLatestOrNull(final BalanceJakartaEntity latestBalance) {
+    if (latestBalance == null) {
       return null;
     }
     final var latestBalanceYear = latestBalance.getYear();
     final var latestBalanceWeekNumber = latestBalance.getWeekNumber();
-    final var latestBalanceSunday = QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
+    final var latestBalanceSunday =
+        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
 
-    return  latestBalanceSunday;
+    return latestBalanceSunday;
   }
 }
