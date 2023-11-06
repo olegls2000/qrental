@@ -41,4 +41,17 @@ public class QWeekQueryService implements GetQWeekQuery {
   public QWeekUpdateRequest getUpdateRequestById(Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
   }
+
+  @Override
+  public List<QWeekResponse> getByYear(final Integer year) {
+    return loadPort.loadByYear(year).stream()
+        .map(mapper::toResponse)
+        .sorted(comparing(QWeekResponse::getNumber))
+        .collect(toList());
+  }
+
+  @Override
+  public List<Integer> getAllYears() {
+    return loadPort.loadYears();
+  }
 }

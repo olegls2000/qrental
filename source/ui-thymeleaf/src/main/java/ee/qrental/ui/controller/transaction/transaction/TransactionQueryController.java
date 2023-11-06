@@ -6,6 +6,7 @@ import static ee.qrental.ui.controller.util.TransactionFilterRequestUtils.addCle
 import static ee.qrental.ui.controller.util.TransactionFilterRequestUtils.addWeekOptionsToModel;
 
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
@@ -28,12 +29,14 @@ public class TransactionQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetTransactionQuery transactionQuery;
   private final GetBalanceQuery balanceQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   @GetMapping
   public String getPageWithAllTransactions(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addCleanFilterRequestToModel(model);
-    addWeekOptionsToModel(model);
+    // addWeekOptionsToModel(model);
+    // qWeekQuery.getByYear();
     addTransactionDataToModel(transactionQuery.getAll(), model);
     addLatestDataToModel(model);
 
@@ -42,8 +45,8 @@ public class TransactionQueryController {
 
   @PostMapping
   public String getPageWithFilteredTransactions(
-          @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
-          final Model model) {
+      @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
+      final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addWeekOptionsToModel(model);
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
@@ -58,15 +61,16 @@ public class TransactionQueryController {
     model.addAttribute("transactions", transactions);
   }
 
-  private void addLatestDataToModel( final Model model) {
+  private void addLatestDataToModel(final Model model) {
     final var latestCalculatedDate = balanceQuery.getLatestCalculatedDate();
-    if(latestCalculatedDate == null){
+    if (latestCalculatedDate == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
       return;
     }
     final var latestCalculatedWeek = QTimeUtils.getWeekNumber(latestCalculatedDate);
-    final var latestBalanceWeek = String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
+    final var latestBalanceWeek =
+        String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
     model.addAttribute("latestBalanceWeek", latestBalanceWeek);
   }
 }

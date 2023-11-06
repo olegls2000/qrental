@@ -13,4 +13,8 @@ public interface QWeekRepository {
   void deleteById(final Long id);
 
   QWeekJakartaEntity findByYearAndWeekNumber(final Integer year, final Integer weekNumber);
+
+  List<QWeekJakartaEntity> findByYear(final Integer year);
+
+  List<Integer> findAllYears();
 }

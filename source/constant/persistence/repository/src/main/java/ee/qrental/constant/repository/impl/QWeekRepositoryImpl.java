@@ -35,4 +35,14 @@ public class QWeekRepositoryImpl implements QWeekRepository {
   public QWeekJakartaEntity findByYearAndWeekNumber(final Integer year, final Integer weekNumber) {
     return springDataRepository.findByYearAndNumber(year, weekNumber);
   }
+
+  @Override
+  public List<QWeekJakartaEntity> findByYear(final Integer year) {
+    return springDataRepository.findByYear(year);
+  }
+
+  @Override
+  public List<Integer> findAllYears() {
+    return springDataRepository.findYears();
+  }
 }
