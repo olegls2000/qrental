@@ -13,10 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class RentCalculation {
 
-    private Long id;
-    private LocalDate actionDate;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String comment;
-    private List<RentCalculationResult> results;
+  private Long id;
+  private Long qWeekId;
+  private LocalDate actionDate;
+  private String comment;
+  private List<RentCalculationResult> results;
 }

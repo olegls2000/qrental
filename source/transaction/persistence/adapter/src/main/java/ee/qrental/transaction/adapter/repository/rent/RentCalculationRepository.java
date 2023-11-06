@@ -12,5 +12,5 @@ public interface RentCalculationRepository {
 
   RentCalculationJakartaEntity getReferenceById(final Long id);
 
-  LocalDate getLastCalculationDate();
+  Long getLastCalculationQWeekId();
 }

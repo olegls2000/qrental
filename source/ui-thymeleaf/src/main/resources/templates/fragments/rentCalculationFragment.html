@@ -8,12 +8,20 @@
                    aria-label="Close"
                    href="#" onclick="history.back();">
                 </a>
-                <div class="row">
-                    <div class="col-6">
+                <div class="row m-3">
+                    <div class="col-3">
+                        <p>Action Date:</p>
+                        <p th:text="${qDateFormatter.format(rentCalculation.actionDate)}">???</p>
+                    </div>
+                    <div class="col-3">
+                        <p>Week number:</p>
+                        <p th:text="${rentCalculation.weekNumber}">???</p>
+                    </div>
+                    <div class="col-3">
                         <p>Start period:</p>
                         <p th:text="${qDateFormatter.format(rentCalculation.startDate)}">???</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                         <p>End period:</p>
                         <p th:text="${qDateFormatter.format(rentCalculation.endDate)}">???</p>
                     </div>

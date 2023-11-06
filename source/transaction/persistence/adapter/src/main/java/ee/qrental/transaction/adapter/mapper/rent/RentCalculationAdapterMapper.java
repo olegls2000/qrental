@@ -16,6 +16,7 @@ public class RentCalculationAdapterMapper {
     return RentCalculation.builder()
         .id(entity.getId())
         .actionDate(entity.getActionDate())
+        .qWeekId(entity.getQWeekId())
         .results(entity.getResults().stream().map(this::mapToDomain).toList())
         .comment(entity.getComment())
         .build();

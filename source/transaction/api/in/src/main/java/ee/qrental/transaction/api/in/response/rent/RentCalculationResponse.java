@@ -8,9 +8,11 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class RentCalculationResponse {
   private Long id;
-  private LocalDate actionDate;
+  private Integer year;
+  private Integer weekNumber;
   private LocalDate startDate;
   private LocalDate endDate;
   private Integer transactionCount;
+  private LocalDate actionDate;
   private String comment;
 }

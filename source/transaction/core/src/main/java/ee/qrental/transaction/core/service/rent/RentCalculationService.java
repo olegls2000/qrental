@@ -77,10 +77,9 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     }
 
     final var domain = addRequestMapper.toDomain(addRequest);
-    final var calculationDate = addRequest.getActionDate();
-    final var week = weekQuery.getById(1L);
+    final var week = weekQuery.getById(addRequest.getQWeekId());
     final var activeCarLinks = carLinkQuery.getActive();
-    for (final CarLinkResponse activeCarLink : activeCarLinks) {
+    for (final var activeCarLink : activeCarLinks) {
       final TransactionAddRequest rentTransactionAddRequest =
           getRentTransactionAddRequest(week, activeCarLink);
       final var carLinkId = activeCarLink.getId();

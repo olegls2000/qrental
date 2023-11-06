@@ -1,5 +1,6 @@
 package ee.qrental.transaction.spring.config.rent;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.adapter.mapper.rent.RentCalculationAdapterMapper;
 import ee.qrental.transaction.core.mapper.rent.RentCalculationAddRequestMapper;
 import ee.qrental.transaction.core.mapper.rent.RentCalculationResponseMapper;
@@ -14,8 +15,8 @@ public class RentMapperConfig {
   }
 
   @Bean
-  RentCalculationResponseMapper getRentCalculationResponseMapper() {
-    return new RentCalculationResponseMapper();
+  RentCalculationResponseMapper getRentCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
+    return new RentCalculationResponseMapper(qWeekQuery);
   }
 
   @Bean

@@ -3,7 +3,6 @@ package ee.qrental.transaction.repository.impl.rent;
 import ee.qrental.transaction.adapter.repository.rent.RentCalculationRepository;
 import ee.qrental.transaction.entity.jakarta.rent.RentCalculationJakartaEntity;
 import ee.qrental.transaction.repository.spring.rent.RentCalculationSpringDataRepository;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -28,7 +27,7 @@ public class RentCalculationRepositoryImpl implements RentCalculationRepository 
   }
 
   @Override
-  public LocalDate getLastCalculationDate() {
-    return springDataRepository.getLastCalculationDate();
+  public Long getLastCalculationQWeekId() {
+    return springDataRepository.getLastCalculationQWeekId();
   }
 }

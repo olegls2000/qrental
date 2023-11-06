@@ -1,6 +1,5 @@
 package ee.qrental.transaction.adapter.adapter.rent;
 
-import static ee.qrental.common.core.utils.QTimeUtils.RENT_START_CALCULATION_DATE;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.adapter.mapper.rent.RentCalculationAdapterMapper;
@@ -18,8 +17,8 @@ public class RentCalculationLoadAdapter implements RentCalculationLoadPort {
   private final RentCalculationAdapterMapper mapper;
 
   @Override
-  public LocalDate loadLastCalculationDate() {
-    return loadedOrDefault(repository.getLastCalculationDate(), RENT_START_CALCULATION_DATE);
+  public Long loadLastCalculationQWeekId() {
+    return repository.getLastCalculationQWeekId();
   }
 
   private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {

@@ -51,6 +51,11 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
+  public QWeekResponse getByYearAndNumber(final Integer year, final Integer number) {
+    return mapper.toResponse(loadPort.loadByYearAndNumber(year, number));
+  }
+
+  @Override
   public List<Integer> getAllYears() {
     return loadPort.loadYears();
   }

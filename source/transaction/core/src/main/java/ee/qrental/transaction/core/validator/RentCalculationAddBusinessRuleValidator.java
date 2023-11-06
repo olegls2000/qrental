@@ -4,10 +4,13 @@ import static java.lang.String.format;
 
 import ee.qrental.common.core.in.validation.ViolationsCollector;
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.api.out.rent.RentCalculationLoadPort;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 
@@ -16,34 +19,32 @@ public class RentCalculationAddBusinessRuleValidator {
 
   private final RentCalculationLoadPort loadPort;
   private final BalanceLoadPort balanceLoadPort;
+  private final GetQWeekQuery qWeekQuery;
 
   public ViolationsCollector validate(final RentCalculationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
-    checkIfCalculationDayIsMonday(addRequest, violationsCollector);
-    checkIfWeeklyRendAlreadyCalculated(addRequest, violationsCollector);
-    checkIfBalanceAlreadyCalculatedForRequestedWeek(addRequest, violationsCollector);
+    final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
+    // checkIfCalculationDayIsMonday(violationsCollector);
+    checkIfWeeklyRendAlreadyCalculated(qWeek, violationsCollector);
+    checkIfBalanceAlreadyCalculatedForRequestedWeek(qWeek, violationsCollector);
     return violationsCollector;
   }
 
   private void checkIfBalanceAlreadyCalculatedForRequestedWeek(
-          final RentCalculationAddRequest addRequest, final ViolationsCollector violationsCollector) {
-
+      final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
     final var latestBalanceCalculatedDay = balanceLoadPort.loadLatestCalculatedDateOrDefault();
-
-    final var  year = addRequest.getYear();
-    final var  weekNumber = addRequest.getWeekNumber();
-    final var rentCalculationStartDate = QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber);
-
+    final var rentCalculationStartDate =
+        QTimeUtils.getFirstDayOfWeekInYear(qWeek.getYear(), qWeek.getNumber());
     if (rentCalculationStartDate.isBefore(latestBalanceCalculatedDay)) {
-      final var violation = "Weekly Rent Calculation must be done only for the week without calculated Balance";
+      final var violation =
+          "Weekly Rent Calculation must be done only for the week without calculated Balance";
       System.out.println(violation);
       violationsCollector.collect(violation);
     }
   }
 
-  private void checkIfCalculationDayIsMonday(
-      final RentCalculationAddRequest addRequest, final ViolationsCollector violationsCollector) {
-    final var dayOfWeek = addRequest.getActionDate().getDayOfWeek();
+  private void checkIfCalculationDayIsMonday(final ViolationsCollector violationsCollector) {
+    final var dayOfWeek = LocalDate.now().getDayOfWeek();
     if (dayOfWeek != DayOfWeek.MONDAY) {
       final var violation = "Weekly Rent Calculation must be started on Monday only";
       System.out.println(violation);
@@ -52,13 +53,18 @@ public class RentCalculationAddBusinessRuleValidator {
   }
 
   private void checkIfWeeklyRendAlreadyCalculated(
-      final RentCalculationAddRequest addRequest, final ViolationsCollector violationsCollector) {
-    final var calculationDate = addRequest.getActionDate();
-    final var weekNumber = QTimeUtils.getWeekNumber(calculationDate);
-    final var lastCalculationDate = loadPort.loadLastCalculationDate();
-    if (calculationDate.isBefore(lastCalculationDate) || calculationDate.equals(lastCalculationDate)) {
+      final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
+    final var year = qWeek.getYear();
+    final var weekNumber = qWeek.getNumber();
+    final var lastCalculationQWeekId = loadPort.loadLastCalculationQWeekId();
+    if (lastCalculationQWeekId == null) {
+      return;
+    }
+    final var lastCalculatedWeek = qWeekQuery.getById(lastCalculationQWeekId);
+
+    if (lastCalculatedWeek.getYear() == year && lastCalculatedWeek.getNumber() == weekNumber) {
       final var violation =
-          format("Calculation for week %d already done till %s", weekNumber, lastCalculationDate);
+          format("Calculation for the year %d and week %d already done.", year, weekNumber);
       System.out.println("Execution time: " + LocalTime.now() + " " + violation);
       violationsCollector.collect(violation);
     }

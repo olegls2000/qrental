@@ -20,8 +20,7 @@ public class RentCalculationPersistenceAdapter implements RentCalculationAddPort
     final var rentCalculationEntity =
         RentCalculationJakartaEntity.builder()
             .actionDate(domain.getActionDate())
-            .startDate(domain.getStartDate())
-            .endDate(domain.getEndDate())
+            .qWeekId(domain.getQWeekId())
             .comment(domain.getComment())
             .build();
     final var rentCalculationEntitySaved = rentCalculationRepository.save(rentCalculationEntity);
