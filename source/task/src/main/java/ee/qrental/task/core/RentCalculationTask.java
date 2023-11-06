@@ -26,7 +26,7 @@ private final RentCalculationAddUseCase rentCalculationAddUseCase;
   // @Scheduled(cron = "5 0 * * * MON")
 
   // every 5 min
-   @Scheduled(cron = "5 * * * * *")
+   @Scheduled(cron = "5 0 * * * MON")
   public void scheduleTask() {
         final var addRequest = new RentCalculationAddRequest();
         addRequest.setComment("Automatically triggered rent calculation");
