@@ -51,8 +51,8 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByCalculationId(final Long calculationId) {
-    return mapToTransactionResponseList(transactionLoadPort.loadAllByCalculationId(calculationId));
+  public List<TransactionResponse> getAllByRentCalculationId(final Long rentCalculationId) {
+    return mapToTransactionResponseList(transactionLoadPort.loadAllByRentCalculationId(rentCalculationId));
   }
 
   @Override

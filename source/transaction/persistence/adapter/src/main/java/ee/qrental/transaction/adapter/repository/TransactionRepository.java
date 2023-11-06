@@ -19,7 +19,7 @@ public interface TransactionRepository {
   List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
           final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
 
-  List<TransactionJakartaEntity> findAllByCalculationId(final Long calculationId);
+  List<TransactionJakartaEntity> findAllByRentCalculationId(final Long rentCalculationId);
 
   TransactionJakartaEntity getReferenceById(Long id);
 

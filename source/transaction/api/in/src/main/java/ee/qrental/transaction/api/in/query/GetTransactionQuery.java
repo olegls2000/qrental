@@ -15,7 +15,7 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByIds(final List<Long> ids);
 
-  List<TransactionResponse> getAllByCalculationId(final Long calculationId);
+  List<TransactionResponse> getAllByRentCalculationId(final Long rentCalculationId);
 
   List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter);
 

@@ -28,7 +28,7 @@
         </tr>
         <tr th:each="calculation : ${calculations}">
             <td><a class="btn btn-sm btn-warning"
-                   th:href="@{/transactions/rent-calculations/{id}(id=${calculation.id})}">
+                   th:href="@{/rents/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span>
                 Details</a></td>
             <td th:text="${qDateFormatter.format(calculation.actionDate)}">???</td>

@@ -30,9 +30,9 @@ public interface TransactionSpringDataRepository
           "SELECT * FROM transaction tx "
               + "WHERE tx.id  in ("
               + "select clr.transaction_id from rent_calculation_result clr "
-              + "where clr.calculation_id = :calculationId)",
+              + "where clr.rent_calculation_id = :rentCalculationId)",
       nativeQuery = true)
-  List<TransactionJakartaEntity> findAllByCalculationId(@Param("calculationId") Long calculationId);
+  List<TransactionJakartaEntity> findAllByRentCalculationId(@Param("rentCalculationId") Long rentCalculationId);
 
   @Query(
           value =

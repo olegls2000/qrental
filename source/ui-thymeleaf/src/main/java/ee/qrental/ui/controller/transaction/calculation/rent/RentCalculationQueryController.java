@@ -13,13 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(TRANSACTION_ROOT_PATH)
+@RequestMapping(RENTS_ROOT_PATH)
 @AllArgsConstructor
 public class RentCalculationQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetRentCalculationQuery rentCalculationQuery;
+  private final GetTransactionQuery transactionQuery;
 
-  @GetMapping("/rent-calculations")
+  @GetMapping("/calculations")
   public String getRentCalculationView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("calculations", rentCalculationQuery.getAll());
@@ -27,9 +28,14 @@ public class RentCalculationQueryController {
     return "rentCalculations";
   }
 
-  @GetMapping(value = "/rent-calculations/{id}")
+  @GetMapping(value = "/calculations/{id}")
   public String getRentCalculationView(@PathVariable("id") long id, final Model model) {
-    model.addAttribute("rentTransactions", new ArrayList<>());
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    final var rentCalculation = rentCalculationQuery.getById(id);
+    final var rentTransactions = transactionQuery.getAllByRentCalculationId(id);
+
+    model.addAttribute("rentCalculation", rentCalculation);
+    model.addAttribute("rentTransactions", rentTransactions);
 
     return "detailView/rentCalculation";
   }
