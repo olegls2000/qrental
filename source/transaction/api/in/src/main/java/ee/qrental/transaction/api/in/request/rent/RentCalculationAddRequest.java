@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class RentCalculationAddRequest extends AbstractAddRequest {
   private LocalDate actionDate = LocalDate.now();
+  private Integer year;
+  private Integer weekNumber;
   private String comment;
 }
