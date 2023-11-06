@@ -10,6 +10,8 @@ import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.response.CarLinkResponse;
 import ee.qrental.common.core.utils.Week;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.api.in.request.EmailType;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
@@ -52,6 +54,16 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private final RentCalculationAddBusinessRuleValidator addBusinessRuleValidator;
   private final EmailSendUseCase emailSendUseCase;
   private final GetUserAccountQuery userAccountQuery;
+  private final GetQWeekQuery weekQuery;
+
+  private static Week getWeekForRentCalculation(final LocalDate calculationDate) {
+    // add One day, to make day of Week Tuesday, to avoid Localisation issues Sunday or Monday week
+    // start
+    final var weekNumber = getWeekNumber(calculationDate.plusDays(1L));
+    final var week = new Week(calculationDate, calculationDate.plusDays(7L), weekNumber);
+
+    return week;
+  }
 
   // @Transactional
   @Override
@@ -66,7 +78,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
 
     final var domain = addRequestMapper.toDomain(addRequest);
     final var calculationDate = addRequest.getActionDate();
-    final var week = getWeekForRentCalculation(calculationDate);
+    final var week = weekQuery.getById(1L);
     final var activeCarLinks = carLinkQuery.getActive();
     for (final CarLinkResponse activeCarLink : activeCarLinks) {
       final TransactionAddRequest rentTransactionAddRequest =
@@ -84,7 +96,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
       domain.getResults().add(calculationResultForNoLabelFine);
     }
     rentCalculationAddPort.add(domain);
-    sendEmails(domain.getResults(), week.weekNumber());
+    sendEmails(domain.getResults(), week.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
@@ -97,18 +109,9 @@ public class RentCalculationService implements RentCalculationAddUseCase {
         .transactionId(transactionId)
         .build();
   }
-
-  private static Week getWeekForRentCalculation(final LocalDate calculationDate) {
-    // add One day, to make day of Week Tuesday, to avoid Localisation issues Sunday or Monday week
-    // start
-    final var weekNumber = getWeekNumber(calculationDate.plusDays(1L));
-    final var week = new Week(calculationDate, calculationDate.plusDays(7L), weekNumber);
-
-    return week;
-  }
-
+//TODO complete Qweek migration
   private TransactionAddRequest getRentTransactionAddRequest(
-      final Week week, final CarLinkResponse activeCarLink) {
+          final QWeekResponse week, final CarLinkResponse activeCarLink) {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDate(LocalDate.now());
     final var transactionTpe =
@@ -120,19 +123,19 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     }
     addRequest.setWithVat(FALSE);
     addRequest.setTransactionTypeId(transactionTpe.getId());
-    addRequest.setWeekNumber(week.weekNumber());
+    addRequest.setWeekNumber(week.getNumber());
     addRequest.setDriverId(activeCarLink.getDriverId());
     addRequest.setAmount(calculateRentTransactionAmount(activeCarLink));
     addRequest.setComment(
         format(
             "Automatically crated 'Rent' Transaction for active Car Link %d. Week %d",
-            activeCarLink.getId(), week.weekNumber()));
+            activeCarLink.getId(), week.getNumber()));
 
     return addRequest;
   }
 
   private TransactionAddRequest getNoLabelFineTransactionAddRequest(
-      final Week week, final CarLinkResponse activeCarLink) {
+      final QWeekResponse week, final CarLinkResponse activeCarLink) {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDate(LocalDate.now());
     final var transactionTpe = transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NO_LABEL_FINE);
@@ -143,14 +146,14 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     }
 
     addRequest.setTransactionTypeId(transactionTpe.getId());
-    addRequest.setWeekNumber(week.weekNumber());
+    addRequest.setWeekNumber(week.getNumber());
     addRequest.setDriverId(activeCarLink.getDriverId());
     addRequest.setAmount(NO_LABEL_RATE);
     addRequest.setWithVat(FALSE);
     addRequest.setComment(
         format(
             "Automatically crated 'No Label Fine' Transaction for active Car Link %d. Week %d",
-            activeCarLink.getId(), week.weekNumber()));
+            activeCarLink.getId(), week.getNumber()));
 
     return addRequest;
   }
