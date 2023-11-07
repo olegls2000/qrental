@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface CarLoadPort extends LoadPort<Car> {
   List<Car> loadNotAvailableByDate(final LocalDate date);
+
+  List<Car> loadByActive(final boolean active);
+
 }

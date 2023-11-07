@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.service.rent;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getWeekNumber;
+
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -9,7 +9,6 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.response.CarLinkResponse;
-import ee.qrental.common.core.utils.Week;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.email.api.in.request.EmailSendRequest;
@@ -56,15 +55,6 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private final GetUserAccountQuery userAccountQuery;
   private final GetQWeekQuery weekQuery;
 
-  private static Week getWeekForRentCalculation(final LocalDate calculationDate) {
-    // add One day, to make day of Week Tuesday, to avoid Localisation issues Sunday or Monday week
-    // start
-    final var weekNumber = getWeekNumber(calculationDate.plusDays(1L));
-    final var week = new Week(calculationDate, calculationDate.plusDays(7L), weekNumber);
-
-    return week;
-  }
-
   // @Transactional
   @Override
   public void add(final RentCalculationAddRequest addRequest) {
@@ -108,11 +98,11 @@ public class RentCalculationService implements RentCalculationAddUseCase {
         .transactionId(transactionId)
         .build();
   }
-//TODO complete Qweek migration
+
   private TransactionAddRequest getRentTransactionAddRequest(
           final QWeekResponse week, final CarLinkResponse activeCarLink) {
     final var addRequest = new TransactionAddRequest();
-    addRequest.setDate(LocalDate.now());
+    addRequest.setDate(week.getStart());
     final var transactionTpe =
         transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT);
     if (transactionTpe == null) {
@@ -136,7 +126,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private TransactionAddRequest getNoLabelFineTransactionAddRequest(
       final QWeekResponse week, final CarLinkResponse activeCarLink) {
     final var addRequest = new TransactionAddRequest();
-    addRequest.setDate(LocalDate.now());
+    addRequest.setDate(week.getStart());
     final var transactionTpe = transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NO_LABEL_FINE);
     if (transactionTpe == null) {
       throw new RuntimeException(

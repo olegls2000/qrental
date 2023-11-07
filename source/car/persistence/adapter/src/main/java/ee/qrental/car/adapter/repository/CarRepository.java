@@ -10,6 +10,8 @@ public interface CarRepository {
 
   List<CarJakartaEntity> findNotAvailableByDate(final LocalDate date);
 
+  List<CarJakartaEntity> findByActive(final boolean active);
+
   CarJakartaEntity save(final CarJakartaEntity entity);
 
   CarJakartaEntity getReferenceById(final Long id);

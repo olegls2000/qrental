@@ -28,6 +28,13 @@ public class CarLoadAdapter implements CarLoadPort {
 
   @Override
   public List<Car> loadNotAvailableByDate(final LocalDate date) {
-    return repository.findNotAvailableByDate(date).stream().map(mapper::mapToDomain).collect(toList());
+    return repository.findNotAvailableByDate(date).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
+
+  @Override
+  public List<Car> loadByActive(boolean active) {
+    return repository.findByActive(active).stream().map(mapper::mapToDomain).collect(toList());
   }
 }

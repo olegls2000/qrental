@@ -21,6 +21,7 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
+            <th>Active</th>
             <th>REG Number</th>
             <th>Branding</th>
             <th>Age</th>
@@ -49,8 +50,10 @@
                     <span class="bi-trash"></span>
                 </a>
             </td>
+            <td th:if="${car.active}" class="text-center">Yes</td>
+            <td th:unless="${car.active}" class="text-center text-secondary">No
+            </td>
             <td th:text="${car.regNumber}"></td>
-
             <td>
                 <i th:if="${car.byQrent}"> Q </i>
                 <i th:if="${car.byBolt}" class="bi bi-type-bold"></i>
@@ -59,30 +62,27 @@
                 <i th:if="${car.byTallink}"> T </i>
             </td>
             <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
-
-
             <th:block th:switch="${car.warrantyRagStatus}">
                 <td th:case="'RED'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-danger bg-danger border-danger"
                     th:text="${qDateFormatter.format(car.releaseDate)}">???
                 </td>
                 <td th:case="'AMBER'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-secondary bg-warning border-warning"
                     th:text="${qDateFormatter.format(car.releaseDate)}">???
                 </td>
                 <td th:case="'GREEN'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-success bg-success border-success"
                     th:text="${qDateFormatter.format(car.releaseDate)}">???
                 </td>
             </th:block>
 
-
             <td th:text="${car.manufacturer}"></td>
             <td th:text="${car.model}"></td>
-            <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+            <td class="text-center bg-opacity-10 border border-opacity-10 "
                 th:classappend="${car.gearType=='MANUAL'} ?
                                  'text-warning bg-warning border-warning'
                                  : 'text-success bg-success border-success'"
@@ -90,17 +90,17 @@
             </td>
             <th:block th:switch="${car.insuranceRagStatus}">
                 <td th:case="'RED'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-danger bg-danger border-danger"
                     th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-secondary bg-warning border-warning"
                     th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-success bg-success border-success"
                     th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
                 </td>
@@ -108,17 +108,17 @@
 
             <th:block th:switch="${car.technicalInspectionRagStatus}">
                 <td th:case="'RED'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-danger bg-danger border-danger"
                     th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-secondary bg-warning border-warning"
                     th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-success bg-success border-success"
                     th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
                 </td>
@@ -126,17 +126,17 @@
 
             <th:block th:switch="${car.gasInspectionRagStatus}">
                 <td th:case="'RED'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-danger bg-danger border-danger"
                     th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>
                 <td th:case="'AMBER'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-secondary bg-warning border-warning"
                     th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>
                 <td th:case="'GREEN'"
-                    class="text-center bg-opacity-10 border border-opacity-10 rounded-2
+                    class="text-center bg-opacity-10 border border-opacity-10
                     text-success bg-success border-success"
                     th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
                 </td>

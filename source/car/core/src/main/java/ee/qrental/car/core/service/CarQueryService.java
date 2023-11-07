@@ -50,7 +50,8 @@ public class CarQueryService implements GetCarQuery {
 
   @Override
   public List<CarResponse> getAvailableCars() {
-    final var allCars = loadPort.loadAll();
+    final var activeState = true;
+    final var allCars = loadPort.loadByActive(activeState);
     final var activeLinks = carLinkLoadPort.loadActive();
     if (activeLinks.isEmpty()) {
 
@@ -78,10 +79,10 @@ public class CarQueryService implements GetCarQuery {
   public List<CarResponse> getAllByFilter(final CarFilter filterRequest) {
 
     switch (filterRequest.getState()) {
-      case YES -> {
+      case AVAILABLE -> {
         return getAvailableCars();
       }
-      case NO -> {
+      case WITH_LINKS -> {
         return getNotAvailableCars();
       }
     }

@@ -24,6 +24,11 @@ public class CarRepositoryImpl implements CarRepository {
   }
 
   @Override
+  public List<CarJakartaEntity> findByActive(final boolean active) {
+    return springDataRepository.findByActive(active);
+  }
+
+  @Override
   public CarJakartaEntity save(final CarJakartaEntity entity) {
     return springDataRepository.save(entity);
   }

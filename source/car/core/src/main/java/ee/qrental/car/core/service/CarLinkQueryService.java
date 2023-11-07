@@ -10,6 +10,7 @@ import ee.qrental.car.api.out.CarLinkLoadPort;
 import ee.qrental.car.core.mapper.CarLinkResponseMapper;
 import ee.qrental.car.core.mapper.CarLinkUpdateRequestMapper;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -70,6 +71,7 @@ public class CarLinkQueryService implements GetCarLinkQuery {
 
     return loadPort.loadActiveByDate(LocalDate.now()).stream()
         .map(mapper::toResponse)
+        .sorted(Comparator.comparing(CarLinkResponse::getCallSign))
         .collect(toList());
   }
 

@@ -4,13 +4,12 @@
     <h2 class="py-3">Rent Calculations</h2>
     <table class="table table-striped table-bordered">
         <tr>
-            <th>
+            <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
                    href="/rents/calculations/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
-                    <span class="bi-plus-circle"></span>
-                    Calculate Rent
+                    <span class="bi bi-calculator"></span>
                 </a>
             </th>
             <th>Year</th>
@@ -27,8 +26,7 @@
         <tr th:each="calculation : ${calculations}">
             <td><a class="btn btn-sm btn-warning"
                    th:href="@{/rents/calculations/{id}(id=${calculation.id})}">
-                <span class="bi bi-card-checklist"></span>
-                Details</a></td>
+                <span class="bi bi-card-checklist"></span></a></td>
             <td th:text="${calculation.year}">???</td>
             <td th:text="${calculation.weekNumber}">???</td>
             <td th:text="${qDateFormatter.format(calculation.startDate)}">???</td>

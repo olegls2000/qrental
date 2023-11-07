@@ -23,15 +23,8 @@ where transaction_type_id in (select distinct(id)
                               from transaction_type
                               where name in ('weekly rent', 'no label fine'));
 
-SELECT distinct (qw.year)
-FROM q_week qw;
 
 
 
-select qw.id
-from rent_calculation rc
-         LEFT JOIN q_week qw on rc.q_week_id = q_week_id
-order by qw.year, qw.number desc
-limit 1;
 
 
