@@ -5,8 +5,6 @@ import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 public class RentCalculationTask {
 
@@ -28,12 +26,10 @@ public class RentCalculationTask {
   // @Scheduled(cron = "5 0 * * * MON")
 
   // every 5 min
-   @Scheduled(cron = "5 0 * * * MON")
+   @Scheduled(cron = "2 0 * * * MON")
   public void scheduleTask() {
         final var addRequest = new RentCalculationAddRequest();
         addRequest.setComment("Automatically triggered rent calculation");
-        final var actionDate = LocalDate.now();
-
 
         rentCalculationAddUseCase.add(addRequest);
     }

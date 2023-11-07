@@ -1,7 +1,7 @@
 alter table rent_calculation
-    drop column start_date;
+    drop column IF EXISTS start_date;
 alter table rent_calculation
-    drop column end_date;
+    drop column IF EXISTS end_date;
 
 ALTER TABLE rent_calculation
     ADD COLUMN q_week_id integer not null

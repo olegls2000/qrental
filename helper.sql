@@ -1,4 +1,6 @@
 --#### CLEAN-UPs
+--## Q Week
+delete from q_week;
 
 --## Rent Calculations:
 delete
@@ -22,6 +24,11 @@ from transaction
 where transaction_type_id in (select distinct(id)
                               from transaction_type
                               where name in ('weekly rent', 'no label fine'));
+
+
+
+insert into q_week (year, number, description) values (2023, 1, '30-Oct ... 05-Nov');
+
 
 
 
