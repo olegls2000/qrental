@@ -11,6 +11,8 @@ public class BalanceResponse {
   private Long id;
   private BigDecimal amount;
   private BigDecimal fee;
+  private Long qWeekId;
+  private Integer year;
   private Integer weekNumber;
   private Long driverId;
   private LocalDate created;

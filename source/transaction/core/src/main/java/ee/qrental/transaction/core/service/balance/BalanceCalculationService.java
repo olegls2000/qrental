@@ -7,7 +7,6 @@ import static java.math.BigDecimal.ZERO;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.common.core.utils.Week;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -32,16 +31,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BalanceCalculationService implements BalanceCalculationAddUseCase {
 
-  private final BalanceCalculationAddRequestMapper addRequestMapper;
-  private final BalanceCalculationAddPort balanceCalculationAddPort;
-  private final BalanceAddPort balanceAddPort;
+  private final GetQWeekQuery qWeekQuery;
+  private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
   private final FeeCalculationService feeCalculationService;
   private final FeeReplenishService feeReplenishService;
-  private final GetDriverQuery driverQuery;
-  private final BalanceLoadPort loadPort;
-  private final GetQWeekQuery qWeekQuery;
+  private final BalanceCalculationAddPort balanceCalculationAddPort;
+  private final BalanceAddPort balanceAddPort;
+  private final BalanceLoadPort balanceLoadPort;
   private final BalanceCalculationLoadPort balanceCalculationLoadPort;
+  private final BalanceCalculationAddRequestMapper addRequestMapper;
 
   //@Transactional
   @Override
@@ -135,7 +134,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final List<TransactionResponse> driversTransactions) {
     final var previousWeekNumber = week.getNumber() - 1;
     final var previousWeekBalance =
-        loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
+        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, week.getYear(), previousWeekNumber);
 
     final var amount = calculateAmount(previousWeekBalance,driversTransactions);
     final var feeAmount = calculateFeeAmount(previousWeekBalance, driversTransactions);

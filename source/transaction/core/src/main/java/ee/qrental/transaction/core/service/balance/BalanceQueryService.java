@@ -9,6 +9,7 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.QWeekIterator;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
@@ -22,6 +23,7 @@ import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -29,6 +31,7 @@ import lombok.AllArgsConstructor;
 public class BalanceQueryService implements GetBalanceQuery {
 
   private final GetDriverQuery driverQuery;
+  private final GetQWeekQuery qWeekQuery;
   private final GetConstantQuery constantQuery;
   private final BalanceLoadPort balanceLoadPort;
   private final TransactionLoadPort transactionLoadPort;
@@ -76,9 +79,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   private BigDecimal calculateTotal(final List<Transaction> transactions) {
-    return transactions.stream()
-        .map(Transaction::getRealAmount)
-        .reduce(ZERO, BigDecimal::add);
+    return transactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
   }
 
   @Override
@@ -129,14 +130,16 @@ public class BalanceQueryService implements GetBalanceQuery {
 
       return getSumOfTransactionByFilter(filter);
     }
-    final var latestCalculatedWeek = latestBalance.getWeekNumber();
-    final var earliestNotCalculatedWeek = latestCalculatedWeek + 1;
+    final var latestCalculatedWeek = qWeekQuery.getById(latestBalance.getQWeekId());
+    final var latestCalculatedWeekNumber = latestCalculatedWeek.getNumber();
+
+    final var earliestNotCalculatedWeek = latestCalculatedWeekNumber + 1;
     final var startDate = QTimeUtils.getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
     final var filter = filterBuilder.dateStart(startDate).build();
     final var fromBalance = latestBalance.getAmount();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
-      return fromBalance.add(rawTransactionSum);
+    return fromBalance.add(rawTransactionSum);
   }
 
   @Override
@@ -153,9 +156,10 @@ public class BalanceQueryService implements GetBalanceQuery {
       final var balanceAmount = latestBalance.getAmount();
       rawTotal = rawTotal.add(balanceAmount);
 
-      final var year = latestBalance.getYear();
-      final var latestCalculatedWeek = latestBalance.getWeekNumber();
-      final var earliestNotCalculatedWeek = latestCalculatedWeek + 1;
+      final var latestBalanceWeek = qWeekQuery.getById(latestBalance.getQWeekId());
+      final var year = latestBalanceWeek.getYear();
+      final var latestCalculatedWeekNumbr = latestBalanceWeek.getNumber();
+      final var earliestNotCalculatedWeek = latestCalculatedWeekNumbr + 1;
       startDate = QTimeUtils.getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
     }
 
@@ -168,9 +172,7 @@ public class BalanceQueryService implements GetBalanceQuery {
       final var weekTransactions =
           transactionLoadPort.loadAllByDriverIdAndBetweenDays(driverId, week.start(), week.end());
       final var weekTotal =
-          weekTransactions.stream()
-              .map(Transaction::getRealAmount)
-              .reduce(ZERO, BigDecimal::add);
+          weekTransactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
       rawTotal = rawTotal.add(weekTotal);
       if (rawTotal.compareTo(ZERO) < 0) {
         final var weekFee = rawTotal.multiply(weeklyInterest);
@@ -200,11 +202,11 @@ public class BalanceQueryService implements GetBalanceQuery {
     if (latestBalance == null) {
       return LocalDate.now().with(firstDayOfYear());
     }
-
-    final var latestBalanceYear = latestBalance.getYear();
-    final var latestBalanceWeek = latestBalance.getWeekNumber();
+    final var latestBalanceWeek = qWeekQuery.getById(latestBalance.getQWeekId());
+    final var latestBalanceYear = latestBalanceWeek.getYear();
+    final var latestBalanceWeekNumber = latestBalanceWeek.getNumber();
     final var latestCalculatedDate =
-        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeek);
+        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
 
     return latestCalculatedDate.plusDays(1L);
   }
@@ -225,7 +227,13 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   @Override
   public LocalDate getLatestCalculatedDate() {
-    return balanceLoadPort.loadLatest();
+    final var latestBalance = balanceLoadPort.loadLatest();
+    if (latestBalance == null) {
+      return LocalDate.of(2023, Month.JANUARY, 2);
+    }
+    final var latestBalanceWek = qWeekQuery.getById(latestBalance.getQWeekId());
+
+    return latestBalanceWek.getEnd();
   }
 
   private BigDecimal getSumOfTransactionByFilter(final PeriodAndDriverFilter filter) {
@@ -233,9 +241,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         transactionLoadPort.loadAllByDriverIdAndBetweenDays(
             filter.getDriverId(), filter.getDateStart(), filter.getDateEnd());
     final var result =
-        rawTransactions.stream()
-            .map(Transaction::getRealAmount)
-            .reduce(ZERO, BigDecimal::add);
+        rawTransactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
 
     return result;
   }

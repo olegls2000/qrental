@@ -1,16 +1,17 @@
 package ee.qrental.transaction.core.mapper.balance;
 
-import static java.lang.String.format;
 
-import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
-import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
-import ee.qrental.transaction.domain.balance.Balance;
-import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
+import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class BalanceCalculationResponseMapper
     implements ResponseMapper<BalanceCalculationResponse, BalanceCalculation> {
+  private final BalanceResponseMapper balanceResponseMapper;
+
   @Override
   public BalanceCalculationResponse toResponse(final BalanceCalculation domain) {
     if (domain == null) {
@@ -20,7 +21,7 @@ public class BalanceCalculationResponseMapper
     final var balances =
         domain.getResults().stream()
             .map(r -> r.getBalance())
-            .map(this::toResponse)
+            .map(balanceResponseMapper::toResponse)
             .collect(Collectors.toList());
 
     return BalanceCalculationResponse.builder()
@@ -31,14 +32,7 @@ public class BalanceCalculationResponseMapper
         .build();
   }
 
-  private BalanceResponse toResponse(final Balance domain) {
-    return BalanceResponse.builder()
-        .fee(domain.getFee())
-        .weekNumber(domain.getWeekNumber())
-        .amount(domain.getAmount())
-        .driverId(domain.getDriverId())
-        .build();
-  }
+
 
   @Override
   public String toObjectInfo(final BalanceCalculation domain) {

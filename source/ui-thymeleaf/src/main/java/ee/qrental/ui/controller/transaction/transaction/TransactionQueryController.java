@@ -35,8 +35,7 @@ public class TransactionQueryController {
   public String getPageWithAllTransactions(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addCleanFilterRequestToModel(model);
-    // addWeekOptionsToModel(model);
-    // qWeekQuery.getByYear();
+    model.addAttribute("weeks", qWeekQuery.getAll());
     addTransactionDataToModel(transactionQuery.getAll(), model);
     addLatestDataToModel(model);
 
@@ -48,7 +47,7 @@ public class TransactionQueryController {
       @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
       final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    addWeekOptionsToModel(model);
+    model.addAttribute("weeks", qWeekQuery.getAll());
     addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     addLatestDataToModel(model);

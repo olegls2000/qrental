@@ -1,8 +1,10 @@
 package ee.qrental.ui.controller.transaction.calculation.balance;
 
+import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
+
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;
-import ee.qrental.common.core.utils.QWeek;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,24 +13,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
-
 @Controller
 @RequestMapping(TRANSACTION_ROOT_PATH)
 @AllArgsConstructor
 public class BalanceCalculationUseCaseController {
 
+  private final GetQWeekQuery qWeekQuery;
   private final BalanceCalculationAddUseCase addUseCase;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     addAddRequestToModel(new BalanceCalculationAddRequest(), model);
-    model.addAttribute("years", List.of(2023));
-    model.addAttribute("weeks", Arrays.stream(QWeek.values()).filter(week -> week.getNumber() != 0).collect(Collectors.toList()));
+    model.addAttribute("weeks", qWeekQuery.getAll());
 
     return "forms/addBalanceCalculation";
   }
@@ -39,6 +35,7 @@ public class BalanceCalculationUseCaseController {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
+      model.addAttribute("weeks", qWeekQuery.getAll());
       return "forms/addBalanceCalculation";
     }
 

@@ -10,15 +10,16 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.Transaction;
+import ee.qrental.transaction.domain.balance.Balance;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TransactionBusinessRuleValidator implements QValidator<Transaction> {
 
+  private final GetQWeekQuery qWeekQuery;
   private final TransactionLoadPort transactionLoadPort;
   private final BalanceLoadPort balanceLoadPort;
-  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public ViolationsCollector validateAdd(final Transaction domain) {
@@ -28,7 +29,8 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     if (latestBalance == null) {
       return violationsCollector;
     }
-    checkDateForAdd(latestBalance, domain, violationsCollector);
+    final var latestBalanceDate = getLatestBalanceDate(latestBalance);
+    checkDateForAdd(latestBalanceDate, domain, violationsCollector);
 
     return violationsCollector;
   }
@@ -43,10 +45,8 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
       return violationsCollector;
     }
 
-    final var latestBalanceCalculatedDate = null;
-    if (latestBalanceCalculatedDate == null) {
-      return violationsCollector;
-    }
+    final var latestBalanceCalculatedDate = getLatestBalanceDate(latestBalance);
+
     checkExistence(domain.getId(), transactionFromDb, violationsCollector);
     checkIfUpdateAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
     checkNewDate(latestBalanceCalculatedDate, domain, violationsCollector);
@@ -141,5 +141,10 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     if (fromDb == null) {
       violationCollector.collect("Update of Transaction failed. No Record with id = " + id);
     }
+  }
+
+  private LocalDate getLatestBalanceDate(final Balance balance) {
+    final var latestBalanceQWeek = qWeekQuery.getById(balance.getQWeekId());
+    return latestBalanceQWeek.getEnd();
   }
 }

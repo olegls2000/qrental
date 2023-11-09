@@ -8,8 +8,8 @@ import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.common.core.utils.QTimeUtils;
-import ee.qrental.common.core.utils.Week;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -27,11 +27,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FeeCalculationService {
   private static final BigDecimal FEE_CALCULATION_THRESHOLD = ZERO;
-  private final BalanceLoadPort loadPort;
-  private final TransactionAddUseCase transactionAddUseCase;
-  private final GetTransactionTypeQuery transactionTypeQuery;
+
+  private final GetQWeekQuery qWeekQuery;
   private final GetTransactionQuery transactionQuery;
+  private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetConstantQuery constantQuery;
+  private final TransactionAddUseCase transactionAddUseCase;
+  private final BalanceLoadPort loadPort;
 
   public void calculate(final QWeekResponse week, final DriverResponse driver) {
     if (!driver.getNeedFee()) {
@@ -72,7 +74,8 @@ public class FeeCalculationService {
     return feeTransactionAddRequest;
   }
 
-  private BigDecimal getFeeAmountBasedOnPreviousWekBalance(final QWeekResponse week, final Long driverId) {
+  private BigDecimal getFeeAmountBasedOnPreviousWekBalance(
+      final QWeekResponse week, final Long driverId) {
     final var currentWeekNumber = week.getNumber();
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
@@ -102,17 +105,16 @@ public class FeeCalculationService {
   }
 
   private BigDecimal getFeeAbleAmountFromPreviousWeek(final Balance balance) {
-    final var year = balance.getYear();
-    final var weekNumber = balance.getWeekNumber();
-    if (weekNumber == 0 && year == 2023) {
+    final var qWeekId = balance.getQWeekId();
+    if (qWeekId == null) {
       return balance.getAmount();
     }
-    final var driverId = balance.getDriverId();
+    final var qWeek = qWeekQuery.getById(qWeekId);
     final var transactionFilter =
         PeriodAndDriverFilter.builder()
-            .driverId(driverId)
-            .dateStart(QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber))
-            .dateEnd(QTimeUtils.getLastDayOfWeekInYear(year, weekNumber))
+            .driverId(balance.getDriverId())
+            .dateStart(qWeek.getStart())
+            .dateEnd(qWeek.getEnd())
             .build();
 
     final var feeAbleTransactionTypes =
