@@ -9,11 +9,16 @@ import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class QWeekQueryService implements GetQWeekQuery {
+
+  private static final Comparator<QWeekResponse> DEFAULT_COMPARATOR = comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber);
+  private static final Comparator<QWeekResponse> REVERSED_COMPARATOR = comparing(QWeekResponse::getYear).reversed()
+          .thenComparing(QWeekResponse::getNumber).reversed();
 
   private final QWeekLoadPort loadPort;
   private final QWeekResponseMapper mapper;
@@ -21,9 +26,11 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public List<QWeekResponse> getAll() {
+
+
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
-        .sorted(comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber))
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 
@@ -43,10 +50,10 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public List<QWeekResponse> getByYear(final Integer year) {
+  public List<QWeekResponse> getAllByYear(final Integer year) {
     return loadPort.loadByYear(year).stream()
         .map(mapper::toResponse)
-        .sorted(comparing(QWeekResponse::getNumber))
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 
@@ -58,5 +65,13 @@ public class QWeekQueryService implements GetQWeekQuery {
   @Override
   public List<Integer> getAllYears() {
     return loadPort.loadYears();
+  }
+
+  @Override
+  public List<QWeekResponse> getAllBeforeById(final Long id) {
+    return loadPort.loadAllBeforeById(id).stream()
+            .map(mapper::toResponse)
+            .sorted(REVERSED_COMPARATOR)
+            .collect(toList());
   }
 }

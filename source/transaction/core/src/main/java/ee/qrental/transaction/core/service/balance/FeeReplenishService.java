@@ -6,6 +6,7 @@ import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.common.core.utils.Week;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -25,10 +26,10 @@ public class FeeReplenishService {
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetTransactionQuery transactionQuery;
 
-  public void replenish(final Week week, final Long driverId) {
+  public void replenish(final QWeekResponse week, final Long driverId) {
     var feeBalanceFromPreviousWeek = getFeeAmountFromPreviousWeek(driverId, week);
     if (feeBalanceFromPreviousWeek.compareTo(ZERO) >= 0) {
-      System.out.println("Fee replenish is not required in Week: " + week.weekNumber());
+      System.out.println("Fee replenish is not required in Week: " + week.getNumber());
 
       return;
     }
@@ -45,8 +46,8 @@ public class FeeReplenishService {
     }
   }
 
-  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final Week week) {
-    final var currentWeekNumber = week.weekNumber();
+  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final QWeekResponse week) {
+    final var currentWeekNumber = week.getNumber();
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
         balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
@@ -57,11 +58,11 @@ public class FeeReplenishService {
   }
 
   private List<TransactionResponse> getListOfPositiveNonFeeTransactions(
-      final Week week, final Long driverId) {
+      final QWeekResponse week, final Long driverId) {
     final var filter =
         PeriodAndDriverFilter.builder()
-            .dateStart(week.start())
-            .dateEnd(week.end())
+            .dateStart(week.getStart())
+            .dateEnd(week.getEnd())
             .driverId(driverId)
             .build();
 
@@ -73,7 +74,7 @@ public class FeeReplenishService {
   }
 
   private BigDecimal replenishAndGetNewFeeAmountToReplenish(
-      final Week week,
+      final QWeekResponse week,
       final TransactionResponse donorTransaction,
       final BigDecimal feeAmountToReplenish) {
     final var transactionAmount = donorTransaction.getRealAmount();
@@ -108,7 +109,7 @@ public class FeeReplenishService {
   private void replenishAndCompensate(
       final BigDecimal feeAmountToReplenish,
       final Long driverId,
-      final Week week,
+      final QWeekResponse week,
       final Long donorTransactionId) {
     final var feeReplenishTransaction =
         getFeeReplenishTransaction(feeAmountToReplenish, driverId, week);
@@ -123,7 +124,7 @@ public class FeeReplenishService {
   private TransactionAddRequest getCompensationTransaction(
       final BigDecimal compensationAmount,
       final Long driverId,
-      final Week week,
+      final QWeekResponse week,
       final Long feeReplenishTransactionId,
       final Long donorTransactionId) {
     final var compensationTransactionAddRequest =
@@ -141,7 +142,7 @@ public class FeeReplenishService {
   }
 
   private TransactionAddRequest getFeeReplenishTransaction(
-      final BigDecimal feeReplenishmentAmount, final Long driverId, final Week week) {
+      final BigDecimal feeReplenishmentAmount, final Long driverId, final QWeekResponse week) {
     final var feeReplenishTransactionAddRequest =
         getTransactionRequest(
             feeReplenishmentAmount,
@@ -156,7 +157,7 @@ public class FeeReplenishService {
   private TransactionAddRequest getTransactionRequest(
       final BigDecimal amount,
       final Long driverId,
-      final Week week,
+      final QWeekResponse week,
       final String transactionTypeName,
       final String comment) {
     final var transactionType = transactionTypeQuery.getByName(transactionTypeName);
@@ -166,11 +167,11 @@ public class FeeReplenishService {
     }
     final var transactionAddRequest = new TransactionAddRequest();
     transactionAddRequest.setAmount(amount);
-    transactionAddRequest.setDate(week.end());
+    transactionAddRequest.setDate(week.getEnd());
     transactionAddRequest.setWithVat(FALSE);
     transactionAddRequest.setTransactionTypeId(transactionType.getId());
     transactionAddRequest.setDriverId(driverId);
-    transactionAddRequest.setWeekNumber(week.weekNumber());
+    transactionAddRequest.setWeekNumber(week.getNumber());
     transactionAddRequest.setComment(comment);
 
     return transactionAddRequest;

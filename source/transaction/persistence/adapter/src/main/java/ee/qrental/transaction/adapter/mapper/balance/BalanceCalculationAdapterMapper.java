@@ -34,8 +34,7 @@ public class BalanceCalculationAdapterMapper {
   private Balance mapToDomain(final BalanceJakartaEntity balanceEntity) {
     return Balance.builder()
         .id(balanceEntity.getId())
-        .year(balanceEntity.getYear())
-        .weekNumber(balanceEntity.getWeekNumber())
+        .qWeekId(balanceEntity.getQWeekId())
         .created(balanceEntity.getCreated())
         .driverId(balanceEntity.getDriverId())
         .amount(balanceEntity.getAmount())

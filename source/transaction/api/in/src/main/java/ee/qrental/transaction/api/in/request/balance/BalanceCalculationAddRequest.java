@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 public class BalanceCalculationAddRequest extends AbstractAddRequest {
   private LocalDate actionDate = LocalDate.now();
-  private Integer lastYear;
-  private QWeek lastWeek;
+  private Long qWeekId;
   private String comment;
 }

@@ -31,6 +31,11 @@ public class QWeekLoadAdapter implements QWeekLoadPort {
   }
 
   @Override
+  public List<QWeek> loadAllBeforeById(final Long id) {
+    return repository.findAllBeforeById(id).stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
   public List<Integer> loadYears() {
     return repository.findAllYears();
   }

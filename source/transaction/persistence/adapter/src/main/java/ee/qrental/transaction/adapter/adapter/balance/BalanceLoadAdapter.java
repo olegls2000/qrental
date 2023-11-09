@@ -3,13 +3,10 @@ package ee.qrental.transaction.adapter.adapter.balance;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.transaction.adapter.mapper.balance.BalanceAdapterMapper;
 import ee.qrental.transaction.adapter.repository.balance.BalanceRepository;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.balance.Balance;
-import ee.qrental.transaction.entity.jakarta.balance.BalanceJakartaEntity;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -33,8 +30,7 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   public Balance loadByDriverIdAndYearAndWeekNumberOrDefault(
       final Long driverId, final Integer year, final Integer weekNumber) {
     if (year == 2023 && weekNumber < 1) {
-      final var defaultBalance =
-          Balance.builder().amount(ZERO).year(year).weekNumber(weekNumber).fee(ZERO).build();
+      final var defaultBalance = Balance.builder().amount(ZERO).fee(ZERO).build();
 
       return defaultBalance;
     }
@@ -50,7 +46,7 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public Balance loadLatestByIdAndYearAndWeekNumber(
+  public Balance loadLatestByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
     final var latestBalance =
         repository.getLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
@@ -59,28 +55,16 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public LocalDate loadLatestCalculatedDateOrDefault() {
+  public Balance loadLatest() {
     final var latestBalance = repository.getLatest();
 
-    return getLatestOrNull(latestBalance);
+    return mapper.mapToDomain(latestBalance);
   }
 
   @Override
-  public LocalDate loadLatestCalculatedDateOrDefaultByDriverId(Long driverId) {
+  public Balance loadLatestByDriverId(Long driverId) {
     final var latestBalance = repository.getLatestByDriverId(driverId);
 
-    return getLatestOrNull(latestBalance);
-  }
-
-  private LocalDate getLatestOrNull(final BalanceJakartaEntity latestBalance) {
-    if (latestBalance == null) {
-      return null;
-    }
-    final var latestBalanceYear = latestBalance.getYear();
-    final var latestBalanceWeekNumber = latestBalance.getWeekNumber();
-    final var latestBalanceSunday =
-        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
-
-    return latestBalanceSunday;
+    return mapper.mapToDomain(latestBalance);
   }
 }

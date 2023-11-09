@@ -42,6 +42,11 @@ public class QWeekRepositoryImpl implements QWeekRepository {
   }
 
   @Override
+  public List<QWeekJakartaEntity> findAllBeforeById(final Long id) {
+    return springDataRepository.findAllBeforeById(id);
+  }
+
+  @Override
   public List<Integer> findAllYears() {
     return springDataRepository.findYears();
   }

@@ -3,7 +3,6 @@ package ee.qrental.transaction.core.validator;
 import static java.lang.String.format;
 
 import ee.qrental.common.core.in.validation.ViolationsCollector;
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
@@ -24,7 +23,7 @@ public class RentCalculationAddBusinessRuleValidator {
   public ViolationsCollector validate(final RentCalculationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
-    // checkIfCalculationDayIsMonday(violationsCollector);
+    //checkIfCalculationDayIsMonday(violationsCollector);
     checkIfWeeklyRendAlreadyCalculated(qWeek, violationsCollector);
     checkIfBalanceAlreadyCalculatedForRequestedWeek(qWeek, violationsCollector);
     return violationsCollector;
@@ -32,10 +31,11 @@ public class RentCalculationAddBusinessRuleValidator {
 
   private void checkIfBalanceAlreadyCalculatedForRequestedWeek(
       final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
-    final var latestBalanceCalculatedDay = balanceLoadPort.loadLatestCalculatedDateOrDefault();
-    final var rentCalculationStartDate =
-        QTimeUtils.getFirstDayOfWeekInYear(qWeek.getYear(), qWeek.getNumber());
-    if (rentCalculationStartDate.isBefore(latestBalanceCalculatedDay)) {
+    final var latestBalance = balanceLoadPort.loadLatest();
+    if(latestBalance == null) {
+      return;
+    }
+    if (latestBalance.getQWeekId() == qWeek.getId()) {
       final var violation =
           "Weekly Rent Calculation must be done only for the week without calculated Balance";
       System.out.println(violation);

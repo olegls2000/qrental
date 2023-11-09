@@ -6,6 +6,7 @@ import static java.time.format.FormatStyle.MEDIUM;
 
 import ee.qrental.common.core.in.validation.QValidator;
 import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.Transaction;
@@ -17,16 +18,17 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
 
   private final TransactionLoadPort transactionLoadPort;
   private final BalanceLoadPort balanceLoadPort;
+  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public ViolationsCollector validateAdd(final Transaction domain) {
     final var driverId = domain.getDriverId();
     final var violationsCollector = new ViolationsCollector();
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(driverId);
-    if(latestBalanceCalculatedDate == null){
+    final var latestBalance = balanceLoadPort.loadLatestByDriverId(driverId);
+    if (latestBalance == null) {
       return violationsCollector;
     }
-    checkDateForAdd(latestBalanceCalculatedDate, domain, violationsCollector);
+    checkDateForAdd(latestBalance, domain, violationsCollector);
 
     return violationsCollector;
   }
@@ -36,8 +38,13 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     final var violationsCollector = new ViolationsCollector();
     final var transactionId = domain.getId();
     final var transactionFromDb = transactionLoadPort.loadById(transactionId);
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
-    if (latestBalanceCalculatedDate == null){
+    final var latestBalance = balanceLoadPort.loadLatest();
+    if (latestBalance == null) {
+      return violationsCollector;
+    }
+
+    final var latestBalanceCalculatedDate = null;
+    if (latestBalanceCalculatedDate == null) {
       return violationsCollector;
     }
     checkExistence(domain.getId(), transactionFromDb, violationsCollector);
@@ -50,10 +57,14 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
   @Override
   public ViolationsCollector validateDelete(final Long id) {
     final var violationsCollector = new ViolationsCollector();
-    final var latestBalanceCalculatedDate = balanceLoadPort.loadLatestCalculatedDateOrDefault();
-    if(latestBalanceCalculatedDate == null){
+    final var latestBalance = balanceLoadPort.loadLatest();
+    if (latestBalance == null) {
+
       return violationsCollector;
     }
+    final var latestBalanceQWeek = qWeekQuery.getById(latestBalance.getQWeekId());
+    final var latestBalanceCalculatedDate = latestBalanceQWeek.getEnd();
+
     final var transactionFromDb = transactionLoadPort.loadById(id);
     checkIfDeleteAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
 
@@ -69,7 +80,8 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     if (transactionDate.isBefore(balanceLatestCalculatedDate)
         || transactionDate.equals(balanceLatestCalculatedDate)) {
       final var formattedTransactionDate = transactionDate.format(ofLocalizedDate(MEDIUM));
-      final var formattedBalanceCalculatedDate = balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
+      final var formattedBalanceCalculatedDate =
+          balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
       violationCollector.collect(
           format(
               "Transaction date %s must be after the latest calculated Balance date: %s",
@@ -100,7 +112,8 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     if (transactionDate.isBefore(balanceLatestCalculatedDate)
         || transactionDate.equals(balanceLatestCalculatedDate)) {
       final var formattedTransactionDate = transactionDate.format(ofLocalizedDate(MEDIUM));
-      final var formattedBalanceCalculatedDate = balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
+      final var formattedBalanceCalculatedDate =
+          balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
       violationCollector.collect(
           format(
               "Transaction new date %s must be after the latest calculated Balance date: %s",

@@ -23,7 +23,7 @@ class TransactionBusinessRuleValidatorTest {
         balanceLoadPort = mock(BalanceLoadPort.class);
         instanceUnderTest = new TransactionBusinessRuleValidator(transactionLoadPort, balanceLoadPort);
 
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
+        when(balanceLoadPort.loadLatest()).thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
     }
 
     @Test
@@ -33,7 +33,7 @@ class TransactionBusinessRuleValidatorTest {
                 .date(LocalDate.of(2023, Month.JANUARY, 25))
                 .driverId(2L)
                 .build();
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+        when(balanceLoadPort.loadLatestByDriverId(2L))
                 .thenReturn(null);
 
         // when
@@ -50,7 +50,7 @@ class TransactionBusinessRuleValidatorTest {
                .date(LocalDate.of(2023, Month.JANUARY, 25))
                .driverId(2L)
                .build();
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+        when(balanceLoadPort.loadLatestByDriverId(2L))
                 .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
 
         // when
@@ -68,7 +68,7 @@ class TransactionBusinessRuleValidatorTest {
                 .date(LocalDate.of(2023, Month.JANUARY, 26))
                 .driverId(2L)
                 .build();
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefaultByDriverId(2L))
+        when(balanceLoadPort.loadLatestByDriverId(2L))
                 .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
         // when
         final var violationsCollector =  instanceUnderTest.validateAdd(transaction);
@@ -92,7 +92,7 @@ class TransactionBusinessRuleValidatorTest {
     @Test
     public void testUpdateIfBalanceWasNotCalculated(){
         // given
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(null);
+        when(balanceLoadPort.loadLatest()).thenReturn(null);
         final var transactionNew =  Transaction.builder()
                 .id(1L)
                 .date(LocalDate.of(2023, Month.JANUARY, 28))
@@ -233,7 +233,7 @@ class TransactionBusinessRuleValidatorTest {
     @Test
     public void testDeleteIfBalanceWasNotCalculated(){
         // given
-        when(balanceLoadPort.loadLatestCalculatedDateOrDefault()).thenReturn(null);
+        when(balanceLoadPort.loadLatest()).thenReturn(null);
         final var transactionFromDb = Transaction.builder()
                 .id(1L)
                 .date(LocalDate.of(2023, Month.JANUARY, 25)).build();

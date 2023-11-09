@@ -12,8 +12,7 @@ public class BalanceAdapterMapper {
     }
     return Balance.builder()
         .id(entity.getId())
-        .weekNumber(entity.getWeekNumber())
-        .year(entity.getYear())
+        .qWeekId(entity.getQWeekId())
         .driverId(entity.getDriverId())
         .created(entity.getCreated())
         .amount(entity.getAmount())
@@ -24,8 +23,7 @@ public class BalanceAdapterMapper {
   public BalanceJakartaEntity mapToEntity(final Balance domain) {
     return BalanceJakartaEntity.builder()
         .id(domain.getId())
-        .weekNumber(domain.getWeekNumber())
-        .year(domain.getYear())
+        .qWeekId(domain.getQWeekId())
         .driverId(domain.getDriverId())
         .created(domain.getCreated())
         .amount(domain.getAmount())

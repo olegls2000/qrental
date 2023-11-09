@@ -29,6 +29,10 @@ where transaction_type_id in (select distinct(id)
 
 insert into q_week (year, number, description) values (2023, 1, '30-Oct ... 05-Nov');
 
+select qw.* from q_week qw
+where qw.year <= (select year from q_week where id = 26) and qw.number <= (select number from q_week where id = 26)
+;
+
 
 
 

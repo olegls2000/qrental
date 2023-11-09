@@ -11,9 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class Balance {
   private Long id;
-  private Integer weekNumber;
-  private Integer year;
   private Long driverId;
+  private Long qWeekId;
   private LocalDate created;
   private BigDecimal amount;
   private BigDecimal fee;

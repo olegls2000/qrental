@@ -36,9 +36,7 @@ public class BalanceJakartaEntity {
   @Column(name = "fee")
   private BigDecimal fee;
 
-  @Column(name = "week_number")
-  private Integer weekNumber;
+  @Column(name = "q_week_id")
+  private Long qWeekId;
 
-  @Column(name = "year")
-  private Integer year;
 }

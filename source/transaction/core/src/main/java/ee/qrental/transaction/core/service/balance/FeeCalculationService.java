@@ -10,6 +10,7 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.Week;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
@@ -32,7 +33,7 @@ public class FeeCalculationService {
   private final GetTransactionQuery transactionQuery;
   private final GetConstantQuery constantQuery;
 
-  public void calculate(final Week week, final DriverResponse driver) {
+  public void calculate(final QWeekResponse week, final DriverResponse driver) {
     if (!driver.getNeedFee()) {
       System.out.println(
           "Fee charging is not activated for Driver (" + driver.getIsikukood() + ")");
@@ -48,7 +49,7 @@ public class FeeCalculationService {
       return;
     }
     final var feeTransactionAddRequest =
-        getTransactionRequest(feeAmount.abs(), driverId, week.weekNumber(), week.end());
+        getTransactionRequest(feeAmount.abs(), driverId, week.getNumber(), week.getEnd());
     transactionAddUseCase.add(feeTransactionAddRequest);
   }
 
@@ -71,8 +72,8 @@ public class FeeCalculationService {
     return feeTransactionAddRequest;
   }
 
-  private BigDecimal getFeeAmountBasedOnPreviousWekBalance(final Week week, final Long driverId) {
-    final var currentWeekNumber = week.weekNumber();
+  private BigDecimal getFeeAmountBasedOnPreviousWekBalance(final QWeekResponse week, final Long driverId) {
+    final var currentWeekNumber = week.getNumber();
     final var previousWeekNumber = currentWeekNumber - 1;
     final var balanceFromPreviousWeek =
         loadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
