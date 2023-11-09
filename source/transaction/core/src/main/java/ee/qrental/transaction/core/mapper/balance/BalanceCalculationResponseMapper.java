@@ -33,7 +33,6 @@ public class BalanceCalculationResponseMapper
   }
 
 
-
   @Override
   public String toObjectInfo(final BalanceCalculation domain) {
     return String.format("Balance Calculation was done at: %s", domain.getActionDate());

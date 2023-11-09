@@ -3,6 +3,7 @@ package ee.qrental.transaction.core.service;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
@@ -24,6 +25,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   private final List<TransactionLoadStrategy> loadStrategies;
   private final TransactionResponseMapper responseMapper;
   private final TransactionUpdateRequestMapper updateRequestMapper;
+  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public List<TransactionResponse> getAll() {
@@ -52,7 +54,8 @@ public class TransactionQueryService implements GetTransactionQuery {
 
   @Override
   public List<TransactionResponse> getAllByRentCalculationId(final Long rentCalculationId) {
-    return mapToTransactionResponseList(transactionLoadPort.loadAllByRentCalculationId(rentCalculationId));
+    return mapToTransactionResponseList(
+        transactionLoadPort.loadAllByRentCalculationId(rentCalculationId));
   }
 
   @Override
@@ -77,6 +80,15 @@ public class TransactionQueryService implements GetTransactionQuery {
   public List<TransactionResponse> getAllByFilter(final PeriodFilter filter) {
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllBetweenDays(filter.getDateStart(), filter.getDatEnd()));
+  }
+
+  @Override
+  public List<TransactionResponse> getAllByQWeekId(final Long qWeekId) {
+    final var qWeek = qWeekQuery.getById(qWeekId);
+    final var periodFilter =
+        PeriodFilter.builder().dateStart(qWeek.getStart()).datEnd(qWeek.getEnd()).build();
+
+    return getAllByFilter(periodFilter);
   }
 
   @Override

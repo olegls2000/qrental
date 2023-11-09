@@ -1,5 +1,6 @@
 package ee.qrental.transaction.spring.config;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.out.TransactionAddPort;
 import ee.qrental.transaction.api.out.TransactionDeletePort;
@@ -11,10 +12,9 @@ import ee.qrental.transaction.core.mapper.TransactionUpdateRequestMapper;
 import ee.qrental.transaction.core.service.TransactionQueryService;
 import ee.qrental.transaction.core.service.TransactionUseCaseService;
 import ee.qrental.transaction.core.service.strategy.*;
+import ee.qrental.transaction.core.validator.TransactionBusinessRuleValidator;
 import java.util.Arrays;
 import java.util.List;
-
-import ee.qrental.transaction.core.validator.TransactionBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,9 +36,10 @@ public class TransactionServiceConfig {
       final TransactionLoadPort transactionLoadPort,
       final List<TransactionLoadStrategy> loadStrategies,
       final TransactionResponseMapper responseMapper,
-      final TransactionUpdateRequestMapper updateRequestMapper) {
+      final TransactionUpdateRequestMapper updateRequestMapper,
+      final GetQWeekQuery qWeekQuery) {
     return new TransactionQueryService(
-        transactionLoadPort, loadStrategies, responseMapper, updateRequestMapper);
+        transactionLoadPort, loadStrategies, responseMapper, updateRequestMapper, qWeekQuery);
   }
 
   @Bean
@@ -50,6 +51,11 @@ public class TransactionServiceConfig {
       final TransactionUpdateRequestMapper updateRequestMapper,
       final TransactionBusinessRuleValidator businessRuleValidator) {
     return new TransactionUseCaseService(
-        addPort, updatePort, deletePort, addRequestMapper, updateRequestMapper, businessRuleValidator);
+        addPort,
+        updatePort,
+        deletePort,
+        addRequestMapper,
+        updateRequestMapper,
+        businessRuleValidator);
   }
 }

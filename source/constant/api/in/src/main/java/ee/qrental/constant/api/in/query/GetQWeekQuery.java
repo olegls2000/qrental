@@ -5,8 +5,10 @@ import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekResponse> {
+  Map<Integer, List<QWeekResponse>> getAllGroupedByYear();
   List<QWeekResponse> getAllByYear(final Integer year);
 
   QWeekResponse getByYearAndNumber(final Integer year, final Integer number);

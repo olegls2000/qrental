@@ -27,7 +27,7 @@ public class QWeekLoadAdapter implements QWeekLoadPort {
 
   @Override
   public List<QWeek> loadByYear(final Integer year) {
-    return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+    return repository.findByYear(year).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override

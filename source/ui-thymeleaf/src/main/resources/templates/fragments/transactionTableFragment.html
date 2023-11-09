@@ -20,7 +20,7 @@
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactions)}">
-            <td colspan="6">No Transactions</td>
+            <td colspan="10">No Transactions</td>
         </tr>
         <tr th:each="transaction : ${transactions}"
             data-bs-toggle="tooltip" th:attr="title=${transaction.comment}">

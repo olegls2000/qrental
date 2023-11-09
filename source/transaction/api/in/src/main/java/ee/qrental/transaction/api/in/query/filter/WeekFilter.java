@@ -1,12 +1,15 @@
 package ee.qrental.transaction.api.in.query.filter;
 
-import ee.qrental.common.core.utils.QWeek;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
+@NoArgsConstructor
 @Getter
-public class YearAndWeekFilter {
+@Setter
+public class WeekFilter {
   private Integer year;
-  private QWeek week;
+  private Long qWeekId;
 }

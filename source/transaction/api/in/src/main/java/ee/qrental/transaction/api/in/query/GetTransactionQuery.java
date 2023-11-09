@@ -22,4 +22,5 @@ public interface GetTransactionQuery
   List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter);
 
   List<TransactionResponse> getAllByFilter(final PeriodFilter filter);
+  List<TransactionResponse> getAllByQWeekId(final Long qWeekId);
 }

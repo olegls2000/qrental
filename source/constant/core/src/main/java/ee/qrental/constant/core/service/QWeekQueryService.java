@@ -1,7 +1,9 @@
 package ee.qrental.constant.core.service;
 
 import static java.util.Comparator.comparing;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
@@ -11,6 +13,7 @@ import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -26,7 +29,6 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public List<QWeekResponse> getAll() {
-
 
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
@@ -55,6 +57,11 @@ public class QWeekQueryService implements GetQWeekQuery {
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
+  }
+
+  @Override
+  public Map<Integer, List<QWeekResponse>> getAllGroupedByYear() {
+    return getAllYears().stream().collect(toMap(identity(), this::getAllByYear));
   }
 
   @Override
