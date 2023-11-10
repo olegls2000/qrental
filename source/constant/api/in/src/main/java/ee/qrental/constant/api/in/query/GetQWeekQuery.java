@@ -9,9 +9,12 @@ import java.util.Map;
 
 public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekResponse> {
   Map<Integer, List<QWeekResponse>> getAllGroupedByYear();
+
   List<QWeekResponse> getAllByYear(final Integer year);
 
   QWeekResponse getByYearAndNumber(final Integer year, final Integer number);
+
+  QWeekResponse getPrevious(final Long qWeekId);
 
   List<Integer> getAllYears();
 

@@ -17,7 +17,7 @@ import lombok.experimental.UtilityClass;
 public class QTimeUtils {
 
   public static final LocalDate INVOICE_START_CALCULATION_DATE = LocalDate.of(2023, MARCH, 05);
-  public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 01);
+  public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 02);
   public static final LocalDate RENT_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 01);
 
   public static int getWeekNumber(final LocalDate date) {

@@ -7,6 +7,7 @@
             <label class="form-label text-muted" for="weekId">Select last week (included)</label>
             <select id="weekId" class="form-select"
                     th:field="*{qWeekId}">
+                <option th:value="null">All weeks</option>
                 <option th:each="week: ${weeks}"
                         th:value="${week.id}"
                         th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>

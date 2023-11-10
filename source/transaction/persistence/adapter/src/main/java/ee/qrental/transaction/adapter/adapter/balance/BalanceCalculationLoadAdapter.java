@@ -1,6 +1,5 @@
 package ee.qrental.transaction.adapter.adapter.balance;
 
-import static ee.qrental.common.core.utils.QTimeUtils.BALANCE_START_CALCULATION_DATE;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.adapter.mapper.balance.BalanceCalculationAdapterMapper;
@@ -19,7 +18,7 @@ public class BalanceCalculationLoadAdapter implements BalanceCalculationLoadPort
 
   @Override
   public LocalDate loadLastCalculationDate() {
-    return loadedOrDefault(repository.getLastCalculationDate(), BALANCE_START_CALCULATION_DATE);
+    return repository.getLastCalculationDate();
   }
 
   private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {

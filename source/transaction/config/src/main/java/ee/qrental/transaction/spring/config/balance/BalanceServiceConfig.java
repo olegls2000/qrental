@@ -90,11 +90,12 @@ public class BalanceServiceConfig {
 
   @Bean
   FeeReplenishService getFeeDebtReplenishService(
-      final BalanceLoadPort loadPort,
-      final TransactionAddUseCase transactionAddUseCase,
+      final GetQWeekQuery qWeekQuery,
+      final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
-      final GetTransactionQuery transactionQuery) {
+      final TransactionAddUseCase transactionAddUseCase,
+      final BalanceLoadPort balanceLoadPort) {
     return new FeeReplenishService(
-        loadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery);
+        qWeekQuery, transactionQuery, transactionTypeQuery, transactionAddUseCase, balanceLoadPort);
   }
 }

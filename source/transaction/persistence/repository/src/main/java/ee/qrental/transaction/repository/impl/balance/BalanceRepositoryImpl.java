@@ -1,8 +1,8 @@
 package ee.qrental.transaction.repository.impl.balance;
 
 import ee.qrental.transaction.adapter.repository.balance.BalanceRepository;
-import ee.qrental.transaction.repository.spring.balance.BalanceSpringDataRepository;
 import ee.qrental.transaction.entity.jakarta.balance.BalanceJakartaEntity;
+import ee.qrental.transaction.repository.spring.balance.BalanceSpringDataRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -33,14 +33,20 @@ public class BalanceRepositoryImpl implements BalanceRepository {
   }
 
   @Override
+  public BalanceJakartaEntity getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
+    return springDataRepository.findByDriverIdAndQWeekId(driverId, qWeekId);
+  }
+
+  @Override
   public BalanceJakartaEntity getLatestByDriverId(final Long driverId) {
     return springDataRepository.findLatestByDriverId(driverId);
   }
 
   @Override
   public BalanceJakartaEntity getLatestByDriverIdAndYearAndWeekNumber(
-          final Long driverId, final Integer year, final Integer weekNumber) {
-    return springDataRepository.findLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
+      final Long driverId, final Integer year, final Integer weekNumber) {
+    return springDataRepository.findLatestByDriverIdAndYearAndWeekNumber(
+        driverId, year, weekNumber);
   }
 
   @Override

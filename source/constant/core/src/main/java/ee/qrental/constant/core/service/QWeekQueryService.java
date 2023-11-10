@@ -19,9 +19,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class QWeekQueryService implements GetQWeekQuery {
 
-  private static final Comparator<QWeekResponse> DEFAULT_COMPARATOR = comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber);
-  private static final Comparator<QWeekResponse> REVERSED_COMPARATOR = comparing(QWeekResponse::getYear).reversed()
-          .thenComparing(QWeekResponse::getNumber).reversed();
+  private static final Comparator<QWeekResponse> DEFAULT_COMPARATOR =
+      comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber);
+  private static final Comparator<QWeekResponse> REVERSED_COMPARATOR =
+      comparing(QWeekResponse::getYear)
+          .reversed()
+          .thenComparing(QWeekResponse::getNumber)
+          .reversed();
 
   private final QWeekLoadPort loadPort;
   private final QWeekResponseMapper mapper;
@@ -70,6 +74,25 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
+  public QWeekResponse getPrevious(final Long qWeekId) {
+    final var qWeek = loadPort.loadById(qWeekId);
+    final var qWeekYear = qWeek.getYear();
+    final var qWeekNumber = qWeek.getNumber();
+    var previousWeekYear = qWeekYear;
+    var previousWeekNumber = qWeekNumber - 1;
+    if (qWeekYear == 2023 && qWeekNumber == 1) {
+      return null;
+    }
+
+    if (previousWeekNumber == 0) {
+      previousWeekYear = qWeekYear - 1;
+      previousWeekNumber = 52;
+    }
+
+    return mapper.toResponse(loadPort.loadByYearAndNumber(previousWeekYear, previousWeekNumber));
+  }
+
+  @Override
   public List<Integer> getAllYears() {
     return loadPort.loadYears();
   }
@@ -77,8 +100,8 @@ public class QWeekQueryService implements GetQWeekQuery {
   @Override
   public List<QWeekResponse> getAllBeforeById(final Long id) {
     return loadPort.loadAllBeforeById(id).stream()
-            .map(mapper::toResponse)
-            .sorted(REVERSED_COMPARATOR)
-            .collect(toList());
+        .map(mapper::toResponse)
+        .sorted(REVERSED_COMPARATOR)
+        .collect(toList());
   }
 }

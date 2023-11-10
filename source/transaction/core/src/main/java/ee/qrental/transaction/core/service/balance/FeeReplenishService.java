@@ -5,7 +5,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
-import ee.qrental.common.core.utils.Week;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
@@ -21,13 +21,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FeeReplenishService {
 
-  private final BalanceLoadPort balanceLoadPort;
-  private final TransactionAddUseCase transactionAddUseCase;
-  private final GetTransactionTypeQuery transactionTypeQuery;
+  private final GetQWeekQuery qWeekQuery;
   private final GetTransactionQuery transactionQuery;
+  private final GetTransactionTypeQuery transactionTypeQuery;
+  private final TransactionAddUseCase transactionAddUseCase;
+  private final BalanceLoadPort balanceLoadPort;
 
   public void replenish(final QWeekResponse week, final Long driverId) {
-    var feeBalanceFromPreviousWeek = getFeeAmountFromPreviousWeek(driverId, week);
+    var feeBalanceFromPreviousWeek = getFeeAmountFromPreviousWeek(driverId, week.getId());
     if (feeBalanceFromPreviousWeek.compareTo(ZERO) >= 0) {
       System.out.println("Fee replenish is not required in Week: " + week.getNumber());
 
@@ -37,8 +38,7 @@ public class FeeReplenishService {
     final var donorTransactions = getListOfPositiveNonFeeTransactions(week, driverId);
     for (final TransactionResponse donorTransaction : donorTransactions) {
       feeAmountToReplenish =
-          replenishAndGetNewFeeAmountToReplenish(
-              week, donorTransaction, feeAmountToReplenish);
+          replenishAndGetNewFeeAmountToReplenish(week, donorTransaction, feeAmountToReplenish);
       if (feeAmountToReplenish.compareTo(ZERO) <= 0) {
 
         return;
@@ -46,12 +46,13 @@ public class FeeReplenishService {
     }
   }
 
-  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final QWeekResponse week) {
-    final var currentWeekNumber = week.getNumber();
-    final var previousWeekNumber = currentWeekNumber - 1;
+  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final Long qWeekId) {
+    final var previousQWeek = qWeekQuery.getPrevious(qWeekId);
+    if (previousQWeek == null) {
+      return ZERO;
+    }
     final var balanceFromPreviousWeek =
-        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
-            driverId, week.getYear(), previousWeekNumber);
+        balanceLoadPort.loadByDriverIdAndQWeekId(driverId, previousQWeek.getId());
     var feeBalanceFromPreviousWeek = balanceFromPreviousWeek.getFee();
 
     return feeBalanceFromPreviousWeek;
@@ -69,7 +70,7 @@ public class FeeReplenishService {
     return transactionQuery.getAllByFilter(filter).stream()
         .filter(tx -> isNotFeeType(tx.getType()))
         .filter(transaction -> transaction.getRealAmount().compareTo(ZERO) > 0)
-        .sorted((tx1, tx2)-> tx2.getRealAmount().compareTo(tx1.getRealAmount()))
+        .sorted((tx1, tx2) -> tx2.getRealAmount().compareTo(tx1.getRealAmount()))
         .toList();
   }
 
@@ -83,15 +84,14 @@ public class FeeReplenishService {
           "You are trying to replenish Fee Debt from Negative Transaction. Check Transaction selection Logic!");
     }
 
-
     final var leftoverToReplenish = feeAmountToReplenish.subtract(transactionAmount);
     if (leftoverToReplenish.compareTo(ZERO) >= 0) {
       final var possibleReplenishmentAmount = transactionAmount;
       replenishAndCompensate(
-              possibleReplenishmentAmount,
-                donorTransaction.getDriverId(),
-                week,
-                donorTransaction.getId());
+          possibleReplenishmentAmount,
+          donorTransaction.getDriverId(),
+          week,
+          donorTransaction.getId());
 
       return leftoverToReplenish;
     }

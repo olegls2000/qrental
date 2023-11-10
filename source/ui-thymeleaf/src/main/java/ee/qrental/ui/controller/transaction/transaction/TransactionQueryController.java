@@ -10,7 +10,6 @@ import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.WeekFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
-import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -46,7 +45,14 @@ public class TransactionQueryController {
       @ModelAttribute final WeekFilter transactionFilterRequest, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("weeks", qWeekQuery.getAll());
-    addTransactionDataToModel(transactionQuery.getAllByFilter(transactionFilterRequest), model);
+    //todo move to the service
+    if (transactionFilterRequest.getQWeekId() == null) {
+      addTransactionDataToModel(transactionQuery.getAll(), model);
+    } else {
+      addTransactionDataToModel(
+          transactionQuery.getAllByQWeekId(transactionFilterRequest.getQWeekId()), model);
+    }
+
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     addLatestDataToModel(model);
 

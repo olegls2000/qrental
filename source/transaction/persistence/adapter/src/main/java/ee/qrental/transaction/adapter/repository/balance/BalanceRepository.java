@@ -11,13 +11,16 @@ public interface BalanceRepository {
 
   BalanceJakartaEntity getReferenceById(final Long id);
 
-  //TO\
+  // TO\
   BalanceJakartaEntity getByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber);
+
+  BalanceJakartaEntity getByDriverIdAndQWeekId(final Long driverId, final Long qWeek);
 
   BalanceJakartaEntity getLatestByDriverId(final Long driverId);
 
   BalanceJakartaEntity getLatestByDriverIdAndYearAndWeekNumber(
-          final Long driverId, final Integer year, final Integer weekNumber);
+      final Long driverId, final Integer year, final Integer weekNumber);
+
   BalanceJakartaEntity getLatest();
 }

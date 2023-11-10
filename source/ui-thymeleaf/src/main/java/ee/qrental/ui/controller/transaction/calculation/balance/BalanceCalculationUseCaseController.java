@@ -1,6 +1,6 @@
 package ee.qrental.ui.controller.transaction.calculation.balance;
 
-import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
+import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(TRANSACTION_ROOT_PATH)
+@RequestMapping(BALANCE_ROOT_PATH)
 @AllArgsConstructor
 public class BalanceCalculationUseCaseController {
 
@@ -39,7 +39,7 @@ public class BalanceCalculationUseCaseController {
       return "forms/addBalanceCalculation";
     }
 
-    return "redirect:" + TRANSACTION_ROOT_PATH + "/calculations";
+    return "redirect:" + BALANCE_ROOT_PATH + "/calculations";
   }
 
   private void addAddRequestToModel(

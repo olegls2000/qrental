@@ -19,15 +19,23 @@ public interface BalanceSpringDataRepository extends JpaRepository<BalanceJakart
 
   @Query(
       value =
-          "select bl.* from balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id " +
-                  "where bl.driver_id = :driverId "
+          "select bl.* from balance bl where bl.driver_id = :driverId and bl.q_week_id = :qWeekId",
+      nativeQuery = true)
+  BalanceJakartaEntity findByDriverIdAndQWeekId(
+      @Param("driverId") final Long driverId, @Param("qWeekId") final Long qWeekId);
+
+  @Query(
+      value =
+          "select bl.* from balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id "
+              + "where bl.driver_id = :driverId "
               + "order by qw.year desc, qw.number desc limit 1",
       nativeQuery = true)
   BalanceJakartaEntity findLatestByDriverId(@Param("driverId") final Long driverId);
 
   @Query(
-      value = "select bl.* from balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id " +
-              "order by qw.year desc, qw.number desc limit 1",
+      value =
+          "select bl.* from balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id "
+              + "order by qw.year desc, qw.number desc limit 1",
       nativeQuery = true)
   BalanceJakartaEntity findLatest();
 
