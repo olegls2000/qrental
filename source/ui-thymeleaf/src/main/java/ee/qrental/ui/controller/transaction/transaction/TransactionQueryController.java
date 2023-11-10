@@ -3,10 +3,9 @@ package ee.qrental.ui.controller.transaction.transaction;
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PATH;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.filter.WeekFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
@@ -26,7 +25,7 @@ public class TransactionQueryController {
 
   private final QDateFormatter qDateFormatter;
   private final GetTransactionQuery transactionQuery;
-  private final GetBalanceQuery balanceQuery;
+  private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
 
   @GetMapping
@@ -65,15 +64,16 @@ public class TransactionQueryController {
   }
 
   private void addLatestDataToModel(final Model model) {
-    final var latestCalculatedDate = balanceQuery.getLatestCalculatedDate();
-    if (latestCalculatedDate == null) {
+    final var latestCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
+    if (latestCalculatedWeekId == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
       return;
     }
-    final var latestCalculatedWeek = QTimeUtils.getWeekNumber(latestCalculatedDate);
-    final var latestBalanceWeek =
-        String.format("%d (%s)", latestCalculatedWeek, latestCalculatedDate);
-    model.addAttribute("latestBalanceWeek", latestBalanceWeek);
+
+    final var latestCalculatedWeek = qWeekQuery.getById(latestCalculatedWeekId);
+    final var latestBalanceWeekLabel =
+            String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
+    model.addAttribute("latestBalanceWeek", latestBalanceWeekLabel);
   }
 }

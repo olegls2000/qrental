@@ -41,7 +41,7 @@ public class BalanceCalculationBusinessRuleValidator implements QValidator<Balan
 
   public boolean isCalculationRequired(final LocalDate actionDate) {
     final var actionDateFormal = getLastSundayFromDate(actionDate);
-    final var lastCalculationDate = loadPort.loadLastCalculationDate();
+    final var lastCalculationDate = loadPort.loadLastCalculatedDate();
     final long daysBetween = DAYS.between(lastCalculationDate, actionDateFormal);
 
     return daysBetween >= 7;

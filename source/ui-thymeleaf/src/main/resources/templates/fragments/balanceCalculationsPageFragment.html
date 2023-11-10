@@ -2,6 +2,13 @@
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
     <ul th:replace="fragments/transactionTabFragment :: transactionTabs('balanceCalculations')"></ul>
     <h2 class="py-3">Balance Calculations</h2>
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Latest Calculated Week: ${latestBalanceWeek}|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+        </div>
+    </div>
     <table class="table table-striped table-bordered">
         <tr>
             <th style="width: 1% !important;">
@@ -14,6 +21,8 @@
             </th>
             <th>Action Date</th>
             <th>Balances Count</th>
+            <th>Start Date</th>
+            <th>End Date</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(calculations)}">
@@ -26,6 +35,8 @@
             <td th:text="${qDateFormatter.format(calculation.actionDate)}">???</td>
 
             <td th:text="${#lists.size(calculation.balances)}"/>
+            <td th:text="${qDateFormatter.format(calculation.startDate)}">???</td>
+            <td th:text="${qDateFormatter.format(calculation.endDate)}">???</td>
             <td th:text="${calculation.comment}">???</td>
         </tr>
     </table>

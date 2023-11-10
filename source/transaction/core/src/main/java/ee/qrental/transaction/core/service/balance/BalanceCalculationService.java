@@ -109,7 +109,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   }
 
   private LocalDate getLastCalculationDate() {
-    var lastCalculationDate = balanceCalculationLoadPort.loadLastCalculationDate();
+    var lastCalculationDate = balanceCalculationLoadPort.loadLastCalculatedDate();
     if (lastCalculationDate == null) {
       lastCalculationDate = BALANCE_START_CALCULATION_DATE;
     }

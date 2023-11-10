@@ -47,7 +47,7 @@ public class FeeReplenishService {
   }
 
   private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final Long qWeekId) {
-    final var previousQWeek = qWeekQuery.getPrevious(qWeekId);
+    final var previousQWeek = qWeekQuery.getOneWeekBefore(qWeekId);
     if (previousQWeek == null) {
       return ZERO;
     }

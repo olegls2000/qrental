@@ -17,12 +17,8 @@ public class BalanceCalculationLoadAdapter implements BalanceCalculationLoadPort
   private final BalanceCalculationAdapterMapper mapper;
 
   @Override
-  public LocalDate loadLastCalculationDate() {
+  public LocalDate loadLastCalculatedDate() {
     return repository.getLastCalculationDate();
-  }
-
-  private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {
-    return loadedDate == null ? defaultDate : loadedDate;
   }
 
   @Override

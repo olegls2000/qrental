@@ -9,4 +9,6 @@ public interface GetBalanceCalculationQuery {
   List<BalanceCalculationResponse> getAll();
 
   BalanceCalculationResponse getById(final Long id);
+
+  Long getLastCalculatedQWeekId();
 }

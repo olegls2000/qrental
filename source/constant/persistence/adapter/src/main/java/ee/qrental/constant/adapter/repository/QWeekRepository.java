@@ -18,4 +18,6 @@ public interface QWeekRepository {
   List<QWeekJakartaEntity> findAllBeforeById(final Long id);
 
   List<Integer> findAllYears();
+
+  List<QWeekJakartaEntity> findAllAfterById(final Long id);
 }

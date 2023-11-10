@@ -6,5 +6,5 @@ import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import java.time.LocalDate;
 
 public interface BalanceCalculationLoadPort extends LoadPort<BalanceCalculation> {
-  LocalDate loadLastCalculationDate();
+  LocalDate loadLastCalculatedDate();
 }

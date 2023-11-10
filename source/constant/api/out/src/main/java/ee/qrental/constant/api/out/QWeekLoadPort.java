@@ -8,7 +8,10 @@ import java.util.List;
 public interface QWeekLoadPort extends LoadPort<QWeek> {
 
   List<QWeek> loadByYear(final Integer year);
+
   List<QWeek> loadAllBeforeById(final Long id);
+
+  List<QWeek> loadAllAfterById(final Long id);
 
   List<Integer> loadYears();
 

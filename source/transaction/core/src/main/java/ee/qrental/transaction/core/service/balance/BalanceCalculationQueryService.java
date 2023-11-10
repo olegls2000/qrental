@@ -2,17 +2,19 @@ package ee.qrental.transaction.core.service.balance;
 
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationResponseMapper;
-
 import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BalanceCalculationQueryService implements GetBalanceCalculationQuery {
 
+  private final GetQWeekQuery qWeekQuery;
   private final BalanceCalculationLoadPort loadPort;
   private final BalanceCalculationResponseMapper responseMapper;
 
@@ -24,5 +26,19 @@ public class BalanceCalculationQueryService implements GetBalanceCalculationQuer
   @Override
   public BalanceCalculationResponse getById(final Long id) {
     return responseMapper.toResponse(loadPort.loadById(id));
+  }
+
+  @Override
+  public Long getLastCalculatedQWeekId() {
+    final var lastCalculatedDate = loadPort.loadLastCalculatedDate();
+    if (lastCalculatedDate == null) {
+
+      return null;
+    }
+    final var year = lastCalculatedDate.getYear();
+    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculatedDate);
+    final var lastCalculatedWeek = qWeekQuery.getByYearAndNumber(year, weekNumber);
+
+    return lastCalculatedWeek.getId();
   }
 }

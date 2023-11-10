@@ -74,7 +74,7 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public QWeekResponse getPrevious(final Long qWeekId) {
+  public QWeekResponse getOneWeekBefore(final Long qWeekId) {
     final var qWeek = loadPort.loadById(qWeekId);
     final var qWeekYear = qWeek.getYear();
     final var qWeekNumber = qWeek.getNumber();
@@ -102,6 +102,14 @@ public class QWeekQueryService implements GetQWeekQuery {
     return loadPort.loadAllBeforeById(id).stream()
         .map(mapper::toResponse)
         .sorted(REVERSED_COMPARATOR)
+        .collect(toList());
+  }
+
+  @Override
+  public List<QWeekResponse> getAllAfterById(final Long id) {
+    return loadPort.loadAllAfterById(id).stream()
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 }

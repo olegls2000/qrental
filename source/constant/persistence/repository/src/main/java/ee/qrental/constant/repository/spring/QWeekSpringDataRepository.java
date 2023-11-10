@@ -19,7 +19,16 @@ public interface QWeekSpringDataRepository extends JpaRepository<QWeekJakartaEnt
       value =
           "SELECT qw.* FROM q_week qw "
               + "WHERE qw.year <= (SELECT year FROM q_week WHERE id = :id) "
-              + "AND qw.number <= (SELECT number FROM q_week WHERE id = :id);",
+              + "AND qw.number < (SELECT number FROM q_week WHERE id = :id);",
       nativeQuery = true)
   List<QWeekJakartaEntity> findAllBeforeById(@Param("id") final Long id);
+
+
+  @Query(
+          value =
+                  "SELECT qw.* FROM q_week qw "
+                          + "WHERE qw.year >= (SELECT year FROM q_week WHERE id = :id) "
+                          + "AND qw.number > (SELECT number FROM q_week WHERE id = :id);",
+          nativeQuery = true)
+    List<QWeekJakartaEntity> findAllAfterById(@Param("id") final Long id);
 }

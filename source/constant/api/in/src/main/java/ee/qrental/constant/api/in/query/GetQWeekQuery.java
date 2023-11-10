@@ -14,9 +14,19 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
 
   QWeekResponse getByYearAndNumber(final Integer year, final Integer number);
 
-  QWeekResponse getPrevious(final Long qWeekId);
+  QWeekResponse getOneWeekBefore(final Long qWeekId);
 
   List<Integer> getAllYears();
 
+  /**
+   * @param qWeekId
+   * @return return a List of QWeeks without a Week, which ID is present in parameter
+   */
   List<QWeekResponse> getAllBeforeById(final Long qWeekId);
+
+  /**
+   * @param qWeekId
+   * @return return a QWeeks without a Week, which ID is present in parameter
+   */
+  List<QWeekResponse> getAllAfterById(final Long qWeekId);
 }

@@ -41,9 +41,10 @@ public class BalanceServiceConfig {
 
   @Bean
   BalanceCalculationQueryService getBalanceCalculationQueryService(
+      final GetQWeekQuery qWeekQuery,
       final BalanceCalculationLoadPort loadPort,
       final BalanceCalculationResponseMapper responseMapper) {
-    return new BalanceCalculationQueryService(loadPort, responseMapper);
+    return new BalanceCalculationQueryService(qWeekQuery, loadPort, responseMapper);
   }
 
   @Bean

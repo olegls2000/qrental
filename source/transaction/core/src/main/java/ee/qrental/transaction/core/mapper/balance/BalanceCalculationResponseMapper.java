@@ -1,6 +1,5 @@
 package ee.qrental.transaction.core.mapper.balance;
 
-
 import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
@@ -26,12 +25,13 @@ public class BalanceCalculationResponseMapper
 
     return BalanceCalculationResponse.builder()
         .id(domain.getId())
+        .startDate(domain.getStartDate())
+        .endDate(domain.getEndDate())
         .actionDate(domain.getActionDate())
         .comment(domain.getComment())
         .balances(balances)
         .build();
   }
-
 
   @Override
   public String toObjectInfo(final BalanceCalculation domain) {
