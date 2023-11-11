@@ -1,19 +1,18 @@
 <ul th:fragment="transactionTabs(activeTab)" class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'balances'} ? active : ''"
-       href="/balances">Balances</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'transactions'} ? active : ''"
-       href="/transactions">Transactions</a>
-  </li>
-
-  <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'balanceCalculations'} ? active : ''"
-       href="/balances/calculations">Balance Calculations</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" th:classappend="${activeTab == 'rentCalculations'} ? active : ''"
-       href="/rents/calculations">Rent Calculations</a>
-  </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'transactions'} ? active : ''"
+           href="/transactions">Transactions</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'balances'} ? active : ''"
+           href="/balances">Balances</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'balanceCalculations'} ? active : ''"
+           href="/balances/calculations">Balance Calculations</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'rentCalculations'} ? active : ''"
+           href="/rents/calculations">Rent Calculations</a>
+    </li>
 </ul>
