@@ -61,6 +61,12 @@ where bl.driver_id = :driverId
 
 
 
+select bl.* from balance bl where driver_id = 1;
+
+            --where bl.driver_id = :driverId and bl.q_week_id = :qWeekId;
+
+
+
 
 
 

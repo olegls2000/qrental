@@ -30,20 +30,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BalanceQueryService implements GetBalanceQuery {
 
-  private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetConstantQuery constantQuery;
   private final BalanceLoadPort balanceLoadPort;
   private final TransactionLoadPort transactionLoadPort;
   private final BalanceResponseMapper balanceResponseMapper;
-
-  @Override
-  public List<BalanceAmountWithDriverResponse> getAllBalanceTotalsWithDriver() {
-    return driverQuery.getAll().stream()
-        .map(this::getBalanceByDriverId)
-        .sorted(this::getBalanceComparator)
-        .collect(toList());
-  }
 
   @Override
   public BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
@@ -52,34 +43,6 @@ public class BalanceQueryService implements GetBalanceQuery {
         balanceLoadPort.loadLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
 
     return balanceResponseMapper.toResponse(latestBalance);
-  }
-
-  private int getBalanceComparator(
-      BalanceAmountWithDriverResponse bal1, BalanceAmountWithDriverResponse bal2) {
-    final var callSign1 = bal1.getCallSign();
-    final var callSign2 = bal2.getCallSign();
-    if (callSign1 != null && callSign2 != null) {
-      return callSign1 - callSign2;
-    }
-    return 0;
-  }
-
-  private BalanceAmountWithDriverResponse getBalanceByDriverId(final DriverResponse driver) {
-    final var driverId = driver.getId();
-    final var total = calculateTotal(transactionLoadPort.loadAllByDriverId(driverId));
-
-    return BalanceAmountWithDriverResponse.builder()
-        .driverId(driverId)
-        .total(total)
-        .callSign(driver.getCallSign())
-        .firstName(driver.getFirstName())
-        .lastName(driver.getLastName())
-        .phone(driver.getPhone())
-        .build();
-  }
-
-  private BigDecimal calculateTotal(final List<Transaction> transactions) {
-    return transactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
   }
 
   @Override
@@ -223,17 +186,6 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
     return balanceResponseMapper.toResponse(latestBalance);
-  }
-
-  @Override
-  public LocalDate getLatestCalculatedDate() {
-    final var latestBalance = balanceLoadPort.loadLatest();
-    if (latestBalance == null) {
-      return LocalDate.of(2023, Month.JANUARY, 2);
-    }
-    final var latestBalanceWek = qWeekQuery.getById(latestBalance.getQWeekId());
-
-    return latestBalanceWek.getEnd();
   }
 
   private BigDecimal getSumOfTransactionByFilter(final PeriodAndDriverFilter filter) {

@@ -98,11 +98,19 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public List<QWeekResponse> getAllBeforeById(final Long id) {
-    return loadPort.loadAllBeforeById(id).stream()
-        .map(mapper::toResponse)
-        .sorted(REVERSED_COMPARATOR)
-        .collect(toList());
+  public List<QWeekResponse> getAllBetweenByIds(final Long startWeekId, final Long endWeekId) {
+    return loadPort.loadAllBetweenByIds(startWeekId, endWeekId).stream()
+            .map(mapper::toResponse)
+            .sorted(REVERSED_COMPARATOR)
+            .collect(toList());
+  }
+
+  @Override
+  public List<QWeekResponse> getAllBeforeById(final Long qWeekId) {
+    return loadPort.loadAllBeforeById(qWeekId).stream()
+            .map(mapper::toResponse)
+            .sorted(REVERSED_COMPARATOR)
+            .collect(toList());
   }
 
   @Override

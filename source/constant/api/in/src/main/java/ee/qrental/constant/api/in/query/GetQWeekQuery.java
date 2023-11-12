@@ -22,6 +22,8 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
    * @param qWeekId
    * @return return a List of QWeeks without a Week, which ID is present in parameter
    */
+  List<QWeekResponse> getAllBetweenByIds(final Long startWeekId, final Long endWeekId);
+
   List<QWeekResponse> getAllBeforeById(final Long qWeekId);
 
   /**

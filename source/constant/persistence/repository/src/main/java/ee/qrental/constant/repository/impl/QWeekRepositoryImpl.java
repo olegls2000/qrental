@@ -42,7 +42,13 @@ public class QWeekRepositoryImpl implements QWeekRepository {
   }
 
   @Override
-  public List<QWeekJakartaEntity> findAllBeforeById(final Long id) {
+  public List<QWeekJakartaEntity> findAllBetweenByIds(
+      final Long startWeekId, final Long endWeekId) {
+    return springDataRepository.findAllBetweenByIds(startWeekId, endWeekId);
+  }
+
+  @Override
+  public List<QWeekJakartaEntity> findAllBeforeById(Long id) {
     return springDataRepository.findAllBeforeById(id);
   }
 

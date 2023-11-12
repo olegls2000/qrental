@@ -18,17 +18,30 @@ public interface QWeekSpringDataRepository extends JpaRepository<QWeekJakartaEnt
   @Query(
       value =
           "SELECT qw.* FROM q_week qw "
-              + "WHERE qw.year <= (SELECT year FROM q_week WHERE id = :id) "
-              + "AND qw.number < (SELECT number FROM q_week WHERE id = :id);",
+              + "WHERE"
+              + "(qw.year >= (SELECT year FROM q_week WHERE id = :startWeekId) AND "
+              + " qw.number > (SELECT number FROM q_week WHERE id = :startWeekId)) "
+              + "AND"
+              + " (qw.year <= (SELECT year FROM q_week WHERE id = :endWeekId) "
+              + "AND qw.number <= (SELECT number FROM q_week WHERE id = :endWeekId));",
+      nativeQuery = true)
+  List<QWeekJakartaEntity> findAllBetweenByIds(
+      @Param("startWeekId") final Long startWeekId, @Param("endWeekId") final Long endWeekId);
+
+  @Query(
+      value =
+          "SELECT qw.* FROM q_week qw "
+              + "WHERE "
+              + "qw.year <= (SELECT year FROM q_week WHERE id = :id) AND "
+              + "qw.number <= (SELECT number FROM q_week WHERE id = :id)",
       nativeQuery = true)
   List<QWeekJakartaEntity> findAllBeforeById(@Param("id") final Long id);
 
-
   @Query(
-          value =
-                  "SELECT qw.* FROM q_week qw "
-                          + "WHERE qw.year >= (SELECT year FROM q_week WHERE id = :id) "
-                          + "AND qw.number > (SELECT number FROM q_week WHERE id = :id);",
-          nativeQuery = true)
-    List<QWeekJakartaEntity> findAllAfterById(@Param("id") final Long id);
+      value =
+          "SELECT qw.* FROM q_week qw "
+              + "WHERE qw.year >= (SELECT year FROM q_week WHERE id = :id) "
+              + "AND qw.number > (SELECT number FROM q_week WHERE id = :id);",
+      nativeQuery = true)
+  List<QWeekJakartaEntity> findAllAfterById(@Param("id") final Long id);
 }

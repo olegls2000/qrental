@@ -30,7 +30,12 @@ public class BalanceCalculationQueryController {
 
   @GetMapping(value = "/calculations/{id}")
   public String getBalanceCalculationView(@PathVariable("id") long id, final Model model) {
-    model.addAttribute("balances", balanceCalculationQuery.getById(id).getBalances());
+
+   final var calculation =  balanceCalculationQuery.getById(id);
+    model.addAttribute("balances", calculation.getBalances());
+    model.addAttribute("startDate", calculation.getStartDate());
+    model.addAttribute("endDate", calculation.getEndDate());
+    model.addAttribute("actionDate", calculation.getActionDate());
 
     return "detailView/balanceCalculation";
   }

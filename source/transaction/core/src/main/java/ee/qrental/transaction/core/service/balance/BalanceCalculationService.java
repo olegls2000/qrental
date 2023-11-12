@@ -1,6 +1,5 @@
 package ee.qrental.transaction.core.service.balance;
 
-import static ee.qrental.common.core.utils.QTimeUtils.BALANCE_START_CALCULATION_DATE;
 import static ee.qrental.transaction.api.in.TransactionConstants.isFeeType;
 import static ee.qrental.transaction.api.in.TransactionConstants.isNotFeeType;
 import static java.math.BigDecimal.ZERO;
@@ -8,6 +7,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
+import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -23,9 +23,11 @@ import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.domain.balance.Balance;
+import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -43,23 +45,40 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final BalanceCalculationLoadPort balanceCalculationLoadPort;
   private final BalanceCalculationAddRequestMapper addRequestMapper;
 
+  private void setStartAndEndDates(
+      final BalanceCalculation domain,
+      QWeekResponse latestCalculatedWeek,
+      QWeekResponse latestRequestedWeek) {
+    final var startDate =
+        latestCalculatedWeek == null
+            ? LocalDate.of(2023, Month.JANUARY, 02)
+            : latestCalculatedWeek.getEnd().plus(1, DAYS);
+    final var endDate = latestRequestedWeek.getEnd();
+
+    domain.setStartDate(startDate);
+    domain.setEndDate(endDate);
+  }
+
   // @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
 
-    final var calculationQWeekId = addRequest.getQWeekId();
+    final var latestRequestedWeekId = addRequest.getQWeekId();
     final var domain = addRequestMapper.toDomain(addRequest);
-    final var qWeek = qWeekQuery.getById(calculationQWeekId);
+    final var latestRequestedWeek = qWeekQuery.getById(latestRequestedWeekId);
 
-    var lastCalculationDate = getLastCalculationDate();
-    final var startDate = lastCalculationDate.plus(1, DAYS);
-    final var endDate = qWeek.getEnd();
+    var lastCalculationWeek = getLastCalculationWeek();
 
-    domain.setStartDate(startDate);
-    domain.setEndDate(endDate);
+    setStartAndEndDates(domain, lastCalculationWeek, latestRequestedWeek);
 
-    qWeekQuery.getAllBeforeById(calculationQWeekId).stream()
+    final var qWeeksForCalculation =
+        lastCalculationWeek == null
+            ? qWeekQuery.getAllBeforeById(latestRequestedWeekId)
+            : qWeekQuery.getAllBetweenByIds(
+                lastCalculationWeek.getId(), latestRequestedWeek.getId());
+
+    qWeeksForCalculation.stream()
         .sorted(comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber))
         .forEach(
             week ->
@@ -81,26 +100,6 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                               "Balance for Driver with id: %d and week %d was calculated.\n",
                               driverId, week.getNumber());
                         }));
-
-    /* while (weekIterator.hasNext()) {
-      final var week = weekIterator.next();
-      drivers.stream()
-          .forEach(
-              driver -> {
-                final var driverId = driver.getId();
-                feeReplenishService.replenish(week, driverId);
-                feeCalculationService.calculate(week, driver);
-
-                final var driversTransactions = getAllTransactionsByDriverAndWeek(week, driverId);
-                final var balanceToSave = getBalance(week, driverId, driversTransactions);
-                final var balance = balanceAddPort.add(balanceToSave);
-                final var balanceCalculationResult = getBalanceCalculationResult(driversTransactions, balance);
-                domain.getResults().add(balanceCalculationResult);
-                System.out.printf(
-                    "Balance for Driver with id: %d and week %d was calculated.\n",
-                    driverId, week.weekNumber());
-              });
-    }*/
     balanceCalculationAddPort.add(domain);
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
@@ -108,12 +107,16 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         "----> Time: Balance Calculation took %d milli seconds \n", calculationDuration);
   }
 
-  private LocalDate getLastCalculationDate() {
+  private QWeekResponse getLastCalculationWeek() {
     var lastCalculationDate = balanceCalculationLoadPort.loadLastCalculatedDate();
     if (lastCalculationDate == null) {
-      lastCalculationDate = BALANCE_START_CALCULATION_DATE;
+
+      return null;
     }
-    return lastCalculationDate;
+    final var year = lastCalculationDate.getYear();
+    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculationDate);
+
+    return qWeekQuery.getByYearAndNumber(year, weekNumber);
   }
 
   private BalanceCalculationResult getBalanceCalculationResult(

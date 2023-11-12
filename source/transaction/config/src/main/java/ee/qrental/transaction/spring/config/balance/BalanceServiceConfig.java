@@ -24,19 +24,13 @@ public class BalanceServiceConfig {
 
   @Bean
   GetBalanceQuery getBalanceQueryService(
-      final GetDriverQuery driverQuery,
       final GetQWeekQuery qWeekQuery,
       final GetConstantQuery constantQuery,
       final BalanceLoadPort balanceLoadPort,
       final TransactionLoadPort transactionLoadPort,
       final BalanceResponseMapper balanceResponseMapper) {
     return new BalanceQueryService(
-        driverQuery,
-        qWeekQuery,
-        constantQuery,
-        balanceLoadPort,
-        transactionLoadPort,
-        balanceResponseMapper);
+        qWeekQuery, constantQuery, balanceLoadPort, transactionLoadPort, balanceResponseMapper);
   }
 
   @Bean

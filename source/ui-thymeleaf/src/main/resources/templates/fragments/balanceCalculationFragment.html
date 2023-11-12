@@ -3,12 +3,30 @@
     <div class="col-10">
         <div class="card">
             <div class="card-body">
+                <h4 class="card-title">Balance Calculation Results</h4>
                 <div class="row">
                     <div class="col">
                         <a class="btn-close position-absolute top-0 end-0 m-2"
                            aria-label="Close"
                            href="/balances/calculations">
                         </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <small th:text="|Start: ${startDate}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                    <div class="col-4">
+                        <small th:text="|End: ${endDate}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                    <div class="col-4">
+                        <small th:text="|Action date: ${actionDate}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
                     </div>
                 </div>
                 <table class="table table-striped table-bordered">

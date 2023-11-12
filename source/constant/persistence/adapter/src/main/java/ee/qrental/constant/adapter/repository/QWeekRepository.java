@@ -15,6 +15,9 @@ public interface QWeekRepository {
   QWeekJakartaEntity findByYearAndWeekNumber(final Integer year, final Integer weekNumber);
 
   List<QWeekJakartaEntity> findByYear(final Integer year);
+
+  List<QWeekJakartaEntity> findAllBetweenByIds(final Long startWeekId, final Long endWeekId);
+
   List<QWeekJakartaEntity> findAllBeforeById(final Long id);
 
   List<Integer> findAllYears();
