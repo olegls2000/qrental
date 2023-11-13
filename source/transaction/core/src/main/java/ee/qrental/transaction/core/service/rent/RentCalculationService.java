@@ -1,6 +1,5 @@
 package ee.qrental.transaction.core.service.rent;
 
-
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -100,7 +99,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   }
 
   private TransactionAddRequest getRentTransactionAddRequest(
-          final QWeekResponse week, final CarLinkResponse activeCarLink) {
+      final QWeekResponse week, final CarLinkResponse activeCarLink) {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDate(week.getStart());
     final var transactionTpe =

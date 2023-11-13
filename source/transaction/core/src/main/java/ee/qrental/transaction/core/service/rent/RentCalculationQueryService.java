@@ -24,4 +24,10 @@ public class RentCalculationQueryService implements GetRentCalculationQuery {
   public RentCalculationResponse getById(final Long id) {
     return responseMapper.toResponse(loadPort.loadById(id));
   }
+
+  @Override
+  public Long getLastCalculatedQWeekId() {
+
+    return loadPort.loadLastCalculationQWeekId();
+  }
 }

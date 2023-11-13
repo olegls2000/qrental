@@ -21,7 +21,7 @@
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(calculations)}">
-            <td colspan="5">No Rent Calculations were done yet</td>
+            <td colspan="8">No Rent Calculations were done yet</td>
         </tr>
         <tr th:each="calculation : ${calculations}">
             <td><a class="btn btn-sm btn-warning"

@@ -34,6 +34,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BalanceCalculationService implements BalanceCalculationAddUseCase {
 
+  private static final LocalDate DEFAULT_START_DATE = LocalDate.of(2023, Month.JANUARY, 02);
+
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
@@ -45,41 +47,19 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final BalanceCalculationLoadPort balanceCalculationLoadPort;
   private final BalanceCalculationAddRequestMapper addRequestMapper;
 
-  private void setStartAndEndDates(
-      final BalanceCalculation domain,
-      QWeekResponse latestCalculatedWeek,
-      QWeekResponse latestRequestedWeek) {
-    final var startDate =
-        latestCalculatedWeek == null
-            ? LocalDate.of(2023, Month.JANUARY, 02)
-            : latestCalculatedWeek.getEnd().plus(1, DAYS);
-    final var endDate = latestRequestedWeek.getEnd();
-
-    domain.setStartDate(startDate);
-    domain.setEndDate(endDate);
-  }
-
   // @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
-
     final var latestRequestedWeekId = addRequest.getQWeekId();
     final var domain = addRequestMapper.toDomain(addRequest);
     final var latestRequestedWeek = qWeekQuery.getById(latestRequestedWeekId);
-
-    var lastCalculationWeek = getLastCalculationWeek();
-
-    setStartAndEndDates(domain, lastCalculationWeek, latestRequestedWeek);
-
+    var latestCalculatedWeek = getLatestCalculatedWeek();
+    setStartAndEndDates(domain, latestCalculatedWeek, latestRequestedWeek);
     final var qWeeksForCalculation =
-        lastCalculationWeek == null
-            ? qWeekQuery.getAllBeforeById(latestRequestedWeekId)
-            : qWeekQuery.getAllBetweenByIds(
-                lastCalculationWeek.getId(), latestRequestedWeek.getId());
+        getQWeeksForCalculationOrdered(latestCalculatedWeek, latestRequestedWeek);
 
     qWeeksForCalculation.stream()
-        .sorted(comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber))
         .forEach(
             week ->
                 driverQuery.getAll().stream()
@@ -88,7 +68,6 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                           final var driverId = driver.getId();
                           feeReplenishService.replenish(week, driverId);
                           feeCalculationService.calculate(week, driver);
-
                           final var driversTransactions =
                               getAllTransactionsByDriverAndWeek(week, driverId);
                           final var balanceToSave = getBalance(week, driverId, driversTransactions);
@@ -107,7 +86,34 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         "----> Time: Balance Calculation took %d milli seconds \n", calculationDuration);
   }
 
-  private QWeekResponse getLastCalculationWeek() {
+  private void setStartAndEndDates(
+      final BalanceCalculation domain,
+      QWeekResponse latestCalculatedWeek,
+      QWeekResponse latestRequestedWeek) {
+    final var startDate =
+        latestCalculatedWeek == null
+            ? DEFAULT_START_DATE
+            : latestCalculatedWeek.getEnd().plus(1, DAYS);
+    final var endDate = latestRequestedWeek.getEnd();
+
+    domain.setStartDate(startDate);
+    domain.setEndDate(endDate);
+  }
+
+  private List<QWeekResponse> getQWeeksForCalculationOrdered(
+      final QWeekResponse lastCalculationWeek, final QWeekResponse latestRequestedWeek) {
+    final var qWeeksForCalculation =
+        lastCalculationWeek == null
+            ? qWeekQuery.getAllBeforeById(latestRequestedWeek.getId())
+            : qWeekQuery.getAllBetweenByIds(
+                lastCalculationWeek.getId(), latestRequestedWeek.getId());
+    qWeeksForCalculation.sort(
+        comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber));
+
+    return qWeeksForCalculation;
+  }
+
+  private QWeekResponse getLatestCalculatedWeek() {
     var lastCalculationDate = balanceCalculationLoadPort.loadLastCalculatedDate();
     if (lastCalculationDate == null) {
 

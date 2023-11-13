@@ -6,7 +6,6 @@ import ee.qrental.transaction.adapter.mapper.rent.RentCalculationAdapterMapper;
 import ee.qrental.transaction.adapter.repository.rent.RentCalculationRepository;
 import ee.qrental.transaction.api.out.rent.RentCalculationLoadPort;
 import ee.qrental.transaction.domain.rent.RentCalculation;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -19,10 +18,6 @@ public class RentCalculationLoadAdapter implements RentCalculationLoadPort {
   @Override
   public Long loadLastCalculationQWeekId() {
     return repository.getLastCalculationQWeekId();
-  }
-
-  private LocalDate loadedOrDefault(final LocalDate loadedDate, final LocalDate defaultDate) {
-    return loadedDate == null ? defaultDate : loadedDate;
   }
 
   @Override

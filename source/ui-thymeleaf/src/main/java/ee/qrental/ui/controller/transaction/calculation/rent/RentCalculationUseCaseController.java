@@ -3,6 +3,8 @@ package ee.qrental.ui.controller.transaction.calculation.rent;
 import static ee.qrental.ui.controller.util.ControllerUtils.RENTS_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import java.util.List;
@@ -19,18 +21,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class RentCalculationUseCaseController {
 
-  private final RentCalculationAddUseCase addUseCase;
+  private final GetRentCalculationQuery rentCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final RentCalculationAddUseCase addUseCase;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     addAddRequestToModel(new RentCalculationAddRequest(), model);
-    model.addAttribute("years", List.of(2023));
-
-    final var weeks = qWeekQuery.getAll();
-    model.addAttribute("weeks", weeks);
+    model.addAttribute("weeks", getWeeks());
 
     return "forms/addRentCalculation";
+  }
+
+  private List<QWeekResponse> getWeeks() {
+    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
+    if (lastCalculatedWeekId == null) {
+      return qWeekQuery.getAll();
+    }
+
+    return qWeekQuery.getAllAfterById(lastCalculatedWeekId);
   }
 
   @PostMapping(value = "/calculations/add")
