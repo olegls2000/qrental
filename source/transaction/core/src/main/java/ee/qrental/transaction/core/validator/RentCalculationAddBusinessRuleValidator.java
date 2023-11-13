@@ -23,7 +23,7 @@ public class RentCalculationAddBusinessRuleValidator {
   public ViolationsCollector validate(final RentCalculationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
-    //checkIfCalculationDayIsMonday(violationsCollector);
+    // checkIfCalculationDayIsMonday(violationsCollector);
     checkIfWeeklyRendAlreadyCalculated(qWeek, violationsCollector);
     checkIfBalanceAlreadyCalculatedForRequestedWeek(qWeek, violationsCollector);
     return violationsCollector;
@@ -32,10 +32,17 @@ public class RentCalculationAddBusinessRuleValidator {
   private void checkIfBalanceAlreadyCalculatedForRequestedWeek(
       final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
     final var latestBalance = balanceLoadPort.loadLatest();
-    if(latestBalance == null) {
+    if (latestBalance == null) {
       return;
     }
-    if (latestBalance.getQWeekId() == qWeek.getId()) {
+
+    final var qWeekYear = qWeek.getYear();
+    final var qWeekNumber = qWeek.getNumber();
+    final var latestBalanceQWeek = qWeekQuery.getById(latestBalance.getQWeekId());
+    final var latestBalanceQWeekYear = latestBalanceQWeek.getYear();
+    final var latestBalanceQWeekNumber = latestBalanceQWeek.getNumber();
+
+    if (qWeekYear <= latestBalanceQWeekYear && qWeekNumber <= latestBalanceQWeekNumber) {
       final var violation =
           "Weekly Rent Calculation must be done only for the week without calculated Balance";
       System.out.println(violation);

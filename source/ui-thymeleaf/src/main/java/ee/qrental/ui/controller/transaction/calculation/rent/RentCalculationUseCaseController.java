@@ -48,6 +48,8 @@ public class RentCalculationUseCaseController {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
+      model.addAttribute("weeks", getWeeks());
+
       return "forms/addRentCalculation";
     }
 
