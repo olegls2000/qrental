@@ -26,7 +26,24 @@ public class RentCalculationAddBusinessRuleValidator {
     // checkIfCalculationDayIsMonday(violationsCollector);
     checkIfWeeklyRendAlreadyCalculated(qWeek, violationsCollector);
     checkIfBalanceAlreadyCalculatedForRequestedWeek(qWeek, violationsCollector);
+    checkIfPreviousWeekHasCalculatedRent(qWeek, violationsCollector);
     return violationsCollector;
+  }
+
+  private void checkIfPreviousWeekHasCalculatedRent(
+      final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
+    final var previousWeek = qWeekQuery.getOneBeforeById(qWeek.getId());
+    if (previousWeek == null) {
+      System.out.println("First Rent Calculation");
+      return;
+    }
+    final var latestCalculatedQWeekId = loadPort.loadLastCalculationQWeekId();
+    if (previousWeek.getId() != latestCalculatedQWeekId) {
+      final var violation =
+          format("Rent Calculation for previous week - %d was not calculated.", previousWeek.getNumber());
+      System.out.println(violation);
+      violationsCollector.collect(violation);
+    }
   }
 
   private void checkIfBalanceAlreadyCalculatedForRequestedWeek(

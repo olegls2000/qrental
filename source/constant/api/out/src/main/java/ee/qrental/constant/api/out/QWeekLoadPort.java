@@ -14,7 +14,5 @@ public interface QWeekLoadPort extends LoadPort<QWeek> {
 
   List<QWeek> loadAllAfterById(final Long id);
 
-  List<Integer> loadYears();
-
   QWeek loadByYearAndNumber(final Integer year, final Integer number);
 }

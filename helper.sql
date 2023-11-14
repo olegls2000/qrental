@@ -63,9 +63,9 @@ where bl.driver_id = :driverId
 
 select bl.* from balance bl where driver_id = 1;
 
-select qw.id from rent_calculation rc
-              LEFT JOIN q_week qw on rc.q_week_id = q_week_id
-             order by qw.year, qw.number asc limit 1;
+select * from rent_calculation rc
+             JOIN q_week qw on rc.q_week_id = qw.id
+             order by qw.year, qw.number desc limit 1;
 
 
 

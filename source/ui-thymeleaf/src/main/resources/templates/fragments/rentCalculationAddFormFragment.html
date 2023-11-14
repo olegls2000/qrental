@@ -1,6 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
-            title='Trigger Rent calculation',
+            title='Calculation',
             closeRef='/transactions',
             content=~{fragments/rentCalculationAddFormFragment.html :: addForm},
             request=${addRequest}
@@ -12,21 +12,20 @@
     <form method="post"
           th:action="@{/rents/calculations/add}"
           th:object="${addRequest}">
-        <p class="fs-4 ">Please confirm that you want to trigger:</p>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Weekly Rent calculation</li>
-        </ul>
-        <div class="row">
-            <div class="mb-3">
-                <label class="form-label text-muted" for="weekId">Select last week (included)</label>
-                <select id="weekId" class="form-select"
-                        th:field="*{qWeekId}">
-                    <option th:each="week: ${weeks}"
-                            th:value="${week.id}"
-                            th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>
-                </select>
+        <div class="row justify-content-md-center mb-3">
+            <p class="fs-4">Please confirm that you want to trigger Rent Calculation for the period:</p>
+            <div class="col-md-auto">
+                <small th:text="|from
+        ${qDateFormatter.format(nextWeek.start)} till ${qDateFormatter.format(nextWeek.end)} (${nextWeek.number})|"
+                       class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
             </div>
         </div>
+        <input id="neextWeekId"
+               required
+               th:field="*{qWeekId}"
+               type="number"
+               hidden/>
         <div class="mb-3">
             <label class="form-label text-muted" for="actionDateId">Action Date</label>
             <input class="form-control" id="actionDateId"

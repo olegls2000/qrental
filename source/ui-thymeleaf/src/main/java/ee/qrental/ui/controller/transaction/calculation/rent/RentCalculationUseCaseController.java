@@ -1,5 +1,6 @@
 package ee.qrental.ui.controller.transaction.calculation.rent;
 
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.RENTS_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -8,6 +9,8 @@ import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import java.util.List;
+
+import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +27,27 @@ public class RentCalculationUseCaseController {
   private final GetRentCalculationQuery rentCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
   private final RentCalculationAddUseCase addUseCase;
+  private final QDateFormatter qDateFormatter;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
-    addAddRequestToModel(new RentCalculationAddRequest(), model);
-    model.addAttribute("weeks", getWeeks());
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    final var nextWeek = getNextWeek();
+    final var rentCalculationRequest = new RentCalculationAddRequest();
+    rentCalculationRequest.setQWeekId(nextWeek.getId());
+    addAddRequestToModel(rentCalculationRequest, model);
+    model.addAttribute("nextWeek", getNextWeek());
 
     return "forms/addRentCalculation";
+  }
+
+  private QWeekResponse getNextWeek() {
+    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
+    if (lastCalculatedWeekId == null) {
+      return qWeekQuery.getFirstWeek();
+    }
+
+    return qWeekQuery.getOneAfterById(lastCalculatedWeekId);
   }
 
   private List<QWeekResponse> getWeeks() {

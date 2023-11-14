@@ -1,9 +1,7 @@
 package ee.qrental.constant.core.service;
 
 import static java.util.Comparator.comparing;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
@@ -13,7 +11,6 @@ import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -64,17 +61,12 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public Map<Integer, List<QWeekResponse>> getAllGroupedByYear() {
-    return getAllYears().stream().collect(toMap(identity(), this::getAllByYear));
-  }
-
-  @Override
   public QWeekResponse getByYearAndNumber(final Integer year, final Integer number) {
     return mapper.toResponse(loadPort.loadByYearAndNumber(year, number));
   }
 
   @Override
-  public QWeekResponse getOneWeekBefore(final Long qWeekId) {
+  public QWeekResponse getOneBeforeById(final Long qWeekId) {
     final var qWeek = loadPort.loadById(qWeekId);
     final var qWeekYear = qWeek.getYear();
     final var qWeekNumber = qWeek.getNumber();
@@ -93,24 +85,42 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public List<Integer> getAllYears() {
-    return loadPort.loadYears();
+  public QWeekResponse getOneAfterById(final Long qWeekId) {
+    final var qWeek = loadPort.loadById(qWeekId);
+    final var qWeekYear = qWeek.getYear();
+    final var qWeekNumber = qWeek.getNumber();
+    var nextWeekYear = qWeekYear;
+    var nextWeekNumber = qWeekNumber;
+
+    if (qWeekNumber == 52) {
+      nextWeekYear = qWeekYear + 1;
+      nextWeekNumber = 1;
+    } else {
+      nextWeekNumber = qWeekNumber + 1;
+    }
+
+    return mapper.toResponse(loadPort.loadByYearAndNumber(nextWeekYear, nextWeekNumber));
+  }
+
+  @Override
+  public QWeekResponse getFirstWeek() {
+    return mapper.toResponse(loadPort.loadByYearAndNumber(2023, 1));
   }
 
   @Override
   public List<QWeekResponse> getAllBetweenByIds(final Long startWeekId, final Long endWeekId) {
     return loadPort.loadAllBetweenByIds(startWeekId, endWeekId).stream()
-            .map(mapper::toResponse)
-            .sorted(REVERSED_COMPARATOR)
-            .collect(toList());
+        .map(mapper::toResponse)
+        .sorted(REVERSED_COMPARATOR)
+        .collect(toList());
   }
 
   @Override
   public List<QWeekResponse> getAllBeforeById(final Long qWeekId) {
     return loadPort.loadAllBeforeById(qWeekId).stream()
-            .map(mapper::toResponse)
-            .sorted(REVERSED_COMPARATOR)
-            .collect(toList());
+        .map(mapper::toResponse)
+        .sorted(REVERSED_COMPARATOR)
+        .collect(toList());
   }
 
   @Override

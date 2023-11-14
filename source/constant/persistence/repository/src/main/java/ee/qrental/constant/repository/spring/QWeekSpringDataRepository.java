@@ -12,9 +12,6 @@ public interface QWeekSpringDataRepository extends JpaRepository<QWeekJakartaEnt
 
   List<QWeekJakartaEntity> findByYear(final Integer year);
 
-  @Query(value = "SELECT distinct (qw.year) FROM q_week qw;", nativeQuery = true)
-  List<Integer> findYears();
-
   @Query(
       value =
           "SELECT qw.* FROM q_week qw "
