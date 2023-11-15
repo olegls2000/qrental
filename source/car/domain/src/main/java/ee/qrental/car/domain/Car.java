@@ -38,11 +38,11 @@ public class Car {
     private RagStatus gasInspectionRagStatus;
     private RagStatus warrantyRagStatus;
     private String comment;
-    private Boolean byQrent;
-    private Boolean byBolt;
-    private Boolean byForus;
-    private Boolean byUber;
-    private Boolean byTallink;
+    private Boolean brandingQrent;
+    private Boolean brandingBolt;
+    private Boolean brandingForus;
+    private Boolean brandingUber;
+    private Boolean brandingTallink;
 
     public RagStatus getInsuranceRagStatus() {
         final var daysBetween = DAYS.between(LocalDate.now(), insuranceDateEnd);

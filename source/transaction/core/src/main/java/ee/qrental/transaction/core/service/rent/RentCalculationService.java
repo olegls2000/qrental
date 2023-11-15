@@ -75,19 +75,28 @@ public class RentCalculationService implements RentCalculationAddUseCase {
       final var rentTransactionId = transactionUseCaseService.add(rentTransactionAddRequest);
       final var calculationResultForRent = getResult(carLinkId, rentTransactionId);
       domain.getResults().add(calculationResultForRent);
-      final var noLabelFineTransactionAddRequest =
-          getNoLabelFineTransactionAddRequest(week, activeCarLink);
-      final var noLabelFineTransactionId =
-          transactionUseCaseService.add(noLabelFineTransactionAddRequest);
-
-      final var calculationResultForNoLabelFine = getResult(carLinkId, noLabelFineTransactionId);
-      domain.getResults().add(calculationResultForNoLabelFine);
+      final var isNoLabelFineRequired = isNoLabelFineRequired(activeCarLink.getCarId());
+      if (isNoLabelFineRequired) {
+        final var noLabelFineTransactionAddRequest =
+            getNoLabelFineTransactionAddRequest(week, activeCarLink);
+        final var noLabelFineTransactionId =
+            transactionUseCaseService.add(noLabelFineTransactionAddRequest);
+        final var calculationResultForNoLabelFine = getResult(carLinkId, noLabelFineTransactionId);
+        domain.getResults().add(calculationResultForNoLabelFine);
+      }
     }
     rentCalculationAddPort.add(domain);
     sendEmails(domain.getResults(), week.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
+  }
+
+  private boolean isNoLabelFineRequired(final Long carId) {
+    final var car = carQuery.getById(carId);
+    final var hasQLabel = car.getBrandingQrent();
+
+    return !hasQLabel;
   }
 
   private RentCalculationResult getResult(final Long carLinkId, final Long transactionId) {

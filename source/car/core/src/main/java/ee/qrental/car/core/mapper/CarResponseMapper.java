@@ -38,11 +38,11 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
                 .gasInspectionRagStatus(domain.getGasInspectionRagStatus().name())
                 .warrantyRagStatus(domain.getWarrantyRagStatus().name())
                 .comment(domain.getComment())
-                .byQrent(domain.getByQrent())
-                .byBolt(domain.getByBolt())
-                .byForus(domain.getByForus())
-                .byUber(domain.getByUber())
-                .byTallink(domain.getByTallink())
+                .brandingQrent(domain.getBrandingQrent())
+                .brandingBolt(domain.getBrandingBolt())
+                .brandingForus(domain.getBrandingForus())
+                .brandingUber(domain.getBrandingUber())
+                .brandingTallink(domain.getBrandingTallink())
                 .build();
     }
 

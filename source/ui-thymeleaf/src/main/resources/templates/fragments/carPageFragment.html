@@ -55,11 +55,11 @@
             </td>
             <td th:text="${car.regNumber}"></td>
             <td>
-                <i th:if="${car.byQrent}"> Q </i>
-                <i th:if="${car.byBolt}" class="bi bi-type-bold"></i>
-                <i th:if="${car.byForus}"> F </i>
-                <i th:if="${car.byUber}"> U </i>
-                <i th:if="${car.byTallink}"> T </i>
+                <i th:if="${car.brandingQrent}"> Q </i>
+                <i th:if="${car.brandingBolt}" class="bi bi-type-bold"></i>
+                <i th:if="${car.brandingForus}"> F </i>
+                <i th:if="${car.brandingUber}"> U </i>
+                <i th:if="${car.brandingTallink}"> T </i>
             </td>
             <td th:text="${qDateFormatter.format(car.releaseDate)}"></td>
             <th:block th:switch="${car.warrantyRagStatus}">

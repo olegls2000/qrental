@@ -34,11 +34,11 @@ public class CarAddRequestMapper
                 .gasInspectionEnd(request.getGasInspectionEnd())
                 .comment(request.getComment())
                 .dateEndLpg(request.getDateEndLpg())
-                .byQrent(request.getByQrent())
-                .byBolt(request.getByBolt())
-                .byForus(request.getByForus())
-                .byUber(request.getByUber())
-                .byTallink(request.getByTallink())
+                .brandingQrent(request.getBrandingQrent())
+                .brandingBolt(request.getBrandingBolt())
+                .brandingForus(request.getBrandingForus())
+                .brandingUber(request.getBrandingUber())
+                .brandingTallink(request.getBrandingTallink())
                 .build();
     }
 }

@@ -33,11 +33,11 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
                 .gasInspectionEnd(request.getGasInspectionEnd())
                 .comment(request.getComment())
                 .dateEndLpg(request.getDateEndLpg())
-                .byQrent(request.getByQrent())
-                .byBolt(request.getByBolt())
-                .byForus(request.getByForus())
-                .byUber(request.getByUber())
-                .byTallink(request.getByTallink())
+                .brandingQrent(request.getBrandingQrent())
+                .brandingBolt(request.getBrandingBolt())
+                .brandingForus(request.getBrandingForus())
+                .brandingUber(request.getBrandingUber())
+                .brandingTallink(request.getBrandingTallink())
                 .build();
     }
 
@@ -68,11 +68,11 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
                 .gasInspectionEnd(domain.getGasInspectionEnd())
                 .comment(domain.getComment())
                 .dateEndLpg(domain.getDateEndLpg())
-                .byQrent(domain.getByQrent())
-                .byBolt(domain.getByBolt())
-                .byForus(domain.getByForus())
-                .byUber(domain.getByUber())
-                .byTallink(domain.getByTallink())
+                .brandingQrent(domain.getBrandingQrent())
+                .brandingBolt(domain.getBrandingBolt())
+                .brandingForus(domain.getBrandingForus())
+                .brandingUber(domain.getBrandingUber())
+                .brandingTallink(domain.getBrandingTallink())
                 .build();
     }
 }

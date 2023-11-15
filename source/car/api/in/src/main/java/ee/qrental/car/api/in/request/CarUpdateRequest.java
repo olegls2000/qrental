@@ -36,9 +36,9 @@ public class CarUpdateRequest extends AbstractUpdateRequest {
   private LocalDate gasInspectionEnd;
   private String comment;
   private LocalDate dateEndLpg;
-  private Boolean byQrent;
-  private Boolean byBolt;
-  private Boolean byForus;
-  private Boolean byUber;
-  private Boolean byTallink;
+  private Boolean brandingQrent;
+  private Boolean brandingBolt;
+  private Boolean brandingForus;
+  private Boolean brandingUber;
+  private Boolean brandingTallink;
 }
