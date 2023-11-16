@@ -57,7 +57,7 @@ public class Car {
     }
 
     public RagStatus getWarrantyRagStatus() {
-        final var daysBetween = DAYS.between( releaseDate, LocalDate.now());
+        final var daysBetween = DAYS.between( releaseDate , LocalDate.now());
         return getRagStatusByDurationForWarranty(daysBetween);
     }
 

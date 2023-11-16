@@ -1,14 +1,15 @@
 package ee.qrental.contract.entity.jakarta;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import jakarta.persistence.*;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "contract")
@@ -18,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class ContractJakartaEntity {
+
   @Id
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
@@ -81,4 +83,20 @@ public class ContractJakartaEntity {
 
   @Column(name = "created")
   private LocalDate created;
+
+  @Column(name = "q_firm_vat_number")
+  private String qFirmVatNumber;
+
+@Column(name = "q_firm_iban")
+  private String qFirmIban;
+
+  @Column(name = "q_firm_vat_phone")
+  private String qFirmVatPhone;
+
+  @Column(name = "renter_address")
+  private String renterAddress;
+
+  @Column(name = "driver_address")
+  private String driverAddress;
+
 }

@@ -1,16 +1,17 @@
 package ee.qrental.contract.core.mapper;
 
-import static java.lang.String.format;
-import static java.time.format.DateTimeFormatter.ofPattern;
-
 import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.contract.api.in.request.ContractAddRequest;
 import ee.qrental.contract.domain.Contract;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+
+import java.time.LocalDate;
+
+import static java.lang.String.format;
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 @AllArgsConstructor
 public class ContractAddRequestMapper implements AddRequestMapper<ContractAddRequest, Contract> {
@@ -36,11 +37,11 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .renterName(renterName)
         .renterRegistrationNumber(renterRegistrationNumber)
         .renterCeoName(driver.getCompanyCeoName())
-        .renterCeoTaxNumber(driver.getCompanyCeoTaxNumber())
+        .renterCeoIsikukood(driver.getCompanyCeoTaxNumber())
         .renterPhone(driver.getPhone())
         .renterEmail(driver.getEmail())
         .driverId(driverId)
-        .driverTaxNumber(driver.getIsikukood())
+        .driverIsikukood(driver.getIsikukood())
         .driverLicenceNumber(driver.getDriverLicenseNumber())
         .qFirmId(qFirmId)
         .qFirmName(qFirm.getName())
@@ -49,7 +50,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .qFirmEmail(qFirm.getEmail())
         .qFirmCeo(qFirm.getCeoName())
         .qFirmCeoDeputies(qFirm.getDeputies())
-        .created(currentDate)
+        .created(LocalDate.now())
         .build();
   }
 
@@ -65,7 +66,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
 
   private String getContractNumber(final LocalDate currentDate, final Long driverId) {
     final var dateString = currentDate.format(ofPattern("yyyyMMdd"));
-    return format("%s-%d", dateString, driverId);
+    return String.format("%s-%d", dateString, driverId);
   }
 
   private String getRenterRegistrationNumber(final DriverResponse driver) {

@@ -1,8 +1,5 @@
 package ee.qrental.car.core.service;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.query.filter.CarFilter;
 import ee.qrental.car.api.in.request.CarUpdateRequest;
@@ -12,10 +9,14 @@ import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.core.mapper.CarResponseMapper;
 import ee.qrental.car.core.mapper.CarUpdateRequestMapper;
 import ee.qrental.car.domain.CarLink;
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import lombok.AllArgsConstructor;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @AllArgsConstructor
 public class CarQueryService implements GetCarQuery {
