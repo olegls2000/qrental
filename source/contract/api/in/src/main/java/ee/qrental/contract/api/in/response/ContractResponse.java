@@ -36,14 +36,5 @@ public class ContractResponse {
   private List<String> qFirmCeoDeputies = new ArrayList<>();
   private LocalDate created;
 
-/*  private String number;
-  private String renterName;
-  private String renterRegistrationNumber;
-  private String renterCeoName;
-  private Long driverIsikukood;
-  private String qFirmName;
-  private String qFirmCeo;
-  private LocalDate created;
-*/
 }
 

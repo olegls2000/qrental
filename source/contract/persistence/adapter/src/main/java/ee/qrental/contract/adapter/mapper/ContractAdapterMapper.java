@@ -32,6 +32,7 @@ public class ContractAdapterMapper {
                 .driverId(entity.getDriverId())
                 .driverIsikukood(entity.getDriverIsikukood())
                 .driverLicenceNumber(entity.getDriverLicenceNumber())
+                .driverAddress(entity.getDriverAddress())
                 .qFirmId(entity.getQFirmId())
                 .qFirmName(entity.getQFirmName())
                 .qFirmRegistrationNumber(entity.getQFirmRegistrationNumber())
@@ -39,6 +40,7 @@ public class ContractAdapterMapper {
                 .qFirmIban(entity.getQFirmIban())
                 .qFirmPostAddress(entity.getQFirmPostAddress())
                 .qFirmEmail(entity.getQFirmEmail())
+                .qFirmVatPhone(entity.getQFirmVatPhone())
                 .qFirmCeo(entity.getQFirmCeo())
                 .qFirmCeoDeputies(
                         asList(
@@ -71,6 +73,7 @@ public class ContractAdapterMapper {
                 .driverId(domain.getDriverId())
                 .driverIsikukood(domain.getDriverIsikukood())
                 .driverLicenceNumber(domain.getDriverLicenceNumber())
+                .driverAddress(domain.getDriverAddress())
                 .qFirmId(domain.getQFirmId())
                 .qFirmName(domain.getQFirmName())
                 .qFirmRegistrationNumber(domain.getQFirmRegistrationNumber())
@@ -78,6 +81,7 @@ public class ContractAdapterMapper {
                 .qFirmIban(domain.getQFirmIban())
                 .qFirmPostAddress(domain.getQFirmPostAddress())
                 .qFirmEmail(domain.getQFirmEmail())
+                .qFirmVatPhone(domain.getQFirmVatPhone())
                 .qFirmCeo(domain.getQFirmCeo())
                 .qFirmCeoDeputy1(getQfirmCeoDeputy1(domain))
                 .qFirmCeoDeputy2(getQfirmCeoDeputy2(domain))
