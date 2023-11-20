@@ -1,5 +1,9 @@
 package ee.qrental.car.core.service;
 
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.query.filter.CarFilter;
 import ee.qrental.car.api.in.request.CarUpdateRequest;
@@ -9,17 +13,14 @@ import ee.qrental.car.api.out.CarLoadPort;
 import ee.qrental.car.core.mapper.CarResponseMapper;
 import ee.qrental.car.core.mapper.CarUpdateRequestMapper;
 import ee.qrental.car.domain.CarLink;
-import lombok.AllArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CarQueryService implements GetCarQuery {
+  private final Comparator<CarResponse> DEFAULT_COMPARATOR = comparing(CarResponse::getRegNumber);
 
   private final CarLoadPort loadPort;
   private final CarResponseMapper mapper;
@@ -30,7 +31,7 @@ public class CarQueryService implements GetCarQuery {
   public List<CarResponse> getAll() {
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
-        .sorted(Comparator.comparing(CarResponse::getRegNumber))
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 
@@ -56,10 +57,7 @@ public class CarQueryService implements GetCarQuery {
     final var activeLinks = carLinkLoadPort.loadActive();
     if (activeLinks.isEmpty()) {
 
-      return allCars.stream()
-          .map(mapper::toResponse)
-          .sorted(Comparator.comparing(CarResponse::getRegNumber))
-          .collect(toList());
+      return allCars.stream().map(mapper::toResponse).sorted(DEFAULT_COMPARATOR).collect(toList());
     }
 
     final var activeCarIds = activeLinks.stream().map(CarLink::getCarId).collect(toSet());
@@ -73,6 +71,7 @@ public class CarQueryService implements GetCarQuery {
 
     return loadPort.loadNotAvailableByDate(LocalDate.now()).stream()
         .map(car -> mapper.toResponse(car))
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 

@@ -1,6 +1,7 @@
 package ee.qrental.car.core.service;
 
 import static java.lang.String.format;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
@@ -16,6 +17,32 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CarLinkQueryService implements GetCarLinkQuery {
+  private final Comparator<CarLinkResponse> DEFAULT_COMPARATOR =
+      (o1, o2) -> {
+        final var callSign1 = o1.getCallSign();
+        final var callSign2 = o2.getCallSign();
+
+        if (callSign1 == null && callSign2 == null) {
+
+          return 0;
+        }
+        if (callSign1 != null && callSign2 == null) {
+
+          return -1;
+        }
+
+        if (callSign1 == null && callSign2 != null) {
+
+          return 1;
+        }
+
+        return callSign1 - callSign2;
+      };
+
+  private final Comparator<CarLinkResponse> DRIVER_COMPARATOR =
+      comparing(CarLinkResponse::getDriverInfo);
+  private final Comparator<CarLinkResponse> END_DATE_COMPARATOR =
+      comparing(CarLinkResponse::getDateEnd);
 
   private final CarLinkLoadPort loadPort;
   private final CarLinkResponseMapper mapper;
@@ -23,7 +50,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
 
   @Override
   public List<CarLinkResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
   }
 
   @Override
@@ -71,7 +101,7 @@ public class CarLinkQueryService implements GetCarLinkQuery {
 
     return loadPort.loadActiveByDate(LocalDate.now()).stream()
         .map(mapper::toResponse)
-        .sorted(Comparator.comparing(CarLinkResponse::getCallSign))
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 
@@ -83,7 +113,11 @@ public class CarLinkQueryService implements GetCarLinkQuery {
   @Override
   public List<CarLinkResponse> getClosedByDate(final LocalDate date) {
 
-    return loadPort.loadClosedByDate(date).stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadClosedByDate(date).stream()
+        .map(mapper::toResponse)
+        .sorted(
+            DEFAULT_COMPARATOR.thenComparing(DRIVER_COMPARATOR).thenComparing(END_DATE_COMPARATOR))
+        .collect(toList());
   }
 
   @Override

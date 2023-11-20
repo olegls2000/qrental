@@ -1,5 +1,7 @@
 package ee.qrental.driver.core.service;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
@@ -15,6 +17,11 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CallSignLinkQueryService implements GetCallSignLinkQuery {
+
+  private final Comparator<CallSignLinkResponse> DEFAULT_COMPARATOR =
+      comparingInt(CallSignLinkResponse::getCallSign);
+  private final Comparator<CallSignLinkResponse> DATE_COMPARATOR =
+      comparing(CallSignLinkResponse::getDateEnd).reversed();
 
   private final CallSignLinkLoadPort loadPort;
   private final CallSignLinkResponseMapper mapper;
@@ -58,6 +65,7 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   public List<CallSignLinkResponse> getActive() {
     return loadPort.loadActiveByDate(LocalDate.now()).stream()
         .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 
@@ -65,6 +73,7 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   public List<CallSignLinkResponse> getClosed() {
     return loadPort.loadClosedByDate(LocalDate.now()).stream()
         .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR.thenComparing(DATE_COMPARATOR))
         .collect(toList());
   }
 

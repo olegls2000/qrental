@@ -1,5 +1,6 @@
 package ee.qrental.transaction.core.service.balance;
 
+import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.core.utils.FeeUtils.FEE_WEEKLY_INTEREST;
 import static ee.qrental.transaction.core.utils.FeeUtils.getWeekFeeInterest;
 import static java.math.BigDecimal.ZERO;
@@ -10,11 +11,8 @@ import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.common.core.utils.QWeekIterator;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
-import ee.qrental.transaction.api.in.response.balance.BalanceAmountWithDriverResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
@@ -23,7 +21,6 @@ import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -70,7 +67,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var balanceSum = latestBalance != null ? latestBalance.getAmount() : ZERO;
     final var rawSum = getRawTransactionsSum(latestBalance, driverId);
 
-    return balanceSum.add(rawSum);
+    return round(balanceSum.add(rawSum));
   }
 
   @Override
@@ -80,7 +77,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber);
     if (balance != null) {
 
-      return balance.getAmount();
+      return round(balance.getAmount());
     }
 
     final var endDate = QTimeUtils.getLastDayOfWeekInYear(year, weekNumber);
@@ -102,7 +99,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var fromBalance = latestBalance.getAmount();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
-    return fromBalance.add(rawTransactionSum);
+    return round(fromBalance.add(rawTransactionSum));
   }
 
   @Override
@@ -146,7 +143,7 @@ public class BalanceQueryService implements GetBalanceQuery {
       }
     }
 
-    return rawFeeTotal;
+    return round(rawFeeTotal);
   }
 
   private BigDecimal getRawTransactionsSum(final Balance latestBalance, final Long driverId) {
@@ -178,7 +175,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   public BigDecimal getFeeByDriver(Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
-    return latestBalance != null ? latestBalance.getFee() : ZERO;
+    return latestBalance != null ? round(latestBalance.getFee()) : ZERO;
   }
 
   @Override
@@ -195,6 +192,6 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var result =
         rawTransactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
 
-    return result;
+    return round(result);
   }
 }

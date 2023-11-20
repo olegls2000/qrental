@@ -1,14 +1,20 @@
 package ee.qrental.invoice.core.service.pdf;
 
+import static com.lowagie.text.Font.BOLDITALIC;
+import static com.lowagie.text.Font.COURIER;
+import static com.lowagie.text.PageSize.A4;
+import static com.lowagie.text.Rectangle.NO_BORDER;
+import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
+import static ee.qrental.common.core.utils.QNumberUtils.round;
+import static java.awt.Color.white;
+import static java.lang.String.format;
+
+import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.*;
 import com.lowagie.text.alignment.HorizontalAlignment;
 import com.lowagie.text.alignment.VerticalAlignment;
 import com.lowagie.text.pdf.PdfWriter;
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,16 +22,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Map;
-
-import static com.lowagie.text.Font.BOLDITALIC;
-
-import static com.lowagie.text.Font.COURIER;
-import static com.lowagie.text.PageSize.A4;
-import static com.lowagie.text.Rectangle.NO_BORDER;
-import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
-import static java.awt.Color.white;
-import static java.lang.String.format;
-import static java.math.BigDecimal.ROUND_DOWN;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 
 @AllArgsConstructor
 public class InvoiceToPdfConverter {
@@ -42,8 +40,7 @@ public class InvoiceToPdfConverter {
     final var invoicePdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
     final var invoicePdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(invoicePdfDoc, invoicePdfOutputStream);
-    final var header =
-        getHeader(model.getNumber(), model.getStartDate(), model.getEndDate());
+    final var header = getHeader(model.getNumber(), model.getStartDate(), model.getEndDate());
     final var requisites =
         getRequisites(
             model.getDriverCompany(),
@@ -97,9 +94,7 @@ public class InvoiceToPdfConverter {
 
   @SneakyThrows
   private Table getHeader(
-      final String invoiceNumber,
-      final String startDate,
-      final String endDate) {
+      final String invoiceNumber, final String startDate, final String endDate) {
     final var header = new Table(2);
     header.setPadding(0f);
     header.setSpacing(0f);
@@ -263,8 +258,7 @@ public class InvoiceToPdfConverter {
     table.setBorder(NO_BORDER);
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(advancePayment));
-    table.addCell(
-        getTotalLabelCell("Eelmise perioodi võlgnevus "));
+    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus "));
     table.addCell(getTotalValueCell(debt));
     table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
     table.addCell(getTotalValueCell(total));
@@ -377,7 +371,7 @@ public class InvoiceToPdfConverter {
     if (number == null) {
       return "-- eur";
     }
-    final var numberFinal = number.setScale(2, ROUND_DOWN).abs();
+    final var numberFinal = round(number).abs();
     DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);
