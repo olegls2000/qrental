@@ -99,4 +99,13 @@ public class ContractJakartaEntity {
   @Column(name = "driver_address")
   private String driverAddress;
 
+  @Column(name = "car_vin")
+  private String carVin;
+
+  @Column(name = "car_manufacturer")
+  private String carManufacturer;
+
+  @Column(name = "car_model")
+  private String carModel;
+
 }

@@ -29,6 +29,9 @@ public class ContractToPdfModelMapper {
                 .qFirmEmail(contract.getQFirmEmail())
                 .qFirmVatPhone(contract.getQFirmVatPhone())
                 .qFirmCeo(contract.getQFirmCeo())
+                .carVin(contract.getCarVin())
+                .carManufacturer(contract.getCarManufacturer())
+                .carModel(contract.getCarModel())
                 .build();
     }
 }

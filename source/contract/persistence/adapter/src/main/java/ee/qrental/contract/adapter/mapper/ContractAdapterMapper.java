@@ -47,6 +47,9 @@ public class ContractAdapterMapper {
                                 entity.getQFirmCeoDeputy1(),
                                 entity.getQFirmCeoDeputy2(),
                                 entity.getQFirmCeoDeputy3()))
+                .carVin(entity.getCarVin())
+                .carManufacturer(entity.getCarManufacturer())
+                .carModel(entity.getCarModel())
                 .created(entity.getCreated())
                 .active(active)
                 .build();
@@ -86,6 +89,9 @@ public class ContractAdapterMapper {
                 .qFirmCeoDeputy1(getQfirmCeoDeputy1(domain))
                 .qFirmCeoDeputy2(getQfirmCeoDeputy2(domain))
                 .qFirmCeoDeputy3(getQfirmCeoDeputy3(domain))
+                .carVin(domain.getCarVin())
+                .carManufacturer(domain.getCarManufacturer())
+                .carModel(domain.getCarModel())
                 .created(domain.getCreated())
                 .build();
     }

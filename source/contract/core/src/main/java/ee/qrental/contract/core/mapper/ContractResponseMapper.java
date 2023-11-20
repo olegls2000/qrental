@@ -36,6 +36,9 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
                 .qFirmVatPhone(domain.getQFirmVatPhone())
                 .qFirmEmail(domain.getQFirmEmail())
                 .qFirmCeo(domain.getQFirmCeo())
+                .carVin(domain.getCarVin())
+                .carManufacturer(domain.getCarManufacturer())
+                .carModel(domain.getCarModel())
                 .created(domain.getCreated())
                 .build();
     }

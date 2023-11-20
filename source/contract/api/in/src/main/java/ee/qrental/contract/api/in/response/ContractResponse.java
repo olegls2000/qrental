@@ -34,6 +34,9 @@ public class ContractResponse {
   private String qFirmVatPhone;
   private String qFirmCeo;
   private List<String> qFirmCeoDeputies = new ArrayList<>();
+  private String carVin;
+  private String carManufacturer;
+  private String carModel;
   private LocalDate created;
 
 }
