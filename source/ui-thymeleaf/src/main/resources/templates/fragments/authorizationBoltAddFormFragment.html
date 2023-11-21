@@ -1,0 +1,46 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Authorization',
+            content=~{fragments/authorizationBoltAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/authorizations/add}"
+          th:object="${addRequest}">
+        <input id="driverId" required
+               th:field="*{driverId}"
+               type="text"
+               hidden/>
+        <p class="fs-5">Drivers info:</p>
+        <table class="table table-sm">
+            <tbody>
+            <tr>
+                <td>Driver Isikukood:</td>
+                <td th:text="${driver.isikukood}">???</td>
+            </tr>
+
+            <tr>
+                <td>Driver first name:</td>
+                <td th:text="${driver.firstName}">???</td>
+            </tr>
+            <tr>
+                <td>Driver last name:</td>
+                <td th:text="${driver.lastName}">???</td>
+            </tr>
+            <tr>
+                <td>Driver email:</td>
+                <td th:text="${driver.email}">???</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add'
+        )">
+        </div>
+    </form>
+</div>

@@ -20,7 +20,8 @@ public class EmailServiceConfig {
         new ContractLetterBuildStrategy(templateEngine),
         new InvoiceLetterBuildStrategy(templateEngine),
         new UserRegistrationLetterBuildStrategy(templateEngine),
-        new CalculationLetterBuildStrategy(templateEngine));
+        new CalculationLetterBuildStrategy(templateEngine),
+        new AuthorizationLetterBuildStrategy(templateEngine));
   }
 
   @Bean

@@ -3,7 +3,7 @@ package ee.qrental.email.api.in.request;
 public enum EmailType {
   INVOICE,
   CONTRACT,
-  AUTHORIZATION_BOLT,
+    AUTHORIZATION,
   USER_REGISTRATION,
   CALCULATION
 }

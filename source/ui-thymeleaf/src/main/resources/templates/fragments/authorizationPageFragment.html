@@ -17,10 +17,10 @@
         <tr th:each="authorization : ${authorizations}">
             <td>
                 <a class="btn btn-sm btn-info"
-                   th:href="@{/bolt-authorizations/pdf/{id}(id=${authorization.id})}">
+                   th:href="@{/authorizations/pdf/{id}(id=${authorization.id})}">
                     <span class="bi-file-earmark-pdf"></span></a>
                 <a class="btn btn-sm btn-warning"
-                   th:href="@{/bolt-authorizations/email/send-form/{id}(id=${authorization.id})}">
+                   th:href="@{/authorizations/email/send-form/{id}(id=${authorization.id})}">
                     <span class="bi bi-envelope-at"></span></a>
             </td>
             <td th:text="${authorization.driverIsikukood}">???</td>
@@ -28,7 +28,6 @@
             <td th:text="${authorization.driverLastName}">???</td>
             <td th:text="${authorization.driverEmail}">???</td>
             <td th:text="${qDateFormatter.format(authorization.created)}">???</td>
-
         </tr>
     </table>
 </div>

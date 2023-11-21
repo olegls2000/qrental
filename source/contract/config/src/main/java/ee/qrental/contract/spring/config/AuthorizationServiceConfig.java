@@ -1,14 +1,14 @@
 package ee.qrental.contract.spring.config;
 
-import ee.qrental.contract.api.in.query.GetAuthorizationBoltQuery;
-import ee.qrental.contract.api.in.usecase.AuthorizationBoltPdfUseCase;
-import ee.qrental.contract.api.in.usecase.AuthorizationBoltSendByEmailUseCase;
+import ee.qrental.contract.api.in.query.GetAuthorizationQuery;
+import ee.qrental.contract.api.in.usecase.AuthorizationPdfUseCase;
+import ee.qrental.contract.api.in.usecase.AuthorizationSendByEmailUseCase;
 import ee.qrental.contract.api.out.*;
 import ee.qrental.contract.core.mapper.*;
 import ee.qrental.contract.core.service.*;
-import ee.qrental.contract.core.service.pdf.AuthorizationBoltToPdfConverter;
-import ee.qrental.contract.core.service.pdf.AuthorizationBoltToPdfModelMapper;
-import ee.qrental.contract.core.validator.AuthorizationBoltAddBusinessRuleValidator;
+import ee.qrental.contract.core.service.pdf.AuthorizationToPdfConverter;
+import ee.qrental.contract.core.service.pdf.AuthorizationToPdfModelMapper;
+import ee.qrental.contract.core.validator.AuthorizationAddBusinessRuleValidator;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,23 +17,23 @@ import org.springframework.context.annotation.Configuration;
 public class AuthorizationServiceConfig {
 
   @Bean
-  GetAuthorizationBoltQuery getGetAuthorizationBoltQuery(
-      final AuthorizationBoltLoadPort loadPort,
-      final AuthorizationBoltResponseMapper mapper,
-      final AuthorizationBoltUpdateRequestMapper updateRequestMapper) {
-    return new AuthorizationBoltQueryService(loadPort, mapper, updateRequestMapper);
+  GetAuthorizationQuery getGetAuthorizationBoltQuery(
+      final AuthorizationLoadPort loadPort,
+      final AuthorizationResponseMapper mapper,
+      final AuthorizationUpdateRequestMapper updateRequestMapper) {
+    return new AuthorizationQueryService(loadPort, mapper, updateRequestMapper);
   }
 
   @Bean
-  AuthorizationBoltUseCaseService getAuthorizationBoltUseCaseService(
+  AuthorizationUseCaseService getAuthorizationBoltUseCaseService(
       final AuthorizationBoltAddPort addPort,
       final AuthorizationBoltUpdatePort updatePort,
       final AuthorizationBoltDeletePort deletePort,
-      final AuthorizationBoltLoadPort loadPort,
-      final AuthorizationBoltAddRequestMapper addRequestMapper,
-      final AuthorizationBoltUpdateRequestMapper updateRequestMapper,
-      final AuthorizationBoltAddBusinessRuleValidator addBusinessRuleValidator) {
-    return new AuthorizationBoltUseCaseService(
+      final AuthorizationLoadPort loadPort,
+      final AuthorizationAddRequestMapper addRequestMapper,
+      final AuthorizationUpdateRequestMapper updateRequestMapper,
+      final AuthorizationAddBusinessRuleValidator addBusinessRuleValidator) {
+    return new AuthorizationUseCaseService(
         addPort,
         updatePort,
         deletePort,
@@ -44,28 +44,28 @@ public class AuthorizationServiceConfig {
   }
 
   @Bean
-  AuthorizationBoltToPdfConverter getAuthorizationBoltToPdfConverter() {
-    return new AuthorizationBoltToPdfConverter();
+  AuthorizationToPdfConverter getAuthorizationBoltToPdfConverter() {
+    return new AuthorizationToPdfConverter();
   }
 
   @Bean
-  AuthorizationBoltToPdfModelMapper getAuthorizationBoltToPdfModelMapper() {
-    return new AuthorizationBoltToPdfModelMapper();
+  AuthorizationToPdfModelMapper getAuthorizationBoltToPdfModelMapper() {
+    return new AuthorizationToPdfModelMapper();
   }
 
   @Bean
-  AuthorizationBoltSendByEmailUseCase getAuthorizationBoltSendByEmailUseCase(
+  AuthorizationSendByEmailUseCase getAuthorizationBoltSendByEmailUseCase(
       final EmailSendUseCase emailSendUseCase,
-      final AuthorizationBoltLoadPort loadPort,
-      final AuthorizationBoltPdfUseCase pdfUseCase) {
-    return new AuthorizationBoltSendByEmailService(emailSendUseCase, loadPort, pdfUseCase);
+      final AuthorizationLoadPort loadPort,
+      final AuthorizationPdfUseCase pdfUseCase) {
+    return new AuthorizationSendByEmailService(emailSendUseCase, loadPort, pdfUseCase);
   }
 
   @Bean
-  AuthorizationBoltPdfUseCase getAuthorizationBoltPdfUseCase(
-      final AuthorizationBoltLoadPort loadPort,
-      final AuthorizationBoltToPdfConverter converter,
-      final AuthorizationBoltToPdfModelMapper mapper) {
-    return new AuthorizationBoltPdfUseCaseImpl(loadPort, converter, mapper);
+  AuthorizationPdfUseCase getAuthorizationBoltPdfUseCase(
+      final AuthorizationLoadPort loadPort,
+      final AuthorizationToPdfConverter converter,
+      final AuthorizationToPdfModelMapper mapper) {
+    return new AuthorizationPdfUseCaseImpl(loadPort, converter, mapper);
   }
 }

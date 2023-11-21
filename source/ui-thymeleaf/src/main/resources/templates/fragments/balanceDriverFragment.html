@@ -88,22 +88,16 @@
                             </a>
                         </td>
 
-
-
-
                         <td>
-                            <a class="btn btn-sm btn-success"
-                               th:href="${'/bolt-authorizations/add-form/'+ {driverId}}"
+                            <a th:if="${authorizationId == null}" class="btn btn-sm btn-success"
+                               th:href="${'/authorizations/add-form/'+ {driverId}}"
                                role="button"
                                aria-controls="offcanvasExample">
                                 <span class="bi-plus-circle"></span></a>
                         </td>
                         <td>
-                            <span th:text="${activeContract}">???</span>
-                        </td>
-                        <td>
-                            <a th:if="${activeContractId != null}" class="btn btn-sm btn-info"
-                               th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                            <a th:if="${authorizationId != null}" class="btn btn-sm btn-info"
+                               th:href="@{/authorizations/pdf/{id}(id=${authorisationId})}">
                                 <span class="bi-file-earmark-pdf"></span>
                             </a>
                         </td>

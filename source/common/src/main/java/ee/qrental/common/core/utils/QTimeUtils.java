@@ -9,12 +9,15 @@ import static java.time.temporal.TemporalAdjusters.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class QTimeUtils {
+
+  public static final DateTimeFormatter Q_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
   public static final LocalDate INVOICE_START_CALCULATION_DATE = LocalDate.of(2023, MARCH, 05);
   public static final LocalDate BALANCE_START_CALCULATION_DATE = LocalDate.of(2023, JANUARY, 02);
