@@ -17,19 +17,17 @@ import lombok.SneakyThrows;
 public class AuthorizationBoltSendByEmailService implements AuthorizationBoltSendByEmailUseCase {
 
   private final EmailSendUseCase emailSendUseCase;
-
-  private final AuthorizationBoltLoadPort authorizationBoltLoadPort;
-
-  private final AuthorizationBoltPdfUseCase contractPdfUseCase;
+  private final AuthorizationBoltLoadPort loadPort;
+  private final AuthorizationBoltPdfUseCase pdfUseCase;
 
   @SneakyThrows
   @Override
   public void sendByEmail(final AuthorizationBoltSendByEmailRequest request) {
     final var authorizationId = request.getId();
-    final var authorization = authorizationBoltLoadPort.loadById(authorizationId);
- 
+    final var authorization = loadPort.loadById(authorizationId);
+
     final var recipient = authorization.getDriverEmail();
-    final var attachment = contractPdfUseCase.getPdfInputStreamById(authorizationId);
+    final var attachment = pdfUseCase.getPdfInputStreamById(authorizationId);
     final var properties = new HashMap<String, Object>();
 
     final var emailSendRequest =

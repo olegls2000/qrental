@@ -1,16 +1,14 @@
 package ee.qrental.contract.spring.config;
 
 import ee.qrental.contract.api.in.query.GetAuthorizationBoltQuery;
-import ee.qrental.contract.api.in.query.GetContractQuery;
-import ee.qrental.contract.api.in.usecase.ContractPdfUseCase;
-import ee.qrental.contract.api.in.usecase.ContractSendByEmailUseCase;
+import ee.qrental.contract.api.in.usecase.AuthorizationBoltPdfUseCase;
+import ee.qrental.contract.api.in.usecase.AuthorizationBoltSendByEmailUseCase;
 import ee.qrental.contract.api.out.*;
 import ee.qrental.contract.core.mapper.*;
 import ee.qrental.contract.core.service.*;
-import ee.qrental.contract.core.service.pdf.ContractToPdfConverter;
-import ee.qrental.contract.core.service.pdf.ContractToPdfModelMapper;
+import ee.qrental.contract.core.service.pdf.AuthorizationBoltToPdfConverter;
+import ee.qrental.contract.core.service.pdf.AuthorizationBoltToPdfModelMapper;
 import ee.qrental.contract.core.validator.AuthorizationBoltAddBusinessRuleValidator;
-import ee.qrental.contract.core.validator.ContractBusinessRuleValidator;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,28 +44,28 @@ public class AuthorizationServiceConfig {
   }
 
   @Bean
-  ContractToPdfConverter getContractToPdfConverter() {
-    return new ContractToPdfConverter();
+  AuthorizationBoltToPdfConverter getAuthorizationBoltToPdfConverter() {
+    return new AuthorizationBoltToPdfConverter();
   }
 
   @Bean
-  ContractToPdfModelMapper getContractToPdfModelMapper() {
-    return new ContractToPdfModelMapper();
+  AuthorizationBoltToPdfModelMapper getAuthorizationBoltToPdfModelMapper() {
+    return new AuthorizationBoltToPdfModelMapper();
   }
 
   @Bean
-  ContractSendByEmailUseCase getContractSendByEmailUseCase(
+  AuthorizationBoltSendByEmailUseCase getAuthorizationBoltSendByEmailUseCase(
       final EmailSendUseCase emailSendUseCase,
-      final ContractLoadPort invoiceLoadPort,
-      final ContractPdfUseCase invoicePdfUseCase) {
-    return new ContractSendByEmailService(emailSendUseCase, invoiceLoadPort, invoicePdfUseCase);
+      final AuthorizationBoltLoadPort loadPort,
+      final AuthorizationBoltPdfUseCase pdfUseCase) {
+    return new AuthorizationBoltSendByEmailService(emailSendUseCase, loadPort, pdfUseCase);
   }
 
   @Bean
-  ContractPdfUseCase getContractPdfUseCase(
-      final ContractLoadPort loadPort,
-      final ContractToPdfConverter converter,
-      final ContractToPdfModelMapper mapper) {
-    return new ContractPdfUseCaseImpl(loadPort, converter, mapper);
+  AuthorizationBoltPdfUseCase getAuthorizationBoltPdfUseCase(
+      final AuthorizationBoltLoadPort loadPort,
+      final AuthorizationBoltToPdfConverter converter,
+      final AuthorizationBoltToPdfModelMapper mapper) {
+    return new AuthorizationBoltPdfUseCaseImpl(loadPort, converter, mapper);
   }
 }

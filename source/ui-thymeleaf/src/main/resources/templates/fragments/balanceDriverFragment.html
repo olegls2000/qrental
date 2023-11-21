@@ -14,7 +14,8 @@
                         <th scope="col" colspan="2">Driver info:</th>
                         <th scope="col" colspan="3">Call sign:</th>
                         <th scope="col" colspan="3">Car:</th>
-                        <th scope="col" colspan="4">Contract:</th>
+                        <th scope="col" colspan="3">Contract:</th>
+                        <th scope="col" colspan="2">Authorization:</th>
                     </tr>
                     <tr>
                         <td>
@@ -86,7 +87,35 @@
                                 <span class="bi-file-earmark-pdf"></span>
                             </a>
                         </td>
+
+
+
+
+                        <td>
+                            <a class="btn btn-sm btn-success"
+                               th:href="${'/bolt-authorizations/add-form/'+ {driverId}}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span></a>
+                        </td>
+                        <td>
+                            <span th:text="${activeContract}">???</span>
+                        </td>
+                        <td>
+                            <a th:if="${activeContractId != null}" class="btn btn-sm btn-info"
+                               th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                                <span class="bi-file-earmark-pdf"></span>
+                            </a>
+                        </td>
                     </tr>
+
+
+
+
+
+
+
+
                 </table>
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">

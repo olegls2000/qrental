@@ -3,4 +3,9 @@ ee.qrental.contract.spring.config.ContractAdapterConfig,\
 ee.qrental.contract.spring.config.ContractMapperConfig,\
 ee.qrental.contract.spring.config.ContractServiceConfig,\
 ee.qrental.contract.spring.config.ContractRepositoryConfig,\
-ee.qrental.contract.spring.config.ContractValidatorConfig
+ee.qrental.contract.spring.config.ContractValidatorConfig,\
+ee.qrental.contract.spring.config.AuthorizationBoltAdapterConfig,\
+ee.qrental.contract.spring.config.AuthorizationBoltMapperConfig,\
+ee.qrental.contract.spring.config.AuthorizationBoltServiceConfig,\
+ee.qrental.contract.spring.config.AuthorizationBoltRepositoryConfig,\
+ee.qrental.contract.spring.config.AuthorizationBoltValidatorConfig

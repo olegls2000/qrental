@@ -15,7 +15,7 @@ import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static java.awt.Color.white;
 
 @AllArgsConstructor
-public class ContractBoltToPdfConverter {
+public class AuthorizationBoltToPdfConverter {
 
     private static String getTextOrEmpty(final String text) {
         if (text == null || text.isBlank()) {
@@ -25,7 +25,7 @@ public class ContractBoltToPdfConverter {
     }
 
     @SneakyThrows
-    public InputStream getPdfInputStream(final ContractPdfModel model) {
+    public InputStream getPdfInputStream(final AuthorizationBoltPdfModel model) {
         final var contractPdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
         final var contractPdfOutputStream = new ByteArrayOutputStream();
         final var writer = PdfWriter.getInstance(contractPdfDoc, contractPdfOutputStream);

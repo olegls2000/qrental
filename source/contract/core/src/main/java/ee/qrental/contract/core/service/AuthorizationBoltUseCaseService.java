@@ -7,10 +7,7 @@ import ee.qrental.contract.api.in.usecase.*;
 import ee.qrental.contract.api.out.*;
 import ee.qrental.contract.core.mapper.AuthorizationBoltAddRequestMapper;
 import ee.qrental.contract.core.mapper.AuthorizationBoltUpdateRequestMapper;
-import ee.qrental.contract.core.mapper.ContractAddRequestMapper;
-import ee.qrental.contract.core.mapper.ContractUpdateRequestMapper;
 import ee.qrental.contract.core.validator.AuthorizationBoltAddBusinessRuleValidator;
-import ee.qrental.contract.core.validator.ContractBusinessRuleValidator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -31,13 +28,15 @@ public class AuthorizationBoltUseCaseService
 
   @Override
   public Long add(final AuthorizationBoltAddRequest request) {
-    final var contract = addRequestMapper.toDomain(request);
-    final var violationsCollector = addBusinessRuleValidator.validateAdd(contract);
+    final var violationsCollector = addBusinessRuleValidator.validateAdd(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 
       return null;
     }
+
+    final var contract = addRequestMapper.toDomain(request);
+
     final var savedContract = addPort.add(contract);
 
     return savedContract.getId();
