@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ControllerUtils {
+  public static final String HOME_ROOT_PATH = "/";
   public static final String BALANCE_ROOT_PATH = "/balances";
   public static final String CALL_SIGN_ROOT_PATH = "/call-signs";
   public static final String CALL_SIGN_LINK_ROOT_PATH = "/call-sign-links";

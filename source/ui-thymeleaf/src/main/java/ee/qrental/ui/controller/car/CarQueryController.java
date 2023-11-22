@@ -1,8 +1,5 @@
 package ee.qrental.ui.controller.car;
 
-import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
-import static ee.qrental.ui.controller.util.ControllerUtils.CAR_ROOT_PATH;
-
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.query.filter.Availability;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
+import static ee.qrental.ui.controller.util.ControllerUtils.CAR_ROOT_PATH;
 @Controller
 @RequestMapping(CAR_ROOT_PATH)
 @AllArgsConstructor
@@ -35,7 +34,7 @@ public class CarQueryController {
     return "cars";
   }
 
-  @PostMapping
+    @PostMapping
   public String getPageWithFilteredCars(
       @ModelAttribute final CarFilter carFilterRequest, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
