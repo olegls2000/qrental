@@ -10,4 +10,6 @@ public interface TransactionTypeSpringDataRepository
   TransactionTypeJakartaEntity findByName(final String name);
 
   List<TransactionTypeJakartaEntity> findAllByNegative(final Boolean negative);
+
+  List<TransactionTypeJakartaEntity> findAllByFeeAble(final Boolean feeAble);
 }

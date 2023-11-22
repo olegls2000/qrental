@@ -21,10 +21,12 @@ import ee.qrental.transaction.api.out.balance.BalanceAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
+import ee.qrental.transaction.domain.type.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -39,6 +41,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
+  private final TransactionTypeLoadPort transactionTypeLoadPort;
   private final FeeCalculationService feeCalculationService;
   private final FeeReplenishService feeReplenishService;
   private final BalanceCalculationAddPort balanceCalculationAddPort;
@@ -158,27 +161,40 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
             driverId, week.getYear(), previousWeekNumber);
 
-    final var amount = calculateAmount(previousWeekBalance, driversTransactions);
+    final var feeAbleTransactionTypes =
+        transactionTypeLoadPort.loadFeeAble().stream().map(TransactionType::getName).toList();
+
+    final var nonFeeAbleTransactionTypes =
+        transactionTypeLoadPort.loadNonFeeAble().stream().map(TransactionType::getName).toList();
+
+    final var feeAbleAmount =
+        calculateAmount(previousWeekBalance, driversTransactions, feeAbleTransactionTypes);
+    final var nonFeeAbleAmount =
+        calculateAmount(previousWeekBalance, driversTransactions, nonFeeAbleTransactionTypes);
     final var feeAmount = calculateFeeAmount(previousWeekBalance, driversTransactions);
 
     return Balance.builder()
         .driverId(driverId)
         .qWeekId(week.getId())
         .created(LocalDate.now())
-        .amount(amount)
+        .feeAbleAmount(feeAbleAmount)
+        .nonFeeAbleAmount(nonFeeAbleAmount)
         .fee(feeAmount)
         .build();
   }
 
   private BigDecimal calculateAmount(
-      final Balance previousWeekBalance, final List<TransactionResponse> driversTransactions) {
+      final Balance previousWeekBalance,
+      final List<TransactionResponse> driversTransactions,
+      final List<String> includedTypes) {
     final var transactionsSum =
         driversTransactions.stream()
             .filter(transaction -> isNotFeeType(transaction.getType()))
+            .filter(transaction -> includedTypes.contains(transaction.getType()))
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal::add)
             .orElse(ZERO);
-    final var amountFromPreviousWeek = previousWeekBalance.getAmount();
+    final var amountFromPreviousWeek = previousWeekBalance.getFeeAbleAmount();
 
     return transactionsSum.add(amountFromPreviousWeek);
   }

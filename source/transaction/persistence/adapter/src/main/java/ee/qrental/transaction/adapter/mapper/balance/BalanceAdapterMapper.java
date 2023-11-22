@@ -3,7 +3,6 @@ package ee.qrental.transaction.adapter.mapper.balance;
 import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.entity.jakarta.balance.BalanceJakartaEntity;
 
-
 public class BalanceAdapterMapper {
 
   public Balance mapToDomain(final BalanceJakartaEntity entity) {
@@ -15,7 +14,8 @@ public class BalanceAdapterMapper {
         .qWeekId(entity.getQWeekId())
         .driverId(entity.getDriverId())
         .created(entity.getCreated())
-        .amount(entity.getAmount())
+        .feeAbleAmount(entity.getFeeAbleAmount())
+        .nonFeeAbleAmount(entity.getNonFeeAbleAmount())
         .fee(entity.getFee())
         .build();
   }
@@ -26,7 +26,8 @@ public class BalanceAdapterMapper {
         .qWeekId(domain.getQWeekId())
         .driverId(domain.getDriverId())
         .created(domain.getCreated())
-        .amount(domain.getAmount())
+        .feeAbleAmount(domain.getFeeAbleAmount())
+        .nonFeeAbleAmount(domain.getNonFeeAbleAmount())
         .fee(domain.getFee())
         .build();
   }

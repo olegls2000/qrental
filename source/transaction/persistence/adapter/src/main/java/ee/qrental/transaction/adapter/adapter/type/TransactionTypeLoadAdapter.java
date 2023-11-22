@@ -1,5 +1,7 @@
 package ee.qrental.transaction.adapter.adapter.type;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.adapter.mapper.type.TransactionTypeAdapterMapper;
@@ -33,5 +35,15 @@ public class TransactionTypeLoadAdapter implements TransactionTypeLoadPort {
   @Override
   public List<TransactionType> loadByNegative(final Boolean negative) {
     return repository.findByNegative(negative).stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
+  public List<TransactionType> loadFeeAble() {
+    return repository.findByFeeAble(TRUE).stream().map(mapper::mapToDomain).collect(toList());
+  }
+
+  @Override
+  public List<TransactionType> loadNonFeeAble() {
+    return repository.findByFeeAble(FALSE).stream().map(mapper::mapToDomain).collect(toList());
   }
 }

@@ -12,6 +12,7 @@ import ee.qrental.transaction.api.out.balance.BalanceAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationResponseMapper;
 import ee.qrental.transaction.core.mapper.balance.BalanceResponseMapper;
@@ -46,6 +47,7 @@ public class BalanceServiceConfig {
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
       final GetTransactionQuery transactionQuery,
+      final TransactionTypeLoadPort transactionTypeLoadPort,
       final FeeCalculationService feeCalculationService,
       final FeeReplenishService feeReplenishService,
       final BalanceCalculationAddPort balanceCalculationAddPort,
@@ -57,6 +59,7 @@ public class BalanceServiceConfig {
         qWeekQuery,
         driverQuery,
         transactionQuery,
+        transactionTypeLoadPort,
         feeCalculationService,
         feeReplenishService,
         balanceCalculationAddPort,
@@ -68,15 +71,11 @@ public class BalanceServiceConfig {
 
   @Bean
   FeeCalculationService getFeeTransactionCreator(
-      final GetQWeekQuery qWeekQuery,
-      final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
       final GetConstantQuery constantQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final BalanceLoadPort loadPort) {
     return new FeeCalculationService(
-        qWeekQuery,
-        transactionQuery,
         transactionTypeQuery,
         constantQuery,
         transactionAddUseCase,

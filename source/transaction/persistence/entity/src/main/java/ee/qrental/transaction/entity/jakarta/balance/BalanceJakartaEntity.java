@@ -30,13 +30,15 @@ public class BalanceJakartaEntity {
   @Column(name = "created")
   private LocalDate created;
 
-  @Column(name = "amount")
-  private BigDecimal amount;
+  @Column(name = "fee_able_amount")
+  private BigDecimal feeAbleAmount;
+
+  @Column(name = "non_fee_able_amount")
+  private BigDecimal nonFeeAbleAmount;
 
   @Column(name = "fee")
   private BigDecimal fee;
 
   @Column(name = "q_week_id")
   private Long qWeekId;
-
 }

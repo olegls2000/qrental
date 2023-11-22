@@ -30,7 +30,8 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   public Balance loadByDriverIdAndYearAndWeekNumberOrDefault(
       final Long driverId, final Integer year, final Integer weekNumber) {
     if (year == 2023 && weekNumber < 1) {
-      final var defaultBalance = Balance.builder().amount(ZERO).fee(ZERO).build();
+      final var defaultBalance =
+          Balance.builder().feeAbleAmount(ZERO).nonFeeAbleAmount(ZERO).fee(ZERO).build();
 
       return defaultBalance;
     }

@@ -15,4 +15,6 @@ public interface TransactionTypeRepository {
   TransactionTypeJakartaEntity findByName(final String name);
 
   List<TransactionTypeJakartaEntity> findByNegative(final Boolean negative);
+
+  List<TransactionTypeJakartaEntity> findByFeeAble(final Boolean feeAble);
 }

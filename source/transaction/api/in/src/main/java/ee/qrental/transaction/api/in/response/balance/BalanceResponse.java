@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class BalanceResponse {
   private Long id;
+  private BigDecimal feeAbleAmount;
+  private BigDecimal nonFeeAbleAmount;
   private BigDecimal amount;
   private BigDecimal fee;
   private Long qWeekId;

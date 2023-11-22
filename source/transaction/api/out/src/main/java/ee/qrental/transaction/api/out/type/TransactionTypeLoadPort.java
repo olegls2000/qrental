@@ -9,4 +9,8 @@ public interface TransactionTypeLoadPort extends LoadPort<TransactionType> {
   TransactionType loadByName(final String name);
 
   List<TransactionType> loadByNegative(final Boolean negative);
+
+  List<TransactionType> loadFeeAble();
+
+  List<TransactionType> loadNonFeeAble();
 }

@@ -37,7 +37,8 @@ public class BalanceCalculationAdapterMapper {
         .qWeekId(balanceEntity.getQWeekId())
         .created(balanceEntity.getCreated())
         .driverId(balanceEntity.getDriverId())
-        .amount(balanceEntity.getAmount())
+        .feeAbleAmount(balanceEntity.getFeeAbleAmount())
+        .nonFeeAbleAmount(balanceEntity.getNonFeeAbleAmount())
         .fee(balanceEntity.getFee())
         .build();
   }

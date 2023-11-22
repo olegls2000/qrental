@@ -62,8 +62,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   public void add(final InvoiceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
     final var actionDate = addRequest.getActionDate();
-      final var lastYear = addRequest.getLastYear();
-      final var lastWeek = addRequest.getLastWeek();
+    final var lastYear = addRequest.getLastYear();
+    final var lastWeek = addRequest.getLastWeek();
     final var domain = invoiceCalculationAddRequestMapper.toDomain(addRequest);
     final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(lastYear, lastWeek);
     domain.setStartDate(weekIterator.getStartPeriod());
@@ -87,8 +87,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     balanceQuery.getByDriverIdAndYearAndWeekNumber(
                         driverId, week.getYear(), weekNumber);
                 if (weekBalance == null) {
-                  throw new RuntimeException("Invoice calculation is impossible for the week: "
-                          + weekNumber + ", please calculate a Balance first");
+                  throw new RuntimeException(
+                      "Invoice calculation is impossible for the week: "
+                          + weekNumber
+                          + ", please calculate a Balance first");
                 }
                 if (weekBalance.getAmount().compareTo(ZERO) >= 0) {
                   System.out.printf(
@@ -155,7 +157,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .items(invoiceItems)
                         .build();
                 final var transactionIds =
-                    driversNegativeTransactions.stream().map(TransactionResponse::getId).collect(toSet());
+                    driversNegativeTransactions.stream()
+                        .map(TransactionResponse::getId)
+                        .collect(toSet());
                 final var result =
                     InvoiceCalculationResult.builder()
                         .invoice(invoice)
@@ -171,25 +175,25 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
   }
 
-  private FirmResponse getQFirmForInvoice(final DriverResponse driver,
-                                          final LocalDate weekStartDay,
-                                          final Integer weekNumber){
-      final var firmLink =
-              firmLinkQuery.getOneByDriverIdAndRequiredDate(driver.getId(), weekStartDay);
-      if (firmLink == null) {
-          System.out.printf("Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice",
-                  String.format("%s %s", driver.getFirstName(), driver.getLastName()),
-                  weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
-                  weekNumber);
-          final var qFirmId = driver.getQFirmId();
-          final var qFirm = firmQuery.getById(qFirmId);
-
-          return qFirm;
-      }
-      final var qFirmId = firmLink.getFirmId();
+  private FirmResponse getQFirmForInvoice(
+      final DriverResponse driver, final LocalDate weekStartDay, final Integer weekNumber) {
+    final var firmLink =
+        firmLinkQuery.getOneByDriverIdAndRequiredDate(driver.getId(), weekStartDay);
+    if (firmLink == null) {
+      System.out.printf(
+          "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice",
+          String.format("%s %s", driver.getFirstName(), driver.getLastName()),
+          weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
+          weekNumber);
+      final var qFirmId = driver.getQFirmId();
       final var qFirm = firmQuery.getById(qFirmId);
 
       return qFirm;
+    }
+    final var qFirmId = firmLink.getFirmId();
+    final var qFirm = firmQuery.getById(qFirmId);
+
+    return qFirm;
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
@@ -230,7 +234,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     return String.format("%d%d%d", year, weekNumber, driverId);
   }
 
-  private List<InvoiceItem> getInvoiceItems(final List<TransactionResponse> transactions, final FirmResponse firm) {
+  private List<InvoiceItem> getInvoiceItems(
+      final List<TransactionResponse> transactions, final FirmResponse firm) {
     final var withoutVat = isFirmWithoutVAT(firm);
     final var typeVsTransactions =
         transactions.stream()
@@ -242,9 +247,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         .collect(toList());
   }
 
-  private InvoiceItem getInvoiceItem(final String type,
-                                     final List<TransactionResponse> transactions,
-                                     final boolean withoutVat) {
+  private InvoiceItem getInvoiceItem(
+      final String type, final List<TransactionResponse> transactions, final boolean withoutVat) {
     final var vatRate = withoutVat ? ONE : VAT_RATE;
     final var amount =
         transactions.stream()
@@ -261,7 +265,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         .build();
   }
 
-  private boolean isFirmWithoutVAT(final FirmResponse firm){
-      return firm.getVatNumber() == null || firm.getVatNumber().isEmpty();
+  private boolean isFirmWithoutVAT(final FirmResponse firm) {
+    return firm.getVatNumber() == null || firm.getVatNumber().isEmpty();
   }
 }

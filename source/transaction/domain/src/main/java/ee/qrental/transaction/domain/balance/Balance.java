@@ -14,6 +14,11 @@ public class Balance {
   private Long driverId;
   private Long qWeekId;
   private LocalDate created;
-  private BigDecimal amount;
+  private BigDecimal feeAbleAmount;
+  private BigDecimal nonFeeAbleAmount;
   private BigDecimal fee;
+
+  public BigDecimal getAmount() {
+    return feeAbleAmount.add(nonFeeAbleAmount);
+  }
 }

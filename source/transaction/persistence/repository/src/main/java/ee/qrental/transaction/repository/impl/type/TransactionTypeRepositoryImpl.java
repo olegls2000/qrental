@@ -32,6 +32,11 @@ public class TransactionTypeRepositoryImpl implements TransactionTypeRepository 
   }
 
   @Override
+  public List<TransactionTypeJakartaEntity> findByFeeAble(final Boolean feeAble) {
+    return springDataRepository.findAllByFeeAble(feeAble);
+  }
+
+  @Override
   public TransactionTypeJakartaEntity save(final TransactionTypeJakartaEntity entity) {
     return springDataRepository.save(entity);
   }
