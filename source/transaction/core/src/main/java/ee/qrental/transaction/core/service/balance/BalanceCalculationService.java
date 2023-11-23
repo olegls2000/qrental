@@ -43,7 +43,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final GetTransactionQuery transactionQuery;
   private final TransactionTypeLoadPort transactionTypeLoadPort;
   private final FeeCalculationService feeCalculationService;
-  private final FeeReplenishService feeReplenishService;
+  private final ReplenishService replenishService;
   private final BalanceCalculationAddPort balanceCalculationAddPort;
   private final BalanceAddPort balanceAddPort;
   private final BalanceLoadPort balanceLoadPort;
@@ -69,7 +69,8 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                     .forEach(
                         driver -> {
                           final var driverId = driver.getId();
-                          feeReplenishService.replenish(week, driverId);
+                          replenishService.replenishFee(week, driverId);
+                          replenishService.replenishNonFeeAble(week, driverId);
                           feeCalculationService.calculate(week, driver);
                           final var driversTransactions =
                               getAllTransactionsByDriverAndWeek(week, driverId);

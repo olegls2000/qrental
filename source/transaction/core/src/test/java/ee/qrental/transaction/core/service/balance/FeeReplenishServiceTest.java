@@ -4,6 +4,7 @@ import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
@@ -23,7 +24,8 @@ import org.mockito.ArgumentCaptor;
 
 class FeeReplenishServiceTest {
 
-  private FeeReplenishService instanceUnderTest;
+  private ReplenishService instanceUnderTest;
+  private GetQWeekQuery qWeekQuery;
   private BalanceLoadPort balanceLoadPort;
   private TransactionAddUseCase transactionAddUseCase;
   private GetTransactionTypeQuery transactionTypeQuery;
@@ -31,17 +33,21 @@ class FeeReplenishServiceTest {
 
   @BeforeEach
   void init() {
+    qWeekQuery = mock(GetQWeekQuery.class);
     balanceLoadPort = mock(BalanceLoadPort.class);
     transactionAddUseCase = mock(TransactionAddUseCase.class);
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
     transactionQuery = mock(GetTransactionQuery.class);
 
     instanceUnderTest =
-        new FeeReplenishService(
-            balanceLoadPort, transactionAddUseCase, transactionTypeQuery, transactionQuery);
+        new ReplenishService(
+            qWeekQuery,
+            transactionQuery,
+            transactionTypeQuery,
+            transactionAddUseCase,
+            balanceLoadPort);
 
-    when(balanceLoadPort.loadLatest())
-        .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
+    //when(balanceLoadPort.loadLatest()).thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
   }
 
   @Test
@@ -59,7 +65,7 @@ class FeeReplenishServiceTest {
         .thenReturn(balance);
 
     // when
-    instanceUnderTest.replenish(week, 2L);
+    instanceUnderTest.replenishFee(week, 2L);
 
     // then
     verify(transactionAddUseCase, never()).add(any());
@@ -80,7 +86,7 @@ class FeeReplenishServiceTest {
         .thenReturn(balance);
 
     // when
-    instanceUnderTest.replenish(week, 2L);
+    instanceUnderTest.replenishFee(week, 2L);
 
     // then
     verify(transactionAddUseCase, never()).add(any());
@@ -114,7 +120,7 @@ class FeeReplenishServiceTest {
     when(transactionTypeQuery.getByName("compensation")).thenReturn(compensationTransactionType);
 
     // when
-    instanceUnderTest.replenish(week, 2L);
+    instanceUnderTest.replenishFee(week, 2L);
 
     // then
     final var transactionAddRequestCaptor = ArgumentCaptor.forClass(TransactionAddRequest.class);
@@ -145,11 +151,13 @@ class FeeReplenishServiceTest {
   void testReplenishIfFeeBalanceIsNegativeAndFeeDebtIsBiggerThenPositiveTransactionAmount() {
     // given
     final var driverId = 2L;
-    final var week = QWeekResponse.builder()
+    final var week =
+        QWeekResponse.builder()
             .start(LocalDate.of(2023, Month.JANUARY, 9))
             .end(LocalDate.of(2023, Month.JANUARY, 16))
             .number(2)
-            .build();;
+            .build();
+    ;
     final var balance = Balance.builder().fee(BigDecimal.valueOf(-10)).build();
     when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
         .thenReturn(balance);
@@ -168,7 +176,7 @@ class FeeReplenishServiceTest {
     when(transactionTypeQuery.getByName("compensation")).thenReturn(compensationTransactionType);
 
     // when
-    instanceUnderTest.replenish(week, 2L);
+    instanceUnderTest.replenishFee(week, 2L);
 
     // then
     final var transactionAddRequestCaptor = ArgumentCaptor.forClass(TransactionAddRequest.class);

@@ -14,12 +14,14 @@ import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Function;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class FeeReplenishService {
+public class ReplenishService {
 
   private final GetQWeekQuery qWeekQuery;
   private final GetTransactionQuery transactionQuery;
@@ -27,10 +29,11 @@ public class FeeReplenishService {
   private final TransactionAddUseCase transactionAddUseCase;
   private final BalanceLoadPort balanceLoadPort;
 
-  public void replenish(final QWeekResponse week, final Long driverId) {
-    var feeBalanceFromPreviousWeek = getFeeAmountFromPreviousWeek(driverId, week.getId());
+  public void replenishFee(final QWeekResponse week, final Long driverId) {
+    var feeBalanceFromPreviousWeek =
+        getAmountForCompensationFromPreviousWeek(driverId, week.getId(), Balance::getFee);
     if (feeBalanceFromPreviousWeek.compareTo(ZERO) >= 0) {
-      System.out.println("Fee replenish is not required in Week: " + week.getNumber());
+      System.out.println("Fee replenish is not required for Week: " + week.getNumber());
 
       return;
     }
@@ -38,7 +41,11 @@ public class FeeReplenishService {
     final var donorTransactions = getListOfPositiveNonFeeTransactions(week, driverId);
     for (final TransactionResponse donorTransaction : donorTransactions) {
       feeAmountToReplenish =
-          replenishAndGetNewFeeAmountToReplenish(week, donorTransaction, feeAmountToReplenish);
+          replenishAndGetNewAmountToReplenish(
+              week,
+              donorTransaction,
+              feeAmountToReplenish,
+              "Fee Replenishment. Automatically created transaction, during Balance Calculation.");
       if (feeAmountToReplenish.compareTo(ZERO) <= 0) {
 
         return;
@@ -46,16 +53,39 @@ public class FeeReplenishService {
     }
   }
 
-  private BigDecimal getFeeAmountFromPreviousWeek(final Long driverId, final Long qWeekId) {
+  public void replenishNonFeeAble(final QWeekResponse week, final Long driverId) {
+    final var nonFeeAbleBalanceFromPreviousWeek =
+        getAmountForCompensationFromPreviousWeek(
+            driverId, week.getId(), Balance::getNonFeeAbleAmount);
+    if (nonFeeAbleBalanceFromPreviousWeek.compareTo(ZERO) >= 0) {
+      System.out.println(
+          "Non Fee Able (fines) replenish is not required for Week: " + week.getNumber());
+
+      return;
+    }
+    var amountToReplenish = nonFeeAbleBalanceFromPreviousWeek.abs();
+    final var donorTransactions = getListOfPositiveNonFeeTransactions(week, driverId);
+    for (final TransactionResponse donorTransaction : donorTransactions) {
+      amountToReplenish =
+          replenishAndGetNewAmountToReplenish(week, donorTransaction, amountToReplenish,
+                  "Non Fee Able Replenishment. Automatically created transaction, during Balance Calculation.");
+      if (amountToReplenish.compareTo(ZERO) <= 0) {
+
+        return;
+      }
+    }
+  }
+
+  private BigDecimal getAmountForCompensationFromPreviousWeek(
+      final Long driverId, final Long qWeekId, Function<Balance, BigDecimal> amountGetter) {
     final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     if (previousQWeek == null) {
       return ZERO;
     }
     final var balanceFromPreviousWeek =
         balanceLoadPort.loadByDriverIdAndQWeekId(driverId, previousQWeek.getId());
-    var feeBalanceFromPreviousWeek = balanceFromPreviousWeek.getFee();
 
-    return feeBalanceFromPreviousWeek;
+    return amountGetter.apply(balanceFromPreviousWeek);
   }
 
   private List<TransactionResponse> getListOfPositiveNonFeeTransactions(
@@ -74,34 +104,37 @@ public class FeeReplenishService {
         .toList();
   }
 
-  private BigDecimal replenishAndGetNewFeeAmountToReplenish(
+  private BigDecimal replenishAndGetNewAmountToReplenish(
       final QWeekResponse week,
       final TransactionResponse donorTransaction,
-      final BigDecimal feeAmountToReplenish) {
+      final BigDecimal amountToReplenish,
+      final String comment) {
     final var transactionAmount = donorTransaction.getRealAmount();
     if (transactionAmount.compareTo(ZERO) <= 0) {
       throw new RuntimeException(
           "You are trying to replenish Fee Debt from Negative Transaction. Check Transaction selection Logic!");
     }
 
-    final var leftoverToReplenish = feeAmountToReplenish.subtract(transactionAmount);
+    final var leftoverToReplenish = amountToReplenish.subtract(transactionAmount);
     if (leftoverToReplenish.compareTo(ZERO) >= 0) {
       final var possibleReplenishmentAmount = transactionAmount;
       replenishAndCompensate(
           possibleReplenishmentAmount,
           donorTransaction.getDriverId(),
           week,
-          donorTransaction.getId());
+          donorTransaction.getId(),
+          comment);
 
       return leftoverToReplenish;
     }
 
-    final var possibleReplenishmentAmount = feeAmountToReplenish;
+    final var possibleReplenishmentAmount = amountToReplenish;
     replenishAndCompensate(
         possibleReplenishmentAmount,
         donorTransaction.getDriverId(),
         week,
-        donorTransaction.getId());
+        donorTransaction.getId(),
+        comment);
 
     return leftoverToReplenish;
   }
@@ -110,9 +143,10 @@ public class FeeReplenishService {
       final BigDecimal feeAmountToReplenish,
       final Long driverId,
       final QWeekResponse week,
-      final Long donorTransactionId) {
+      final Long donorTransactionId,
+      final String comment) {
     final var feeReplenishTransaction =
-        getFeeReplenishTransaction(feeAmountToReplenish, driverId, week);
+        getFeeReplenishTransaction(feeAmountToReplenish, driverId, week, comment);
     final var positiveFeeTransactionId = transactionAddUseCase.add(feeReplenishTransaction);
 
     final var compensationTransaction =
@@ -142,14 +176,13 @@ public class FeeReplenishService {
   }
 
   private TransactionAddRequest getFeeReplenishTransaction(
-      final BigDecimal feeReplenishmentAmount, final Long driverId, final QWeekResponse week) {
+      final BigDecimal feeReplenishmentAmount,
+      final Long driverId,
+      final QWeekResponse week,
+      final String comment) {
     final var feeReplenishTransactionAddRequest =
         getTransactionRequest(
-            feeReplenishmentAmount,
-            driverId,
-            week,
-            TRANSACTION_TYPE_NAME_FEE_REPLENISH,
-            "Replenishment. Automatically created transaction, during Balance Calculation, for the replenishing of Fee debt");
+            feeReplenishmentAmount, driverId, week, TRANSACTION_TYPE_NAME_FEE_REPLENISH, comment);
 
     return feeReplenishTransactionAddRequest;
   }
