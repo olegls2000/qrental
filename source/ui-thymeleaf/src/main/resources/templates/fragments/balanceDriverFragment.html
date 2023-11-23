@@ -104,12 +104,6 @@
                     </tr>
 
 
-
-
-
-
-
-
                 </table>
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
@@ -146,68 +140,67 @@
             <form th:replace="fragments/transactionDriverSearchFormFragment.html :: searchForm"></form>
         </div>
     </div>
-    <div th:if="${transactionFilterRequest.week.number != 0}">
-        <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
-            <div class="col-md-auto">
-                <small th:text="|Period Balance data, EURO:|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+
+    <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Period Balance data, EURO:|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|Beginning of period: ${balancePeriodStartAmount}|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${balancePeriodStartAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|Period total: ${balancePeriodTotalAmount}|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${balancePeriodTotalAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|End of period: ${balancePeriodEndAmount} |"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${balancePeriodEndAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
-            </div>
         </div>
-        <div id="periodFeeDataId" class="row justify-content-md-center mb-3">
-            <div class="col-md-auto">
-                <small th:text="|Period Fee data, EURO:|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+        <div class="col-md-auto">
+            <small th:text="|Beginning of period: ${balancePeriodStartAmount}|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${balancePeriodStartAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Period total: ${balancePeriodTotalAmount}|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${balancePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|End of period: ${balancePeriodEndAmount} |"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${balancePeriodEndAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+    </div>
+    <div id="periodFeeDataId" class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Period Fee data, EURO:|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|Beginning of period: ${feePeriodStartAmount}|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Beginning of period: ${feePeriodStartAmount}|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodStartAmount<0} ?
+                   th:classappend="${feePeriodStartAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|Period total: ${feePeriodTotalAmount}|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Period total: ${feePeriodTotalAmount}|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodTotalAmount<0} ?
+                   th:classappend="${feePeriodTotalAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
-            </div>
-            <div class="col-md-auto">
-                <small th:text="|End of period: ${feePeriodEndAmount}|"
-                       class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|End of period: ${feePeriodEndAmount}|"
+                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodEndAmount<0} ?
+                   th:classappend="${feePeriodEndAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
-            </div>
         </div>
     </div>
     <table class="table table-striped table-bordered table-hover">

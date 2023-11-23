@@ -9,29 +9,18 @@
            hidden/>
 
     <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-label text-muted" for="yearId">Select Year</label>
-                <select id="yearId" class="form-select"
-                        th:field="*{year}">
-                    <option th:each="year: ${years}"
-                            th:value="${year}"
-                            th:text="|${year}|"></option>
-                </select>
-            </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
-                <label class="form-label text-muted" for="periodFilterWeekSelectId">Select Week</label>
-                <select id="periodFilterWeekSelectId" class="form-select"
-                        th:field="*{week}">
-                    <option th:each="week: ${weeks}"
-                            th:value="${week}"
-                            th:text="|${week.displayValue}|"></option>
-                </select>
-            </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="weekId">Select last week (included)</label>
+            <select id="weekId" class="form-select"
+                    th:field="*{qWeekId}">
+                <option th:value="null">All weeks</option>
+                <option th:each="week: ${weeks}"
+                        th:value="${week.id}"
+                        th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>
+            </select>
         </div>
     </div>
+
     <div class="row justify-content-center">
         <div class="col-4">
             <input id="periodFilterSubmitId" class="btn btn-sm btn-success"

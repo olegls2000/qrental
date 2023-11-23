@@ -15,6 +15,7 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.FeeOption;
+import ee.qrental.transaction.api.in.query.filter.WeekAndDriverFilter;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
@@ -53,8 +54,12 @@ public class BalanceQueryController {
 
   @GetMapping(value = "/driver/{id}")
   public String getDriverTransactionsView(@PathVariable("id") long id, final Model model) {
-    TransactionFilterRequestUtils.addCleanFilterRequestToModel(id, model);
-    TransactionFilterRequestUtils.addWeekOptionsToModel(model);
+    // TransactionFilterRequestUtils.addCleanFilterRequestToModel(id, model);
+    // TransactionFilterRequestUtils.addWeekOptionsToModel(model);
+    final var filter = new YearAndWeekAndDriverAndFeeFilter();
+    filter.setDriverId(id);
+    model.addAttribute("transactionFilterRequest", filter);
+    model.addAttribute("weeks", qWeekQuery.getAll());
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var transactions = transactionQuery.getAllByDriverId(id);
     addTransactionDataToModel(id, transactions, model);
@@ -70,7 +75,7 @@ public class BalanceQueryController {
   @PostMapping(value = "/driver/{id}")
   public String getFilteredDriverTransactionsView(
       @PathVariable("id") long id,
-      @ModelAttribute final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
+      @ModelAttribute final WeekAndDriverFilter transactionFilterRequest,
       final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
 
@@ -85,7 +90,7 @@ public class BalanceQueryController {
     addCarDataToModel(id, model);
     addTotalFinancialDataToModel(id, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
-    if (transactionFilterRequest.getWeek() != QWeek.ALL){
+    if (transactionFilterRequest.getQWeekId() != null) {
       addBalancePeriodDataToModel(model, transactionFilterRequest, transactions);
       addFeePeriodDataToModel(model, transactionFilterRequest);
     }
@@ -93,15 +98,15 @@ public class BalanceQueryController {
     return "detailView/balanceDriver";
   }
 
-  private void setUpFeeParameter(final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest) {
-    if (transactionFilterRequest.getWeek() != QWeek.ALL) {
+  private void setUpFeeParameter(final WeekAndDriverFilter transactionFilterRequest) {
+    if (transactionFilterRequest.getQWeekId() != null) {
       transactionFilterRequest.setFeeOption(FeeOption.WITHOUT_FEE);
     }
   }
 
   private void addBalancePeriodDataToModel(
       final Model model,
-      final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest,
+      final WeekAndDriverFilter transactionFilterRequest,
       final List<TransactionResponse> periodTransactions) {
     final var driverId = transactionFilterRequest.getDriverId();
     final var year = transactionFilterRequest.getYear();
@@ -123,16 +128,15 @@ public class BalanceQueryController {
   }
 
   private void addFeePeriodDataToModel(
-      final Model model,
-      final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest) {
+      final Model model, final YearAndWeekAndDriverAndFeeFilter transactionFilterRequest) {
     final var driverId = transactionFilterRequest.getDriverId();
     final var year = transactionFilterRequest.getYear();
     final var weekNumber = transactionFilterRequest.getWeek().getNumber();
     final var previousWeek = weekNumber - 1;
     final var latestBalance =
         balanceQuery.getLatestBalanceByDriverIdAndYearAndWeekNumber(driverId, year, previousWeek);
-     var feeFromLatestBalance = ZERO;
-    if(latestBalance != null) {
+    var feeFromLatestBalance = ZERO;
+    if (latestBalance != null) {
       feeFromLatestBalance = latestBalance.getFee();
     }
     model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
@@ -140,7 +144,7 @@ public class BalanceQueryController {
     transactionFilterRequest.setFeeOption(FeeOption.ONLY_FEE);
     final var periodFeeTransactions = transactionQuery.getAllByFilter(transactionFilterRequest);
     final var periodFeeTotalAmount =
-            periodFeeTransactions.stream()
+        periodFeeTransactions.stream()
             .map(TransactionResponse::getRealAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     model.addAttribute("feePeriodTotalAmount", periodFeeTotalAmount);
@@ -231,7 +235,7 @@ public class BalanceQueryController {
 
     final var latestCalculatedWeek = qWeekQuery.getById(latestCalculatedWeekId);
     final var latestBalanceWeekLabel =
-            String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
+        String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
     model.addAttribute("latestBalanceWeek", latestBalanceWeekLabel);
   }
 }
