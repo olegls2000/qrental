@@ -1,5 +1,7 @@
 package ee.qrental.driver.domain;
 
+import static java.math.BigDecimal.ZERO;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -49,5 +51,9 @@ public class Driver {
 
   public Long getCallSignId() {
     return callSign == null ? null : callSign.getId();
+  }
+
+  public BigDecimal getDeposit() {
+    return deposit == null ? ZERO : deposit;
   }
 }

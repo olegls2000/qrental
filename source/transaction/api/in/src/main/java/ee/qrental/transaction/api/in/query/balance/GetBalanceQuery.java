@@ -1,11 +1,7 @@
 package ee.qrental.transaction.api.in.query.balance;
 
-
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
-import ee.qrental.transaction.api.in.response.balance.BalanceAmountWithDriverResponse;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 public interface GetBalanceQuery {
@@ -13,12 +9,7 @@ public interface GetBalanceQuery {
 
   BalanceResponse getById(final Long id);
 
-  BalanceResponse getByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber);
-
   BigDecimal getRawBalanceTotalByDriver(final Long driverId);
-
-  BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(final Long driverId, final Integer year, final Integer weekNumber);
 
   BigDecimal getRawFeeTotalByDriver(final Long driverId);
 
@@ -26,8 +17,32 @@ public interface GetBalanceQuery {
 
   BalanceResponse getLatestBalanceByDriver(final Long driverId);
 
+  BigDecimal getPeriodAmountByDriverAndQWeek(final Long driverId, final Long qWeekId);
+  BigDecimal getPeriodFeeByDriverAndQWeek(final Long driverId, final Long qWeekId);
+
+  @Deprecated
   BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
-          final Long driverId,
-          final Integer year,
-          final Integer weekNumber);
+      final Long driverId, final Integer year, final Integer weekNumber);
+
+  /**
+   * Return Balance Fee Amount for the requested week. If no Balance was not calculated for the
+   * requested week, will return ZERO
+   */
+  BigDecimal getFeeByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
+
+  @Deprecated
+  BalanceResponse getByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber);
+
+  /**
+   * Calculate period between versions
+   *
+   * @deprecated
+   *     <p>Use {@link GetBalanceQuery#getRawBalanceTotalByDriverIdAndQWeekId(Long, Long)} instead.
+   */
+  @Deprecated
+  BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(
+      final Long driverId, final Integer year, final Integer weekNumber);
+
+  BigDecimal getRawBalanceTotalByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 }

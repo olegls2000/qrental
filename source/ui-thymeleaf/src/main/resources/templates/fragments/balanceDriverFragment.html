@@ -146,7 +146,7 @@
             <form th:replace="fragments/transactionDriverSearchFormFragment.html :: searchForm"></form>
         </div>
     </div>
-    <div th:if="${transactionFilterRequest.week.number != 0}">
+    <div th:if="${transactionFilterRequest.qWeekId != null}">
         <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
             <div class="col-md-auto">
                 <small th:text="|Period Balance data, EURO:|"

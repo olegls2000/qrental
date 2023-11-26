@@ -13,6 +13,8 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByDriverId(final Long driverId);
 
+  List<TransactionResponse> getAllByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
+
   List<TransactionResponse> getAllByIds(final List<Long> ids);
 
   List<TransactionResponse> getAllByRentCalculationId(final Long rentCalculationId);
@@ -22,5 +24,6 @@ public interface GetTransactionQuery
   List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter);
 
   List<TransactionResponse> getAllByFilter(final PeriodFilter filter);
+
   List<TransactionResponse> getAllByQWeekId(final Long qWeekId);
 }

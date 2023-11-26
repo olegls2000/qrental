@@ -48,6 +48,20 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
+  public List<TransactionResponse> getAllByDriverIdAndQWeekId(
+      final Long driverId, final Long qWeekId) {
+    final var qWeek = qWeekQuery.getById(qWeekId);
+    final var periodFilter =
+        PeriodAndDriverFilter.builder()
+            .driverId(driverId)
+            .dateStart(qWeek.getStart())
+            .dateEnd(qWeek.getEnd())
+            .build();
+
+    return getAllByFilter(periodFilter);
+  }
+
+  @Override
   public List<TransactionResponse> getAllByIds(List<Long> ids) {
     return mapToTransactionResponseList(transactionLoadPort.loadAllByIds(ids));
   }
