@@ -1,0 +1,42 @@
+<div th:fragment="transactionKindPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/settingsTabFragment :: settingsTab('transactionKinds')"></ul>
+    <h2 class="py-3">Transaction Kinds</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/transaction-kinds/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th style="width: 1% !important;">Delete</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(transactionKinds)}">
+            <td colspan="5">No Transaction Kinds</td>
+        </tr>
+        <tr th:each="transactionKind : ${transactionKinds}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/transaction-kinds/update-form/{id}(id=${transactionKind.id})}">
+                    <span class="bi-pencil-square"></span>
+                </a>
+
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/transaction-kinds/delete-form/{id}(id=${transactionKind.id})}">
+                    <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td th:text="${transactionKind.code}"></td>
+            <td th:text="${transactionKind.name}"></td>
+            <td th:text="${transactionKind.comment}"></td>
+        </tr>
+    </table>
+</div>

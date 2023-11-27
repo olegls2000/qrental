@@ -9,6 +9,11 @@ ee.qrental.transaction.spring.config.type.TransactionTypeMapperConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeServiceConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeRepositoryConfig,\
 ee.qrental.transaction.spring.config.type.TransactionTypeValidatorConfig,\
+ee.qrental.transaction.spring.config.kind.TransactionKindAdapterConfig,\
+ee.qrental.transaction.spring.config.kind.TransactionKindMapperConfig,\
+ee.qrental.transaction.spring.config.kind.TransactionKindServiceConfig,\
+ee.qrental.transaction.spring.config.kind.TransactionKindRepositoryConfig,\
+ee.qrental.transaction.spring.config.kind.TransactionKindValidatorConfig,\
 ee.qrental.transaction.spring.config.balance.BalanceAdapterConfig,\
 ee.qrental.transaction.spring.config.balance.BalanceMapperConfig,\
 ee.qrental.transaction.spring.config.balance.BalanceServiceConfig,\

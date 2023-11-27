@@ -24,4 +24,5 @@ public class ControllerUtils {
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String RENTS_ROOT_PATH = "/rents";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
+  public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
 }

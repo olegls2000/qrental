@@ -8,6 +8,10 @@
        href="/transaction-types">Transaction Types</a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'transactionKinds'} ? active : ''"
+       href="/transaction-kinds">Transaction Kinds</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" th:classappend="${activeTab == 'constants'} ? active : ''"
        href="/constants">Constants</a>
   </li>
