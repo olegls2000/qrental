@@ -4,6 +4,7 @@ import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PAT
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.TransactionDeleteRequest;
@@ -26,12 +27,13 @@ public class TransactionUseCaseController {
   private final TransactionDeleteUseCase deleteUseCase;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
+  private final GetTransactionKindQuery transactionKindQuery;
   private final GetDriverQuery driverQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new TransactionAddRequest());
-    addTransactionTypes(model);
+    addTransactionAttributes(model);
     model.addAttribute("drivers", driverQuery.getAll());
 
     return "forms/addTransaction";
@@ -56,16 +58,17 @@ public class TransactionUseCaseController {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDriverId(driverId);
     model.addAttribute("addRequest", addRequest);
-    addTransactionTypes(model);
+    addTransactionAttributes(model);
     model.addAttribute("driverInfo", driverQuery.getObjectInfo(driverId));
     model.addAttribute("driverId", driverId);
 
     return "forms/addTransactionWithDriver";
   }
 
-  private void addTransactionTypes(Model model) {
+  private void addTransactionAttributes(Model model) {
     model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
     model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
+    model.addAttribute("transactionKinds", transactionKindQuery.getAll());
   }
 
   @PostMapping(value = "/add/driver")
@@ -84,7 +87,7 @@ public class TransactionUseCaseController {
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", transactionQuery.getUpdateRequestById(id));
-    addTransactionTypes(model);
+    addTransactionAttributes(model);
     model.addAttribute("drivers", driverQuery.getAll());
 
     return "forms/updateTransaction";
@@ -108,7 +111,7 @@ public class TransactionUseCaseController {
     final var updateRequest = transactionQuery.getUpdateRequestById(id);
     final var driverId = updateRequest.getDriverId();
     model.addAttribute("updateRequest", updateRequest);
-    addTransactionTypes(model);
+    addTransactionAttributes(model);
     model.addAttribute("driverInfo", driverQuery.getObjectInfo(driverId));
     model.addAttribute("driverId", driverId);
 

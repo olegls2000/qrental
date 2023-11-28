@@ -11,6 +11,7 @@ public class TransactionResponse {
   private Long id;
   private String type;
   private String typeDescription;
+  private String kind;
   private String driverInfo;
   private Long driverId;
   private Integer callSign;

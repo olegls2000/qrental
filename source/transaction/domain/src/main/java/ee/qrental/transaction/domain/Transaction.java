@@ -1,10 +1,10 @@
 package ee.qrental.transaction.domain;
 
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.transaction.domain.kind.TransactionKind;
+import ee.qrental.transaction.domain.type.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import ee.qrental.transaction.domain.type.TransactionType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -14,6 +14,7 @@ public class Transaction {
 
   private Long id;
   private TransactionType type;
+  private TransactionKind kind;
   private Long driverId;
   private BigDecimal amount;
   private LocalDate date;

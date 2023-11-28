@@ -14,6 +14,7 @@
             <th>Driver</th>
             <th>Transaction Type</th>
             <th>Amount</th>
+            <th>Kind</th>
             <th>Week</th>
             <th>Date</th>
             <th>With VAT</th>
@@ -43,6 +44,7 @@
                 : 'text-success bg-success border-success'"
                 th:text="${transaction.realAmount}">???
             </td>
+            <td th:text="${transaction.kind}">???</td>
             <td th:text="${transaction.weekNumber}">???</td>
             <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
             <td th:text="${transaction.withVat}">???</td>

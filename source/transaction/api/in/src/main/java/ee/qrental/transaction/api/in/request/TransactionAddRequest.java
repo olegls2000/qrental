@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class TransactionAddRequest extends AbstractAddRequest {
   private Long transactionTypeId;
+  private Long transactionKindId;
   private Long driverId;
   private BigDecimal amount;
   private Integer weekNumber;

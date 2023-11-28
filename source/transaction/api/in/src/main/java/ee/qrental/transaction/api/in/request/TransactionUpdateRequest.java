@@ -1,8 +1,8 @@
 package ee.qrental.transaction.api.in.request;
 
+import ee.qrental.common.core.in.request.AbstractUpdateRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import ee.qrental.common.core.in.request.AbstractUpdateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 public class TransactionUpdateRequest extends AbstractUpdateRequest {
     private Long positiveTransactionTypeId;
     private Long negativeTransactionTypeId;
+    private Long transactionKindId;
     private Long driverId;
     private BigDecimal amount;
     private LocalDate date;

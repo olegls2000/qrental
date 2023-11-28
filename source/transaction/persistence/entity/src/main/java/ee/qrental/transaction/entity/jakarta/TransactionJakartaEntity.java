@@ -2,6 +2,7 @@ package ee.qrental.transaction.entity.jakarta;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import ee.qrental.transaction.entity.jakarta.kind.TransactionKindJakartaEntity;
 import ee.qrental.transaction.entity.jakarta.type.TransactionTypeJakartaEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -43,4 +44,8 @@ public class TransactionJakartaEntity {
   @ManyToOne
   @JoinColumn(name = "transaction_type_id", nullable = false)
   private TransactionTypeJakartaEntity type;
+
+  @ManyToOne
+  @JoinColumn(name = "transaction_kind_id", nullable = false)
+  private TransactionKindJakartaEntity kind;
 }

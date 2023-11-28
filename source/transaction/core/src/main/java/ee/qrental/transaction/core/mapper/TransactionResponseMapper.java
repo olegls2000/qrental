@@ -22,11 +22,14 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
     final var callSign = driver.getCallSign();
     final var driverInfo = format("%s %s ", driver.getFirstName(), driver.getLastName());
 
+    final var transactionKindCode = domain.getKind() == null ? null : domain.getKind().getCode();
+
     return TransactionResponse.builder()
         .id(domain.getId())
         .realAmount(domain.getRealAmount())
         .type(domain.getType().getName())
         .typeDescription(domain.getType().getDescription())
+        .kind(transactionKindCode)
         .driverId(domain.getDriverId())
         .driverInfo(driverInfo)
         .callSign(callSign)
