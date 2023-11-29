@@ -13,13 +13,12 @@ public class TransactionMapperConfig {
 
   @Bean
   TransactionAddRequestMapper getTransactionAddRequestMapper(
-          final TransactionTypeLoadPort transactionTypeLoadPort) {
+      final TransactionTypeLoadPort transactionTypeLoadPort) {
     return new TransactionAddRequestMapper(transactionTypeLoadPort);
   }
 
   @Bean
-  TransactionResponseMapper getTransactionResponseMapper(
-      final GetDriverQuery driverQuery) {
+  TransactionResponseMapper getTransactionResponseMapper(final GetDriverQuery driverQuery) {
     return new TransactionResponseMapper(driverQuery);
   }
 

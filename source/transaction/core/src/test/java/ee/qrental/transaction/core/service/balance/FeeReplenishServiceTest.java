@@ -60,7 +60,7 @@ class FeeReplenishServiceTest {
             .end(LocalDate.of(2023, Month.JANUARY, 16))
             .number(2)
             .build();
-    final var balance = Balance.builder().fee(BigDecimal.valueOf(2.5)).build();
+    final var balance = Balance.builder().feeAmount(BigDecimal.valueOf(2.5)).build();
     when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
         .thenReturn(balance);
 
@@ -81,7 +81,7 @@ class FeeReplenishServiceTest {
             .end(LocalDate.of(2023, Month.JANUARY, 16))
             .number(2)
             .build();
-    final var balance = Balance.builder().fee(BigDecimal.ZERO).build();
+    final var balance = Balance.builder().feeAmount(BigDecimal.ZERO).build();
     when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
         .thenReturn(balance);
 
@@ -102,7 +102,7 @@ class FeeReplenishServiceTest {
             .end(LocalDate.of(2023, Month.JANUARY, 16))
             .number(2)
             .build();
-    final var balance = Balance.builder().fee(BigDecimal.valueOf(-10)).build();
+    final var balance = Balance.builder().feeAmount(BigDecimal.valueOf(-10)).build();
     when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
         .thenReturn(balance);
 
@@ -158,7 +158,7 @@ class FeeReplenishServiceTest {
             .number(2)
             .build();
     ;
-    final var balance = Balance.builder().fee(BigDecimal.valueOf(-10)).build();
+    final var balance = Balance.builder().feeAmount(BigDecimal.valueOf(-10)).build();
     when(balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, 2023, 1))
         .thenReturn(balance);
 

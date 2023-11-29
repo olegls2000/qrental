@@ -17,7 +17,7 @@ public interface TransactionRepository {
       final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
 
   List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
-          final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
+      final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
 
   List<TransactionJakartaEntity> findAllByRentCalculationId(final Long rentCalculationId);
 
@@ -28,9 +28,10 @@ public interface TransactionRepository {
   void deleteById(final Long id);
 
   List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(
-          final LocalDate dateStart,
-          final LocalDate dateEnd,
-          final Long driverId);
+      final LocalDate dateStart, final LocalDate dateEnd, final Long driverId);
 
   List<TransactionJakartaEntity> findByIds(final List<Long> ids);
+
+  List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
+      final Long driverId, final Long kindId, final LocalDate dateStart, final LocalDate dateEnd);
 }

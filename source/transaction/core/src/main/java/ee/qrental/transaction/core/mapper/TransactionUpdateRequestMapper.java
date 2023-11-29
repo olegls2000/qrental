@@ -11,12 +11,12 @@ public class TransactionUpdateRequestMapper
     implements UpdateRequestMapper<TransactionUpdateRequest, Transaction> {
 
   @Override
-  public Transaction toDomain(TransactionUpdateRequest request) {
+  public Transaction toDomain(final TransactionUpdateRequest request) {
     return Transaction.builder()
         .id(request.getId())
         .driverId(request.getDriverId())
         .type(TransactionType.builder().id(getTransactionTypeId(request)).build())
-        .amount(request.getAmount())
+  .amount(request.getAmount())
         .date(request.getDate())
         .withVat(request.getWithVat())
         .comment(request.getComment())
@@ -33,7 +33,7 @@ public class TransactionUpdateRequestMapper
   }
 
   @Override
-  public TransactionUpdateRequest toRequest(Transaction domain) {
+  public TransactionUpdateRequest toRequest(final Transaction domain) {
     final var updateRequest =
         TransactionUpdateRequest.builder()
             .id(domain.getId())

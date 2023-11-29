@@ -2,9 +2,8 @@ package ee.qrental.transaction.entity.jakarta.type;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import ee.qrental.transaction.entity.jakarta.TransactionJakartaEntity;
+import ee.qrental.transaction.entity.jakarta.kind.TransactionKindJakartaEntity;
 import jakarta.persistence.*;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +41,7 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "comment")
   private String comment;
 
-  @OneToMany(mappedBy = "type")
-  private Set<TransactionJakartaEntity> transactions;
+  @ManyToOne
+  @JoinColumn(name = "transaction_kind_id")
+  private TransactionKindJakartaEntity kind;
 }

@@ -29,8 +29,9 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .created(domain.getCreated())
         .feeAbleAmount(domain.getFeeAbleAmount())
         .nonFeeAbleAmount(domain.getFeeAbleAmount())
+        .positiveAmount(domain.getPositiveAmount())
+        .feeAmount(domain.getFeeAmount())
         .amount(domain.getAmount())
-        .fee(domain.getFee())
         .build();
   }
 

@@ -39,7 +39,7 @@ public class BalanceCalculationAdapterMapper {
         .driverId(balanceEntity.getDriverId())
         .feeAbleAmount(balanceEntity.getFeeAbleAmount())
         .nonFeeAbleAmount(balanceEntity.getNonFeeAbleAmount())
-        .fee(balanceEntity.getFee())
+        .feeAmount(balanceEntity.getFeeAmount())
         .build();
   }
 }

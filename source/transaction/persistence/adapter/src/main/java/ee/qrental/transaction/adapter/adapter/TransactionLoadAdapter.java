@@ -58,23 +58,35 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
   }
 
   @Override
-  public List<Transaction> loadAllNonFeeByDriverIdAndBetweenDays(Long driverId, LocalDate dateStart, LocalDate dateEnd) {
-    return repository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
-            .map(mapper::mapToDomain)
-            .collect(toList());
+  public List<Transaction> loadAllByDriverIdAndKindIdAndBetweenDays(
+      final Long driverId, final Long kindId, final LocalDate dateStart, final LocalDate dateEnd) {
+    return repository
+        .findAllByDriverIdAndKindIdAndBetweenDays(driverId, kindId, dateStart, dateEnd)
+        .stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
   }
 
   @Override
-  public List<Transaction> loadAllFeeByDriverIdAndBetweenDays(Long driverId, LocalDate dateStart, LocalDate dateEnd) {
+  public List<Transaction> loadAllNonFeeByDriverIdAndBetweenDays(
+      Long driverId, LocalDate dateStart, LocalDate dateEnd) {
+    return repository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
+
+  @Override
+  public List<Transaction> loadAllFeeByDriverIdAndBetweenDays(
+      Long driverId, LocalDate dateStart, LocalDate dateEnd) {
     return repository.findAllFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId).stream()
-            .map(mapper::mapToDomain)
-            .collect(toList());
+        .map(mapper::mapToDomain)
+        .collect(toList());
   }
 
   @Override
   public List<Transaction> loadAllByRentCalculationId(final Long rentCalculationId) {
     return repository.findAllByRentCalculationId(rentCalculationId).stream()
-            .map(mapper::mapToDomain)
-            .collect(toList());
+        .map(mapper::mapToDomain)
+        .collect(toList());
   }
 }

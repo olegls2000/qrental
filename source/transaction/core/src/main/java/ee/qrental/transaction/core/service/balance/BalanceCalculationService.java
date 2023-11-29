@@ -1,88 +1,162 @@
 package ee.qrental.transaction.core.service.balance;
 
-import static ee.qrental.transaction.api.in.TransactionConstants.isFeeType;
-import static ee.qrental.transaction.api.in.TransactionConstants.isNotFeeType;
+import static ee.qrental.transaction.api.in.TransactionConstants.*;
+import static ee.qrental.transaction.core.utils.FeeUtils.FEE_WEEKLY_INTEREST;
+import static ee.qrental.transaction.core.utils.FeeUtils.getWeekFeeInterest;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
-import ee.qrental.transaction.api.in.response.TransactionResponse;
 // import jakarta.transaction.Transactional;
+import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;
+import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationAddPort;
-import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.api.out.kind.TransactionKindLoadPort;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
+import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
-import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
-import ee.qrental.transaction.domain.type.TransactionType;
+import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.List;
+import java.util.function.Function;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BalanceCalculationService implements BalanceCalculationAddUseCase {
+  private static final BigDecimal FEE_CALCULATION_THRESHOLD = ZERO;
 
-  private static final LocalDate DEFAULT_START_DATE = LocalDate.of(2023, Month.JANUARY, 02);
-
+  private final GetConstantQuery constantQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
-  private final GetTransactionQuery transactionQuery;
+  private final TransactionLoadPort transactionLoadPort;
   private final TransactionTypeLoadPort transactionTypeLoadPort;
-  private final FeeCalculationService feeCalculationService;
-  private final ReplenishService replenishService;
+  private final TransactionKindLoadPort transactionKindLoadPort;
   private final BalanceCalculationAddPort balanceCalculationAddPort;
   private final BalanceAddPort balanceAddPort;
   private final BalanceLoadPort balanceLoadPort;
-  private final BalanceCalculationLoadPort balanceCalculationLoadPort;
   private final BalanceCalculationAddRequestMapper addRequestMapper;
+  private final TransactionAddUseCase transactionAddUseCase;
 
   // @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
-    final var latestRequestedWeekId = addRequest.getQWeekId();
+    final var requestedQWeekId = addRequest.getQWeekId();
     final var domain = addRequestMapper.toDomain(addRequest);
-    final var latestRequestedWeek = qWeekQuery.getById(latestRequestedWeekId);
-    var latestCalculatedWeek = getLatestCalculatedWeek();
-    setStartAndEndDates(domain, latestCalculatedWeek, latestRequestedWeek);
-    final var qWeeksForCalculation =
-        getQWeeksForCalculationOrdered(latestCalculatedWeek, latestRequestedWeek);
-
-    qWeeksForCalculation.stream()
+    final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
+    final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWeekId);
+    driverQuery.getAll()
         .forEach(
-            week ->
-                driverQuery.getAll().stream()
-                    .forEach(
-                        driver -> {
-                          final var driverId = driver.getId();
-                          replenishService.replenishFee(week, driverId);
-                          replenishService.replenishNonFeeAble(week, driverId);
-                          feeCalculationService.calculate(week, driver);
-                          final var driversTransactions =
-                              getAllTransactionsByDriverAndWeek(week, driverId);
-                          final var balanceToSave = getBalance(week, driverId, driversTransactions);
-                          final var balance = balanceAddPort.add(balanceToSave);
-                          final var balanceCalculationResult =
-                              getBalanceCalculationResult(driversTransactions, balance);
-                          domain.getResults().add(balanceCalculationResult);
-                          System.out.printf(
-                              "Balance for Driver with id: %d and week %d was calculated.\n",
-                              driverId, week.getNumber());
-                        }));
+            driver -> {
+              final var driverId = driver.getId();
+              final var previousQWeekBalance =
+                  balanceLoadPort.loadByDriverIdAndQWeekId(driverId, previousQWeek.getId());
+              if (previousQWeekBalance == null) {
+                throw new RuntimeException(
+                    format("Balance for previous qWeek %d, must exist", previousQWeek.getNumber()));
+              }
+              if (!previousQWeekBalance.getDerived()) {
+                throw new RuntimeException(
+                    format(
+                        "Balance for previous qWeek %d, must be derived",
+                        previousQWeek.getNumber()));
+              }
+
+              if (driver.getNeedFee()) {
+                BigDecimal feeAmountForRequestedWeek;
+                final var faAmountFromPreviousWeekBalance = previousQWeekBalance.getFeeAbleAmount();
+                if (faAmountFromPreviousWeekBalance.compareTo(FEE_CALCULATION_THRESHOLD) > 0) {
+                  final var weeklyInterestConstant = constantQuery.getByName(FEE_WEEKLY_INTEREST);
+
+                  final var weeklyInterest = getWeekFeeInterest(weeklyInterestConstant);
+                  final var nominalWeeklyFee =
+                      faAmountFromPreviousWeekBalance.multiply(weeklyInterest);
+
+                  final var feeAmountFromPreviousWeek = previousQWeekBalance.getFeeAmount();
+                  final var faAmountFromPreviousWeek = previousQWeekBalance.getFeeAbleAmount();
+                  final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeek);
+                  if (totalFeeDebt.compareTo(faAmountFromPreviousWeek) < 0) {
+                    feeAmountForRequestedWeek = nominalWeeklyFee;
+                  } else {
+                    final var feeOverdue = totalFeeDebt.subtract(faAmountFromPreviousWeek);
+                    feeAmountForRequestedWeek = nominalWeeklyFee.subtract(feeOverdue);
+                  }
+                  final var transactionType =
+                      transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_FEE_DEBT);
+                  final var feeTransactionAddRequest = new TransactionAddRequest();
+                  feeTransactionAddRequest.setAmount(feeAmountForRequestedWeek);
+                  feeTransactionAddRequest.setDate(requestedQWeek.getEnd());
+                  feeTransactionAddRequest.setWithVat(FALSE);
+                  feeTransactionAddRequest.setTransactionTypeId(transactionType.getId());
+                  feeTransactionAddRequest.setDriverId(driverId);
+                  feeTransactionAddRequest.setWeekNumber(requestedQWeek.getNumber());
+                  feeTransactionAddRequest.setComment(
+                      "automatically created during Balance calculation");
+
+                  transactionAddUseCase.add(feeTransactionAddRequest);
+                }
+              }
+              final var feeAmount =
+                  getBalanceAmount(
+                      TransactionKindsCode.F,
+                      driverId,
+                      requestedQWeek,
+                      Balance::getFeeAmount,
+                      previousQWeekBalance);
+              final var nonFeeAbleAmount =
+                  getBalanceAmount(
+                      TransactionKindsCode.NFA,
+                      driverId,
+                      requestedQWeek,
+                      Balance::getNonFeeAbleAmount,
+                      previousQWeekBalance);
+              final var feeAbleAmount =
+                  getBalanceAmount(
+                      TransactionKindsCode.FA,
+                      driverId,
+                      requestedQWeek,
+                      Balance::getFeeAbleAmount,
+                      previousQWeekBalance);
+              final var positiveAmount =
+                  getBalanceAmount(
+                      TransactionKindsCode.P,
+                      driverId,
+                      requestedQWeek,
+                      Balance::getPositiveAmount,
+                      previousQWeekBalance);
+
+              final var balance =
+                  Balance.builder()
+                      .driverId(driverId)
+                      .qWeekId(requestedQWeekId)
+                      .created(LocalDate.now())
+                      .feeAmount(feeAmount)
+                      .nonFeeAbleAmount(nonFeeAbleAmount)
+                      .feeAbleAmount(feeAbleAmount)
+                      .positiveAmount(positiveAmount)
+                      .derived(FALSE)
+                      .build();
+              final var balanceSaved = balanceAddPort.add(balance);
+              final var balanceDerived = derive(balanceSaved);
+              balanceAddPort.add(balanceDerived);
+
+              final var balanceCalculationResult =
+                  getBalanceCalculationResult(balance, requestedQWeek);
+              domain.getResults().add(balanceCalculationResult);
+            });
     balanceCalculationAddPort.add(domain);
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
@@ -90,126 +164,149 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         "----> Time: Balance Calculation took %d milli seconds \n", calculationDuration);
   }
 
-  private void setStartAndEndDates(
-      final BalanceCalculation domain,
-      QWeekResponse latestCalculatedWeek,
-      QWeekResponse latestRequestedWeek) {
-    final var startDate =
-        latestCalculatedWeek == null
-            ? DEFAULT_START_DATE
-            : latestCalculatedWeek.getEnd().plus(1, DAYS);
-    final var endDate = latestRequestedWeek.getEnd();
+  private Balance derive(final Balance balanceToDerive) {
+    var derivedPositiveAmount = balanceToDerive.getPositiveAmount();
+    var derivedFeeAmount = balanceToDerive.getFeeAmount();
+    var derivedNonFeeAbleAmount = balanceToDerive.getNonFeeAbleAmount();
+    var derivedFeeAbleAmount = balanceToDerive.getFeeAbleAmount();
 
-    domain.setStartDate(startDate);
-    domain.setEndDate(endDate);
-  }
+    if (derivedPositiveAmount.compareTo(ZERO) == 0) {
+      System.out.println(
+          "No positive amount. Derive is impossible for the Balance: " + balanceToDerive);
 
-  private List<QWeekResponse> getQWeeksForCalculationOrdered(
-      final QWeekResponse lastCalculationWeek, final QWeekResponse latestRequestedWeek) {
-    final var qWeeksForCalculation =
-        lastCalculationWeek == null
-            ? qWeekQuery.getAllBeforeById(latestRequestedWeek.getId())
-            : qWeekQuery.getAllBetweenByIds(
-                lastCalculationWeek.getId(), latestRequestedWeek.getId());
-    qWeeksForCalculation.sort(
-        comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber));
-
-    return qWeeksForCalculation;
-  }
-
-  private QWeekResponse getLatestCalculatedWeek() {
-    var lastCalculationDate = balanceCalculationLoadPort.loadLastCalculatedDate();
-    if (lastCalculationDate == null) {
-
-      return null;
+      return Balance.builder()
+          .derived(TRUE)
+          .driverId(balanceToDerive.getDriverId())
+          .created(LocalDate.now())
+          .qWeekId(balanceToDerive.getQWeekId())
+          .feeAmount(balanceToDerive.getFeeAmount())
+          .nonFeeAbleAmount(balanceToDerive.getNonFeeAbleAmount())
+          .feeAbleAmount(balanceToDerive.getFeeAbleAmount())
+          .positiveAmount(balanceToDerive.getPositiveAmount())
+          .build();
     }
-    final var year = lastCalculationDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculationDate);
 
-    return qWeekQuery.getByYearAndNumber(year, weekNumber);
-  }
+    if (derivedFeeAmount.compareTo(ZERO) == 0
+        && derivedFeeAbleAmount.compareTo(ZERO) == 0
+        && derivedNonFeeAbleAmount.compareTo(ZERO) == 0) {
 
-  private BalanceCalculationResult getBalanceCalculationResult(
-      final List<TransactionResponse> driversTransactions, final Balance savedBalance) {
-    final var transactionIds =
-        driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
-    final var result =
-        BalanceCalculationResult.builder()
-            .balance(savedBalance)
-            .transactionIds(transactionIds)
-            .build();
-    return result;
-  }
+      System.out.println(
+          "No negative amounts. Derive is not required for Balance: " + balanceToDerive);
 
-  private List<TransactionResponse> getAllTransactionsByDriverAndWeek(
-      final QWeekResponse week, final Long driverId) {
-    final var filter =
-        PeriodAndDriverFilter.builder()
-            .dateStart(week.getStart())
-            .dateEnd(week.getEnd())
-            .driverId(driverId)
-            .build();
+      return Balance.builder()
+          .derived(TRUE)
+          .driverId(balanceToDerive.getDriverId())
+          .created(LocalDate.now())
+          .qWeekId(balanceToDerive.getQWeekId())
+          .feeAmount(balanceToDerive.getFeeAmount())
+          .nonFeeAbleAmount(balanceToDerive.getNonFeeAbleAmount())
+          .feeAbleAmount(balanceToDerive.getFeeAbleAmount())
+          .positiveAmount(balanceToDerive.getPositiveAmount())
+          .build();
+    }
+    // positive: 5, fee: 2
+    if (derivedPositiveAmount.compareTo(derivedFeeAmount) > 0) {
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedFeeAmount); // 3
+      derivedFeeAmount = derivedFeeAmount.subtract(derivedFeeAmount); // 0
+    } else {
+      // positive: 2, fee: 3
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedPositiveAmount); // 0
+      derivedFeeAmount = derivedFeeAmount.subtract(derivedPositiveAmount); // 1
+    }
 
-    return transactionQuery.getAllByFilter(filter).stream().toList();
-  }
+    if (derivedPositiveAmount.compareTo(ZERO) == 0) {
+      System.out.println("No positive amount. Derive is done for the Balance: " + balanceToDerive);
 
-  private Balance getBalance(
-      final QWeekResponse week,
-      final Long driverId,
-      final List<TransactionResponse> driversTransactions) {
-    final var previousWeekNumber = week.getNumber() - 1;
-    final var previousWeekBalance =
-        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(
-            driverId, week.getYear(), previousWeekNumber);
+      return Balance.builder()
+          .derived(TRUE)
+          .driverId(balanceToDerive.getDriverId())
+          .created(LocalDate.now())
+          .qWeekId(balanceToDerive.getQWeekId())
+          .feeAmount(derivedFeeAmount)
+          .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
+          .positiveAmount(derivedPositiveAmount)
+          .build();
+    }
 
-    final var feeAbleTransactionTypes =
-        transactionTypeLoadPort.loadFeeAble().stream().map(TransactionType::getName).toList();
+    // positive: 5, NonFeeAble: 2
+    if (derivedPositiveAmount.compareTo(derivedNonFeeAbleAmount) > 0) {
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedNonFeeAbleAmount); // 3
+      derivedNonFeeAbleAmount = derivedFeeAmount.subtract(derivedNonFeeAbleAmount); // 0
+    } else {
+      // positive: 2, NonFeeAble: 3
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedPositiveAmount); // 0
+      derivedNonFeeAbleAmount = derivedNonFeeAbleAmount.subtract(derivedPositiveAmount); // 1
+    }
 
-    final var nonFeeAbleTransactionTypes =
-        transactionTypeLoadPort.loadNonFeeAble().stream().map(TransactionType::getName).toList();
+    if (derivedPositiveAmount.compareTo(ZERO) == 0) {
+      System.out.println("No positive amount. Derive is done for the Balance: " + balanceToDerive);
 
-    final var feeAbleAmount =
-        calculateAmount(previousWeekBalance, driversTransactions, feeAbleTransactionTypes);
-    final var nonFeeAbleAmount =
-        calculateAmount(previousWeekBalance, driversTransactions, nonFeeAbleTransactionTypes);
-    final var feeAmount = calculateFeeAmount(previousWeekBalance, driversTransactions);
+      return Balance.builder()
+          .derived(TRUE)
+          .driverId(balanceToDerive.getDriverId())
+          .created(LocalDate.now())
+          .qWeekId(balanceToDerive.getQWeekId())
+          .feeAmount(derivedFeeAmount)
+          .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
+          .positiveAmount(derivedPositiveAmount)
+          .build();
+    }
+
+    // positive: 5, feeAble: 2
+    if (derivedPositiveAmount.compareTo(derivedFeeAbleAmount) > 0) {
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedFeeAbleAmount); // 3
+      derivedFeeAbleAmount = derivedFeeAmount.subtract(derivedFeeAbleAmount); // 0
+    } else {
+      // positive: 2, feeAble: 3
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedPositiveAmount); // 0
+      derivedFeeAbleAmount = derivedFeeAbleAmount.subtract(derivedPositiveAmount); // 1
+    }
 
     return Balance.builder()
-        .driverId(driverId)
-        .qWeekId(week.getId())
+        .derived(TRUE)
+        .driverId(balanceToDerive.getDriverId())
         .created(LocalDate.now())
-        .feeAbleAmount(feeAbleAmount)
-        .nonFeeAbleAmount(nonFeeAbleAmount)
-        .fee(feeAmount)
+        .qWeekId(balanceToDerive.getQWeekId())
+        .feeAmount(derivedFeeAmount)
+        .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+        .feeAbleAmount(derivedFeeAbleAmount)
+        .positiveAmount(derivedPositiveAmount)
         .build();
   }
 
-  private BigDecimal calculateAmount(
-      final Balance previousWeekBalance,
-      final List<TransactionResponse> driversTransactions,
-      final List<String> includedTypes) {
-    final var transactionsSum =
-        driversTransactions.stream()
-            .filter(transaction -> isNotFeeType(transaction.getType()))
-            .filter(transaction -> includedTypes.contains(transaction.getType()))
-            .map(TransactionResponse::getRealAmount)
-            .reduce(BigDecimal::add)
-            .orElse(ZERO);
-    final var amountFromPreviousWeek = previousWeekBalance.getFeeAbleAmount();
+  private BigDecimal getBalanceAmount(
+      final TransactionKindsCode kindEnum,
+      final Long driverId,
+      final QWeekResponse requestedQWeek,
+      final Function<Balance, BigDecimal> getAmount,
+      final Balance previousWeekBalance) {
+    final var kind = transactionKindLoadPort.loadByCode(kindEnum.name());
+    final var kindId = kind.getId();
+    final var pTransactions =
+        transactionLoadPort.loadAllByDriverIdAndKindIdAndBetweenDays(
+            driverId, kindId, requestedQWeek.getStart(), requestedQWeek.getEnd());
+    final var transactionAmountSum =
+        pTransactions.stream()
+            .map(Transaction::getRealAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    return transactionsSum.add(amountFromPreviousWeek);
+    return transactionAmountSum.add(getAmount.apply(previousWeekBalance));
   }
 
-  private BigDecimal calculateFeeAmount(
-      final Balance previousWeekBalance, final List<TransactionResponse> driversTransactions) {
-    final var feeTransactionsSum =
-        driversTransactions.stream()
-            .filter(transaction -> isFeeType(transaction.getType()))
-            .map(TransactionResponse::getRealAmount)
-            .reduce(BigDecimal::add)
-            .orElse(ZERO);
-    final var feeAmountFromPreviousWeek = previousWeekBalance.getFee();
-
-    return feeTransactionsSum.add(feeAmountFromPreviousWeek);
+  private BalanceCalculationResult getBalanceCalculationResult(
+      final Balance savedBalance, final QWeekResponse requestedWeek) {
+    final var transactionIds =
+        transactionLoadPort
+            .loadAllByDriverIdAndBetweenDays(
+                savedBalance.getDriverId(), requestedWeek.getStart(), requestedWeek.getEnd())
+            .stream()
+            .map(Transaction::getId)
+            .collect(toSet());
+    return BalanceCalculationResult.builder()
+        .balance(savedBalance)
+        .transactionIds(transactionIds)
+        .build();
   }
 }

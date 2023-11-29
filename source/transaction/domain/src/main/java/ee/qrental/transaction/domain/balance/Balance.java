@@ -16,9 +16,35 @@ public class Balance {
   private LocalDate created;
   private BigDecimal feeAbleAmount;
   private BigDecimal nonFeeAbleAmount;
-  private BigDecimal fee;
+  private BigDecimal feeAmount;
+  private BigDecimal positiveAmount;
+  private Boolean derived;
 
   public BigDecimal getAmount() {
-    return feeAbleAmount.add(nonFeeAbleAmount);
+    return positiveAmount.subtract(feeAmount).subtract(nonFeeAbleAmount).subtract(feeAbleAmount);
+  }
+
+  @Override
+  public String toString() {
+    return "Balance{"
+        + "id="
+        + id
+        + ", driverId="
+        + driverId
+        + ", qWeekId="
+        + qWeekId
+        + ", created="
+        + created
+        + ", feeAbleAmount="
+        + feeAbleAmount
+        + ", nonFeeAbleAmount="
+        + nonFeeAbleAmount
+        + ", feeAmount="
+        + feeAmount
+        + ", positiveAmount="
+        + positiveAmount
+        + ", derived="
+        + derived
+        + '}';
   }
 }

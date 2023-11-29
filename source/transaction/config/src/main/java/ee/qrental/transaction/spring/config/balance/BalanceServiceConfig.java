@@ -3,15 +3,14 @@ package ee.qrental.transaction.spring.config.balance;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationAddPort;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
+import ee.qrental.transaction.api.out.kind.TransactionKindLoadPort;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationResponseMapper;
@@ -44,52 +43,28 @@ public class BalanceServiceConfig {
 
   @Bean
   BalanceCalculationService getBalanceCalculationService(
+      final GetConstantQuery constantQuery,
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
-      final GetTransactionQuery transactionQuery,
+      final TransactionLoadPort transactionLoadPort,
       final TransactionTypeLoadPort transactionTypeLoadPort,
-      final FeeCalculationService feeCalculationService,
-      final ReplenishService replenishService,
+      final TransactionKindLoadPort transactionKindLoadPort,
       final BalanceCalculationAddPort balanceCalculationAddPort,
       final BalanceAddPort balanceAddPort,
       final BalanceLoadPort balanceLoadPort,
-      final BalanceCalculationLoadPort balanceCalculationLoadPort,
-      final BalanceCalculationAddRequestMapper addRequestMapper) {
+      final BalanceCalculationAddRequestMapper addRequestMapper,
+      final TransactionAddUseCase transactionAddUseCase) {
     return new BalanceCalculationService(
+        constantQuery,
         qWeekQuery,
         driverQuery,
-        transactionQuery,
+        transactionLoadPort,
         transactionTypeLoadPort,
-        feeCalculationService,
-        replenishService,
+        transactionKindLoadPort,
         balanceCalculationAddPort,
         balanceAddPort,
         balanceLoadPort,
-        balanceCalculationLoadPort,
-        addRequestMapper);
-  }
-
-  @Bean
-  FeeCalculationService getFeeTransactionCreator(
-      final GetTransactionTypeQuery transactionTypeQuery,
-      final GetConstantQuery constantQuery,
-      final TransactionAddUseCase transactionAddUseCase,
-      final BalanceLoadPort loadPort) {
-    return new FeeCalculationService(
-        transactionTypeQuery,
-        constantQuery,
-        transactionAddUseCase,
-        loadPort);
-  }
-
-  @Bean
-  ReplenishService getReplenishService(
-      final GetQWeekQuery qWeekQuery,
-      final GetTransactionQuery transactionQuery,
-      final GetTransactionTypeQuery transactionTypeQuery,
-      final TransactionAddUseCase transactionAddUseCase,
-      final BalanceLoadPort balanceLoadPort) {
-    return new ReplenishService(
-        qWeekQuery, transactionQuery, transactionTypeQuery, transactionAddUseCase, balanceLoadPort);
+        addRequestMapper,
+        transactionAddUseCase);
   }
 }

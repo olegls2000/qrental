@@ -4,7 +4,6 @@ import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_ROOT_PAT
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.TransactionDeleteRequest;
@@ -27,7 +26,6 @@ public class TransactionUseCaseController {
   private final TransactionDeleteUseCase deleteUseCase;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
-  private final GetTransactionKindQuery transactionKindQuery;
   private final GetDriverQuery driverQuery;
 
   @GetMapping(value = "/add-form")
@@ -41,8 +39,7 @@ public class TransactionUseCaseController {
 
   @PostMapping(value = "/add")
   public String addTransaction(
-      @ModelAttribute final TransactionAddRequest addRequest,
-      final Model model) {
+      @ModelAttribute final TransactionAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
@@ -68,11 +65,11 @@ public class TransactionUseCaseController {
   private void addTransactionAttributes(Model model) {
     model.addAttribute("positiveTransactionTypes", transactionTypeQuery.getPositive());
     model.addAttribute("negativeTransactionTypes", transactionTypeQuery.getNegative());
-    model.addAttribute("transactionKinds", transactionKindQuery.getAll());
   }
 
   @PostMapping(value = "/add/driver")
-  public String addTransactionWithDriver(@ModelAttribute final TransactionAddRequest addRequest, final Model model) {
+  public String addTransactionWithDriver(
+      @ModelAttribute final TransactionAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
@@ -120,8 +117,7 @@ public class TransactionUseCaseController {
 
   @PostMapping("/update/driver")
   public String updateTransactionWithDriver(
-          final TransactionUpdateRequest updateRequest,
-          final Model model) {
+      final TransactionUpdateRequest updateRequest, final Model model) {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       addUpdateRequestToModel(updateRequest, model);
@@ -142,12 +138,10 @@ public class TransactionUseCaseController {
   }
 
   @PostMapping("/delete")
-  public String deleteForm(
-          final TransactionDeleteRequest deleteRequest,
-          final Model model) {
+  public String deleteForm(final TransactionDeleteRequest deleteRequest, final Model model) {
     deleteUseCase.delete(deleteRequest);
     if (deleteRequest.hasViolations()) {
-     model.addAttribute("deleteRequest", deleteRequest);
+      model.addAttribute("deleteRequest", deleteRequest);
 
       return "forms/updateTransaction";
     }
@@ -168,7 +162,8 @@ public class TransactionUseCaseController {
   @PostMapping("/delete/driver/{driverId}")
   public String deleteTransactionWithDriver(
       @PathVariable("driverId") long driverId,
-      final TransactionDeleteRequest deleteRequest, Model model) {
+      final TransactionDeleteRequest deleteRequest,
+      Model model) {
     deleteUseCase.delete(deleteRequest);
     if (deleteRequest.hasViolations()) {
       model.addAttribute("deleteRequest", deleteRequest);

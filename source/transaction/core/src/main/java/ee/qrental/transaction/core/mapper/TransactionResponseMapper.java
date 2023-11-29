@@ -22,7 +22,8 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
     final var callSign = driver.getCallSign();
     final var driverInfo = format("%s %s ", driver.getFirstName(), driver.getLastName());
 
-    final var transactionKindCode = domain.getKind() == null ? null : domain.getKind().getCode();
+    final var kind = domain.getType().getKind();
+    final var transactionKindCode = kind == null ? null : kind.getCode();
 
     return TransactionResponse.builder()
         .id(domain.getId())

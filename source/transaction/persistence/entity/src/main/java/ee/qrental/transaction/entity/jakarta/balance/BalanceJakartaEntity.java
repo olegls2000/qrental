@@ -36,9 +36,15 @@ public class BalanceJakartaEntity {
   @Column(name = "non_fee_able_amount")
   private BigDecimal nonFeeAbleAmount;
 
-  @Column(name = "fee")
-  private BigDecimal fee;
+  @Column(name = "positive_amount")
+  private BigDecimal positiveAmount;
+
+  @Column(name = "fee_amount")
+  private BigDecimal feeAmount;
 
   @Column(name = "q_week_id")
   private Long qWeekId;
+
+  @Column(name = "derived")
+  private Boolean derived;
 }

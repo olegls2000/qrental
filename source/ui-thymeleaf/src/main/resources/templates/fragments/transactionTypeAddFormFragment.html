@@ -23,6 +23,21 @@
     <form method="post"
           th:action="@{/transaction-types/add}"
           th:object="${addRequest}">
+
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="transactionKindId">Transaction Kind</label>
+                <select id="transactionKindId" class="form-select" required
+                        th:field="*{transactionKindId}">
+                    <option th:value="''" th:text="Select"></option>
+                    <option th:each="transactionKind : ${transactionKinds}"
+                            th:value="${transactionKind.id}"
+                            th:text="|${transactionKind.code} - ${transactionKind.name}|">
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <div class="mb-3">
             <label class="form-label text-muted" for="transactionTypeId">Transaction type name (Eng)</label>
             <input class="form-control" id="transactionTypeId"

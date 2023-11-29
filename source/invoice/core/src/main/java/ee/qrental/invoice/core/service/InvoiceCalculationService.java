@@ -121,7 +121,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     balanceQuery.getByDriverIdAndYearAndWeekNumber(
                         driverId, week.getYear(), previousWeek);
                 final var previousWeekBalanceAmount = previousWeekBalance.getAmount();
-                final var previousWeekFeeBalanceAmount = previousWeekBalance.getFee();
+                final var previousWeekFeeBalanceAmount = previousWeekBalance.getFeeAmount();
                 final var currentWeekFee =
                     driversNegativeTransactions.stream()
                         .filter(tx -> isFeeType(tx.getType()))

@@ -2,6 +2,7 @@ package ee.qrental.ui.controller.transaction.transaction;
 
 import static ee.qrental.ui.controller.util.ControllerUtils.TRANSACTION_TYPE_ROOT_PATH;
 
+import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeAddRequest;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeDeleteRequest;
@@ -23,11 +24,12 @@ public class TransactionTypeUseCaseController {
   private final TransactionTypeUpdateUseCase updateUseCase;
   private final TransactionTypeDeleteUseCase deleteUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
+  private final GetTransactionKindQuery transactionKindQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new TransactionTypeAddRequest());
-
+    model.addAttribute("transactionKinds", transactionKindQuery.getAll());
     return "forms/addTransactionType";
   }
 
@@ -37,6 +39,7 @@ public class TransactionTypeUseCaseController {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
       model.addAttribute("addRequest", addRequest);
+      model.addAttribute("transactionKinds", transactionKindQuery.getAll());
 
       return "forms/addTransactionType";
     }
@@ -47,7 +50,7 @@ public class TransactionTypeUseCaseController {
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", transactionTypeQuery.getUpdateRequestById(id));
-
+    model.addAttribute("transactionKinds", transactionKindQuery.getAll());
     return "forms/updateTransactionType";
   }
 
@@ -57,7 +60,7 @@ public class TransactionTypeUseCaseController {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);
-
+      model.addAttribute("transactionKinds", transactionKindQuery.getAll());
       return "forms/updateTransactionType";
     }
 

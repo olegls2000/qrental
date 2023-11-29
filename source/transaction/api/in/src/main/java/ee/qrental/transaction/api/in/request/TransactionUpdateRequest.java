@@ -15,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 public class TransactionUpdateRequest extends AbstractUpdateRequest {
     private Long positiveTransactionTypeId;
     private Long negativeTransactionTypeId;
-    private Long transactionKindId;
     private Long driverId;
     private BigDecimal amount;
     private LocalDate date;

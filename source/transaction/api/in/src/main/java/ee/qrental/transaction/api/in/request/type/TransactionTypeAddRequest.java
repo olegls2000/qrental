@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TransactionTypeAddRequest extends AbstractAddRequest {
-
+  private Long transactionKindId;
   private String name;
   private String description;
   private String descriptionRus;
