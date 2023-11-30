@@ -14,8 +14,6 @@ public class TransactionTypeAddRequestMapper
         .id(null)
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .name(request.getName())
-        .negative(request.getNegative())
-        .feeAble(request.getFeeAble())
         .description(request.getDescription())
         .descriptionRus(request.getDescriptionRus())
         .comment(request.getComment())

@@ -11,11 +11,15 @@ public class TransactionTypeResponseMapper
 
   @Override
   public TransactionTypeResponse toResponse(final TransactionType domain) {
+    final var kind = domain.getKind();
+    final var kindCode = kind == null ? "n/a" : kind.getCode();
+
     return TransactionTypeResponse.builder()
         .id(domain.getId())
         .name(domain.getName())
-        .negative(domain.getNegative())
-        .feeAble(domain.getFeeAble())
+        .negative(domain.isNegative())
+        .feeAble(domain.isFeeAble())
+        .kind(kindCode)
         .description(domain.getDescription())
         .descriptionRus(domain.getDescriptionRus())
         .comment(domain.getComment())

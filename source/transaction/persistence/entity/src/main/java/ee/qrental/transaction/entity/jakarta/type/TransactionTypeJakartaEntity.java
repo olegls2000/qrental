@@ -29,12 +29,6 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "negative")
-  private Boolean negative;
-
-  @Column(name = "fee_able")
-  private Boolean feeAble;
-
   @Column(name = "description_rus")
   private String descriptionRus;
 

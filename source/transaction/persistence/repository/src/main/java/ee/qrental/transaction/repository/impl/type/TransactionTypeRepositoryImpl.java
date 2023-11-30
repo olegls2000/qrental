@@ -27,13 +27,8 @@ public class TransactionTypeRepositoryImpl implements TransactionTypeRepository 
   }
 
   @Override
-  public List<TransactionTypeJakartaEntity> findByNegative(final Boolean negative) {
-    return springDataRepository.findAllByNegative(negative);
-  }
-
-  @Override
-  public List<TransactionTypeJakartaEntity> findByFeeAble(final Boolean feeAble) {
-    return springDataRepository.findAllByFeeAble(feeAble);
+  public List<TransactionTypeJakartaEntity> findAllByKindCodesIn(final List<String> kindCodes) {
+    return springDataRepository.findAllByKindCodesIn(kindCodes);
   }
 
   @Override

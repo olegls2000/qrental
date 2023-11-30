@@ -10,6 +10,7 @@ public class TransactionTypeResponse {
   private String name;
   private String description;
   private String descriptionRus;
+  private String kind;
   private Boolean negative;
   private Boolean feeAble;
   private String comment;

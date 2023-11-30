@@ -1,6 +1,7 @@
 package ee.qrental.transaction.domain;
 
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import ee.qrental.transaction.domain.type.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class Transaction {
-
   private Long id;
   private TransactionType type;
   private Long driverId;
@@ -21,7 +21,18 @@ public class Transaction {
   private String comment;
 
   public BigDecimal getRealAmount() {
-    return type.getNegative() ? amount.negate() : amount;
+    final var kind = type.getKind();
+    // TODO remove after kind is fulfilled
+    if (kind == null) {
+      return amount;
+    }
+
+    final var kindCode = type.getKind().getCode();
+
+    if (TransactionKindsCode.P.name().equals(kindCode)) {
+      return amount;
+    }
+    return amount.negate();
   }
 
   public Integer getWeekNumber() {

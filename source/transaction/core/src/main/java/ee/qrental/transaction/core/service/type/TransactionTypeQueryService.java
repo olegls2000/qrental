@@ -1,7 +1,6 @@
 package ee.qrental.transaction.core.service.type;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -10,6 +9,7 @@ import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeResponseMapper;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeUpdateRequestMapper;
+import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -47,11 +47,22 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
 
   @Override
   public List<TransactionTypeResponse> getNegative() {
-    return loadPort.loadByNegative(TRUE).stream().map(mapper::toResponse).collect(toList());
+
+    return loadPort
+        .loadByKindCodesIn(
+            asList(
+                TransactionKindsCode.F.name(),
+                TransactionKindsCode.NFA.name(),
+                TransactionKindsCode.FA.name()))
+        .stream()
+        .map(mapper::toResponse)
+        .collect(toList());
   }
 
   @Override
   public List<TransactionTypeResponse> getPositive() {
-    return loadPort.loadByNegative(FALSE).stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadByKindCodesIn(asList(TransactionKindsCode.P.name())).stream()
+        .map(mapper::toResponse)
+        .collect(toList());
   }
 }

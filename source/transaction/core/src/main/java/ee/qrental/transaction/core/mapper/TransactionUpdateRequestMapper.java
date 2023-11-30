@@ -16,7 +16,7 @@ public class TransactionUpdateRequestMapper
         .id(request.getId())
         .driverId(request.getDriverId())
         .type(TransactionType.builder().id(getTransactionTypeId(request)).build())
-  .amount(request.getAmount())
+        .amount(request.getAmount())
         .date(request.getDate())
         .withVat(request.getWithVat())
         .comment(request.getComment())
@@ -50,7 +50,7 @@ public class TransactionUpdateRequestMapper
 
   private void setTransactionTypeToUpdateRequest(
       final Transaction domain, final TransactionUpdateRequest updateRequest) {
-    final var isNegative = domain.getType().getNegative();
+    final var isNegative = domain.getType().isNegative();
     final var transactionTypeId = domain.getType().getId();
     if (isNegative) {
       updateRequest.setNegativeTransactionTypeId(transactionTypeId);

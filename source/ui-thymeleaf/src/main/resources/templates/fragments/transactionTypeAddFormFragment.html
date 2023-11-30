@@ -8,18 +8,6 @@
 </div>
 
 <div th:fragment="addForm">
-    <script>
-        function onNegativeChange() {
-            const feeAbleCheckbox = document.getElementById("feeAbleId");
-            const negativeCheckbox = document.getElementById("negativeId");
-            if (negativeCheckbox.checked) {
-                feeAbleCheckbox.disabled = false;
-            } else {
-                feeAbleCheckbox.checked = false;
-                feeAbleCheckbox.disabled = true;
-            }
-        }
-    </script>
     <form method="post"
           th:action="@{/transaction-types/add}"
           th:object="${addRequest}">
@@ -58,23 +46,7 @@
                    th:field="*{descriptionRus}"
                    type="text"/>
         </div>
-        <div class="row">
-            <div class="col mb-3">
-                <input class="form-check-input" id="negativeId"
-                       th:field="*{negative}"
-                       onchange="onNegativeChange()"
-                       type="checkbox"/>
-                <label class="form-check-label text-muted" for="negativeId">Negative</label>
-            </div>
-            <div class="col mb-3">
-                <input class="form-check-input" id="feeAbleId"
-                       th:field="*{feeAble}"
-                       type="checkbox"
-                       disabled/>
-                <label class="form-check-label text-muted" for="feeAbleId">Fee able (only for Negative)</label>
-            </div>
-        </div>
-                <div class="mb-3">
+        <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>
             <textarea class="form-control"
                       id="commentId"

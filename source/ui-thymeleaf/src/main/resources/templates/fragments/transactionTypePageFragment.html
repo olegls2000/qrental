@@ -16,6 +16,7 @@
             <th>Name</th>
             <th>Negative</th>
             <th>Fee able</th>
+            <th>Kind</th>
             <th>Nimi (estonian language)</th>
             <th>Имя (russian language)</th>
             <th>Comment</th>
@@ -46,10 +47,11 @@
                 class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
                 Positive
             </td>
-            <td th:text="${transactionType.feeAble}"></td>
-            <td th:text="${transactionType.description}"></td>
-            <td th:text="${transactionType.descriptionRus}"></td>
-            <td th:text="${transactionType.comment}"></td>
+            <td th:text="${transactionType.feeAble}">???</td>
+            <td th:text="${transactionType.kind}">???</td>
+            <td th:text="${transactionType.description}">???</td>
+            <td th:text="${transactionType.descriptionRus}">???</td>
+            <td th:text="${transactionType.comment}">???</td>
         </tr>
     </table>
 </div>

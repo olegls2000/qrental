@@ -15,7 +15,5 @@ public class TransactionTypeUpdateRequest extends AbstractUpdateRequest {
   private String name;
   private String description;
   private String descriptionRus;
-  private Boolean negative;
-  private Boolean feeAble;
   private String comment;
 }
