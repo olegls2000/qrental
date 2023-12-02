@@ -61,12 +61,14 @@ where bl.driver_id = :driverId
 
 
 
-select bl.* from balance bl where driver_id = 1;
+select bl.* from balance bl where driver_id = 1 and q_week_id = 13;
 
 select * from rent_calculation rc
              JOIN q_week qw on rc.q_week_id = qw.id
              order by qw.year, qw.number desc limit 1;
 
+
+select * from balance_transaction;
 
 
 

@@ -1,6 +1,5 @@
 package ee.qrental.transaction.adapter.mapper;
 
-import ee.qrental.transaction.adapter.mapper.kind.TransactionKindAdapterMapper;
 import ee.qrental.transaction.adapter.mapper.type.TransactionTypeAdapterMapper;
 import ee.qrental.transaction.adapter.repository.balance.BalanceTransactionRepository;
 import ee.qrental.transaction.domain.Transaction;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 public class TransactionAdapterMapper {
 
   private final TransactionTypeAdapterMapper transactionTypeAdapterMapper;
-  private final TransactionKindAdapterMapper transactionKindAdapterMapper;
   private final BalanceTransactionRepository transactionBalanceRepository;
 
   public Transaction mapToDomain(final TransactionJakartaEntity entity) {

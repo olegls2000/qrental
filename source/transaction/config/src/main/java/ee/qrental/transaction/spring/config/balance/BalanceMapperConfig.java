@@ -2,6 +2,7 @@ package ee.qrental.transaction.spring.config.balance;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.transaction.adapter.mapper.balance.BalanceAdapterMapper;
 import ee.qrental.transaction.adapter.mapper.balance.BalanceCalculationAdapterMapper;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationAddRequestMapper;
 import ee.qrental.transaction.core.mapper.balance.BalanceCalculationResponseMapper;
@@ -30,7 +31,8 @@ public class BalanceMapperConfig {
   }
 
   @Bean
-  BalanceCalculationAdapterMapper getBalanceCalculationAdapterMapper() {
-    return new BalanceCalculationAdapterMapper();
+  BalanceCalculationAdapterMapper getBalanceCalculationAdapterMapper(
+      final BalanceAdapterMapper balanceAdapterMapper) {
+    return new BalanceCalculationAdapterMapper(balanceAdapterMapper);
   }
 }

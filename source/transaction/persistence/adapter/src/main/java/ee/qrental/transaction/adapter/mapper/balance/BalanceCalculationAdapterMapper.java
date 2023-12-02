@@ -1,13 +1,15 @@
 package ee.qrental.transaction.adapter.mapper.balance;
 
-import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
 import ee.qrental.transaction.entity.jakarta.balance.BalanceCalculationJakartaEntity;
 import ee.qrental.transaction.entity.jakarta.balance.BalanceCalculationResultJakartaEntity;
-import ee.qrental.transaction.entity.jakarta.balance.BalanceJakartaEntity;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class BalanceCalculationAdapterMapper {
+
+  private final BalanceAdapterMapper balanceAdapterMapper;
 
   public BalanceCalculation mapToDomain(final BalanceCalculationJakartaEntity entity) {
     if (entity == null) {
@@ -27,19 +29,7 @@ public class BalanceCalculationAdapterMapper {
       final BalanceCalculationResultJakartaEntity resultEntity) {
 
     return BalanceCalculationResult.builder()
-        .balance(mapToDomain(resultEntity.getBalance()))
-        .build();
-  }
-
-  private Balance mapToDomain(final BalanceJakartaEntity balanceEntity) {
-    return Balance.builder()
-        .id(balanceEntity.getId())
-        .qWeekId(balanceEntity.getQWeekId())
-        .created(balanceEntity.getCreated())
-        .driverId(balanceEntity.getDriverId())
-        .feeAbleAmount(balanceEntity.getFeeAbleAmount())
-        .nonFeeAbleAmount(balanceEntity.getNonFeeAbleAmount())
-        .feeAmount(balanceEntity.getFeeAmount())
+        .balance(balanceAdapterMapper.mapToDomain(resultEntity.getBalance()))
         .build();
   }
 }

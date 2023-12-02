@@ -3,7 +3,6 @@ package ee.qrental.transaction.spring.config;
 import ee.qrental.transaction.adapter.adapter.TransactionLoadAdapter;
 import ee.qrental.transaction.adapter.adapter.TransactionPersistenceAdapter;
 import ee.qrental.transaction.adapter.mapper.TransactionAdapterMapper;
-import ee.qrental.transaction.adapter.mapper.kind.TransactionKindAdapterMapper;
 import ee.qrental.transaction.adapter.mapper.type.TransactionTypeAdapterMapper;
 import ee.qrental.transaction.adapter.repository.TransactionRepository;
 import ee.qrental.transaction.adapter.repository.balance.BalanceTransactionRepository;
@@ -16,10 +15,8 @@ public class TransactionAdapterConfig {
   @Bean
   TransactionAdapterMapper getTransactionAdapterMapper(
       final TransactionTypeAdapterMapper transactionTypeAdapterMapper,
-      final TransactionKindAdapterMapper transactionKindAdapterMapper,
       final BalanceTransactionRepository balanceTransactionRepository) {
-    return new TransactionAdapterMapper(
-        transactionTypeAdapterMapper, transactionKindAdapterMapper, balanceTransactionRepository);
+    return new TransactionAdapterMapper(transactionTypeAdapterMapper, balanceTransactionRepository);
   }
 
   @Bean

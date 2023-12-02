@@ -18,6 +18,7 @@ public class BalanceAdapterMapper {
         .nonFeeAbleAmount(entity.getNonFeeAbleAmount())
         .feeAmount(entity.getFeeAmount())
         .positiveAmount(entity.getPositiveAmount())
+        .derived(entity.getDerived())
         .build();
   }
 
@@ -31,6 +32,7 @@ public class BalanceAdapterMapper {
         .nonFeeAbleAmount(domain.getNonFeeAbleAmount())
         .feeAmount(domain.getFeeAmount())
         .positiveAmount(domain.getPositiveAmount())
+        .derived(domain.getDerived())
         .build();
   }
 }

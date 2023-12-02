@@ -44,7 +44,7 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   @Override
   public BigDecimal getFeeByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
-    final var balance = balanceLoadPort.loadByDriverIdAndQWeekId(driverId, qWeekId);
+    final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
 
     return balance == null ? ZERO : balance.getFeeAmount();
   }
@@ -112,7 +112,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BigDecimal getRawBalanceTotalByDriverIdAndQWeekId(
       final Long driverId, final Long qWeekId) {
-    final var balance = balanceLoadPort.loadByDriverIdAndQWeekId(driverId, qWeekId);
+    final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
     if (balance != null) {
 
       return round(balance.getAmount());

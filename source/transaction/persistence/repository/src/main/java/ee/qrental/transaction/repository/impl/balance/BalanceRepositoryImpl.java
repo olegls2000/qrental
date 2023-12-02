@@ -33,8 +33,9 @@ public class BalanceRepositoryImpl implements BalanceRepository {
   }
 
   @Override
-  public BalanceJakartaEntity getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
-    return springDataRepository.findByDriverIdAndQWeekId(driverId, qWeekId);
+  public BalanceJakartaEntity getByDriverIdAndQWeekIdAndDerived(
+      final Long driverId, final Long qWeekId, final boolean derived) {
+    return springDataRepository.findByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, derived);
   }
 
   @Override

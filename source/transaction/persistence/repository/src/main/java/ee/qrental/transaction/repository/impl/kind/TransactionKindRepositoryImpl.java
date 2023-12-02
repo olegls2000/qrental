@@ -27,8 +27,8 @@ public class TransactionKindRepositoryImpl implements TransactionKindRepository 
   }
 
   @Override
-  public TransactionKindJakartaEntity findByCode(final String name) {
-    return springDataRepository.findByName(name);
+  public TransactionKindJakartaEntity findByCode(final String code) {
+    return springDataRepository.findByCode(code);
   }
 
   @Override

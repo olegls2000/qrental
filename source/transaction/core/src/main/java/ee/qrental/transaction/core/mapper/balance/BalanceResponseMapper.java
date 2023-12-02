@@ -32,6 +32,7 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .positiveAmount(domain.getPositiveAmount())
         .feeAmount(domain.getFeeAmount())
         .amount(domain.getAmount())
+        .driverInfo(driverQuery.getObjectInfo(domain.getDriverId()))
         .build();
   }
 

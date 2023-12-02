@@ -1,6 +1,5 @@
 package ee.qrental.invoice.core.service;
 
-import static ee.qrental.transaction.api.in.TransactionConstants.*;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
@@ -124,7 +123,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var previousWeekFeeBalanceAmount = previousWeekBalance.getFeeAmount();
                 final var currentWeekFee =
                     driversNegativeTransactions.stream()
-                        .filter(tx -> isFeeType(tx.getType()))
+                        .filter(tx -> "F".equals(tx.getKind()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
                         .orElse(ZERO)
@@ -239,7 +238,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var withoutVat = isFirmWithoutVAT(firm);
     final var typeVsTransactions =
         transactions.stream()
-            .filter(tx -> isNotFeeType(tx.getType()))
+            .filter(tx -> !"F".equals(tx.getKind()))
             .collect(groupingBy(TransactionResponse::getType));
 
     return typeVsTransactions.entrySet().stream()

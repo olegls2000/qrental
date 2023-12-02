@@ -19,10 +19,12 @@ public interface BalanceSpringDataRepository extends JpaRepository<BalanceJakart
 
   @Query(
       value =
-          "select bl.* from balance bl where bl.driver_id = :driverId and bl.q_week_id = :qWeekId",
+          "select bl.* from balance bl where bl.driver_id = :driverId and bl.q_week_id = :qWeekId and bl.derived = :derived",
       nativeQuery = true)
-  BalanceJakartaEntity findByDriverIdAndQWeekId(
-      @Param("driverId") final Long driverId, @Param("qWeekId") final Long qWeekId);
+  BalanceJakartaEntity findByDriverIdAndQWeekIdAndDerived(
+      @Param("driverId") final Long driverId,
+      @Param("qWeekId") final Long qWeekId,
+      @Param("derived") final boolean derived);
 
   @Query(
       value =

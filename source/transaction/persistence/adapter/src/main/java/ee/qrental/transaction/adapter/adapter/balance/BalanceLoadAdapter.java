@@ -40,8 +40,10 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
-  public Balance loadByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
-    return mapper.mapToDomain(repository.getByDriverIdAndQWeekId(driverId, qWeekId));
+  public Balance loadByDriverIdAndQWeekIdAndDerived(
+      final Long driverId, final Long qWeekId, final boolean derived) {
+    return mapper.mapToDomain(
+        repository.getByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, derived));
   }
 
   @Override

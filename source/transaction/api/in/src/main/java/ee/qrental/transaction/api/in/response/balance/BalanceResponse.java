@@ -18,5 +18,6 @@ public class BalanceResponse {
   private Integer year;
   private Integer weekNumber;
   private Long driverId;
+  private String driverInfo;
   private LocalDate created;
 }
