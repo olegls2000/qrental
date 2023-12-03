@@ -65,7 +65,7 @@ public class QWeekQueryService implements GetQWeekQuery {
       final Long starQtWeekId, final Long endQWeekId) {
     final var qWeeks =
         starQtWeekId == null
-            ? loadPort.loadAllBeforeById(starQtWeekId)
+            ? loadPort.loadAllBeforeById(endQWeekId)
             : loadPort.loadAllBetweenByIds(starQtWeekId, endQWeekId);
 
     return qWeeks.stream().map(mapper::toResponse).sorted(DEFAULT_COMPARATOR).collect(toList());
