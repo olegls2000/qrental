@@ -27,10 +27,10 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .year(qWeek.getYear())
         .weekNumber(qWeek.getNumber())
         .created(domain.getCreated())
-        .feeAbleAmount(domain.getFeeAbleAmount())
-        .nonFeeAbleAmount(domain.getFeeAbleAmount())
+        .feeAbleAmount(domain.getFeeAbleAmount().negate())
+        .nonFeeAbleAmount(domain.getNonFeeAbleAmount().negate())
         .positiveAmount(domain.getPositiveAmount())
-        .feeAmount(domain.getFeeAmount())
+        .feeAmount(domain.getFeeAmount().negate())
         .amount(domain.getAmount())
         .driverInfo(driverQuery.getObjectInfo(domain.getDriverId()))
         .build();
