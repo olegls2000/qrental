@@ -243,7 +243,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     return transactionLoadPort
         .loadAllFeeByDriverIdAndBetweenDays(driverId, qWeek.getStart(), qWeek.getEnd())
         .stream()
-        .map(Transaction::getRealAmount)
+        .map(Transaction::getAmount)
         .reduce(ZERO, BigDecimal::add);
   }
 

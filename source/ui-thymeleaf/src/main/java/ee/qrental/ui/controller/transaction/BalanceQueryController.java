@@ -117,10 +117,10 @@ public class BalanceQueryController {
       final Long requestedQWeekId,
       final Long previousQWeekId) {
     final var feeFromLatestBalance =
-        balanceQuery.getFeeByDriverIdAndQWeekId(driverId, previousQWeekId);
+        balanceQuery.getFeeByDriverIdAndQWeekId(driverId, previousQWeekId).negate();
     model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
     final var periodFeeTotalAmount =
-        balanceQuery.getPeriodFeeByDriverAndQWeek(driverId, requestedQWeekId);
+        balanceQuery.getPeriodFeeByDriverAndQWeek(driverId, requestedQWeekId).negate();
     model.addAttribute("feePeriodTotalAmount", periodFeeTotalAmount);
     final var periodFeeEndBalanceAmount = feeFromLatestBalance.add(periodFeeTotalAmount);
     model.addAttribute("feePeriodEndAmount", periodFeeEndBalanceAmount);
