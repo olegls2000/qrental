@@ -18,7 +18,7 @@ public class InvoiceCalculationLoadAdapter implements InvoiceCalculationLoadPort
   private final InvoiceCalculationAdapterMapper mapper;
 
   @Override
-  public LocalDate loadLastCalculationDate() {
+  public LocalDate loadLastCalculatedDate() {
     return loadedOrDefault(repository.getLastCalculationDate(), INVOICE_START_CALCULATION_DATE);
   }
 

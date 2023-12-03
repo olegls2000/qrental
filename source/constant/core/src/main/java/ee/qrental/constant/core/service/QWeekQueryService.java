@@ -61,6 +61,17 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
+  public List<QWeekResponse> getQWeeksFromPeriodOrdered(
+      final Long starQtWeekId, final Long endQWeekId) {
+    final var qWeeks =
+        starQtWeekId == null
+            ? loadPort.loadAllBeforeById(starQtWeekId)
+            : loadPort.loadAllBetweenByIds(starQtWeekId, endQWeekId);
+
+    return qWeeks.stream().map(mapper::toResponse).sorted(DEFAULT_COMPARATOR).collect(toList());
+  }
+
+  @Override
   public QWeekResponse getByYearAndNumber(final Integer year, final Integer number) {
     return mapper.toResponse(loadPort.loadByYearAndNumber(year, number));
   }

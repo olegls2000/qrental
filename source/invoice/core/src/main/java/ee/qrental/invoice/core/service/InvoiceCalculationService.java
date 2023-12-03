@@ -1,11 +1,15 @@
 package ee.qrental.invoice.core.service;
 
+import static java.lang.String.format;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.common.core.utils.Week;
+import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
@@ -17,6 +21,7 @@ import ee.qrental.firm.api.in.response.FirmResponse;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
 import ee.qrental.invoice.api.out.InvoiceCalculationAddPort;
+import ee.qrental.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrental.invoice.core.mapper.InvoiceCalculationAddRequestMapper;
 import ee.qrental.invoice.core.service.pdf.InvoiceToPdfConverter;
 import ee.qrental.invoice.core.service.pdf.InvoiceToPdfModelMapper;
@@ -29,10 +34,12 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
+import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -42,49 +49,70 @@ import lombok.AllArgsConstructor;
 public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
   private static final BigDecimal VAT_RATE = BigDecimal.valueOf(0.83333333333333333333d);
+  private static final LocalDate DEFAULT_START_DATE = LocalDate.of(2023, Month.JANUARY, 2);
 
-  private final InvoiceCalculationAddRequestMapper invoiceCalculationAddRequestMapper;
-  private final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator;
-  private final InvoiceCalculationAddPort invoiceCalculationAddPort;
-  private final InvoiceCalculationPeriodService invoiceCalculationPeriodService;
-  private final InvoiceToPdfConverter invoiceToPdfConverter;
-  private final InvoiceToPdfModelMapper invoiceToPdfModelMapper;
-  private final GetTransactionQuery transactionQuery;
+  private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetFirmQuery firmQuery;
   private final GetBalanceQuery balanceQuery;
-  private final EmailSendUseCase emailSendUseCase;
+  private final GetTransactionQuery transactionQuery;
   private final GetFirmLinkQuery firmLinkQuery;
+  private final EmailSendUseCase emailSendUseCase;
+  private final InvoiceCalculationLoadPort loadPort;
+  private final InvoiceCalculationAddRequestMapper addRequestMapper;
+  private final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator;
+  private final InvoiceCalculationAddPort invoiceCalculationAddPort;
+  private final InvoiceToPdfConverter invoiceToPdfConverter;
+  private final InvoiceToPdfModelMapper invoiceToPdfModelMapper;
+
+  private void setStartAndEndDates(
+      final InvoiceCalculation domain,
+      QWeekResponse latestCalculatedWeek,
+      QWeekResponse latestRequestedWeek) {
+    final var startDate =
+        latestCalculatedWeek == null
+            ? DEFAULT_START_DATE
+            : latestCalculatedWeek.getEnd().plusDays(1);
+    final var endDate = latestRequestedWeek.getEnd();
+
+    domain.setStartDate(startDate);
+    domain.setEndDate(endDate);
+  }
 
   @Transactional
   @Override
   public void add(final InvoiceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
+    final var requestedQWeekId = addRequest.getQWeekId();
+    final var domain = addRequestMapper.toDomain(addRequest);
+    final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
     final var actionDate = addRequest.getActionDate();
-    final var lastYear = addRequest.getLastYear();
-    final var lastWeek = addRequest.getLastWeek();
-    final var domain = invoiceCalculationAddRequestMapper.toDomain(addRequest);
-    final var weekIterator = invoiceCalculationPeriodService.getWeekIterator(lastYear, lastWeek);
-    domain.setStartDate(weekIterator.getStartPeriod());
-    domain.setEndDate(weekIterator.getEndPeriod());
+    var latestCalculatedWeek = getLatestCalculatedWeek();
+    setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
+    final var qWeeksForCalculation =
+        qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeek.getId(), requestedQWeek.getId());
+    getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {
       addRequest.setViolations(violationsCollector.getViolations());
       return;
     }
     final var drivers = driverQuery.getAll();
-    while (weekIterator.hasNext()) {
-      final var week = weekIterator.next();
-      final var weekNumber = week.weekNumber();
-      final var weekStartDay = week.start();
-      final var weekEndDay = week.end();
-      drivers.stream()
-          .forEach(
+    qWeeksForCalculation.forEach(
+        week -> {
+          final var qWeekId = week.getId();
+          final var weekNumber = week.getNumber();
+          final var weekYear = week.getYear();
+          final var weekStartDay = week.getStart();
+          final var weekEndDay = week.getEnd();
+
+          final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
+
+          drivers.forEach(
               driver -> {
                 final var driverId = driver.getId();
                 final var weekBalance =
-                    balanceQuery.getByDriverIdAndYearAndWeekNumber(
-                        driverId, week.getYear(), weekNumber);
+                    balanceQuery.getDerivedBalanceByDriverAndQWeek(driverId, qWeekId);
                 if (weekBalance == null) {
                   throw new RuntimeException(
                       "Invoice calculation is impossible for the week: "
@@ -105,22 +133,39 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .build();
                 final var driversNegativeTransactions =
                     transactionQuery.getAllByFilter(filter).stream()
-                        .filter(tx -> tx.getRealAmount().compareTo(BigDecimal.ZERO) < 0)
+                        .filter(tx -> tx.getRealAmount().compareTo(ZERO) < 0)
                         .filter(tx -> !tx.getType().equals("compensation"))
                         .toList();
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =
-                    String.format(
+                    format(
                         "%s %s, %d",
                         driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
                 final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekNumber);
-                final var invoiceNumber = getInvoiceNumber(week, driverId);
-                final var previousWeek = weekNumber - 1;
-                final var previousWeekBalance =
-                    balanceQuery.getByDriverIdAndYearAndWeekNumber(
-                        driverId, week.getYear(), previousWeek);
-                final var previousWeekBalanceAmount = previousWeekBalance.getAmount();
-                final var previousWeekFeeBalanceAmount = previousWeekBalance.getFeeAmount();
+                final var invoiceNumber = getInvoiceNumber(weekYear, weekNumber, driverId);
+                final var defaultQWeekBalance =
+                    BalanceResponse.builder()
+                        .qWeekId(null)
+                        .positiveAmount(ZERO)
+                        .feeAmount(ZERO)
+                        .feeAbleAmount(ZERO)
+                        .nonFeeAbleAmount(ZERO)
+                        .driverId(driverId)
+                        .build();
+
+                final var previousQWeekBalance =
+                    previousQWeek == null
+                        ? defaultQWeekBalance
+                        : balanceQuery.getDerivedBalanceByDriverAndQWeek(
+                            driverId, previousQWeek.getId());
+                if (previousQWeekBalance == null) {
+                  throw new RuntimeException(
+                      format(
+                          "Balance for previous qWeek %d, must exist", previousQWeek.getNumber()));
+                }
+
+                final var previousWeekBalanceAmount = previousQWeekBalance.getAmount();
+                final var previousWeekFeeBalanceAmount = previousQWeekBalance.getFeeAmount();
                 final var currentWeekFee =
                     driversNegativeTransactions.stream()
                         .filter(tx -> "F".equals(tx.getKind()))
@@ -166,12 +211,24 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .build();
                 domain.getResults().add(result);
               });
-    }
+        });
     invoiceCalculationAddPort.add(domain);
     sendEmails(domain);
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
+  }
+
+  private QWeekResponse getLatestCalculatedWeek() {
+    var lastCalculationDate = loadPort.loadLastCalculatedDate();
+    if (lastCalculationDate == null) {
+
+      return null;
+    }
+    final var year = lastCalculationDate.getYear();
+    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculationDate);
+
+    return qWeekQuery.getByYearAndNumber(year, weekNumber);
   }
 
   private FirmResponse getQFirmForInvoice(
@@ -181,7 +238,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     if (firmLink == null) {
       System.out.printf(
           "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice",
-          String.format("%s %s", driver.getFirstName(), driver.getLastName()),
+          format("%s %s", driver.getFirstName(), driver.getLastName()),
           weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
           weekNumber);
       final var qFirmId = driver.getQFirmId();
@@ -227,10 +284,24 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     return invoiceToPdfConverter.getPdfInputStream(invoicePdfModel);
   }
 
-  private String getInvoiceNumber(final Week week, final Long driverId) {
-    final var year = week.getYear();
-    final var weekNumber = week.weekNumber();
-    return String.format("%d%d%d", year, weekNumber, driverId);
+  // TODO move to the Qweek Service
+  private List<QWeekResponse> getQWeeksForCalculationOrdered(
+      final QWeekResponse lastCalculationWeek, final QWeekResponse latestRequestedWeek) {
+    final var qWeeksForCalculation =
+        lastCalculationWeek == null
+            ? qWeekQuery.getAllBeforeById(latestRequestedWeek.getId())
+            : qWeekQuery.getAllBetweenByIds(
+                lastCalculationWeek.getId(), latestRequestedWeek.getId());
+    qWeeksForCalculation.sort(
+        comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber));
+
+    return qWeeksForCalculation;
+  }
+
+  private String getInvoiceNumber(
+      final Integer weekYear, final Integer weekNumber, final Long driverId) {
+
+    return format("%d%d%d", weekYear, weekNumber, driverId);
   }
 
   private List<InvoiceItem> getInvoiceItems(

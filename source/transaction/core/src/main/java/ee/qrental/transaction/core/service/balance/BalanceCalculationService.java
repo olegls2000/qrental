@@ -6,7 +6,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 import ee.qrental.common.core.utils.QTimeUtils;
@@ -35,7 +34,6 @@ import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 
@@ -69,7 +67,8 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     var latestCalculatedWeek = getLatestCalculatedWeek();
     setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
     final var qWeeksForCalculation =
-        getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
+            qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeek.getId(), requestedQWeek.getId());
+
     final var drivers = driverQuery.getAll();
     qWeeksForCalculation.forEach(
         week ->
@@ -363,18 +362,5 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
 
     domain.setStartDate(startDate);
     domain.setEndDate(endDate);
-  }
-
-  private List<QWeekResponse> getQWeeksForCalculationOrdered(
-      final QWeekResponse lastCalculationWeek, final QWeekResponse latestRequestedWeek) {
-    final var qWeeksForCalculation =
-        lastCalculationWeek == null
-            ? qWeekQuery.getAllBeforeById(latestRequestedWeek.getId())
-            : qWeekQuery.getAllBetweenByIds(
-                lastCalculationWeek.getId(), latestRequestedWeek.getId());
-    qWeeksForCalculation.sort(
-        comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber));
-
-    return qWeeksForCalculation;
   }
 }

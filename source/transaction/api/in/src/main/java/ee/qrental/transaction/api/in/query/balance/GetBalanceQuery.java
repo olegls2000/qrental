@@ -17,7 +17,10 @@ public interface GetBalanceQuery {
 
   BalanceResponse getLatestBalanceByDriver(final Long driverId);
 
+  BalanceResponse getDerivedBalanceByDriverAndQWeek(final Long driverId, final Long qWeekId);
+
   BigDecimal getPeriodAmountByDriverAndQWeek(final Long driverId, final Long qWeekId);
+
   BigDecimal getPeriodFeeByDriverAndQWeek(final Long driverId, final Long qWeekId);
 
   @Deprecated

@@ -2,6 +2,8 @@ package ee.qrental.invoice.core.service;
 
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.in.query.GetInvoiceCalculationQuery;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationUpdateRequest;
 import ee.qrental.invoice.api.in.response.InvoiceCalculationResponse;
@@ -13,6 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class InvoiceCalculationQueryService implements GetInvoiceCalculationQuery {
 
+  private final GetQWeekQuery qWeekQuery;
   private final InvoiceCalculationLoadPort loadPort;
   private final InvoiceCalculationResponseMapper responseMapper;
 
@@ -34,5 +37,19 @@ public class InvoiceCalculationQueryService implements GetInvoiceCalculationQuer
   @Override
   public InvoiceCalculationUpdateRequest getUpdateRequestById(final Long id) {
     return null;
+  }
+
+  @Override
+  public Long getLastCalculatedQWeekId() {
+    final var lastCalculatedDate = loadPort.loadLastCalculatedDate();
+    if (lastCalculatedDate == null) {
+
+      return null;
+    }
+    final var year = lastCalculatedDate.getYear();
+    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculatedDate);
+    final var lastCalculatedWeek = qWeekQuery.getByYearAndNumber(year, weekNumber);
+
+    return lastCalculatedWeek.getId();
   }
 }

@@ -5,5 +5,5 @@ import ee.qrental.invoice.domain.InvoiceCalculation;
 import java.time.LocalDate;
 
 public interface InvoiceCalculationLoadPort extends LoadPort<InvoiceCalculation> {
-  LocalDate loadLastCalculationDate();
+  LocalDate loadLastCalculatedDate();
 }

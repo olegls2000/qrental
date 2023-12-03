@@ -3,6 +3,7 @@ package ee.qrental.transaction.core.service.balance;
 import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.core.utils.FeeUtils.FEE_WEEKLY_INTEREST;
 import static ee.qrental.transaction.core.utils.FeeUtils.getWeekFeeInterest;
+import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ZERO;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.util.stream.Collectors.toList;
@@ -219,6 +220,14 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
     return balanceResponseMapper.toResponse(latestBalance);
+  }
+
+  @Override
+  public BalanceResponse getDerivedBalanceByDriverAndQWeek(
+      final Long driverId, final Long qWeekId) {
+    final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, TRUE);
+
+    return balanceResponseMapper.toResponse(balance);
   }
 
   @Override

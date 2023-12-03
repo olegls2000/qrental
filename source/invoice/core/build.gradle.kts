@@ -7,6 +7,7 @@ dependencies{
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:firm:api:in"))
+    implementation(project(":source:constant:api:in"))
     implementation(project(":source:email:api:in"))
 
     compileOnly(libs.q.lombok)

@@ -14,32 +14,18 @@
           th:object="${addRequest}">
         <p class="fs-4 ">Please confirm that you want to trigger:</p>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Bulk Weekly Invoices creation</li>
+            <li class="list-group-item">Bulk weekly invoices creation</li>
             <li class="list-group-item">Bulk email notification</li>
         </ul>
         <div class="row">
-            <div class="col">
-                <div class="mb-3">
-                    <label class="form-label text-muted" for="yearId">Select last year</label>
-                    <select id="yearId" class="form-select"
-                            th:field="*{lastYear}">
-                        <option th:each="year: ${years}"
-                                th:value="${year}"
-                                th:text="|${year}|"></option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="mb-3">
-                    <label class="form-label text-muted" for="weekId">Select last week (included)</label>
-                    <select id="weekId" class="form-select"
-                            th:field="*{lastWeek}">
-                        <option th:each="week: ${weeks}"
-                                th:value="${week}"
-                                th:text="|${week.displayValue}|"></option>
-                    </select>
-                </div>
+            <div class="mb-3">
+                <label class="form-label text-muted" for="weekId">Select last week (included)</label>
+                <select id="weekId" class="form-select"
+                        th:field="*{qWeekId}">
+                    <option th:each="week: ${weeks}"
+                            th:value="${week.id}"
+                            th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>
+                </select>
             </div>
         </div>
         <div class="mb-3">
@@ -49,11 +35,8 @@
                    type="date"
                    readonly/>
         </div>
-
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Calculate',
-            cancelHref='/invoices'
-        )">
+            submitValue='Calculate')">
         </div>
     </form>
 </div>

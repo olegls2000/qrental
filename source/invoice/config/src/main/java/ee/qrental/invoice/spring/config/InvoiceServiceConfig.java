@@ -1,5 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
@@ -61,44 +62,41 @@ public class InvoiceServiceConfig {
 
   @Bean
   InvoiceCalculationQueryService getInvoiceCalculationQueryService(
+      final GetQWeekQuery qWeekQuery,
       final InvoiceCalculationLoadPort loadPort,
       final InvoiceCalculationResponseMapper responseMapper) {
-    return new InvoiceCalculationQueryService(loadPort, responseMapper);
+    return new InvoiceCalculationQueryService(qWeekQuery, loadPort, responseMapper);
   }
 
   @Bean
   InvoiceCalculationService getInvoiceCalculationService(
-          final InvoiceCalculationAddRequestMapper invoiceCalculationAddRequestMapper,
-          final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator,
-          final InvoiceCalculationAddPort invoiceCalculationAddPort,
-          final InvoiceCalculationPeriodService invoiceCalculationPeriodService,
-          final InvoiceToPdfConverter invoiceToPdfConverter,
-          final InvoiceToPdfModelMapper invoiceToPdfModelMapper,
-          final GetTransactionQuery transactionQuery,
-          final GetDriverQuery driverQuery,
-          final GetFirmQuery firmQuery,
-          final EmailSendUseCase emailSendUseCase,
-          final GetBalanceQuery balanceQuery,
-          final GetFirmLinkQuery firmLinkQuery) {
+      final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery driverQuery,
+      final GetFirmQuery firmQuery,
+      final GetBalanceQuery balanceQuery,
+      final GetTransactionQuery transactionQuery,
+      final GetFirmLinkQuery firmLinkQuery,
+      final EmailSendUseCase emailSendUseCase,
+      final InvoiceCalculationLoadPort loadPort,
+      final InvoiceCalculationAddRequestMapper addRequestMapper,
+      final InvoiceCalculationBusinessRuleValidator invoiceCalculationBusinessRuleValidator,
+      final InvoiceCalculationAddPort invoiceCalculationAddPort,
+      final InvoiceToPdfConverter invoiceToPdfConverter,
+      final InvoiceToPdfModelMapper invoiceToPdfModelMapper) {
     return new InvoiceCalculationService(
-        invoiceCalculationAddRequestMapper,
-        invoiceCalculationBusinessRuleValidator,
-        invoiceCalculationAddPort,
-        invoiceCalculationPeriodService,
-        invoiceToPdfConverter,
-        invoiceToPdfModelMapper,
-        transactionQuery,
+        qWeekQuery,
         driverQuery,
         firmQuery,
         balanceQuery,
+        transactionQuery,
+        firmLinkQuery,
         emailSendUseCase,
-        firmLinkQuery);
-  }
-
-  @Bean
-  InvoiceCalculationPeriodService getInvoiceCalculationPeriodService(
-      final InvoiceCalculationLoadPort loadPort) {
-    return new InvoiceCalculationPeriodService(loadPort);
+        loadPort,
+        addRequestMapper,
+        invoiceCalculationBusinessRuleValidator,
+        invoiceCalculationAddPort,
+        invoiceToPdfConverter,
+        invoiceToPdfModelMapper);
   }
 
   @Bean
