@@ -66,8 +66,10 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
 
     var latestCalculatedWeek = getLatestCalculatedWeek();
     setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
+    final var latestCalculatedWeekId =
+        latestCalculatedWeek == null ? null : latestCalculatedWeek.getId();
     final var qWeeksForCalculation =
-            qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeek.getId(), requestedQWeek.getId());
+        qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeekId, requestedQWeek.getId());
 
     final var drivers = driverQuery.getAll();
     qWeeksForCalculation.forEach(
