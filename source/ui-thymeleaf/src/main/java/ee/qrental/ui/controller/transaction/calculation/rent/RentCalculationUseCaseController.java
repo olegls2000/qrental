@@ -8,8 +8,6 @@ import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
-import java.util.List;
-
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -41,31 +39,14 @@ public class RentCalculationUseCaseController {
     return "forms/addRentCalculation";
   }
 
-  private QWeekResponse getNextWeek() {
-    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
-    if (lastCalculatedWeekId == null) {
-      return qWeekQuery.getFirstWeek();
-    }
-
-    return qWeekQuery.getOneAfterById(lastCalculatedWeekId);
-  }
-
-  private List<QWeekResponse> getWeeks() {
-    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
-    if (lastCalculatedWeekId == null) {
-      return qWeekQuery.getAll();
-    }
-
-    return qWeekQuery.getAllAfterById(lastCalculatedWeekId);
-  }
-
   @PostMapping(value = "/calculations/add")
   public String addCalculation(
       @ModelAttribute final RentCalculationAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
+      model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
       addAddRequestToModel(addRequest, model);
-      model.addAttribute("weeks", getWeeks());
+      model.addAttribute("nextWeek", getNextWeek());
 
       return "forms/addRentCalculation";
     }
@@ -75,5 +56,14 @@ public class RentCalculationUseCaseController {
 
   private void addAddRequestToModel(final RentCalculationAddRequest addRequest, final Model model) {
     model.addAttribute("addRequest", addRequest);
+  }
+
+  private QWeekResponse getNextWeek() {
+    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
+    if (lastCalculatedWeekId == null) {
+      return qWeekQuery.getFirstWeek();
+    }
+
+    return qWeekQuery.getOneAfterById(lastCalculatedWeekId);
   }
 }
