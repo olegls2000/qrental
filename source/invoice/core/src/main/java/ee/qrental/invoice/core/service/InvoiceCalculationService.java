@@ -164,7 +164,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                           "Balance for previous qWeek %d, must exist", previousQWeek.getNumber()));
                 }
 
-                final var previousWeekBalanceAmount = previousQWeekBalance.getAmount();
+                final var previousWeekBalanceAmountWithoutFee =
+                    previousQWeekBalance.getAmount().subtract(previousQWeekBalance.getFeeAmount());
                 final var previousWeekFeeBalanceAmount = previousQWeekBalance.getFeeAmount();
                 final var currentWeekFee =
                     driversNegativeTransactions.stream()
@@ -195,7 +196,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .qFirmRegNumber(qFirm.getRegistrationNumber())
                         .qFirmVatNumber(qFirm.getVatNumber())
                         .created(actionDate)
-                        .balance(previousWeekBalanceAmount)
+                        .balance(previousWeekBalanceAmountWithoutFee)
                         .currentWeekFee(currentWeekFee)
                         .previousWeekBalanceFee(previousWeekFeeBalanceAmount)
                         .items(invoiceItems)
