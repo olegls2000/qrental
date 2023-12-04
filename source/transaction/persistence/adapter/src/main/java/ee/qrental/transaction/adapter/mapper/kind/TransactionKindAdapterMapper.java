@@ -19,6 +19,9 @@ public class TransactionKindAdapterMapper {
   }
 
   public TransactionKindJakartaEntity mapToEntity(final TransactionKind domain) {
+    if (domain == null) {
+      return null;
+    }
     return TransactionKindJakartaEntity.builder()
         .id(domain.getId())
         .code(domain.getCode())

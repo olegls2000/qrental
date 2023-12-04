@@ -24,13 +24,14 @@ public class TransactionTypeAdapterMapper {
   }
 
   public TransactionTypeJakartaEntity mapToEntity(final TransactionType domain) {
+
     return TransactionTypeJakartaEntity.builder()
         .id(domain.getId())
         .name(domain.getName())
         .description(domain.getDescription())
         .descriptionRus(domain.getDescriptionRus())
         .comment(domain.getComment())
-        .kind(TransactionKindJakartaEntity.builder().id(domain.getKind().getId()).build())
+        .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
         .build();
   }
 }
