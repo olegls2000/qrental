@@ -17,7 +17,7 @@
             <th>Kind</th>
             <th>Week</th>
             <th>Date</th>
-            <th>With VAT</th>
+            <th>In Invoice</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactions)}">
@@ -38,7 +38,7 @@
             <td th:text="${transaction.callSign}">???</td>
             <td th:text="${transaction.driverInfo}">???</td>
             <td th:text="${transaction.type}">???</td>
-            <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+            <td class="text-center bg-opacity-10 border border-opacity-10 rounded-1"
                 th:classappend="${transaction.realAmount<0} ?
                 'text-danger bg-danger border-danger'
                 : 'text-success bg-success border-success'"
@@ -47,7 +47,7 @@
             <td th:text="${transaction.kind}">???</td>
             <td th:text="${transaction.weekNumber}">???</td>
             <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
-            <td th:text="${transaction.withVat}">???</td>
+            <td th:text="${transaction.invoiceIncluded}">???</td>
             <td th:text="${transaction.commentShorten}">???</td>
         </tr>
     </table>

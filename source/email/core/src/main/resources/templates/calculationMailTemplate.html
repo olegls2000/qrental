@@ -25,7 +25,6 @@
         <th>Amount</th>
         <th>Week</th>
         <th>Date</th>
-        <th>With VAT</th>
         <th>Comment</th>
     </tr>
     <tr th:if="${#lists.isEmpty(transactions)}">
@@ -44,7 +43,6 @@
         </td>
         <td th:text="${transaction.weekNumber}">???</td>
         <td th:text="${transaction.date}">???</td>
-        <td th:text="${transaction.withVat}">???</td>
         <td th:text="${transaction.comment}">???</td>
     </tr>
 </table>

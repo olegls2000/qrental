@@ -39,6 +39,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .withVat(domain.getWithVat())
         .raw(domain.isRaw())
         .comment(domain.getComment())
+        .invoiceIncluded(domain.getType().getInvoiceIncluded())
         .commentShorten(contract(domain.getComment(), COMMENT_MAX_SIZE))
         .build();
   }

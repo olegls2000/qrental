@@ -133,8 +133,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .build();
                 final var driversNegativeTransactions =
                     transactionQuery.getAllByFilter(filter).stream()
-                        .filter(tx -> tx.getRealAmount().compareTo(ZERO) < 0)
-                        .filter(tx -> !tx.getType().equals("compensation"))
+                        .filter(TransactionResponse::getInvoiceIncluded)
                         .toList();
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =

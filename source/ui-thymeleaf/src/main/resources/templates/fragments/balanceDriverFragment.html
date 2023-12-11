@@ -218,7 +218,7 @@
             <th>Kind</th>
             <th>Week</th>
             <th>Date</th>
-            <th>With VAT</th>
+            <th>In Invoice</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactions)}">
@@ -246,7 +246,7 @@
             <td th:text="${transaction.kind}">???</td>
             <td th:text="${transaction.weekNumber}">???</td>
             <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
-            <td th:text="${transaction.withVat}">???</td>
+            <td th:text="${transaction.invoiceIncluded}">???</td>
             <td th:text="${transaction.commentShorten}">???</td>
         </tr>
     </table>
