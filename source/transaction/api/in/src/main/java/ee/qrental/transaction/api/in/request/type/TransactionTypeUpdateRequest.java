@@ -15,5 +15,6 @@ public class TransactionTypeUpdateRequest extends AbstractUpdateRequest {
   private String name;
   private String description;
   private String invoiceName;
+  private Boolean invoiceIncluded;
   private String comment;
 }

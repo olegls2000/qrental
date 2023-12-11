@@ -13,10 +13,10 @@ public class TransactionType {
   private String name;
   private String description;
   private String invoiceName;
+  private Boolean invoiceIncluded;
   private String comment;
 
   public boolean isNegative() {
-
     // TODO must be removed
     if (kind == null) {
       return false;
@@ -30,11 +30,10 @@ public class TransactionType {
   }
 
   public boolean isFeeAble() {
-    //TODO remove after Kind is set for all types
-    if(kind == null) {
+    // TODO remove after Kind is set for all types
+    if (kind == null) {
       return false;
     }
-
 
     final var kindCode = kind.getCode();
     if (TransactionKindsCode.FA.name().equals(kindCode)) {

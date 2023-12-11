@@ -29,7 +29,6 @@
                 </select>
             </div>
         </div>
-
         <div class="mb-3">
             <label class="form-label text-muted" for="transactionTypeId">Transaction type name</label>
             <input class="form-control" id="transactionTypeId" placeholder="Enter Transaction type "
@@ -50,13 +49,18 @@
                    type="text"/>
         </div>
         <div class="mb-3">
+            <label class="form-check-label text-muted" for="invoiceIncluded">Invoice included</label>
+            <input class="form-check-input" id="invoiceIncluded"
+                   th:field="*{invoiceIncluded}"
+                   type="checkbox"/>
+        </div>
+        <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>
             <textarea class="form-control"
                       id="commentId"
                       placeholder="Enter Comment"
                       th:field="*{comment}"/>
         </div>
-
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Update'
         )">

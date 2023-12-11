@@ -32,6 +32,9 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "invoice_name")
   private String invoiceName;
 
+  @Column(name = "invoice_included")
+  private Boolean invoiceIncluded;
+
   @Column(name = "comment")
   private String comment;
 

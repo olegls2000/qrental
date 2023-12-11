@@ -22,6 +22,7 @@ public class TransactionTypeResponseMapper
         .kind(kindCode)
         .description(domain.getDescription())
         .invoiceName(domain.getInvoiceName())
+        .invoiceIncluded(domain.getInvoiceIncluded())
         .comment(domain.getComment())
         .build();
   }

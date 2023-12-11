@@ -17,6 +17,7 @@ public class TransactionTypeAdapterMapper {
         .name(entity.getName())
         .description(entity.getDescription())
         .invoiceName(entity.getInvoiceName())
+        .invoiceIncluded(entity.getInvoiceIncluded())
         .kind(transactionKindAdapterMapper.mapToDomain(entity.getKind()))
         .comment(entity.getComment())
         .build();
@@ -29,6 +30,7 @@ public class TransactionTypeAdapterMapper {
         .name(domain.getName())
         .description(domain.getDescription())
         .invoiceName(domain.getInvoiceName())
+        .invoiceIncluded(domain.getInvoiceIncluded())
         .comment(domain.getComment())
         .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
         .build();

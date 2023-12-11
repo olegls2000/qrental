@@ -47,6 +47,12 @@
                    type="text"/>
         </div>
         <div class="mb-3">
+            <label class="form-check-label text-muted" for="invoiceIncluded">Invoice included</label>
+            <input class="form-check-input" id="invoiceIncluded"
+                   th:field="*{invoiceIncluded}"
+                   type="checkbox"/>
+        </div>
+        <div class="mb-3">
             <label class="form-label text-muted" for="commentId">Comment</label>
             <textarea class="form-control"
                       id="commentId"

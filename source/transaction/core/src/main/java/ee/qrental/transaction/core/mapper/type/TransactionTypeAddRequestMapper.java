@@ -16,6 +16,7 @@ public class TransactionTypeAddRequestMapper
         .name(request.getName())
         .description(request.getDescription())
         .invoiceName(request.getInvoiceName())
+        .invoiceIncluded(request.getInvoiceIncluded())
         .comment(request.getComment())
         .build();
   }

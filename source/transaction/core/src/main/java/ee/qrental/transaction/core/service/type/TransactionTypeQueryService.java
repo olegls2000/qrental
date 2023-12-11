@@ -1,6 +1,7 @@
 package ee.qrental.transaction.core.service.type;
 
 import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -22,7 +23,12 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
 
   @Override
   public List<TransactionTypeResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream()
+        .map(mapper::toResponse)
+        .sorted(
+            comparing(TransactionTypeResponse::getKind)
+                .thenComparing(TransactionTypeResponse::getName))
+        .collect(toList());
   }
 
   @Override

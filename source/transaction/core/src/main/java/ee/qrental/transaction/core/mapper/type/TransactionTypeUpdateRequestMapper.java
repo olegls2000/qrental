@@ -15,6 +15,7 @@ public class TransactionTypeUpdateRequestMapper
         .name(request.getName())
         .description(request.getDescription())
         .invoiceName(request.getInvoiceName())
+        .invoiceIncluded(request.getInvoiceIncluded())
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .comment(request.getComment())
         .build();
@@ -30,6 +31,7 @@ public class TransactionTypeUpdateRequestMapper
         .name(domain.getName())
         .description(domain.getDescription())
         .invoiceName(domain.getInvoiceName())
+        .invoiceIncluded(domain.getInvoiceIncluded())
         .transactionKindId(kindId)
         .comment(domain.getComment())
         .build();
