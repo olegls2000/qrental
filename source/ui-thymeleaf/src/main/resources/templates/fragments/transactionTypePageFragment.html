@@ -18,7 +18,7 @@
             <th>Fee able</th>
             <th>Kind</th>
             <th>Nimi (estonian language)</th>
-            <th>Имя (russian language)</th>
+            <th>Invoice Name</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactionTypes)}">
@@ -50,7 +50,7 @@
             <td th:text="${transactionType.feeAble}">???</td>
             <td th:text="${transactionType.kind}">???</td>
             <td th:text="${transactionType.description}">???</td>
-            <td th:text="${transactionType.descriptionRus}">???</td>
+            <td th:text="${transactionType.invoiceName}">???</td>
             <td th:text="${transactionType.comment}">???</td>
         </tr>
     </table>

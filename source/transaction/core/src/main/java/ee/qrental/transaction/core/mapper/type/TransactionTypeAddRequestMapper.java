@@ -15,7 +15,7 @@ public class TransactionTypeAddRequestMapper
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .name(request.getName())
         .description(request.getDescription())
-        .descriptionRus(request.getDescriptionRus())
+        .invoiceName(request.getInvoiceName())
         .comment(request.getComment())
         .build();
   }

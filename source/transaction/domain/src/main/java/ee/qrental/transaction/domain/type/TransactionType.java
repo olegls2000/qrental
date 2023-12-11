@@ -12,7 +12,7 @@ public class TransactionType {
   private TransactionKind kind;
   private String name;
   private String description;
-  private String descriptionRus;
+  private String invoiceName;
   private String comment;
 
   public boolean isNegative() {

@@ -29,8 +29,8 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "description_rus")
-  private String descriptionRus;
+  @Column(name = "invoice_name")
+  private String invoiceName;
 
   @Column(name = "comment")
   private String comment;

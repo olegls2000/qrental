@@ -9,7 +9,7 @@ public class TransactionTypeResponse {
   private Long id;
   private String name;
   private String description;
-  private String descriptionRus;
+  private String invoiceName;
   private String kind;
   private Boolean negative;
   private Boolean feeAble;

@@ -14,7 +14,7 @@ public class TransactionTypeUpdateRequestMapper
         .id(request.getId())
         .name(request.getName())
         .description(request.getDescription())
-        .descriptionRus(request.getDescriptionRus())
+        .invoiceName(request.getInvoiceName())
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .comment(request.getComment())
         .build();
@@ -29,7 +29,7 @@ public class TransactionTypeUpdateRequestMapper
         .id(domain.getId())
         .name(domain.getName())
         .description(domain.getDescription())
-        .descriptionRus(domain.getDescriptionRus())
+        .invoiceName(domain.getInvoiceName())
         .transactionKindId(kindId)
         .comment(domain.getComment())
         .build();

@@ -21,7 +21,7 @@ public class TransactionTypeResponseMapper
         .feeAble(domain.isFeeAble())
         .kind(kindCode)
         .description(domain.getDescription())
-        .descriptionRus(domain.getDescriptionRus())
+        .invoiceName(domain.getInvoiceName())
         .comment(domain.getComment())
         .build();
   }

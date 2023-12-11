@@ -2,7 +2,6 @@ package ee.qrental.transaction.adapter.mapper.type;
 
 import ee.qrental.transaction.adapter.mapper.kind.TransactionKindAdapterMapper;
 import ee.qrental.transaction.domain.type.TransactionType;
-import ee.qrental.transaction.entity.jakarta.kind.TransactionKindJakartaEntity;
 import ee.qrental.transaction.entity.jakarta.type.TransactionTypeJakartaEntity;
 import lombok.AllArgsConstructor;
 
@@ -17,7 +16,7 @@ public class TransactionTypeAdapterMapper {
         .id(entity.getId())
         .name(entity.getName())
         .description(entity.getDescription())
-        .descriptionRus(entity.getDescriptionRus())
+        .invoiceName(entity.getInvoiceName())
         .kind(transactionKindAdapterMapper.mapToDomain(entity.getKind()))
         .comment(entity.getComment())
         .build();
@@ -29,7 +28,7 @@ public class TransactionTypeAdapterMapper {
         .id(domain.getId())
         .name(domain.getName())
         .description(domain.getDescription())
-        .descriptionRus(domain.getDescriptionRus())
+        .invoiceName(domain.getInvoiceName())
         .comment(domain.getComment())
         .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
         .build();
