@@ -54,6 +54,11 @@ public class BalanceLoadAdapter implements BalanceLoadPort {
   }
 
   @Override
+  public Long loadCountByDriver(Long driverId) {
+    return repository.getCountByDriverId(driverId);
+  }
+
+  @Override
   public Balance loadLatestByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
     final var latestBalance =

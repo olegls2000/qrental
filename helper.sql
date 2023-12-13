@@ -25,6 +25,13 @@ delete
 from balance_transaction;
 delete
 from balance;
+
+delete from invoice_item;
+delete from invoice_calculation_result;
+delete from invoice_transaction;
+delete from invoice_calculation;
+delete from invoice;
+
 delete
 from transaction
 where transaction_type_id in (select distinct(id)
@@ -76,7 +83,7 @@ limit 1;
 
 
 select *
-from balance_transaction;
+from balance;
 
 
 

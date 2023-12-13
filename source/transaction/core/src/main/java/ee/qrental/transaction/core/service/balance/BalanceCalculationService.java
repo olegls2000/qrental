@@ -31,6 +31,7 @@ import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
 import ee.qrental.transaction.domain.kind.TransactionKindsCode;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -56,7 +57,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
   private final BalanceCalculationAddRequestMapper addRequestMapper;
   private final TransactionAddUseCase transactionAddUseCase;
 
-  // @Transactional
+  @Transactional
   @Override
   public void add(final BalanceCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
@@ -76,36 +77,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         week ->
             drivers.forEach(
                 driver -> {
+                  if (week.getNumber() == 3) {
+                    throw new RuntimeException("Artificial interruption");
+                  }
                   final var previousQWeek = qWeekQuery.getOneBeforeById(week.getId());
                   final var driverId = driver.getId();
-                  final var defaultQWeekBalance =
-                      Balance.builder()
-                          .qWeekId(null)
-                          .positiveAmount(ZERO)
-                          .feeAmount(ZERO)
-                          .feeAbleAmount(ZERO)
-                          .nonFeeAbleAmount(ZERO)
-                          .driverId(driverId)
-                          .derived(TRUE)
-                          .build();
-                  final var previousQWeekBalance =
-                      previousQWeek == null
-                          ? defaultQWeekBalance
-                          : balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(
-                              driverId, previousQWeek.getId(), true);
-                  if (previousQWeekBalance == null) {
-                    throw new RuntimeException(
-                        format(
-                            "Balance for previous qWeek %d, must exist",
-                            previousQWeek.getNumber()));
-                  }
-                  if (!previousQWeekBalance.getDerived()) {
-                    throw new RuntimeException(
-                        format(
-                            "Balance for previous qWeek %d, must be derived",
-                            previousQWeek.getNumber()));
-                  }
-
+                  final var previousQWeekBalance = getPreviousWeekBalance(driverId, previousQWeek);
                   if (driver.getNeedFee()) {
                     BigDecimal feeAmountForRequestedWeek;
                     final var faAmountFromPreviousWeekBalance =
@@ -194,6 +171,40 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf(
         "----> Time: Balance Calculation took %d milli seconds \n", calculationDuration);
+  }
+
+  private Balance getPreviousWeekBalance(final Long driverId, final QWeekResponse previousWeek) {
+    final var zeroBalance =
+        Balance.builder()
+            .qWeekId(null)
+            .positiveAmount(ZERO)
+            .feeAmount(ZERO)
+            .feeAbleAmount(ZERO)
+            .nonFeeAbleAmount(ZERO)
+            .driverId(driverId)
+            .derived(TRUE)
+            .build();
+
+    if (previousWeek == null) {
+      return zeroBalance;
+    }
+
+    final var balancesCount = balanceLoadPort.loadCountByDriver(driverId);
+    if (balancesCount == 0) {
+      return zeroBalance;
+    }
+
+    final var previousWeekBalance =
+        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, previousWeek.getId(), true);
+
+    if (previousWeekBalance == null) {
+      throw new RuntimeException(
+          format(
+              "Derived Balance for previous qWeek %d and driver with id %d, must exist",
+              previousWeek.getNumber(), driverId));
+    }
+
+    return previousWeekBalance;
   }
 
   private Balance derive(final Balance balanceToDerive) {

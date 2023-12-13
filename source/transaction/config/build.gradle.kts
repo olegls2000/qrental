@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":source:constant:api:in"))
 
     implementation("org.springframework:spring-context-support")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }

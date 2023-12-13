@@ -44,6 +44,11 @@ public class BalanceRepositoryImpl implements BalanceRepository {
   }
 
   @Override
+  public Long getCountByDriverId(final Long driverId) {
+    return springDataRepository.getCountByDriverId(driverId);
+  }
+
+  @Override
   public BalanceJakartaEntity getLatestByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber) {
     return springDataRepository.findLatestByDriverIdAndYearAndWeekNumber(

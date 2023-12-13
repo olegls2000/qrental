@@ -20,6 +20,8 @@ public interface BalanceRepository {
 
   BalanceJakartaEntity getLatestByDriverId(final Long driverId);
 
+  Long getCountByDriverId(final Long driverId);
+
   BalanceJakartaEntity getLatestByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber);
 
