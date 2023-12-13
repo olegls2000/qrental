@@ -77,9 +77,6 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         week ->
             drivers.forEach(
                 driver -> {
-                  if (week.getNumber() == 3) {
-                    throw new RuntimeException("Artificial interruption");
-                  }
                   final var previousQWeek = qWeekQuery.getOneBeforeById(week.getId());
                   final var driverId = driver.getId();
                   final var previousQWeekBalance = getPreviousWeekBalance(driverId, previousQWeek);
