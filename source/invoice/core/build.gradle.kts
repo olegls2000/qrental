@@ -10,6 +10,8 @@ dependencies{
     implementation(project(":source:constant:api:in"))
     implementation(project(":source:email:api:in"))
 
+    implementation("jakarta.transaction:jakarta.transaction-api:2.0.1")
+
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
     implementation(libs.q.jakarta.transaction)

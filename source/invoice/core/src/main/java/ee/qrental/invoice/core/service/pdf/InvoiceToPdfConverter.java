@@ -239,7 +239,9 @@ public class InvoiceToPdfConverter {
     table.addCell(getTotalLabelCell("Viiviste üldsumma"));
     table.addCell(getTotalValueCell(totalFeeAmount));
     table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
-    table.addCell(getTotalValueCell(totalWithFee));
+
+    final var finalTotalWithFee = totalWithFee.compareTo(BigDecimal.ZERO) > 0 ? totalWithFee : BigDecimal.ZERO;
+    table.addCell(getTotalValueCell(finalTotalWithFee));
 
     return table;
   }
@@ -331,7 +333,8 @@ public class InvoiceToPdfConverter {
     final var sumCell =
         new Cell(
             new Paragraph(
-                getFormattedString(item.getValue().negate()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+                getFormattedString(item.getValue().negate()),
+                new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     sumCell.setHorizontalAlignment(RIGHT);
     sumCell.setBorderColor(Color.DARK_GRAY);
     sumCell.setBorderWidth(1f);

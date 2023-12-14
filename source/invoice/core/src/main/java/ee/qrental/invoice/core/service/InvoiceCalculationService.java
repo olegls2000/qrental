@@ -128,9 +128,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .dateEnd(weekEndDay)
                         .build();
                 final var driversTransactions =
-                    transactionQuery.getAllByFilter(filter).stream()
-                        .filter(TransactionResponse::getInvoiceIncluded)
-                        .toList();
+                    transactionQuery.getAllByFilter(filter).stream().toList();
+
+
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =
                     format(
@@ -164,10 +164,16 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var previousWeekFeeBalanceAmount = previousQWeekBalance.getFeeAmount();
                 final var currentWeekFee =
                     driversTransactions.stream()
+                        .filter(tx -> "F".equals(tx.getKind()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
                         .orElse(ZERO);
-                final var invoiceItems = getInvoiceItems(driversTransactions, qFirm);
+
+                  final var invoicesIncludedTransactions =
+                          driversTransactions.stream()
+                                  .filter(TransactionResponse::getInvoiceIncluded)
+                                  .toList();
+                final var invoiceItems = getInvoiceItems(invoicesIncludedTransactions, qFirm);
                 final var invoice =
                     Invoice.builder()
                         .id(null)
