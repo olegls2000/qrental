@@ -167,7 +167,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .filter(tx -> "F".equals(tx.getKind()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
-                        .orElse(ZERO);
+                        .orElse(ZERO).negate();
 
                   final var invoicesIncludedTransactions =
                           driversTransactions.stream()

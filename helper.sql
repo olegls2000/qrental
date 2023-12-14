@@ -18,19 +18,44 @@ where transaction_type_id in (select distinct(id)
 --------------------------------------------------------------------------------------------------------
 --## Balance Calculations:
 delete
+from balance_calculation_result bcr
+where bcr.balance_id in
+      (select bl.id from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?));
+
+delete
+from balance_transaction btr
+where btr.balance_id in
+      (select bl.id from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?));
+
+delete from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?);
+
+delete
+from transaction tx
+where tx.transaction_type_id in (select distinct(id)
+                              from transaction_type
+                              where name in ('fee replenish', 'compensation', 'fee debt'))
+and tx.date;
+
+
+
+delete
 from balance_calculation_result;
 delete
 from balance_calculation;
 delete
-from balance_transaction;
-delete
 from balance;
 
-delete from invoice_item;
-delete from invoice_calculation_result;
-delete from invoice_transaction;
-delete from invoice_calculation;
-delete from invoice;
+
+delete
+from invoice_item;
+delete
+from invoice_calculation_result;
+delete
+from invoice_transaction;
+delete
+from invoice_calculation;
+delete
+from invoice;
 
 delete
 from transaction
