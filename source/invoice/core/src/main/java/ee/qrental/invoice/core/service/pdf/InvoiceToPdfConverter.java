@@ -331,7 +331,7 @@ public class InvoiceToPdfConverter {
     final var sumCell =
         new Cell(
             new Paragraph(
-                getFormattedString(item.getValue()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+                getFormattedString(item.getValue().negate()), new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     sumCell.setHorizontalAlignment(RIGHT);
     sumCell.setBorderColor(Color.DARK_GRAY);
     sumCell.setBorderWidth(1f);
@@ -372,7 +372,7 @@ public class InvoiceToPdfConverter {
       return "-- eur";
     }
     final var numberFinal = round(number);
-    final var df = new DecimalFormat();
+    final DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);
     df.setGroupingUsed(false);

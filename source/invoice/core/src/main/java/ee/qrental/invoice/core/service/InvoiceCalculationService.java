@@ -33,6 +33,7 @@ import ee.qrental.invoice.domain.InvoiceItem;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
@@ -56,6 +57,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final GetFirmQuery firmQuery;
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
+  private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetFirmLinkQuery firmLinkQuery;
   private final EmailSendUseCase emailSendUseCase;
   private final InvoiceCalculationLoadPort loadPort;
@@ -125,7 +127,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .dateStart(weekStartDay)
                         .dateEnd(weekEndDay)
                         .build();
-                final var driversNegativeTransactions =
+                final var driversTransactions =
                     transactionQuery.getAllByFilter(filter).stream()
                         .filter(TransactionResponse::getInvoiceIncluded)
                         .toList();
@@ -161,13 +163,11 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     previousQWeekBalance.getAmount().subtract(previousQWeekBalance.getFeeAmount());
                 final var previousWeekFeeBalanceAmount = previousQWeekBalance.getFeeAmount();
                 final var currentWeekFee =
-                    driversNegativeTransactions.stream()
-                        .filter(tx -> "F".equals(tx.getKind()))
+                    driversTransactions.stream()
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
-                        .orElse(ZERO)
-                        .negate();
-                final var invoiceItems = getInvoiceItems(driversNegativeTransactions, qFirm);
+                        .orElse(ZERO);
+                final var invoiceItems = getInvoiceItems(driversTransactions, qFirm);
                 final var invoice =
                     Invoice.builder()
                         .id(null)
@@ -195,9 +195,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .items(invoiceItems)
                         .build();
                 final var transactionIds =
-                    driversNegativeTransactions.stream()
-                        .map(TransactionResponse::getId)
-                        .collect(toSet());
+                    driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
                 final var result =
                     InvoiceCalculationResult.builder()
                         .invoice(invoice)
@@ -318,13 +316,11 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
             .reduce(BigDecimal::add)
             .orElse(ZERO)
             .multiply(vatRate);
-    final var transactionTypeDescription = transactions.get(0).getTypeDescription();
+    final var transactionTypeName = transactions.get(0).getType();
+    final var transactionType = transactionTypeQuery.getByName(transactionTypeName);
+    final var invoiceItemName = transactionType.getInvoiceName();
 
-    return InvoiceItem.builder()
-        .type(type)
-        .description(transactionTypeDescription)
-        .amount(amount)
-        .build();
+    return InvoiceItem.builder().type(type).description(invoiceItemName).amount(amount).build();
   }
 
   private boolean isFirmWithoutVAT(final FirmResponse firm) {

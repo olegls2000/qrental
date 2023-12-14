@@ -17,6 +17,7 @@ import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
 import ee.qrental.invoice.core.validator.InvoiceCalculationBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -75,6 +76,7 @@ public class InvoiceServiceConfig {
       final GetFirmQuery firmQuery,
       final GetBalanceQuery balanceQuery,
       final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
       final GetFirmLinkQuery firmLinkQuery,
       final EmailSendUseCase emailSendUseCase,
       final InvoiceCalculationLoadPort loadPort,
@@ -89,6 +91,7 @@ public class InvoiceServiceConfig {
         firmQuery,
         balanceQuery,
         transactionQuery,
+        transactionTypeQuery,
         firmLinkQuery,
         emailSendUseCase,
         loadPort,
