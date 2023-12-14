@@ -371,8 +371,8 @@ public class InvoiceToPdfConverter {
     if (number == null) {
       return "-- eur";
     }
-    final var numberFinal = round(number).abs();
-    DecimalFormat df = new DecimalFormat();
+    final var numberFinal = round(number);
+    final var df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);
     df.setGroupingUsed(false);

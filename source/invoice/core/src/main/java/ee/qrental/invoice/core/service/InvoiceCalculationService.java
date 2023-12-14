@@ -119,12 +119,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                           + weekNumber
                           + ", please calculate a Balance first");
                 }
-                if (weekBalance.getAmount().compareTo(ZERO) >= 0) {
-                  System.out.printf(
-                      "Driver with id=%d has positive balance, invoice is not required.\n",
-                      driverId);
-                  return;
-                }
                 final var filter =
                     PeriodAndDriverFilter.builder()
                         .driverId(driverId)
@@ -237,7 +231,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         firmLinkQuery.getOneByDriverIdAndRequiredDate(driver.getId(), weekStartDay);
     if (firmLink == null) {
       System.out.printf(
-          "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice",
+          "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice \n",
           format("%s %s", driver.getFirstName(), driver.getLastName()),
           weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
           weekNumber);
@@ -308,9 +302,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
       final List<TransactionResponse> transactions, final FirmResponse firm) {
     final var withoutVat = isFirmWithoutVAT(firm);
     final var typeVsTransactions =
-        transactions.stream()
-            .filter(tx -> !"F".equals(tx.getKind()))
-            .collect(groupingBy(TransactionResponse::getType));
+        transactions.stream().collect(groupingBy(TransactionResponse::getType));
 
     return typeVsTransactions.entrySet().stream()
         .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue(), withoutVat))
