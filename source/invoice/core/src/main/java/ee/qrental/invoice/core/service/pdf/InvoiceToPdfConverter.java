@@ -49,19 +49,21 @@ public class InvoiceToPdfConverter {
             model.getDriverCompanyVat(),
             model.getDriverInfo());
     final var itemsTable = getItemsTable(model.getItems());
-    final var invoiceSumma =
-        getSumms(
+    final var block1 =
+        getBlock1(
             model.getSum(), model.getVatPercentage(), model.getVatAmount(), model.getSumWithVat());
-    final var invoiceTotal =
-        getTotal(
+    final var block2 =
+        getBlock2(
             model.getTotal(), model.getDebt(), model.getAdvancePayment(), model.getVatPercentage());
-    final var interest =
-        getInterest(
+    final var block3 = getBlock3();
+    final var block4 =
+        getBlock4(
             model.getFeeStartDate(),
             model.getFeeEndDate(),
             model.getCurrentWeekFee(),
             model.getPreviousWeekBalanceFee(),
             model.getTotalWithFee());
+    final var block5 = getBlock5();
     final var footer =
         getFooter(
             model.getQFirmName(),
@@ -79,11 +81,15 @@ public class InvoiceToPdfConverter {
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(itemsTable);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(invoiceSumma);
+    invoicePdfDoc.add(block1);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(invoiceTotal);
+    invoicePdfDoc.add(block2);
     invoicePdfDoc.add(new Paragraph("\n"));
-    invoicePdfDoc.add(interest);
+    invoicePdfDoc.add(block3);
+    invoicePdfDoc.add(new Paragraph("\n"));
+    invoicePdfDoc.add(block4);
+    invoicePdfDoc.add(new Paragraph("\n"));
+    invoicePdfDoc.add(block5);
     invoicePdfDoc.add(new Paragraph("\n"));
     invoicePdfDoc.add(footer);
     invoicePdfDoc.close();
@@ -107,28 +113,35 @@ public class InvoiceToPdfConverter {
     final var logo = Image.getInstance("Images/qRentalGroup_gorznt.png");
     logo.scaleAbsolute(150f, 60f);
     final var cell = new Cell(logo);
-    cell.setRowspan(3);
+    cell.setRowspan(4);
     cell.setBorder(NO_BORDER);
     header.addCell(cell);
 
     final var cell1 =
         new Cell(
-            new Paragraph("Arve Nr.: " + invoiceNumber, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
+            new Paragraph("Arve Nr.: " + invoiceNumber, new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     cell1.setBorder(NO_BORDER);
     header.addCell(cell1);
 
     final var cell2 =
-        new Cell(new Paragraph("Data : " + startDate, new Font(Font.TIMES_ROMAN, 14, Font.BOLD)));
+        new Cell(
+            new Paragraph("Arve kuupäev: " + startDate, new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
     cell2.setBorder(NO_BORDER);
     header.addCell(cell2);
 
     final var cell3 =
         new Cell(
+            new Paragraph("Maksetähtpäev: " + "???", new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
+    cell3.setBorder(NO_BORDER);
+    header.addCell(cell3);
+
+    final var cell4 =
+        new Cell(
             new Paragraph(
                 format("Ajaperiood: %s - %s", startDate, endDate),
                 new Font(Font.TIMES_ROMAN, 12, Font.BOLD)));
-    cell3.setBorder(NO_BORDER);
-    header.addCell(cell3);
+    cell4.setBorder(NO_BORDER);
+    header.addCell(cell4);
 
     return header;
   }
@@ -176,7 +189,7 @@ public class InvoiceToPdfConverter {
     return table;
   }
 
-  private Table getSumms(
+  private Table getBlock1(
       final BigDecimal invoiceTotalAmount,
       final BigDecimal vatPercentage,
       final BigDecimal vatAmount,
@@ -188,12 +201,12 @@ public class InvoiceToPdfConverter {
     table.setWidth(70f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
-    table.addCell(getSummLabelCell("Summa"));
+    table.addCell(getSummLabelCell("Jooksvate kohustuste summa"));
     table.addCell(getSummValueCell(invoiceTotalAmount));
     final var vatLabel = "Käibemaks (" + vatPercentage + "%)";
     table.addCell(getSummLabelCell(vatLabel));
     table.addCell(getSummValueCell(vatAmount));
-    table.addCell(getSummLabelCell("Arve summa"));
+    table.addCell(getSummLabelCell("Jooksvate kohustuste summa + km"));
     table.addCell(getSummValueCell(arveSum));
 
     return table;
@@ -218,7 +231,7 @@ public class InvoiceToPdfConverter {
     return cell;
   }
 
-  private Table getInterest(
+  private Table getBlock4(
       final String feeStartPeriod,
       final String feeEndPeriod,
       final BigDecimal currentWeekFee,
@@ -236,17 +249,31 @@ public class InvoiceToPdfConverter {
         getTotalLabelCell(
             String.format("Viivised %s - %s perioodi eest", feeStartPeriod, feeEndPeriod)));
     table.addCell(getTotalValueCell(currentWeekFee));
+    table.addCell(
+        getTotalLabelCell(String.format("Kuni %s kogunenud viiviste üldsumma", feeStartPeriod)));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(44444)));
     table.addCell(getTotalLabelCell("Viiviste üldsumma"));
     table.addCell(getTotalValueCell(totalFeeAmount));
-    table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
-
-    final var finalTotalWithFee = totalWithFee.compareTo(BigDecimal.ZERO) > 0 ? totalWithFee : BigDecimal.ZERO;
-    table.addCell(getTotalValueCell(finalTotalWithFee));
 
     return table;
   }
 
-  private Table getTotal(
+  private Table getBlock5() {
+    final var table = new Table(2);
+    table.setWidths(new float[] {8, 2});
+    table.setSpacing(-1f);
+    table.setPadding(0f);
+    table.setWidth(70f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+
+    table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(333333)));
+
+    return table;
+  }
+
+  private Table getBlock2(
       final BigDecimal total,
       final BigDecimal debt,
       final BigDecimal advancePayment,
@@ -258,12 +285,33 @@ public class InvoiceToPdfConverter {
     table.setWidth(70f);
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
+
+    table.addCell(getTotalLabelCell("Eelmise perioodi saldo"));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(9999)));
+    table.addCell(getTotalLabelCell("Eelmise perioodi sissetulekud"));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(8888)));
+
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(advancePayment));
     table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus "));
     table.addCell(getTotalValueCell(debt));
-    table.addCell(getTotalLabelCell("Kohustuse summa kokku"));
-    table.addCell(getTotalValueCell(total));
+
+    return table;
+  }
+
+  private Table getBlock3() {
+    final var table = new Table(2);
+    table.setWidths(new float[] {8, 2});
+    table.setSpacing(-1f);
+    table.setPadding(0f);
+    table.setWidth(70f);
+    table.setHorizontalAlignment(RIGHT);
+    table.setBorder(NO_BORDER);
+
+    table.addCell(getTotalLabelCell("Jooksvate kohustuste summa + km"));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(7777)));
+    table.addCell(getTotalLabelCell("Arve summa (kohustuste üldsumma + km):"));
+    table.addCell(getTotalValueCell(BigDecimal.valueOf(6666)));
 
     return table;
   }
