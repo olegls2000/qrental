@@ -37,6 +37,8 @@ public interface GetBalanceQuery {
   BalanceResponse getByDriverIdAndYearAndWeekNumber(
       final Long driverId, final Integer year, final Integer weekNumber);
 
+  BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
+
   /**
    * Calculate period between versions
    *
@@ -48,4 +50,6 @@ public interface GetBalanceQuery {
       final Long driverId, final Integer year, final Integer weekNumber);
 
   BigDecimal getRawBalanceTotalByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
+
+  Long getCountByDriver(final Long driverId);
 }

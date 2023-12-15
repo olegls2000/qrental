@@ -113,14 +113,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
           drivers.forEach(
               driver -> {
                 final var driverId = driver.getId();
-                final var weekBalance =
-                    balanceQuery.getDerivedBalanceByDriverAndQWeek(driverId, qWeekId);
-                if (weekBalance == null) {
-                  throw new RuntimeException(
-                      "Invoice calculation is impossible for the week: "
-                          + weekNumber
-                          + ", please calculate a Balance first");
-                }
+                checkIfBalanceForCurrentWeekExists(driverId, week);
                 final var filter =
                     PeriodAndDriverFilter.builder()
                         .driverId(driverId)
@@ -130,7 +123,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var driversTransactions =
                     transactionQuery.getAllByFilter(filter).stream().toList();
 
-
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =
                     format(
@@ -138,27 +130,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
                 final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekNumber);
                 final var invoiceNumber = getInvoiceNumber(weekYear, weekNumber, driverId);
-                final var defaultQWeekBalance =
-                    BalanceResponse.builder()
-                        .qWeekId(null)
-                        .positiveAmount(ZERO)
-                        .feeAmount(ZERO)
-                        .feeAbleAmount(ZERO)
-                        .nonFeeAbleAmount(ZERO)
-                        .driverId(driverId)
-                        .build();
-
-                final var previousQWeekBalance =
-                    previousQWeek == null
-                        ? defaultQWeekBalance
-                        : balanceQuery.getDerivedBalanceByDriverAndQWeek(
-                            driverId, previousQWeek.getId());
-                if (previousQWeekBalance == null) {
-                  throw new RuntimeException(
-                      format(
-                          "Balance for previous qWeek %d, must exist", previousQWeek.getNumber()));
-                }
-
+                final var previousQWeekBalance = getWeekBalanceOrDefault(driverId, previousQWeek);
                 final var previousWeekBalanceAmountWithoutFee =
                     previousQWeekBalance.getAmount().subtract(previousQWeekBalance.getFeeAmount());
                 final var previousWeekFeeBalanceAmount = previousQWeekBalance.getFeeAmount();
@@ -167,12 +139,13 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .filter(tx -> "F".equals(tx.getKind()))
                         .map(TransactionResponse::getRealAmount)
                         .reduce(BigDecimal::add)
-                        .orElse(ZERO).negate();
+                        .orElse(ZERO)
+                        .negate();
 
-                  final var invoicesIncludedTransactions =
-                          driversTransactions.stream()
-                                  .filter(TransactionResponse::getInvoiceIncluded)
-                                  .toList();
+                final var invoicesIncludedTransactions =
+                    driversTransactions.stream()
+                        .filter(TransactionResponse::getInvoiceIncluded)
+                        .toList();
                 final var invoiceItems = getInvoiceItems(invoicesIncludedTransactions, qFirm);
                 final var invoice =
                     Invoice.builder()
@@ -215,6 +188,49 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
+  }
+
+  private void checkIfBalanceForCurrentWeekExists(
+      final Long driverId, final QWeekResponse qWeek) {
+    final var weekBalance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeek.getId());
+    if (weekBalance == null) {
+      throw new RuntimeException(
+          format(
+              "Derived Balance for the qWeek %d and driver with id %d, must exist",
+              qWeek.getNumber(), driverId));
+    }
+  }
+
+  private BalanceResponse getWeekBalanceOrDefault(final Long driverId, final QWeekResponse qWeek) {
+    final var zeroBalance =
+        BalanceResponse.builder()
+            .qWeekId(null)
+            .positiveAmount(ZERO)
+            .feeAmount(ZERO)
+            .feeAbleAmount(ZERO)
+            .nonFeeAbleAmount(ZERO)
+            .driverId(driverId)
+            .build();
+
+    if (qWeek == null) {
+      return zeroBalance;
+    }
+
+    final var balancesCount = balanceQuery.getCountByDriver(driverId);
+    if (balancesCount == 0) {
+      return zeroBalance;
+    }
+
+    final var weekBalance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeek.getId());
+
+    if (weekBalance == null) {
+      throw new RuntimeException(
+          format(
+              "Balance for the qWeek %d and driver with id %d, must exist",
+              qWeek.getNumber(), driverId));
+    }
+
+    return weekBalance;
   }
 
   private QWeekResponse getLatestCalculatedWeek() {

@@ -44,6 +44,7 @@ delete
 from balance_calculation;
 delete
 from balance;
+select * from balance;
 
 
 delete

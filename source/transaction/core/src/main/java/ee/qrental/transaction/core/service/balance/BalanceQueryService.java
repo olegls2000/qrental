@@ -70,6 +70,12 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
+  public BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
+    return balanceResponseMapper.toResponse(
+        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
+  }
+
+  @Override
   public BigDecimal getRawBalanceTotalByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     final var balanceSum = latestBalance != null ? latestBalance.getAmount() : ZERO;
@@ -137,6 +143,11 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
     return round(fromBalance.add(rawTransactionSum));
+  }
+
+  @Override
+  public Long getCountByDriver(final Long driverId) {
+    return balanceLoadPort.loadCountByDriver(driverId);
   }
 
   @Override
