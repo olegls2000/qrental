@@ -36,4 +36,9 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
       final Integer weekNumber, final Long driverId, final Long firmId) {
     return springDataRepository.findByWeekNumberAndDriverIdAndQFirmId(weekNumber, driverId, firmId);
   }
+
+  @Override
+  public InvoiceJakartaEntity findByByQWeekIdAndDriverId(final Long qWeekId, final Long driverId) {
+    return springDataRepository.findByByQWeekIdAndDriverId(qWeekId, driverId);
+  }
 }

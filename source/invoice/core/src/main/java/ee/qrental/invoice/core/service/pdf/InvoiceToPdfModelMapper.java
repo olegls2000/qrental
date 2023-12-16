@@ -6,6 +6,7 @@ import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
@@ -18,6 +19,7 @@ public class InvoiceToPdfModelMapper {
   private static final BigDecimal VAT_RATE = BigDecimal.valueOf(20);
 
   private final InvoiceLoadPort invoiceLoadPort;
+  private final GetQWeekQuery qWeekQuery;
 
   public InvoicePdfModel getPdfModel(final Invoice invoice) {
     final var number = invoice.getNumber();
@@ -68,18 +70,9 @@ public class InvoiceToPdfModelMapper {
     final var total = sumWithVat.add(debt).subtract(advancePayment);
     final var currentWeekFee = invoice.getCurrentWeekFee();
     final var previousWeekBalanceFee = invoice.getPreviousWeekBalanceFee().negate();
-
     final var totalWithFee = total.add(currentWeekFee).add(previousWeekBalanceFee);
-
-    final var previousInvoice =
-        invoiceLoadPort.loadByWeekAndDriverAndFirm(
-            previousWeekNumber, invoice.getDriverId(), invoice.getQFirmId());
     final var block2AValue =
-        previousInvoice
-            .getCurrentWeekFee()
-            .add(previousInvoice.getPreviousWeekBalanceFee().negate());
-
-
+        getTotalAmountWithFeeFromPreviousInvoice(invoice.getDriverId(), invoice.getQWeekId());
 
     return InvoicePdfModel.builder()
         .number(number)
@@ -116,6 +109,21 @@ public class InvoiceToPdfModelMapper {
         .block2A(block2AValue)
         .block2B(invoice.getPreviousWeekPositiveTxSum())
         .build();
+  }
+
+  private BigDecimal getTotalAmountWithFeeFromPreviousInvoice(
+      final Long driverId, final Long currentQWeekId) {
+    final var previousQWeek = qWeekQuery.getOneBeforeById(currentQWeekId);
+
+    final var previousInvoice =
+        invoiceLoadPort.loadByQWeekIdAndDriverId(previousQWeek.getId(), driverId);
+
+    if (previousInvoice == null) {
+      return ZERO;
+    }
+    return previousInvoice
+        .getCurrentWeekFee()
+        .add(previousInvoice.getPreviousWeekBalanceFee().negate());
   }
 
   private BigDecimal getDebt(final BigDecimal balanceAmount) {

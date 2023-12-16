@@ -59,8 +59,9 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  InvoiceToPdfModelMapper getInvoiceToPdfModelMapper(final InvoiceLoadPort loadPort) {
-    return new InvoiceToPdfModelMapper(loadPort);
+  InvoiceToPdfModelMapper getInvoiceToPdfModelMapper(
+      final InvoiceLoadPort loadPort, final GetQWeekQuery qWeekQuery) {
+    return new InvoiceToPdfModelMapper(loadPort, qWeekQuery);
   }
 
   @Bean

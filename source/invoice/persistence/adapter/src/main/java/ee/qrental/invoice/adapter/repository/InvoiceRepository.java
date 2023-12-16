@@ -14,4 +14,6 @@ public interface InvoiceRepository {
 
   InvoiceJakartaEntity findByWeekAndDriverIdAndFirmId(
       final Integer weekNumber, final Long driverId, final Long firmId);
+
+  InvoiceJakartaEntity findByByQWeekIdAndDriverId(final Long qWeekId, final Long driverId);
 }
