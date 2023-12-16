@@ -36,6 +36,7 @@ public class InvoiceAdapterMapper {
         .balance(entity.getBalance())
         .currentWeekFee(entity.getCurrentWeekFee())
         .previousWeekBalanceFee(entity.getPreviousWeekBalanceFee())
+        .previousWeekPositiveTxSum(entity.getPreviousWeekPositiveTxSum())
         .comment(entity.getComment())
         .items(entity.getItems().stream().map(this::mapToItemDomain).collect(toList()))
         .build();
@@ -74,6 +75,7 @@ public class InvoiceAdapterMapper {
         .balance(domain.getBalance())
         .currentWeekFee(domain.getCurrentWeekFee())
         .previousWeekBalanceFee(domain.getPreviousWeekBalanceFee())
+        .previousWeekPositiveTxSum(domain.getPreviousWeekPositiveTxSum())
         .comment(domain.getComment())
         .build();
   }

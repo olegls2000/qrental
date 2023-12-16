@@ -114,7 +114,7 @@ public class InvoiceToPdfModelMapper {
         .currentWeekFee(currentWeekFee)
         .totalWithFee(totalWithFee)
         .block2A(block2AValue)
-        .block2B(BigDecimal.valueOf(88))
+        .block2B(invoice.getPreviousWeekPositiveTxSum())
         .build();
   }
 

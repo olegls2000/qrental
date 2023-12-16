@@ -109,6 +109,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
           final var weekEndDay = week.getEnd();
 
           final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
+          final var previousQWeekStartDay = previousQWeek.getStart();
+          final var previousQWeekEndDay = previousQWeek.getEnd();
 
           drivers.forEach(
               driver -> {
@@ -147,6 +149,24 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .filter(TransactionResponse::getInvoiceIncluded)
                         .toList();
                 final var invoiceItems = getInvoiceItems(invoicesIncludedTransactions, qFirm);
+
+                final var filterForPreviousWeek =
+                    PeriodAndDriverFilter.builder()
+                        .driverId(driverId)
+                        .dateStart(previousQWeekStartDay)
+                        .dateEnd(previousQWeekEndDay)
+                        .build();
+                final var previousWeekDriversTransactions =
+                    transactionQuery.getAllByFilter(filterForPreviousWeek).stream().toList();
+
+                final var sumOfPositiveTransactionsFromPreviousWeekNotIncludedIntoInvoice =
+                    previousWeekDriversTransactions.stream()
+                        .filter(tx -> !tx.getInvoiceIncluded())
+                        .filter(tx -> "P".equals(tx.getKind()))
+                        .map(TransactionResponse::getRealAmount)
+                        .reduce(BigDecimal::add)
+                        .orElse(ZERO);
+
                 final var invoice =
                     Invoice.builder()
                         .id(null)
@@ -172,6 +192,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .balance(previousWeekBalanceAmountWithoutFee)
                         .currentWeekFee(currentWeekFee)
                         .previousWeekBalanceFee(previousWeekFeeBalanceAmount)
+                        .previousWeekPositiveTxSum(
+                            sumOfPositiveTransactionsFromPreviousWeekNotIncludedIntoInvoice)
                         .items(invoiceItems)
                         .build();
                 final var transactionIds =

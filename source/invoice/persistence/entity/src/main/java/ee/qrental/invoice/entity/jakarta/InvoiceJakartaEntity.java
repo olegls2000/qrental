@@ -91,6 +91,9 @@ public class InvoiceJakartaEntity {
   @Column(name = "previous_week_balance_fee")
   private BigDecimal previousWeekBalanceFee;
 
+  @Column(name = "previous_week_positive_transactions_sum")
+  private BigDecimal previousWeekPositiveTxSum;
+
   @Column(name = "comment")
   private String comment;
 
