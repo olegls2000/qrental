@@ -153,6 +153,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .number(invoiceNumber)
                         .weekNumber(weekNumber)
                         .driverId(driverId)
+                        .qWeekId(week.getId())
                         .driverCompany(driver.getCompanyName())
                         .driverInfo(driverInfo)
                         .driverCompanyAddress(driver.getCompanyAddress())
@@ -190,8 +191,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
   }
 
-  private void checkIfBalanceForCurrentWeekExists(
-      final Long driverId, final QWeekResponse qWeek) {
+  private void checkIfBalanceForCurrentWeekExists(final Long driverId, final QWeekResponse qWeek) {
     final var weekBalance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeek.getId());
     if (weekBalance == null) {
       throw new RuntimeException(

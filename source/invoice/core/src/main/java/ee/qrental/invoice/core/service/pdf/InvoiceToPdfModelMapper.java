@@ -6,13 +6,18 @@ import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class InvoiceToPdfModelMapper {
 
   private static final BigDecimal VAT_RATE = BigDecimal.valueOf(20);
+
+  private final InvoiceLoadPort invoiceLoadPort;
 
   public InvoicePdfModel getPdfModel(final Invoice invoice) {
     final var number = invoice.getNumber();
@@ -66,6 +71,16 @@ public class InvoiceToPdfModelMapper {
 
     final var totalWithFee = total.add(currentWeekFee).add(previousWeekBalanceFee);
 
+    final var previousInvoice =
+        invoiceLoadPort.loadByWeekAndDriverAndFirm(
+            previousWeekNumber, invoice.getDriverId(), invoice.getQFirmId());
+    final var block2AValue =
+        previousInvoice
+            .getCurrentWeekFee()
+            .add(previousInvoice.getPreviousWeekBalanceFee().negate());
+
+
+
     return InvoicePdfModel.builder()
         .number(number)
         .weekNumber(weekNumber)
@@ -98,6 +113,8 @@ public class InvoiceToPdfModelMapper {
         .previousWeekBalanceFee(previousWeekBalanceFee)
         .currentWeekFee(currentWeekFee)
         .totalWithFee(totalWithFee)
+        .block2A(block2AValue)
+        .block2B(BigDecimal.valueOf(88))
         .build();
   }
 

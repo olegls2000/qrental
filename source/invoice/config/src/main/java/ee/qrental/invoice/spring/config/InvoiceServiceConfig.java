@@ -59,8 +59,8 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  InvoiceToPdfModelMapper getInvoiceToPdfModelMapper() {
-    return new InvoiceToPdfModelMapper();
+  InvoiceToPdfModelMapper getInvoiceToPdfModelMapper(final InvoiceLoadPort loadPort) {
+    return new InvoiceToPdfModelMapper(loadPort);
   }
 
   @Bean

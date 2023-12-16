@@ -39,4 +39,6 @@ public class InvoicePdfModel {
   private BigDecimal currentWeekFee;
   private BigDecimal previousWeekBalanceFee;
   private BigDecimal totalWithFee;
+  private BigDecimal block2A;
+  private BigDecimal block2B;
 }

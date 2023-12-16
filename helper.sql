@@ -119,7 +119,7 @@ limit 1;
 
 
 select *
-from balance;
+from invoice;
 
 
 
