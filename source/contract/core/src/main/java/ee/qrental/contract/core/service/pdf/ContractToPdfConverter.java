@@ -108,7 +108,7 @@ public class ContractToPdfConverter {
         header1.addCell(cell3);
 
         contractPdfDoc.add(header1);
-
+        contractPdfDoc.add(new Paragraph("\n"));
 
         final var rendileandja = new Table(1);
         rendileandja.setPadding(0f);
@@ -132,13 +132,13 @@ public class ContractToPdfConverter {
         rendileandja.addCell(rendileandjacell2);
 
         final var rendileandjacell3 =
-                new Cell(new Paragraph( "edaspidi Rendileandja." , new Font(Font.TIMES_ROMAN, 9, Font.BOLD)));
+                new Cell(new Paragraph("edaspidi Rendileandja.", new Font(Font.TIMES_ROMAN, 9, Font.BOLD)));
         rendileandjacell3.setBorder(NO_BORDER);
         rendileandjacell3.setHorizontalAlignment(LEFT);
         rendileandja.addCell(rendileandjacell3);
 
         final var rendileandjacell4 =
-                new Cell(new Paragraph("Asukoht:"   + getTextOrEmpty(model.getQFirmPostAddress()),
+                new Cell(new Paragraph("Asukoht:" + getTextOrEmpty(model.getQFirmPostAddress()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rendileandjacell4.setBorder(NO_BORDER);
         rendileandjacell4.setHorizontalAlignment(LEFT);
@@ -166,27 +166,28 @@ public class ContractToPdfConverter {
         rendileandja.addCell(rendileandjacell7);
 
         final var rendileandjacell8 =
-                new Cell(new Paragraph(" E-post:  " + getTextOrEmpty(model.getQFirmEmail()),
+                new Cell(new Paragraph("E-post:  " + getTextOrEmpty(model.getQFirmEmail()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rendileandjacell8.setBorder(NO_BORDER);
         rendileandjacell8.setHorizontalAlignment(LEFT);
         rendileandja.addCell(rendileandjacell8);
 
         final var rendileandjacell9 =
-                new Cell(new Paragraph(" Kontakttelefon:  " + getTextOrEmpty(model.getQFirmVatPhone()),
+                new Cell(new Paragraph("Kontakttelefon:  " + getTextOrEmpty(model.getQFirmVatPhone()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rendileandjacell9.setBorder(NO_BORDER);
         rendileandjacell9.setHorizontalAlignment(LEFT);
         rendileandja.addCell(rendileandjacell9);
 
         final var rendileandjacell10 =
-                new Cell(new Paragraph(" Esindaja:  " + getTextOrEmpty(model.getQFirmCeo()),
+                new Cell(new Paragraph("Esindaja:  " + getTextOrEmpty(model.getQFirmCeo()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rendileandjacell10.setBorder(NO_BORDER);
         rendileandjacell10.setHorizontalAlignment(LEFT);
         rendileandja.addCell(rendileandjacell10);
 
         contractPdfDoc.add(rendileandja);
+
 /*
 @SneakyThrows
  /*       private Table getRequisitesQfirm (
@@ -296,7 +297,6 @@ public class ContractToPdfConverter {
         rentnikcell10.setHorizontalAlignment(LEFT);
         rentnik.addCell(rentnikcell10);
 
-
         contractPdfDoc.add(rentnik);
 
 
@@ -334,7 +334,7 @@ public class ContractToPdfConverter {
         final var body1cell4 =
                 new Cell(new Paragraph("Koostöölepingu sõlmitakse määramata tähtajaks, ja see kehtib kliendi poolt " +
                         "asjakohase taotluse esitamiseni ja pretensioonide puudumisel. " +
-                        "Pretensioonide korral, kehtib koostööleping nende lahendamiseni. \n",
+                        "Pretensioonide korral, kehtib koostööleping nende lahendamiseni.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body1cell4.setBorder(NO_BORDER);
         body1cell4.setHorizontalAlignment(JUSTIFIED);
@@ -348,7 +348,7 @@ public class ContractToPdfConverter {
         body1.addCell(body1cell5);
 
         final var body1cell6 =
-                new Cell(new Paragraph("Auto rendipäeva pikkus on 24 tundi alates iga ööpäeva kella 09:00’st. \n",
+                new Cell(new Paragraph("Auto rendipäeva pikkus on 24 tundi alates iga ööpäeva kella 09:00’st.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body1cell6.setBorder(NO_BORDER);
         body1cell6.setHorizontalAlignment(JUSTIFIED);
@@ -362,7 +362,7 @@ public class ContractToPdfConverter {
         body1.addCell(body1cell7);
 
         final var body1cell8 =
-                new Cell(new Paragraph("Kütus ei sisaldu rendihinnas. \n",
+                new Cell(new Paragraph("Kütus ei sisaldu rendihinnas.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body1cell8.setBorder(NO_BORDER);
         body1cell8.setHorizontalAlignment(JUSTIFIED);
@@ -377,7 +377,7 @@ public class ContractToPdfConverter {
 
         final var body1cell10 =
                 new Cell(new Paragraph("Rendiautos on keelatud süüa, suitsetada, tarbida alkoholi ja vedada loomi. " +
-                        "Antud keelu eiramise korral Rentniku poolt on Rendileandjal õigus nõuda Rentnikult trahvi 500.- EUR. \n",
+                        "Antud keelu eiramise korral Rentniku poolt on Rendileandjal õigus nõuda Rentnikult trahvi 500.- EUR.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body1cell10.setBorder(NO_BORDER);
         body1cell10.setHorizontalAlignment(JUSTIFIED);
@@ -418,7 +418,7 @@ public class ContractToPdfConverter {
         body2.addCell(body2cell3);
 
         final var body2cell4 =
-                new Cell(new Paragraph("Üleandmise / Vastuvõtmise akt \n",
+                new Cell(new Paragraph("Üleandmise / Vastuvõtmise akt ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body2cell4.setBorder(NO_BORDER);
         body2cell4.setHorizontalAlignment(JUSTIFIED);
@@ -432,7 +432,7 @@ public class ContractToPdfConverter {
         body2.addCell(body2cell5);
 
         final var body2cell6 =
-                new Cell(new Paragraph("Sularahata arvelduste vahendusleping \n",
+                new Cell(new Paragraph("Sularahata arvelduste vahendusleping",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body2cell6.setBorder(NO_BORDER);
         body2cell6.setHorizontalAlignment(JUSTIFIED);
@@ -473,7 +473,7 @@ public class ContractToPdfConverter {
         body3.addCell(body3cell3);
 
         final var body3cell4 =
-                new Cell(new Paragraph("Vaba auto Q Takso Veod OÜ autopargist. \n",
+                new Cell(new Paragraph("Vaba auto Q Takso Veod OÜ autopargist.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell4.setBorder(NO_BORDER);
         body3cell4.setHorizontalAlignment(JUSTIFIED);
@@ -489,7 +489,7 @@ public class ContractToPdfConverter {
         final var body3cell6 =
                 new Cell(new Paragraph("Käesoleva Koostöölepingu kohaselt kohustub Rendileandja andma Rentnikule " +
                         "kasutamiseks Koostöölepingus toodud tingimustel vaba sõidukit oma autopargist -  koostöölepingu eseme ehk Rendiauto." +
-                        " Rentnik on kohustatud maksma selle eest tasu (Renti) Rendileandjale kogu Rendiperioodi eest.  \n",
+                        " Rentnik on kohustatud maksma selle eest tasu (Renti) Rendileandjale kogu Rendiperioodi eest. ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell6.setBorder(NO_BORDER);
         body3cell6.setHorizontalAlignment(JUSTIFIED);
@@ -503,7 +503,7 @@ public class ContractToPdfConverter {
         body3.addCell(body3cell7);
 
         final var body3cell8 =
-                new Cell(new Paragraph("Sõiduki väljastamise koht on Lasnamäe 30a, Tallinn. \n",
+                new Cell(new Paragraph("Sõiduki väljastamise koht on Lasnamäe 30a, Tallinn.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell8.setBorder(NO_BORDER);
         body3cell8.setHorizontalAlignment(JUSTIFIED);
@@ -517,7 +517,7 @@ public class ContractToPdfConverter {
         body3.addCell(body3cell9);
 
         final var body3cell10 =
-                new Cell(new Paragraph("Sõiduki viimine üle Eesti Vabariigi  välise- või sisse piiri ilma eelneva Rendileandja kirjaliku nõusolekuta keelatud.  \n",
+                new Cell(new Paragraph("Sõiduki viimine üle Eesti Vabariigi  välise- või sisse piiri ilma eelneva Rendileandja kirjaliku nõusolekuta keelatud.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell10.setBorder(NO_BORDER);
         body3cell10.setHorizontalAlignment(JUSTIFIED);
@@ -531,7 +531,7 @@ public class ContractToPdfConverter {
         body3.addCell(body3cell11);
 
         final var body3cell12 =
-                new Cell(new Paragraph("Sõiduki tagastamiskoht on Lasnamäe 30a, Tallinn.  \n",
+                new Cell(new Paragraph("Sõiduki tagastamiskoht on Lasnamäe 30a, Tallinn. ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell12.setBorder(NO_BORDER);
         body3cell12.setHorizontalAlignment(JUSTIFIED);
@@ -546,7 +546,7 @@ public class ContractToPdfConverter {
 
         final var body3cell14 =
                 new Cell(new Paragraph("Rendiauto tagatise summa on määratud auto üleandmise/vastuvõtmise aktis." +
-                        " Tagatise summa tagastatakse rentnikule mitte varem kui kolm nädalat pärast auto rendiandjale tagastamist. \n",
+                        " Tagatise summa tagastatakse rentnikule mitte varem kui kolm nädalat pärast auto rendiandjale tagastamist.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body3cell14.setBorder(NO_BORDER);
         body3cell14.setHorizontalAlignment(JUSTIFIED);
@@ -588,7 +588,7 @@ public class ContractToPdfConverter {
 
         final var body4cell4 =
                 new Cell(new Paragraph("Rendiauto informatsioon ja seisund, ning informatsioon üleantud tagatise kohta" +
-                        " auto üleandmise ajaks on määratud Üleandmise / Vastuvõtmise aktis. \n",
+                        " auto üleandmise ajaks on määratud Üleandmise / Vastuvõtmise aktis.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell4.setBorder(NO_BORDER);
         body4cell4.setHorizontalAlignment(JUSTIFIED);
@@ -602,8 +602,11 @@ public class ContractToPdfConverter {
         body4.addCell(body4cell5);
 
         final var body4cell6 =
-                new Cell(new Paragraph("Lepingualune auto renditasu suurus auto üleandmise ajaks sõltub konkreetse" +
-                        " auto omadustest ja on määratud auto Üleandmise / Vastuvõtmise aktis.   \n",
+                new Cell(new Paragraph("Rendiauto lepingualune nädala renditasu suurus üleandmise-vastuvõtmise ajaks sõltub konkreetse auto omadustest " +
+                        "ja on määratud auto üleandmise-vastuvõtmise aktis." +
+                        "Üleandmise-vastuvõtmise aktis määratud renditasu on aktuaalne vaid täis rendinädala tasumise eest. " +
+                        "Täisrendinädal arvestatakse esimese kalendri nädala Esmaspäeva kella 10:00'st kuni järgneva kalendri nädala kella 10:00'st." +
+                        "Iga osalise nädala rendiööpäeva maksumus on võrdne viiendikuga terve nädala rendi maksumusest.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell6.setBorder(NO_BORDER);
         body4cell6.setHorizontalAlignment(JUSTIFIED);
@@ -619,7 +622,7 @@ public class ContractToPdfConverter {
         final var body4cell8 =
                 new Cell(new Paragraph("Rentnik kohustub maksma rendileandjale renditasu ette iga rendinädala eest CarAutoRent OÜ kontoris," +
                         " mis asub aadressil Lasnamäe 30a, Tallinn, mitte hiljem, kui iga nädala teisipäeva kella 16:00’ni." +
-                        " Makse on võimalik teostada sularahas ja ülekandega CarAutoRent OÜ esindajaga edastatud pangakontole asjakohase selgitusega – Autorent + auto number. \n",
+                        " Makse on võimalik teostada sularahas ja ülekandega CarAutoRent OÜ esindajaga edastatud pangakontole asjakohase selgitusega – Autorent + auto number.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell8.setBorder(NO_BORDER);
         body4cell8.setHorizontalAlignment(JUSTIFIED);
@@ -660,7 +663,7 @@ public class ContractToPdfConverter {
         body5.addCell(body5cell3);
 
         final var body5cell4 =
-                new Cell(new Paragraph("Rentnikul on õigus kasutada sõidukit oma isiklikus hüvanguks. \n",
+                new Cell(new Paragraph("Rentnikul on õigus kasutada sõidukit oma isiklikus hüvanguks.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body5cell4.setBorder(NO_BORDER);
         body5cell4.setHorizontalAlignment(JUSTIFIED);
@@ -675,7 +678,7 @@ public class ContractToPdfConverter {
 
         final var body5cell6 =
                 new Cell(new Paragraph("Rentnikul on õigus kasutada sõidukit ainult siis, kui ta on vähemalt 21 aastat" +
-                        " vana ja omab mootorsõiduki juhistaaži vähemalt kaks aastat.   \n",
+                        " vana ja omab mootorsõiduki juhistaaži vähemalt kaks aastat.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body5cell6.setBorder(NO_BORDER);
         body5cell6.setHorizontalAlignment(JUSTIFIED);
@@ -691,7 +694,7 @@ public class ContractToPdfConverter {
         final var body5cell8 =
                 new Cell(new Paragraph("Kui rentnik ei nõustu Rendileandja poolt esitatud nõude või selle suurusega," +
                         " on tal õigus esitada kohtusse hagi 30 päeva jooksul arvates nõude kättesaamisest." +
-                        " Hagi tähtaegset esitamata jätmist tõlgendatakse nõudega nõustumisena täies ulatuses ja rentniku hilisemaid pretensioone ei arvestata. \n",
+                        " Hagi tähtaegset esitamata jätmist tõlgendatakse nõudega nõustumisena täies ulatuses ja rentniku hilisemaid pretensioone ei arvestata.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body5cell8.setBorder(NO_BORDER);
         body5cell8.setHorizontalAlignment(JUSTIFIED);
@@ -732,7 +735,7 @@ public class ContractToPdfConverter {
 
         final var body6cell4 =
                 new Cell(new Paragraph("Rentnik kohustub maksma tasu rendiperioodi eest. Renditasu mittetähtaegsel tasumisel on" +
-                        " rentnik kohustatud tasuma viivist 1% kalendripäevas tasumata summalt. \n",
+                        " rentnik kohustatud tasuma viivist 1% kalendripäevas tasumata summalt.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell4.setBorder(NO_BORDER);
         body6cell4.setHorizontalAlignment(JUSTIFIED);
@@ -746,7 +749,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell5);
 
         final var body6cell6 =
-                new Cell(new Paragraph("Tasumata summa arvestatakse nädalapõhiselt konkreetse sõiduki nädala rendi maksumuse ja juhi tehtud maksete alusel.  \n",
+                new Cell(new Paragraph("Tasumata summa arvestatakse nädalapõhiselt konkreetse sõiduki nädala rendi maksumuse ja juhi tehtud maksete alusel.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell6.setBorder(NO_BORDER);
         body6cell6.setHorizontalAlignment(JUSTIFIED);
@@ -762,7 +765,7 @@ public class ContractToPdfConverter {
         final var body6cell8 =
                 new Cell(new Paragraph("Rentnik on kohustatud sõiduki üle vaatama enne vastuvõtmist, veenduma selle sobilikkuses ja korrasolekus," +
                         " tegema vastavasisulise märke autol olemasolevatest kahjustustest Vastuvõtmise-üleandmise aktil ja panna oma allkirja nende kinnitamiseks. " +
-                        "Rentniku allkiri kinnitab ta nõusolekut ainult nende kahjustuste olemasoluga autol, mis on märgitud Vastuvõtmise-üleandmise aktil. \n",
+                        "Rentniku allkiri kinnitab ta nõusolekut ainult nende kahjustuste olemasoluga autol, mis on märgitud Vastuvõtmise-üleandmise aktil.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell8.setBorder(NO_BORDER);
         body6cell8.setHorizontalAlignment(JUSTIFIED);
@@ -776,7 +779,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell9);
 
         final var body6cell10 =
-                new Cell(new Paragraph("Vastuvõtmise-üleandmise akt koostatakse kahes eksemplaris – originaal ja selle koopia, mis antakse rentnikule auto kahjustuste kinnitamiseks.  \n",
+                new Cell(new Paragraph("Vastuvõtmise-üleandmise akt koostatakse kahes eksemplaris – originaal ja selle koopia, mis antakse rentnikule auto kahjustuste kinnitamiseks.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell10.setBorder(NO_BORDER);
         body6cell10.setHorizontalAlignment(JUSTIFIED);
@@ -790,7 +793,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell11);
 
         final var body6cell12 =
-                new Cell(new Paragraph("Rentnik on kohustatud sõidukit kasutama vastavalt valmistajatehase juhendile.  \n",
+                new Cell(new Paragraph("Rentnik on kohustatud sõidukit kasutama vastavalt valmistajatehase juhendile.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell12.setBorder(NO_BORDER);
         body6cell12.setHorizontalAlignment(JUSTIFIED);
@@ -805,7 +808,7 @@ public class ContractToPdfConverter {
 
         final var body6cell14 =
                 new Cell(new Paragraph("Rentnik on kohustatud hoolitsema Rendisõiduki eest heaperemehelikult ja kõrvaldama " +
-                        "tekkinud puudused VÕS § 345 lg. 1 toodud tingimustel (kandma kulu). \n",
+                        "tekkinud puudused VÕS § 345 lg. 1 toodud tingimustel (kandma kulu).",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell14.setBorder(NO_BORDER);
         body6cell14.setHorizontalAlignment(JUSTIFIED);
@@ -820,7 +823,7 @@ public class ContractToPdfConverter {
 
         final var body6cell16 =
                 new Cell(new Paragraph("Rentnik on kohustatud sõidukit mitte kasutama: ebaseaduslikuks tegevuseks või seadusevastasel " +
-                        "eesmärkidel, samuti pukseerimiseks, autovõidusõiduks, treeninguks jne. \n",
+                        "eesmärkidel, samuti pukseerimiseks, autovõidusõiduks, treeninguks jne.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell16.setBorder(NO_BORDER);
         body6cell16.setHorizontalAlignment(JUSTIFIED);
@@ -834,7 +837,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell17);
 
         final var body6cell18 =
-                new Cell(new Paragraph("Rentnik on kohustatud sõidukit kasutama ainult teedel, mis on teed Teeseaduse mõistes \n",
+                new Cell(new Paragraph("Rentnik on kohustatud sõidukit kasutama ainult teedel, mis on teed Teeseaduse mõistes",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell18.setBorder(NO_BORDER);
         body6cell18.setHorizontalAlignment(JUSTIFIED);
@@ -848,7 +851,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell19);
 
         final var body6cell20 =
-                new Cell(new Paragraph("Rentnik on kohustatud sõidukit mitte andma kolmandale isikule kasutamiseks. \n",
+                new Cell(new Paragraph("Rentnik on kohustatud sõidukit mitte andma kolmandale isikule kasutamiseks.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell20.setBorder(NO_BORDER);
         body6cell20.setHorizontalAlignment(JUSTIFIED);
@@ -864,7 +867,7 @@ public class ContractToPdfConverter {
         final var body6cell22 =
                 new Cell(new Paragraph("Rentnik või teine juht on kohustatud veenduma enne igat " +
                         "sõitu sõiduki tehnilises korrasolekus ning jälgima tehnoseisundit sõidu ajal." +
-                        " Tehnilise rikke esinemisel sõitmise katkestama vea  kõrvaldamiseni. \n",
+                        " Tehnilise rikke esinemisel sõitmise katkestama vea  kõrvaldamiseni.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell22.setBorder(NO_BORDER);
         body6cell22.setHorizontalAlignment(JUSTIFIED);
@@ -878,7 +881,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell23);
 
         final var body6cell24 =
-                new Cell(new Paragraph("Rentnik on kohustatud sõidukit tankima üksnes kvaliteetse ja  sõidukile ettenähtud mootorikütusega. \n",
+                new Cell(new Paragraph("Rentnik on kohustatud sõidukit tankima üksnes kvaliteetse ja  sõidukile ettenähtud mootorikütusega. ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell24.setBorder(NO_BORDER);
         body6cell24.setHorizontalAlignment(JUSTIFIED);
@@ -892,7 +895,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell25);
 
         final var body6cell26 =
-                new Cell(new Paragraph("Rentnik on kohustatud tegema kõik, et vältida Rendileandjale ja kolmandatele isikutele kahju tekkimist.\n",
+                new Cell(new Paragraph("Rentnik on kohustatud tegema kõik, et vältida Rendileandjale ja kolmandatele isikutele kahju tekkimist.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell26.setBorder(NO_BORDER);
         body6cell26.setHorizontalAlignment(JUSTIFIED);
@@ -911,7 +914,7 @@ public class ContractToPdfConverter {
                         "päästeametit või politseid, on Rentnik kohustatud seda tegema. Liiklusõnnetuse korral, milles Rentnik pole süüdi, " +
                         "tuleb liiklusõnnetuses osalenud juhtidel täita nõuetekohaselt LE vorm nr.1 või kutsuda sündmuskohale politsei, " +
                         "et fikseerida liiklusõnnetus. Selle LE vorm nr.1 või politsei poolt koostatud sündmuskoha skeemi koopia mitteesitamisel " +
-                        "Rendileandjale, on Rentnik täies ulatuses vastutav Rendileandjale tekitatud kahjude eest.\n",
+                        "Rendileandjale, on Rentnik täies ulatuses vastutav Rendileandjale tekitatud kahjude eest.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell28.setBorder(NO_BORDER);
         body6cell28.setHorizontalAlignment(JUSTIFIED);
@@ -925,7 +928,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell29);
 
         final var body6cell30 =
-                new Cell(new Paragraph("Rentnik on kohustatud tagastama sõiduki lepingus märgitud Rendiperioodi lõppemisel kokkulepitud kohas ettenähtud ajal. Sõidukit ei tohi hüljata.\n",
+                new Cell(new Paragraph("Rentnik on kohustatud tagastama sõiduki lepingus märgitud Rendiperioodi lõppemisel kokkulepitud kohas ettenähtud ajal. Sõidukit ei tohi hüljata.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell30.setBorder(NO_BORDER);
         body6cell30.setHorizontalAlignment(JUSTIFIED);
@@ -991,7 +994,8 @@ public class ContractToPdfConverter {
 
         final var body6cell38 =
                 new Cell(new Paragraph("Rendileandja poolt käesoleva koostöölepingu alusel osutatava rendiautoteenuse (edaspidi \"renditeenus\") " +
-                        "minimaalne kestus on üks kuu alates esimesest Esmaspäevast, mil on rentnik saanud rendileandja poolt vaba auto rendileandja autopargist. \n",
+                        "minimaalne kestus iga renditava auto on neli kalendrinädalat alates päevast, mil on rentnik saanud rendileandja poolt vaba auto" +
+                        " rendileandja autopargist. Iga uue auto neljandalane tähtaeg hakkab lugema päevast, mis on auto üleandmise aktis märgitud.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell38.setBorder(NO_BORDER);
         body6cell38.setHorizontalAlignment(JUSTIFIED);
@@ -1269,8 +1273,7 @@ public class ContractToPdfConverter {
         body7.addCell(body7cell31);
 
         final var body7cell32 =
-                new Cell(new Paragraph("Liiklusõnnetuse korral hüvitab Rentnik Rendileandjale tekitatud kahju täies mahus. \n" +
-                        "\n",
+                new Cell(new Paragraph("Liiklusõnnetuse korral hüvitab Rentnik Rendileandjale tekitatud kahju täies mahus.",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body7cell32.setBorder(NO_BORDER);
         body7cell32.setHorizontalAlignment(JUSTIFIED);

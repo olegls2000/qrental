@@ -39,6 +39,16 @@ and tx.date;
 
 
 delete
+from transaction
+where transaction_type_id in (select distinct(id)
+                              from transaction_type
+                              where name in ('fee replenish', 'compensation', 'fee debt'));
+
+
+
+
+------------------------------------------------------------
+delete
 from balance_calculation_result;
 delete
 from balance_calculation;

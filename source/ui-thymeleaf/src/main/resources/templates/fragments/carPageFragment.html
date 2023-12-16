@@ -23,6 +23,7 @@
             <th style="width: 1% !important;">Delete</th>
             <th>Active</th>
             <th>REG Number</th>
+            <th>Fuel Type</th>
             <th>Branding</th>
             <th>Age</th>
             <th>Warranty</th>
@@ -54,6 +55,7 @@
             <td th:unless="${car.active}" class="text-center text-secondary">No
             </td>
             <td th:text="${car.regNumber}"></td>
+            <td th:text="${car.fuelType} "></td>
             <td>
                 <i th:if="${car.brandingQrent}"> Q </i>
                 <i th:if="${car.brandingBolt}" class="bi bi-type-bold"></i>

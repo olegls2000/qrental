@@ -51,6 +51,10 @@ public enum QWeek {
     FORTY_THIRD("Oct 23-29", 43),
     FORTY_FORTH("Oct-Nov 30-5", 44),
     FORTY_FIFTH("Nov 6-12", 45),
+    FORTY_SIXTH("Nov 13-19",46),
+    FORTY_SEVENTH("Nov 20-26",47),
+    FORTY_EIGHTH("Nov-Dec 27-3",48)
+
 
     ;
     private String month;

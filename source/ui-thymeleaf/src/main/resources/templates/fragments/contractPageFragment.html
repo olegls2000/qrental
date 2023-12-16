@@ -10,7 +10,7 @@
             <th>Renter Company</th>
             <th>Renter Company Reg. number</th>
             <th>Renter Company CEO</th>
-            <th>Driver Tax-id</th>
+            <th>Driver Isikukood</th>
             <th>Q-Firm name</th>
             <th>Q-Firm CEO</th>
             <th>Created</th>
@@ -21,6 +21,9 @@
         <tr th:each="contract : ${contracts}">
             <td>
                 <a class="btn btn-sm btn-info"
+                   th:href="@{/contracts/pdf/{id}(id=${contract.id})}">
+                    <span class="bi-file-earmark-pdf"></span></a>
+                <a class="btn btn-sm btn-outline-info disabled"
                    th:href="@{/contracts/pdf/{id}(id=${contract.id})}">
                     <span class="bi-file-earmark-pdf"></span></a>
                 <a class="btn btn-sm btn-warning"
