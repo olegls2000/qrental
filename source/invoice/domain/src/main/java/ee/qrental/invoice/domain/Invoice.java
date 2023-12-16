@@ -1,11 +1,12 @@
 package ee.qrental.invoice.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @SuperBuilder
 @Getter
