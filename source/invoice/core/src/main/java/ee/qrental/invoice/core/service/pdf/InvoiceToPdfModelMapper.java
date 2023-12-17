@@ -121,9 +121,25 @@ public class InvoiceToPdfModelMapper {
     if (previousInvoice == null) {
       return ZERO;
     }
-    return previousInvoice
-        .getCurrentWeekFee()
-        .add(previousInvoice.getPreviousWeekBalanceFee().negate());
+    final var sum =
+        previousInvoice.getItems().stream()
+            .map(InvoiceItem::getAmount)
+            .reduce(BigDecimal::add)
+            .orElse(ZERO)
+            .negate();
+    final var withVat = previousInvoice.withVat();
+    final var vatPercentage = withVat ? VAT_RATE : ZERO;
+    final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
+    final var sumWithVat = sum.add(vatAmount);
+    final var balanceAmount = previousInvoice.getBalance();
+    final var debt = getDebt(balanceAmount);
+    final var advancePayment = getAdvancePayment(balanceAmount);
+    final var total = sumWithVat.add(debt).subtract(advancePayment);
+    final var currentWeekFee = previousInvoice.getCurrentWeekFee();
+    final var previousWeekBalanceFee = previousInvoice.getPreviousWeekBalanceFee().negate();
+    final var totalWithFee = total.add(currentWeekFee).add(previousWeekBalanceFee);
+
+    return totalWithFee;
   }
 
   private BigDecimal getDebt(final BigDecimal balanceAmount) {
