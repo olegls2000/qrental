@@ -11,7 +11,7 @@ spring:
         enable_lazy_load_no_trans: true
   mail:
     username: billing@qrent.ee
-    password: shzlahiyqdwcbzqk
+    password: wzqwqrciagzpxcbv
     host: smtp.zone.eu
     port: 587
     protocol: smtp
