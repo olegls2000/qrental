@@ -311,6 +311,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                       .properties(properties)
                       .build();
               emailSendUseCase.sendEmail(emailSendRequest);
+              System.out.println("Email was sent: "+ emailSendRequest );
             });
   }
 
