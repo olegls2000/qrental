@@ -44,6 +44,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -289,13 +290,20 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
+    final var invoicesCount = invoiceCalculation.getResults().size();
+    AtomicInteger handledInvoices = new AtomicInteger();
     invoiceCalculation.getResults().stream()
         .map(InvoiceCalculationResult::getInvoice)
+        .sorted(comparing(Invoice::getNumber))
         .forEach(
             invoice -> {
               final var driverId = invoice.getDriverId();
               final var driver = driverQuery.getById(driverId);
               if (!driver.getNeedInvoicesByEmail()) {
+                handledInvoices.getAndIncrement();
+                System.out.println(
+                    format("Handled %d from %d invoices", handledInvoices, invoicesCount));
+
                 return;
               }
               final var recipient = driver.getEmail();
@@ -311,7 +319,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                       .properties(properties)
                       .build();
               emailSendUseCase.sendEmail(emailSendRequest);
-              System.out.println("Email was sent: "+ emailSendRequest );
+              System.out.println("Email was sent: " + emailSendRequest);
+              handledInvoices.getAndIncrement();
+              System.out.println(
+                  format("Handled %d from %d invoices", handledInvoices, invoicesCount));
             });
   }
 
