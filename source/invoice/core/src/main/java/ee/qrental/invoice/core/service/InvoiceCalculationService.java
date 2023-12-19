@@ -322,7 +322,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
               System.out.println("Email was sent: " + emailSendRequest);
               handledInvoices.getAndIncrement();
               System.out.println(
-                  format("Handled %d from %d invoices", handledInvoices, invoicesCount));
+                  format("Handled %d from %d invoices", handledInvoices.get(), invoicesCount));
             });
   }
 
