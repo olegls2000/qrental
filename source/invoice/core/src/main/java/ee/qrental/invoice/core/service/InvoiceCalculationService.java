@@ -300,9 +300,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
               final var driverId = invoice.getDriverId();
               final var driver = driverQuery.getById(driverId);
               if (!driver.getNeedInvoicesByEmail()) {
-                handledInvoices.getAndIncrement();
+                final var handledInvoicesInt = handledInvoices.getAndIncrement();
                 System.out.println(
-                    format("Handled %d from %d invoices", handledInvoices, invoicesCount));
+                    format("Handled %d from %d invoices", handledInvoicesInt, invoicesCount));
 
                 return;
               }
@@ -320,9 +320,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                       .build();
               emailSendUseCase.sendEmail(emailSendRequest);
               System.out.println("Email was sent: " + emailSendRequest);
-              handledInvoices.getAndIncrement();
+              final var handledInvoicesInt = handledInvoices.getAndIncrement();
               System.out.println(
-                  format("Handled %d from %d invoices", handledInvoices.get(), invoicesCount));
+                  format("Handled %d from %d invoices", handledInvoicesInt, invoicesCount));
             });
   }
 
