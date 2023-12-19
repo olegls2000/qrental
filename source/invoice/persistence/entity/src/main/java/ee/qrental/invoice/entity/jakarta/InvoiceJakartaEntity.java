@@ -5,6 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -98,5 +99,5 @@ public class InvoiceJakartaEntity {
   private String comment;
 
   @OneToMany(mappedBy = "invoice")
-  private List<InvoiceItemJakartaEntity> items;
+  private List<InvoiceItemJakartaEntity> items = new ArrayList<>();
 }
