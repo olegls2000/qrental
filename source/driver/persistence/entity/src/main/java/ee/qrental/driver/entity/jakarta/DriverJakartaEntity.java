@@ -108,6 +108,9 @@ public class DriverJakartaEntity {
   @Column(name = "comment")
   private String comment;
 
+  @Column(name = "created_date")
+  private LocalDate createdDate;
+
   @OneToMany(mappedBy = "driver")
   private List<CallSignLinkJakartaEntity> callSignLinks;
 }

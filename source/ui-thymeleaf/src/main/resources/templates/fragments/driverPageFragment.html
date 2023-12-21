@@ -26,6 +26,7 @@
             <th>Charge Fee</th>
             <th>Q Firm</th>
             <th>Deposit</th>
+            <th>Created on</th>
         </tr>
         <tr th:if="${#lists.isEmpty(drivers)}">
             <td colspan="5">No drivers</td>
@@ -72,7 +73,7 @@
             </td>
             <td th:text="${driver.qFirmName}">??</td>
             <td th:text="${driver.deposit}">??</td>
-
+            <td th:text="${qDateFormatter.format(driver.createdDate)}">???</td>
         </tr>
     </table>
 </div>

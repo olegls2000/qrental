@@ -39,6 +39,7 @@ public class Driver {
   private BigDecimal deposit;
   private Long qFirmId;
   private String comment;
+  private LocalDate createdDate;
   private CallSign callSign;
 
   public boolean withCallSign() {

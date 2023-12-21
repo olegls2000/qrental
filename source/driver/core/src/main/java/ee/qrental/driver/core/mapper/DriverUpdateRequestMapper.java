@@ -76,6 +76,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .byPhone(domain.getByPhone())
         .qFirmId(domain.getQFirmId())
         .comment(domain.getComment())
+        .createdDate(domain.getCreatedDate())
         .build();
   }
 }

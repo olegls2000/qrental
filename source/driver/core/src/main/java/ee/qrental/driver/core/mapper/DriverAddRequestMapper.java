@@ -5,6 +5,8 @@ import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
 
+import java.time.LocalDate;
+
 public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest, Driver> {
 
   @Override
@@ -38,6 +40,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .byPhone(request.getByPhone())
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
+        .createdDate(LocalDate.now())
         .callSign(CallSign.builder().id(request.getCallSignId()).build())
         .build();
   }

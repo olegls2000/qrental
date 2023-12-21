@@ -51,6 +51,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .qFirmId(qFirmId)
         .qFirmName(qFirmName)
         .comment(domain.getComment())
+        .createdDate(domain.getCreatedDate())
         .build();
   }
 

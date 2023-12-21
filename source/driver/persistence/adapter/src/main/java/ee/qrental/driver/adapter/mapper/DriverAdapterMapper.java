@@ -44,6 +44,7 @@ public class DriverAdapterMapper {
         .byPhone(entity.getByPhone())
         .deposit(entity.getDeposit())
         .comment(entity.getComment())
+        .createdDate(entity.getCreatedDate())
         .qFirmId(entity.getQFirmId())
         .build();
   }
@@ -79,6 +80,7 @@ public class DriverAdapterMapper {
         .deposit(domain.getDeposit())
         .qFirmId(domain.getQFirmId())
         .comment(domain.getComment())
+        .createdDate(domain.getCreatedDate())
         .build();
   }
 

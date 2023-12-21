@@ -43,4 +43,5 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Boolean byPhone;
   private BigDecimal deposit;
   private String comment;
+  private LocalDate createdDate;
 }

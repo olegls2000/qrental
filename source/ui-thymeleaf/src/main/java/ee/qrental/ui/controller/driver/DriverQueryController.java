@@ -1,9 +1,11 @@
 package ee.qrental.ui.controller.driver;
 
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.DRIVER_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class DriverQueryController {
 
+  private final QDateFormatter qDateFormatter;
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
 
   @GetMapping
   public String getDriverView(final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("drivers", driverQuery.getAll());
     populateLinksCounts(model);
 
