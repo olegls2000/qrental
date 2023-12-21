@@ -115,7 +115,16 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
           drivers.forEach(
               driver -> {
+                final var driverCreationDate = driver.getCreatedDate();
                 final var driverId = driver.getId();
+                if (driverCreationDate.isAfter(weekEndDay)) {
+                  System.out.println(
+                      format(
+                          "Invoice for the week %d will not be created, cause driver (id: %d) was not created at that period",
+                          weekNumber, driverId));
+                  return;
+                }
+
                 checkIfBalanceForCurrentWeekExists(driverId, week);
                 final var filter =
                     PeriodAndDriverFilter.builder()
