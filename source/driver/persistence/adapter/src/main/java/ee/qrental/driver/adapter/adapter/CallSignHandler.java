@@ -16,12 +16,18 @@ public class CallSignHandler {
 
   public void addHandle(final Driver domain, final DriverJakartaEntity driverSaved) {
     final var callSignLinkToSave = getCallSignLinkToSave(driverSaved, domain);
+    if (callSignLinkToSave == null) {
+      return;
+    }
     callSignLinkRepository.save(callSignLinkToSave);
   }
 
   private CallSignLinkJakartaEntity getCallSignLinkToSave(
       final DriverJakartaEntity driverJakartaEntity, final Driver domain) {
     final var callSignId = domain.getCallSign().getId();
+    if (callSignId == null) {
+      return null;
+    }
     final var callSignJakartaEntity = callSignRepository.getReferenceById(callSignId);
 
     return CallSignLinkJakartaEntity.builder()
@@ -38,7 +44,8 @@ public class CallSignHandler {
         callSignLinkRepository.findActiveByDriverIdAndNowDate(driverId, LocalDate.now());
     final var callSignFromDomain = domain.getCallSign().getId();
     if (callSignFromDomain == null && activeCallSignLink == null) {
-      System.out.printf("Call Sign for Driver with id=%d was not assigned, no changes required", driverId);
+      System.out.printf(
+          "Call Sign for Driver with id=%d was not assigned, no changes required", driverId);
       return;
     }
     if (callSignFromDomain == null) {
@@ -54,7 +61,7 @@ public class CallSignHandler {
       return;
     }
 
-    if (!callSignFromDomain.equals(activeCallSignLink.getCallSign().getId()) ) {
+    if (!callSignFromDomain.equals(activeCallSignLink.getCallSign().getId())) {
       System.out.printf("Call Sign for Driver with id=%d must be unassigned", driverId);
       disableActiveCallSign(activeCallSignLink);
       final var callSignLinkToSave = getCallSignLinkToSave(driverSaved, domain);
