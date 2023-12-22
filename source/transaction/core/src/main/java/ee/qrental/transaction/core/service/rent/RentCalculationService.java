@@ -16,7 +16,6 @@ import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
-// import jakarta.transaction.Transactional;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import ee.qrental.transaction.api.out.rent.RentCalculationAddPort;
 import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
@@ -26,6 +25,7 @@ import ee.qrental.transaction.core.validator.RentCalculationAddBusinessRuleValid
 import ee.qrental.transaction.domain.rent.RentCalculationResult;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import ee.qrental.user.api.in.response.UserAccountResponse;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -54,10 +54,9 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private final GetUserAccountQuery userAccountQuery;
   private final GetQWeekQuery weekQuery;
 
-  // @Transactional
+  @Transactional
   @Override
   public void add(final RentCalculationAddRequest addRequest) {
-
     final var calculationStartTime = System.currentTimeMillis();
     final var violationsCollector = addBusinessRuleValidator.validate(addRequest);
     if (violationsCollector.hasViolations()) {

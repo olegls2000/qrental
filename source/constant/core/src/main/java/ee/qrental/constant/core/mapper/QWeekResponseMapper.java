@@ -7,6 +7,10 @@ import ee.qrental.constant.domain.QWeek;
 public class QWeekResponseMapper implements ResponseMapper<QWeekResponse, QWeek> {
   @Override
   public QWeekResponse toResponse(final QWeek domain) {
+    if(domain == null){
+      return null;
+    }
+
     return QWeekResponse.builder()
         .id(domain.getId())
         .year(domain.getYear())

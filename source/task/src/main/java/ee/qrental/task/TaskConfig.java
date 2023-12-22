@@ -1,5 +1,6 @@
 package ee.qrental.task;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.task.core.RentCalculationTask;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +31,8 @@ public class TaskConfig {
 
   @Bean
   public RentCalculationTask getRentCalculationTask(
-      final RentCalculationAddUseCase rentCalculationAddUseCase) {
+      final GetQWeekQuery qWeekQuery, final RentCalculationAddUseCase rentCalculationAddUseCase) {
 
-    return new RentCalculationTask(rentCalculationAddUseCase);
+    return new RentCalculationTask(qWeekQuery, rentCalculationAddUseCase);
   }
 }
