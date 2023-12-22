@@ -2,6 +2,8 @@ package ee.qrental.transaction.core.service.rent;
 
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.response.rent.RentCalculationResponse;
 import ee.qrental.transaction.api.out.rent.RentCalculationLoadPort;
@@ -12,6 +14,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RentCalculationQueryService implements GetRentCalculationQuery {
 
+  private final GetQWeekQuery qWeekQuery;
+  private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final RentCalculationLoadPort loadPort;
   private final RentCalculationResponseMapper responseMapper;
 
@@ -27,7 +31,17 @@ public class RentCalculationQueryService implements GetRentCalculationQuery {
 
   @Override
   public Long getLastCalculatedQWeekId() {
+    final var lastRentCalculationQWeekId = loadPort.loadLastCalculationQWeekId();
+    if (lastRentCalculationQWeekId != null) {
 
-    return loadPort.loadLastCalculationQWeekId();
+      return lastRentCalculationQWeekId;
+    }
+    final var lastBalanceCalculationQWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
+    if (lastBalanceCalculationQWeekId != null) {
+
+      return lastBalanceCalculationQWeekId;
+    }
+
+    return qWeekQuery.getFirstWeek().getId();
   }
 }

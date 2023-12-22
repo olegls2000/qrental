@@ -5,6 +5,7 @@ import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.out.rent.RentCalculationAddPort;
 import ee.qrental.transaction.api.out.rent.RentCalculationLoadPort;
@@ -24,8 +25,12 @@ public class RentServiceConfig {
 
   @Bean
   GetRentCalculationQuery getRentCalculationQueryService(
-      final RentCalculationLoadPort loadPort, final RentCalculationResponseMapper responseMapper) {
-    return new RentCalculationQueryService(loadPort, responseMapper);
+      final GetQWeekQuery qWeekQuery,
+      final GetBalanceCalculationQuery balanceCalculationQuery,
+      final RentCalculationLoadPort loadPort,
+      final RentCalculationResponseMapper responseMapper) {
+    return new RentCalculationQueryService(
+        qWeekQuery, balanceCalculationQuery, loadPort, responseMapper);
   }
 
   @Bean

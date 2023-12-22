@@ -30,11 +30,11 @@ public class RentCalculationUseCaseController {
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var nextWeek = getNextWeek();
+    final var nextWeek = getFirstPossibleWeek();
     final var rentCalculationRequest = new RentCalculationAddRequest();
     rentCalculationRequest.setQWeekId(nextWeek.getId());
     addAddRequestToModel(rentCalculationRequest, model);
-    model.addAttribute("nextWeek", getNextWeek());
+    model.addAttribute("nextWeek", getFirstPossibleWeek());
 
     return "forms/addRentCalculation";
   }
@@ -46,7 +46,7 @@ public class RentCalculationUseCaseController {
     if (addRequest.hasViolations()) {
       model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
       addAddRequestToModel(addRequest, model);
-      model.addAttribute("nextWeek", getNextWeek());
+      model.addAttribute("nextWeek", getFirstPossibleWeek());
 
       return "forms/addRentCalculation";
     }
@@ -58,12 +58,10 @@ public class RentCalculationUseCaseController {
     model.addAttribute("addRequest", addRequest);
   }
 
-  private QWeekResponse getNextWeek() {
-    final var lastCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
-    if (lastCalculatedWeekId == null) {
-      return qWeekQuery.getFirstWeek();
-    }
+  private QWeekResponse getFirstPossibleWeek() {
+    final var firstPossibleQWeekIdForRentCalculation =
+        rentCalculationQuery.getLastCalculatedQWeekId();
 
-    return qWeekQuery.getOneAfterById(lastCalculatedWeekId);
+    return qWeekQuery.getOneAfterById(firstPossibleQWeekIdForRentCalculation);
   }
 }

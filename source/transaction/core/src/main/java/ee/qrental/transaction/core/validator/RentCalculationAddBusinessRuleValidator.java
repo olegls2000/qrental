@@ -24,9 +24,9 @@ public class RentCalculationAddBusinessRuleValidator {
     final var violationsCollector = new ViolationsCollector();
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
     // checkIfCalculationDayIsMonday(violationsCollector);
-    checkIfWeeklyRendAlreadyCalculated(qWeek, violationsCollector);
+    checkIfWeeklyRentAlreadyCalculated(qWeek, violationsCollector);
     checkIfBalanceAlreadyCalculatedForRequestedWeek(qWeek, violationsCollector);
-    checkIfPreviousWeekHasCalculatedRent(qWeek, violationsCollector);
+    //checkIfPreviousWeekHasCalculatedRent(qWeek, violationsCollector);
     return violationsCollector;
   }
 
@@ -76,7 +76,7 @@ public class RentCalculationAddBusinessRuleValidator {
     }
   }
 
-  private void checkIfWeeklyRendAlreadyCalculated(
+  private void checkIfWeeklyRentAlreadyCalculated(
       final QWeekResponse qWeek, final ViolationsCollector violationsCollector) {
     final var year = qWeek.getYear();
     final var weekNumber = qWeek.getNumber();
