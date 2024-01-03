@@ -52,8 +52,8 @@ public class UserAccountQueryService implements GetUserAccountQuery {
   }
 
   @Override
-  public List<UserAccountResponse> getAllByRoleName(String roleName) {
-    return loadPort.loadAll().stream()
+  public List<UserAccountResponse> getAllOperators() {
+    return loadPort.loadByRoleName("Operation").stream()
         .map(mapper::toResponse)
         .sorted(getLastNameComparator())
         .collect(toList());

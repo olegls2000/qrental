@@ -19,6 +19,7 @@ public class EmailServiceConfig {
     return asList(
         new ContractLetterBuildStrategy(templateEngine),
         new InvoiceLetterBuildStrategy(templateEngine),
+        new ErrorLetterBuildStrategy(templateEngine),
         new UserRegistrationLetterBuildStrategy(templateEngine),
         new CalculationLetterBuildStrategy(templateEngine),
         new AuthorizationLetterBuildStrategy(templateEngine));

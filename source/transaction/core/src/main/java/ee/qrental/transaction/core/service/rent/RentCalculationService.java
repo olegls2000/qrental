@@ -175,7 +175,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   }
 
   private void sendEmails(final List<RentCalculationResult> results, final Integer weekNumber) {
-    final var operators = userAccountQuery.getAllByRoleName("operator");
+    final var operators = userAccountQuery.getAllOperators();
     final var recipients = operators.stream().map(UserAccountResponse::getEmail).collect(toList());
     final var emailProperties = new HashMap<String, Object>();
     emailProperties.put("calculationType", "Weekly Rent");

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface GetUserAccountQuery
     extends BaseGetQuery<UserAccountUpdateRequest, UserAccountResponse> {
-  List<UserAccountResponse> getAllByRoleName(final String roleName);
+  List<UserAccountResponse> getAllOperators();
 }

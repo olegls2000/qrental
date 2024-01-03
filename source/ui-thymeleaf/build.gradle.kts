@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":source:car:api:in"))
+    implementation(project(":source:email:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:user:api:in"))
     implementation(project(":source:transaction:api:in"))
