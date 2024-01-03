@@ -1,18 +1,21 @@
 package ee.qrental.invoice.core.validator;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getLastSundayFromDate;
+import static ee.qrental.common.core.utils.QTimeUtils.getWeekNumber;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import ee.qrental.common.core.in.validation.QValidator;
 import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrental.invoice.domain.InvoiceCalculation;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class InvoiceCalculationBusinessRuleValidator implements QValidator<InvoiceCalculation> {
 
+  private final GetQWeekQuery qWeekQuery;
   private final InvoiceCalculationLoadPort loadPort;
 
   @Override
@@ -46,7 +49,21 @@ public class InvoiceCalculationBusinessRuleValidator implements QValidator<Invoi
   }
 
   public boolean isCalculationRequired(final LocalDate actionDate) {
-    final var actionDateFormal = getLastSundayFromDate(actionDate);
+    if (actionDate == null) {
+      throw new RuntimeException("Impossible to calculate last Sunday, if fromDate is NULL.");
+    }
+    if (actionDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+      return false;
+    }
+    final var actionDateYear = actionDate.getYear();
+    final var actionDateWeekNumber = getWeekNumber(actionDate);
+    final var actionDateQWeek = qWeekQuery.getByYearAndNumber(actionDateYear, actionDateWeekNumber);
+    if (actionDateQWeek == null) {
+      throw new RuntimeException(
+          "Q-Week  for " + actionDateYear + " does not exist, please create a QWeek in Settings");
+    }
+    final var previousQWek = qWeekQuery.getOneBeforeById(actionDateQWeek.getId());
+    final var actionDateFormal = previousQWek.getEnd();
     final var lastCalculationDate = loadPort.loadLastCalculatedDate();
     final long daysBetween = DAYS.between(lastCalculationDate, actionDateFormal);
 

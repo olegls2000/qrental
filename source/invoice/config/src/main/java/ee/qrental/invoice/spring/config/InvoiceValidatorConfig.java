@@ -1,5 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.core.validator.InvoiceBusinessRuleValidator;
@@ -18,7 +19,7 @@ public class InvoiceValidatorConfig {
 
   @Bean
   InvoiceCalculationBusinessRuleValidator getInvoiceCalculationBusinessRuleValidator(
-      final InvoiceCalculationLoadPort loadPort) {
-    return new InvoiceCalculationBusinessRuleValidator(loadPort);
+      final GetQWeekQuery qWeekQuery, final InvoiceCalculationLoadPort loadPort) {
+    return new InvoiceCalculationBusinessRuleValidator(qWeekQuery, loadPort);
   }
 }
