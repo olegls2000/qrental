@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm" class="row mt-5">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Problem with Request processing</h4>
+                <a class="btn-close position-absolute top-0 end-0 m-2"
+                   aria-label="Close"
+                   href="#" onclick="history.back();">
+                </a>
+                <div>
+                    <div class="d-flex justify-content-center m-5">
+                        <img th:src="@{/error-robot.png}"/>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <p>Problem ID:
+                            <b th:text="${uuid}">???</b>
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-center m-3">
+                        <p>Please, no worries our Support Team already notified.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

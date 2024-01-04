@@ -1,7 +1,6 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Trigger Invoices calculation',
-            closeRef='/invoices',
             content=~{fragments/invoiceCalculationAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
