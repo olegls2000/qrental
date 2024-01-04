@@ -228,7 +228,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     if (weekBalance == null) {
       throw new RuntimeException(
           format(
-              "Derived Balance for the qWeek %d and driver with id %d, must exist",
+              "Derived Balance for the qWeek with number: %d and driver with id: %d, must exist",
               qWeek.getNumber(), driverId));
     }
   }
