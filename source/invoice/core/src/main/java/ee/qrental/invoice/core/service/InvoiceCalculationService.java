@@ -92,8 +92,10 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var actionDate = addRequest.getActionDate();
     var latestCalculatedWeek = getLatestCalculatedWeek();
     setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
+    final var nextAfterRequested = qWeekQuery.getOneAfterById(requestedQWeek.getId());
     final var qWeeksForCalculation =
-        qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeek.getId(), requestedQWeek.getId());
+        qWeekQuery.getQWeeksFromPeriodOrdered(
+            latestCalculatedWeek.getId(), nextAfterRequested.getId());
     getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {
@@ -125,7 +127,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                   return;
                 }
 
-                checkIfBalanceForCurrentWeekExists(driverId, week);
+                checkIfBalanceForCurrentWeekExists(driver, week);
                 final var filter =
                     PeriodAndDriverFilter.builder()
                         .driverId(driverId)
@@ -223,13 +225,19 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
   }
 
-  private void checkIfBalanceForCurrentWeekExists(final Long driverId, final QWeekResponse qWeek) {
+  private void checkIfBalanceForCurrentWeekExists(
+      final DriverResponse driver, final QWeekResponse qWeek) {
+    final var driverId = driver.getId();
     final var weekBalance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeek.getId());
     if (weekBalance == null) {
       throw new RuntimeException(
           format(
-              "Derived Balance for the qWeek with number: %d and driver with id: %d, must exist",
-              qWeek.getNumber(), driverId));
+              "Derived Balance for the qWeek with number: %d and Driver (id: %d, first name: %s, last name: %s, created on: %s) , must exist",
+              qWeek.getNumber(),
+              driverId,
+              driver.getFirstName(),
+              driver.getLastName(),
+              driver.getCreatedDate().toString()));
     }
   }
 
