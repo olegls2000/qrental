@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
-
+<nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/carOnHomePageFragment.html :: carOnHomePage})"></div>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/driverPotentialPageFragment.html :: driverPotentialPage})"></div>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/driverOnHomePageFragment.html :: driverOnHomePage})"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
 </html>

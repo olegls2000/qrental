@@ -289,14 +289,14 @@ public class InvoiceToPdfConverter {
     table.setHorizontalAlignment(RIGHT);
     table.setBorder(NO_BORDER);
 
-    table.addCell(getTotalLabelCell("Eelmise perioodi saldo"));
+    table.addCell(getTotalLabelCell("Eelmise perioodi kohustused"));
     table.addCell(getTotalValueCell(a));
     table.addCell(getTotalLabelCell("Eelmise perioodi sissetulekud"));
     table.addCell(getTotalValueCell(b));
 
     table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks"));
     table.addCell(getTotalValueCell(advancePayment));
-    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus "));
+    table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus"));
     table.addCell(getTotalValueCell(debt));
 
     return table;
