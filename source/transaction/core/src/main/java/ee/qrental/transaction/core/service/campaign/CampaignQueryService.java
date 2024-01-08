@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @AllArgsConstructor
 public class CampaignQueryService implements GetCampaignQuery {
 
@@ -20,7 +22,8 @@ public class CampaignQueryService implements GetCampaignQuery {
 
   @Override
   public List<CampaignResponse> getAll() {
-    return null;
+
+    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
   }
 
   @Override
@@ -40,12 +43,13 @@ public class CampaignQueryService implements GetCampaignQuery {
 
 
   @Override
-  public CampaignResponse getByCampaign(String campaign) {
-    return null;
+  public CampaignResponse getByCampaign(final String campaign) {
+    return mapper.toResponse(loadPort.loadByCampaign(campaign));
   }
 
   @Override
   public List<CampaignResponse> getActive() {
+
     return null;
   }
 }

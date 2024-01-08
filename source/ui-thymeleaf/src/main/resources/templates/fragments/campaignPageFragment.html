@@ -15,7 +15,7 @@
             <th style="width: 1% !important;">Delete</th>
             <th>Campaign</th>
             <th>Description</th>
-            <th>Active</th>
+            <th>Activity</th>
         </tr>
         <tr th:if="${#lists.isEmpty(campaigns)}">
             <td colspan="5">No Campaigns</td>
@@ -34,15 +34,15 @@
                     <span class="bi-trash"></span>
                 </a>
             </td>
-            <td th:text="${campaign.campain}"></td>
+            <td th:text="${campaign.campaign}"></td>
             <td th:text="${campaign.description}">???</td>
             <td th:if="${campaign.active}"
-                class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
-                Negative
+                class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
+                Active
             </td>
             <td th:unless="${campaign.active}"
-                class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
-                Positive
+                class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
+                Not Active
             </td>
         </tr>
     </table>
