@@ -1,0 +1,55 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Campaign',
+            closeRef='/campaigns',
+            content=~{fragments/campaignUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+
+<form th:fragment="updateForm"
+      method="post"
+      th:action="@{/campaigns/update}"
+      th:object="${updateRequest}">
+
+    <input id="campaignId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="campaignId">Campaign name</label>
+                <input class="form-control" id="campaignId"
+                       placeholder="Enter Campaign name"
+                       required
+                       th:field="*{campaign}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="descriptionId">Description</label>
+                <input class="form-control" id="descriptionID" placeholder="Enter  Description" required
+                       th:field="*{description}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-check-label text-muted" for="activeId">Active</label>
+        <input class="form-check-input" id="activeId"
+               th:field="*{active}"
+               type="checkbox"/>
+    </div>
+
+
+
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/campaigns'
+        )">
+    </div>
+</form>

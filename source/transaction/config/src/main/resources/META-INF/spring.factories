@@ -24,4 +24,3 @@ ee.qrental.transaction.spring.config.rent.RentMapperConfig,\
 ee.qrental.transaction.spring.config.rent.RentServiceConfig,\
 ee.qrental.transaction.spring.config.rent.RentValidatorConfig,\
 ee.qrental.transaction.spring.config.rent.RentRepositoryConfig
-
