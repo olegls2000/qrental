@@ -3,10 +3,10 @@ package ee.qrental.ui.controller.firm;
 import static ee.qrental.ui.controller.util.ControllerUtils.FIRM_ROOT_PATH;
 
 import ee.qrental.firm.api.in.query.GetFirmQuery;
-import ee.qrental.firm.api.in.request.FirmAddRequest;
+import ee.qrental.firm.api.in.request.WeekObligationAddRequest;
 import ee.qrental.firm.api.in.request.FirmDeleteRequest;
 import ee.qrental.firm.api.in.request.FirmUpdateRequest;
-import ee.qrental.firm.api.in.usecase.FirmAddUseCase;
+import ee.qrental.firm.api.in.usecase.WeekObligationAddUseCase;
 import ee.qrental.firm.api.in.usecase.FirmDeleteUseCase;
 import ee.qrental.firm.api.in.usecase.FirmUpdateUseCase;
 import lombok.AllArgsConstructor;
@@ -19,20 +19,20 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class FirmUseCaseController {
 
-  private final FirmAddUseCase addUseCase;
+  private final WeekObligationAddUseCase addUseCase;
   private final FirmUpdateUseCase updateUseCase;
   private final FirmDeleteUseCase deleteUseCase;
   private final GetFirmQuery firmQuery;
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
-    model.addAttribute("addRequest", new FirmAddRequest());
+    model.addAttribute("addRequest", new WeekObligationAddRequest());
 
     return "forms/addFirm";
   }
 
   @PostMapping(value = "/add")
-  public String addFirmFirm(@ModelAttribute final FirmAddRequest firmInfo) {
+  public String addFirmFirm(@ModelAttribute final WeekObligationAddRequest firmInfo) {
     addUseCase.add(firmInfo);
 
     return "redirect:" + FIRM_ROOT_PATH;

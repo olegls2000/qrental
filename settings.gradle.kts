@@ -45,6 +45,17 @@ include("source:firm:persistence:repository")
 include("source:firm:persistence:flyway")
 include("source:firm:config")
 
+//Bonus domain:
+include("source:bonus:api:in")
+include("source:bonus:api:out")
+include("source:bonus:domain")
+include("source:bonus:core")
+include("source:bonus:persistence:adapter")
+include("source:bonus:persistence:entity")
+include("source:bonus:persistence:repository")
+include("source:bonus:persistence:flyway")
+include("source:bonus:config")
+
 //Constant domain:
 include("source:constant:api:in")
 include("source:constant:api:out")

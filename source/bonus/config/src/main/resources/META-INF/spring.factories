@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.bonus.spring.config.BonusAdapterConfig,\
+ee.qrental.bonus.spring.config.BonusMapperConfig,\
+ee.qrental.bonus.spring.config.BonusServiceConfig,\
+ee.qrental.bonus.spring.config.BonusRepositoryConfig
