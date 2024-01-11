@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class TransactionBusinessRuleValidator implements QValidator<Transaction> {
+public class TransactionUpdateDeleteBusinessRuleValidator implements QValidator<Transaction> {
 
   private final GetQWeekQuery qWeekQuery;
   private final TransactionLoadPort transactionLoadPort;
@@ -25,6 +25,7 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
   public ViolationsCollector validateAdd(final Transaction domain) {
     final var driverId = domain.getDriverId();
     final var violationsCollector = new ViolationsCollector();
+
     final var latestBalance = balanceLoadPort.loadLatestByDriverId(driverId);
     if (latestBalance == null) {
       return violationsCollector;
@@ -69,6 +70,13 @@ public class TransactionBusinessRuleValidator implements QValidator<Transaction>
     checkIfDeleteAllowed(latestBalanceCalculatedDate, transactionFromDb, violationsCollector);
 
     return violationsCollector;
+  }
+
+  private void checkDTransactionTypeForAdd(
+      final Transaction domain, final ViolationsCollector violationCollector) {
+    if (domain.getType() == null) {
+      violationCollector.collect("Transaction Type mus be selected");
+    }
   }
 
   private void checkDateForAdd(
