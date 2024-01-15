@@ -8,11 +8,11 @@ import ee.qrental.transaction.api.in.usecase.TransactionDeleteUseCase;
 import ee.qrental.transaction.api.in.usecase.TransactionUpdateUseCase;
 import ee.qrental.transaction.api.out.TransactionAddPort;
 import ee.qrental.transaction.api.out.TransactionDeletePort;
-import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.TransactionUpdatePort;
 import ee.qrental.transaction.core.mapper.TransactionAddRequestMapper;
 import ee.qrental.transaction.core.mapper.TransactionUpdateRequestMapper;
-import ee.qrental.transaction.core.validator.TransactionBusinessRuleValidator;
+import ee.qrental.transaction.core.validator.TransactionAddBusinessRuleValidator;
+import ee.qrental.transaction.core.validator.TransactionUpdateDeleteBusinessRuleValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -24,18 +24,17 @@ public class TransactionUseCaseService
   private final TransactionDeletePort deletePort;
   private final TransactionAddRequestMapper addRequestMapper;
   private final TransactionUpdateRequestMapper updateRequestMapper;
-  private final TransactionBusinessRuleValidator businessRuleValidator;
+  private final TransactionUpdateDeleteBusinessRuleValidator businessRuleValidator;
+  private final TransactionAddBusinessRuleValidator addBusinessRuleValidator;
 
   @Override
   public Long add(final TransactionAddRequest request) {
-    final var domain = addRequestMapper.toDomain(request);
-    final var violationsCollector = businessRuleValidator.validateAdd(domain);
+    final var violationsCollector = addBusinessRuleValidator.validateAdd(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 
       return null;
     }
-
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 
