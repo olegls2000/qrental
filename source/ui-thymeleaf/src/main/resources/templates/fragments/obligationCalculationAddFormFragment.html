@@ -1,7 +1,7 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Calculation',
-            content=~{fragments/rentCalculationAddFormFragment.html :: addForm},
+            content=~{fragments/obligationCalculationAddFormFragment.html :: addForm},
             request=${addRequest}
         )">
     </div>
@@ -9,10 +9,10 @@
 
 <div th:fragment="addForm">
     <form method="post"
-          th:action="@{/rents/calculations/add}"
+          th:action="@{/obligations/calculations/add}"
           th:object="${addRequest}">
         <div class="row justify-content-md-center mb-3">
-            <p class="fs-4">Please confirm that you want to trigger Rent Calculation for the period:</p>
+            <p class="fs-4">Please confirm that you want to trigger Obligation Calculation for the period:</p>
             <div class="col-md-auto">
                 <small th:text="|from
         ${qDateFormatter.format(nextWeek.start)} till ${qDateFormatter.format(nextWeek.end)} (${nextWeek.number})|"

@@ -24,6 +24,7 @@ public class ControllerUtils {
   public static final String INVOICE_ROOT_PATH = "/invoices";
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String RENTS_ROOT_PATH = "/rents";
+  public static final String OBLIGATIONS_ROOT_PATH = "/obligations";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
   public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
 }

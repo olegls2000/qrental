@@ -26,6 +26,8 @@ public class BalanceCalculationJakartaEntity {
   @Column(name = "action_date")
   private LocalDate actionDate;
 
+
+  //TODO change to qWeekId
   @Column(name = "start_date")
   private LocalDate startDate;
 

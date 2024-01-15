@@ -6,6 +6,9 @@ import ee.qrental.bonus.entity.jakarta.ObligationJakartaEntity;
 public class ObligationAdapterMapper {
 
   public Obligation mapToDomain(final ObligationJakartaEntity entity) {
+    if (entity == null) {
+      return null;
+    }
     return Obligation.builder()
         .id(entity.getId())
         .driverId(entity.getDriverId())

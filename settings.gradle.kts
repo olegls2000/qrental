@@ -100,6 +100,17 @@ include("source:transaction:persistence:repository")
 include("source:transaction:persistence:flyway")
 include("source:transaction:config")
 
+//Bonus domain:
+include("source:bonus:api:in")
+include("source:bonus:api:out")
+include("source:bonus:domain")
+include("source:bonus:core")
+include("source:bonus:persistence:adapter")
+include("source:bonus:persistence:entity")
+include("source:bonus:persistence:repository")
+include("source:bonus:persistence:flyway")
+include("source:bonus:config")
+
 //Email domain:
 include("source:email:api:in")
 include("source:email:core")

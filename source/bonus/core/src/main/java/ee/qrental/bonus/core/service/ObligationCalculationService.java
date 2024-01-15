@@ -76,7 +76,7 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
                   getRentObligation(driverId, transactionTypeIds, currentQWeekId);
               final var debtObligation = getDebtObligation(driverId);
               final var weekObligationAmount = rentObligation.add(debtObligation);
-              final var positiveAmount = getPositiveAmount();
+              final var positiveAmount = getPositiveAmount(driverId, currentQWeekId);
               final var matchCount =
                   getMatchCount(
                       driverId, previousWeek.getId(), weekObligationAmount, positiveAmount);
@@ -108,7 +108,8 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
       final BigDecimal positiveAmount) {
 
     final var currentWeekMatch = positiveAmount.compareTo(obligationAmount) >= 0;
-    final var previousWeekObligation = loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
+    final var previousWeekObligation =
+        loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
     final var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
     if (currentWeekMatch) {
       return previousWeekObligationMatchCount + 1;
@@ -117,8 +118,14 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     return 0;
   }
 
-  private BigDecimal getPositiveAmount() {
-    return BigDecimal.ZERO;
+  private BigDecimal getPositiveAmount(final Long driverId, final Long qWeekId) {
+    final var positiveAmount =
+        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
+            .filter(tr -> "P".equals(tr.getKind()))
+            .map(transactionResponse -> transactionResponse.getRealAmount())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    return positiveAmount;
   }
 
   private BigDecimal getRentObligation(
@@ -132,6 +139,11 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
 
   private BigDecimal getDebtObligation(final Long driverId) {
     final var rawBalance = balanceQuery.getRawBalanceTotalByDriver(driverId);
+    if (rawBalance.compareTo(BigDecimal.ZERO) > 0) {
+
+      return rawBalance.divide(BigDecimal.valueOf(4));
+    }
+
     return BigDecimal.ZERO;
   }
 

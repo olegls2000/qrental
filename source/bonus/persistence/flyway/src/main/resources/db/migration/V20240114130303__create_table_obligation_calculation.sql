@@ -4,6 +4,6 @@ create table if not exists obligation_calculation
     action_date date    not null,
     comment     varchar,
     q_week_id   integer not null
-        constraint q_week_u unique
-        constraint q_week_fk references q_week
+        constraint obligation_calculation_u unique
+        constraint obligation_calculation_q_week_fk references q_week
 );

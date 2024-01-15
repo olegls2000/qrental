@@ -1,25 +1,35 @@
 package ee.qrental.bonus.spring.config;
 
-import ee.qrental.firm.core.mapper.FirmAddRequestMapper;
-import ee.qrental.firm.core.mapper.FirmResponseMapper;
-import ee.qrental.firm.core.mapper.FirmUpdateRequestMapper;
+import ee.qrental.bonus.adapter.mapper.ObligationCalculationAdapterMapper;
+import ee.qrental.bonus.core.mapper.ObligationCalculationAddRequestMapper;
+import ee.qrental.bonus.core.mapper.ObligationCalculationResponseMapper;
+import ee.qrental.bonus.core.mapper.ObligationResponseMapper;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BonusMapperConfig {
+
   @Bean
-  FirmAddRequestMapper getFirmAddRequestMapper() {
-    return new FirmAddRequestMapper();
+  ObligationResponseMapper getObligationResponseMapper() {
+    return new ObligationResponseMapper();
   }
 
   @Bean
-  FirmResponseMapper getFirmResponseMapper() {
-    return new FirmResponseMapper();
+  ObligationCalculationAddRequestMapper getObligationCalculationAddRequestMapper() {
+    return new ObligationCalculationAddRequestMapper();
   }
 
   @Bean
-  FirmUpdateRequestMapper getFirmUpdateRequestMapper() {
-    return new FirmUpdateRequestMapper();
+  ObligationCalculationResponseMapper getObligationCalculationResponseMapper(
+      final GetQWeekQuery qWeekQuery) {
+
+    return new ObligationCalculationResponseMapper(qWeekQuery);
+  }
+
+  @Bean
+  ObligationCalculationAdapterMapper getObligationCalculationAdapterMapper() {
+    return new ObligationCalculationAdapterMapper();
   }
 }

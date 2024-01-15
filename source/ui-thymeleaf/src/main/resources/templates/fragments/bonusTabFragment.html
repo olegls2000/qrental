@@ -1,0 +1,9 @@
+<ul th:fragment="bonusTabs(activeTab)" class="nav nav-tabs">
+
+
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'obligationCalculations'} ? active : ''"
+           href="/obligations/calculations">Obligation Calculations</a>
+    </li>
+
+</ul>
