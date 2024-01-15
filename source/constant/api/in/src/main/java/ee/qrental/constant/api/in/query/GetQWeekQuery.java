@@ -9,6 +9,8 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
 
   List<QWeekResponse> getAllByYear(final Integer year);
 
+  QWeekResponse getCurrentWeek();
+
   List<QWeekResponse> getQWeeksFromPeriodOrdered(final Long starQtWeekId, final Long endQWeekId);
 
   QWeekResponse getByYearAndNumber(final Integer year, final Integer number);

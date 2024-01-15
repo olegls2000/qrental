@@ -1,14 +1,17 @@
 package ee.qrental.constant.core.service;
 
+import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -58,6 +61,20 @@ public class QWeekQueryService implements GetQWeekQuery {
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
+  }
+
+  @Override
+  public QWeekResponse getCurrentWeek() {
+    final var nowDate = LocalDate.now();
+    final var year = nowDate.getYear();
+    final var number = QTimeUtils.getWeekNumber(nowDate);
+    final var currentQWeek = loadPort.loadByYearAndNumber(year, number);
+    if (currentQWeek == null) {
+      throw new RuntimeException(
+          format("Q Week number: %d for the %d year is missing", number, year));
+    }
+
+    return mapper.toResponse(currentQWeek);
   }
 
   @Override

@@ -27,6 +27,11 @@ public class TransactionTypeRepositoryImpl implements TransactionTypeRepository 
   }
 
   @Override
+  public List<TransactionTypeJakartaEntity> findAllByNameIn(List<String> names) {
+    return springDataRepository.findAllByNameIn(names);
+  }
+
+  @Override
   public List<TransactionTypeJakartaEntity> findAllByKindCodesIn(final List<String> kindCodes) {
     return springDataRepository.findAllByKindCodesIn(kindCodes);
   }

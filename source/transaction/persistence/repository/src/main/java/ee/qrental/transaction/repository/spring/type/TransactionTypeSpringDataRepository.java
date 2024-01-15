@@ -20,4 +20,7 @@ public interface TransactionTypeSpringDataRepository
       nativeQuery = true)
   List<TransactionTypeJakartaEntity> findAllByKindCodesIn(
       @Param("kindCodes") final List<String> kindCodes);
+
+  @Query(value = "SELECT * FROM transaction_type txt WHERE txt.name in :names", nativeQuery = true)
+  List<TransactionTypeJakartaEntity> findAllByNameIn(@Param("names") final List<String> names);
 }

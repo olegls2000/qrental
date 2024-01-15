@@ -9,6 +9,7 @@ public interface GetTransactionTypeQuery
     extends BaseGetQuery<TransactionTypeUpdateRequest, TransactionTypeResponse> {
 
   TransactionTypeResponse getByName(final String name);
+  List<TransactionTypeResponse> getByNameIn(final List<String> names);
 
   List<TransactionTypeResponse> getNegative();
 

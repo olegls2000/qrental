@@ -32,8 +32,11 @@ public class TransactionTypeLoadAdapter implements TransactionTypeLoadPort {
 
   @Override
   public List<TransactionType> loadByKindCodesIn(final List<String> kindCodes) {
-    return repository.findAllByKindCodesIn(kindCodes).stream()
-        .map(mapper::mapToDomain)
-        .collect(toList());
+    return repository.findAllByKindCodesIn(kindCodes).stream().map(mapper::mapToDomain).toList();
+  }
+
+  @Override
+  public List<TransactionType> loadByNameIn(List<String> names) {
+    return repository.findAllByNameIn(names).stream().map(mapper::mapToDomain).toList();
   }
 }

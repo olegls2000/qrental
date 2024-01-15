@@ -1,5 +1,7 @@
 package ee.qrental.transaction.core.service.rent;
 
+import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NO_LABEL_FINE;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -34,8 +36,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class RentCalculationService implements RentCalculationAddUseCase {
-  private static final String TRANSACTION_TYPE_NAME_WEEKLY_RENT = "weekly rent";
-  private static final String TRANSACTION_TYPE_NO_LABEL_FINE = "no label fine";
   private static final BigDecimal OLD_CAR_RATE = BigDecimal.valueOf(150L);
   private static final BigDecimal NEW_CAR_RATE = BigDecimal.valueOf(230L);
   private static final BigDecimal ELEGANCE_RATE = BigDecimal.valueOf(10L);
@@ -52,7 +52,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private final RentCalculationAddBusinessRuleValidator addBusinessRuleValidator;
   private final EmailSendUseCase emailSendUseCase;
   private final GetUserAccountQuery userAccountQuery;
-  private final GetQWeekQuery weekQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   @Transactional
   @Override
@@ -65,11 +65,11 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     }
 
     final var domain = addRequestMapper.toDomain(addRequest);
-    final var week = weekQuery.getById(addRequest.getQWeekId());
+    final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
     final var activeCarLinks = carLinkQuery.getActive();
     for (final var activeCarLink : activeCarLinks) {
       final TransactionAddRequest rentTransactionAddRequest =
-          getRentTransactionAddRequest(week, activeCarLink);
+          getRentTransactionAddRequest(qWeek, activeCarLink);
       final var carLinkId = activeCarLink.getId();
       final var rentTransactionId = transactionUseCaseService.add(rentTransactionAddRequest);
       final var calculationResultForRent = getResult(carLinkId, rentTransactionId);
@@ -77,7 +77,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
       final var isNoLabelFineRequired = isNoLabelFineRequired(activeCarLink.getCarId());
       if (isNoLabelFineRequired) {
         final var noLabelFineTransactionAddRequest =
-            getNoLabelFineTransactionAddRequest(week, activeCarLink);
+            getNoLabelFineTransactionAddRequest(qWeek, activeCarLink);
         final var noLabelFineTransactionId =
             transactionUseCaseService.add(noLabelFineTransactionAddRequest);
         final var calculationResultForNoLabelFine = getResult(carLinkId, noLabelFineTransactionId);
@@ -85,7 +85,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
       }
     }
     rentCalculationAddPort.add(domain);
-    sendEmails(domain.getResults(), week.getNumber());
+    sendEmails(domain.getResults(), qWeek.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
@@ -188,7 +188,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
 
     final var emailSendRequest =
         EmailSendRequest.builder()
-            .type(EmailType.CALCULATION)
+            .type(EmailType.RENT_CALCULATION)
             .recipients(recipients)
             .properties(emailProperties)
             .build();

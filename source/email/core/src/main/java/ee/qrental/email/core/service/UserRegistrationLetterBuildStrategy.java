@@ -6,7 +6,6 @@ import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.core.service.messagestrategy.LetterBuildStrategy;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
@@ -24,7 +23,7 @@ public class UserRegistrationLetterBuildStrategy implements LetterBuildStrategy 
 
   @Override
   public MimeMessage process(final EmailSendRequest emailSendRequest, final MimeMessage message)
-      throws MessagingException, IOException {
+      throws MessagingException {
     final var password = emailSendRequest.getProperties().get("password").toString();
     final var username = emailSendRequest.getProperties().get("username").toString();
     final var firstName = emailSendRequest.getProperties().get("firstName").toString();
