@@ -1,6 +1,8 @@
 package ee.qrental.bonus.core.service;
 
+import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NO_LABEL_FINE;
+import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.bonus.api.in.request.ObligationCalculationAddRequest;
@@ -35,6 +37,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ObligationCalculationService implements ObligationCalculationAddUseCase {
 
+  private static final BigDecimal DEBT_RATE = BigDecimal.valueOf(0.25d);
+
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
@@ -60,10 +64,8 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
 
     final var domain = addRequestMapper.toDomain(addRequest);
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
-    final var transactionTypeIds =
-        transactionTypeQuery.getByNameIn(List.of(TRANSACTION_TYPE_NO_LABEL_FINE)).stream()
-            .map(TransactionTypeResponse::getId)
-            .toList();
+    final var transactionTypeIds = getRentTransactionTypesIds();
+
     final var currentQWeek = qWeekQuery.getCurrentWeek();
     final var currentQWeekId = currentQWeek.getId();
     final var previousWeek = qWeekQuery.getOneBeforeById(currentQWeekId);
@@ -74,7 +76,7 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
             driverId -> {
               final var rentObligation =
                   getRentObligation(driverId, transactionTypeIds, currentQWeekId);
-              final var debtObligation = getDebtObligation(driverId);
+              final var debtObligation = getDebtObligation(driverId, rentObligation);
               final var weekObligationAmount = rentObligation.add(debtObligation);
               final var positiveAmount = getPositiveAmount(driverId, currentQWeekId);
               final var matchCount =
@@ -98,7 +100,22 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     sendEmails(domain.getResults(), qWeek.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
-    System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
+    System.out.printf(
+        "----> Time: Obligation Calculation took %d milli seconds \n", calculationDuration);
+  }
+
+  private List<Long> getRentTransactionTypesIds() {
+    final var rentTransactionTypesIds =
+        transactionTypeQuery
+            .getByNameIn(List.of(TRANSACTION_TYPE_NAME_WEEKLY_RENT, TRANSACTION_TYPE_NO_LABEL_FINE))
+            .stream()
+            .map(TransactionTypeResponse::getId)
+            .toList();
+    if (rentTransactionTypesIds.size() != 2) {
+      throw new RuntimeException(
+          "Rent transaction types are messed. Please create 'weekly rent' and 'no label fine' transaction types.");
+    }
+    return rentTransactionTypesIds;
   }
 
   private Integer getMatchCount(
@@ -110,9 +127,9 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     final var currentWeekMatch = positiveAmount.compareTo(obligationAmount) >= 0;
     final var previousWeekObligation =
         loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
-    final var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
+    var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
     if (currentWeekMatch) {
-      return previousWeekObligationMatchCount + 1;
+      return ++previousWeekObligationMatchCount;
     }
 
     return 0;
@@ -122,8 +139,8 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     final var positiveAmount =
         transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
             .filter(tr -> "P".equals(tr.getKind()))
-            .map(transactionResponse -> transactionResponse.getRealAmount())
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .map(TransactionResponse::getRealAmount)
+            .reduce(ZERO, BigDecimal::add);
 
     return positiveAmount;
   }
@@ -134,17 +151,22 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
         .filter(transaction -> transactionTypeIds.contains(transaction.getId()))
         .map(TransactionResponse::getRealAmount)
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
+        .reduce(ZERO, BigDecimal::add);
   }
 
-  private BigDecimal getDebtObligation(final Long driverId) {
+  private BigDecimal getDebtObligation(final Long driverId, final BigDecimal rentObligation) {
     final var rawBalance = balanceQuery.getRawBalanceTotalByDriver(driverId);
-    if (rawBalance.compareTo(BigDecimal.ZERO) > 0) {
+    if (rawBalance.compareTo(ZERO) > 0) {
 
-      return rawBalance.divide(BigDecimal.valueOf(4));
+      return ZERO;
+    }
+    final var defaultDebt = rentObligation.multiply(DEBT_RATE);
+    if (rawBalance.compareTo(defaultDebt) >= 0) {
+
+      return defaultDebt;
     }
 
-    return BigDecimal.ZERO;
+    return rawBalance;
   }
 
   private ObligationCalculationResult getResult(final Long obligationId) {

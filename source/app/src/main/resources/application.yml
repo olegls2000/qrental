@@ -2,7 +2,7 @@ server:
   port: ${PORT:8181}
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://ec2-18-202-8-133.eu-west-1.compute.amazonaws.com:5432/d9p4dpgt8k95od}
   jpa:
     #show-sql: true
     properties:
