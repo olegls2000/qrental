@@ -49,6 +49,7 @@ public class BalanceCalculationUseCaseController {
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
       model.addAttribute("weeks", getWeeks());
+
       return "forms/addBalanceCalculation";
     }
 

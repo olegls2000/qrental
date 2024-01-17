@@ -17,4 +17,13 @@ public interface ObligationSpringDataRepository
       @Param("driverId") final Long driverId, @Param("qWeekId") final Long qWeekId);
 
   List<ObligationJakartaEntity> findAllByIdIn(final List<Long> ids);
+
+  @Query(
+      value =
+          "select ob.* from obligation ob "
+              + " LEFT JOIN obligation_calculation_result ocr ON ob.id = ocr.obligation_id "
+              + " where ocr.obligation_calculation_id =:calculationId",
+      nativeQuery = true)
+  List<ObligationJakartaEntity> findByCalculationId(
+      @Param("calculationId") final Long calculationId);
 }

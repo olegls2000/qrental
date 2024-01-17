@@ -5,6 +5,7 @@ import ee.qrental.bonus.core.mapper.ObligationCalculationAddRequestMapper;
 import ee.qrental.bonus.core.mapper.ObligationCalculationResponseMapper;
 import ee.qrental.bonus.core.mapper.ObligationResponseMapper;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class BonusMapperConfig {
 
   @Bean
-  ObligationResponseMapper getObligationResponseMapper() {
-    return new ObligationResponseMapper();
+  ObligationResponseMapper getObligationResponseMapper(final GetDriverQuery driverQuery) {
+    return new ObligationResponseMapper(driverQuery);
   }
 
   @Bean

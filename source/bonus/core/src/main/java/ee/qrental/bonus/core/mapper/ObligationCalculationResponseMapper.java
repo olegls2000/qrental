@@ -26,7 +26,7 @@ public class ObligationCalculationResponseMapper
         .endDate(qWeek.getEnd())
         .year(qWeek.getYear())
         .weekNumber(qWeek.getNumber())
-        .obligationCount(domain.getResults().size())
+        .obligationsCount(domain.getResults().size())
         .comment(domain.getComment())
         .build();
   }

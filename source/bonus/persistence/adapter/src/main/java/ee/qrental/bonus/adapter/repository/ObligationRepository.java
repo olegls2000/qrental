@@ -12,8 +12,9 @@ public interface ObligationRepository {
 
   void deleteById(final Long id);
 
-
   ObligationJakartaEntity findByDriverIdAndByQWeekId(final Long driverId, final Long qWekId);
 
   List<ObligationJakartaEntity> findByIds(final List<Long> ids);
+
+  List<ObligationJakartaEntity> findByCalculationId(final Long id);
 }

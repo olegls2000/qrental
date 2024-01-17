@@ -41,4 +41,9 @@ public class ObligationRepositoryImpl implements ObligationRepository {
   public List<ObligationJakartaEntity> findByIds(List<Long> ids) {
     return springDataRepository.findAllByIdIn(ids);
   }
+
+  @Override
+  public List<ObligationJakartaEntity> findByCalculationId(final Long calculationId) {
+    return springDataRepository.findByCalculationId(calculationId);
+  }
 }

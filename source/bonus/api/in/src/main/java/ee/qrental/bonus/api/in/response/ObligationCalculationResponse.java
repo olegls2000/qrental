@@ -12,7 +12,7 @@ public class ObligationCalculationResponse {
   private Integer weekNumber;
   private LocalDate startDate;
   private LocalDate endDate;
-  private Integer obligationCount;
+  private Integer obligationsCount;
   private LocalDate actionDate;
   private String comment;
 }

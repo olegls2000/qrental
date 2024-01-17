@@ -8,8 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class ObligationResponse {
   private Long id;
-  private Long qWeekId;
-  private Long driverId;
+  private String driverInfo;
   private BigDecimal amount;
   private BigDecimal positiveAmount;
   private Integer matchCount;

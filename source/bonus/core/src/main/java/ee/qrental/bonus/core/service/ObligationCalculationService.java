@@ -64,35 +64,34 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
 
     final var domain = addRequestMapper.toDomain(addRequest);
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
+    final var qWeekId = qWeek.getId();
     final var transactionTypeIds = getRentTransactionTypesIds();
 
-    final var currentQWeek = qWeekQuery.getCurrentWeek();
-    final var currentQWeekId = currentQWeek.getId();
-    final var previousWeek = qWeekQuery.getOneBeforeById(currentQWeekId);
+    final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
 
     carLinkQuery.getActive().stream()
         .map(CarLinkResponse::getDriverId)
         .forEach(
             driverId -> {
               final var rentObligation =
-                  getRentObligation(driverId, transactionTypeIds, currentQWeekId);
+                  getRentObligation(driverId, transactionTypeIds, qWeekId);
               final var debtObligation = getDebtObligation(driverId, rentObligation);
               final var weekObligationAmount = rentObligation.add(debtObligation);
-              final var positiveAmount = getPositiveAmount(driverId, currentQWeekId);
+              final var positiveAmount = getPositiveAmount(driverId, qWeekId);
               final var matchCount =
                   getMatchCount(
                       driverId, previousWeek.getId(), weekObligationAmount, positiveAmount);
               final var obligation =
                   Obligation.builder()
                       .id(null)
-                      .qWeekId(currentQWeekId)
+                      .qWeekId(qWeekId)
                       .driverId(driverId)
                       .obligationAmount(weekObligationAmount)
                       .positiveAmount(positiveAmount)
                       .matchCount(matchCount)
                       .build();
-              obligationAddPort.add(obligation);
-              final var result = getResult(obligation.getId());
+            final var savedObligation =  obligationAddPort.add(obligation);
+              final var result = getResult(savedObligation.getId());
               domain.getResults().add(result);
             });
     calculationAddPort.add(domain);
@@ -127,6 +126,9 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     final var currentWeekMatch = positiveAmount.compareTo(obligationAmount) >= 0;
     final var previousWeekObligation =
         loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
+    if (previousWeekObligation == null) {
+      return 0;
+    }
     var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
     if (currentWeekMatch) {
       return ++previousWeekObligationMatchCount;

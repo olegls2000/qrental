@@ -4,10 +4,9 @@ import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_
 import static ee.qrental.ui.controller.util.ControllerUtils.*;
 
 import ee.qrental.bonus.api.in.query.GetObligationCalculationQuery;
+import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
-import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
-import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ObligationCalculationQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetObligationCalculationQuery obligationCalculationQuery;
-  //private final GetObligationQuery obligationQuery;
+  private final GetObligationQuery obligationQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
 
@@ -37,12 +36,12 @@ public class ObligationCalculationQueryController {
   public String getObligationCalculationView(@PathVariable("id") long id, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var calculation = obligationCalculationQuery.getById(id);
-    //final var obligations = transactionQuery.getAllByRentCalculationId(id);
+    final var obligations = obligationQuery.getAllByCalculationId(id);
 
     model.addAttribute("calculation", calculation);
-   // model.addAttribute("obligations", rentTransactions);
+    model.addAttribute("obligations", obligations);
 
-    return "detailView/rentCalculation";
+    return "detailView/obligationCalculation";
   }
 
   private void addLatestDataToModel(final Model model) {

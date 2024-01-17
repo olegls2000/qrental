@@ -1,6 +1,6 @@
 package ee.qrental.email.core.service;
 
-import static ee.qrental.email.api.in.request.EmailType.RENT_CALCULATION;
+import static ee.qrental.email.api.in.request.EmailType.OBLIGATION_CALCULATION;
 
 import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.core.service.messagestrategy.LetterBuildStrategy;
@@ -19,7 +19,7 @@ public class ObligationCalculationLetterBuildStrategy implements LetterBuildStra
 
   @Override
   public boolean canApply(EmailSendRequest emailSendRequest) {
-    return RENT_CALCULATION == emailSendRequest.getType();
+    return OBLIGATION_CALCULATION == emailSendRequest.getType();
   }
 
   @Override

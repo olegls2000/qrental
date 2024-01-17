@@ -31,6 +31,13 @@ public class ObligationLoadAdapter implements ObligationLoadPort {
   }
 
   @Override
+  public List<Obligation> loadAllByCalculationId(final Long calculationId) {
+    return repository.findByCalculationId(calculationId).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
+
+  @Override
   public Obligation loadByDriverIdAndByQWeekId(final Long driverId, final Long qWeekId) {
     return mapper.mapToDomain(repository.findByDriverIdAndByQWeekId(driverId, qWeekId));
   }
