@@ -3,6 +3,10 @@
 delete
 from q_week;
 
+
+--------------------------------------------------------------------------------------------------------
+--## Obligation Calculations:
+
 delete
 from obligation_calculation_result ocr
 where ocr.obligation_calculation_id in
