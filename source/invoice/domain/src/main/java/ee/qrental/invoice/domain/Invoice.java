@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.math.BigDecimal.ZERO;
+
 @SuperBuilder
 @Getter
 @Setter
@@ -41,5 +43,9 @@ public class Invoice {
 
   public Boolean withVat() {
     return qFirmVatNumber != null && !qFirmVatNumber.isBlank();
+  }
+
+  public BigDecimal getSum() {
+    return items.stream().map(InvoiceItem::getAmount).reduce(BigDecimal::add).orElse(ZERO).negate();
   }
 }
