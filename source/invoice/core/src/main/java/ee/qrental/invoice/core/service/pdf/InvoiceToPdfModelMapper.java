@@ -5,8 +5,8 @@ import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
@@ -16,24 +16,23 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class InvoiceToPdfModelMapper {
 
-  private static final BigDecimal VAT_RATE = BigDecimal.valueOf(20);
+  private static final BigDecimal VAT_RATE_2023 = BigDecimal.valueOf(20);
+  private static final BigDecimal VAT_RATE_2024 = BigDecimal.valueOf(22);
 
   private final InvoiceLoadPort invoiceLoadPort;
   private final GetQWeekQuery qWeekQuery;
 
   public InvoicePdfModel getPdfModel(final Invoice invoice) {
     final var number = invoice.getNumber();
-    final var weekNumber = invoice.getWeekNumber();
-    final var previousWeekNumber = weekNumber - 1;
-    final var year = invoice.getCreated().getYear();
-    final var startDate =
-        QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
-    final var endDate =
-        QTimeUtils.getLastDayOfWeekInYear(year, weekNumber).format(ofLocalizedDate(SHORT));
-    final var feeStartDate =
-        QTimeUtils.getFirstDayOfWeekInYear(year, previousWeekNumber).format(ofLocalizedDate(SHORT));
-    final var feeEndDate =
-        QTimeUtils.getLastDayOfWeekInYear(year, previousWeekNumber).format(ofLocalizedDate(SHORT));
+    final var invoiceWeek = qWeekQuery.getById(invoice.getQWeekId());
+    final var weekNumber = invoiceWeek.getNumber();
+    final var year = invoiceWeek.getYear();
+    final var previousWeek = qWeekQuery.getOneBeforeById(invoice.getQWeekId());
+    final var startDate = invoiceWeek.getStart().format(ofLocalizedDate(SHORT));
+
+    final var endDate = invoiceWeek.getEnd().format(ofLocalizedDate(SHORT));
+    final var feeStartDate = previousWeek.getStart().format(ofLocalizedDate(SHORT));
+    final var feeEndDate = previousWeek.getEnd().format(ofLocalizedDate(SHORT));
 
     final var driverInfo = invoice.getDriverInfo();
     final var driverCompany = invoice.getDriverCompany();
@@ -47,15 +46,9 @@ public class InvoiceToPdfModelMapper {
     final var qFirmVatNumber = invoice.getQFirmVatNumber();
     final var qFirmBank = invoice.getQFirmBank();
     final var qFirmIban = invoice.getQFirmIban();
-    final var sum =
-        invoice.getItems().stream()
-            .map(InvoiceItem::getAmount)
-            .reduce(BigDecimal::add)
-            .orElse(ZERO)
-            .negate();
+    final var sum = invoice.getSum();
 
-    final var withVat = invoice.withVat();
-    final var vatPercentage = withVat ? VAT_RATE : ZERO;
+    final var vatPercentage = getVatRate(invoice, invoiceWeek);
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
 
     final var driverCompanyVat = invoice.getDriverCompanyVat();
@@ -111,6 +104,14 @@ public class InvoiceToPdfModelMapper {
         .build();
   }
 
+  private BigDecimal getVatRate(final Invoice invoice, final QWeekResponse invoiceWeek) {
+    if (invoice.withVat()) {
+      return invoiceWeek.getYear() == 2023 ? VAT_RATE_2023 : VAT_RATE_2024;
+    }
+
+    return ZERO;
+  }
+
   private BigDecimal getTotalAmountWithFeeFromPreviousInvoice(
       final Long driverId, final Long currentQWeekId) {
     final var previousQWeek = qWeekQuery.getOneBeforeById(currentQWeekId);
@@ -121,14 +122,9 @@ public class InvoiceToPdfModelMapper {
     if (previousInvoice == null) {
       return ZERO;
     }
-    final var sum =
-        previousInvoice.getItems().stream()
-            .map(InvoiceItem::getAmount)
-            .reduce(BigDecimal::add)
-            .orElse(ZERO)
-            .negate();
+    final var sum = previousInvoice.getSum();
     final var withVat = previousInvoice.withVat();
-    final var vatPercentage = withVat ? VAT_RATE : ZERO;
+    final var vatPercentage = withVat ? VAT_RATE_2023 : ZERO;
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
     final var sumWithVat = sum.add(vatAmount);
     final var balanceAmount = previousInvoice.getBalance();
