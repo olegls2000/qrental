@@ -1,10 +1,9 @@
 package ee.qrental.ui.controller.transaction.model;
 
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.math.BigDecimal;
 
 @SuperBuilder
 @Getter
@@ -17,4 +16,6 @@ public class DriversBalanceModel {
   private String phone;
   private BigDecimal rawTotal;
   private BigDecimal fee;
+  private BigDecimal obligationAmount;
+  private Integer obligationMatchCount;
 }

@@ -3,6 +3,7 @@ package ee.qrental.ui.controller.transaction;
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
 
+import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.contract.api.in.query.GetContractQuery;
@@ -15,6 +16,7 @@ import ee.qrental.transaction.api.in.query.filter.QWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,7 @@ public class BalanceQueryController {
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetContractQuery contractQuery;
   private final GetCarLinkQuery linkQuery;
+  private final GetObligationQuery obligationQuery;
   private final DriverBalanceAssembler driverBalanceAssembler;
 
   @GetMapping
@@ -59,6 +62,7 @@ public class BalanceQueryController {
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
+    addObligationDataToModel(driverId, model);
 
     return "detailView/balanceDriver";
   }
@@ -83,6 +87,7 @@ public class BalanceQueryController {
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
+    addObligationDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     if (requestedQWekId != null) {
       final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWekId);
@@ -90,6 +95,7 @@ public class BalanceQueryController {
       if (previousQWeek != null) {
         addBalancePeriodDataToModel(model, driverId, requestedQWekId, previousQWeekId);
         addFeePeriodDataToModel(model, driverId, requestedQWekId, previousQWeekId);
+        addObligationPeriodDataToModel(model, driverId, requestedQWekId);
       }
     }
 
@@ -126,6 +132,33 @@ public class BalanceQueryController {
     model.addAttribute("feePeriodEndAmount", periodFeeEndBalanceAmount);
   }
 
+  private void addObligationPeriodDataToModel(
+      final Model model, final Long driverId, final Long requestedQWeekId) {
+    final var periodObligation =
+        obligationQuery.getByQWeekIdAndDriverId(requestedQWeekId, driverId);
+    if (periodObligation == null) {
+      model.addAttribute("periodObligationAmount", "not calculated");
+      model.addAttribute("periodObligationAmountPaid", "not calculated");
+      model.addAttribute("periodObligationAmountLeftToPay", "not calculated");
+
+      return;
+    }
+
+    final var periodObligationAmount = periodObligation.getAmount();
+    model.addAttribute("periodObligationAmount", periodObligationAmount.negate());
+    final var periodObligationAmountPaid = periodObligation.getPositiveAmount();
+
+    model.addAttribute("periodObligationAmountPaid", periodObligationAmountPaid);
+
+    final var periodObligationDiff = periodObligationAmount.subtract(periodObligationAmountPaid);
+    final var periodObligationAmountLeftToPay =
+        periodObligationDiff.compareTo(BigDecimal.ZERO) < 0
+            ? BigDecimal.ZERO
+            : periodObligationDiff;
+
+    model.addAttribute("periodObligationAmountLeftToPay", periodObligationAmountLeftToPay);
+  }
+
   private void addTransactionDataToModel(
       final Long driverId, final List<TransactionResponse> transactions, final Model model) {
     model.addAttribute("transactions", transactions);
@@ -152,6 +185,16 @@ public class BalanceQueryController {
       return;
     }
     model.addAttribute("latestBalanceWeek", latestBalance.getWeekNumber());
+  }
+
+  private void addObligationDataToModel(final Long driverId, final Model model) {
+    final var obligation = obligationQuery.getForCurrentWeekByDriverId(driverId);
+    final var obligationAmount =
+        obligation == null ? "not calculated" : obligation.getAmount().toString();
+    final var obligationMatchCount =
+        obligation == null ? "not calculated" : obligation.getMatchCount().toString();
+    model.addAttribute("obligationAmount", obligationAmount);
+    model.addAttribute("obligationMatchCount", obligationMatchCount);
   }
 
   private void addCallSignDataToModel(final Long driverId, final Model model) {

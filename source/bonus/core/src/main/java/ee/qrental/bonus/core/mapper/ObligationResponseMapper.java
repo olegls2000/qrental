@@ -15,6 +15,10 @@ public class ObligationResponseMapper implements ResponseMapper<ObligationRespon
 
   @Override
   public ObligationResponse toResponse(final Obligation domain) {
+    if(domain == null){
+      return null;
+    }
+
     final var driver = driverQuery.getById(domain.getDriverId());
 
     return ObligationResponse.builder()

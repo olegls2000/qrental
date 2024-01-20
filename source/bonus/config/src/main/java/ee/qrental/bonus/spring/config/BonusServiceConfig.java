@@ -37,8 +37,10 @@ public class BonusServiceConfig {
 
   @Bean
   GetObligationQuery getGetObligationQuery(
-      final ObligationLoadPort loadPort, final ObligationResponseMapper responseMapper) {
-    return new ObligationQueryService(loadPort, responseMapper);
+      final GetQWeekQuery qWeekQuery,
+      final ObligationLoadPort loadPort,
+      final ObligationResponseMapper responseMapper) {
+    return new ObligationQueryService(qWeekQuery, loadPort, responseMapper);
   }
 
   @Bean

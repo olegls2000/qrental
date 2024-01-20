@@ -136,40 +136,41 @@
                 </div>
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
-                        <small th:text="|Weekly obligation: 0.00 EURO |"
+                        <small th:text="|Current week obligation: ${obligationAmount} EURO |"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-success bg-success border-success'">???</small>
                     </div>
                     <div class="col-md-auto">
-                        <small th:text="|Current CASCO: 1000 EURO |"
-                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                               th:classappend="'text-success bg-success border-success'">???</small>
-                    </div>
-                    <div class="col-md-auto">
-                        <small th:text="|Available campaigns: |"
+                        <small th:text="|Obligation match count: ${obligationMatchCount}|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-success bg-success border-success'">???</small>
-                        <small>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-1-square"></span>
-                            </a>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-2-square"></span>
-                            </a>
-                            <a class="btn btn btn-secondary" href="#">
-                                <span class="bi bi-3-square"></span>
-                            </a>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-4-square"></span>
-                            </a>
-                            <a class="btn btn  btn-secondary" href="#">
-                                <span class="bi bi-5-square"></span>
-                            </a>
-                        </small>
                     </div>
+                    <!--
+                      <div class="col-md-auto">
+                          <small th:text="|Available campaigns: |"
+                                 class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                                 border-opacity-10 rounded-2 "
+                                 th:classappend="'text-success bg-success border-success'">???</small>
+                          <small>
+                              <a class="btn btn btn-success" href="#">
+                                  <span class="bi bi-1-square"></span>
+                              </a>
+                              <a class="btn btn btn-success" href="#">
+                                  <span class="bi bi-2-square"></span>
+                              </a>
+                              <a class="btn btn btn-secondary" href="#">
+                                  <span class="bi bi-3-square"></span>
+                              </a>
+                              <a class="btn btn btn-success" href="#">
+                                  <span class="bi bi-4-square"></span>
+                              </a>
+                              <a class="btn btn  btn-secondary" href="#">
+                                  <span class="bi bi-5-square"></span>
+                              </a>
+                          </small>
+                      </div>-->
 
                 </div>
                 <div th:replace="fragments/balanceDriverFragment.html :: detailView"></div>
@@ -251,32 +252,21 @@
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold text-dark ">???</small>
             </div>
             <div class="col-md-auto">
-                <small th:text="|Beginning of period: ${feePeriodStartAmount}|"
+                <small th:text="|Beginning of period: ${periodObligationAmount}|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodStartAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
+                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
             </div>
             <div class="col-md-auto">
-                <small th:text="|Complited: ${feePeriodTotalAmount}|"
+                <small th:text="|Paid: ${periodObligationAmountPaid}|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodTotalAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
+                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
             </div>
             <div class="col-md-auto">
-                <small th:text="|Left to do: ${feePeriodEndAmount}|"
+                <small th:text="|Left to pay: ${periodObligationAmountLeftToPay}|"
                        class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2"
-                       th:classappend="${feePeriodEndAmount<0} ?
-                                 'text-danger bg-danger border-danger'
-                                 : 'text-success bg-success border-success'">???</small>
+                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
             </div>
         </div>
-
-
     </div>
     <table class="table table-striped table-bordered table-hover">
         <tr>
