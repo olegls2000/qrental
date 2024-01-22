@@ -145,18 +145,21 @@ public class BalanceQueryController {
     }
 
     final var periodObligationAmount = periodObligation.getAmount();
-    model.addAttribute("periodObligationAmount", periodObligationAmount.negate());
-    final var periodObligationAmountPaid = periodObligation.getPositiveAmount();
+    final var periodObligationAmountAbs = periodObligationAmount.abs();
 
+    model.addAttribute("periodObligationAmount", periodObligationAmountAbs);
+    final var periodObligationAmountPaid = periodObligation.getPositiveAmount();
     model.addAttribute("periodObligationAmountPaid", periodObligationAmountPaid);
 
-    final var periodObligationDiff = periodObligationAmount.subtract(periodObligationAmountPaid);
+    final var periodObligationDiff = periodObligationAmountAbs.subtract(periodObligationAmountPaid);
     final var periodObligationAmountLeftToPay =
         periodObligationDiff.compareTo(BigDecimal.ZERO) < 0
             ? BigDecimal.ZERO
             : periodObligationDiff;
 
+    final var periodObligationMatchCount = periodObligation.getMatchCount();
     model.addAttribute("periodObligationAmountLeftToPay", periodObligationAmountLeftToPay);
+    model.addAttribute("periodObligationMatchCount", periodObligationMatchCount);
   }
 
   private void addTransactionDataToModel(
