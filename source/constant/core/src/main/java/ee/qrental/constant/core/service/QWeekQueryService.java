@@ -23,7 +23,6 @@ public class QWeekQueryService implements GetQWeekQuery {
       comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber);
   private static final Comparator<QWeekResponse> REVERSED_COMPARATOR =
       comparing(QWeekResponse::getYear)
-          .reversed()
           .thenComparing(QWeekResponse::getNumber)
           .reversed();
 
@@ -36,7 +35,7 @@ public class QWeekQueryService implements GetQWeekQuery {
 
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
-        .sorted(DEFAULT_COMPARATOR)
+        .sorted(REVERSED_COMPARATOR)
         .collect(toList());
   }
 
