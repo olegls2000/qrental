@@ -1,14 +1,8 @@
 package ee.qrental.bonus.spring.config;
 
-import ee.qrental.bonus.adapter.repository.ObligationCalculationRepository;
-import ee.qrental.bonus.adapter.repository.ObligationCalculationResultRepository;
-import ee.qrental.bonus.adapter.repository.ObligationRepository;
-import ee.qrental.bonus.repository.impl.ObligationCalculationRepositoryImpl;
-import ee.qrental.bonus.repository.impl.ObligationCalculationResultRepositoryImpl;
-import ee.qrental.bonus.repository.impl.ObligationRepositoryImpl;
-import ee.qrental.bonus.repository.spring.ObligationCalculationResultSpringDataRepository;
-import ee.qrental.bonus.repository.spring.ObligationCalculationSpringDataRepository;
-import ee.qrental.bonus.repository.spring.ObligationSpringDataRepository;
+import ee.qrental.bonus.adapter.repository.*;
+import ee.qrental.bonus.repository.impl.*;
+import ee.qrental.bonus.repository.spring.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,23 +10,23 @@ import org.springframework.context.annotation.Configuration;
 public class BonusRepositoryConfig {
 
   @Bean
-  ObligationRepository getObligationRepository(
-      final ObligationSpringDataRepository springDataRepository) {
+  BonusCalculationRepository getBonusCalculationRepository(
+      final BonusCalculationSpringDataRepository springDataRepository) {
 
-    return new ObligationRepositoryImpl(springDataRepository);
+    return new BonusCalculationRepositoryImpl(springDataRepository);
   }
 
   @Bean
-  ObligationCalculationRepository getObligationCalculationRepository(
-      final ObligationCalculationSpringDataRepository springDataRepository) {
+  BonusCalculationResultRepository getBonusCalculationResultRepository(
+      final BonusCalculationResultSpringDataRepository springDataRepository) {
 
-    return new ObligationCalculationRepositoryImpl(springDataRepository);
+    return new BonusCalculationResultRepositoryImpl(springDataRepository);
   }
 
   @Bean
-  ObligationCalculationResultRepository getObligationCalculationResultRepository(
-      final ObligationCalculationResultSpringDataRepository springDataRepository) {
+  BonusProgramRepository getBonusProgramRepository(
+          final BonusProgramSpringDataRepository springDataRepository) {
 
-    return new ObligationCalculationResultRepositoryImpl(springDataRepository);
+    return new BonusProgramRepositoryImpl(springDataRepository);
   }
 }

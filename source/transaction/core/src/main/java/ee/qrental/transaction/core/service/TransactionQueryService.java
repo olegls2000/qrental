@@ -73,6 +73,12 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
+  public List<TransactionResponse> getAllByBonusCalculationId(final Long bonusCalculationId) {
+    return mapToTransactionResponseList(
+            transactionLoadPort.loadAllByBonusCalculationId(bonusCalculationId));
+  }
+
+  @Override
   public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter) {
     return mapToTransactionResponseList(
         loadStrategies.stream()

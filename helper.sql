@@ -15,14 +15,14 @@ where ocr.obligation_calculation_id in
        where q_week_id in
              (select id
               from q_week
-              where year = 2023 and number = 25));
+              where year = 2024 /*and number = 25*/));
 
 delete
 from obligation ob
-where ob.q_week_id in (select id from q_week where year = 2023 and number = 25);
+where ob.q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
 
 delete
-from obligation_calculation where q_week_id in (select id from q_week where year = 2023 and number = 25);
+from obligation_calculation where q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
 
 
 

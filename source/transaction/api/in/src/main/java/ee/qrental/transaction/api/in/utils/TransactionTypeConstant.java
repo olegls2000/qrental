@@ -6,4 +6,5 @@ import lombok.experimental.UtilityClass;
 public class TransactionTypeConstant {
     public static final String TRANSACTION_TYPE_NAME_WEEKLY_RENT = "weekly rent";
     public static final String TRANSACTION_TYPE_NO_LABEL_FINE = "no label fine";
+    public static final String TRANSACTION_TYPE_BONUS = "bonus";
 }

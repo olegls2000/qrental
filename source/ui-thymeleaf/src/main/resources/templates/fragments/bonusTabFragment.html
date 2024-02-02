@@ -1,9 +1,14 @@
-<ul th:fragment="bonusTabs(activeTab)" class="nav nav-tabs">
-
-
-    <li class="nav-item">
-        <a class="nav-link" th:classappend="${activeTab == 'obligationCalculations'} ? active : ''"
-           href="/obligations/calculations">Obligation Calculations</a>
-    </li>
-
+<ul th:fragment="bonusTab(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'obligations'} ? active : ''"
+       href="/obligations/calculations">Obligation Calculations</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'bonusPrograms'} ? active : ''"
+       href="/bonus-programs">Bonus Programs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'bonusCalculations'} ? active : ''"
+       href="/bonuses/calculations">Bonus Calculations</a>
+  </li>
 </ul>

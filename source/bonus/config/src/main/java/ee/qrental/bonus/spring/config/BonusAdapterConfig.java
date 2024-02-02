@@ -1,50 +1,44 @@
 package ee.qrental.bonus.spring.config;
 
-import ee.qrental.bonus.adapter.adapter.ObligationCalculationLoadAdapter;
-import ee.qrental.bonus.adapter.adapter.ObligationCalculationPersistenceAdapter;
-import ee.qrental.bonus.adapter.adapter.ObligationLoadAdapter;
-import ee.qrental.bonus.adapter.adapter.ObligationPersistenceAdapter;
+import ee.qrental.bonus.adapter.adapter.*;
+import ee.qrental.bonus.adapter.mapper.BonusCalculationAdapterMapper;
+import ee.qrental.bonus.adapter.mapper.BonusProgramAdapterMapper;
 import ee.qrental.bonus.adapter.mapper.ObligationAdapterMapper;
 import ee.qrental.bonus.adapter.mapper.ObligationCalculationAdapterMapper;
-import ee.qrental.bonus.adapter.repository.ObligationCalculationRepository;
-import ee.qrental.bonus.adapter.repository.ObligationCalculationResultRepository;
-import ee.qrental.bonus.adapter.repository.ObligationRepository;
-import ee.qrental.bonus.api.out.ObligationAddPort;
-import ee.qrental.bonus.api.out.ObligationCalculationLoadPort;
-import ee.qrental.bonus.api.out.ObligationLoadPort;
+import ee.qrental.bonus.adapter.repository.*;
+import ee.qrental.bonus.api.out.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BonusAdapterConfig {
   @Bean
-  ObligationAdapterMapper getObligationAdapterMapper() {
-    return new ObligationAdapterMapper();
+  BonusProgramAdapterMapper getBonusProgramAdapterMapper() {
+    return new BonusProgramAdapterMapper();
   }
 
   @Bean
-  ObligationLoadPort getObligationLoadPort(
-      final ObligationRepository repository, final ObligationAdapterMapper mapper) {
-    return new ObligationLoadAdapter(repository, mapper);
+  BonusProgramLoadPort getBonusProgramLoadPort(
+      final BonusProgramRepository repository, final BonusProgramAdapterMapper mapper) {
+    return new BonusProgramLoadAdapter(repository, mapper);
   }
 
   @Bean
-  ObligationCalculationLoadPort getObligationCalculationLoadPort(
-      final ObligationCalculationRepository repository,
-      final ObligationCalculationAdapterMapper mapper) {
-    return new ObligationCalculationLoadAdapter(repository, mapper);
+  BonusCalculationLoadPort getBonusCalculationLoadPort(
+      final BonusCalculationRepository repository, final BonusCalculationAdapterMapper mapper) {
+    return new BonusCalculationLoadAdapter(repository, mapper);
   }
 
   @Bean
-  ObligationAddPort getObligationPersistenceAdapter(
-      final ObligationRepository repository, final ObligationAdapterMapper mapper) {
-    return new ObligationPersistenceAdapter(repository, mapper);
+  BonusProgramPersistenceAdapter getBonusProgramPersistenceAdapter(
+      final BonusProgramRepository repository, final BonusProgramAdapterMapper mapper) {
+    return new BonusProgramPersistenceAdapter(repository, mapper);
   }
 
   @Bean
-  ObligationCalculationPersistenceAdapter getObligationCalculationPersistenceAdapter(
-      final ObligationCalculationRepository calculationRepository,
-      final ObligationCalculationResultRepository resultRepository) {
-    return new ObligationCalculationPersistenceAdapter(calculationRepository, resultRepository);
+  BonusCalculationPersistenceAdapter getBonusCalculationPersistenceAdapter(
+      final BonusCalculationRepository calculationRepository,
+      final BonusCalculationResultRepository resultRepository) {
+    return new BonusCalculationPersistenceAdapter(calculationRepository, resultRepository);
   }
 }

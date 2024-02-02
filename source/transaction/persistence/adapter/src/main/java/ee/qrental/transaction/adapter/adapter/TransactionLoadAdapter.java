@@ -89,4 +89,11 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
         .map(mapper::mapToDomain)
         .collect(toList());
   }
+
+  @Override
+  public List<Transaction> loadAllByBonusCalculationId(final Long bonusCalculationId) {
+    return repository.findAllByBonusCalculationId(bonusCalculationId).stream()
+            .map(mapper::mapToDomain)
+            .collect(toList());
+  }
 }

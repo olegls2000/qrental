@@ -1,4 +1,9 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrental.bonus.spring.config.ObligationAdapterConfig,\
+ee.qrental.bonus.spring.config.ObligationMapperConfig,\
+ee.qrental.bonus.spring.config.ObligationServiceConfig,\
+ee.qrental.bonus.spring.config.ObligationRepositoryConfig,\
+ee.qrental.bonus.spring.config.ObligationValidatorConfig,\
 ee.qrental.bonus.spring.config.BonusAdapterConfig,\
 ee.qrental.bonus.spring.config.BonusMapperConfig,\
 ee.qrental.bonus.spring.config.BonusServiceConfig,\

@@ -1,49 +1,54 @@
 <div th:fragment="campaignPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
-    <ul th:replace="fragments/settingsTabFragment :: settingsTab('campaigns')"></ul>
-    <h2 class="py-3">Campaigns</h2>
+    <ul th:replace="fragments/bonusTabFragment :: bonusTab('bonusPrograms')"></ul>
+    <h2 class="py-3">Bonus Programs</h2>
     <table class="table table-striped table-bordered">
         <tr>
             <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
-                   href="/campaigns/add-form"
+                   href="/bonus-programs/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
-            <th>Campaign</th>
+            <th>Code</th>
+            <th>Active</th>
+            <th>Name (Rus)</th>
+            <th>Name (Eng)</th>
+            <th>Name (Eng)</th>
             <th>Description</th>
-            <th>Activity</th>
         </tr>
-        <tr th:if="${#lists.isEmpty(campaigns)}">
+        <tr th:if="${#lists.isEmpty(bonusPrograms)}">
             <td colspan="5">No Campaigns</td>
         </tr>
-        <tr th:each="campaign : ${campaigns}">
+        <tr th:each="bonusProgram : ${bonusPrograms}">
             <td class="text-center">
                 <a class="btn btn-sm btn-warning"
-                   th:href="@{/campaigns/update-form/{id}(id=${campaign.id})}">
+                   th:href="@{/bonus-programs/update-form/{id}(id=${bonusProgram.id})}">
                     <span class="bi-pencil-square"></span>
                 </a>
-
             </td>
             <td class="text-center">
                 <a class="btn btn-sm btn-danger"
-                   th:href="@{/campaigns/delete-form/{id}(id=${campaign.id})}">
+                   th:href="@{/bonus-programs/delete-form/{id}(id=${bonusProgram.id})}">
                     <span class="bi-trash"></span>
                 </a>
             </td>
-            <td th:text="${campaign.campaign}"></td>
-            <td th:text="${campaign.description}">???</td>
-            <td th:if="${campaign.active}"
+            <td th:text="${bonusProgram.code}"></td>
+            <td th:if="${bonusProgram.active}"
                 class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
                 Active
             </td>
-            <td th:unless="${campaign.active}"
+            <td th:unless="${bonusProgram.active}"
                 class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
                 Not Active
             </td>
+            <td th:text="${bonusProgram.nameEng}"></td>
+            <td th:text="${bonusProgram.nameRus}">???</td>
+            <td th:text="${bonusProgram.nameEst}">???</td>
+            <td th:text="${bonusProgram.description}">???</td>
         </tr>
     </table>
 </div>

@@ -40,7 +40,6 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
 
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceQuery balanceQuery;
-  private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetCarLinkQuery carLinkQuery;
   private final GetUserAccountQuery userAccountQuery;

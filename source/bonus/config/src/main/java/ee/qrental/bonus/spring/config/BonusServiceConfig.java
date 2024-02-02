@@ -1,24 +1,19 @@
 package ee.qrental.bonus.spring.config;
 
-import ee.qrental.bonus.api.in.query.GetObligationCalculationQuery;
-import ee.qrental.bonus.api.in.query.GetObligationQuery;
-import ee.qrental.bonus.api.in.usecase.ObligationCalculationAddUseCase;
-import ee.qrental.bonus.api.out.ObligationAddPort;
-import ee.qrental.bonus.api.out.ObligationCalculationAddPort;
-import ee.qrental.bonus.api.out.ObligationCalculationLoadPort;
-import ee.qrental.bonus.api.out.ObligationLoadPort;
-import ee.qrental.bonus.core.mapper.ObligationCalculationAddRequestMapper;
-import ee.qrental.bonus.core.mapper.ObligationCalculationResponseMapper;
-import ee.qrental.bonus.core.mapper.ObligationResponseMapper;
-import ee.qrental.bonus.core.service.ObligationCalculationQueryService;
-import ee.qrental.bonus.core.service.ObligationCalculationService;
-import ee.qrental.bonus.core.service.ObligationQueryService;
-import ee.qrental.bonus.core.validator.ObligationCalculationAddBusinessRuleValidator;
+import ee.qrental.bonus.api.in.query.GetBonusCalculationQuery;
+import ee.qrental.bonus.api.in.query.GetBonusProgramQuery;
+import ee.qrental.bonus.api.in.usecase.BonusCalculationAddUseCase;
+import ee.qrental.bonus.api.out.*;
+import ee.qrental.bonus.core.mapper.*;
+import ee.qrental.bonus.core.service.BonusCalculationQueryService;
+import ee.qrental.bonus.core.service.BonusCalculationService;
+import ee.qrental.bonus.core.service.BonusProgramQueryService;
+import ee.qrental.bonus.core.service.BonusProgramService;
+import ee.qrental.bonus.core.validator.BonusCalculationAddBusinessRuleValidator;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import org.springframework.context.annotation.Bean;
@@ -28,46 +23,55 @@ import org.springframework.context.annotation.Configuration;
 public class BonusServiceConfig {
 
   @Bean
-  GetObligationCalculationQuery getGetObligationCalculationQuery(
+  GetBonusCalculationQuery getGetBonusCalculationQuery(
       final GetQWeekQuery qWeekQuery,
-      final ObligationCalculationLoadPort loadPort,
-      final ObligationCalculationResponseMapper responseMapper) {
-    return new ObligationCalculationQueryService(qWeekQuery, loadPort, responseMapper);
+      final BonusCalculationLoadPort loadPort,
+      final BonusCalculationResponseMapper responseMapper) {
+    return new BonusCalculationQueryService(qWeekQuery, loadPort, responseMapper);
   }
 
   @Bean
-  GetObligationQuery getGetObligationQuery(
-      final GetQWeekQuery qWeekQuery,
-      final ObligationLoadPort loadPort,
-      final ObligationResponseMapper responseMapper) {
-    return new ObligationQueryService(qWeekQuery, loadPort, responseMapper);
+  BonusProgramService gtBonusProgramService(
+      final BonusProgramAddPort addPort,
+      final BonusProgramUpdatePort updatePort,
+      final BonusProgramDeletePort deletePort,
+      final BonusProgramAddRequestMapper addRequestMapper,
+      final BonusProgramUpdateRequestMapper updateRequestMapper) {
+    return new BonusProgramService(
+        addPort, updatePort, deletePort, addRequestMapper, updateRequestMapper);
   }
 
   @Bean
-  public ObligationCalculationAddUseCase getObligationCalculationAddUseCase(
+  GetBonusProgramQuery getBonusProgramQuery(
+      final BonusProgramLoadPort loadPort,
+      final BonusProgramResponseMapper responseMapper,
+      final BonusProgramUpdateRequestMapper updateRequestMapper) {
+    return new BonusProgramQueryService(loadPort, responseMapper, updateRequestMapper);
+  }
+
+  @Bean
+  public BonusCalculationAddUseCase getBonusCalculationAddUseCase(
       final GetQWeekQuery qWeekQuery,
-      final GetBalanceQuery balanceQuery,
-      final GetTransactionTypeQuery transactionTypeQuery,
       final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final BonusProgramLoadPort bonusProgramLoadPort,
       final GetCarLinkQuery carLinkQuery,
       final GetUserAccountQuery userAccountQuery,
       final EmailSendUseCase emailSendUseCase,
-      final ObligationCalculationAddPort calculationAddPort,
-      final ObligationAddPort obligationAddPort,
-      final ObligationLoadPort loadPort,
-      final ObligationCalculationAddRequestMapper addRequestMapper,
-      final ObligationCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
-    return new ObligationCalculationService(
+      final BonusCalculationAddPort calculationAddPort,
+      final ObligationLoadPort obligationLoadPort,
+      final BonusCalculationAddRequestMapper addRequestMapper,
+      final BonusCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
+    return new BonusCalculationService(
         qWeekQuery,
-        balanceQuery,
-        transactionTypeQuery,
         transactionQuery,
+        transactionTypeQuery,
+        bonusProgramLoadPort,
         carLinkQuery,
         userAccountQuery,
         emailSendUseCase,
         calculationAddPort,
-        obligationAddPort,
-        loadPort,
+        obligationLoadPort,
         addRequestMapper,
         addBusinessRuleValidator);
   }

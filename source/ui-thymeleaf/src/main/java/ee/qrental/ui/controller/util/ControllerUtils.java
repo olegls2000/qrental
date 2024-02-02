@@ -20,11 +20,12 @@ public class ControllerUtils {
   public static final String CAR_LINK_ROOT_PATH = "/car-links";
   public static final String CONSTANT_ROOT_PATH = "/constants";
   public static final String WEEK_ROOT_PATH = "/weeks";
-  public static final String CAMPAIGN_ROOT_PATH = "/campaigns";
+  public static final String BONUS_PROGRAM_PATH = "/bonus-programs";
   public static final String INVOICE_ROOT_PATH = "/invoices";
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String RENTS_ROOT_PATH = "/rents";
   public static final String OBLIGATIONS_ROOT_PATH = "/obligations";
+  public static final String BONUS_ROOT_PATH = "/bonuses";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
   public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
 }

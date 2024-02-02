@@ -1,11 +1,8 @@
 package ee.qrental.bonus.spring.config;
 
-import ee.qrental.bonus.adapter.mapper.ObligationCalculationAdapterMapper;
-import ee.qrental.bonus.core.mapper.ObligationCalculationAddRequestMapper;
-import ee.qrental.bonus.core.mapper.ObligationCalculationResponseMapper;
-import ee.qrental.bonus.core.mapper.ObligationResponseMapper;
+import ee.qrental.bonus.adapter.mapper.BonusCalculationAdapterMapper;
+import ee.qrental.bonus.core.mapper.*;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
-import ee.qrental.driver.api.in.query.GetDriverQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,24 +10,33 @@ import org.springframework.context.annotation.Configuration;
 public class BonusMapperConfig {
 
   @Bean
-  ObligationResponseMapper getObligationResponseMapper(final GetDriverQuery driverQuery) {
-    return new ObligationResponseMapper(driverQuery);
+  BonusProgramResponseMapper getBonusProgramResponseMapper() {
+    return new BonusProgramResponseMapper();
   }
 
   @Bean
-  ObligationCalculationAddRequestMapper getObligationCalculationAddRequestMapper() {
-    return new ObligationCalculationAddRequestMapper();
+  BonusProgramAddRequestMapper gtBonusProgramAddRequestMapper() {
+    return new BonusProgramAddRequestMapper();
   }
 
   @Bean
-  ObligationCalculationResponseMapper getObligationCalculationResponseMapper(
-      final GetQWeekQuery qWeekQuery) {
-
-    return new ObligationCalculationResponseMapper(qWeekQuery);
+  BonusProgramUpdateRequestMapper getBonusProgramUpdateRequestMapper() {
+    return new BonusProgramUpdateRequestMapper();
   }
 
   @Bean
-  ObligationCalculationAdapterMapper getObligationCalculationAdapterMapper() {
-    return new ObligationCalculationAdapterMapper();
+  BonusCalculationAddRequestMapper getBonusCalculationAddRequestMapper() {
+    return new BonusCalculationAddRequestMapper();
+  }
+
+  @Bean
+  BonusCalculationResponseMapper getBonusCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
+
+    return new BonusCalculationResponseMapper(qWeekQuery);
+  }
+
+  @Bean
+  BonusCalculationAdapterMapper getBonusCalculationAdapterMapper() {
+    return new BonusCalculationAdapterMapper();
   }
 }

@@ -1,0 +1,65 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add Bonus Program',
+            content=~{fragments/bonusProgramAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/bonus-programs/add}"
+          th:object="${addRequest}">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="codeId">Code</label>
+                    <input class="form-control" id="codeId"
+                           placeholder="Enter code"
+                           required
+                           th:field="*{code}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="activeId">Active</label>
+                    <input class="form-check-input" id="activeId"
+                           th:field="*{active}"
+                           type="checkbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEngId">Name (Eng)</label>
+            <input class="form-control" id="nameEngId" placeholder="Enter English name" required
+                   th:field="*{nameEng}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameRusId">Name (Rus)</label>
+            <input class="form-control" id="nameRusId" placeholder="Enter Russian name" required
+                   th:field="*{nameRus}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEstId">Name (Est)</label>
+            <input class="form-control" id="nameEstId" placeholder="Enter Estonian name" required
+                   th:field="*{nameEst}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="descriptionId">Description</label>
+            <input class="form-control" id="descriptionId" placeholder="Enter Description" required
+                   th:field="*{description}"
+                   type="text"/>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add'
+        )">
+        </div>
+    </form>
+</div>
+
