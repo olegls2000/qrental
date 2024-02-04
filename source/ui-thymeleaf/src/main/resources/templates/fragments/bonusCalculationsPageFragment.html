@@ -7,7 +7,7 @@
         <tr>
             <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
-                   href="/obligations/calculations/add-form"
+                   href="/bonuses/calculations/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi bi-calculator"></span>
@@ -26,7 +26,7 @@
         </tr>
         <tr th:each="calculation : ${calculations}">
             <td><a class="btn btn-sm btn-warning"
-                   th:href="@{/obligations/calculations/{id}(id=${calculation.id})}">
+                   th:href="@{/bonuses/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span></a></td>
             <td th:text="${calculation.year}">???</td>
             <td th:text="${calculation.weekNumber}">???</td>

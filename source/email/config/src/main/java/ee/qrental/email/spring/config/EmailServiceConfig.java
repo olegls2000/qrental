@@ -22,6 +22,7 @@ public class EmailServiceConfig {
         new ErrorLetterBuildStrategy(templateEngine),
         new UserRegistrationLetterBuildStrategy(templateEngine),
         new RentCalculationLetterBuildStrategy(templateEngine),
+        new BonusCalculationLetterBuildStrategy(templateEngine),
         new ObligationCalculationLetterBuildStrategy(templateEngine),
         new AuthorizationLetterBuildStrategy(templateEngine));
   }

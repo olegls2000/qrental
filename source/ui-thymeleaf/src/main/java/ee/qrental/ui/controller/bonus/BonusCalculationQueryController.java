@@ -26,7 +26,7 @@ public class BonusCalculationQueryController {
   private final GetBalanceCalculationQuery balanceCalculationQuery;
 
   @GetMapping("/calculations")
-  public String getObligationCalculationsView(final Model model) {
+  public String getCalculationsView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addLatestDataToModel(model);
     model.addAttribute("calculations", bonusCalculationQuery.getAll());
@@ -35,7 +35,7 @@ public class BonusCalculationQueryController {
   }
 
   @GetMapping(value = "/calculations/{id}")
-  public String getObligationCalculationView(@PathVariable("id") long id, final Model model) {
+  public String getCalculationView(@PathVariable("id") long id, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var calculation = bonusCalculationQuery.getById(id);
     final var transactions = transactionQuery.getAllByRentCalculationId(id);

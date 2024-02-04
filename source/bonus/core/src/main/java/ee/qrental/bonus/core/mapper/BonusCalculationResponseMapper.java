@@ -26,7 +26,7 @@ public class BonusCalculationResponseMapper
         .endDate(qWeek.getEnd())
         .year(qWeek.getYear())
         .weekNumber(qWeek.getNumber())
-        .transactionCount(domain.getResults().size())
+        .transactionsCount(domain.getResults().size())
         .comment(domain.getComment())
         .build();
   }

@@ -23,24 +23,24 @@ public class RentCalculationPersistenceAdapter implements RentCalculationAddPort
             .qWeekId(domain.getQWeekId())
             .comment(domain.getComment())
             .build();
-    final var rentCalculationEntitySaved = rentCalculationRepository.save(rentCalculationEntity);
-    saveRentCalculationResults(domain, rentCalculationEntitySaved);
+    final var calculationEntitySaved = rentCalculationRepository.save(rentCalculationEntity);
+    saveResults(domain, calculationEntitySaved);
 
     return null;
   }
 
-  private void saveRentCalculationResults(
+  private void saveResults(
       final RentCalculation domain, final RentCalculationJakartaEntity rentCalculationEntitySaved) {
     final var rentCalculationResults = domain.getResults();
     for (final RentCalculationResult result : rentCalculationResults) {
-      final var rentCalculationResultEntity =
+      final var resultEntity =
           RentCalculationResultJakartaEntity.builder()
               .id(null)
               .rentCalculation(rentCalculationEntitySaved)
               .carLinkId(result.getCarLinkId())
               .transactionId(result.getTransactionId())
               .build();
-      rentCalculationResultRepository.save(rentCalculationResultEntity);
+      rentCalculationResultRepository.save(resultEntity);
     }
   }
 }

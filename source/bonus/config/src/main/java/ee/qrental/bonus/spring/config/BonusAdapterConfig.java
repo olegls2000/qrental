@@ -3,8 +3,6 @@ package ee.qrental.bonus.spring.config;
 import ee.qrental.bonus.adapter.adapter.*;
 import ee.qrental.bonus.adapter.mapper.BonusCalculationAdapterMapper;
 import ee.qrental.bonus.adapter.mapper.BonusProgramAdapterMapper;
-import ee.qrental.bonus.adapter.mapper.ObligationAdapterMapper;
-import ee.qrental.bonus.adapter.mapper.ObligationCalculationAdapterMapper;
 import ee.qrental.bonus.adapter.repository.*;
 import ee.qrental.bonus.api.out.*;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +36,9 @@ public class BonusAdapterConfig {
   @Bean
   BonusCalculationPersistenceAdapter getBonusCalculationPersistenceAdapter(
       final BonusCalculationRepository calculationRepository,
-      final BonusCalculationResultRepository resultRepository) {
-    return new BonusCalculationPersistenceAdapter(calculationRepository, resultRepository);
+      final BonusCalculationResultRepository resultRepository,
+      final BonusProgramRepository bonusProgramRepository) {
+    return new BonusCalculationPersistenceAdapter(
+        calculationRepository, resultRepository, bonusProgramRepository);
   }
 }

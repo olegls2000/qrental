@@ -12,7 +12,7 @@ public class BonusCalculationResponse {
   private Integer weekNumber;
   private LocalDate startDate;
   private LocalDate endDate;
-  private Integer transactionCount;
+  private Integer transactionsCount;
   private LocalDate actionDate;
   private String comment;
 }
