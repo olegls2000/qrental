@@ -63,7 +63,10 @@ public class CarLinkUseCaseController {
     model.addAttribute("updateRequest", carLinkQuery.getUpdateRequestById(id));
     model.addAttribute("linkedCar", linkedCar);
     addDriverInfoToModel(driverId, model);
-    addCarListToModel(model);
+
+    final var cars = carQuery.getAvailableCars();
+    cars.add(linkedCar);
+    model.addAttribute("cars", cars);
 
     return "forms/updateCarLink";
   }
@@ -74,7 +77,11 @@ public class CarLinkUseCaseController {
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);
       addDriverInfoToModel(updateRequest.getDriverId(), model);
-      addCarListToModel(model);
+
+      final var linkedCar = carQuery.getById(updateRequest.getCarId());
+      final var cars = carQuery.getAvailableCars();
+      cars.add(linkedCar);
+      model.addAttribute("cars", cars);
 
       return "forms/updateCarLink";
     }
