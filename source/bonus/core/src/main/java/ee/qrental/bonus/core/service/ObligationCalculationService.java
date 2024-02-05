@@ -22,7 +22,6 @@ import ee.qrental.email.api.in.request.EmailType;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import ee.qrental.user.api.in.response.UserAccountResponse;
@@ -78,7 +77,11 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
               final var positiveAmount = getPositiveAmount(driverId, qWeekId);
               final var matchCount =
                   getMatchCount(
-                      driverId, previousWeek.getId(), weekObligationAmount, positiveAmount);
+                      driverId,
+                      previousWeek.getId(),
+                      weekObligationAmount,
+                      positiveAmount,
+                      rentObligation);
               final var obligation =
                   Obligation.builder()
                       .id(null)
@@ -109,8 +112,12 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
       final Long driverId,
       final Long previousQWeekId,
       final BigDecimal obligationAmount,
-      final BigDecimal positiveAmount) {
-
+      final BigDecimal positiveAmount,
+      final BigDecimal rentObligation) {
+    if (rentObligation.compareTo(ZERO) == 0) {
+      System.out.println("No Rent transactions. Match count is O");
+      return 0;
+    }
     final var sum = obligationAmount.add(positiveAmount);
     final var currentWeekMatch = sum.compareTo(ZERO) >= 0;
     final var previousWeekObligation =
