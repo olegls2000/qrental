@@ -117,7 +117,6 @@ public class RentCalculationService implements RentCalculationAddUseCase {
           "Transaction type for weekly Rent Calculation is missing. Create a Transaction Type with name: "
               + TRANSACTION_TYPE_NAME_WEEKLY_RENT);
     }
-    addRequest.setWithVat(FALSE);
     addRequest.setTransactionTypeId(transactionTpe.getId());
     addRequest.setWeekNumber(week.getNumber());
     addRequest.setDriverId(activeCarLink.getDriverId());
@@ -145,7 +144,6 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     addRequest.setWeekNumber(week.getNumber());
     addRequest.setDriverId(activeCarLink.getDriverId());
     addRequest.setAmount(NO_LABEL_RATE);
-    addRequest.setWithVat(FALSE);
     addRequest.setComment(
         format(
             "Automatically crated 'No Label Fine' Transaction for active Car Link %d. Week %d",

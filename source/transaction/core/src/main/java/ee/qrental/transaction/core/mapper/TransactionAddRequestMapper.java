@@ -22,7 +22,6 @@ public class TransactionAddRequestMapper
         .amount(request.getAmount())
         .driverId(request.getDriverId())
         .date(request.getDate())
-        .withVat(request.getWithVat())
         .comment(request.getComment())
         .build();
   }

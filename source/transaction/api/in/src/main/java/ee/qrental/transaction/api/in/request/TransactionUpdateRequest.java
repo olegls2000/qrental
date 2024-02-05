@@ -18,6 +18,5 @@ public class TransactionUpdateRequest extends AbstractUpdateRequest {
     private Long driverId;
     private BigDecimal amount;
     private LocalDate date;
-    private Boolean withVat;
     private String comment;
 }

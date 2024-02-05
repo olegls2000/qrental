@@ -31,9 +31,6 @@ public class TransactionJakartaEntity {
   @Column(name = "amount")
   private BigDecimal amount;
 
-  @Column(name = "with_vat")
-  private Boolean withVat;
-
   @Column(name = "date")
   private LocalDate date;
 

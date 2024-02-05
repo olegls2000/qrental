@@ -36,7 +36,6 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .callSign(callSign)
         .date(domain.getDate())
         .weekNumber(domain.getWeekNumber())
-        .withVat(domain.getWithVat())
         .raw(domain.isRaw())
         .comment(domain.getComment())
         .invoiceIncluded(domain.getType().getInvoiceIncluded())

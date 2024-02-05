@@ -53,7 +53,6 @@ public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
     bonusTransaction.setComment(comment);
     bonusTransaction.setDriverId(driverId);
     bonusTransaction.setAmount(bonusAmount);
-    bonusTransaction.setWithVat(false);
     bonusTransaction.setTransactionTypeId(transactionTypeId);
 
     return Optional.of(bonusTransaction);
