@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
   private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.05);
+  private static final BigDecimal BONUS_THRESHOLD_RATE = BigDecimal.valueOf(2d);
 
   public BonusStrategyTwoWeeksPrepayment(
       final GetTransactionQuery transactionQuery,
@@ -39,7 +40,8 @@ public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
     final var driverId = obligation.getDriverId();
     final var qWeekId = obligation.getQWeekId();
     final var positiveAmount = getPositiveAmount(driverId, qWeekId);
-    final var bonusThreshold = obligation.getObligationAmount().multiply(BigDecimal.valueOf(2l));
+    final var bonusThreshold =
+        obligation.getObligationAmount().abs().multiply(BONUS_THRESHOLD_RATE);
     if (positiveAmount.compareTo(bonusThreshold) < 0) {
       return Optional.empty();
     }
