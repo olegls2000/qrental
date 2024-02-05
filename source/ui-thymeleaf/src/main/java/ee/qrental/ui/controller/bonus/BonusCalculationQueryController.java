@@ -38,7 +38,7 @@ public class BonusCalculationQueryController {
   public String getCalculationView(@PathVariable("id") long id, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var calculation = bonusCalculationQuery.getById(id);
-    final var transactions = transactionQuery.getAllByRentCalculationId(id);
+    final var transactions = transactionQuery.getAllByBonusCalculationId(id);
 
     model.addAttribute("calculation", calculation);
     model.addAttribute("transactions", transactions);
