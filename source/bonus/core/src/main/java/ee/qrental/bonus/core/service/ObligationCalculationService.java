@@ -74,7 +74,8 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
               final var debtObligation =
                   getDebtObligation(driverId, previousWeek.getId(), rentObligation);
               final var weekObligationAmount = rentObligation.add(debtObligation);
-              final var positiveAmount = getPositiveAmount(driverId, qWeekId);
+              final var prepayment = getPrepayment(driverId, previousWeek.getId());
+              final var positiveAmount = getPositiveAmount(driverId, qWeekId).add(prepayment);
               final var matchCount =
                   getMatchCount(
                       driverId,
@@ -150,6 +151,17 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
         .filter(transaction -> transactionTypes.contains(transaction.getType()))
         .map(TransactionResponse::getRealAmount)
         .reduce(ZERO, BigDecimal::add);
+  }
+
+  private BigDecimal getPrepayment(final Long driverId, final Long previousQWeekId) {
+    final var rawBalance =
+        balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(driverId, previousQWeekId);
+    if (rawBalance.compareTo(ZERO) > 0) {
+
+      return rawBalance;
+    }
+
+    return ZERO;
   }
 
   private BigDecimal getDebtObligation(
