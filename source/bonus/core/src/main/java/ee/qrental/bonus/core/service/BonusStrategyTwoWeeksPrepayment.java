@@ -40,13 +40,12 @@ public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
     final var driverId = obligation.getDriverId();
     final var qWeekId = obligation.getQWeekId();
     final var positiveAmount = getPositiveAmount(driverId, qWeekId);
-    final var bonusThreshold =
-        obligation.getObligationAmount().abs().multiply(BONUS_THRESHOLD_RATE);
+    final var obligationAbs = obligation.getObligationAmount().abs();
+    final var bonusThreshold = obligationAbs.multiply(BONUS_THRESHOLD_RATE);
     if (positiveAmount.compareTo(bonusThreshold) < 0) {
       return Optional.empty();
     }
-    final var weekObligation = obligation.getObligationAmount();
-    final var bonusAmount = weekObligation.multiply(DISCOUNT_RATE);
+    final var bonusAmount = obligationAbs.multiply(DISCOUNT_RATE);
     final var comment =
         format("Bonus Transaction for %s Strategy", STRATEGY_2_WEEKS_PREPAYMENT_CODE);
     final var transactionTypeId = getBonusTransactionTypeId();
