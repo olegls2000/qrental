@@ -191,13 +191,17 @@ public class BalanceQueryController {
   }
 
   private void addObligationDataToModel(final Long driverId, final Model model) {
-    final var obligation = obligationQuery.getForCurrentWeekByDriverId(driverId);
-    final var obligationAmount =
-        obligation == null ? "not calculated" : obligation.getAmount().toString();
-    final var obligationMatchCount =
-        obligation == null ? "not calculated" : obligation.getMatchCount().toString();
-    model.addAttribute("obligationAmount", obligationAmount);
-    model.addAttribute("obligationMatchCount", obligationMatchCount);
+    final var rawObligationAmount =
+        obligationQuery.getRawObligationAmountForCurrentWeekByDriverId(driverId);
+    model.addAttribute("obligationAmount", rawObligationAmount);
+
+    final var preCurrentWeekObligation =
+        obligationQuery.getObligationAmountForPreCurrentWeekByDriverId(driverId);
+    if (preCurrentWeekObligation == null) {
+      model.addAttribute("obligationMatchCount", "not calculated");
+      return;
+    }
+    model.addAttribute("obligationMatchCount", preCurrentWeekObligation.getMatchCount().toString());
   }
 
   private void addCallSignDataToModel(final Long driverId, final Model model) {

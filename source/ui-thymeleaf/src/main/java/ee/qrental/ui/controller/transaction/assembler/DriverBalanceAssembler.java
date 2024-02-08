@@ -25,9 +25,12 @@ public class DriverBalanceAssembler {
     final var driverId = driver.getId();
     final var rawTotal = balanceQuery.getRawBalanceTotalByDriver(driverId);
     final var fee = balanceQuery.getFeeByDriver(driverId);
-    final var obligation = obligationQuery.getForCurrentWeekByDriverId(driverId);
-    final var obligationAmount = obligation == null ? null : obligation.getAmount();
-    final var obligationMatchCount = obligation == null ? null : obligation.getMatchCount();
+    final var obligationAmount =
+        obligationQuery.getRawObligationAmountForCurrentWeekByDriverId(driverId);
+    final var preCurrentWeekObligation =
+        obligationQuery.getObligationAmountForPreCurrentWeekByDriverId(driverId);
+    final var obligationMatchCount =
+        preCurrentWeekObligation == null ? null : preCurrentWeekObligation.getMatchCount();
 
     return DriversBalanceModel.builder()
         .driverId(driverId)

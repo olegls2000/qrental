@@ -12,6 +12,7 @@ import ee.qrental.bonus.core.mapper.ObligationCalculationResponseMapper;
 import ee.qrental.bonus.core.mapper.ObligationResponseMapper;
 import ee.qrental.bonus.core.service.ObligationCalculationQueryService;
 import ee.qrental.bonus.core.service.ObligationCalculationService;
+import ee.qrental.bonus.core.service.ObligationCalculator;
 import ee.qrental.bonus.core.service.ObligationQueryService;
 import ee.qrental.bonus.core.validator.ObligationCalculationAddBusinessRuleValidator;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
@@ -19,7 +20,6 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,14 +39,22 @@ public class ObligationServiceConfig {
   GetObligationQuery getGetObligationQuery(
       final GetQWeekQuery qWeekQuery,
       final ObligationLoadPort loadPort,
+      final ObligationCalculator obligationCalculator,
       final ObligationResponseMapper responseMapper) {
-    return new ObligationQueryService(qWeekQuery, loadPort, responseMapper);
+    return new ObligationQueryService(qWeekQuery, loadPort, obligationCalculator, responseMapper);
+  }
+
+  @Bean
+  ObligationCalculator getObligationCalculator(
+      final GetQWeekQuery qWeekQuery,
+      final GetBalanceQuery balanceQuery,
+      final GetTransactionQuery transactionQuery) {
+    return new ObligationCalculator(qWeekQuery, balanceQuery, transactionQuery);
   }
 
   @Bean
   public ObligationCalculationAddUseCase getObligationCalculationAddUseCase(
       final GetQWeekQuery qWeekQuery,
-      final GetBalanceQuery balanceQuery,
       final GetTransactionQuery transactionQuery,
       final GetCarLinkQuery carLinkQuery,
       final GetUserAccountQuery userAccountQuery,
@@ -55,10 +63,10 @@ public class ObligationServiceConfig {
       final ObligationAddPort obligationAddPort,
       final ObligationLoadPort loadPort,
       final ObligationCalculationAddRequestMapper addRequestMapper,
-      final ObligationCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
+      final ObligationCalculationAddBusinessRuleValidator addBusinessRuleValidator,
+      final ObligationCalculator obligationCalculator) {
     return new ObligationCalculationService(
         qWeekQuery,
-        balanceQuery,
         transactionQuery,
         carLinkQuery,
         userAccountQuery,
@@ -67,6 +75,7 @@ public class ObligationServiceConfig {
         obligationAddPort,
         loadPort,
         addRequestMapper,
-        addBusinessRuleValidator);
+        addBusinessRuleValidator,
+        obligationCalculator);
   }
 }
