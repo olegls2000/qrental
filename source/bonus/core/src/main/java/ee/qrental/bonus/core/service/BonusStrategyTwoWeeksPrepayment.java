@@ -33,16 +33,15 @@ public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
   }
 
   @Override
-  public Optional<TransactionAddRequest> calculateBonus(final Obligation obligation) {
+  public Optional<TransactionAddRequest> calculateBonus(
+      final Obligation obligation, final BigDecimal rawBalanceAmount) {
     if (obligation.getMatchCount() < 4) {
       return Optional.empty();
     }
     final var driverId = obligation.getDriverId();
-    final var qWeekId = obligation.getQWeekId();
-    final var positiveAmount = getPositiveAmount(driverId, qWeekId);
     final var obligationAbs = obligation.getObligationAmount().abs();
     final var bonusThreshold = obligationAbs.multiply(BONUS_THRESHOLD_RATE);
-    if (positiveAmount.compareTo(bonusThreshold) < 0) {
+    if (rawBalanceAmount.compareTo(bonusThreshold) < 0) {
       return Optional.empty();
     }
     final var bonusAmount = obligationAbs.multiply(DISCOUNT_RATE);
@@ -62,16 +61,5 @@ public class BonusStrategyTwoWeeksPrepayment extends AbstractBonusStrategy {
   @Override
   public String getBonusCode() {
     return STRATEGY_2_WEEKS_PREPAYMENT_CODE;
-  }
-
-  private BigDecimal getPositiveAmount(final Long driverId, final Long qWeekId) {
-    final var positiveAmount =
-        getTransactionQuery().getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-            // TODO move "P" to API
-            .filter(tr -> "P".equals(tr.getKind()))
-            .map(TransactionResponse::getRealAmount)
-            .reduce(ZERO, BigDecimal::add);
-
-    return positiveAmount;
   }
 }

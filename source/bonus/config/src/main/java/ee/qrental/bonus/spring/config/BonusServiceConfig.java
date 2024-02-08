@@ -13,6 +13,7 @@ import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
@@ -60,6 +61,7 @@ public class BonusServiceConfig {
   @Bean
   public BonusCalculationAddUseCase getBonusCalculationAddUseCase(
       final GetQWeekQuery qWeekQuery,
+      final GetBalanceQuery balanceQuery,
       final GetTransactionQuery transactionQuery,
       final GetCarLinkQuery carLinkQuery,
       final TransactionAddUseCase transactionAddUseCase,
@@ -73,6 +75,7 @@ public class BonusServiceConfig {
       final List<BonusStrategy> bonusStrategies) {
     return new BonusCalculationService(
         qWeekQuery,
+        balanceQuery,
         transactionQuery,
         carLinkQuery,
         transactionAddUseCase,

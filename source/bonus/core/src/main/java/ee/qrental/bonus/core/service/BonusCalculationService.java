@@ -16,6 +16,7 @@ import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.api.in.request.EmailType;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import ee.qrental.user.api.in.response.UserAccountResponse;
@@ -29,6 +30,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BonusCalculationService implements BonusCalculationAddUseCase {
   private final GetQWeekQuery qWeekQuery;
+  private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetCarLinkQuery carLinkQuery;
   private final TransactionAddUseCase transactionAddUseCase;
@@ -60,6 +62,8 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
             driverId -> {
               final var obligation =
                   obligationLoadPort.loadByDriverIdAndByQWeekId(driverId, qWeekId);
+              final var rawBalance =
+                  balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(driverId, qWeekId);
               final var strategiesForCalculation = new ArrayList<BonusStrategy>();
               bonusPrograms.stream()
                   .map(
@@ -72,7 +76,8 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
                           bonusStrategyOpt.ifPresent(strategiesForCalculation::add));
 
               for (final BonusStrategy strategy : strategiesForCalculation) {
-                final var transactionAddRequestOptional = strategy.calculateBonus(obligation);
+                final var transactionAddRequestOptional =
+                    strategy.calculateBonus(obligation, rawBalance);
                 if (transactionAddRequestOptional.isPresent()) {
                   final var bonusTransactionId =
                       transactionAddUseCase.add(transactionAddRequestOptional.get());
