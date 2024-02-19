@@ -30,6 +30,7 @@ public class ObligationCalculator {
         balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(driverId, previousQWeekId);
     if (previousWeekBalance.compareTo(ZERO) < 0) {
       final var debt = rentObligationAbs.multiply(DEBT_RATE);
+
       return rentObligationAbs.add(debt);
     }
 
@@ -37,7 +38,7 @@ public class ObligationCalculator {
       return rentObligationAbs.subtract(previousWeekBalance.abs());
     }
 
-    return rentObligation;
+    return rentObligationAbs;
   }
 
   private BigDecimal getRentObligation(final Long driverId, final Long qWeekId) {

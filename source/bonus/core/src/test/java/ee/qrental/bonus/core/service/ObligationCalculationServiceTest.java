@@ -16,7 +16,7 @@ import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
 import org.junit.jupiter.api.BeforeEach;
 
-class ObligationCalculationServicerTest {
+class ObligationCalculationServiceTest {
 
   private ObligationCalculationService instanceUnderTest;
 
@@ -32,6 +32,7 @@ class ObligationCalculationServicerTest {
   private ObligationLoadPort loadPort;
   private ObligationCalculationAddRequestMapper addRequestMapper;
   private ObligationCalculationAddBusinessRuleValidator addBusinessRuleValidator;
+  private ObligationCalculator obligationCalculator;
 
   @BeforeEach
   void init() {
@@ -47,12 +48,11 @@ class ObligationCalculationServicerTest {
     loadPort = mock(ObligationLoadPort.class);
     addRequestMapper = mock(ObligationCalculationAddRequestMapper.class);
     addBusinessRuleValidator = mock(ObligationCalculationAddBusinessRuleValidator.class);
+    obligationCalculator = mock(ObligationCalculator.class);
 
     instanceUnderTest =
         new ObligationCalculationService(
             qWeekQuery,
-            balanceQuery,
-            transactionTypeQuery,
             transactionQuery,
             carLinkQuery,
             userAccountQuery,
@@ -61,7 +61,8 @@ class ObligationCalculationServicerTest {
             obligationAddPort,
             loadPort,
             addRequestMapper,
-            addBusinessRuleValidator);
+            addBusinessRuleValidator,
+            obligationCalculator);
   }
-  //TODO ...
+  // TODO ...
 }
