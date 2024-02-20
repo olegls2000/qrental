@@ -28,7 +28,7 @@ public class BonusServiceConfig {
   List<BonusStrategy> getBonusStrategies(
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery) {
-    return asList(new BonusStrategyTwoWeeksPrepayment(transactionQuery, transactionTypeQuery));
+    return asList(new TwoWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery));
   }
 
   @Bean
