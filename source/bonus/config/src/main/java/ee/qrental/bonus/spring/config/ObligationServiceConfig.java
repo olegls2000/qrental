@@ -17,6 +17,7 @@ import ee.qrental.bonus.core.service.ObligationQueryService;
 import ee.qrental.bonus.core.validator.ObligationCalculationAddBusinessRuleValidator;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
@@ -48,8 +49,9 @@ public class ObligationServiceConfig {
   ObligationCalculator getObligationCalculator(
       final GetQWeekQuery qWeekQuery,
       final GetBalanceQuery balanceQuery,
+      final GetDriverQuery driverQuery,
       final GetTransactionQuery transactionQuery) {
-    return new ObligationCalculator(qWeekQuery, balanceQuery, transactionQuery);
+    return new ObligationCalculator(qWeekQuery, balanceQuery, driverQuery, transactionQuery);
   }
 
   @Bean

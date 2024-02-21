@@ -48,6 +48,8 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .bySms(domain.getBySms())
         .byPhone(domain.getByPhone())
         .deposit(domain.getDeposit())
+        .hasRequiredObligation(domain.hasRequiredObligation())
+        .requiredObligation(domain.getRequiredObligation())
         .qFirmId(qFirmId)
         .qFirmName(qFirmName)
         .comment(domain.getComment())

@@ -8,6 +8,19 @@
 </div>
 
 <div th:fragment="addForm">
+    <script>
+        function onClickRequiredObligation() {
+            const hasRequiredObligation = document.getElementById("hasRequiredObligationId");
+            const requiredObligation = document.getElementById("requiredObligationId");
+            if (hasRequiredObligation.checked == true) {
+                requiredObligation.disabled = false;
+                requiredObligation.value = 0
+            } else {
+                requiredObligation.disabled = true;
+                requiredObligation.value = 0
+            }
+        }
+    </script>
     <form method="post"
           th:action="@{/drivers/add}"
           th:object="${addRequest}">
@@ -58,6 +71,27 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="hasRequiredObligationId"
+                           th:field="*{hasRequiredObligation}"
+                           onchange="onClickRequiredObligation()"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="hasRequiredObligationId">Need Required
+                        Obligation</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="requiredObligationId">Required Obligation, EUR</label>
+                    <input class="form-control" id="requiredObligationId" placeholder="Enter Required Obligation, EUR"
+                           th:field="*{requiredObligation}"
+                           disabled
+                           type="number"/>
+                </div>
+            </div>
+        </div>
         <p class="fs-5">Q-info:</p>
         <div class="row">
             <div class="col">
@@ -83,7 +117,6 @@
                 </div>
             </div>
         </div>
-
         <p class="fs-5">Drivers info:</p>
         <div class="row">
             <div class="col">

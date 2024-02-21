@@ -5,6 +5,7 @@ import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSA
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -19,9 +20,12 @@ public class ObligationCalculator {
 
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceQuery balanceQuery;
+  private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
 
   public BigDecimal calculate(final Long driverId, final Long qWeekId) {
+    var rentObligationResult = ZERO;
+
     final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     final var previousQWeekId = previousQWeek.getId();
     final var rentObligation = getRentObligation(driverId, qWeekId);
@@ -30,15 +34,25 @@ public class ObligationCalculator {
         balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(driverId, previousQWeekId);
     if (previousWeekBalance.compareTo(ZERO) < 0) {
       final var debt = rentObligationAbs.multiply(DEBT_RATE);
-
-      return rentObligationAbs.add(debt);
+      rentObligationResult = rentObligationAbs.add(debt);
+    } else if (previousWeekBalance.compareTo(ZERO) > 0) {
+      rentObligationResult = rentObligationAbs.subtract(previousWeekBalance.abs());
+    } else {
+      rentObligationResult = rentObligationAbs;
     }
-
-    if (previousWeekBalance.compareTo(ZERO) > 0) {
-      return rentObligationAbs.subtract(previousWeekBalance.abs());
+    final var requiredObligation = getRequiredObligation(driverId);
+    if (requiredObligation.compareTo(rentObligationResult) > 0) {
+      return requiredObligation;
     }
+    return rentObligationResult;
+  }
 
-    return rentObligationAbs;
+  private BigDecimal getRequiredObligation(final Long driverId) {
+    final var driver = driverQuery.getById(driverId);
+    if (driver.getHasRequiredObligation()) {
+      return driver.getRequiredObligation();
+    }
+    return ZERO;
   }
 
   private BigDecimal getRentObligation(final Long driverId, final Long qWeekId) {

@@ -35,9 +35,10 @@ public class DriverResponse {
   private Boolean bySms;
   private Boolean byPhone;
   private BigDecimal deposit;
+  private Boolean hasRequiredObligation;
+  private BigDecimal requiredObligation;
   private Long qFirmId;
   private String qFirmName;
   private String comment;
   private LocalDate createdDate;
-
 }

@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -21,20 +23,23 @@ class ObligationCalculatorTest {
   private ObligationCalculator instanceUnderTest;
   private GetQWeekQuery qWeekQuery;
   private GetBalanceQuery balanceQuery;
+  private GetDriverQuery driverQuery;
   private GetTransactionQuery transactionQuery;
 
   @BeforeEach
   void init() {
     qWeekQuery = mock(GetQWeekQuery.class);
     balanceQuery = mock(GetBalanceQuery.class);
+    driverQuery = mock(GetDriverQuery.class);
     transactionQuery = mock(GetTransactionQuery.class);
-    instanceUnderTest = new ObligationCalculator(qWeekQuery, balanceQuery, transactionQuery);
+    instanceUnderTest =
+        new ObligationCalculator(qWeekQuery, balanceQuery, driverQuery, transactionQuery);
 
     when(qWeekQuery.getOneBeforeById(9L)).thenReturn(QWeekResponse.builder().id(8L).build());
   }
 
   @Test
-  public void testObligationWithDebt() {
+  public void testObligationWithDebtAndWithoutRequiredObligation() {
     // given
     final var driverId = 2L;
     final var qWekId = 9L;
@@ -49,6 +54,8 @@ class ObligationCalculatorTest {
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(2L, 8L))
         .thenReturn(BigDecimal.valueOf(-1L));
+    when(driverQuery.getById(2L))
+        .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
     final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
@@ -58,7 +65,7 @@ class ObligationCalculatorTest {
   }
 
   @Test
-  public void testObligationWithZeroBalance() {
+  public void testObligationWithZeroBalanceAndWithoutRequiredObligation() {
     // given
     final var driverId = 2L;
     final var qWekId = 9L;
@@ -72,6 +79,8 @@ class ObligationCalculatorTest {
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(2L, 8L)).thenReturn(ZERO);
+    when(driverQuery.getById(2L))
+        .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
     final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
@@ -81,7 +90,7 @@ class ObligationCalculatorTest {
   }
 
   @Test
-  public void testObligationWithPositiveBalance() {
+  public void testObligationWithPositiveBalanceAndWithoutRequiredObligation() {
     // given
     final var driverId = 2L;
     final var qWekId = 9L;
@@ -96,11 +105,72 @@ class ObligationCalculatorTest {
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(2L, 8L))
         .thenReturn(BigDecimal.valueOf(50d));
+    when(driverQuery.getById(2L))
+        .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
     final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
 
     // then
     assertEquals(0, BigDecimal.valueOf(50d).compareTo(obligationAmount));
+  }
+
+  @Test
+  public void testObligationWithZeroBalanceAndWithRequiredObligationBiggerThenCalculated() {
+    // given
+    final var driverId = 2L;
+    final var qWekId = 9L;
+
+    final var rentTransaction =
+        TransactionResponse.builder()
+            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .realAmount(BigDecimal.valueOf(-100d))
+            .build();
+    final var rentTransactions = singletonList(rentTransaction);
+
+    when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
+    when(balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(2L, 8L)).thenReturn(ZERO);
+    when(driverQuery.getById(2L))
+        .thenReturn(
+            DriverResponse.builder()
+                .id(2L)
+                .hasRequiredObligation(true)
+                .requiredObligation(BigDecimal.valueOf(200d))
+                .build());
+
+    // when
+    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+
+    // then
+    assertEquals(0, BigDecimal.valueOf(200d).compareTo(obligationAmount));
+  }
+  @Test
+  public void testObligationWithZeroBalanceAndWithRequiredObligationLessThenCalculated() {
+    // given
+    final var driverId = 2L;
+    final var qWekId = 9L;
+
+    final var rentTransaction =
+            TransactionResponse.builder()
+                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .realAmount(BigDecimal.valueOf(-100d))
+                    .build();
+    final var rentTransactions = singletonList(rentTransaction);
+
+    when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
+    when(balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(2L, 8L)).thenReturn(ZERO);
+    when(driverQuery.getById(2L))
+            .thenReturn(
+                    DriverResponse.builder()
+                            .id(2L)
+                            .hasRequiredObligation(true)
+                            .requiredObligation(BigDecimal.valueOf(50d))
+                            .build());
+
+    // when
+    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+
+    // then
+    assertEquals(0, BigDecimal.valueOf(100d).compareTo(obligationAmount));
   }
 }
