@@ -61,7 +61,6 @@ public class BonusServiceConfig {
   @Bean
   public BonusCalculationAddUseCase getBonusCalculationAddUseCase(
       final GetQWeekQuery qWeekQuery,
-      final GetBalanceQuery balanceQuery,
       final GetTransactionQuery transactionQuery,
       final GetCarLinkQuery carLinkQuery,
       final TransactionAddUseCase transactionAddUseCase,
@@ -75,7 +74,6 @@ public class BonusServiceConfig {
       final List<BonusStrategy> bonusStrategies) {
     return new BonusCalculationService(
         qWeekQuery,
-        balanceQuery,
         transactionQuery,
         carLinkQuery,
         transactionAddUseCase,

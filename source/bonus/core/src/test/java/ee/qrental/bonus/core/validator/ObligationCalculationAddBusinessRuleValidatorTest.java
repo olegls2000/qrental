@@ -35,9 +35,10 @@ class ObligationCalculationAddBusinessRuleValidatorTest {
     addRequest.setQWeekId(qWeekId);
     addRequest.setComment("test comment");
 
-
-    final QWeekResponse previousQWeek = null;
-    when(qWeekQuery.getOneBeforeById(qWeekId)).thenReturn(previousQWeek);
+    final var currentQWeekId = 10L;
+    final var currentQWeek = QWeekResponse.builder().id(currentQWeekId).build();
+    when(qWeekQuery.getCurrentWeek()).thenReturn(currentQWeek);
+    when(qWeekQuery.getOneBeforeById(qWeekId)).thenReturn(null);
 
     // when
     final var violationsCollector = instanceUnderTest.validate(addRequest);
@@ -55,8 +56,11 @@ class ObligationCalculationAddBusinessRuleValidatorTest {
     addRequest.setQWeekId(qWeekId);
     addRequest.setComment("test comment");
 
+    final var currentQWeekId = 4L;
+    final var currentQWeek = QWeekResponse.builder().id(currentQWeekId).build();
     final var previousQWeekId = 4L;
     final var previousQWeek = QWeekResponse.builder().id(previousQWeekId).build();
+    when(qWeekQuery.getCurrentWeek()).thenReturn(currentQWeek);
     when(qWeekQuery.getOneBeforeById(qWeekId)).thenReturn(previousQWeek);
     when(loadPort.loadLastCalculatedQWeekId()).thenReturn(null);
 
@@ -79,6 +83,34 @@ class ObligationCalculationAddBusinessRuleValidatorTest {
     final var previousQWeekId = 4L;
     final var previousQWeek = QWeekResponse.builder().id(previousQWeekId).build();
     when(qWeekQuery.getOneBeforeById(qWeekId)).thenReturn(previousQWeek);
+
+    final var currentQWeekId = 4L;
+    final var currentQWeek = QWeekResponse.builder().id(currentQWeekId).build();
+    when(qWeekQuery.getCurrentWeek()).thenReturn(currentQWeek);
+    when(loadPort.loadLastCalculatedQWeekId()).thenReturn(99L);
+
+    // when
+    final var violationsCollector = instanceUnderTest.validate(addRequest);
+
+    // then
+    assertTrue(violationsCollector.hasViolations());
+  }
+
+  @Test
+  public void testIfCalculationForCurrentWeek() {
+    // given
+    final var qWeekId = 5L;
+    final var addRequest = new ObligationCalculationAddRequest();
+    addRequest.setQWeekId(qWeekId);
+    addRequest.setComment("test comment");
+
+    final var previousQWeekId = 4L;
+    final var previousQWeek = QWeekResponse.builder().id(previousQWeekId).build();
+    when(qWeekQuery.getOneBeforeById(qWeekId)).thenReturn(previousQWeek);
+
+    final var currentQWeekId = 5L;
+    final var currentQWeek = QWeekResponse.builder().id(currentQWeekId).build();
+    when(qWeekQuery.getCurrentWeek()).thenReturn(currentQWeek);
     when(loadPort.loadLastCalculatedQWeekId()).thenReturn(99L);
 
     // when

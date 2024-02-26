@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class BonusStrategyTwoWeeksPrepaymentTest {
+class TwoWeeksPrepaymentBonusStrategyTest {
   private GetTransactionQuery transactionQuery;
   private GetTransactionTypeQuery transactionTypeQuery;
 
@@ -79,11 +79,11 @@ class BonusStrategyTwoWeeksPrepaymentTest {
   public void testCalculateBonusForNonMatchingCount() {
     // given
     final var obligation = Obligation.builder().matchCount(3).build();
-    final var rawBalanceAmount = BigDecimal.ONE;
+    final var weekPositiveAmount = BigDecimal.ONE;
 
     // when
     final var addTransactionRequestOpt =
-        instanceUnderTest.calculateBonus(obligation, rawBalanceAmount);
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
     assertTrue(addTransactionRequestOpt.isEmpty());
@@ -93,7 +93,7 @@ class BonusStrategyTwoWeeksPrepaymentTest {
   public void testCalculateBonusForNotEnoughPrepayment() {
     // given
     final var obligation = Obligation.builder().matchCount(4).driverId(2L).qWeekId(9L).build();
-    final var rawBalanceAmount = BigDecimal.valueOf(199d);
+    final var weekPositiveAmount = BigDecimal.valueOf(199d);
     final var rentTransaction =
         TransactionResponse.builder()
             .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
@@ -105,7 +105,7 @@ class BonusStrategyTwoWeeksPrepaymentTest {
 
     // when
     final var addTransactionRequestOpt =
-        instanceUnderTest.calculateBonus(obligation, rawBalanceAmount);
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
     assertTrue(addTransactionRequestOpt.isEmpty());
@@ -115,7 +115,7 @@ class BonusStrategyTwoWeeksPrepaymentTest {
   public void testCalculateBonus() {
     // given
     final var obligation = Obligation.builder().matchCount(4).driverId(2L).qWeekId(9L).build();
-    final var rawBalanceAmount = BigDecimal.valueOf(200d);
+    final var weekPositiveAmount = BigDecimal.valueOf(200d);
     final var rentTransaction =
         TransactionResponse.builder()
             .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
@@ -129,7 +129,7 @@ class BonusStrategyTwoWeeksPrepaymentTest {
 
     // when
     final var addTransactionRequestOpt =
-        instanceUnderTest.calculateBonus(obligation, rawBalanceAmount);
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
     assertTrue(addTransactionRequestOpt.isPresent());

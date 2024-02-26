@@ -47,6 +47,7 @@ public class ExceptionController {
     emailSendUseCase.sendEmail(emailSendRequest);
 
     model.addAttribute("uuid", uuid);
+    model.addAttribute("errorCause", errorMessage);
 
     return "error";
   }

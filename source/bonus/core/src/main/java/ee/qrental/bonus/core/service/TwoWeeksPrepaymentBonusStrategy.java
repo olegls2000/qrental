@@ -40,7 +40,7 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
 
   @Override
   public Optional<TransactionAddRequest> calculateBonus(
-      final Obligation obligation, final BigDecimal rawBalanceAmount) {
+      final Obligation obligation, final BigDecimal weekPositiveAmount) {
     if (obligation.getMatchCount() < BONUS_THRESHOLD_MATCH_COUNT) {
 
       return Optional.empty();
@@ -50,7 +50,7 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
     final var rentAndNonLabelFineAmountAbs =
         getRentAndNonLabelFineTransactionsAbsAmount(driverId, qWeekId);
     final var bonusThreshold = rentAndNonLabelFineAmountAbs.multiply(BONUS_THRESHOLD_RATE);
-    if (rawBalanceAmount.compareTo(bonusThreshold) < 0) {
+    if (weekPositiveAmount.compareTo(bonusThreshold) < 0) {
       return Optional.empty();
     }
     final var bonusAmount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);

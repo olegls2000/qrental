@@ -22,15 +22,22 @@ from obligation ob
 where ob.q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
 
 delete
-from obligation_calculation where q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
+from obligation_calculation
+where q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
 
 --------------------------------------------------------------------------------------------------------
 
 --## Bonus Calculations:
 delete
-from bonus_calculation_result;
+from bonus_calculation_result
+where bonus_calculation_id in (select id
+                               from bonus_calculation
+                               where q_week_id in
+                                     (select qw.id from q_week qw where qw.number = 26));
 delete
-from bonus_calculation;
+from bonus_calculation
+where q_week_id in (select qw.id from q_week qw where qw.number = 26);
+
 delete
 from transaction
 where transaction_type_id in (select distinct(id)
