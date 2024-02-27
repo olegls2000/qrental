@@ -53,7 +53,8 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
     if (weekPositiveAmount.compareTo(bonusThreshold) < 0) {
       return Optional.empty();
     }
-    final var bonusAmount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
+    final var oneWeekBonusAmount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
+    final var totalDiscount =  oneWeekBonusAmount.add(oneWeekBonusAmount);
     final var comment =
         format("Bonus Transaction for %s Strategy", STRATEGY_2_WEEKS_PREPAYMENT_CODE);
     final var transactionTypeId = getBonusTransactionTypeId();
@@ -61,7 +62,7 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
     bonusTransaction.setDate(LocalDate.now());
     bonusTransaction.setComment(comment);
     bonusTransaction.setDriverId(driverId);
-    bonusTransaction.setAmount(bonusAmount);
+    bonusTransaction.setAmount(totalDiscount);
     bonusTransaction.setTransactionTypeId(transactionTypeId);
 
     return Optional.of(bonusTransaction);

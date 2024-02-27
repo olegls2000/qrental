@@ -134,7 +134,7 @@ class TwoWeeksPrepaymentBonusStrategyTest {
     // then
     assertTrue(addTransactionRequestOpt.isPresent());
     final var addRequestTransaction = addTransactionRequestOpt.get();
-    assertEquals(0, BigDecimal.valueOf(5).compareTo(addRequestTransaction.getAmount()));
+    assertEquals(0, BigDecimal.valueOf(10).compareTo(addRequestTransaction.getAmount()));
     assertEquals("Bonus Transaction for 2W Strategy", addRequestTransaction.getComment());
     assertEquals(2L, addRequestTransaction.getDriverId());
     assertEquals(33L, addRequestTransaction.getTransactionTypeId());
