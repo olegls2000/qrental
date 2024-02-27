@@ -50,7 +50,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
-  private static final BigDecimal VAT_RATE = BigDecimal.valueOf(0.83333333333333333333d);
+  private static final BigDecimal VAT_RATE = BigDecimal.valueOf(0.819672d);
   private static final LocalDate DEFAULT_START_DATE = LocalDate.of(2023, Month.JANUARY, 2);
 
   private final GetQWeekQuery qWeekQuery;
