@@ -42,7 +42,7 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
     return Invoice.builder()
         .id(null)
         .number(getInvoiceNumber(year, week, driverId))
-        .weekNumber(week.getNumber())
+        .qWeekId(null)
         .driverId(driverId)
         .driverCompany(driver.getCompanyName())
         .driverCompanyAddress(driver.getCompanyAddress())

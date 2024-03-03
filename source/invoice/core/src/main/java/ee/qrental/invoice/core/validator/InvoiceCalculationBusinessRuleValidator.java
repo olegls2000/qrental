@@ -21,10 +21,12 @@ public class InvoiceCalculationBusinessRuleValidator implements QValidator<Invoi
   @Override
   public ViolationsCollector validateAdd(final InvoiceCalculation domain) {
     final var violationsCollector = new ViolationsCollector();
-    if (isCalculationRequired(domain.getActionDate())) {
-      return violationsCollector;
-    }
-    violationsCollector.collect("No Data for Invoice Calculation.");
+
+    //TODO: make like ObligationCalculationAddBusinessRuleValidator
+    //if (isCalculationRequired(domain.getActionDate())) {
+     // return violationsCollector;
+    //}
+   // violationsCollector.collect("No Data for Invoice Calculation.");
 
     return violationsCollector;
   }
@@ -64,9 +66,10 @@ public class InvoiceCalculationBusinessRuleValidator implements QValidator<Invoi
     }
     final var previousQWek = qWeekQuery.getOneBeforeById(actionDateQWeek.getId());
     final var actionDateFormal = previousQWek.getEnd();
-    final var lastCalculationDate = loadPort.loadLastCalculatedDate();
-    final long daysBetween = DAYS.between(lastCalculationDate, actionDateFormal);
+    //final var lastCalculationDate = loadPort.loadLastCalculatedDate();
+    //final long daysBetween = DAYS.between(lastCalculationDate, actionDateFormal);
 
-    return daysBetween >= 7;
+    //return daysBetween >= 7;
+    return true;
   }
 }

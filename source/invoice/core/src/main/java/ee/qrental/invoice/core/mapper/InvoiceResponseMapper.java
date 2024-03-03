@@ -4,19 +4,27 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.toMap;
 
 import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.in.response.InvoiceImmutableResponse;
 import ee.qrental.invoice.api.in.response.InvoiceResponse;
 import ee.qrental.invoice.domain.Invoice;
 import ee.qrental.invoice.domain.InvoiceItem;
 import java.util.HashMap;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, Invoice> {
+
+  private final GetQWeekQuery qWeekQuery;
+
   @Override
   public InvoiceResponse toResponse(final Invoice domain) {
+    final var qWeek = qWeekQuery.getById(domain.getQWeekId());
     return InvoiceResponse.builder()
         .id(domain.getId())
         .number(domain.getNumber())
-        .weekNumber(domain.getWeekNumber())
+        .weekNumber(qWeek.getNumber())
+        .year(qWeek.getYear())
         .driverCompany(domain.getDriverCompany())
         .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())
         .driverCompanyAddress(domain.getDriverCompanyAddress())
@@ -32,9 +40,11 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
 
   @Override
   public String toObjectInfo(final Invoice domain) {
+
+    final var qWeek = qWeekQuery.getById(domain.getQWeekId());
     return format(
-        "Receiver: %s, Sender: %s, Week: %d",
-        domain.getDriverCompany(), domain.getQFirmName(), domain.getWeekNumber());
+        "Receiver: %s, Sender: %s, Year: %d, Week: %d",
+        domain.getDriverCompany(), domain.getQFirmName(), qWeek.getYear(), qWeek.getNumber());
   }
 
   public InvoiceImmutableResponse toImmutableData(final Invoice domain) {

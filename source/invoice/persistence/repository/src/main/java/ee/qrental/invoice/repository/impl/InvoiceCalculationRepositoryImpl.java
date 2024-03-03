@@ -28,7 +28,7 @@ public class InvoiceCalculationRepositoryImpl implements InvoiceCalculationRepos
   }
 
   @Override
-  public LocalDate getLastCalculationDate() {
-    return springDataRepository.getLastCalculationDate();
+  public InvoiceCalculationJakartaEntity getLastCalculation() {
+    return springDataRepository.getLastCalculation();
   }
 }

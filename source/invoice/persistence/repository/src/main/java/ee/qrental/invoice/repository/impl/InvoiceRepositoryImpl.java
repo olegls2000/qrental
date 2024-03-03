@@ -33,12 +33,18 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
   @Override
   public InvoiceJakartaEntity findByWeekAndDriverIdAndFirmId(
-      final Integer weekNumber, final Long driverId, final Long firmId) {
-    return springDataRepository.findByWeekNumberAndDriverIdAndQFirmId(weekNumber, driverId, firmId);
+      final Long qWeekId, final Long driverId, final Long firmId) {
+    return springDataRepository.findByQWeekIdAndDriverIdAndQFirmId(qWeekId, driverId, firmId);
   }
 
   @Override
   public InvoiceJakartaEntity findByByQWeekIdAndDriverId(final Long qWeekId, final Long driverId) {
     return springDataRepository.findByByQWeekIdAndDriverId(qWeekId, driverId);
+  }
+
+  @Override
+  public List<InvoiceJakartaEntity> findByCalculationId(Long calculationId) {
+    return springDataRepository.findByCalculationId(calculationId);
+
   }
 }

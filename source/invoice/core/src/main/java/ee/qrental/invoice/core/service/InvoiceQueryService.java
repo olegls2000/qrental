@@ -16,22 +16,22 @@ import lombok.AllArgsConstructor;
 public class InvoiceQueryService implements GetInvoiceQuery {
 
   private final InvoiceLoadPort loadPort;
-  private final InvoiceResponseMapper mapper;
+  private final InvoiceResponseMapper responseMapper;
   private final InvoiceUpdateRequestMapper updateRequestMapper;
 
   @Override
   public List<InvoiceResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream().map(responseMapper::toResponse).collect(toList());
   }
 
   @Override
   public InvoiceResponse getById(final Long id) {
-    return mapper.toResponse(loadPort.loadById(id));
+    return responseMapper.toResponse(loadPort.loadById(id));
   }
 
   @Override
   public String getObjectInfo(Long id) {
-    return mapper.toObjectInfo(loadPort.loadById(id));
+    return responseMapper.toObjectInfo(loadPort.loadById(id));
   }
 
   @Override
@@ -41,6 +41,13 @@ public class InvoiceQueryService implements GetInvoiceQuery {
 
   @Override
   public InvoiceImmutableResponse getImmutableDataById(Long id) {
-    return mapper.toImmutableData(loadPort.loadById(id));
+    return responseMapper.toImmutableData(loadPort.loadById(id));
+  }
+
+  @Override
+  public List<InvoiceResponse> getAllByCalculationId(Long calculationId) {
+    return loadPort.loadAllByCalculationId(calculationId).stream()
+            .map(responseMapper::toResponse)
+            .toList();
   }
 }

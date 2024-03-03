@@ -13,7 +13,9 @@ public interface InvoiceRepository {
   void deleteById(final Long id);
 
   InvoiceJakartaEntity findByWeekAndDriverIdAndFirmId(
-      final Integer weekNumber, final Long driverId, final Long firmId);
+      final Long qWeekId, final Long driverId, final Long firmId);
 
   InvoiceJakartaEntity findByByQWeekIdAndDriverId(final Long qWeekId, final Long driverId);
+
+    List<InvoiceJakartaEntity> findByCalculationId(final Long calculationId);
 }

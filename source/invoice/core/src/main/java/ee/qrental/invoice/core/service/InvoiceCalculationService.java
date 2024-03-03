@@ -7,7 +7,6 @@ import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -68,20 +67,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final InvoiceToPdfConverter invoiceToPdfConverter;
   private final InvoiceToPdfModelMapper invoiceToPdfModelMapper;
 
-  private void setStartAndEndDates(
-      final InvoiceCalculation domain,
-      QWeekResponse latestCalculatedWeek,
-      QWeekResponse latestRequestedWeek) {
-    final var startDate =
-        latestCalculatedWeek == null
-            ? DEFAULT_START_DATE
-            : latestCalculatedWeek.getEnd().plusDays(1);
-    final var endDate = latestRequestedWeek.getEnd();
-
-    domain.setStartDate(startDate);
-    domain.setEndDate(endDate);
-  }
-
   @Transactional
   @Override
   public void add(final InvoiceCalculationAddRequest addRequest) {
@@ -91,7 +76,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
     final var actionDate = addRequest.getActionDate();
     var latestCalculatedWeek = getLatestCalculatedWeek();
-    setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
+    domain.setStartQWeekId(latestCalculatedWeek.getId());
     final var nextAfterRequested = qWeekQuery.getOneAfterById(requestedQWeek.getId());
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
@@ -183,7 +168,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     Invoice.builder()
                         .id(null)
                         .number(invoiceNumber)
-                        .weekNumber(weekNumber)
                         .driverId(driverId)
                         .qWeekId(week.getId())
                         .driverCompany(driver.getCompanyName())
@@ -274,15 +258,13 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private QWeekResponse getLatestCalculatedWeek() {
-    var lastCalculationDate = loadPort.loadLastCalculatedDate();
-    if (lastCalculationDate == null) {
+    var lastCalculation = loadPort.loadLastCalculation();
+    if (lastCalculation == null) {
 
       return null;
     }
-    final var year = lastCalculationDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculationDate);
 
-    return qWeekQuery.getByYearAndNumber(year, weekNumber);
+    return qWeekQuery.getById(lastCalculation.getEndQWeekId());
   }
 
   private FirmResponse getQFirmForInvoice(
