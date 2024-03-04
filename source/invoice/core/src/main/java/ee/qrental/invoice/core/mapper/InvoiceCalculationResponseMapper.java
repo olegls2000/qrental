@@ -6,6 +6,8 @@ import ee.qrental.common.core.in.mapper.ResponseMapper;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.in.response.InvoiceCalculationResponse;
 import ee.qrental.invoice.domain.InvoiceCalculation;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -26,8 +28,8 @@ public class InvoiceCalculationResponseMapper
     return InvoiceCalculationResponse.builder()
         .id(domain.getId())
         .actionDate(domain.getActionDate())
-        .startWeek(format("%d-%d", startQWeek.getYear(), startQWeek.getNumber()))
-        .endWeek(format("%d-%d", endQWeek.getYear(), endQWeek.getNumber()))
+        .startWeek(startQWeek.toString())
+        .endWeek(endQWeek.toString())
         .invoicesCount(domain.getResults().size())
         .comment(domain.getComment())
         .build();
