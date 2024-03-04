@@ -23,14 +23,23 @@ public class ExceptionController {
 
   @ExceptionHandler(Exception.class)
   public String handleException(final Exception exception, final Model model) {
-    //TODO move to some service
+    // TODO move to some service
+    final var uuid = UUID.randomUUID().toString();
+    sndEmailNotification(uuid, exception);
+    exception.printStackTrace();
+    model.addAttribute("uuid", uuid);
+    model.addAttribute("errorCause", exception.getMessage());
+
+    return "error";
+  }
+
+  private void sndEmailNotification(final String uuid, final Exception exception) {
     final var operators = userAccountQuery.getAllOperators();
     final var recipients = operators.stream().map(UserAccountResponse::getEmail).toList();
     final var emailProperties = new HashMap<String, Object>();
-    final var uuid = UUID.randomUUID().toString();
     emailProperties.put("uuid", uuid);
-    final var errorMessage = exception.getMessage();
-    emailProperties.put("errorMessage", errorMessage);
+
+    emailProperties.put("errorMessage", exception.getMessage());
 
     final var stringWriter = new StringWriter();
     exception.printStackTrace(new PrintWriter(stringWriter));
@@ -45,10 +54,5 @@ public class ExceptionController {
             .build();
 
     emailSendUseCase.sendEmail(emailSendRequest);
-
-    model.addAttribute("uuid", uuid);
-    model.addAttribute("errorCause", errorMessage);
-
-    return "error";
   }
 }

@@ -127,7 +127,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                     format(
                         "%s %s, %d",
                         driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
-                final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekNumber);
+                final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekYear, weekNumber);
                 final var invoiceNumber = getInvoiceNumber(weekYear, weekNumber, driverId);
                 final var previousQWeekBalance = getWeekBalanceOrDefault(driverId, previousQWeek);
                 final var previousWeekBalanceAmountWithoutFee =
@@ -268,14 +268,18 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private FirmResponse getQFirmForInvoice(
-      final DriverResponse driver, final LocalDate weekStartDay, final Integer weekNumber) {
+      final DriverResponse driver,
+      final LocalDate weekStartDay,
+      final Integer weekYear,
+      final Integer weekNumber) {
     final var firmLink =
         firmLinkQuery.getOneByDriverIdAndRequiredDate(driver.getId(), weekStartDay);
     if (firmLink == null) {
       System.out.printf(
-          "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d week Invoice \n",
+          "Driver %s did not have a Firm Link on %s, current Firm will be taken for the %d year - %d week Invoice \n",
           format("%s %s", driver.getFirstName(), driver.getLastName()),
           weekStartDay.format(DateTimeFormatter.ISO_LOCAL_DATE),
+          weekYear,
           weekNumber);
       final var qFirmId = driver.getQFirmId();
       final var qFirm = firmQuery.getById(qFirmId);
