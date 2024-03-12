@@ -1,5 +1,6 @@
 package ee.qrental.common.core.utils;
 
+import static java.math.BigDecimal.ROUND_HALF_UP;
 import static java.math.RoundingMode.DOWN;
 
 import java.math.BigDecimal;
@@ -12,6 +13,6 @@ public class QNumberUtils {
       return null;
     }
 
-    return value.setScale(2, DOWN);
+    return value.setScale(2, ROUND_HALF_UP);
   }
 }
