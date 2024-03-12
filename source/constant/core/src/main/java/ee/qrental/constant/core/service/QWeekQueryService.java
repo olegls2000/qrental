@@ -1,9 +1,5 @@
 package ee.qrental.constant.core.service;
 
-import static java.lang.String.format;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-
 import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
@@ -11,10 +7,15 @@ import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.core.mapper.QWeekResponseMapper;
 import ee.qrental.constant.core.mapper.QWeekUpdateRequestMapper;
+import lombok.AllArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import lombok.AllArgsConstructor;
+
+import static java.lang.String.format;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 public class QWeekQueryService implements GetQWeekQuery {
@@ -58,7 +59,7 @@ public class QWeekQueryService implements GetQWeekQuery {
   public List<QWeekResponse> getAllByYear(final Integer year) {
     return loadPort.loadByYear(year).stream()
         .map(mapper::toResponse)
-        .sorted(DEFAULT_COMPARATOR)
+        .sorted(REVERSED_COMPARATOR)
         .collect(toList());
   }
 
@@ -84,7 +85,7 @@ public class QWeekQueryService implements GetQWeekQuery {
             ? loadPort.loadAllBeforeById(endQWeekId)
             : loadPort.loadAllBetweenByIds(starQtWeekId, endQWeekId);
 
-    return qWeeks.stream().map(mapper::toResponse).sorted(DEFAULT_COMPARATOR).collect(toList());
+    return qWeeks.stream().map(mapper::toResponse).sorted(REVERSED_COMPARATOR).collect(toList());
   }
 
   @Override

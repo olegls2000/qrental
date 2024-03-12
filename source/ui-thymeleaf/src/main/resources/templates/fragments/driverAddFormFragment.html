@@ -48,7 +48,7 @@
                            for="driverFriendId">Driver friend</label>
                     <select id="driverFriendId"
                             class="form-select"
-                            th:field="*{callSignId}">
+                    >
                         <option th:value="null">No friend</option>
                     </select>
                 </div>
@@ -101,9 +101,11 @@
                     <select id="qFirmId"
                             class="form-select"
                             th:field="*{qFirmId}">
+                        <option value="8">Q Takso Veod OÜ</option>
                         <option th:each="qFirm : ${qFirms}"
                                 th:value="${qFirm.id}"
-                                th:text="${qFirm.name}">??
+                                th:text="${qFirm.name}"
+                                >??
                         </option>
                     </select>
                 </div>
