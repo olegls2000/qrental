@@ -112,6 +112,12 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     if (positiveAmount.compareTo(obligationAmount) >= 0) {
       final var previousWeekObligation =
           loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
+
+      if (previousWeekObligation == null) {
+
+        return 0;
+      }
+
       var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
 
       return ++previousWeekObligationMatchCount;
