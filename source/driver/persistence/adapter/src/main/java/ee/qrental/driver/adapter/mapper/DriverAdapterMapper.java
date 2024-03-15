@@ -29,6 +29,7 @@ public class DriverAdapterMapper {
         .companyCeoLastName(entity.getCompanyCeoLastName())
         .companyCeoTaxNumber(entity.getCompanyCeoTaxNumber())
         .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
+        .companyVat(entity.getCompanyVat())
         .companyAddress(entity.getCompanyAddress())
         .driverLicenseNumber(entity.getDriverLicenseNumber())
         .driverLicenseExp(entity.getDriverLicenseExp())

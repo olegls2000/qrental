@@ -50,17 +50,6 @@
             <div class="col">
                 <div class="mb-3">
                     <label class="form-label text-muted"
-                           for="driverFriendId">Driver friend</label>
-                    <select id="driverFriendId"
-                            class="form-select"
-                            th:field="*{callSignId}">
-                        <option th:value="null">No friend</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col">
-                <div class="mb-3">
-                    <label class="form-label text-muted"
                            for="callSignId">New Call Sign</label>
                     <select id="callSignId"
                             class="form-select"
@@ -282,7 +271,7 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-check-label text-muted" for="companyAddress">VAT</label>
+                    <label class="form-check-label text-muted" for="companyVat">VAT</label>
                     <input class="form-control" id="companyVat" placeholder="Enter VAT"
                            th:field="*{companyVat}"
                            type="text"/>
