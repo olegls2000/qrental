@@ -9,7 +9,8 @@ import java.util.Optional;
 public interface BonusStrategy {
 
   String STRATEGY_2_WEEKS_PREPAYMENT_CODE = "2W";
-  String BONUS_TRANSACTION_TYPE_NAME = "bonus";
+  String STRATEGY_4_WEEKS_PREPAYMENT_CODE = "4W";
+
 
   boolean canApply(final BonusProgram bonusProgram);
 

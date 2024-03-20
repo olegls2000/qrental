@@ -10,8 +10,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public abstract class AbstractBonusStrategy implements BonusStrategy {
-  private final GetTransactionQuery transactionQuery;
-  private final GetTransactionTypeQuery transactionTypeQuery;
+
+    private final String BONUS_TRANSACTION_TYPE_NAME = "bonus";
+    private final GetTransactionQuery transactionQuery;
+    private final GetTransactionTypeQuery transactionTypeQuery;
 
     final Long getBonusTransactionTypeId() {
         final var bonusTransactionType = getTransactionTypeQuery().getByName(BONUS_TRANSACTION_TYPE_NAME);
