@@ -4,6 +4,7 @@ import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
 import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
+import java.math.BigDecimal;
 
 public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
 
@@ -37,10 +38,19 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .bySms(request.getBySms())
         .byPhone(request.getByPhone())
         .deposit(request.getDeposit())
+        .requiredObligation(getRequiredObligation(request))
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
         .callSign(CallSign.builder().id(request.getCallSignId()).build())
         .build();
+  }
+
+  private BigDecimal getRequiredObligation(final DriverUpdateRequest driverUpdateRequest) {
+    if (driverUpdateRequest.getHasRequiredObligation()) {
+      return driverUpdateRequest.getRequiredObligation();
+    }
+
+    return BigDecimal.ZERO;
   }
 
   @Override
@@ -75,6 +85,8 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .bySms(domain.getBySms())
         .byPhone(domain.getByPhone())
         .qFirmId(domain.getQFirmId())
+        .hasRequiredObligation(domain.hasRequiredObligation())
+        .requiredObligation(domain.getRequiredObligation())
         .comment(domain.getComment())
         .createdDate(domain.getCreatedDate())
         .build();

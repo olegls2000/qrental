@@ -26,11 +26,11 @@ public class InvoiceCalculationJakartaEntity {
   @Column(name = "action_date")
   private LocalDate actionDate;
 
-  @Column(name = "start_date")
-  private LocalDate startDate;
+  @Column(name = "start_q_week_id")
+  private Long startQWeekId;
 
-  @Column(name = "end_date")
-  private LocalDate endDate;
+  @Column(name = "end_q_week_id")
+  private Long endQWeekId;
 
   @Column(name = "comment")
   private String comment;

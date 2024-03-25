@@ -12,6 +12,8 @@
                     <span class="bi bi-calculator"></span>
                 </a>
             </th>
+            <th>Start Week</th>
+            <th>End Week</th>
             <th>Action Date</th>
             <th>Invoices Count</th>
             <th>Comment</th>
@@ -21,8 +23,10 @@
         </tr>
         <tr th:each="calculation : ${calculations}">
             <td><a class="btn btn-sm btn-warning"
-                   th:href="@{/calculations/{id}(id=${calculation.id})}">
+                   th:href="@{/invoices/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span></a></td>
+            <td th:text="${calculation.startWeek}">???</td>
+            <td th:text="${calculation.endWeek}">???</td>
             <td th:text="${calculation.actionDate}">???</td>
             <td th:text="${calculation.invoicesCount}">???</td>
             <td th:text="${calculation.comment}">???</td>

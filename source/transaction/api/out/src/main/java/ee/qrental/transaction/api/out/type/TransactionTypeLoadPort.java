@@ -9,4 +9,5 @@ public interface TransactionTypeLoadPort extends LoadPort<TransactionType> {
   TransactionType loadByName(final String name);
 
   List<TransactionType> loadByKindCodesIn(final List<String> kindCodes);
+  List<TransactionType> loadByNameIn(final List<String> names);
 }

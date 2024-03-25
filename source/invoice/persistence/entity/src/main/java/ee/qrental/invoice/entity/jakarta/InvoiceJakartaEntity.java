@@ -29,9 +29,6 @@ public class InvoiceJakartaEntity {
   @Column(name = "number")
   private String number;
 
-  @Column(name = "week_number")
-  private Integer weekNumber;
-
   @Column(name = "q_week_id")
   private Long qWeekId;
 

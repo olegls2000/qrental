@@ -10,6 +10,7 @@ public class InvoiceResponse {
   private Long id;
   private String number;
   private Integer weekNumber;
+  private Integer year;
   private String driverCompany;
   private String driverCompanyRegNumber;
   private String driverCompanyAddress;

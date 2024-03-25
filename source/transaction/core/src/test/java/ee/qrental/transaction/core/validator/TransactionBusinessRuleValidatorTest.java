@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.domain.Transaction;
@@ -52,7 +53,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transaction =
         Transaction.builder().date(LocalDate.of(2023, Month.JANUARY, 25)).driverId(2L).build();
     when(balanceLoadPort.loadLatestByDriverId(2L))
-        .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
+        .thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+        .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateAdd(transaction);
@@ -73,7 +76,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transaction =
         Transaction.builder().date(LocalDate.of(2023, Month.JANUARY, 26)).driverId(2L).build();
     when(balanceLoadPort.loadLatestByDriverId(2L))
-        .thenReturn(LocalDate.of(2023, Month.JANUARY, 26));
+        .thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+        .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
     // when
     final var violationsCollector = instanceUnderTest.validateAdd(transaction);
 
@@ -125,6 +130,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 25)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -148,6 +156,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 26)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -167,10 +178,17 @@ class TransactionBusinessRuleValidatorTest {
   public void testUpdateIfTransactionDateAfterCalculationDate() {
     // given
     final var transactionNew =
-        Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 28)).build();
+        Transaction.builder()
+            .id(1L)
+            .driverId(2L)
+            .date(LocalDate.of(2023, Month.JANUARY, 28))
+            .build();
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 27)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+        .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -187,6 +205,10 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 27)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
+
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -210,6 +232,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 27)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -233,6 +258,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 27)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateUpdate(transactionNew);
@@ -262,6 +290,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 25)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateDelete(1L);
@@ -283,6 +314,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 26)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateDelete(1L);
@@ -304,6 +338,9 @@ class TransactionBusinessRuleValidatorTest {
     final var transactionFromDb =
         Transaction.builder().id(1L).date(LocalDate.of(2023, Month.JANUARY, 27)).build();
     when(transactionLoadPort.loadById(1L)).thenReturn(transactionFromDb);
+    when(balanceLoadPort.loadLatest()).thenReturn(Balance.builder().qWeekId(99L).build());
+    when(qWeekQuery.getById(99L))
+            .thenReturn(QWeekResponse.builder().end(LocalDate.of(2023, Month.JANUARY, 26)).build());
 
     // when
     final var violationsCollector = instanceUnderTest.validateDelete(1L);

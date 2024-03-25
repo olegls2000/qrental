@@ -1,10 +1,12 @@
 package ee.qrental.invoice.core.service.pdf;
 
+import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static java.math.BigDecimal.ZERO;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
 
+import ee.qrental.common.core.utils.QNumberUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
@@ -46,7 +48,7 @@ public class InvoiceToPdfModelMapper {
     final var qFirmVatNumber = invoice.getQFirmVatNumber();
     final var qFirmBank = invoice.getQFirmBank();
     final var qFirmIban = invoice.getQFirmIban();
-    final var sum = invoice.getSum();
+    final var sum = round(invoice.getSum());
 
     final var vatPercentage = getVatRate(invoice, invoiceWeek);
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
@@ -88,19 +90,19 @@ public class InvoiceToPdfModelMapper {
         .qFirmVatNumber(qFirmVatNumber)
         .qFirmBank(qFirmBank)
         .qFirmIban(qFirmIban)
-        .sum(sum)
-        .vatPercentage(vatPercentage)
-        .vatAmount(vatAmount)
-        .sumWithVat(sumWithVat)
+        .sum(round(sum))
+        .vatPercentage(round(vatPercentage))
+        .vatAmount(round(vatAmount))
+        .sumWithVat(round(sumWithVat))
         .items(items)
-        .debt(debt)
-        .advancePayment(advancePayment)
-        .total(total)
-        .previousWeekBalanceFee(previousWeekBalanceFee)
-        .currentWeekFee(currentWeekFee)
-        .totalWithFee(totalWithFee)
-        .block2A(block2AValue)
-        .block2B(invoice.getPreviousWeekPositiveTxSum())
+        .debt(round(debt))
+        .advancePayment(round(advancePayment))
+        .total(round(total))
+        .previousWeekBalanceFee(round(previousWeekBalanceFee))
+        .currentWeekFee(round(currentWeekFee))
+        .totalWithFee(round(totalWithFee))
+        .block2A(round(block2AValue))
+        .block2B(round(invoice.getPreviousWeekPositiveTxSum()))
         .build();
   }
 

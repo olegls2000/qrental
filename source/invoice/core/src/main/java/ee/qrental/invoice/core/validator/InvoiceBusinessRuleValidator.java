@@ -35,7 +35,7 @@ public class InvoiceBusinessRuleValidator implements QValidator<Invoice> {
   private void checkUniqueness(final Invoice domain, final ViolationsCollector violationCollector) {
     final var invoiceFromDb =
         loadPort.loadByWeekAndDriverAndFirm(
-            domain.getWeekNumber(), domain.getDriverId(), domain.getQFirmId());
+            domain.getQWeekId(), domain.getDriverId(), domain.getQFirmId());
     if (invoiceFromDb == null) {
       return;
     }

@@ -37,10 +37,15 @@ public class Driver {
   private Boolean bySms;
   private Boolean byPhone;
   private BigDecimal deposit;
+  private BigDecimal requiredObligation;
   private Long qFirmId;
   private String comment;
   private LocalDate createdDate;
   private CallSign callSign;
+
+  public boolean hasRequiredObligation() {
+    return requiredObligation.compareTo(ZERO) > 0;
+  }
 
   public boolean withCallSign() {
     return callSign != null;

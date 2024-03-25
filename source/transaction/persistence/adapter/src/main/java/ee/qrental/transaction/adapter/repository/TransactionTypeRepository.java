@@ -14,5 +14,7 @@ public interface TransactionTypeRepository {
 
   TransactionTypeJakartaEntity findByName(final String name);
 
+  List<TransactionTypeJakartaEntity> findAllByNameIn(final List<String> names);
+
   List<TransactionTypeJakartaEntity> findAllByKindCodesIn(final List<String> kindCodes);
 }

@@ -35,6 +35,8 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private String address;
   private Boolean needInvoicesByEmail;
   private Boolean needFee;
+  private Boolean hasRequiredObligation;
+  private BigDecimal requiredObligation;
   private Boolean byTelegram;
   private Boolean byWhatsApp;
   private Boolean byViber;

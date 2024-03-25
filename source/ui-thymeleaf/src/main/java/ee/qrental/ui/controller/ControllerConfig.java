@@ -1,5 +1,6 @@
 package ee.qrental.ui.controller;
 
+import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
@@ -19,7 +20,9 @@ public class ControllerConfig {
 
   @Bean
   DriverBalanceAssembler getDriverBalanceAssembler(
-      final GetBalanceQuery balanceQuery, final GetDriverQuery driverQuery) {
-    return new DriverBalanceAssembler(balanceQuery, driverQuery);
+      final GetBalanceQuery balanceQuery,
+      final GetDriverQuery driverQuery,
+      final GetObligationQuery obligationQuery) {
+    return new DriverBalanceAssembler(balanceQuery, driverQuery, obligationQuery);
   }
 }

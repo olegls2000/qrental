@@ -3,6 +3,48 @@
 delete
 from q_week;
 
+
+--------------------------------------------------------------------------------------------------------
+--## Obligation Calculations:
+
+delete
+from obligation_calculation_result ocr
+where ocr.obligation_calculation_id in
+      (select id
+       from obligation_calculation
+       where q_week_id in
+             (select id
+              from q_week
+              where year = 2024 /*and number = 25*/));
+
+delete
+from obligation ob
+where ob.q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
+
+delete
+from obligation_calculation
+where q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
+
+--------------------------------------------------------------------------------------------------------
+
+--## Bonus Calculations:
+delete
+from bonus_calculation_result
+where bonus_calculation_id in (select id
+                               from bonus_calculation
+                               where q_week_id in
+                                     (select qw.id from q_week qw where qw.number = 26));
+delete
+from bonus_calculation
+where q_week_id in (select qw.id from q_week qw where qw.number = 26);
+
+delete
+from transaction
+where transaction_type_id in (select distinct(id)
+                              from transaction_type
+                              where name in ('bonus'));
+
+
 --------------------------------------------------------------------------------------------------------
 --## Rent Calculations:
 delete
@@ -27,14 +69,16 @@ from balance_transaction btr
 where btr.balance_id in
       (select bl.id from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?));
 
-delete from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?);
+delete
+from balance bl
+where q_week_id in (select qw.id from q_week qw where qw.number = ?);
 
 delete
 from transaction tx
 where tx.transaction_type_id in (select distinct(id)
-                              from transaction_type
-                              where name in ('fee replenish', 'compensation', 'fee debt'))
-and tx.date;
+                                 from transaction_type
+                                 where name in ('fee replenish', 'compensation', 'fee debt'))
+  and tx.date;
 
 
 
@@ -45,8 +89,6 @@ where transaction_type_id in (select distinct(id)
                               where name in ('fee replenish', 'compensation', 'fee debt'));
 
 
-
-
 ------------------------------------------------------------
 delete
 from balance_calculation_result;
@@ -54,7 +96,8 @@ delete
 from balance_calculation;
 delete
 from balance;
-select * from balance;
+select *
+from balance;
 
 
 delete
@@ -106,10 +149,10 @@ where bl.driver_id = :driverId
 
 select bl.*
 from balance bl
-where driver_id in (select id from driver where first_name = 'Driver2')
+where driver_id in (select id from driver where id = 172)
   and q_week_id in (select id
                     from q_week
-                    where number = :?);
+                    where number = 49);
 
 select *
 from rent_calculation rc
@@ -121,8 +164,64 @@ limit 1;
 select *
 from invoice;
 
+UPDATE driver
+SET created_date = '2023-01-01';
+
+SELECT qw.*
+FROM q_week qw
+WHERE (
+            qw.year = (SELECT year FROM q_week WHERE id = 67)
+        AND qw.number < (SELECT number FROM q_week WHERE id = 67)
+    )
+   OR (qw.year < (SELECT year FROM q_week WHERE id = 67));
 
 
+SELECT qw.*
+FROM q_week qw
+WHERE ((qw.year = (SELECT year FROM q_week WHERE id = 59) AND
+        qw.number > (SELECT number FROM q_week WHERE id = 59)))
+   OR (qw.year > (SELECT year FROM q_week WHERE id = 59))
+    AND
+      ((qw.year = (SELECT year FROM q_week WHERE id = 67)
+          AND qw.number < (SELECT number FROM q_week WHERE id = 67)) OR
+       (qw.year < (SELECT year FROM q_week WHERE id = 67)));
+
+select *
+from role;
+
+select count(*)
+from driver;
+
+SELECT qw.*
+FROM q_week qw
+WHERE qw.year = (SELECT year FROM q_week WHERE id = :startWeekId) AND
+      qw.number > (SELECT number FROM q_week WHERE id = :startWeekId)
+   OR qw.year > (SELECT year FROM q_week WHERE id = :startWeekId)
+    AND
+      qw.year = (SELECT year FROM q_week WHERE id = :endWeekId) AND
+      qw.number < (SELECT number FROM q_week WHERE id = :endWeekId)
+   OR qw.year < (SELECT year FROM q_week WHERE id = :startWeekId);
+
+2023,51
+2023,52
+2024,1
 
 
+select qw.*
+from q_week qw
+WHERE (qw.year * 100 + qw.number) >
+      (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :startWeekId)
+  AND (qw.year * 100 + qw.number) <
+      (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :endWeekId);
 
+
+SELECT monthyear,
+       animal_type,
+       outcome_type,
+       (age_in_days / 365) AS `Years Old`
+FROM austin_animal_center_age_at_outcome
+WHERE (age_in_days / 365) > 8
+
+
+select *
+from q_week;

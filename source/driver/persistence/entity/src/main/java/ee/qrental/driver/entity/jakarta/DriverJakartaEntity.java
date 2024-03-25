@@ -105,6 +105,9 @@ public class DriverJakartaEntity {
   @Column(name = "deposit")
   private BigDecimal deposit;
 
+  @Column(name = "required_obligation")
+  private BigDecimal requiredObligation;
+
   @Column(name = "comment")
   private String comment;
 

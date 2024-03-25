@@ -11,7 +11,8 @@
             <th>Last Name</th>
             <th>Phone</th>
             <th>Campaigns</th>
-            <th>Weekly Obligation, EUR</th>
+            <th>Obligation amount, EUR</th>
+            <th>Obligation match count</th>
             <th>Raw Total, EUR</th>
             <th>Fee, EUR</th>
         </tr>
@@ -28,18 +29,26 @@
             <td th:text="${balance.firstName}">???</td>
             <td th:text="${balance.lastName}">???</td>
             <td th:text="${balance.phone}">???</td>
-            <td th:text="123456" class="text-center bg-opacity-10 border border-opacity-10 rounded-2">???</td>
-            <td th:text="0.00" class="text-center bg-opacity-10 border border-opacity-10 rounded-2">???</td>
-            <td th:text="${balance.rawTotal} "
+            <td th:text="TBA" class="text-center bg-opacity-10 border border-opacity-10 rounded-2">???</td>
+
+            <td th:text="${balance.obligationAmount != null} ? ${balance.obligationAmount} : 'not calculated'"
+                class="text-center bg-opacity-10 border border-opacity-10 rounded-2">???
+            </td>
+            <td th:text="${balance.obligationMatchCount != null} ? ${balance.obligationMatchCount} : 'not calculated'"
+                class="text-center bg-opacity-10 border border-opacity-10 rounded-2">???
+            </td>
+            <td th:text="${balance.rawTotal}"
                 class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
                 th:classappend="${balance.rawTotal<0} ?
                 'text-danger bg-danger border-danger'
-                : 'text-success bg-success border-success'">???</td>
+                : 'text-success bg-success border-success'">???
+            </td>
             <td th:text="${balance.fee}"
                 class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
                 th:classappend="${balance.fee>0} ?
                 'text-danger bg-danger border-danger'
-                : 'text-success bg-success border-success'">???</td>
+                : 'text-success bg-success border-success'">???
+            </td>
 
         </tr>
     </table>

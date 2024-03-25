@@ -21,6 +21,7 @@ public interface TransactionRepository {
 
   List<TransactionJakartaEntity> findAllByRentCalculationId(final Long rentCalculationId);
 
+  List<TransactionJakartaEntity> findAllByBonusCalculationId(final Long bonusCalculationId);
   TransactionJakartaEntity getReferenceById(Long id);
 
   TransactionJakartaEntity save(final TransactionJakartaEntity entity);
@@ -34,4 +35,6 @@ public interface TransactionRepository {
 
   List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
       final Long driverId, final Long kindId, final LocalDate dateStart, final LocalDate dateEnd);
+
+
 }

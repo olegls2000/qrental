@@ -11,6 +11,8 @@ public class InvoiceCalculationAddRequestMapper
   public InvoiceCalculation toDomain(final InvoiceCalculationAddRequest request) {
     return InvoiceCalculation.builder()
         .actionDate(request.getActionDate())
+        .startQWeekId(null) //calculated and set in Service
+        .endQWeekId(request.getQWeekId())
         .results(new ArrayList<>())
         .comment(request.getComment())
         .build();

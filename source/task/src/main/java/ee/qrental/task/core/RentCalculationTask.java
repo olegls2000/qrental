@@ -40,10 +40,7 @@ public class RentCalculationTask {
   }
 
   private Long getQWeekId() {
-    final var nowDate = LocalDate.now();
-    final var year = nowDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(nowDate);
-    final var qWeek = qWeekQuery.getByYearAndNumber(year, weekNumber);
+    final var qWeek = qWeekQuery.getCurrentWeek();
     if (qWeek == null) {
       throw new RuntimeException(
           "Impossible to start Rent calculation for (d% year d% week number), because Q-week does not exist.");

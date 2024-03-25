@@ -1,9 +1,9 @@
-<div th:fragment="assembledRentCalculation" class="row mt-5">
+<div th:fragment="assembledObligationtCalculation" class="row mt-5">
     <div class="col"></div>
     <div class="col-10">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Rent Calculation Details</h4>
+                <h4 class="card-title">Obligation Calculation Details</h4>
                 <a class="btn-close position-absolute top-0 end-0 m-2"
                    aria-label="Close"
                    href="#" onclick="history.back();">
@@ -11,69 +11,38 @@
                 <div class="row m-3">
                     <div class="col-3">
                         <p>Action Date:</p>
-                        <p th:text="${qDateFormatter.format(rentCalculation.actionDate)}">???</p>
+                        <p th:text="${qDateFormatter.format(calculation.actionDate)}">???</p>
                     </div>
                     <div class="col-3">
                         <p>Week number:</p>
-                        <p th:text="${rentCalculation.weekNumber}">???</p>
+                        <p th:text="${calculation.weekNumber}">???</p>
                     </div>
                     <div class="col-3">
                         <p>Start period:</p>
-                        <p th:text="${qDateFormatter.format(rentCalculation.startDate)}">???</p>
+                        <p th:text="${qDateFormatter.format(calculation.startDate)}">???</p>
                     </div>
                     <div class="col-3">
                         <p>End period:</p>
-                        <p th:text="${qDateFormatter.format(rentCalculation.endDate)}">???</p>
+                        <p th:text="${qDateFormatter.format(calculation.endDate)}">???</p>
                     </div>
                 </div>
 
                 <div>
                     <table class="table table-striped table-bordered table-hover">
                         <tr>
-                            <th style="width: 1% !important;">
-                                <a class="btn btn-sm btn-success"
-                                   href="/transactions/add-form"
-                                   role="button"
-                                   aria-controls="offcanvasExample">
-                                    <span class="bi-plus-circle"></span>
-                                </a>
-                            </th>
-                            <th style="width: 1% !important;">Delete</th>
-                            <th>Call Sign</th>
                             <th>Driver</th>
-                            <th>Transaction Type</th>
-                            <th>Amount</th>
-                            <th>Week</th>
-                            <th>Date</th>
-                            <th>Comment</th>
+                            <th>Amount, EUR</th>
+                            <th>Positive Amount, EUR</th>
+                            <th>Match count</th>
                         </tr>
-                        <tr th:if="${#lists.isEmpty(rentTransactions)}">
-                            <td colspan="6">No Transactions</td>
+                        <tr th:if="${#lists.isEmpty(obligations)}">
+                            <td colspan="6">No Obligations</td>
                         </tr>
-                        <tr th:each="transaction : ${rentTransactions}"
-                            data-bs-toggle="tooltip" th:attr="title=${transaction.comment}">
-                            <td class="text-center">
-                                <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
-                                   th:href="@{/transactions/update-form/{id}(id=${transaction.id})}">
-                                    <span class="bi-pencil-square"></span></a>
-                            </td>
-                            <td class="text-center">
-                                <a th:if="${transaction.raw == true}" class="btn btn-sm btn-danger"
-                                   th:href="@{/transactions/delete-form/{id}(id=${transaction.id})}">
-                                    <span class="bi-trash"></span></a>
-                            </td>
-                            <td th:text="${transaction.callSign}">???</td>
-                            <td th:text="${transaction.driverInfo}">???</td>
-                            <td th:text="${transaction.type}">???</td>
-                            <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
-                                th:classappend="${transaction.realAmount<0} ?
-                'text-danger bg-danger border-danger'
-                : 'text-success bg-success border-success'"
-                                th:text="${transaction.realAmount}">???
-                            </td>
-                            <td th:text="${transaction.weekNumber}">???</td>
-                            <td th:text="${qDateFormatter.format(transaction.date)}">???</td>
-                            <td th:text="${transaction.commentShorten}">???</td>
+                        <tr th:each="obligation : ${obligations}">
+                            <td th:text="${obligation.driverInfo}">???</td>
+                            <td th:text="${obligation.amount}">???</td>
+                            <td th:text="${obligation.positiveAmount}">???</td>
+                            <td th:text="${obligation.matchCount}">???</td>
                         </tr>
                     </table>
                 </div>

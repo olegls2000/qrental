@@ -29,6 +29,7 @@ public class RentCalculationQueryController {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addLatestDataToModel(model);
     model.addAttribute("calculations", rentCalculationQuery.getAll());
+
     return "rentCalculations";
   }
 

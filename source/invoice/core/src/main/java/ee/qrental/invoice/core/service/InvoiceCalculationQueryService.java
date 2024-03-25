@@ -2,7 +2,6 @@ package ee.qrental.invoice.core.service;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.in.query.GetInvoiceCalculationQuery;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationUpdateRequest;
@@ -41,15 +40,8 @@ public class InvoiceCalculationQueryService implements GetInvoiceCalculationQuer
 
   @Override
   public Long getLastCalculatedQWeekId() {
-    final var lastCalculatedDate = loadPort.loadLastCalculatedDate();
-    if (lastCalculatedDate == null) {
+    final var lastCalculation = loadPort.loadLastCalculation();
 
-      return null;
-    }
-    final var year = lastCalculatedDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculatedDate);
-    final var lastCalculatedWeek = qWeekQuery.getByYearAndNumber(year, weekNumber);
-
-    return lastCalculatedWeek.getId();
+    return lastCalculation == null ? null : lastCalculation.getEndQWeekId();
   }
 }

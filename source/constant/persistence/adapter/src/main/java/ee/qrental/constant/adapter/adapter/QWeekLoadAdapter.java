@@ -1,13 +1,14 @@
 package ee.qrental.constant.adapter.adapter;
 
-import static java.util.stream.Collectors.toList;
-
 import ee.qrental.constant.adapter.mapper.QWeekAdapterMapper;
 import ee.qrental.constant.adapter.repository.QWeekRepository;
 import ee.qrental.constant.api.out.QWeekLoadPort;
 import ee.qrental.constant.domain.QWeek;
-import java.util.List;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 public class QWeekLoadAdapter implements QWeekLoadPort {

@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class RentCalculationResult {
     private Long id;
+    private Long calculationId;
     private Long carLinkId;
     private Long transactionId;
-    private Long rentCalculationId;
 }

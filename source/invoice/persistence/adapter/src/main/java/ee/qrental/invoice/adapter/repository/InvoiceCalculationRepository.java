@@ -11,5 +11,5 @@ public interface InvoiceCalculationRepository {
 
   InvoiceCalculationJakartaEntity getReferenceById(final Long id);
 
-  LocalDate getLastCalculationDate();
+  InvoiceCalculationJakartaEntity getLastCalculation();
 }

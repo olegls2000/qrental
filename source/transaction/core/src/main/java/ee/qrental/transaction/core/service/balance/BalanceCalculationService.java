@@ -107,7 +107,6 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                       final var feeTransactionAddRequest = new TransactionAddRequest();
                       feeTransactionAddRequest.setAmount(feeAmountForRequestedWeek);
                       feeTransactionAddRequest.setDate(requestedQWeek.getEnd());
-                      feeTransactionAddRequest.setWithVat(FALSE);
                       feeTransactionAddRequest.setTransactionTypeId(transactionType.getId());
                       feeTransactionAddRequest.setDriverId(driverId);
                       feeTransactionAddRequest.setWeekNumber(requestedQWeek.getNumber());

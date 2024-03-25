@@ -28,4 +28,6 @@ public interface TransactionLoadPort extends LoadPort<Transaction> {
       final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllByRentCalculationId(final Long rentCalculationId);
+
+    List<Transaction> loadAllByBonusCalculationId(final Long bonusCalculationId);
 }

@@ -602,11 +602,12 @@ public class ContractToPdfConverter {
         body4.addCell(body4cell5);
 
         final var body4cell6 =
-                new Cell(new Paragraph("Rendiauto lepingualune nädala renditasu suurus üleandmise-vastuvõtmise ajaks sõltub konkreetse auto omadustest " +
-                        "ja on määratud auto üleandmise-vastuvõtmise aktis." +
-                        "Üleandmise-vastuvõtmise aktis määratud renditasu on aktuaalne vaid täis rendinädala tasumise eest. " +
-                        "Täisrendinädal arvestatakse esimese kalendri nädala Esmaspäeva kella 10:00'st kuni järgneva kalendri nädala kella 10:00'st." +
-                        "Iga osalise nädala rendiööpäeva maksumus on võrdne viiendikuga terve nädala rendi maksumusest.",
+                new Cell(new Paragraph("Rendiauto lepingualune nädala renditasu suurus üleandmise-vastuvõtmise hetkeks sõltub konkreetse auto omadustest ja " +
+                        "määratakse eraldi auto üleandmisevastuvõtmise aktis." +
+                        "Üleandmise-vastuvõtmise aktis määratud renditasu on aktuaalne vaid täis rendinädala tasumise eest." +
+                        "Täisrendinädal arvestatakse esimese kalendri nädala Esmaspäeva kella 10:00'st kuni järgneva kalendri nädala kella 10:00'ni - " +
+                        "nimelt seitse päevat, millest on Pühapäev tasuta ja võib olla kasutatud puhkepäevana. " +
+                        "Iga mittetäis nädala rendiööpäeva maksumus on võrdne viiendikuga terve nädala rendi maksumusest.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell6.setBorder(NO_BORDER);
         body4cell6.setHorizontalAlignment(JUSTIFIED);
@@ -735,7 +736,7 @@ public class ContractToPdfConverter {
 
         final var body6cell4 =
                 new Cell(new Paragraph("Rentnik kohustub maksma tasu rendiperioodi eest. Renditasu mittetähtaegsel tasumisel on" +
-                        " rentnik kohustatud tasuma viivist 1% kalendripäevas tasumata summalt.",
+                        " rentnik kohustatud tasuma viivist 0.25% kalendripäevas tasumata summalt.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell4.setBorder(NO_BORDER);
         body6cell4.setHorizontalAlignment(JUSTIFIED);
@@ -857,8 +858,22 @@ public class ContractToPdfConverter {
         body6cell20.setHorizontalAlignment(JUSTIFIED);
         body6.addCell(body6cell20);
 
-        final var body6cell21 =
+        final var body6cell43 =
                 new Cell(new Paragraph("VI.10",
+                        new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
+        body6cell43.setBorder(NO_BORDER);
+        body6cell43.setHorizontalAlignment(LEFT);
+        body6.addCell(body6cell43);
+
+        final var body6cell44 =
+                new Cell(new Paragraph("Rentnik on kohustatud jälgida rendiauto dokumentide kehtivust ja veenduda, et on rendiauto liikluses kasutamine seaduslik.",
+                        new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
+        body6cell44.setBorder(NO_BORDER);
+        body6cell44.setHorizontalAlignment(JUSTIFIED);
+        body6.addCell(body6cell44);
+
+        final var body6cell21 =
+                new Cell(new Paragraph("VI.11",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell21.setBorder(NO_BORDER);
         body6cell21.setHorizontalAlignment(LEFT);
@@ -874,7 +889,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell22);
 
         final var body6cell23 =
-                new Cell(new Paragraph("VI.11",
+                new Cell(new Paragraph("VI.12",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell23.setBorder(NO_BORDER);
         body6cell23.setHorizontalAlignment(LEFT);
@@ -888,7 +903,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell24);
 
         final var body6cell25 =
-                new Cell(new Paragraph("VI.12",
+                new Cell(new Paragraph("VI.13",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell25.setBorder(NO_BORDER);
         body6cell25.setHorizontalAlignment(LEFT);
@@ -902,7 +917,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell26);
 
         final var body6cell27 =
-                new Cell(new Paragraph("VI.13",
+                new Cell(new Paragraph("VI.14",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell27.setBorder(NO_BORDER);
         body6cell27.setHorizontalAlignment(LEFT);
@@ -921,7 +936,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell28);
 
         final var body6cell29 =
-                new Cell(new Paragraph("VI.14",
+                new Cell(new Paragraph("VI.15",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell29.setBorder(NO_BORDER);
         body6cell29.setHorizontalAlignment(LEFT);
@@ -935,7 +950,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell30);
 
         final var body6cell31 =
-                new Cell(new Paragraph("VI.15",
+                new Cell(new Paragraph("VI.16",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell31.setBorder(NO_BORDER);
         body6cell31.setHorizontalAlignment(LEFT);
@@ -952,7 +967,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell32);
 
         final var body6cell33 =
-                new Cell(new Paragraph("VI.16",
+                new Cell(new Paragraph("VI.17",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell33.setBorder(NO_BORDER);
         body6cell33.setHorizontalAlignment(LEFT);
@@ -969,7 +984,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell34);
 
         final var body6cell35 =
-                new Cell(new Paragraph("VI.17",
+                new Cell(new Paragraph("VI.18",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell35.setBorder(NO_BORDER);
         body6cell35.setHorizontalAlignment(LEFT);
@@ -986,7 +1001,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell36);
 
         final var body6cell37 =
-                new Cell(new Paragraph("VI.18",
+                new Cell(new Paragraph("VI.19",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell37.setBorder(NO_BORDER);
         body6cell37.setHorizontalAlignment(LEFT);
@@ -1002,7 +1017,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell38);
 
         final var body6cell39 =
-                new Cell(new Paragraph("VI.19",
+                new Cell(new Paragraph("VI.20",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell39.setBorder(NO_BORDER);
         body6cell39.setHorizontalAlignment(LEFT);
@@ -1017,7 +1032,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell40);
 
         final var body6cell41 =
-                new Cell(new Paragraph("VI.20",
+                new Cell(new Paragraph("VI.21",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body6cell41.setBorder(NO_BORDER);
         body6cell41.setHorizontalAlignment(LEFT);

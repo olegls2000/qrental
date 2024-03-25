@@ -1,5 +1,6 @@
 package ee.qrental.invoice.spring.config;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.adapter.mapper.InvoiceCalculationAdapterMapper;
@@ -20,8 +21,8 @@ public class InvoiceMapperConfig {
   }
 
   @Bean
-  InvoiceResponseMapper getInvoiceResponseMapper() {
-    return new InvoiceResponseMapper();
+  InvoiceResponseMapper getInvoiceResponseMapper(final GetQWeekQuery qWeekQuery) {
+    return new InvoiceResponseMapper(qWeekQuery);
   }
 
   @Bean
@@ -35,8 +36,8 @@ public class InvoiceMapperConfig {
   }
 
   @Bean
-  InvoiceCalculationResponseMapper getInvoiceCalculationResponseMapper() {
-    return new InvoiceCalculationResponseMapper();
+  InvoiceCalculationResponseMapper getInvoiceCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
+    return new InvoiceCalculationResponseMapper(qWeekQuery);
   }
 
   @Bean

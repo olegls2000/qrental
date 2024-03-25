@@ -1,12 +1,13 @@
 package ee.qrental.common.core.utils;
 
-import static ee.qrental.task.core.utils.QTimeUtils.getLastSundayFromDate;
-import static ee.qrental.task.core.utils.QTimeUtils.getWeekNumber;
+import org.junit.jupiter.api.Test;
+
+import static ee.qrental.common.core.utils.QTimeUtils.getLastSundayFromDate;
+import static ee.qrental.common.core.utils.QTimeUtils.getWeekNumber;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.Month;
-import org.junit.jupiter.api.Test;
 
 class QTimeUtilsTest {
 

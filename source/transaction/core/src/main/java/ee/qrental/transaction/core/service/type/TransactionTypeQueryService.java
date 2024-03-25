@@ -52,6 +52,11 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
   }
 
   @Override
+  public List<TransactionTypeResponse> getByNameIn(final List<String> names) {
+    return loadPort.loadByNameIn(names).stream().map(mapper::toResponse).toList();
+  }
+
+  @Override
   public List<TransactionTypeResponse> getNegative() {
 
     return loadPort
@@ -67,8 +72,8 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
 
   @Override
   public List<TransactionTypeResponse> getPositive() {
-    return loadPort.loadByKindCodesIn(asList(TransactionKindsCode.P.name())).stream()
+    return loadPort.loadByKindCodesIn(List.of(TransactionKindsCode.P.name())).stream()
         .map(mapper::toResponse)
-        .collect(toList());
+        .toList();
   }
 }

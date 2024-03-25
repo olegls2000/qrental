@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 public class InvoiceCalculationResponse {
   private Long id;
   private Integer invoicesCount;
+  private String startWeek;
+  private String endWeek;
   private LocalDate actionDate;
   private String comment;
 }
