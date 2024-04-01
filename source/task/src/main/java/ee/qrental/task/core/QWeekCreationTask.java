@@ -20,10 +20,9 @@ public class QWeekCreationTask {
    * | | | | | * * * * * command to be executed
    */
 
-  // Scheduled task is executed at 00:05 AM on the MONDAY every week
-  // @Scheduled(cron = "5 0 * * * MON")
+  // Scheduled task is executed at 00:02:00 AM on the MONDAY every week
 
-  @Scheduled(cron = "1 0 * * * MON")
+  @Scheduled(cron = "0 2 * * * MON")
   public void scheduleTask() {
     final var nowDate = LocalDate.now();
     final var addRequest = new QWeekAddRequest();
