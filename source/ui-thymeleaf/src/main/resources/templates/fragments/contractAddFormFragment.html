@@ -15,6 +15,17 @@
                th:field="*{driverId}"
                type="text"
                hidden/>
+        <p class="fs-5">Contract duration:</p>
+        <div class="row">
+            <div class="col mb-3" th:each="radioValue: ${contractDurations}">
+                <input type="radio"
+                       th:field="*{contractDuration}"
+                       th:value="${radioValue}"/>
+                <label
+                        th:for="${#ids.prev('contractDuration')}"
+                        th:text="${radioValue}"></label>
+            </div>
+        </div>
         <p class="fs-5">Drivers info:</p>
         <table class="table table-sm">
             <tbody>

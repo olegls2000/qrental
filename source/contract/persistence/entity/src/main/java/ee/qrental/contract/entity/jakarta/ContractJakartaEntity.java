@@ -27,6 +27,9 @@ public class ContractJakartaEntity {
   @Column(name = "number")
   private String number;
 
+  @Column(name = "contract_duration")
+  private String contractDuration;
+
   @Column(name = "renter_name")
   private String renterName;
 
@@ -87,7 +90,7 @@ public class ContractJakartaEntity {
   @Column(name = "q_firm_vat_number")
   private String qFirmVatNumber;
 
-@Column(name = "q_firm_iban")
+  @Column(name = "q_firm_iban")
   private String qFirmIban;
 
   @Column(name = "q_firm_vat_phone")
@@ -107,5 +110,4 @@ public class ContractJakartaEntity {
 
   @Column(name = "car_model")
   private String carModel;
-
 }

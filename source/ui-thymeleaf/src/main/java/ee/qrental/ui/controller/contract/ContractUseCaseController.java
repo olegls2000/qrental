@@ -37,20 +37,9 @@ public class ContractUseCaseController {
     addAddRequestToModel(model, driverId, qFirmId);
     addQFirmInfoToModel(model, qFirmId);
     addDriverInfoToModel(model, driverId);
+    addContractDurationsToModel(model);
 
     return "forms/addContract";
-  }
-
-  private void addActiveContractToModel(final Long driverId, final Model model) {
-    final var activeContract = contractQuery.getActiveContractByDriverId(driverId);
-    if (activeContract == null) {
-      model.addAttribute("activeContract", "not assigned");
-      model.addAttribute("activeContractId", null);
-
-      return;
-    }
-    model.addAttribute("activeContract", activeContract.getNumber());
-    model.addAttribute("activeContractId", activeContract.getId());
   }
 
   private void addAddRequestToModel(Model model, final Long driverId, final Long qFirmId) {
@@ -68,6 +57,7 @@ public class ContractUseCaseController {
       model.addAttribute("addRequest", addRequest);
       addQFirmInfoToModel(model, addRequest.getQFirmId());
       addDriverInfoToModel(model, addRequest.getDriverId());
+      addContractDurationsToModel(model);
 
       return "forms/addContract";
     }
@@ -89,6 +79,10 @@ public class ContractUseCaseController {
   private void addDriverInfoToModel(final Model model, final Long driverId) {
     final var driver = driverQuery.getById(driverId);
     model.addAttribute("driver", driver);
+  }
+
+  private void addContractDurationsToModel(final Model model) {
+    model.addAttribute("contractDurations", contractQuery.getAllDurations());
   }
 
   @PostMapping("/update")

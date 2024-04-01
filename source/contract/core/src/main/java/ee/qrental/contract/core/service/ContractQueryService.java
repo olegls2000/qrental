@@ -1,5 +1,6 @@
 package ee.qrental.contract.core.service;
 
+import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.contract.api.in.query.GetContractQuery;
@@ -8,7 +9,10 @@ import ee.qrental.contract.api.in.response.ContractResponse;
 import ee.qrental.contract.api.out.ContractLoadPort;
 import ee.qrental.contract.core.mapper.ContractResponseMapper;
 import ee.qrental.contract.core.mapper.ContractUpdateRequestMapper;
+
 import java.util.List;
+
+import ee.qrental.contract.domain.ContractDuration;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -41,5 +45,10 @@ public class ContractQueryService implements GetContractQuery {
   @Override
   public ContractResponse getActiveContractByDriverId(Long driverId) {
     return mapper.toResponse(loadPort.loadActiveByDriverId(driverId));
+  }
+
+  @Override
+  public List<String> getAllDurations() {
+    return stream(ContractDuration.values()).map(ContractDuration::getLabel).toList();
   }
 }

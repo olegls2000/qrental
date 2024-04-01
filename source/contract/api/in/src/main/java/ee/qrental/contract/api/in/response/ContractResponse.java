@@ -13,6 +13,7 @@ public class ContractResponse {
   private Long id;
   private boolean active;
   private String number;
+  private Integer duration;
   private String renterName;
   private String renterRegistrationNumber;
   private String renterAddress;

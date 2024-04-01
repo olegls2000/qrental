@@ -12,4 +12,5 @@ import lombok.Setter;
 public class ContractAddRequest extends AbstractAddRequest {
   private Long driverId;
   private Long qFirmId;
+  private String contractDuration;
 }

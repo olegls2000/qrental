@@ -14,6 +14,7 @@ import java.util.List;
 public class Contract {
   private Long id;
   private String number;
+  private ContractDuration contractDuration;
   private String renterName;
   private String renterRegistrationNumber;
   private String renterAddress;
@@ -30,7 +31,7 @@ public class Contract {
   private String qFirmRegistrationNumber;
   private String qFirmVatNumber;
   private String qFirmIban;
-    private String qFirmPostAddress;
+  private String qFirmPostAddress;
   private String qFirmEmail;
   private String qFirmVatPhone;
   private String qFirmCeo;
