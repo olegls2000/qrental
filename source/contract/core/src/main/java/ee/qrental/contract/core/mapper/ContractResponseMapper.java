@@ -16,7 +16,7 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
         .id(domain.getId())
         .active(domain.isActive())
         .number(domain.getNumber())
-        .duration(domain.getContractDuration().getMonthsCount())
+        .duration(domain.getContractDuration().getWeeksCount())
         .renterName(domain.getRenterName())
         .renterRegistrationNumber(domain.getRenterRegistrationNumber())
         .renterAddress(domain.getRenterAddress())

@@ -3,14 +3,14 @@ package ee.qrental.contract.domain;
 import lombok.Getter;
 
 public enum ContractDuration {
-  FOUR_MONTHS("4 months", 4),
-  TWELVE_MONTHS("12 months", 12);
+  FOUR_WEEKS("4 weeks", 4),
+  TWELVE_WEEKS("12 weeks", 12);
 
   @Getter private String label;
-  @Getter private Integer monthsCount;
+  @Getter private Integer weeksCount;
 
-  ContractDuration(String label, Integer monthsCount) {
+  ContractDuration(final String label, final Integer weeksCount) {
     this.label = label;
-    this.monthsCount = monthsCount;
+    this.weeksCount = weeksCount;
   }
 }

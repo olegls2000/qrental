@@ -1009,7 +1009,7 @@ public class ContractToPdfConverter {
 
         final var body6cell38 =
                 new Cell(new Paragraph("Rendileandja poolt käesoleva koostöölepingu alusel osutatava rendiautoteenuse (edaspidi \"renditeenus\") " +
-                        "minimaalne kestus iga renditava auto on neli kalendrinädalat alates päevast, mil on rentnik saanud rendileandja poolt vaba auto" +
+                        "minimaalne kestus iga renditava auto on " + model.getDuration() + " kalendrinädalat alates päevast, mil on rentnik saanud rendileandja poolt vaba auto" +
                         " rendileandja autopargist. Iga uue auto neljandalane tähtaeg hakkab lugema päevast, mis on auto üleandmise aktis märgitud.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell38.setBorder(NO_BORDER);

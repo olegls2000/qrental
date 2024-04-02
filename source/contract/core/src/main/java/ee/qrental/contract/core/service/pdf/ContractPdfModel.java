@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @SuperBuilder
 public class ContractPdfModel {
     private String number;
+    private String duration;
     private String renterName;
     private String renterRegistrationNumber;
     private String renterAddress;
