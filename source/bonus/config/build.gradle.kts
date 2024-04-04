@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":source:car:api:in"))
     implementation(project(":source:driver:api:in"))
     implementation(project(":source:user:api:in"))
+    implementation(project(":source:contract:api:in"))
     implementation("org.springframework:spring-context-support")
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

@@ -29,4 +29,5 @@ public interface CallSignLinkRepository {
 
   Long findCountClosedByDate(final LocalDate date);
 
+  List<CallSignLinkJakartaEntity> findAllByDriverId(Long driverId);
 }

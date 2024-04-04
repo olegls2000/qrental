@@ -72,4 +72,9 @@ public class CallSignLinkRepositoryImpl implements CallSignLinkRepository {
   public Long findCountClosedByDate(final LocalDate date) {
     return springDataRepository.findCountClosedByDate(date);
   }
+
+  @Override
+  public List<CallSignLinkJakartaEntity> findAllByDriverId(final Long driverId) {
+    return springDataRepository.findAllByDriverId(driverId);
+  }
 }

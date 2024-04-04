@@ -13,6 +13,8 @@ public interface CallSignLinkLoadPort extends LoadPort<CallSignLink> {
 
   CallSignLink loadActiveByDriverId(final Long driverId);
 
+  List<CallSignLink> loadByDriverId(final Long driverId);
+
   CallSignLink loadByDriverIdAndDate(final Long driverId, final LocalDate date);
 
   List<CallSignLink> loadActiveByDate(final LocalDate date);

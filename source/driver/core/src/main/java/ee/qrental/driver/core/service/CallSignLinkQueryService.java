@@ -56,6 +56,14 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   }
 
   @Override
+  public List<CallSignLinkResponse> getCallSignLinksByDriverId(final Long driverId) {
+    return loadPort.loadByDriverId(driverId).stream()
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
+  }
+
+  @Override
   public CallSignLinkResponse getCallSignLinkByDriverIdAndDate(
       final Long driverId, final LocalDate date) {
     return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, date));

@@ -11,6 +11,8 @@ public interface GetCallSignLinkQuery
 
   CallSignLinkResponse getActiveCallSignLinkByDriverId(final Long driverId);
 
+  List<CallSignLinkResponse> getCallSignLinksByDriverId(final Long driverId);
+
   CallSignLinkResponse getCallSignLinkByDriverIdAndDate(final Long driverId, final LocalDate date);
 
   List<CallSignLinkResponse> getActive();

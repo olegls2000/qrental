@@ -15,6 +15,11 @@ public interface CallSignLinkSpringDataRepository
   List<CallSignLinkJakartaEntity> findAllByCallSignId(@Param("callSignId") final Long callSignId);
 
   @Query(
+      value = "SELECT csl.* FROM call_sign_link csl where csl.driver_id = :driverId",
+      nativeQuery = true)
+  List<CallSignLinkJakartaEntity> findAllByDriverId(@Param("driverId") final Long driverId);
+
+  @Query(
       value =
           "SELECT csl.* FROM call_sign_link csl "
               + "where csl.date_end is null "
