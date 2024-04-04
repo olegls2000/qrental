@@ -16,12 +16,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
+public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.05);
   private static final BigDecimal BONUS_THRESHOLD_RATE = BigDecimal.valueOf(2d);
   private static final Integer BONUS_THRESHOLD_MATCH_COUNT = 4;
 
-  public TwoWeeksPrepaymentBonusStrategy(
+  public NewDriverBonusStrategy(
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery) {
     super(transactionQuery, transactionTypeQuery);
@@ -30,7 +30,7 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
   @Override
   public boolean canApply(final BonusProgram bonusProgram) {
     return bonusProgram.getActive()
-        && STRATEGY_2_WEEKS_PREPAYMENT_CODE.equals(bonusProgram.getCode());
+        && STRATEGY_NEW_DRIVER_CODE.equals(bonusProgram.getCode());
   }
 
   @Override

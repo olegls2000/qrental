@@ -16,12 +16,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
-  private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.05);
-  private static final BigDecimal BONUS_THRESHOLD_RATE = BigDecimal.valueOf(2d);
-  private static final Integer BONUS_THRESHOLD_MATCH_COUNT = 4;
+public class ReliablePartnerBonusStrategy extends AbstractBonusStrategy {
+   private static final Integer BONUS_THRESHOLD_MATCH_COUNT = 4;
 
-  public TwoWeeksPrepaymentBonusStrategy(
+  public ReliablePartnerBonusStrategy(
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery) {
     super(transactionQuery, transactionTypeQuery);
@@ -30,37 +28,44 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
   @Override
   public boolean canApply(final BonusProgram bonusProgram) {
     return bonusProgram.getActive()
-        && STRATEGY_2_WEEKS_PREPAYMENT_CODE.equals(bonusProgram.getCode());
+        && STRATEGY_RELIABLE_PARTNER_CODE.equals(bonusProgram.getCode());
   }
 
   @Override
   public Optional<TransactionAddRequest> calculateBonus(
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
-    if (obligation.getMatchCount() < BONUS_THRESHOLD_MATCH_COUNT) {
+    final var matchCount = obligation.getMatchCount();
+
+    if (matchCount < BONUS_THRESHOLD_MATCH_COUNT) {
 
       return Optional.empty();
     }
     final var driverId = obligation.getDriverId();
     final var qWeekId = obligation.getQWeekId();
-    final var rentAndNonLabelFineAmountAbs =
+
+    final var discountRate = getDiscountRate(matchCount);
+    final var rentAndNonLabelFineTransactionsAbsAmount =
         getRentAndNonLabelFineTransactionsAbsAmount(driverId, qWeekId);
-    final var bonusThreshold = rentAndNonLabelFineAmountAbs.multiply(BONUS_THRESHOLD_RATE);
-    if (weekPositiveAmount.compareTo(bonusThreshold) < 0) {
-      return Optional.empty();
-    }
-    final var oneWeekBonusAmount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
-    final var totalDiscount = oneWeekBonusAmount.add(oneWeekBonusAmount);
-    final var comment =
-        format("Bonus Transaction for %s Strategy", STRATEGY_2_WEEKS_PREPAYMENT_CODE);
+
+    final var discount = rentAndNonLabelFineTransactionsAbsAmount.multiply(discountRate);
+    final var comment = format("Bonus Transaction for %s Strategy", STRATEGY_RELIABLE_PARTNER_CODE);
     final var transactionTypeId = getBonusTransactionTypeId();
     final var bonusTransaction = new TransactionAddRequest();
     bonusTransaction.setDate(LocalDate.now());
     bonusTransaction.setComment(comment);
     bonusTransaction.setDriverId(driverId);
-    bonusTransaction.setAmount(totalDiscount);
+    bonusTransaction.setAmount(discount);
     bonusTransaction.setTransactionTypeId(transactionTypeId);
 
     return Optional.of(bonusTransaction);
+  }
+
+  private BigDecimal getDiscountRate(final int matchCount) {
+    final var occurrences = (double) (matchCount / BONUS_THRESHOLD_MATCH_COUNT);
+    if (occurrences < 4) {
+      return BigDecimal.valueOf(occurrences).divide(BigDecimal.valueOf(100d));
+    }
+    return BigDecimal.valueOf(0.05d);
   }
 
   private BigDecimal getRentAndNonLabelFineTransactionsAbsAmount(
@@ -77,6 +82,6 @@ public class TwoWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
 
   @Override
   public String getBonusCode() {
-    return STRATEGY_2_WEEKS_PREPAYMENT_CODE;
+    return STRATEGY_RELIABLE_PARTNER_CODE;
   }
 }

@@ -31,13 +31,8 @@ public class FourWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
 
   @Override
   public boolean canApply(final BonusProgram bonusProgram) {
-    if (bonusProgram.getActive()
-        && STRATEGY_4_WEEKS_PREPAYMENT_CODE.equals(bonusProgram.getCode())) {
-
-      return true;
-    }
-
-    return false;
+    return bonusProgram.getActive()
+        && STRATEGY_4_WEEKS_PREPAYMENT_CODE.equals(bonusProgram.getCode());
   }
 
   @Override
@@ -56,7 +51,7 @@ public class FourWeeksPrepaymentBonusStrategy extends AbstractBonusStrategy {
       return Optional.empty();
     }
     final var oneWeekBonusAmount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
-    final var totalDiscount =  oneWeekBonusAmount.multiply(BONUS_TRANSACTION_COUNT);
+    final var totalDiscount = oneWeekBonusAmount.multiply(BONUS_TRANSACTION_COUNT);
     final var comment =
         format("Bonus Transaction for %s Strategy", STRATEGY_4_WEEKS_PREPAYMENT_CODE);
     final var transactionTypeId = getBonusTransactionTypeId();

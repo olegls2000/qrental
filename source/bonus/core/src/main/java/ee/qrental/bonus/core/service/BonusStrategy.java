@@ -10,6 +10,8 @@ public interface BonusStrategy {
 
   String STRATEGY_2_WEEKS_PREPAYMENT_CODE = "2W";
   String STRATEGY_4_WEEKS_PREPAYMENT_CODE = "4W";
+  String STRATEGY_RELIABLE_PARTNER_CODE = "RP";
+  String STRATEGY_NEW_DRIVER_CODE = "ND";
 
 
   boolean canApply(final BonusProgram bonusProgram);
