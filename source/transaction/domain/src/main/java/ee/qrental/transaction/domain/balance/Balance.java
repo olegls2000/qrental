@@ -18,10 +18,15 @@ public class Balance {
   private BigDecimal nonFeeAbleAmount;
   private BigDecimal feeAmount;
   private BigDecimal positiveAmount;
+  private BigDecimal repairmentAmount;
   private Boolean derived;
 
   public BigDecimal getAmount() {
-    return positiveAmount.subtract(feeAmount).subtract(nonFeeAbleAmount).subtract(feeAbleAmount);
+    return positiveAmount
+        .subtract(feeAmount)
+        .subtract(nonFeeAbleAmount)
+        .subtract(feeAbleAmount)
+        .subtract(repairmentAmount);
   }
 
   @Override
@@ -41,6 +46,8 @@ public class Balance {
         + nonFeeAbleAmount
         + ", feeAmount="
         + feeAmount
+        + ", repairmentAmount="
+        + repairmentAmount
         + ", positiveAmount="
         + positiveAmount
         + ", derived="

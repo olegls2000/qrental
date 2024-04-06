@@ -37,6 +37,7 @@
                         <th>Fee Amount</th>
                         <th>Non Fee Amount</th>
                         <th>Fee Able Amount</th>
+                        <th>Repairment Amount</th>
                         <th>Positive Amount</th>
                     </tr>
                     <tr th:each="balance : ${balances}">
@@ -46,6 +47,7 @@
                         <td th:text="${balance.feeAmount}">???</td>
                         <td th:text="${balance.nonFeeAbleAmount}">???</td>
                         <td th:text="${balance.feeAbleAmount}">???</td>
+                        <td th:text="${balance.repairmentAmount}">???</td>
                         <td th:text="${balance.positiveAmount}">???</td>
                     </tr>
                 </table>

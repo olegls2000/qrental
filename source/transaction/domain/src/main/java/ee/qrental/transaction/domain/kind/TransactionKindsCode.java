@@ -3,9 +3,10 @@ package ee.qrental.transaction.domain.kind;
 public enum TransactionKindsCode {
   F("Fee"),
   NFA("Non Fee Able"),
-
   FA("Fee Able"),
-  P("Positive");
+  P("Positive"),
+
+  R("Repairment");
 
   private String name;
 

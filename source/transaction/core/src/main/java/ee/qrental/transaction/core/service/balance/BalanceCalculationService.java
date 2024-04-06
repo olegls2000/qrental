@@ -71,7 +71,8 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var latestCalculatedWeekId =
         latestCalculatedWeek == null ? null : latestCalculatedWeek.getId();
     final var qWeeksForCalculation =
-        qWeekQuery.getQWeeksFromPeriodOrdered(latestCalculatedWeekId, nextAfterRequestedQWeek.getId());
+        qWeekQuery.getQWeeksFromPeriodOrdered(
+            latestCalculatedWeekId, nextAfterRequestedQWeek.getId());
 
     final var drivers = driverQuery.getAll();
     qWeeksForCalculation.forEach(
@@ -137,6 +138,13 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                           week,
                           Balance::getFeeAbleAmount,
                           previousQWeekBalance);
+                  final var repairmentAmount =
+                      getBalanceAmount(
+                          TransactionKindsCode.R,
+                          driverId,
+                          week,
+                          Balance::getRepairmentAmount,
+                          previousQWeekBalance);
                   final var positiveAmount =
                       getBalanceAmount(
                           TransactionKindsCode.P,
@@ -153,6 +161,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                           .feeAmount(feeAmount)
                           .nonFeeAbleAmount(nonFeeAbleAmount)
                           .feeAbleAmount(feeAbleAmount)
+                          .repairmentAmount(repairmentAmount)
                           .positiveAmount(positiveAmount)
                           .derived(FALSE)
                           .build();
@@ -209,39 +218,41 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     var derivedFeeAmount = balanceToDerive.getFeeAmount();
     var derivedNonFeeAbleAmount = balanceToDerive.getNonFeeAbleAmount();
     var derivedFeeAbleAmount = balanceToDerive.getFeeAbleAmount();
+    var derivedRepairmentAmount = balanceToDerive.getRepairmentAmount();
+    final var derivedBalanceBuilder =
+        Balance.builder()
+            .derived(TRUE)
+            .driverId(balanceToDerive.getDriverId())
+            .created(LocalDate.now())
+            .qWeekId(balanceToDerive.getQWeekId());
 
     if (derivedPositiveAmount.compareTo(ZERO) == 0) {
       System.out.println(
           "No positive amount. Derive is impossible for the Balance: " + balanceToDerive);
 
-      return Balance.builder()
-          .derived(TRUE)
-          .driverId(balanceToDerive.getDriverId())
-          .created(LocalDate.now())
-          .qWeekId(balanceToDerive.getQWeekId())
+      return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
-          .nonFeeAbleAmount(balanceToDerive.getNonFeeAbleAmount())
-          .feeAbleAmount(balanceToDerive.getFeeAbleAmount())
-          .positiveAmount(balanceToDerive.getPositiveAmount())
+          .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+          .feeAbleAmount(derivedFeeAmount)
+          .repairmentAmount(derivedRepairmentAmount)
+          .positiveAmount(derivedPositiveAmount)
           .build();
     }
 
     if (derivedFeeAmount.compareTo(ZERO) == 0
         && derivedFeeAbleAmount.compareTo(ZERO) == 0
-        && derivedNonFeeAbleAmount.compareTo(ZERO) == 0) {
+        && derivedNonFeeAbleAmount.compareTo(ZERO) == 0
+        && derivedRepairmentAmount.compareTo(ZERO) == 0) {
 
       System.out.println(
           "No negative amounts. Derive is not required for Balance: " + balanceToDerive);
 
-      return Balance.builder()
-          .derived(TRUE)
-          .driverId(balanceToDerive.getDriverId())
-          .created(LocalDate.now())
-          .qWeekId(balanceToDerive.getQWeekId())
+      return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
-          .nonFeeAbleAmount(balanceToDerive.getNonFeeAbleAmount())
-          .feeAbleAmount(balanceToDerive.getFeeAbleAmount())
-          .positiveAmount(balanceToDerive.getPositiveAmount())
+          .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+          .feeAbleAmount(derivedFeeAmount)
+          .repairmentAmount(derivedRepairmentAmount)
+          .positiveAmount(derivedPositiveAmount)
           .build();
     }
     // positive: 5, fee: 2
@@ -257,14 +268,11 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     if (derivedPositiveAmount.compareTo(ZERO) == 0) {
       System.out.println("No positive amount. Derive is done for the Balance: " + balanceToDerive);
 
-      return Balance.builder()
-          .derived(TRUE)
-          .driverId(balanceToDerive.getDriverId())
-          .created(LocalDate.now())
-          .qWeekId(balanceToDerive.getQWeekId())
+      return derivedBalanceBuilder
           .feeAmount(derivedFeeAmount)
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
+          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
@@ -282,14 +290,11 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     if (derivedPositiveAmount.compareTo(ZERO) == 0) {
       System.out.println("No positive amount. Derive is done for the Balance: " + balanceToDerive);
 
-      return Balance.builder()
-          .derived(TRUE)
-          .driverId(balanceToDerive.getDriverId())
-          .created(LocalDate.now())
-          .qWeekId(balanceToDerive.getQWeekId())
+      return derivedBalanceBuilder
           .feeAmount(derivedFeeAmount)
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
+          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
@@ -304,14 +309,33 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       derivedPositiveAmount = ZERO; // 0
     }
 
-    return Balance.builder()
-        .derived(TRUE)
-        .driverId(balanceToDerive.getDriverId())
-        .created(LocalDate.now())
-        .qWeekId(balanceToDerive.getQWeekId())
+    if (derivedPositiveAmount.compareTo(ZERO) == 0) {
+      System.out.println("No positive amount. Derive is done for the Balance: " + balanceToDerive);
+
+      return derivedBalanceBuilder
+          .feeAmount(derivedFeeAmount)
+          .nonFeeAbleAmount(derivedNonFeeAbleAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
+          .repairmentAmount(derivedRepairmentAmount)
+          .positiveAmount(derivedPositiveAmount)
+          .build();
+    }
+
+    // positive: 5, repairment: 2
+    if (derivedPositiveAmount.compareTo(derivedRepairmentAmount) > 0) {
+      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedRepairmentAmount); // 3
+      derivedRepairmentAmount = ZERO; // 0
+    } else {
+      // positive: 2, repairment: 3
+      derivedRepairmentAmount = derivedRepairmentAmount.subtract(derivedPositiveAmount); // 1
+      derivedPositiveAmount = ZERO; // 0
+    }
+
+    return derivedBalanceBuilder
         .feeAmount(derivedFeeAmount)
         .nonFeeAbleAmount(derivedNonFeeAbleAmount)
         .feeAbleAmount(derivedFeeAbleAmount)
+        .repairmentAmount(derivedRepairmentAmount)
         .positiveAmount(derivedPositiveAmount)
         .build();
   }

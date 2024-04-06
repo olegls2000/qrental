@@ -42,6 +42,9 @@ public class BalanceJakartaEntity {
   @Column(name = "fee_amount")
   private BigDecimal feeAmount;
 
+  @Column(name = "repairment_amount")
+  private BigDecimal repairmentAmount;
+
   @Column(name = "q_week_id")
   private Long qWeekId;
 
