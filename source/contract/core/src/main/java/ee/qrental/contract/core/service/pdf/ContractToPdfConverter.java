@@ -348,7 +348,7 @@ public class ContractToPdfConverter {
         body1.addCell(body1cell5);
 
         final var body1cell6 =
-                new Cell(new Paragraph("Auto rendipäeva pikkus on 24 tundi alates iga ööpäeva kella 09:00’st.",
+                new Cell(new Paragraph("Auto rendipäeva pikkus on 24 tundi alates iga ööpäeva kella 10:00’st.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body1cell6.setBorder(NO_BORDER);
         body1cell6.setHorizontalAlignment(JUSTIFIED);
@@ -418,13 +418,15 @@ public class ContractToPdfConverter {
         body2.addCell(body2cell3);
 
         final var body2cell4 =
-                new Cell(new Paragraph("Üleandmise / Vastuvõtmise akt ",
+                new Cell(new Paragraph("Üleandmise-vastuvõtmise aks, millel on määratud üleantava rendiauto üleandmise-vastuvõtmise kuupäev," +
+                        " registreerimisnumber, auto seisund (olemasolevad vigastused ja sisepuhtus) üleandmise ajaks, üleantud tagatise suurus " +
+                        "ning rendileandja ja rentniku allkirjad, mis kinnitavad poolte nõustamist nimetatud üleandmise-vastuvõtmise akti andmetega.\n ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body2cell4.setBorder(NO_BORDER);
         body2cell4.setHorizontalAlignment(JUSTIFIED);
         body2.addCell(body2cell4);
 
-        final var body2cell5 =
+/*        final var body2cell5 =
                 new Cell(new Paragraph("II.2",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body2cell5.setBorder(NO_BORDER);
@@ -437,7 +439,7 @@ public class ContractToPdfConverter {
         body2cell6.setBorder(NO_BORDER);
         body2cell6.setHorizontalAlignment(JUSTIFIED);
         body2.addCell(body2cell6);
-
+*/
         contractPdfDoc.add(body2);
 
 
@@ -579,7 +581,7 @@ public class ContractToPdfConverter {
         body4cell2.setHorizontalAlignment(LEFT);
         body4.addCell(body4cell2);
 
-        final var body4cell3 =
+ /*       final var body4cell3 =
                 new Cell(new Paragraph("IV.1",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body4cell3.setBorder(NO_BORDER);
@@ -593,37 +595,38 @@ public class ContractToPdfConverter {
         body4cell4.setBorder(NO_BORDER);
         body4cell4.setHorizontalAlignment(JUSTIFIED);
         body4.addCell(body4cell4);
-
+*/
         final var body4cell5 =
-                new Cell(new Paragraph("IV.2",
+                new Cell(new Paragraph("IV.1",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body4cell5.setBorder(NO_BORDER);
         body4cell5.setHorizontalAlignment(LEFT);
         body4.addCell(body4cell5);
 
         final var body4cell6 =
-                new Cell(new Paragraph("Rendiauto lepingualune nädala renditasu suurus üleandmise-vastuvõtmise hetkeks sõltub konkreetse auto omadustest ja " +
-                        "määratakse eraldi auto üleandmisevastuvõtmise aktis." +
-                        "Üleandmise-vastuvõtmise aktis määratud renditasu on aktuaalne vaid täis rendinädala tasumise eest." +
-                        "Täisrendinädal arvestatakse esimese kalendri nädala Esmaspäeva kella 10:00'st kuni järgneva kalendri nädala kella 10:00'ni - " +
-                        "nimelt seitse päevat, millest on Pühapäev tasuta ja võib olla kasutatud puhkepäevana. " +
-                        "Iga mittetäis nädala rendiööpäeva maksumus on võrdne viiendikuga terve nädala rendi maksumusest.",
+                new Cell(new Paragraph(" Rendiauto lepinguline nädala renditasu suurus üleandmise-vastuvõtmise hetkeks" +
+                        " sõltub üleantava auto omadustest ja määratakse eraldi auto üleandmise-vastuvõtmise aktis. Üleandmise-vastuvõtmise " +
+                        "aktis määratud renditasu on aktuaalne vaid täis rendinädala tasumise puhul. Täisrendinädalat arvestatakse iga " +
+                        "kalendri nädala Esmaspäeva kella 10:00'st kuni järgneva kalendri nädala kella 10:00'ni - nimelt seitse päevat, " +
+                        "millest on Pühapäev tasuta ja võib olla kasutatud puhkepäevana. Iga mittetäis nädala autorendi ööpäeva maksumus " +
+                        "on võrdne viiendikuga terve nädala rendi maksumusest.\n",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell6.setBorder(NO_BORDER);
         body4cell6.setHorizontalAlignment(JUSTIFIED);
         body4.addCell(body4cell6);
 
         final var body4cell7 =
-                new Cell(new Paragraph("IV.3",
+                new Cell(new Paragraph("IV.2",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body4cell7.setBorder(NO_BORDER);
         body4cell7.setHorizontalAlignment(LEFT);
         body4.addCell(body4cell7);
 
         final var body4cell8 =
-                new Cell(new Paragraph("Rentnik kohustub maksma rendileandjale renditasu ette iga rendinädala eest CarAutoRent OÜ kontoris," +
-                        " mis asub aadressil Lasnamäe 30a, Tallinn, mitte hiljem, kui iga nädala teisipäeva kella 16:00’ni." +
-                        " Makse on võimalik teostada sularahas ja ülekandega CarAutoRent OÜ esindajaga edastatud pangakontole asjakohase selgitusega – Autorent + auto number.",
+                new Cell(new Paragraph(" Rentnik kohustub tasuma rendileandjale ettemaksu iga nädala rendi eest sularahas " +
+                        "Q Takso Veod OÜ kontoris, mis asub aadressil Lasnamäe 30a, Tallinn, või ülekandega Q Takso Veod OÜ " +
+                        "pangakontole  (või muule Q Takso Veod OÜ esindajaga maaratud pangakontole) asjakohase selgitusega – " +
+                        "”autorent + auto number”, mitte hiljem, kui iga nädala teisipäeva kella 16:00’ni.\n",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body4cell8.setBorder(NO_BORDER);
         body4cell8.setHorizontalAlignment(JUSTIFIED);
@@ -735,8 +738,9 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell3);
 
         final var body6cell4 =
-                new Cell(new Paragraph("Rentnik kohustub maksma tasu rendiperioodi eest. Renditasu mittetähtaegsel tasumisel on" +
-                        " rentnik kohustatud tasuma viivist 0.25% kalendripäevas tasumata summalt.",
+                new Cell(new Paragraph(" Rentnik kohustub maksma tasu rendiperioodi eest. " +
+                        "Renditasu ja muu rendiauto kasutamisest tulenevad kohustused mittetähtaegsel tasumisel on " +
+                        "rentnik kohustatud tasuma viivist 0.25% kalendripäevas tasumata summalt.",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell4.setBorder(NO_BORDER);
         body6cell4.setHorizontalAlignment(JUSTIFIED);
@@ -975,9 +979,9 @@ public class ContractToPdfConverter {
 
         final var body6cell34 =
                 new Cell(new Paragraph("Kui sõiduk antakse Rentnikule üle seest ja väljast puhtana ja pestuna, kohustub rentnik tagastama " +
-                        "sõiduki samas seisukorras. Pesemata sõiduki tagastamisel tuleb Rentnikul tasuda välispesu eest 50.- EUR," +
-                        " salongi puhastamise eest 180.- EUR ja vajadusel pakiruumi puhastamise eest 40.- EUR. Juhul kui sõiduk vajab " +
-                        "keemilist puhastust, tuleb Rentnikul tasuda keemilise puhastuse eest 320.- EUR. \n",
+                        "sõiduki samas seisukorras. Pesemata sõiduki tagastamisel tuleb Rentnikul tasuda trahvi välispesu vajaduse eest 60.- EUR, " +
+                        "salongi puhastamise vajaduse eest 180.- EUR ja vajadusel pakiruumi puhastamise vajaduse eest 40.- EUR." +
+                        " Juhul kui sõiduk vajab keemilist puhastust, tuleb Rentnikul tasuda trahvi keemilise puhastuse vajaduse eest 360.- EUR.\n",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell34.setBorder(NO_BORDER);
         body6cell34.setHorizontalAlignment(JUSTIFIED);
@@ -1011,10 +1015,8 @@ public class ContractToPdfConverter {
                 new Cell(new Paragraph("Rendileandja poolt käesoleva koostöölepingu alusel osutatava rendiautoteenuse (edaspidi \"renditeenus\") " +
                         "minimaalne kestus on " + model.getDuration() + "  täis kalendrinädalat esimese rendiauto edastamise kuupäevast. " +
                         "Ülalnimetatud kestus hakatakse lugema auto üleandmise-vastuvõtmise aktis märgitud kuupäevast." +
-                        " Iga edasise renditava auto minimaalne rendikestus on neli täis kalendrinädalat alates päevast, " +
-                        "mil on rentnik rendileandja poolt vaba auto rendileandja autopargist kätte saanud. Pikeneb rendikestus automaatselt veel nädala võrra," +
-                        " kui ei ole vastaval ajavahemikul rendilepingu lõpetamise avaldus esitatud.Hakatakse sel juhul iga uue auto neljanädalane rendikestus " +
-                        "lugema iga uues auto üleandmise-vastuvõtmise aktis märgitud kuupäevast.",
+                        " Renditeenuse kasutamise ennetähtaegsel lõpetamisel kohustub rentnik tasuma kõigi kasutamata rendinädalate eest vastavalt " +
+                        "käesoleva lepingu ja asjakohase üleandmise-vastuvõtmise akti tingimustele. \n",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell38.setBorder(NO_BORDER);
         body6cell38.setHorizontalAlignment(JUSTIFIED);
@@ -1028,8 +1030,7 @@ public class ContractToPdfConverter {
         body6.addCell(body6cell39);
 
         final var body6cell40 =
-                new Cell(new Paragraph("Rendileandja poolt osutatava teenuste lõpetamiseks kohustub rendileandja teavitada oma soovist" +
-                        " renditud auto tagastada seitse päeva järgmise esmaspäevani. \n",
+                new Cell(new Paragraph(" Auto renditeenuste lõpetamiseks kohustub rentnik teavitada oma soovist renditud auto tagastada seitse päeva ette järgmise esmaspäevani.\n",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body6cell40.setBorder(NO_BORDER);
         body6cell40.setHorizontalAlignment(JUSTIFIED);
@@ -1525,7 +1526,8 @@ public class ContractToPdfConverter {
         body9.addCell(body9cell19);
 
         final var body9cell20 =
-                new Cell(new Paragraph("Lõpetada rendilepingu erakorraliselt, juhul, kui rentnik on jätnud tasumata neli järjestiku üürimaksed ja/või kokku üürivõlg ületab 1 000 eurot.  ",
+                new Cell(new Paragraph("On rendileandjal õigus lõpetada rendilepingu erakorraliselt, juhul, kui ei ole rentnik tasunud kahte järjestikust " +
+                        "üürimakset täies ulatuses ja/või üürivõla kogusumma ületab 500 eurot.",
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         body9cell20.setBorder(NO_BORDER);
         body9cell20.setHorizontalAlignment(JUSTIFIED);
