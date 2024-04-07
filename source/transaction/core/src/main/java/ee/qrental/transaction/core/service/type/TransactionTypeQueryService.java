@@ -1,9 +1,5 @@
 package ee.qrental.transaction.core.service.type;
 
-import static java.util.Arrays.asList;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeUpdateRequest;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
@@ -11,8 +7,13 @@ import ee.qrental.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeResponseMapper;
 import ee.qrental.transaction.core.mapper.type.TransactionTypeUpdateRequestMapper;
 import ee.qrental.transaction.domain.kind.TransactionKindsCode;
-import java.util.List;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 public class TransactionTypeQueryService implements GetTransactionTypeQuery {
@@ -63,6 +64,7 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
         .loadByKindCodesIn(
             asList(
                 TransactionKindsCode.F.name(),
+                TransactionKindsCode.R.name(),
                 TransactionKindsCode.NFA.name(),
                 TransactionKindsCode.FA.name()))
         .stream()
