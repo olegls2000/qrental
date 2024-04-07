@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class CarResponse {
   private Long id;
   private Boolean active;
+  private String status;
   private Boolean qRent;
   private String regNumber;
   private String vin;

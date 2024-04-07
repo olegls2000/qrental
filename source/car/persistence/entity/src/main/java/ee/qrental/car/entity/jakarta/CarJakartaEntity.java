@@ -19,93 +19,94 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 public class CarJakartaEntity {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = IDENTITY)
+  private Long id;
 
-    @Column(name = "active")
-    private Boolean active;
+  @Column(name = "active")
+  private Boolean active;
 
-    @Column(name = "q_rent")
-    private Boolean qRent;
+  @Column(name = "status")
+  private String status;
 
-    @Column(name = "reg_number")
-    private String regNumber;
+  @Column(name = "q_rent")
+  private Boolean qRent;
 
-    @Column(name = "vin")
-    private String vin;
+  @Column(name = "reg_number")
+  private String regNumber;
 
-    @Column(name = "release_date")
-    private LocalDate releaseDate;
+  @Column(name = "vin")
+  private String vin;
 
-    @Column(name = "manufacturer")
-    private String manufacturer;
+  @Column(name = "release_date")
+  private LocalDate releaseDate;
 
-    @Column(name = "model")
-    private String model;
+  @Column(name = "manufacturer")
+  private String manufacturer;
 
-    @Column(name = "appropriation")
-    private Boolean appropriation;
+  @Column(name = "model")
+  private String model;
 
-    @Column(name = "elegance")
-    private Boolean elegance;
+  @Column(name = "appropriation")
+  private Boolean appropriation;
 
-    @Column(name = "gear_type")
-    private String gearType;
+  @Column(name = "elegance")
+  private Boolean elegance;
 
-    @Column(name = "fuel_type")
-    private String fuelType;
+  @Column(name = "gear_type")
+  private String gearType;
 
-    @Column(name = "lpg")
-    private Boolean lpg;
+  @Column(name = "fuel_type")
+  private String fuelType;
 
-    @Column(name = "date_install_lpg")
-    private LocalDate dateInstallLpg;
+  @Column(name = "lpg")
+  private Boolean lpg;
 
-    @Column(name = "insurance_firm")
-    private String insuranceFirm;
+  @Column(name = "date_install_lpg")
+  private LocalDate dateInstallLpg;
 
-    @Column(name = "insurance_date_start")
-    private LocalDate insuranceDateStart;
+  @Column(name = "insurance_firm")
+  private String insuranceFirm;
 
-    @Column(name = "insurance_date_end")
-    private LocalDate insuranceDateEnd;
+  @Column(name = "insurance_date_start")
+  private LocalDate insuranceDateStart;
 
-    @Column(name = "s_card")
-    private Boolean sCard;
+  @Column(name = "insurance_date_end")
+  private LocalDate insuranceDateEnd;
 
-    @Column(name = "key2")
-    private Boolean key2;
+  @Column(name = "s_card")
+  private Boolean sCard;
 
-    @Column(name = "gps")
-    private Boolean gps;
+  @Column(name = "key2")
+  private Boolean key2;
 
-    @Column(name = "technical_inspection_end")
-    private LocalDate technicalInspectionEnd;
+  @Column(name = "gps")
+  private Boolean gps;
 
-    @Column(name = "gas_inspection_end")
-    private LocalDate gasInspectionEnd;
+  @Column(name = "technical_inspection_end")
+  private LocalDate technicalInspectionEnd;
 
-    @Column(name = "comment")
-    private String comment;
+  @Column(name = "gas_inspection_end")
+  private LocalDate gasInspectionEnd;
 
-    @Column(name = "date_end_lpg")
-    private LocalDate dateEndLpg;
+  @Column(name = "comment")
+  private String comment;
 
-    @Column(name = "by_qrent")
-    private Boolean brandingQrent;
+  @Column(name = "date_end_lpg")
+  private LocalDate dateEndLpg;
 
-    @Column(name = "by_bolt")
-    private Boolean brandingBolt;
+  @Column(name = "by_qrent")
+  private Boolean brandingQrent;
 
-    @Column(name = "by_forus")
-    private Boolean brandingForus;
+  @Column(name = "by_bolt")
+  private Boolean brandingBolt;
 
-    @Column(name = "by_uber")
-    private Boolean brandingUber;
+  @Column(name = "by_forus")
+  private Boolean brandingForus;
 
-    @Column(name = "by_tallink")
-    private Boolean brandingTallink;
+  @Column(name = "by_uber")
+  private Boolean brandingUber;
 
-
+  @Column(name = "by_tallink")
+  private Boolean brandingTallink;
 }

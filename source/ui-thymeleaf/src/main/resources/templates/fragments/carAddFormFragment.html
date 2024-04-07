@@ -12,6 +12,17 @@
     <form method="post"
           th:action="@{/cars/add}"
           th:object="${addRequest}">
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="statusId">Select Car Status</label>
+                <select id="statusId" class="form-select"
+                        th:field="*{status}">
+                    <option th:each="status: ${statuses}"
+                            th:value="${status.key}"
+                            th:text=" ${status.value}"></option>
+                </select>
+            </div>
+        </div>
         <p class="fs-5">Car info:</p>
         <div class="row">
             <div class="col">

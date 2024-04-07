@@ -1,6 +1,7 @@
 package ee.qrental.car.adapter.mapper;
 
 import ee.qrental.car.domain.Car;
+import ee.qrental.car.domain.CarStatus;
 import ee.qrental.car.entity.jakarta.CarJakartaEntity;
 
 public class CarAdapterMapper {
@@ -9,6 +10,7 @@ public class CarAdapterMapper {
     return Car.builder()
         .id(entity.getId())
         .active(entity.getActive())
+        .status(CarStatus.valueOf(entity.getStatus()))
         .qRent(entity.getQRent())
         .regNumber(entity.getRegNumber())
         .vin(entity.getVin())
@@ -43,6 +45,7 @@ public class CarAdapterMapper {
     return CarJakartaEntity.builder()
         .id(domain.getId())
         .active(domain.getActive())
+        .status(domain.getStatus().name())
         .qRent(domain.getQRent())
         .regNumber(domain.getRegNumber())
         .vin(domain.getVin())

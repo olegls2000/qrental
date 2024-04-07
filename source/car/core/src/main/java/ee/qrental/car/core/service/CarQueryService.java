@@ -1,8 +1,8 @@
 package ee.qrental.car.core.service;
 
+import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.query.filter.CarFilter;
@@ -16,6 +16,9 @@ import ee.qrental.car.domain.CarLink;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import ee.qrental.car.domain.CarStatus;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -88,5 +91,10 @@ public class CarQueryService implements GetCarQuery {
     }
 
     return getAll();
+  }
+
+  @Override
+  public Map<String, String> getAllStatuses() {
+    return stream(CarStatus.values()).collect(toMap(Enum::name, CarStatus::getLabel));
   }
 }

@@ -19,6 +19,18 @@
            hidden/>
 
     <div class="row">
+        <div class="mb-3">
+            <label class="form-label text-muted" for="statusId">Select Car Status</label>
+            <select id="statusId" class="form-select"
+                    th:field="*{status}">
+                <option th:each="status: ${statuses}"
+                        th:value="${status.key}"
+                        th:text=" ${status.value}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col">
             <div class="mb-3">
                 <label class="form-label text-muted" for="regNumberId">Registration Number </label>
@@ -257,7 +269,8 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                <label class="form-label text-muted" for="technicalInspectionEnd">Technical Inspection Expiration</label>
+                <label class="form-label text-muted" for="technicalInspectionEnd">Technical Inspection
+                    Expiration</label>
                 <input class="form-control" id="technicalInspectionEnd"
                        placeholder="Enter Technical Inspection Expiration date"
                        required

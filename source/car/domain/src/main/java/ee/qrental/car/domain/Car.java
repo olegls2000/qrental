@@ -12,6 +12,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class Car {
   private Long id;
   private Boolean active;
+  private CarStatus status;
   private Boolean qRent;
   private String regNumber;
   private String vin;

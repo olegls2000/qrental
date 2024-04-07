@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @SuperBuilder
 public class CarUpdateRequest extends AbstractUpdateRequest {
   private Boolean active;
+  private String status;
   private Boolean qRent;
   private String regNumber;
   private String vin;

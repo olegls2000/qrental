@@ -26,7 +26,8 @@ public class CarUseCaseController {
 
   @GetMapping(value = "/add-form")
   public String addForm(final Model model) {
-    model.addAttribute("addRequest", new CarAddRequest());
+    addAddRequestToModel(model, new CarAddRequest());
+    addAStatusesToModel(model);
 
     return "forms/addCar";
   }
@@ -35,7 +36,8 @@ public class CarUseCaseController {
   public String addCarCar(@ModelAttribute final CarAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
-      model.addAttribute("addRequest", addRequest);
+      addAddRequestToModel(model, addRequest);
+      addAStatusesToModel(model);
 
       return "forms/addCar";
     }
@@ -43,9 +45,18 @@ public class CarUseCaseController {
     return "redirect:" + CAR_ROOT_PATH;
   }
 
+  private void addAddRequestToModel(final Model model, final CarAddRequest addRequest) {
+    model.addAttribute("addRequest", addRequest);
+  }
+
+  private void addAStatusesToModel(final Model model) {
+    model.addAttribute("statuses", carQuery.getAllStatuses());
+  }
+
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
-    model.addAttribute("updateRequest", carQuery.getUpdateRequestById(id));
+    addUpdateRequestToModel(model, carQuery.getUpdateRequestById(id));
+    addAStatusesToModel(model);
 
     return "forms/updateCar";
   }
@@ -54,12 +65,17 @@ public class CarUseCaseController {
   public String updateCar(final CarUpdateRequest updateRequest, final Model model) {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
-      model.addAttribute("updateRequest", updateRequest);
+      addUpdateRequestToModel(model, updateRequest);
+      addAStatusesToModel(model);
 
       return "forms/updateCar";
     }
 
     return "redirect:" + CAR_ROOT_PATH;
+  }
+
+  private void addUpdateRequestToModel(final Model model, final CarUpdateRequest updateRequest) {
+    model.addAttribute("updateRequest", updateRequest);
   }
 
   @GetMapping(value = "/delete-form/{id}")

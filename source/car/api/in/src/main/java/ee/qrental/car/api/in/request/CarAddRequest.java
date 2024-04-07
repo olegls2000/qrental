@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CarAddRequest extends AbstractAddRequest {
     private Boolean active;
+    private String status;
     private Boolean qRent;
     private String regNumber;
     private String vin;
