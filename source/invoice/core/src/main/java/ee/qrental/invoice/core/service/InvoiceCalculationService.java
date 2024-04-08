@@ -31,7 +31,7 @@ import ee.qrental.invoice.domain.InvoiceCalculationResult;
 import ee.qrental.invoice.domain.InvoiceItem;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
@@ -114,7 +114,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
                 checkIfBalanceForCurrentWeekExists(driver, week);
                 final var filter =
-                    PeriodAndDriverFilter.builder()
+                    PeriodAndKindAndDriverTransactionFilter.builder()
                         .driverId(driverId)
                         .dateStart(weekStartDay)
                         .dateEnd(weekEndDay)
@@ -148,7 +148,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var invoiceItems = getInvoiceItems(invoicesIncludedTransactions, qFirm);
 
                 final var filterForPreviousWeek =
-                    PeriodAndDriverFilter.builder()
+                    PeriodAndKindAndDriverTransactionFilter.builder()
                         .driverId(driverId)
                         .dateStart(previousQWeekStartDay)
                         .dateEnd(previousQWeekEndDay)

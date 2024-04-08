@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.filter.PeriodAndDriverFilter;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.in.request.TransactionUpdateRequest;
@@ -52,7 +52,7 @@ public class TransactionQueryService implements GetTransactionQuery {
       final Long driverId, final Long qWeekId) {
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var periodFilter =
-        PeriodAndDriverFilter.builder()
+        PeriodAndKindAndDriverTransactionFilter.builder()
             .driverId(driverId)
             .dateStart(qWeek.getStart())
             .dateEnd(qWeek.getEnd())
@@ -90,7 +90,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(final PeriodAndDriverFilter filter) {
+  public List<TransactionResponse> getAllByFilter(final PeriodAndKindAndDriverTransactionFilter filter) {
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByDriverIdAndBetweenDays(
             filter.getDriverId(), filter.getDateStart(), filter.getDateEnd()));

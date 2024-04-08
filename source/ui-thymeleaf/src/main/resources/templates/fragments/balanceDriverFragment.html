@@ -147,55 +147,20 @@
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-success bg-success border-success'">???</small>
                     </div>
-                    <!--
-                      <div class="col-md-auto">
-                          <small th:text="|Available campaigns: |"
-                                 class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                                 border-opacity-10 rounded-2 "
-                                 th:classappend="'text-success bg-success border-success'">???</small>
-                          <small>
-                              <a class="btn btn btn-success" href="#">
-                                  <span class="bi bi-1-square"></span>
-                              </a>
-                              <a class="btn btn btn-success" href="#">
-                                  <span class="bi bi-2-square"></span>
-                              </a>
-                              <a class="btn btn btn-secondary" href="#">
-                                  <span class="bi bi-3-square"></span>
-                              </a>
-                              <a class="btn btn btn-success" href="#">
-                                  <span class="bi bi-4-square"></span>
-                              </a>
-                              <a class="btn btn  btn-secondary" href="#">
-                                  <span class="bi bi-5-square"></span>
-                              </a>
-                          </small>
-                      </div>-->
-
                 </div>
+
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
-                        <small th:text="|Available campaigns: |"
+                        <small th:text="|Repairment Raw due: ${rawRepairment} EURO |"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                                 border-opacity-10 rounded-2 "
-                               th:classappend="'text-success bg-success border-success'">???</small>
-                        <small>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-1-square"></span>
-                            </a>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-2-square"></span>
-                            </a>
-                            <a class="btn btn btn-secondary" href="#">
-                                <span class="bi bi-3-square"></span>
-                            </a>
-                            <a class="btn btn btn-success" href="#">
-                                <span class="bi bi-4-square"></span>
-                            </a>
-                            <a class="btn btn  btn-secondary" href="#">
-                                <span class="bi bi-5-square"></span>
-                            </a>
-                        </small>
+                               border-opacity-10 rounded-2 "
+                               th:classappend="'text-danger bg-danger border-danger'">???</small>
+                    </div>
+                    <div class="col-md-auto">
+                        <small th:text="|Repairment Raw due with Q-Kasko: ${rawRepairmentWithQKasko} EURO|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                               th:classappend="'text-danger bg-danger border-danger'">???</small>
                     </div>
 
                 </div>

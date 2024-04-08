@@ -10,6 +10,8 @@ public interface GetBalanceQuery {
   BalanceResponse getById(final Long id);
 
   BigDecimal getRawBalanceTotalByDriver(final Long driverId);
+  BigDecimal getRawRepairmentTotalByDriver(final Long driverId);
+  BigDecimal getRawRepairmentTotalByDriverWithQKasko(final Long driverId);
 
   BigDecimal getRawFeeTotalByDriver(final Long driverId);
 

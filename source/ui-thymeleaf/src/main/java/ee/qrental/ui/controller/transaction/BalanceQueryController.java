@@ -63,6 +63,7 @@ public class BalanceQueryController {
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
+    addRepairmentDataToModel(driverId, model);
 
     return "detailView/balanceDriver";
   }
@@ -88,6 +89,7 @@ public class BalanceQueryController {
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
+    addRepairmentDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     if (requestedQWekId != null) {
       final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWekId);
@@ -202,6 +204,14 @@ public class BalanceQueryController {
       return;
     }
     model.addAttribute("obligationMatchCount", preCurrentWeekObligation.getMatchCount().toString());
+  }
+
+  private void addRepairmentDataToModel(final Long driverId, final Model model) {
+    final var rawRepairment = balanceQuery.getRawRepairmentTotalByDriver(driverId);
+    final var rawRepairmentWithQKasko =
+        balanceQuery.getRawRepairmentTotalByDriverWithQKasko(driverId);
+    model.addAttribute("rawRepairment", rawRepairment);
+    model.addAttribute("rawRepairmentWithQKasko", rawRepairmentWithQKasko);
   }
 
   private void addCallSignDataToModel(final Long driverId, final Model model) {
