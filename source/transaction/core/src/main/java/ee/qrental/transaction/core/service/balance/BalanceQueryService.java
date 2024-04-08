@@ -307,6 +307,7 @@ public class BalanceQueryService implements GetBalanceQuery {
             .driverId(driverId)
             .dateStart(qWeek.getStart())
             .dateEnd(qWeek.getEnd())
+                .transactionKindCodes(asList("F", "NFA", "FA", "P"))
             .build();
     final var periodAmount = getSumOfTransactionByFilter(periodFilter);
 
