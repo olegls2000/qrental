@@ -135,7 +135,11 @@ public class BalanceQueryService implements GetBalanceQuery {
 
     if (latestBalance == null) {
       final var startDate = QTimeUtils.getFirstDayOfYear(year);
-      final var filter = filterBuilder.dateStart(startDate).build();
+      final var filter =
+          filterBuilder
+              .dateStart(startDate)
+              .transactionKindCodes(asList("F", "NFA", "FA", "P"))
+              .build();
 
       return getSumOfTransactionByFilter(filter);
     }
@@ -144,7 +148,11 @@ public class BalanceQueryService implements GetBalanceQuery {
 
     final var earliestNotCalculatedWeek = latestCalculatedWeekNumber + 1;
     final var startDate = QTimeUtils.getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
-    final var filter = filterBuilder.dateStart(startDate).build();
+    final var filter =
+        filterBuilder
+            .dateStart(startDate)
+            .transactionKindCodes(asList("F", "NFA", "FA", "P"))
+            .build();
     final var fromBalance = latestBalance.getAmount();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
@@ -167,7 +175,11 @@ public class BalanceQueryService implements GetBalanceQuery {
 
     if (latestBalance == null) {
       final var startDate = QTimeUtils.getFirstDayOfYear(qWeekQuery.getFirstWeek().getYear());
-      final var filter = filterBuilder.dateStart(startDate).build();
+      final var filter =
+          filterBuilder
+              .dateStart(startDate)
+              .transactionKindCodes(asList("F", "NFA", "FA", "P"))
+              .build();
 
       return getSumOfTransactionByFilter(filter);
     }
@@ -307,7 +319,7 @@ public class BalanceQueryService implements GetBalanceQuery {
             .driverId(driverId)
             .dateStart(qWeek.getStart())
             .dateEnd(qWeek.getEnd())
-                .transactionKindCodes(asList("F", "NFA", "FA", "P"))
+            .transactionKindCodes(asList("F", "NFA", "FA", "P"))
             .build();
     final var periodAmount = getSumOfTransactionByFilter(periodFilter);
 
