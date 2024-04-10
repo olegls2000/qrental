@@ -138,6 +138,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                           week,
                           Balance::getFeeAbleAmount,
                           previousQWeekBalance);
+                  System.out.println("-> trace: previousQWeekBalance" + previousQWeekBalance);
                   final var repairmentAmount =
                       getBalanceAmount(
                           TransactionKindsCode.R,
