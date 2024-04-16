@@ -62,33 +62,28 @@ where transaction_type_id in (select distinct(id)
 delete
 from balance_calculation_result bcr
 where bcr.balance_id in
-      (select bl.id from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?));
+      (select bl.id
+       from balance bl
+       where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024));
 
 delete
 from balance_transaction btr
 where btr.balance_id in
-      (select bl.id from balance bl where q_week_id in (select qw.id from q_week qw where qw.number = ?));
+      (select bl.id
+       from balance bl
+       where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024));
 
 delete
 from balance bl
-where q_week_id in (select qw.id from q_week qw where qw.number = ?);
+where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
 
 delete
 from transaction tx
 where tx.transaction_type_id in (select distinct(id)
                                  from transaction_type
                                  where name in ('fee replenish', 'compensation', 'fee debt'))
-  and tx.date;
-
-
-
-delete
-from transaction
-where transaction_type_id in (select distinct(id)
-                              from transaction_type
-                              where name in ('fee replenish', 'compensation', 'fee debt'));
-
-
+  and tx.date >= '2024-03-04'::date
+  and tx.date <= '2024-03-10'::date;
 ------------------------------------------------------------
 delete
 from balance_calculation_result;
@@ -170,7 +165,7 @@ SET created_date = '2023-01-01';
 SELECT qw.*
 FROM q_week qw
 WHERE (
-            qw.year = (SELECT year FROM q_week WHERE id = 67)
+    qw.year = (SELECT year FROM q_week WHERE id = 67)
         AND qw.number < (SELECT number FROM q_week WHERE id = 67)
     )
    OR (qw.year < (SELECT year FROM q_week WHERE id = 67));
