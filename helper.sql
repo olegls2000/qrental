@@ -57,8 +57,9 @@ where transaction_type_id in (select distinct(id)
                               from transaction_type
                               where name in ('weekly rent', 'no label fine'));
 
+--##BALANCE CALCULATIONS:
 --------------------------------------------------------------------------------------------------------
---## Balance Calculations:
+--## Remove Balance Calculations for week:
 delete
 from balance_calculation_result bcr
 where bcr.balance_id in
@@ -84,7 +85,8 @@ where tx.transaction_type_id in (select distinct(id)
                                  where name in ('fee replenish', 'compensation', 'fee debt'))
   and tx.date >= '2024-03-04'::date
   and tx.date <= '2024-03-10'::date;
-------------------------------------------------------------
+
+--## Remove all Balance Calculations:
 delete
 from balance_calculation_result;
 delete
@@ -93,10 +95,26 @@ delete
 from balance;
 select *
 from balance;
+-------------------------------------------------
 
+--##INVOICE CALCULATIONS:
+------------------------------------------------------------------------------------------------------------------
+
+--## Remove Invoice Calculations for week:
+delete
+from invoice inv
+where inv.q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
 
 delete
-from invoice_item;
+from invoice_calculation invc
+where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024)
+   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
+-- invoice items must be deleted by Cascade!
+-- invoice_calculation_result must be deleted by Cascade!
+-- invoice_transaction must be deleted by Cascade!
+
+
+--## Remove all Invoice Calculations:
 delete
 from invoice_calculation_result;
 delete
@@ -104,13 +122,11 @@ from invoice_transaction;
 delete
 from invoice_calculation;
 delete
-from invoice;
-
+from invoice inv;;
 delete
-from transaction
-where transaction_type_id in (select distinct(id)
-                              from transaction_type
-                              where name in ('fee replenish', 'compensation', 'fee debt'));
+from invoice_item;
+--------------------------------------------------
+
 
 --#### SELECTS:
 
