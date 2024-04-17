@@ -80,7 +80,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var nextAfterRequested = qWeekQuery.getOneAfterById(requestedQWeek.getId());
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
-            latestCalculatedWeek.getId(), nextAfterRequested.getId());
+            latestCalculatedWeek.getId(),
+            nextAfterRequested.getId(),
+            GetQWeekQuery.DEFAULT_COMPARATOR);
     getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
     if (violationsCollector.hasViolations()) {

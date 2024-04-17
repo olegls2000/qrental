@@ -20,13 +20,6 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class QWeekQueryService implements GetQWeekQuery {
 
-  private static final Comparator<QWeekResponse> DEFAULT_COMPARATOR =
-      comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber);
-  private static final Comparator<QWeekResponse> REVERSED_COMPARATOR =
-      comparing(QWeekResponse::getYear)
-          .thenComparing(QWeekResponse::getNumber)
-          .reversed();
-
   private final QWeekLoadPort loadPort;
   private final QWeekResponseMapper mapper;
   private final QWeekUpdateRequestMapper updateRequestMapper;
@@ -79,13 +72,13 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public List<QWeekResponse> getQWeeksFromPeriodOrdered(
-      final Long starQtWeekId, final Long endQWeekId) {
+      final Long starQtWeekId, final Long endQWeekId, final Comparator<QWeekResponse> comparator) {
     final var qWeeks =
         starQtWeekId == null
             ? loadPort.loadAllBeforeById(endQWeekId)
             : loadPort.loadAllBetweenByIds(starQtWeekId, endQWeekId);
 
-    return qWeeks.stream().map(mapper::toResponse).sorted(REVERSED_COMPARATOR).collect(toList());
+    return qWeeks.stream().map(mapper::toResponse).sorted(comparator).collect(toList());
   }
 
   @Override

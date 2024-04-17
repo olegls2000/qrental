@@ -15,7 +15,6 @@ import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
-// import jakarta.transaction.Transactional;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.transaction.api.in.usecase.balance.BalanceCalculationAddUseCase;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
@@ -72,7 +71,9 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         latestCalculatedWeek == null ? null : latestCalculatedWeek.getId();
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
-            latestCalculatedWeekId, nextAfterRequestedQWeek.getId());
+            latestCalculatedWeekId,
+            nextAfterRequestedQWeek.getId(),
+            GetQWeekQuery.DEFAULT_COMPARATOR);
 
     final var drivers = driverQuery.getAll();
     qWeeksForCalculation.forEach(
@@ -234,7 +235,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
-          .feeAbleAmount(derivedFeeAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
           .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
@@ -251,7 +252,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
-          .feeAbleAmount(derivedFeeAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
           .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
