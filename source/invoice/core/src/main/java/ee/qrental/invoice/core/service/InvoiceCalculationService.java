@@ -263,7 +263,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     var lastCalculation = loadPort.loadLastCalculation();
     if (lastCalculation == null) {
 
-      return null;
+      return qWeekQuery.getFirstWeek();
     }
 
     return qWeekQuery.getById(lastCalculation.getEndQWeekId());
