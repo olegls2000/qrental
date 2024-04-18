@@ -353,8 +353,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
   private String getInvoiceNumber(
       final Integer weekYear, final Integer weekNumber, final Long driverId) {
+    final var formattedWeekNumber = String.format("%02d", weekNumber);
 
-    return format("%d%d%d", weekYear, weekNumber, driverId);
+    return format("%d%s%d", weekYear, formattedWeekNumber, driverId);
   }
 
   private List<InvoiceItem> getInvoiceItems(

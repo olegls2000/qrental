@@ -189,6 +189,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
             .feeAmount(ZERO)
             .feeAbleAmount(ZERO)
             .nonFeeAbleAmount(ZERO)
+            .repairmentAmount(ZERO)
             .driverId(driverId)
             .derived(TRUE)
             .build();
