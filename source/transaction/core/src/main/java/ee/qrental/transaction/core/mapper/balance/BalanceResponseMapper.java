@@ -32,7 +32,7 @@ public class BalanceResponseMapper implements ResponseMapper<BalanceResponse, Ba
         .positiveAmount(domain.getPositiveAmount())
         .feeAmount(domain.getFeeAmount().negate())
         .repairmentAmount(domain.getRepairmentAmount())
-        .amount(domain.getAmount())
+        .amount(domain.getAmountsSumWithoutRepairment())
         .driverInfo(driverQuery.getObjectInfo(domain.getDriverId()))
         .build();
   }

@@ -23,10 +23,8 @@ import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -82,7 +80,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BigDecimal getRawBalanceTotalByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    final var balanceSum = latestBalance != null ? latestBalance.getAmount() : ZERO;
+    final var balanceSum = latestBalance != null ? latestBalance.getAmountsSumWithoutRepairment() : ZERO;
     final var rawSum =
         getRawTransactionsSum(latestBalance, driverId, asList("F", "NFA", "FA", "P"));
 
@@ -125,7 +123,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber);
     if (balance != null) {
 
-      return round(balance.getAmount());
+      return round(balance.getAmountsSumWithoutRepairment());
     }
 
     final var endDate = QTimeUtils.getLastDayOfWeekInYear(year, weekNumber);
@@ -153,7 +151,7 @@ public class BalanceQueryService implements GetBalanceQuery {
             .dateStart(startDate)
             .transactionKindCodes(asList("F", "NFA", "FA", "P"))
             .build();
-    final var fromBalance = latestBalance.getAmount();
+    final var fromBalance = latestBalance.getAmountsSumWithoutRepairment();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
     return round(fromBalance.add(rawTransactionSum));
@@ -165,7 +163,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
     if (balance != null) {
 
-      return round(balance.getAmount());
+      return round(balance.getAmountsSumWithoutRepairment());
     }
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var endDate = qWeek.getEnd();
@@ -191,7 +189,7 @@ public class BalanceQueryService implements GetBalanceQuery {
             .dateStart(startDate)
             .transactionKindCodes(asList("F", "NFA", "FA", "P", "R"))
             .build();
-    final var fromBalance = latestBalance.getAmount();
+    final var fromBalance = latestBalance.getAmountsSumWithoutRepairment();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
     return round(fromBalance.add(rawTransactionSum));
@@ -213,7 +211,7 @@ public class BalanceQueryService implements GetBalanceQuery {
       final var feeFromBalance = latestBalance.getFeeAmount();
       rawFeeTotal = rawFeeTotal.add(feeFromBalance);
 
-      final var balanceAmount = latestBalance.getAmount();
+      final var balanceAmount = latestBalance.getAmountsSumWithoutRepairment();
       rawTotal = rawTotal.add(balanceAmount);
 
       final var latestBalanceWeek = qWeekQuery.getById(latestBalance.getQWeekId());

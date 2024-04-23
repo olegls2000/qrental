@@ -21,13 +21,14 @@ public class Balance {
   private BigDecimal repairmentAmount;
   private Boolean derived;
 
-  public BigDecimal getAmount() {
+  public BigDecimal getAmountsSumWithoutRepairment() {
     return positiveAmount
         .subtract(feeAmount)
         .subtract(nonFeeAbleAmount)
-        .subtract(feeAbleAmount)
-        .subtract(repairmentAmount);
+        .subtract(feeAbleAmount);
   }
+
+
 
   @Override
   public String toString() {
