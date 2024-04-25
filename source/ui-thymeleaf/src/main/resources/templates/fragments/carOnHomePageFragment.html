@@ -35,7 +35,27 @@
 
             </td>
             <td th:text="${car.regNumber}"></td>
+
+            <th:block th:switch="${car.status}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${car.status=='Brisko remont'}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${car.status=='Brisko parking'}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${car.status=='Skoda parking'}">???
+                </td>
+            </th:block>
             <td th:text="${car.status}"></td>
+
+
             <td>
                 <i th:if="${car.brandingQrent}"> Q </i>
                 <i th:if="${car.brandingBolt}"> BOLT</i>

@@ -133,6 +133,14 @@
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
                     </div>
+                    <div class="col-md-auto">
+                        <small th:text="|Total :  EURO|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                               th:classappend="${rawBalanceTotal<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                    </div>
                 </div>
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
@@ -162,7 +170,12 @@
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-danger bg-danger border-danger'">???</small>
                     </div>
-
+                    <div>
+                        <small th:if="${activeContractId != null}" class="btn btn-sm btn-outline-info disabled"
+                           th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                            <span class="bi-file-earmark-pdf"></span>
+                        </small>
+                    </div>
                 </div>
                 <div th:replace="fragments/balanceDriverFragment.html :: detailView"></div>
             </div>

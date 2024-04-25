@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CarQueryService implements GetCarQuery {
   private final Comparator<CarResponse> DEFAULT_COMPARATOR = comparing(CarResponse::getRegNumber);
+  private final Comparator<CarResponse> STATUS_COMPARATOR = comparing(CarResponse::getStatus);
 
   private final CarLoadPort loadPort;
   private final CarResponseMapper mapper;
@@ -67,7 +68,9 @@ public class CarQueryService implements GetCarQuery {
     final var notActiveCars =
         allCars.stream().filter(car -> !activeCarIds.contains(car.getId())).collect(toList());
 
-    return notActiveCars.stream().map(car -> mapper.toResponse(car)).collect(toList());
+    return notActiveCars.stream().map(car -> mapper.toResponse(car))
+            .sorted(STATUS_COMPARATOR)
+            .collect(toList());
   }
 
   public List<CarResponse> getNotAvailableCars() {
