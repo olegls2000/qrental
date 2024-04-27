@@ -79,13 +79,13 @@ public interface TransactionSpringDataRepository
       value =
           "SELECT * FROM transaction tx "
               + "WHERE tx.transaction_type_id in ("
-              + "select txt.id from transaction_type txt where txt.transaction_kind_id = :kindId) "
+              + "select txt.id from transaction_type txt where txt.transaction_kind_id in (:kindIds)) "
               + "and tx.driver_id = :driverId "
               + "and tx.date >= :dateStart and tx.date <= :dateEnd",
       nativeQuery = true)
   List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
       @Param("driverId") Long driverId,
-      @Param("kindId") Long kindId,
+      @Param("kindIds") List<Long> kindIds,
       @Param("dateStart") LocalDate dateStart,
       @Param("dateEnd") LocalDate dateEnd);
 }

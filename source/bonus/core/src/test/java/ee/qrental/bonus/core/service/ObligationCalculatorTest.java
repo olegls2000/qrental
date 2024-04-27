@@ -1,6 +1,7 @@
 package ee.qrental.bonus.core.service;
 
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +16,8 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +39,19 @@ class ObligationCalculatorTest {
         new ObligationCalculator(qWeekQuery, balanceQuery, driverQuery, transactionQuery);
 
     when(qWeekQuery.getOneBeforeById(9L)).thenReturn(QWeekResponse.builder().id(8L).build());
+  }
+
+  @Test
+  public void testSmth(){
+
+    final Integer weekYear = 2024;
+    final Integer weekNumber = 5;
+            final Long driverId = 66L;
+
+    final var formattedWeekNumber = String.format("%02d", weekNumber);
+
+      final var rr =  format("%d%s%d", weekYear, formattedWeekNumber, driverId);
+      assertEquals("20240566", rr);
   }
 
   @Test

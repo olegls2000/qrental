@@ -78,9 +78,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
   @Override
   public List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
-      Long driverId, Long kindId, LocalDate dateStart, LocalDate dateEnd) {
+      final Long driverId,
+      final List<Long> kindIds,
+      final LocalDate dateStart,
+      final LocalDate dateEnd) {
 
     return springDataRepository.findAllByDriverIdAndKindIdAndBetweenDays(
-        driverId, kindId, dateStart, dateEnd);
+        driverId, kindIds, dateStart, dateEnd);
   }
 }

@@ -1,5 +1,7 @@
 package ee.qrental.transaction.core.service.kind;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
@@ -8,6 +10,7 @@ import ee.qrental.transaction.api.in.response.kind.TransactionKindResponse;
 import ee.qrental.transaction.api.out.kind.TransactionKindLoadPort;
 import ee.qrental.transaction.core.mapper.kind.TransactionKindResponseMapper;
 import ee.qrental.transaction.core.mapper.kind.TransactionKindUpdateRequestMapper;
+import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -46,5 +49,39 @@ public class TransactionKindQueryService implements GetTransactionKindQuery {
   @Override
   public TransactionKindResponse getByCode(final String code) {
     return mapper.toResponse(loadPort.loadByCode(code));
+  }
+
+  @Override
+  public List<TransactionKindResponse> getAllNonRepairment() {
+    return loadPort
+        .loadAllByCodeIn(
+            asList(
+                TransactionKindsCode.F.getName(),
+                TransactionKindsCode.NFA.getName(),
+                TransactionKindsCode.FA.getName(),
+                TransactionKindsCode.P.getName()))
+        .stream()
+        .map(mapper::toResponse)
+        .collect(toList());
+  }
+
+  @Override
+  public List<TransactionKindResponse> getAllNonRepairmentExceptNonFeeAble() {
+    return loadPort
+        .loadAllByCodeIn(
+            asList(
+                TransactionKindsCode.F.getName(),
+                TransactionKindsCode.FA.getName(),
+                TransactionKindsCode.P.getName()))
+        .stream()
+        .map(mapper::toResponse)
+        .collect(toList());
+  }
+
+  @Override
+  public List<TransactionKindResponse> getAllRepairment() {
+    return loadPort.loadAllByCodeIn(singletonList(TransactionKindsCode.R.getName())).stream()
+        .map(mapper::toResponse)
+        .collect(toList());
   }
 }

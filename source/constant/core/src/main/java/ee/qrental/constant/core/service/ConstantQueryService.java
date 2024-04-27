@@ -8,11 +8,15 @@ import ee.qrental.constant.api.in.response.constant.ConstantResponse;
 import ee.qrental.constant.api.out.ConstantLoadPort;
 import ee.qrental.constant.core.mapper.ConstantResponseMapper;
 import ee.qrental.constant.core.mapper.ConstantUpdateRequestMapper;
+
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ConstantQueryService implements GetConstantQuery {
+
+  public static final String FEE_WEEKLY_INTEREST = "fee weekly interest";
 
   private final ConstantLoadPort loadPort;
   private final ConstantResponseMapper mapper;
@@ -41,5 +45,16 @@ public class ConstantQueryService implements GetConstantQuery {
   @Override
   public ConstantResponse getByName(final String name) {
     return mapper.toResponse(loadPort.loadByName(name));
+  }
+
+  @Override
+  public BigDecimal getFeeWeeklyInterest() {
+    final var constant = mapper.toResponse(loadPort.loadByName(FEE_WEEKLY_INTEREST));
+
+    if (constant == null) {
+      throw new RuntimeException(
+          "Please create a Constant: " + FEE_WEEKLY_INTEREST + " with appropriate value");
+    }
+    return constant.getValue();
   }
 }

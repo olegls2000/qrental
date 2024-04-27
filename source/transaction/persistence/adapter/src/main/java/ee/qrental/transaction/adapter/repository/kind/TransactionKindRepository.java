@@ -15,4 +15,6 @@ public interface TransactionKindRepository {
   TransactionKindJakartaEntity findByName(final String name);
 
   TransactionKindJakartaEntity findByCode(final String code);
+
+  List<TransactionKindJakartaEntity> findAllByCodeIn(final List<String> codes);
 }

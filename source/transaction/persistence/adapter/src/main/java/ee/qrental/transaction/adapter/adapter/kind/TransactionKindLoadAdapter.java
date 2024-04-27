@@ -34,4 +34,9 @@ public class TransactionKindLoadAdapter implements TransactionKindLoadPort {
   public TransactionKind loadByCode(final String code) {
     return mapper.mapToDomain(repository.findByCode(code));
   }
+
+  @Override
+  public List<TransactionKind> loadAllByCodeIn(final List<String> codes) {
+    return repository.findAllByCodeIn(codes).stream().map(mapper::mapToDomain).collect(toList());
+  }
 }

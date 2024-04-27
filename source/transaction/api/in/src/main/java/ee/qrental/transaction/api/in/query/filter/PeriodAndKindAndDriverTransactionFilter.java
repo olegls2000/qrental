@@ -20,5 +20,5 @@ public class PeriodAndKindAndDriverTransactionFilter {
   private LocalDate dateStart;
   private LocalDate dateEnd;
   private Long driverId;
-  private List<String> transactionKindCodes;
+  private List<Long> transactionKindIds;
 }

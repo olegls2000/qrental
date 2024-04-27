@@ -59,9 +59,12 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
 
   @Override
   public List<Transaction> loadAllByDriverIdAndKindIdAndBetweenDays(
-      final Long driverId, final Long kindId, final LocalDate dateStart, final LocalDate dateEnd) {
+      final Long driverId,
+      final List<Long> kindIds,
+      final LocalDate dateStart,
+      final LocalDate dateEnd) {
     return repository
-        .findAllByDriverIdAndKindIdAndBetweenDays(driverId, kindId, dateStart, dateEnd)
+        .findAllByDriverIdAndKindIdAndBetweenDays(driverId, kindIds, dateStart, dateEnd)
         .stream()
         .map(mapper::mapToDomain)
         .collect(toList());
@@ -93,7 +96,7 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
   @Override
   public List<Transaction> loadAllByBonusCalculationId(final Long bonusCalculationId) {
     return repository.findAllByBonusCalculationId(bonusCalculationId).stream()
-            .map(mapper::mapToDomain)
-            .collect(toList());
+        .map(mapper::mapToDomain)
+        .collect(toList());
   }
 }
