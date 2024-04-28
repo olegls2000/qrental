@@ -29,7 +29,7 @@ public class BalanceDeriveService {
       return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
-          .feeAbleAmount(derivedFeeAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
           .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
@@ -46,7 +46,7 @@ public class BalanceDeriveService {
       return derivedBalanceBuilder
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
-          .feeAbleAmount(derivedFeeAmount)
+          .feeAbleAmount(derivedFeeAbleAmount)
           .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();

@@ -13,18 +13,21 @@ import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.response.kind.TransactionKindResponse;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceResponseMapper;
+import ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy;
 import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.kind.TransactionKind;
 import ee.qrental.transaction.domain.type.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,30 +38,36 @@ class BalanceQueryServiceTest {
   private GetDriverQuery driverQuery;
   private GetQWeekQuery qWeekQuery;
   private GetConstantQuery constantQuery;
+  private GetTransactionQuery transactionQuery;
   private GetTransactionKindQuery transactionKindQuery;
   private BalanceLoadPort balanceLoadPort;
   private TransactionLoadPort transactionLoadPort;
   private BalanceResponseMapper balanceResponseMapper;
+  private BalanceCalculatorStrategy calculatorStrategies;
 
   @BeforeEach
   void init() {
     qWeekQuery = mock(GetQWeekQuery.class);
     driverQuery = mock(GetDriverQuery.class);
     constantQuery = mock(GetConstantQuery.class);
+    transactionQuery = mock(GetTransactionQuery.class);
     transactionKindQuery = mock(GetTransactionKindQuery.class);
     balanceLoadPort = mock(BalanceLoadPort.class);
     transactionLoadPort = mock(TransactionLoadPort.class);
     balanceResponseMapper = mock(BalanceResponseMapper.class);
+    calculatorStrategies = mock(BalanceCalculatorStrategy.class);
 
     instanceUnderTest =
         new BalanceQueryService(
             driverQuery,
             qWeekQuery,
             constantQuery,
+            transactionQuery,
             transactionKindQuery,
             balanceLoadPort,
             transactionLoadPort,
-            balanceResponseMapper);
+            balanceResponseMapper,
+            Arrays.asList(calculatorStrategies));
   }
 
   private TransactionType getTransactionType(
