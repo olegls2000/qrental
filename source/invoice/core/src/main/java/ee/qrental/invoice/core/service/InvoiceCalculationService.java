@@ -343,7 +343,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var qWeeksForCalculation =
         lastCalculationWeek == null
             ? qWeekQuery.getAllBeforeById(latestRequestedWeek.getId())
-            : qWeekQuery.getAllBetweenByIds(
+            : qWeekQuery.getAllBetweenByIdsReversedOrder(
                 lastCalculationWeek.getId(), latestRequestedWeek.getId());
     qWeeksForCalculation.sort(
         comparing(QWeekResponse::getYear).thenComparing(QWeekResponse::getNumber));

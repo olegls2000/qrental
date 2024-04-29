@@ -2,7 +2,6 @@ package ee.qrental.transaction.core.service.balance;
 
 import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.DRY_RUN;
-import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.SAVING;
 import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ZERO;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
@@ -114,6 +113,12 @@ public class BalanceQueryService implements GetBalanceQuery {
   public BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
     return balanceResponseMapper.toResponse(
         balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
+  }
+
+  @Override
+  public BalanceResponse getLatestByDriverId(final Long driverId) {
+    final var latestWeek = qWeekQuery.getCurrentWeek();
+    return getByDriverIdAndQWeekId( driverId, latestWeek.getId());
   }
 
   @Override
@@ -262,11 +267,11 @@ public class BalanceQueryService implements GetBalanceQuery {
     if (latestBalance == null) {
       final var firstQWeek = qWeekQuery.getFirstWeek();
 
-      return qWeekQuery.getAllBetweenByIds(firstQWeek.getId(), currentQWeek.getId());
+      return qWeekQuery.getAllBetweenByIdsDefaultOrder(firstQWeek.getId(), currentQWeek.getId());
     }
     final var firstRawQWeek = qWeekQuery.getOneAfterById(latestBalance.getQWeekId());
 
-    return qWeekQuery.getAllBetweenByIds(firstRawQWeek.getId(), currentQWeek.getId());
+    return qWeekQuery.getAllBetweenByIdsDefaultOrder(firstRawQWeek.getId(), currentQWeek.getId());
   }
 
   @Override
@@ -342,7 +347,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getLatestBalanceByDriver(final Long driverId) {
+  public BalanceResponse getLatestCalculatedBalanceByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
     return balanceResponseMapper.toResponse(latestBalance);

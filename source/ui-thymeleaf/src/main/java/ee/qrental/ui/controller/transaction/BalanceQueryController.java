@@ -181,15 +181,17 @@ public class BalanceQueryController {
   }
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
-    model.addAttribute("rawBalanceTotal", balanceQuery.getRawBalanceTotalByDriver(driverId));
-    model.addAttribute("rawFeeTotal", balanceQuery.getRawFeeTotalByDriver(driverId));
-    final var latestBalance = balanceQuery.getLatestBalanceByDriver(driverId);
-    if (latestBalance == null) {
+    final var latestDerivedRawBalance = balanceQuery.getRawBalanceByDriver(driverId);
+
+    model.addAttribute("rawBalanceTotal", latestDerivedRawBalance.getAmount());
+    model.addAttribute("rawFeeTotal", latestDerivedRawBalance.getFeeAmount());
+    final var latestCalculatedBalance = balanceQuery.getLatestCalculatedBalanceByDriver(driverId);
+    if (latestCalculatedBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
       return;
     }
-    model.addAttribute("latestBalanceWeek", latestBalance.getWeekNumber());
+    model.addAttribute("latestBalanceWeek", latestCalculatedBalance.getWeekNumber());
   }
 
   private void addObligationDataToModel(final Long driverId, final Model model) {

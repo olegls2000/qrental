@@ -112,6 +112,10 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
       final List<TransactionResponse> transactions,
       final Function<Balance, BigDecimal> getAmount,
       final Balance previousWeekBalance) {
+    if (transactions == null || transactions.isEmpty()) {
+      return ZERO;
+    }
+
     final var transactionAmountSum =
         transactions.stream()
             .map(TransactionResponse::getRealAmount)

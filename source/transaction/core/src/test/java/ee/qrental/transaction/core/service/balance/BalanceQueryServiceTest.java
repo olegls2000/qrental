@@ -116,7 +116,7 @@ class BalanceQueryServiceTest {
                 .end(LocalDate.of(2024, FEBRUARY, 4))
                 .build());
 
-    when(qWeekQuery.getAllBetweenByIds(anyLong(), anyLong()))
+    when(qWeekQuery.getAllBetweenByIdsReversedOrder(anyLong(), anyLong()))
         .thenReturn(
             asList(
                 QWeekResponse.builder()
@@ -170,7 +170,7 @@ class BalanceQueryServiceTest {
     final var startQWeekIdCaptor = forClass(Long.class);
     final var endQWeekIdCaptor = forClass(Long.class);
     verify(qWeekQuery, times(1))
-        .getAllBetweenByIds(startQWeekIdCaptor.capture(), endQWeekIdCaptor.capture());
+        .getAllBetweenByIdsReversedOrder(startQWeekIdCaptor.capture(), endQWeekIdCaptor.capture());
     assertEquals(44L, startQWeekIdCaptor.getValue());
     assertEquals(49L, endQWeekIdCaptor.getValue());
 
@@ -229,7 +229,7 @@ class BalanceQueryServiceTest {
                 .end(LocalDate.of(2024, FEBRUARY, 4))
                 .build());
 
-    when(qWeekQuery.getAllBetweenByIds(anyLong(), anyLong()))
+    when(qWeekQuery.getAllBetweenByIdsReversedOrder(anyLong(), anyLong()))
         .thenReturn(
             asList(
                 QWeekResponse.builder()
@@ -283,7 +283,7 @@ class BalanceQueryServiceTest {
     final var startQWeekIdCaptor = forClass(Long.class);
     final var endQWeekIdCaptor = forClass(Long.class);
     verify(qWeekQuery, times(1))
-        .getAllBetweenByIds(startQWeekIdCaptor.capture(), endQWeekIdCaptor.capture());
+        .getAllBetweenByIdsReversedOrder(startQWeekIdCaptor.capture(), endQWeekIdCaptor.capture());
     assertEquals(44L, startQWeekIdCaptor.getValue());
     assertEquals(49L, endQWeekIdCaptor.getValue());
 
