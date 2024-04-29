@@ -84,6 +84,10 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
 
   protected BigDecimal getFeeAmountForPreviousWeek(
       final DriverResponse driver, final Balance previousWeekBalance) {
+    if (previousWeekBalance == null) {
+      return ZERO;
+    }
+
     if (driver.getNeedFee()) {
       BigDecimal feeAmountForRequestedWeek;
       final var faAmountFromPreviousWeekBalance = previousWeekBalance.getFeeAbleAmount();
@@ -92,12 +96,11 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
         final var nominalWeeklyFee = faAmountFromPreviousWeekBalance.multiply(weeklyInterest);
 
         final var feeAmountFromPreviousWeek = previousWeekBalance.getFeeAmount();
-        final var faAmountFromPreviousWeek = previousWeekBalance.getFeeAbleAmount();
         final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeek);
-        if (totalFeeDebt.compareTo(faAmountFromPreviousWeek) < 0) {
+        if (totalFeeDebt.compareTo(faAmountFromPreviousWeekBalance) < 0) {
           feeAmountForRequestedWeek = nominalWeeklyFee;
         } else {
-          final var feeOverdue = totalFeeDebt.subtract(faAmountFromPreviousWeek);
+          final var feeOverdue = totalFeeDebt.subtract(faAmountFromPreviousWeekBalance);
           feeAmountForRequestedWeek = nominalWeeklyFee.subtract(feeOverdue);
         }
 
@@ -112,14 +115,18 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
       final List<TransactionResponse> transactions,
       final Function<Balance, BigDecimal> getAmount,
       final Balance previousWeekBalance) {
-    if (transactions == null || transactions.isEmpty()) {
-      return ZERO;
+    var transactionAmountSum = ZERO;
+    if (transactions != null) {
+      transactionAmountSum =
+          transactions.stream()
+              .map(TransactionResponse::getRealAmount)
+              .map(BigDecimal::abs)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    final var transactionAmountSum =
-        transactions.stream()
-            .map(TransactionResponse::getRealAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    if (previousWeekBalance == null) {
+      return transactionAmountSum;
+    }
 
     return transactionAmountSum.add(getAmount.apply(previousWeekBalance));
   }
