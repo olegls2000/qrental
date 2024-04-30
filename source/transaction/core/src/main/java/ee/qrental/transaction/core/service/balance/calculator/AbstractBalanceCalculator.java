@@ -94,7 +94,6 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
       if (faAmountFromPreviousWeekBalance.compareTo(FEE_CALCULATION_THRESHOLD) > 0) {
         final var weeklyInterest = constantQuery.getFeeWeeklyInterest();
         final var nominalWeeklyFee = faAmountFromPreviousWeekBalance.multiply(weeklyInterest);
-
         final var feeAmountFromPreviousWeek = previousWeekBalance.getFeeAmount();
         final var totalFeeDebt = nominalWeeklyFee.add(feeAmountFromPreviousWeek);
         if (totalFeeDebt.compareTo(faAmountFromPreviousWeekBalance) < 0) {

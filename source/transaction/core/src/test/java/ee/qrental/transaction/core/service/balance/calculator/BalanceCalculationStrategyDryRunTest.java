@@ -1,6 +1,7 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Arrays.asList;
@@ -38,7 +39,7 @@ class BalanceCalculationStrategyDryRunTest {
   }
 
   @Test
-  public void testIfNoPreviousWeek() {
+  public void testIfNoBalanceForPreviousWeek() {
     // given
     final var driver = DriverResponse.builder().id(77L).needFee(TRUE).build();
 
@@ -75,7 +76,7 @@ class BalanceCalculationStrategyDryRunTest {
   }
 
   @Test
-  public void testWithPreviousWeekIfDriverHasFee() {
+  public void testWithBalancePreviousWeekBalanceIfDriverHasFee() {
     // given
     final var driver = DriverResponse.builder().id(77L).needFee(TRUE).build();
 
@@ -120,8 +121,144 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(BigDecimal.valueOf(500), balanceToDerive.getPositiveAmount());
   }
 
+
   @Test
-  public void testWithPreviousWeekIfDriverHasNoTransactionInRequestedWeek() {
+  public void testWithBalancePreviousWeekBalanceIfDriverHasFeeAndFeeAbleLessThenThreshold() {
+    // given
+    final var driver = DriverResponse.builder().id(77L).needFee(TRUE).build();
+
+    final var requestedWeek = QWeekResponse.builder().id(11L).build();
+    final var previousBalance =
+            Balance.builder()
+                    .feeAbleAmount(ZERO)
+                    .feeAmount(BigDecimal.valueOf(20))
+                    .nonFeeAbleAmount(BigDecimal.valueOf(30))
+                    .repairmentAmount(BigDecimal.valueOf(40))
+                    .positiveAmount(ZERO)
+                    .build();
+    final var transactionsByKind = new HashMap<TransactionKindsCode, List<TransactionResponse>>();
+    transactionsByKind.put(
+            FA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-100)).build()));
+    transactionsByKind.put(
+            F, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-10)).build()));
+    transactionsByKind.put(
+            NFA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-200)).build()));
+    transactionsByKind.put(
+            R, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-400)).build()));
+    transactionsByKind.put(
+            P, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(500)).build()));
+
+    when(constantQuery.getFeeWeeklyInterest()).thenReturn(BigDecimal.valueOf(0.1d));
+
+    // when
+    instanceUnderTest.calculateBalance(driver, requestedWeek, previousBalance, transactionsByKind);
+
+    // then
+    final var balanceCaptor = forClass(Balance.class);
+    verify(deriveService, times(1)).getDerivedBalance(balanceCaptor.capture());
+    final var balanceToDerive = balanceCaptor.getValue();
+
+    assertEquals(11L, balanceToDerive.getQWeekId());
+    assertFalse(balanceToDerive.getDerived());
+    assertEquals(77L, balanceToDerive.getDriverId());
+    assertEquals(BigDecimal.valueOf(100), balanceToDerive.getFeeAbleAmount());
+    assertEquals(BigDecimal.valueOf(30), balanceToDerive.getFeeAmount());
+    assertEquals(BigDecimal.valueOf(230), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(BigDecimal.valueOf(440), balanceToDerive.getRepairmentAmount());
+    assertEquals(BigDecimal.valueOf(500), balanceToDerive.getPositiveAmount());
+  }
+
+
+  @Test
+  public void testWithBalanceForPreviousWeekBalanceIfDriverDoesNotHaveFee() {
+    // given
+    final var driver = DriverResponse.builder().id(77L).needFee(FALSE).build();
+
+    final var requestedWeek = QWeekResponse.builder().id(11L).build();
+    final var previousBalance =
+            Balance.builder()
+                    .feeAbleAmount(BigDecimal.valueOf(20))
+                    .feeAmount(ZERO)
+                    .nonFeeAbleAmount(BigDecimal.valueOf(30))
+                    .repairmentAmount(BigDecimal.valueOf(40))
+                    .positiveAmount(ZERO)
+                    .build();
+    final var transactionsByKind = new HashMap<TransactionKindsCode, List<TransactionResponse>>();
+    transactionsByKind.put(
+            FA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-100)).build()));
+    transactionsByKind.put(
+            NFA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-200)).build()));
+    transactionsByKind.put(
+            R, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-400)).build()));
+    transactionsByKind.put(
+            P, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(500)).build()));
+
+    when(constantQuery.getFeeWeeklyInterest()).thenReturn(BigDecimal.valueOf(0.1d));
+
+    // when
+    instanceUnderTest.calculateBalance(driver, requestedWeek, previousBalance, transactionsByKind);
+
+    // then
+    final var balanceCaptor = forClass(Balance.class);
+    verify(deriveService, times(1)).getDerivedBalance(balanceCaptor.capture());
+    final var balanceToDerive = balanceCaptor.getValue();
+
+    assertEquals(11L, balanceToDerive.getQWeekId());
+    assertFalse(balanceToDerive.getDerived());
+    assertEquals(77L, balanceToDerive.getDriverId());
+    assertEquals(BigDecimal.valueOf(120), balanceToDerive.getFeeAbleAmount());
+    assertEquals(ZERO, balanceToDerive.getFeeAmount());
+    assertEquals(BigDecimal.valueOf(230), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(BigDecimal.valueOf(440), balanceToDerive.getRepairmentAmount());
+    assertEquals(BigDecimal.valueOf(500), balanceToDerive.getPositiveAmount());
+  }
+
+  @Test
+  public void testWithBalancePreviousWeekBalanceIfDriverHasFeeAndFeeDebtBiggerThenFeeAble() {
+    // given
+    final var driver = DriverResponse.builder().id(77L).needFee(TRUE).build();
+
+    final var requestedWeek = QWeekResponse.builder().id(11L).build();
+    final var previousBalance =
+            Balance.builder()
+                    .feeAbleAmount(BigDecimal.valueOf(20))
+                    .feeAmount(BigDecimal.valueOf(40))
+                    .nonFeeAbleAmount(BigDecimal.valueOf(30))
+                    .repairmentAmount(BigDecimal.valueOf(40))
+                    .positiveAmount(ZERO)
+                    .build();
+    final var transactionsByKind = new HashMap<TransactionKindsCode, List<TransactionResponse>>();
+    transactionsByKind.put(
+            FA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-20)).build()));
+    transactionsByKind.put(
+            NFA, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-200)).build()));
+    transactionsByKind.put(
+            R, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(-400)).build()));
+    transactionsByKind.put(
+            P, asList(TransactionResponse.builder().realAmount(BigDecimal.valueOf(500)).build()));
+
+    when(constantQuery.getFeeWeeklyInterest()).thenReturn(BigDecimal.valueOf(0.1d));
+
+    // when
+    instanceUnderTest.calculateBalance(driver, requestedWeek, previousBalance, transactionsByKind);
+
+    // then
+    final var balanceCaptor = forClass(Balance.class);
+    verify(deriveService, times(1)).getDerivedBalance(balanceCaptor.capture());
+    final var balanceToDerive = balanceCaptor.getValue();
+
+    assertEquals(11L, balanceToDerive.getQWeekId());
+    assertFalse(balanceToDerive.getDerived());
+    assertEquals(77L, balanceToDerive.getDriverId());
+    assertEquals(BigDecimal.valueOf(40), balanceToDerive.getFeeAbleAmount());
+    assertEquals(BigDecimal.valueOf(20d), balanceToDerive.getFeeAmount());
+    assertEquals(BigDecimal.valueOf(230), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(BigDecimal.valueOf(440), balanceToDerive.getRepairmentAmount());
+    assertEquals(BigDecimal.valueOf(500), balanceToDerive.getPositiveAmount());
+  }
+
+  @Test
+  public void testWithPreviousWeekBalanceIfDriverHasNoTransactionInRequestedWeek() {
     // given
     final var driver = DriverResponse.builder().id(77L).needFee(TRUE).build();
 
