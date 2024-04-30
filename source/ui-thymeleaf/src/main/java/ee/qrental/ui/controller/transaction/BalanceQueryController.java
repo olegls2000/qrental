@@ -63,7 +63,7 @@ public class BalanceQueryController {
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
-    addRepairmentDataToModel(driverId, model);
+    // addRepairmentDataToModel(driverId, model);
 
     return "detailView/balanceDriver";
   }
@@ -89,7 +89,7 @@ public class BalanceQueryController {
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
-    addRepairmentDataToModel(driverId, model);
+    // addRepairmentDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     if (requestedQWekId != null) {
       final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWekId);
@@ -182,9 +182,18 @@ public class BalanceQueryController {
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
     final var latestDerivedRawBalance = balanceQuery.getRawBalanceByDriver(driverId);
+    final var feeAbleTotal = latestDerivedRawBalance.getFeeAbleAmount();
+    final var nonFeeAbleTotal = latestDerivedRawBalance.getNonFeeAbleAmount();
+    final var positiveTotal = latestDerivedRawBalance.getPositiveAmount();
+    final var rawBalanceTotal = feeAbleTotal.add(nonFeeAbleTotal).add(positiveTotal);
+    final var rawFeeTotal = latestDerivedRawBalance.getFeeAmount();
+    model.addAttribute("rawBalanceTotal", rawBalanceTotal);
+    model.addAttribute("rawFeeTotal", rawFeeTotal);
+    model.addAttribute("rawRepairment", latestDerivedRawBalance.getRepairmentAmount());
+    model.addAttribute("total", rawBalanceTotal.add(rawFeeTotal));
+    model.addAttribute(
+        "rawRepairmentWithQKasko", balanceQuery.getRawRepairmentTotalByDriverWithQKasko(driverId));
 
-    model.addAttribute("rawBalanceTotal", latestDerivedRawBalance.getAmount());
-    model.addAttribute("rawFeeTotal", latestDerivedRawBalance.getFeeAmount());
     final var latestCalculatedBalance = balanceQuery.getLatestCalculatedBalanceByDriver(driverId);
     if (latestCalculatedBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");

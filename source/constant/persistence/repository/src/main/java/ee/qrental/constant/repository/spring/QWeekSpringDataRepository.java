@@ -18,7 +18,7 @@ public interface QWeekSpringDataRepository extends JpaRepository<QWeekJakartaEnt
                   + " WHERE "
                   + "(qw.year * 100 + qw.number) > (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :startWeekId) "
                   + "AND "
-                  + "(qw.year * 100 + qw.number) < (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :endWeekId)",
+                  + "(qw.year * 100 + qw.number) <= (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :endWeekId)",
       nativeQuery = true)
   List<QWeekJakartaEntity> findAllBetweenByIds(
       @Param("startWeekId") final Long startWeekId, @Param("endWeekId") final Long endWeekId);

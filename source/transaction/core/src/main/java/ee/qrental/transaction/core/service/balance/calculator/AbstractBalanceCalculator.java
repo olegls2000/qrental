@@ -53,7 +53,8 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     final var positiveAmountCurrentWeek =
         getBalanceAmount(
             transactionsByKind.get(P), Balance::getPositiveAmount, previousWeekBalance);
-    final var totalFee = feeAmountForPreviousWeek.add(feeAmountCurrentWeek);
+    var totalFee = feeAmountForPreviousWeek.add(feeAmountCurrentWeek);
+    totalFee = totalFee.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
     final var balance =
         Balance.builder()
