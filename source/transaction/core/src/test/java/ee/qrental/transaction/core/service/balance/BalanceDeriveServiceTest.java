@@ -236,42 +236,10 @@ class BalanceDeriveServiceTest {
     assertTrue(derivedBalance.getDerived());
     assertEquals(LocalDate.now(), derivedBalance.getCreated());
     assertEquals(55L, derivedBalance.getQWeekId());
-    assertEquals(ZERO, derivedBalance.getPositiveAmount());
-    assertEquals(ZERO, derivedBalance.getFeeAmount());
-    assertEquals(ZERO, derivedBalance.getNonFeeAbleAmount());
-    assertEquals(ZERO, derivedBalance.getFeeAbleAmount());
-    assertEquals(BigDecimal.valueOf(390), derivedBalance.getRepairmentAmount());
-  }
-
-  @Test
-  public void testDeriveIfPositiveMoreThenFeeAndNonFeeAbleAndFeeAbleAndRepairment() {
-
-    // given
-    final var balanceToDerive =
-        Balance.builder()
-            .driverId(88L)
-            .derived(Boolean.FALSE)
-            .created(LocalDate.now().minusDays(3))
-            .qWeekId(55L)
-            .positiveAmount(BigDecimal.valueOf(1010))
-            .feeAmount(BigDecimal.valueOf(100))
-            .nonFeeAbleAmount(BigDecimal.valueOf(200))
-            .feeAbleAmount(BigDecimal.valueOf(300))
-            .repairmentAmount(BigDecimal.valueOf(400))
-            .derived(false)
-            .build();
-
-    // when
-    final var derivedBalance = instanceUnderTest.getDerivedBalance(balanceToDerive);
-
-    // then
-    assertTrue(derivedBalance.getDerived());
-    assertEquals(LocalDate.now(), derivedBalance.getCreated());
-    assertEquals(55L, derivedBalance.getQWeekId());
     assertEquals(BigDecimal.valueOf(10), derivedBalance.getPositiveAmount());
     assertEquals(ZERO, derivedBalance.getFeeAmount());
     assertEquals(ZERO, derivedBalance.getNonFeeAbleAmount());
     assertEquals(ZERO, derivedBalance.getFeeAbleAmount());
-    assertEquals(ZERO, derivedBalance.getRepairmentAmount());
+    assertEquals(BigDecimal.valueOf(400), derivedBalance.getRepairmentAmount());
   }
 }

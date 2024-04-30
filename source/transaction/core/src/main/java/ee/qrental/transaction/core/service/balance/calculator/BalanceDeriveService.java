@@ -14,13 +14,14 @@ public class BalanceDeriveService {
     var derivedFeeAmount = balanceToDerive.getFeeAmount();
     var derivedNonFeeAbleAmount = balanceToDerive.getNonFeeAbleAmount();
     var derivedFeeAbleAmount = balanceToDerive.getFeeAbleAmount();
-    var derivedRepairmentAmount = balanceToDerive.getRepairmentAmount();
+    // var derivedRepairmentAmount = balanceToDerive.getRepairmentAmount();
     final var derivedBalanceBuilder =
         Balance.builder()
             .derived(TRUE)
             .driverId(balanceToDerive.getDriverId())
             .created(LocalDate.now())
-            .qWeekId(balanceToDerive.getQWeekId());
+            .qWeekId(balanceToDerive.getQWeekId())
+            .repairmentAmount(balanceToDerive.getRepairmentAmount());
 
     if (derivedPositiveAmount.compareTo(ZERO) == 0) {
       System.out.println(
@@ -30,15 +31,13 @@ public class BalanceDeriveService {
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
-          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
 
     if (derivedFeeAmount.compareTo(ZERO) == 0
         && derivedFeeAbleAmount.compareTo(ZERO) == 0
-        && derivedNonFeeAbleAmount.compareTo(ZERO) == 0
-        && derivedRepairmentAmount.compareTo(ZERO) == 0) {
+        && derivedNonFeeAbleAmount.compareTo(ZERO) == 0) {
 
       System.out.println(
           "No negative amounts. Derive is not required for Balance: " + balanceToDerive);
@@ -47,7 +46,6 @@ public class BalanceDeriveService {
           .feeAmount(balanceToDerive.getFeeAmount())
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
-          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
@@ -68,7 +66,6 @@ public class BalanceDeriveService {
           .feeAmount(derivedFeeAmount)
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
-          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
@@ -90,7 +87,6 @@ public class BalanceDeriveService {
           .feeAmount(derivedFeeAmount)
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
-          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
     }
@@ -112,26 +108,14 @@ public class BalanceDeriveService {
           .feeAmount(derivedFeeAmount)
           .nonFeeAbleAmount(derivedNonFeeAbleAmount)
           .feeAbleAmount(derivedFeeAbleAmount)
-          .repairmentAmount(derivedRepairmentAmount)
           .positiveAmount(derivedPositiveAmount)
           .build();
-    }
-
-    // positive: 5, repairment: 2
-    if (derivedPositiveAmount.compareTo(derivedRepairmentAmount) > 0) {
-      derivedPositiveAmount = derivedPositiveAmount.subtract(derivedRepairmentAmount); // 3
-      derivedRepairmentAmount = ZERO; // 0
-    } else {
-      // positive: 2, repairment: 3
-      derivedRepairmentAmount = derivedRepairmentAmount.subtract(derivedPositiveAmount); // 1
-      derivedPositiveAmount = ZERO; // 0
     }
 
     return derivedBalanceBuilder
         .feeAmount(derivedFeeAmount)
         .nonFeeAbleAmount(derivedNonFeeAbleAmount)
         .feeAbleAmount(derivedFeeAbleAmount)
-        .repairmentAmount(derivedRepairmentAmount)
         .positiveAmount(derivedPositiveAmount)
         .build();
   }
