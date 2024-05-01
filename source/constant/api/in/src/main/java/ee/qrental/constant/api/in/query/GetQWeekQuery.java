@@ -31,6 +31,10 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
 
   QWeekResponse getFirstWeek();
 
+  /**
+   * @param startWeekId, endWeekId
+   * @return return a list of weeks including endWeek: (start week, end week]
+   */
   List<QWeekResponse> getAllBetweenByIdsReversedOrder(final Long startWeekId, final Long endWeekId);
 
   List<QWeekResponse> getAllBetweenByIdsDefaultOrder(final Long startWeekId, final Long endWeekId);

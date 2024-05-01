@@ -23,7 +23,7 @@ public class DriverBalanceAssembler {
 
   private DriversBalanceModel assembleModel(final DriverResponse driver) {
     final var driverId = driver.getId();
-    final var rawTotal = balanceQuery.getRawBalanceTotalByDriver(driverId);
+    final var rawTotal = balanceQuery.getAmountTotalByDriver(driverId);
     final var fee = balanceQuery.getFeeByDriver(driverId);
     final var obligationAmount =
         obligationQuery.getRawObligationAmountForCurrentWeekByDriverId(driverId);

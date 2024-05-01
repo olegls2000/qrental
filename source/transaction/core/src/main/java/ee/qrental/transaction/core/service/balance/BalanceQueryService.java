@@ -2,7 +2,6 @@ package ee.qrental.transaction.core.service.balance;
 
 import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.DRY_RUN;
-import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ZERO;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.util.stream.Collectors.groupingBy;
@@ -31,6 +30,7 @@ import java.util.List;
 
 import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @AllArgsConstructor
 public class BalanceQueryService implements GetBalanceQuery {
@@ -53,15 +53,6 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber) {
-    final var latestBalance =
-        balanceLoadPort.loadLatestByDriverIdAndYearAndWeekNumber(driverId, year, weekNumber);
-
-    return balanceResponseMapper.toResponse(latestBalance);
-  }
-
-  @Override
   public BigDecimal getFeeByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
     final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
 
@@ -81,32 +72,42 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getRawBalanceByDriver(final Long driverId) {
-    final var driver = driverQuery.getById(driverId);
+  public BalanceResponse getRawByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
+    final var balance = getByDriverIdAndQWeekId(driverId, qWeekId);
+    if (balance != null) {
+      return balance;
+    }
     var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    final var rawWeeks = getRawQWeeks(latestBalance);
+    QWeekResponse startQWeek;
+    if (latestBalance == null) {
+      startQWeek = qWeekQuery.getFirstWeek();
+    } else {
+      startQWeek = qWeekQuery.getOneAfterById(latestBalance.getQWeekId());
+    }
+
+    final var weeksForCalculation =
+        qWeekQuery.getAllBetweenByIdsDefaultOrder(startQWeek.getId(), qWeekId);
     final var calculator = getDryRunStrategy();
 
-    for (final QWeekResponse week : rawWeeks) {
+    for (val week : weeksForCalculation) {
       final var weekTransactions =
           transactionQuery.getAllByDriverIdAndQWeekId(driverId, week.getId()).stream()
               .collect(
                   groupingBy(
                       transactionResponse ->
                           TransactionKindsCode.valueOf(transactionResponse.getKind())));
+      final var driver = driverQuery.getById(driverId);
       latestBalance = calculator.calculateBalance(driver, week, latestBalance, weekTransactions);
     }
 
-    final var response = balanceResponseMapper.toResponse(latestBalance);
-
-    return response;
+    return balanceResponseMapper.toResponse(latestBalance);
   }
 
   @Override
-  public BalanceResponse getByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber) {
-    return balanceResponseMapper.toResponse(
-        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber));
+  public BalanceResponse getRawCurrentByDriver(final Long driverId) {
+    final var currentQWeek = qWeekQuery.getCurrentWeek();
+
+    return getRawByDriverIdAndQWeekId(driverId, currentQWeek.getId());
   }
 
   @Override
@@ -116,13 +117,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getLatestByDriverId(final Long driverId) {
-    final var latestWeek = qWeekQuery.getCurrentWeek();
-    return getByDriverIdAndQWeekId( driverId, latestWeek.getId());
-  }
-
-  @Override
-  public BigDecimal getRawBalanceTotalByDriver(final Long driverId) {
+  public BigDecimal getAmountTotalByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     final var balanceSum =
         latestBalance != null ? latestBalance.getAmountsSumWithoutRepairment() : ZERO;
@@ -133,7 +128,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BigDecimal getRawRepairmentTotalByDriver(final Long driverId) {
+  public BigDecimal getAmountRepairmentByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     final var repairmentBalanceSum =
         latestBalance != null ? latestBalance.getRepairmentAmount() : ZERO;
@@ -147,9 +142,8 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BigDecimal getRawRepairmentTotalByDriverWithQKasko(final Long driverId) {
-
-    final var totalRepairment = getRawRepairmentTotalByDriver(driverId).abs();
+  public BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId) {
+    final var totalRepairment = getAmountRepairmentByDriver(driverId).abs();
     final var selfResponsibility = BigDecimal.valueOf(500);
     if (totalRepairment.compareTo(ZERO) == 0) {
       return ZERO;
@@ -275,7 +269,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BigDecimal getRawFeeTotalByDriver(final Long driverId) {
+  public BigDecimal getAmountFeeByDriver(final Long driverId) {
     final var driver = driverQuery.getById(driverId);
     if (!driver.getNeedFee()) {
 
@@ -347,18 +341,10 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getLatestCalculatedBalanceByDriver(final Long driverId) {
+  public BalanceResponse getLatestByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
     return balanceResponseMapper.toResponse(latestBalance);
-  }
-
-  @Override
-  public BalanceResponse getDerivedBalanceByDriverAndQWeek(
-      final Long driverId, final Long qWeekId) {
-    final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, TRUE);
-
-    return balanceResponseMapper.toResponse(balance);
   }
 
   @Override

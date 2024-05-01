@@ -11,15 +11,16 @@ public interface TransactionLoadPort extends LoadPort<Transaction> {
 
   List<Transaction> loadAllByIds(final List<Long> ids);
 
-  List<Transaction> loadAllNonFeeByDriverId(final Long driverId);
-
   List<Transaction> loadAllBetweenDays(final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllByDriverIdAndBetweenDays(
       final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
   List<Transaction> loadAllByDriverIdAndKindIdAndBetweenDays(
-      final Long driverId, final List<Long> kindIds, final LocalDate dateStart, final LocalDate dateEnd);
+      final Long driverId,
+      final List<Long> kindIds,
+      final LocalDate dateStart,
+      final LocalDate dateEnd);
 
   List<Transaction> loadAllNonFeeByDriverIdAndBetweenDays(
       final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);

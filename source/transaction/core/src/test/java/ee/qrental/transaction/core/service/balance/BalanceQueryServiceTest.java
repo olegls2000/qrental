@@ -162,7 +162,7 @@ class BalanceQueryServiceTest {
                     .build()));
 
     // when
-    final var feeRawTotal = instanceUnderTest.getRawFeeTotalByDriver(driverId);
+    final var feeRawTotal = instanceUnderTest.getAmountFeeByDriver(driverId);
 
     // then
     assertTrue(BigDecimal.valueOf(-60d).compareTo(feeRawTotal) == 0);
@@ -275,7 +275,7 @@ class BalanceQueryServiceTest {
                     .build()));
 
     // when
-    final var feeRawTotal = instanceUnderTest.getRawFeeTotalByDriver(driverId);
+    final var feeRawTotal = instanceUnderTest.getAmountFeeByDriver(driverId);
 
     // then
     assertTrue(BigDecimal.valueOf(-120d).compareTo(feeRawTotal) == 0);

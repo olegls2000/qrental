@@ -56,14 +56,13 @@ public class BalanceQueryController {
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var transactions = transactionQuery.getAllByDriverId(driverId);
-    addTransactionDataToModel(driverId, transactions, model);
+    addTransactionDataToModel(transactions, model);
     addDriverDataToModel(driverId, model);
     addCallSignDataToModel(driverId, model);
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
-    // addRepairmentDataToModel(driverId, model);
 
     return "detailView/balanceDriver";
   }
@@ -82,21 +81,19 @@ public class BalanceQueryController {
             ? transactionQuery.getAllByDriverId(driverId)
             : transactionQuery.getAllByDriverIdAndQWeekId(driverId, requestedQWekId);
 
-    addTransactionDataToModel(driverId, transactions, model);
+    addTransactionDataToModel(transactions, model);
     addDriverDataToModel(driverId, model);
     addCallSignDataToModel(driverId, model);
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
-    // addRepairmentDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     if (requestedQWekId != null) {
       final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWekId);
       final var previousQWeekId = previousQWeek.getId();
       if (previousQWeek != null) {
         addBalancePeriodDataToModel(model, driverId, requestedQWekId, previousQWeekId);
-        addFeePeriodDataToModel(model, driverId, requestedQWekId, previousQWeekId);
         addObligationPeriodDataToModel(model, driverId, requestedQWekId);
       }
     }
@@ -109,29 +106,29 @@ public class BalanceQueryController {
       final Long driverId,
       final Long requestedQWeekId,
       final Long previousQWeekId) {
-    final var periodStartBalanceAmount =
-        balanceQuery.getRawBalanceTotalByDriverIdAndQWeekId(driverId, previousQWeekId);
-    model.addAttribute("balancePeriodStartAmount", periodStartBalanceAmount);
+    final var previousWeekBalance =
+        balanceQuery.getRawByDriverIdAndQWeekId(driverId, previousQWeekId);
+    final var requestedWeekBalance =
+        balanceQuery.getRawByDriverIdAndQWeekId(driverId, requestedQWeekId);
+
+    final var previousWeekFeeAbleAmount = previousWeekBalance.getFeeAbleAmount();
+    final var previousWeekNonFeeAbleAmount = previousWeekBalance.getNonFeeAbleAmount();
+    final var previousWeekPositiveAmount = previousWeekBalance.getPositiveAmount();
+    final var previousWeekTotalAmount =
+        previousWeekFeeAbleAmount.add(previousWeekNonFeeAbleAmount).add(previousWeekPositiveAmount);
+    final var previousWeekFeeAmount = previousWeekBalance.getFeeAmount();
+    final var requestedWeekFeeAmount = requestedWeekBalance.getFeeAmount();
+
+    model.addAttribute("balancePeriodStartAmount", previousWeekTotalAmount);
     final var periodTotalAmount =
         balanceQuery.getPeriodAmountByDriverAndQWeek(driverId, requestedQWeekId);
     model.addAttribute("balancePeriodTotalAmount", periodTotalAmount);
-    final var periodEndBalanceAmount = periodStartBalanceAmount.add(periodTotalAmount);
+    final var periodEndBalanceAmount = previousWeekTotalAmount.add(periodTotalAmount);
     model.addAttribute("balancePeriodEndAmount", periodEndBalanceAmount);
-  }
 
-  private void addFeePeriodDataToModel(
-      final Model model,
-      final Long driverId,
-      final Long requestedQWeekId,
-      final Long previousQWeekId) {
-    final var feeFromLatestBalance =
-        balanceQuery.getFeeByDriverIdAndQWeekId(driverId, previousQWeekId).negate();
-    model.addAttribute("feePeriodStartAmount", feeFromLatestBalance);
-    final var periodFeeTotalAmount =
-        balanceQuery.getPeriodFeeByDriverAndQWeek(driverId, requestedQWeekId).negate();
-    model.addAttribute("feePeriodTotalAmount", periodFeeTotalAmount);
-    final var periodFeeEndBalanceAmount = feeFromLatestBalance.add(periodFeeTotalAmount);
-    model.addAttribute("feePeriodEndAmount", periodFeeEndBalanceAmount);
+    model.addAttribute("feePeriodStartAmount", previousWeekFeeAmount);
+    model.addAttribute("feePeriodTotalAmount", requestedWeekFeeAmount);
+    model.addAttribute("feePeriodEndAmount", previousWeekFeeAmount.add(requestedWeekFeeAmount));
   }
 
   private void addObligationPeriodDataToModel(
@@ -165,9 +162,8 @@ public class BalanceQueryController {
   }
 
   private void addTransactionDataToModel(
-      final Long driverId, final List<TransactionResponse> transactions, final Model model) {
+      final List<TransactionResponse> transactions, final Model model) {
     model.addAttribute("transactions", transactions);
-    model.addAttribute("rawTotal", balanceQuery.getRawBalanceTotalByDriver(driverId));
   }
 
   private void addDriverDataToModel(final Long driverId, final Model model) {
@@ -181,7 +177,7 @@ public class BalanceQueryController {
   }
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
-    final var latestDerivedRawBalance = balanceQuery.getRawBalanceByDriver(driverId);
+    final var latestDerivedRawBalance = balanceQuery.getRawCurrentByDriver(driverId);
     final var feeAbleTotal = latestDerivedRawBalance.getFeeAbleAmount();
     final var nonFeeAbleTotal = latestDerivedRawBalance.getNonFeeAbleAmount();
     final var positiveTotal = latestDerivedRawBalance.getPositiveAmount();
@@ -192,9 +188,9 @@ public class BalanceQueryController {
     model.addAttribute("rawRepairment", latestDerivedRawBalance.getRepairmentAmount());
     model.addAttribute("total", rawBalanceTotal.add(rawFeeTotal));
     model.addAttribute(
-        "rawRepairmentWithQKasko", balanceQuery.getRawRepairmentTotalByDriverWithQKasko(driverId));
+        "rawRepairmentWithQKasko", balanceQuery.getAmountRepairmentByDriverWithQKasko(driverId));
 
-    final var latestCalculatedBalance = balanceQuery.getLatestCalculatedBalanceByDriver(driverId);
+    final var latestCalculatedBalance = balanceQuery.getLatestByDriver(driverId);
     if (latestCalculatedBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
@@ -215,14 +211,6 @@ public class BalanceQueryController {
       return;
     }
     model.addAttribute("obligationMatchCount", preCurrentWeekObligation.getMatchCount().toString());
-  }
-
-  private void addRepairmentDataToModel(final Long driverId, final Model model) {
-    final var rawRepairment = balanceQuery.getRawRepairmentTotalByDriver(driverId);
-    final var rawRepairmentWithQKasko =
-        balanceQuery.getRawRepairmentTotalByDriverWithQKasko(driverId);
-    model.addAttribute("rawRepairment", rawRepairment);
-    model.addAttribute("rawRepairmentWithQKasko", rawRepairmentWithQKasko);
   }
 
   private void addCallSignDataToModel(final Long driverId, final Model model) {

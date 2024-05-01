@@ -56,10 +56,10 @@ public class TransactionKindQueryService implements GetTransactionKindQuery {
     return loadPort
         .loadAllByCodeIn(
             asList(
-                TransactionKindsCode.F.getName(),
-                TransactionKindsCode.NFA.getName(),
-                TransactionKindsCode.FA.getName(),
-                TransactionKindsCode.P.getName()))
+                TransactionKindsCode.F.name(),
+                TransactionKindsCode.NFA.name(),
+                TransactionKindsCode.FA.name(),
+                TransactionKindsCode.P.name()))
         .stream()
         .map(mapper::toResponse)
         .collect(toList());
@@ -70,9 +70,9 @@ public class TransactionKindQueryService implements GetTransactionKindQuery {
     return loadPort
         .loadAllByCodeIn(
             asList(
-                TransactionKindsCode.F.getName(),
-                TransactionKindsCode.FA.getName(),
-                TransactionKindsCode.P.getName()))
+                TransactionKindsCode.F.name(),
+                TransactionKindsCode.FA.name(),
+                TransactionKindsCode.P.name()))
         .stream()
         .map(mapper::toResponse)
         .collect(toList());
@@ -80,7 +80,7 @@ public class TransactionKindQueryService implements GetTransactionKindQuery {
 
   @Override
   public List<TransactionKindResponse> getAllRepairment() {
-    return loadPort.loadAllByCodeIn(singletonList(TransactionKindsCode.R.getName())).stream()
+    return loadPort.loadAllByCodeIn(singletonList(TransactionKindsCode.R.name())).stream()
         .map(mapper::toResponse)
         .collect(toList());
   }

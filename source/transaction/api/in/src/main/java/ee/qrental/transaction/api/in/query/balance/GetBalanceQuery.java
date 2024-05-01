@@ -9,29 +9,25 @@ public interface GetBalanceQuery {
 
   BalanceResponse getById(final Long id);
 
-  BalanceResponse getRawBalanceByDriver(final Long driverId);
+  BalanceResponse getRawByDriverIdAndQWeekId(Long driverId, Long qWeekId);
 
-  BigDecimal getRawBalanceTotalByDriver(final Long driverId);
+  BalanceResponse getRawCurrentByDriver(final Long driverId);
 
-  BigDecimal getRawRepairmentTotalByDriver(final Long driverId);
+  BigDecimal getAmountTotalByDriver(final Long driverId);
 
-  BigDecimal getRawRepairmentTotalByDriverWithQKasko(final Long driverId);
+  BigDecimal getAmountRepairmentByDriver(final Long driverId);
 
-  BigDecimal getRawFeeTotalByDriver(final Long driverId);
+  BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId);
+
+  BigDecimal getAmountFeeByDriver(final Long driverId);
 
   BigDecimal getFeeByDriver(final Long driverId);
 
-  BalanceResponse getLatestCalculatedBalanceByDriver(final Long driverId);
-
-  BalanceResponse getDerivedBalanceByDriverAndQWeek(final Long driverId, final Long qWeekId);
+  BalanceResponse getLatestByDriver(final Long driverId);
 
   BigDecimal getPeriodAmountByDriverAndQWeek(final Long driverId, final Long qWeekId);
 
   BigDecimal getPeriodFeeByDriverAndQWeek(final Long driverId, final Long qWeekId);
-
-  @Deprecated
-  BalanceResponse getLatestBalanceByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber);
 
   /**
    * Return Balance Fee Amount for the requested week. If no Balance was not calculated for the
@@ -39,13 +35,7 @@ public interface GetBalanceQuery {
    */
   BigDecimal getFeeByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 
-  @Deprecated
-  BalanceResponse getByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber);
-
   BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
-
-  BalanceResponse getLatestByDriverId(final Long driverId);
 
   /**
    * Calculate period between versions
