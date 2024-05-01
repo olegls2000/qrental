@@ -7,8 +7,12 @@ import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.ui.controller.transaction.model.DriversBalanceModel;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @AllArgsConstructor
 public class DriverBalanceAssembler {
@@ -18,13 +22,24 @@ public class DriverBalanceAssembler {
   private final GetObligationQuery obligationQuery;
 
   public List<DriversBalanceModel> getDriversBalanceModels() {
-    return driverQuery.getAll().stream().map(this::assembleModel).collect(toList());
+    final var start = System.currentTimeMillis();
+    final var models =
+        driverQuery.getAll().parallelStream().map(this::assembleModel).collect(toList());
+    final var end = System.currentTimeMillis();
+    System.out.println("Balances calculation took: " + (end - start) + " ms");
+
+    return models;
   }
 
   private DriversBalanceModel assembleModel(final DriverResponse driver) {
     final var driverId = driver.getId();
-    final var rawTotal = balanceQuery.getAmountTotalByDriver(driverId);
-    final var fee = balanceQuery.getFeeByDriver(driverId);
+    final var rawBalance = balanceQuery.getRawCurrentByDriver(driverId);
+    final var rawTotal =
+        rawBalance
+            .getFeeAbleAmount()
+            .add(rawBalance.getNonFeeAbleAmount())
+            .add(rawBalance.getPositiveAmount());
+    final var fee = rawBalance.getFeeAmount();
     final var obligationAmount =
         obligationQuery.getRawObligationAmountForCurrentWeekByDriverId(driverId);
     final var preCurrentWeekObligation =
