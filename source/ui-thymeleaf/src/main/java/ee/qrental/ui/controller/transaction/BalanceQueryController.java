@@ -119,20 +119,23 @@ public class BalanceQueryController {
     model.addAttribute("feePeriodStartAmount", previousWeekFeeAmount);
 
     final var requestedWeekBalance =
-            balanceQuery.getRawByDriverIdAndQWeekId(driverId, requestedQWeekId);
+        balanceQuery.getRawByDriverIdAndQWeekId(driverId, requestedQWeekId);
     final var requestedWeekFeeAbleAmount = requestedWeekBalance.getFeeAbleAmount();
     final var requestedWeekNonFeeAbleAmount = requestedWeekBalance.getNonFeeAbleAmount();
     final var requestedWeekPositiveAmount = requestedWeekBalance.getPositiveAmount();
     final var requestedWeekTotalAmount =
-            requestedWeekFeeAbleAmount.add(requestedWeekNonFeeAbleAmount).add(requestedWeekPositiveAmount);
+        requestedWeekFeeAbleAmount
+            .add(requestedWeekNonFeeAbleAmount)
+            .add(requestedWeekPositiveAmount);
     final var requestedWeekFeeAmount = requestedWeekBalance.getFeeAmount();
 
     model.addAttribute("balancePeriodEndAmount", requestedWeekTotalAmount);
     model.addAttribute("feePeriodEndAmount", requestedWeekFeeAmount);
 
-
-    model.addAttribute("balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(previousWeekTotalAmount));
-    model.addAttribute("feePeriodTotalAmount", requestedWeekFeeAmount.add(previousWeekFeeAmount));
+    model.addAttribute(
+        "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(previousWeekTotalAmount));
+    model.addAttribute(
+        "feePeriodTotalAmount", requestedWeekFeeAmount.subtract(previousWeekFeeAmount));
   }
 
   private void addObligationPeriodDataToModel(
