@@ -8,7 +8,6 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrental.common.core.utils.QTimeUtils;
-import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -37,7 +36,6 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
-  private final GetConstantQuery constantQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionKindQuery transactionKindQuery;
   private final BalanceLoadPort balanceLoadPort;
@@ -50,13 +48,6 @@ public class BalanceQueryService implements GetBalanceQuery {
         .filter(strategy -> strategy.canApply(DRY_RUN))
         .findFirst()
         .get();
-  }
-
-  @Override
-  public BigDecimal getFeeByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
-    final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
-
-    return balance == null ? ZERO : balance.getFeeAmount();
   }
 
   @Override
@@ -114,17 +105,6 @@ public class BalanceQueryService implements GetBalanceQuery {
   public BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
     return balanceResponseMapper.toResponse(
         balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
-  }
-
-  @Override
-  public BigDecimal getAmountTotalByDriver(final Long driverId) {
-    final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    final var balanceSum =
-        latestBalance != null ? latestBalance.getAmountsSumWithoutRepairment() : ZERO;
-    final var rawSum =
-        getRawTransactionsSum(latestBalance, driverId, getNonRepairmentTransactionKindIds());
-
-    return round(balanceSum.add(rawSum));
   }
 
   @Override
@@ -240,72 +220,6 @@ public class BalanceQueryService implements GetBalanceQuery {
     return balanceLoadPort.loadCountByDriver(driverId);
   }
 
-  private BigDecimal getFeeFromBalanceOrDefault(final Balance latestBalance) {
-    if (latestBalance != null) {
-      return latestBalance.getFeeAmount();
-    }
-    return ZERO;
-  }
-
-  private BigDecimal getFeeAbleFromBalanceOrDefault(final Balance latestBalance) {
-    if (latestBalance != null) {
-
-      return latestBalance.getFeeAbleAmount();
-    }
-
-    return ZERO;
-  }
-
-  private List<QWeekResponse> getRawQWeeks(final Balance latestBalance) {
-    final var currentQWeek = qWeekQuery.getCurrentWeek();
-    if (latestBalance == null) {
-      final var firstQWeek = qWeekQuery.getFirstWeek();
-
-      return qWeekQuery.getAllBetweenByIdsDefaultOrder(firstQWeek.getId(), currentQWeek.getId());
-    }
-    final var firstRawQWeek = qWeekQuery.getOneAfterById(latestBalance.getQWeekId());
-
-    return qWeekQuery.getAllBetweenByIdsDefaultOrder(firstRawQWeek.getId(), currentQWeek.getId());
-  }
-
-  @Override
-  public BigDecimal getAmountFeeByDriver(final Long driverId) {
-    final var driver = driverQuery.getById(driverId);
-    if (!driver.getNeedFee()) {
-
-      return ZERO;
-    }
-
-    final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    var feeTotal = getFeeFromBalanceOrDefault(latestBalance);
-    var feeAbleTotal = getFeeAbleFromBalanceOrDefault(latestBalance);
-    final var rawQWeeks = getRawQWeeks(latestBalance);
-    final var weeklyInterest = constantQuery.getFeeWeeklyInterest();
-
-    for (final QWeekResponse week : rawQWeeks) {
-      final var weekTotal =
-          transactionLoadPort
-              .loadAllByDriverIdAndKindIdAndBetweenDays(
-                  driverId,
-                  getAllNonRepairmentAndNonFeeAbleTransactionKindIds(),
-                  week.getStart(),
-                  week.getEnd())
-              .stream()
-              .map(Transaction::getRealAmount)
-              .reduce(ZERO, BigDecimal::add);
-      feeAbleTotal = feeAbleTotal.add(weekTotal);
-      if (feeAbleTotal.compareTo(ZERO) < 0) {
-        final var weekFee = feeAbleTotal.multiply(weeklyInterest);
-        feeTotal = feeTotal.add(weekFee);
-        if (feeTotal.compareTo(feeAbleTotal) <= 0) {
-          feeTotal = feeAbleTotal;
-        }
-      }
-    }
-
-    return round(feeTotal);
-  }
-
   private BigDecimal getRawTransactionsSum(
       final Balance latestBalance, final Long driverId, final List<Long> transactionKindIds) {
     final var earliestNotCalculatedDate = getEarliestNotCalculatedDate(latestBalance);
@@ -334,43 +248,10 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BigDecimal getFeeByDriver(final Long driverId) {
-    final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-
-    return latestBalance != null ? round(latestBalance.getFeeAmount()) : ZERO;
-  }
-
-  @Override
   public BalanceResponse getLatestByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
 
     return balanceResponseMapper.toResponse(latestBalance);
-  }
-
-  @Override
-  public BigDecimal getPeriodAmountByDriverAndQWeek(final Long driverId, final Long qWeekId) {
-    final var qWeek = qWeekQuery.getById(qWeekId);
-    final var periodFilter =
-        PeriodAndKindAndDriverTransactionFilter.builder()
-            .driverId(driverId)
-            .dateStart(qWeek.getStart())
-            .dateEnd(qWeek.getEnd())
-            .transactionKindIds(getNonRepairmentTransactionKindIds())
-            .build();
-    final var periodAmount = getSumOfTransactionByFilter(periodFilter);
-
-    return periodAmount;
-  }
-
-  @Override
-  public BigDecimal getPeriodFeeByDriverAndQWeek(final Long driverId, final Long qWeekId) {
-    final var qWeek = qWeekQuery.getById(qWeekId);
-
-    return transactionLoadPort
-        .loadAllFeeByDriverIdAndBetweenDays(driverId, qWeek.getStart(), qWeek.getEnd())
-        .stream()
-        .map(Transaction::getAmount)
-        .reduce(ZERO, BigDecimal::add);
   }
 
   private BigDecimal getSumOfTransactionByFilter(
@@ -390,13 +271,5 @@ public class BalanceQueryService implements GetBalanceQuery {
   private List<Long> getNonRepairmentTransactionKindIds() {
     final var nonRepairmentTransactionKinds = transactionKindQuery.getAllNonRepairment();
     return nonRepairmentTransactionKinds.stream().map(TransactionKindResponse::getId).toList();
-  }
-
-  private List<Long> getAllNonRepairmentAndNonFeeAbleTransactionKindIds() {
-    final var nonRepairmentAndNonFeeAbleTransactionKinds =
-        transactionKindQuery.getAllNonRepairmentExceptNonFeeAble();
-    return nonRepairmentAndNonFeeAbleTransactionKinds.stream()
-        .map(TransactionKindResponse::getId)
-        .toList();
   }
 }

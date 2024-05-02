@@ -16,7 +16,7 @@ public interface QWeekSpringDataRepository extends JpaRepository<QWeekJakartaEnt
       value =
           "select qw.* from q_week qw "
                   + " WHERE "
-                  + "(qw.year * 100 + qw.number) > (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :startWeekId) "
+                  + "(qw.year * 100 + qw.number) >= (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :startWeekId) "
                   + "AND "
                   + "(qw.year * 100 + qw.number) <= (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :endWeekId)",
       nativeQuery = true)

@@ -55,7 +55,6 @@ public class BalanceServiceConfig {
   GetBalanceQuery getBalanceQueryService(
       final GetDriverQuery driverQuery,
       final GetQWeekQuery qWeekQuery,
-      final GetConstantQuery constantQuery,
       final GetTransactionQuery transactionQuery,
       final GetTransactionKindQuery transactionKindQuery,
       final BalanceLoadPort balanceLoadPort,
@@ -65,7 +64,6 @@ public class BalanceServiceConfig {
     return new BalanceQueryService(
         driverQuery,
         qWeekQuery,
-        constantQuery,
         transactionQuery,
         transactionKindQuery,
         balanceLoadPort,
