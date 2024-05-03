@@ -58,17 +58,17 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     final var requestedQWeekId = addRequest.getQWeekId();
     final var domain = addRequestMapper.toDomain(addRequest);
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
-    final var nextAfterRequestedQWeek = qWeekQuery.getOneAfterById(requestedQWeekId);
 
     var latestCalculatedWeek = getLatestCalculatedWeek();
     setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
     final var latestCalculatedWeekId =
         latestCalculatedWeek == null ? null : latestCalculatedWeek.getId();
+    final var nextAfterCalculatedQWeek = qWeekQuery.getOneAfterById(latestCalculatedWeekId);
+    final var nextAfterCalculatedQWeekId =
+        nextAfterCalculatedQWeek == null ? null : nextAfterCalculatedQWeek.getId();
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
-            latestCalculatedWeekId,
-            nextAfterRequestedQWeek.getId(),
-            GetQWeekQuery.DEFAULT_COMPARATOR);
+            nextAfterCalculatedQWeekId, requestedQWeekId, GetQWeekQuery.DEFAULT_COMPARATOR);
     final var calculatorSavingStrategy = getSavingStrategy();
     final var drivers = driverQuery.getAll();
     qWeeksForCalculation.forEach(
