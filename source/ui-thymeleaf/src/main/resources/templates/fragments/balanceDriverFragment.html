@@ -108,15 +108,15 @@
                             </a>
                         </td>
                     </tr>
-
-
                 </table>
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
-                        <small th:text="|Latest Balance week: ${latestBalanceWeek}|"
+                        <small th:text="|Latest Balance year: ${latestBalanceYear}, week: ${latestBalanceWeek}|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
                     </div>
+                </div>
+                <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
                         <small th:text="|Total Raw Balance: ${rawBalanceTotal} EURO|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
@@ -172,7 +172,7 @@
                     </div>
                     <div>
                         <small th:if="${activeContractId != null}" class="btn btn-sm btn-outline-info disabled"
-                           th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                               th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
                             <span class="bi-file-earmark-pdf"></span>
                         </small>
                     </div>

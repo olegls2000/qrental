@@ -248,8 +248,8 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getLatestByDriver(final Long driverId) {
-    final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
+  public BalanceResponse getLatest() {
+    final var latestBalance = balanceLoadPort.loadLatest();
 
     return balanceResponseMapper.toResponse(latestBalance);
   }

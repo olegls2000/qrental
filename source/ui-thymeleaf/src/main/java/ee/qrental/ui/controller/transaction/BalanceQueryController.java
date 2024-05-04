@@ -197,12 +197,13 @@ public class BalanceQueryController {
     model.addAttribute(
         "rawRepairmentWithQKasko", balanceQuery.getAmountRepairmentByDriverWithQKasko(driverId));
 
-    final var latestCalculatedBalance = balanceQuery.getLatestByDriver(driverId);
+    final var latestCalculatedBalance = balanceQuery.getLatest();
     if (latestCalculatedBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
       return;
     }
+    model.addAttribute("latestBalanceYear", latestCalculatedBalance.getYear());
     model.addAttribute("latestBalanceWeek", latestCalculatedBalance.getWeekNumber());
   }
 

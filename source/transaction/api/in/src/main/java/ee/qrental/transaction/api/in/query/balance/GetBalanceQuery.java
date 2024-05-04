@@ -17,7 +17,7 @@ public interface GetBalanceQuery {
 
   BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId);
 
-  BalanceResponse getLatestByDriver(final Long driverId);
+  BalanceResponse getLatest();
 
   BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 
