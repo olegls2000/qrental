@@ -38,6 +38,7 @@ public class BalanceServiceConfig {
   public List<BalanceCalculatorStrategy> getBalanceCalculatorStrategies(
       final BalanceDeriveService balanceDeriveService,
       final GetConstantQuery constantQuery,
+      final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final TransactionTypeLoadPort transactionTypeLoadPort,
       final BalanceAddPort balanceAddPort) {
@@ -47,6 +48,7 @@ public class BalanceServiceConfig {
             transactionAddUseCase,
             balanceDeriveService,
             constantQuery,
+            transactionQuery,
             transactionTypeLoadPort,
             balanceAddPort));
   }

@@ -1,24 +1,34 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
-
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.domain.balance.Balance;
+import ee.qrental.transaction.domain.kind.TransactionKindsCode;
+
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator {
 
   public BalanceCalculationStrategyDryRun(
-      final BalanceDeriveService balanceDeriveService,
-      final GetConstantQuery constantQuery) {
+      final BalanceDeriveService balanceDeriveService, final GetConstantQuery constantQuery) {
     super(balanceDeriveService, constantQuery);
   }
 
   @Override
-  protected void saveFeeTransactionIfNecessary(
-      BigDecimal feeAmountForPreviousWeek, QWeekResponse requestedQWeek, Long driverId) {
+  protected void handleFeeTransaction(
+      BigDecimal feeAmountForPreviousWeek,
+      QWeekResponse requestedQWeek,
+      Long driverId,
+      Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind) {
     System.out.println(
         "Saving Fee transactions during dry run not supported. Amount will be included into Balance");
+    final var feeTransaction =
+        TransactionResponse.builder().realAmount(feeAmountForPreviousWeek).build();
+
+    transactionsByKind.get(TransactionKindsCode.F).add(feeTransaction);
   }
 
   @Override

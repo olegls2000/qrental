@@ -2,6 +2,7 @@ package ee.qrental.transaction.core.service.balance.calculator;
 
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
 import static java.math.BigDecimal.ZERO;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -39,6 +40,8 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     final var driverId = driver.getId();
     final var feeAmountForPreviousWeek = getFeeAmountForPreviousWeek(driver, previousWeekBalance);
 
+    handleFeeTransaction(feeAmountForPreviousWeek, requestedQWeek, driverId, transactionsByKind);
+
     final var feeAmountCurrentWeek =
         getBalanceAmount(transactionsByKind.get(F), Balance::getFeeAmount, previousWeekBalance);
     final var nonFeeAbleAmountCurrentWeek =
@@ -54,7 +57,7 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
         getBalanceAmount(
             transactionsByKind.get(P), Balance::getPositiveAmount, previousWeekBalance);
     var totalFee = feeAmountForPreviousWeek.add(feeAmountCurrentWeek);
-    totalFee = totalFee.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    totalFee = totalFee.setScale(2, ROUND_HALF_EVEN);
 
     final var balance =
         Balance.builder()
@@ -71,13 +74,15 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
 
     final var balanceDerived = getDeriveService().getDerivedBalance(balance);
     saveBalanceIfNecessary(balance);
-    saveFeeTransactionIfNecessary(feeAmountForPreviousWeek, requestedQWeek, driverId);
 
     return saveAndGetDerivedBalanceIfNecessary(balanceDerived);
   }
 
-  protected abstract void saveFeeTransactionIfNecessary(
-      BigDecimal feeAmountForPreviousWeek, QWeekResponse requestedQWeek, Long driverId);
+  protected abstract void handleFeeTransaction(
+      final BigDecimal feeAmountForPreviousWeek,
+      final QWeekResponse requestedQWeek,
+      final Long driverId,
+      final Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind);
 
   protected abstract void saveBalanceIfNecessary(final Balance balance);
 
