@@ -29,7 +29,7 @@ public interface BalanceSpringDataRepository extends JpaRepository<BalanceJakart
   @Query(
       value =
           "select bl.* from balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id "
-              + "where bl.driver_id = :driverId "
+              + "where bl.driver_id = :driverId and bl.derived = true "
               + "order by qw.year desc, qw.number desc limit 1",
       nativeQuery = true)
   BalanceJakartaEntity findLatestByDriverId(@Param("driverId") final Long driverId);
