@@ -7,6 +7,7 @@ import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,9 @@ public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator 
         "Saving Fee transactions during dry run not supported. Amount will be included into Balance");
     final var feeTransaction =
         TransactionResponse.builder().realAmount(feeAmountForPreviousWeek).build();
+    if (transactionsByKind.get(TransactionKindsCode.F) == null) {
+      transactionsByKind.put(TransactionKindsCode.F, new ArrayList<>());
+    }
 
     transactionsByKind.get(TransactionKindsCode.F).add(feeTransaction);
   }
