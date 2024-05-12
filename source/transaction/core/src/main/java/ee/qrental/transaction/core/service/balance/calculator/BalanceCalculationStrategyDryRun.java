@@ -20,10 +20,10 @@ public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator 
 
   @Override
   protected void handleFeeTransaction(
-      BigDecimal feeAmountForPreviousWeek,
-      QWeekResponse requestedQWeek,
-      Long driverId,
-      Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind) {
+      final BigDecimal feeAmountForPreviousWeek,
+      final QWeekResponse requestedQWeek,
+      final Long driverId,
+      final Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind) {
     System.out.println(
         "Saving Fee transactions during dry run not supported. Amount will be included into Balance");
     final var feeTransaction =

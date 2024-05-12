@@ -1,11 +1,13 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
+import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ROUND_HALF_EVEN;
 import static java.math.BigDecimal.ZERO;
 import static lombok.AccessLevel.PROTECTED;
 
+import ee.qrental.common.core.utils.QNumberUtils;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.response.DriverResponse;
@@ -56,15 +58,13 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     final var positiveAmountCurrentWeek =
         getBalanceAmount(
             transactionsByKind.get(P), Balance::getPositiveAmount, previousWeekBalance);
-    var totalFee = feeAmountForPreviousWeek.add(feeAmountCurrentWeek);
-    totalFee = totalFee.setScale(2, ROUND_HALF_EVEN);
 
     final var balance =
         Balance.builder()
             .driverId(driverId)
             .qWeekId(requestedQWeek.getId())
             .created(LocalDate.now())
-            .feeAmount(totalFee)
+            .feeAmount(feeAmountCurrentWeek)
             .nonFeeAbleAmount(nonFeeAbleAmountCurrentWeek)
             .feeAbleAmount(feeAbleAmountCurrentWeek)
             .repairmentAmount(repairmentAmountCurrentWeek)
@@ -133,6 +133,6 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
       return transactionAmountSum;
     }
 
-    return transactionAmountSum.add(getAmount.apply(previousWeekBalance));
+    return round(transactionAmountSum.add(getAmount.apply(previousWeekBalance)));
   }
 }
