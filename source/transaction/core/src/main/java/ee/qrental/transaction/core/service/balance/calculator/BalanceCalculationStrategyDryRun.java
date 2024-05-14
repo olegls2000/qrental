@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ee.qrental.transaction.domain.kind.TransactionKindsCode.F;
+
 public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator {
 
   public BalanceCalculationStrategyDryRun(
@@ -23,16 +25,16 @@ public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator 
       final BigDecimal feeAmountForPreviousWeek,
       final QWeekResponse requestedQWeek,
       final Long driverId,
-      final Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind) {
+      final Map<String, List<TransactionResponse>> transactionsByKind) {
     System.out.println(
         "Saving Fee transactions during dry run not supported. Amount will be included into Balance");
     final var feeTransaction =
         TransactionResponse.builder().realAmount(feeAmountForPreviousWeek).build();
-    if (transactionsByKind.get(TransactionKindsCode.F) == null) {
-      transactionsByKind.put(TransactionKindsCode.F, new ArrayList<>());
+    if (transactionsByKind.get(F.name()) == null) {
+      transactionsByKind.put(F.name(), new ArrayList<>());
     }
 
-    transactionsByKind.get(TransactionKindsCode.F).add(feeTransaction);
+    transactionsByKind.get(F.name()).add(feeTransaction);
   }
 
   @Override

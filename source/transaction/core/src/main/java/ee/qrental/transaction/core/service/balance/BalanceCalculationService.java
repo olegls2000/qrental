@@ -83,12 +83,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                           .collect(
                               groupingBy(
                                   transactionResponse ->
-                                      TransactionKindsCode.valueOf(transactionResponse.getKind())));
-                  final var balanceDerivedSaved =
+                                      transactionResponse.getKind()));
+                  final var balanceWrapper =
                       calculatorSavingStrategy.calculateBalance(
                           driver, week, previousQWeekBalance, weekTransactions);
                   final var balanceCalculationResult =
-                      getBalanceCalculationResult(balanceDerivedSaved, week);
+                      getBalanceCalculationResult(balanceWrapper.getRequestedWeekBalance(), week);
                   domain.getResults().add(balanceCalculationResult);
                 }));
     balanceCalculationAddPort.add(domain);

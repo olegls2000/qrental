@@ -1,5 +1,6 @@
 package ee.qrental.transaction.api.in.query.balance;
 
+import ee.qrental.transaction.api.in.response.balance.BalanceRawContextResponse;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,7 +10,7 @@ public interface GetBalanceQuery {
 
   BalanceResponse getById(final Long id);
 
-  BalanceResponse getRawByDriverIdAndQWeekId(Long driverId, Long qWeekId);
+  BalanceRawContextResponse getRawContextByDriverIdAndQWeekId(Long driverId, Long qWeekId);
 
   BalanceResponse getRawCurrentByDriver(final Long driverId);
 

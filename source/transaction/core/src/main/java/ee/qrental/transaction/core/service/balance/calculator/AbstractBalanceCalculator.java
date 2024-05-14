@@ -3,17 +3,14 @@ package ee.qrental.transaction.core.service.balance.calculator;
 import static ee.qrental.common.core.utils.QNumberUtils.round;
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
-import static java.math.BigDecimal.ROUND_HALF_EVEN;
 import static java.math.BigDecimal.ZERO;
 import static lombok.AccessLevel.PROTECTED;
 
-import ee.qrental.common.core.utils.QNumberUtils;
 import ee.qrental.constant.api.in.query.GetConstantQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.domain.balance.Balance;
-import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,31 +30,33 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
   private final GetConstantQuery constantQuery;
 
   @Override
-  public Balance calculateBalance(
+  public BalanceWrapper calculateBalance(
       final DriverResponse driver,
       final QWeekResponse requestedQWeek,
       final Balance previousWeekBalance,
-      final Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind) {
+      final Map<String, List<TransactionResponse>> transactionsByKind) {
 
     final var driverId = driver.getId();
-    final var feeAmountForPreviousWeek = getFeeAmountForPreviousWeek(driver, previousWeekBalance);
+    final var feeAmountForPreviousWeek =
+        round(getFeeAmountForPreviousWeek(driver, previousWeekBalance));
 
     handleFeeTransaction(feeAmountForPreviousWeek, requestedQWeek, driverId, transactionsByKind);
 
     final var feeAmountCurrentWeek =
-        getBalanceAmount(transactionsByKind.get(F), Balance::getFeeAmount, previousWeekBalance);
+        getBalanceAmount(
+            transactionsByKind.get(F.name()), Balance::getFeeAmount, previousWeekBalance);
     final var nonFeeAbleAmountCurrentWeek =
         getBalanceAmount(
-            transactionsByKind.get(NFA), Balance::getNonFeeAbleAmount, previousWeekBalance);
+            transactionsByKind.get(NFA.name()), Balance::getNonFeeAbleAmount, previousWeekBalance);
     final var feeAbleAmountCurrentWeek =
         getBalanceAmount(
-            transactionsByKind.get(FA), Balance::getFeeAbleAmount, previousWeekBalance);
+            transactionsByKind.get(FA.name()), Balance::getFeeAbleAmount, previousWeekBalance);
     final var repairmentAmountCurrentWeek =
         getBalanceAmount(
-            transactionsByKind.get(R), Balance::getRepairmentAmount, previousWeekBalance);
+            transactionsByKind.get(R.name()), Balance::getRepairmentAmount, previousWeekBalance);
     final var positiveAmountCurrentWeek =
         getBalanceAmount(
-            transactionsByKind.get(P), Balance::getPositiveAmount, previousWeekBalance);
+            transactionsByKind.get(P.name()), Balance::getPositiveAmount, previousWeekBalance);
 
     final var balance =
         Balance.builder()
@@ -75,14 +74,18 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     final var balanceDerived = getDeriveService().getDerivedBalance(balance);
     saveBalanceIfNecessary(balance);
 
-    return saveAndGetDerivedBalanceIfNecessary(balanceDerived);
+    final var derivedBalance = saveAndGetDerivedBalanceIfNecessary(balanceDerived);
+    return BalanceWrapper.builder()
+        .requestedWeekBalance(derivedBalance)
+        .transactionsByKind(transactionsByKind)
+        .build();
   }
 
   protected abstract void handleFeeTransaction(
       final BigDecimal feeAmountForPreviousWeek,
       final QWeekResponse requestedQWeek,
       final Long driverId,
-      final Map<TransactionKindsCode, List<TransactionResponse>> transactionsByKind);
+      final Map<String, List<TransactionResponse>> transactionsByKind);
 
   protected abstract void saveBalanceIfNecessary(final Balance balance);
 
@@ -130,7 +133,7 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     }
 
     if (previousWeekBalance == null) {
-      return transactionAmountSum;
+      return round(transactionAmountSum);
     }
 
     return round(transactionAmountSum.add(getAmount.apply(previousWeekBalance)));

@@ -14,9 +14,11 @@ import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.filter.QWeekAndDriverFilter;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
+import ee.qrental.transaction.api.in.response.balance.BalanceRawContextResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -73,15 +75,6 @@ public class BalanceQueryController {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("weeks", qWeekQuery.getAll());
     final var driverId = transactionFilterRequest.getDriverId();
-
-    final var requestedQWekId = transactionFilterRequest.getQWeekId();
-
-    final var transactions =
-        requestedQWekId == null
-            ? transactionQuery.getAllByDriverId(driverId)
-            : transactionQuery.getAllByDriverIdAndQWeekId(driverId, requestedQWekId);
-
-    addTransactionDataToModel(transactions, model);
     addDriverDataToModel(driverId, model);
     addCallSignDataToModel(driverId, model);
     addContractDataToModel(driverId, model);
@@ -89,25 +82,32 @@ public class BalanceQueryController {
     addTotalFinancialDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
-    if (requestedQWekId != null) {
-      final var previousQWeek = qWeekQuery.getOneBeforeById(requestedQWekId);
-      final var previousQWeekId = previousQWeek.getId();
-      if (previousQWeek != null) {
-        addBalancePeriodDataToModel(model, driverId, requestedQWekId, previousQWeekId);
-        addObligationPeriodDataToModel(model, driverId, requestedQWekId);
-      }
+    List<TransactionResponse> transactions;
+
+    final var requestedQWeekId = transactionFilterRequest.getQWeekId();
+
+    if (requestedQWeekId != null) {
+      final var rawBalanceContext =
+          balanceQuery.getRawContextByDriverIdAndQWeekId(driverId, requestedQWeekId);
+      transactions =
+          rawBalanceContext.getTransactionsByKind().values().stream()
+              .flatMap(Collection::stream)
+              .filter(transactionResponse -> transactionResponse.getId() != null)
+              .toList();
+      addBalancePeriodDataToModel(model, rawBalanceContext);
+      addObligationPeriodDataToModel(model, driverId, requestedQWeekId);
+    } else {
+      transactions = transactionQuery.getAllByDriverId(driverId);
     }
+    addTransactionDataToModel(transactions, model);
 
     return "detailView/balanceDriver";
   }
 
   private void addBalancePeriodDataToModel(
-      final Model model,
-      final Long driverId,
-      final Long requestedQWeekId,
-      final Long previousQWeekId) {
-    final var previousWeekBalance =
-        balanceQuery.getRawByDriverIdAndQWeekId(driverId, previousQWeekId);
+      final Model model, BalanceRawContextResponse rawBalanceContext) {
+
+    final var previousWeekBalance = rawBalanceContext.getPreviousWeekBalance();
 
     final var previousWeekFeeAbleAmount = previousWeekBalance.getFeeAbleAmount();
     final var previousWeekNonFeeAbleAmount = previousWeekBalance.getNonFeeAbleAmount();
@@ -118,8 +118,8 @@ public class BalanceQueryController {
     final var previousWeekFeeAmount = previousWeekBalance.getFeeAmount();
     model.addAttribute("feePeriodStartAmount", previousWeekFeeAmount);
 
-    final var requestedWeekBalance =
-        balanceQuery.getRawByDriverIdAndQWeekId(driverId, requestedQWeekId);
+    final var requestedWeekBalance = rawBalanceContext.getRequestedWeekBalance();
+
     final var requestedWeekFeeAbleAmount = requestedWeekBalance.getFeeAbleAmount();
     final var requestedWeekNonFeeAbleAmount = requestedWeekBalance.getNonFeeAbleAmount();
     final var requestedWeekPositiveAmount = requestedWeekBalance.getPositiveAmount();
@@ -134,8 +134,16 @@ public class BalanceQueryController {
 
     model.addAttribute(
         "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(previousWeekTotalAmount));
-    model.addAttribute(
-        "feePeriodTotalAmount", requestedWeekFeeAmount.subtract(previousWeekFeeAmount));
+
+    final var feeTransactions = rawBalanceContext.getTransactionsByKind().get("F");
+    var feePeriodTotalAmount = BigDecimal.ZERO;
+    if (feeTransactions != null) {
+      feePeriodTotalAmount =
+          rawBalanceContext.getTransactionsByKind().get("F").stream()
+              .map(TransactionResponse::getRealAmount)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    model.addAttribute("feePeriodTotalAmount", feePeriodTotalAmount);
   }
 
   private void addObligationPeriodDataToModel(
