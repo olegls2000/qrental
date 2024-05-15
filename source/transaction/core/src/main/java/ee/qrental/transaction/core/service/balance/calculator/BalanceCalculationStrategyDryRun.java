@@ -29,7 +29,7 @@ public class BalanceCalculationStrategyDryRun extends AbstractBalanceCalculator 
     System.out.println(
         "Saving Fee transactions during dry run not supported. Amount will be included into Balance");
     final var feeTransaction =
-        TransactionResponse.builder().realAmount(feeAmountForPreviousWeek).build();
+        TransactionResponse.builder().realAmount(feeAmountForPreviousWeek.negate()).build();
     if (transactionsByKind.get(F.name()) == null) {
       transactionsByKind.put(F.name(), new ArrayList<>());
     }
