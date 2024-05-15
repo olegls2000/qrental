@@ -71,9 +71,8 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
             .derived(FALSE)
             .build();
 
-    final var balanceDerived = getDeriveService().getDerivedBalance(balance);
     saveBalanceIfNecessary(balance);
-
+    final var balanceDerived = getDeriveService().getDerivedBalance(balance);
     final var derivedBalance = saveAndGetDerivedBalanceIfNecessary(balanceDerived);
     return BalanceWrapper.builder()
         .requestedWeekBalance(derivedBalance)
