@@ -25,7 +25,7 @@ public class TransactionAddBusinessRuleValidator {
     final var violationsCollector = new ViolationsCollector();
     checkDTransactionTypeForAdd(request, violationsCollector);
 
-    final var latestBalance = balanceLoadPort.loadLatest();
+    final var latestBalance = balanceLoadPort.loadLatestByDriverId(request.getDriverId());
     if (latestBalance == null) {
       return violationsCollector;
     }

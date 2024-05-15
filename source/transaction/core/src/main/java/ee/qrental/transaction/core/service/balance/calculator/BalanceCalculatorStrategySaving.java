@@ -49,7 +49,7 @@ public class BalanceCalculatorStrategySaving extends AbstractBalanceCalculator {
           transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_FEE_DEBT);
       final var feeTransactionAddRequest = new TransactionAddRequest();
       feeTransactionAddRequest.setAmount(feeAmountForPreviousWeek);
-      feeTransactionAddRequest.setDate(qWeek.getEnd().plusDays(1));
+      feeTransactionAddRequest.setDate(qWeek.getEnd());
       feeTransactionAddRequest.setTransactionTypeId(transactionType.getId());
       feeTransactionAddRequest.setDriverId(driverId);
       feeTransactionAddRequest.setWeekNumber(qWeek.getNumber());
