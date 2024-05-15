@@ -77,11 +77,11 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var actionDate = addRequest.getActionDate();
     var latestCalculatedWeek = getLatestCalculatedWeek();
     domain.setStartQWeekId(latestCalculatedWeek.getId());
-    final var nextAfterRequested = qWeekQuery.getOneAfterById(requestedQWeek.getId());
+    final var nextAfterLatestCalculated = qWeekQuery.getOneAfterById(latestCalculatedWeek.getId());
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
-            latestCalculatedWeek.getId(),
-            nextAfterRequested.getId(),
+                nextAfterLatestCalculated.getId(),
+                requestedQWeek.getId(),
             GetQWeekQuery.DEFAULT_COMPARATOR);
     getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
@@ -99,6 +99,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
           final var weekEndDay = week.getEnd();
 
           final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
+          if (previousQWeek == null) return;
           final var previousQWeekStartDay = previousQWeek.getStart();
           final var previousQWeekEndDay = previousQWeek.getEnd();
 
