@@ -80,8 +80,8 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
     final var nextAfterLatestCalculated = qWeekQuery.getOneAfterById(latestCalculatedWeek.getId());
     final var qWeeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(
-                nextAfterLatestCalculated.getId(),
-                requestedQWeek.getId(),
+            nextAfterLatestCalculated.getId(),
+            requestedQWeek.getId(),
             GetQWeekQuery.DEFAULT_COMPARATOR);
     getQWeeksForCalculationOrdered(latestCalculatedWeek, requestedQWeek);
     final var violationsCollector = invoiceCalculationBusinessRuleValidator.validateAdd(domain);
@@ -297,19 +297,30 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
     final var invoicesCount = invoiceCalculation.getResults().size();
-    AtomicInteger handledInvoices = new AtomicInteger();
+    var handledInvoices = new AtomicInteger();
     invoiceCalculation.getResults().stream()
         .map(InvoiceCalculationResult::getInvoice)
         .sorted(comparing(Invoice::getNumber))
         .forEach(
             invoice -> {
+              final var invoiceSum = invoice.getSum();
+              if (invoiceSum.compareTo(ZERO) == 0) {
+                System.out.println(
+                    "Invoice Sum is 0 EUR, no need to send invoice to Driver");
+                progressTracking(handledInvoices, invoicesCount);
+
+                return;
+              }
+
               final var driverId = invoice.getDriverId();
               final var driver = driverQuery.getById(driverId);
               if (!driver.getNeedInvoicesByEmail()) {
-                final var handledInvoicesInt = handledInvoices.getAndIncrement();
+                progressTracking(handledInvoices, invoicesCount);
                 System.out.println(
-                    format("Handled %d from %d invoices", handledInvoicesInt, invoicesCount));
-
+                    "Sending Invoices by Email is not activated for Driver: "
+                        + driver.getFirstName()
+                        + ", "
+                        + driver.getLastName());
                 return;
               }
               final var recipient = driver.getEmail();
@@ -326,10 +337,17 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                       .build();
               emailSendUseCase.sendEmail(emailSendRequest);
               System.out.println("Email was sent: " + emailSendRequest);
+
+              progressTracking(handledInvoices, invoicesCount);
               final var handledInvoicesInt = handledInvoices.getAndIncrement();
               System.out.println(
                   format("Handled %d from %d invoices", handledInvoicesInt, invoicesCount));
             });
+  }
+
+  private void progressTracking(final AtomicInteger handledInvoices, final int invoicesCount) {
+    final var handledInvoicesInt = handledInvoices.getAndIncrement();
+    System.out.println(format("Handled %d from %d invoices", handledInvoicesInt, invoicesCount));
   }
 
   private InputStream getAttachment(final Invoice invoice) {
