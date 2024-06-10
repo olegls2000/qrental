@@ -1,8 +1,11 @@
 package ee.qrental.driver.adapter.mapper;
 
 import ee.qrental.driver.adapter.repository.CallSignLinkRepository;
+import ee.qrental.driver.adapter.repository.DriverRepository;
+import ee.qrental.driver.adapter.repository.FriendshipRepository;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
+import ee.qrental.driver.domain.Friendship;
 import ee.qrental.driver.entity.jakarta.DriverJakartaEntity;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -11,14 +14,18 @@ import lombok.AllArgsConstructor;
 public class DriverAdapterMapper {
 
   private final CallSignLinkRepository callSignLinkRepository;
+  private final FriendshipRepository friendshipRepository;
+  private final FriendshipAdapterMapper friendshipAdapterMapper;
 
   public Driver mapToDomain(final DriverJakartaEntity entity) {
     final var callSign = getActiveCallSign(entity.getId());
+    final var friendship = getFriendship(entity.getId());
 
     return Driver.builder()
         .id(entity.getId())
         .active(entity.getActive())
         .callSign(callSign)
+        .friendship(friendship)
         .firstName(entity.getFirstName())
         .lastName(entity.getLastName())
         .taxNumber(entity.getIsikukood())
@@ -100,5 +107,9 @@ public class DriverAdapterMapper {
         .id(callSignEntity.getId())
         .callSign(callSignEntity.getCallSign())
         .build();
+  }
+
+  private Friendship getFriendship(final Long driverId) {
+    return friendshipAdapterMapper.mapToDomain(friendshipRepository.findByFriendId(driverId));
   }
 }

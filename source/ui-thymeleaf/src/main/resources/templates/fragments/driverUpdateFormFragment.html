@@ -30,6 +30,22 @@
                type="text"
                hidden/>
         <p class="fs-5">Setup:</p>
+
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted"
+                       for="recommendedByDriverId">Recommended by:</label>
+                <select id="recommendedByDriverId"
+                        class="form-select"
+                        th:field="*{recommendedByDriverId}">
+                    <option th:value="null">No recommendation</option>
+                    <option th:each="driver : ${recommendedByOptions}"
+                            th:value="${driver.id}"
+                            th:text="|${driver.lastName} ${driver.firstName}, isikukood: ${driver.isikukood}|">??
+                    </option>
+                </select>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <div class="mb-3">

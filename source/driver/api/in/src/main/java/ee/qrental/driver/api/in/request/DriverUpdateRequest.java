@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Boolean active;
   private Long callSignId;
+  private Long recommendedByDriverId;
   private Integer callSign;
   private String firstName;
   private String lastName;

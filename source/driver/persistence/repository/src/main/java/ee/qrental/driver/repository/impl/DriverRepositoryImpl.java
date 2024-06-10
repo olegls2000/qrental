@@ -2,14 +2,14 @@ package ee.qrental.driver.repository.impl;
 
 import ee.qrental.driver.adapter.repository.DriverRepository;
 import ee.qrental.driver.entity.jakarta.DriverJakartaEntity;
-import ee.qrental.driver.repository.spring.DriveSpringDataRepository;
+import ee.qrental.driver.repository.spring.DriverSpringDataRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DriverRepositoryImpl implements DriverRepository {
 
-  private final DriveSpringDataRepository springDataRepository;
+  private final DriverSpringDataRepository springDataRepository;
 
   @Override
   public List<DriverJakartaEntity> findAll() {

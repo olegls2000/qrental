@@ -1,6 +1,5 @@
 package ee.qrental.ui.controller.util;
 
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -28,4 +27,6 @@ public class ControllerUtils {
   public static final String BONUS_ROOT_PATH = "/bonuses";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
   public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
+
+  public static final String ADD_REQUEST_ATTRIBUTE = "addRequest";
 }

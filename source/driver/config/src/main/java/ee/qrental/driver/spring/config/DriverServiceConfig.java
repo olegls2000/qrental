@@ -1,15 +1,13 @@
 package ee.qrental.driver.spring.config;
 
 import ee.qrental.driver.api.in.query.GetDriverQuery;
-import ee.qrental.driver.api.out.DriverAddPort;
-import ee.qrental.driver.api.out.DriverDeletePort;
-import ee.qrental.driver.api.out.DriverLoadPort;
-import ee.qrental.driver.api.out.DriverUpdatePort;
+import ee.qrental.driver.api.out.*;
 import ee.qrental.driver.core.mapper.DriverAddRequestMapper;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
 import ee.qrental.driver.core.service.DriverQueryService;
 import ee.qrental.driver.core.service.DriverUseCaseService;
+import ee.qrental.driver.core.validator.DriverUpdateBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +29,15 @@ public class DriverServiceConfig {
       final DriverDeletePort deletePort,
       final DriverLoadPort loadPort,
       final DriverAddRequestMapper addRequestMapper,
-      final DriverUpdateRequestMapper updateRequestMapper) {
+      final DriverUpdateRequestMapper updateRequestMapper,
+      final DriverUpdateBusinessRuleValidator updateBusinessRuleValidator) {
     return new DriverUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        updateBusinessRuleValidator);
   }
 }

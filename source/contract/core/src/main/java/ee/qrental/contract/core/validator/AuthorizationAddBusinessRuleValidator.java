@@ -13,7 +13,7 @@ public class AuthorizationAddBusinessRuleValidator {
   private final AuthorizationLoadPort loadPort;
 
 
-  public ViolationsCollector validateAdd(final AuthorizationAddRequest addRequest) {
+  public ViolationsCollector validate(final AuthorizationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
     checkUniqueness(addRequest, violationsCollector);
 
@@ -27,11 +27,5 @@ public class AuthorizationAddBusinessRuleValidator {
       return;
     }
     violationCollector.collect(format("Bolt Authority for Driver with id: %d already exists", driverId));
-  }
-
-  private void checkExistence(final Long id, final ViolationsCollector violationCollector) {
-    if (loadPort.loadById(id) == null) {
-      violationCollector.collect("Update of Contract failed. No Record with id = " + id);
-    }
   }
 }

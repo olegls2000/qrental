@@ -28,7 +28,7 @@ public class AuthorizationUseCaseService
 
   @Override
   public Long add(final AuthorizationAddRequest request) {
-    final var violationsCollector = addBusinessRuleValidator.validateAdd(request);
+    final var violationsCollector = addBusinessRuleValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 

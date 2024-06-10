@@ -1,7 +1,7 @@
 package ee.qrental.driver.spring.config;
 
 import ee.qrental.driver.api.out.*;
-import ee.qrental.driver.core.validator.DriverBusinessRuleValidator;
+import ee.qrental.driver.core.validator.DriverUpdateBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class DriverValidatorConfig {
 
   @Bean
-  DriverBusinessRuleValidator getDriverBusinessRuleValidator(final DriverLoadPort loadPort) {
-    return new DriverBusinessRuleValidator(loadPort);
+  DriverUpdateBusinessRuleValidator getDriverBusinessRuleValidator(final DriverLoadPort loadPort) {
+    return new DriverUpdateBusinessRuleValidator(loadPort);
   }
 }

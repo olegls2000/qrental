@@ -16,13 +16,16 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
   private final DriverAdapterMapper driverAdapterMapper;
   private final CallSignHandler callSignHandler;
   private final FirmHandler firmHandler;
+  private final FriendshipHandler friendshipHandler;
 
   @Override
   public Driver add(final Driver domain) {
     final var driverToSave = driverAdapterMapper.mapToEntity(domain);
     final var driverSaved = driverRepository.save(driverToSave);
+    final var driverSavedId = driverSaved.getId();
     callSignHandler.addHandle(domain, driverSaved);
     firmHandler.addHandle(domain, driverSaved);
+    friendshipHandler.addHandle(domain, driverSaved);
 
     return driverAdapterMapper.mapToDomain(driverSaved);
   }
@@ -34,6 +37,7 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
     final var updatedEntity = updateSavedEntity(entityFromDatabase, domain);
     callSignHandler.updateHandle(domain, updatedEntity);
     firmHandler.updateHandle(domain, updatedEntity);
+    friendshipHandler.updateHandle(domain, updatedEntity);
 
     return driverAdapterMapper.mapToDomain(driverRepository.save(updatedEntity));
   }

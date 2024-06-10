@@ -23,12 +23,8 @@ public class DriverLoadAdapter implements DriverLoadPort {
   }
 
   @Override
-  public Driver loadById(Long id) {
+  public Driver loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
 
-  @Override
-  public Driver loadByIsukuKood(final Long isukuKood) {
-    return mapper.mapToDomain(repository.getByIsikukood(isukuKood));
-  }
 }

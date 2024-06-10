@@ -13,6 +13,7 @@ import lombok.Setter;
 public class DriverAddRequest extends AbstractAddRequest {
   private Boolean active;
   private Long callSignId;
+  private Long recommendedByDriverId;
   private String firstName;
   private String lastName;
   private Long taxNumber;

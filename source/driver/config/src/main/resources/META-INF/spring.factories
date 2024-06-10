@@ -4,6 +4,9 @@ ee.qrental.driver.spring.config.DriverValidatorConfig,\
 ee.qrental.driver.spring.config.DriverMapperConfig,\
 ee.qrental.driver.spring.config.DriverServiceConfig,\
 ee.qrental.driver.spring.config.DriverRepositoryConfig,\
+ee.qrental.driver.spring.config.FriendshipRepositoryConfig,\
+ee.qrental.driver.spring.config.FriendshipMapperConfig,\
+ee.qrental.driver.spring.config.FriendshipAdapterConfig,\
 ee.qrental.driver.spring.config.CallSignLinkAdapterConfig,\
 ee.qrental.driver.spring.config.CallSignLinkMapperConfig,\
 ee.qrental.driver.spring.config.CallSignLinkServiceConfig,\

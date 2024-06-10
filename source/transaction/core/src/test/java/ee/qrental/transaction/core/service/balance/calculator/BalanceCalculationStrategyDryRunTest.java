@@ -16,14 +16,12 @@ import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.domain.balance.Balance;
-import ee.qrental.transaction.domain.kind.TransactionKindsCode;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class BalanceCalculationStrategyDryRunTest {
 

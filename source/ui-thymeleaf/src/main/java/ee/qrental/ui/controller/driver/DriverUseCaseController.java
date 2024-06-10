@@ -1,5 +1,6 @@
 package ee.qrental.ui.controller.driver;
 
+import static ee.qrental.ui.controller.util.ControllerUtils.ADD_REQUEST_ATTRIBUTE;
 import static ee.qrental.ui.controller.util.ControllerUtils.DRIVER_ROOT_PATH;
 
 import ee.qrental.driver.api.in.query.GetCallSignQuery;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class DriverUseCaseController {
 
   private static final String CALL_SIGN_OPTIONS = "callSigns";
+  private static final String RECOMMENDED_BY_OPTIONS = "recommendedByOptions";
 
   private final DriverAddUseCase addUseCase;
   private final DriverUpdateUseCase updateUseCase;
@@ -40,25 +42,29 @@ public class DriverUseCaseController {
     addAddRequestToModel(model);
     addQFirmsToModel(model);
     addCallSignOptionsToModel(model);
+    addRecommendedByOptionsToModel(model);
 
     return "forms/addDriver";
   }
 
   private void addAddRequestToModel(Model model) {
-    model.addAttribute("addRequest", new DriverAddRequest());
+    model.addAttribute(ADD_REQUEST_ATTRIBUTE, new DriverAddRequest());
   }
 
   private void addCallSignOptionsToModel(Model model) {
     model.addAttribute(CALL_SIGN_OPTIONS, callSignQuery.getAvailable());
   }
 
+  private void addRecommendedByOptionsToModel(Model model) {
+    model.addAttribute(RECOMMENDED_BY_OPTIONS, driverQuery.getAll());
+  }
+
   @PostMapping(value = "/add")
-  public String addDriver(@ModelAttribute final DriverAddRequest addRequest,
-                          final Model model) {
+  public String addDriver(@ModelAttribute final DriverAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
 
     if (addRequest.hasViolations()) {
-      model.addAttribute("addRequest", addRequest);
+      model.addAttribute(ADD_REQUEST_ATTRIBUTE, addRequest);
 
       return "forms/addDriver";
     }
@@ -72,6 +78,7 @@ public class DriverUseCaseController {
     addUpdateRequestToModel(model, updateRequest);
     addQFirmsToModel(model);
     addCallSignOptionsToModel(model, updateRequest);
+    addRecommendedByOptionsToModel(model);
 
     return "forms/updateDriver";
   }
@@ -93,8 +100,7 @@ public class DriverUseCaseController {
   }
 
   @PostMapping("/update")
-  public String updateDriver(final DriverUpdateRequest updateRequest,
-           final Model model) {
+  public String updateDriver(final DriverUpdateRequest updateRequest, final Model model) {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);

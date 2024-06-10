@@ -3,6 +3,7 @@ package ee.qrental.driver.spring.config;
 import ee.qrental.driver.core.mapper.DriverAddRequestMapper;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
+import ee.qrental.driver.core.mapper.FriendshipDomainMapper;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,8 @@ public class DriverMapperConfig {
   }
 
   @Bean
-  DriverUpdateRequestMapper getDriverUpdateRequestMapper() {
-    return new DriverUpdateRequestMapper();
+  DriverUpdateRequestMapper getDriverUpdateRequestMapper(
+      final FriendshipDomainMapper friendshipDomainMapper) {
+    return new DriverUpdateRequestMapper(friendshipDomainMapper);
   }
 }

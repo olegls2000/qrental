@@ -18,6 +18,7 @@ public class DriverQueryService implements GetDriverQuery {
   private final DriverLoadPort loadPort;
   private final DriverResponseMapper mapper;
   private final DriverUpdateRequestMapper updateRequestMapper;
+  private static final int FRIENDSHIP_WEEK_COUNT = 4;
 
   @Override
   public List<DriverResponse> getAll() {
@@ -57,5 +58,11 @@ public class DriverQueryService implements GetDriverQuery {
       }
       return callSign1.compareTo(callSign2);
     };
+  }
+
+  @Override
+  public List<DriverResponse> getFriends(final Long driverId) {
+    // TODO ..
+    return List.of();
   }
 }

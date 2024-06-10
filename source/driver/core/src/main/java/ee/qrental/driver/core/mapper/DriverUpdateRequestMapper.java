@@ -5,8 +5,12 @@ import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpdateRequest, Driver> {
+
+  private final FriendshipDomainMapper friendshipDomainMapper;
 
   @Override
   public Driver toDomain(final DriverUpdateRequest request) {
@@ -42,6 +46,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .qFirmId(request.getQFirmId())
         .comment(request.getComment())
         .callSign(CallSign.builder().id(request.getCallSignId()).build())
+        .friendship(friendshipDomainMapper.toDomain(request))
         .build();
   }
 
@@ -55,9 +60,12 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
 
   @Override
   public DriverUpdateRequest toRequest(final Driver domain) {
+    final var friendship = domain.getFriendship();
+
     return DriverUpdateRequest.builder()
         .id(domain.getId())
         .active(domain.getActive())
+        .recommendedByDriverId(friendship == null ? null : friendship.getDriverId())
         .callSignId(domain.getCallSignId())
         .callSign(domain.getCallSignValue())
         .firstName(domain.getFirstName())

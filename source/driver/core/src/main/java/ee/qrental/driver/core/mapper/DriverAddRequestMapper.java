@@ -4,6 +4,8 @@ import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest, Driver> {
@@ -38,10 +40,16 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .bySms(request.getBySms())
         .byPhone(request.getByPhone())
         .qFirmId(request.getQFirmId())
-        .requiredObligation(request.getRequiredObligation())
+        .requiredObligation(getRequiredObligation(request))
         .comment(request.getComment())
         .createdDate(LocalDate.now())
         .callSign(CallSign.builder().id(request.getCallSignId()).build())
         .build();
+  }
+
+  private BigDecimal getRequiredObligation(final DriverAddRequest request) {
+    return request.getRequiredObligation() == null
+        ? BigDecimal.ZERO
+        : request.getRequiredObligation();
   }
 }
