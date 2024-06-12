@@ -27,11 +27,6 @@ public class DriverRepositoryImpl implements DriverRepository {
   }
 
   @Override
-  public DriverJakartaEntity getByIsikukood(final Long isikukood) {
-    return springDataRepository.getByIsikukood(isikukood);
-  }
-
-  @Override
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);
   }

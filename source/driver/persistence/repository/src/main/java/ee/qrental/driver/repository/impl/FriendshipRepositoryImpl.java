@@ -33,6 +33,11 @@ public class FriendshipRepositoryImpl implements FriendshipRepository {
   }
 
   @Override
+  public List<FriendshipJakartaEntity> findByDriverId(final Long driverId) {
+    return springDataRepository.findByDriverId(driverId);
+  }
+
+  @Override
   public void deleteById(Long id) {
     springDataRepository.deleteById(id);
   }

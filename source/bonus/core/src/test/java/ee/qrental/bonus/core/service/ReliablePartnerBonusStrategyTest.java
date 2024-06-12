@@ -106,90 +106,93 @@ class ReliablePartnerBonusStrategyTest {
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
+    final var addTransactionRequests =
         instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(1).compareTo(addRequestTransaction.getAmount()));
     assertEquals("Bonus Transaction for RP Strategy", addRequestTransaction.getComment());
     assertEquals(2L, addRequestTransaction.getDriverId());
     assertEquals(33L, addRequestTransaction.getTransactionTypeId());
   }
+
   @Test
   public void testCalculate5Matches1PercentBonus() {
     // given
     final var obligation = Obligation.builder().matchCount(5).driverId(2L).qWeekId(9L).build();
     final var weekPositiveAmount = BigDecimal.valueOf(400d);
     final var rentTransaction =
-            TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
-                    .realAmount(BigDecimal.valueOf(-100d))
-                    .build();
+        TransactionResponse.builder()
+            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .realAmount(BigDecimal.valueOf(-100d))
+            .build();
     final var rentTransactions = singletonList(rentTransaction);
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
-            .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+        .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
-            instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
+    final var addTransactionRequests =
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(1).compareTo(addRequestTransaction.getAmount()));
   }
+
   @Test
   public void testCalculate8Matches2PercentBonus() {
     // given
     final var obligation = Obligation.builder().matchCount(8).driverId(2L).qWeekId(9L).build();
     final var weekPositiveAmount = BigDecimal.valueOf(400d);
     final var rentTransaction =
-            TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
-                    .realAmount(BigDecimal.valueOf(-100d))
-                    .build();
+        TransactionResponse.builder()
+            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .realAmount(BigDecimal.valueOf(-100d))
+            .build();
     final var rentTransactions = singletonList(rentTransaction);
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
-            .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+        .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
-            instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
+    final var addTransactionRequests =
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(2).compareTo(addRequestTransaction.getAmount()));
   }
+
   @Test
   public void testCalculate24Matches5PercentBonus() {
     // given
     final var obligation = Obligation.builder().matchCount(24).driverId(2L).qWeekId(9L).build();
     final var weekPositiveAmount = BigDecimal.valueOf(400d);
     final var rentTransaction =
-            TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
-                    .realAmount(BigDecimal.valueOf(-100d))
-                    .build();
+        TransactionResponse.builder()
+            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .realAmount(BigDecimal.valueOf(-100d))
+            .build();
     final var rentTransactions = singletonList(rentTransaction);
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
-            .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+        .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
-            instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
+    final var addTransactionRequests =
+        instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(5).compareTo(addRequestTransaction.getAmount()));
   }
 }

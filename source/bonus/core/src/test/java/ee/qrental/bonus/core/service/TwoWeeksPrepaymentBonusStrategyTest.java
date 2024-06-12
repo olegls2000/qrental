@@ -82,11 +82,11 @@ class TwoWeeksPrepaymentBonusStrategyTest {
     final var weekPositiveAmount = BigDecimal.ONE;
 
     // when
-    final var addTransactionRequestOpt =
+    final var addTransactionRequests =
         instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isEmpty());
+    assertTrue(addTransactionRequests.isEmpty());
   }
 
   @Test
@@ -128,12 +128,12 @@ class TwoWeeksPrepaymentBonusStrategyTest {
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
+    final var addTransactionRequests =
         instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(10).compareTo(addRequestTransaction.getAmount()));
     assertEquals("Bonus Transaction for 2W Strategy", addRequestTransaction.getComment());
     assertEquals(2L, addRequestTransaction.getDriverId());

@@ -96,7 +96,6 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .hasRequiredObligation(domain.hasRequiredObligation())
         .requiredObligation(domain.getRequiredObligation())
         .comment(domain.getComment())
-        .createdDate(domain.getCreatedDate())
         .build();
   }
 }

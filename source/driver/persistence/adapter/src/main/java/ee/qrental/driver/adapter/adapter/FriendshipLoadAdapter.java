@@ -15,10 +15,10 @@ public class FriendshipLoadAdapter implements FriendshipLoadPort {
   private FriendshipAdapterMapper mapper;
 
   @Override
-  public Friendship loadByFriendId(final Long friendId) {
-    final var entity = repository.findByFriendId(friendId);
-
-    return mapper.mapToDomain(entity);
+  public List<Friendship> loadByDriverId(final Long driverId) {
+    return repository.findByDriverId(driverId).stream()
+        .map(entity -> mapper.mapToDomain(entity))
+        .toList();
   }
 
   @Override

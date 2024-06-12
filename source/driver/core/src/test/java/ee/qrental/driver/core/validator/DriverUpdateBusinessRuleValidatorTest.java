@@ -83,17 +83,18 @@ class DriverUpdateBusinessRuleValidatorTest {
             .id(driverIdToUpdate)
             .recommendedByDriverId(requestRecommendedByDriverId)
             .build();
-    final var friendshipStartDate = LocalDate.now().minus(6, DAYS);
+    final var driverCreationDate = LocalDate.now().minus(6, DAYS);
 
     when(loadPort.loadById(driverIdToUpdate))
         .thenReturn(
             Driver.builder()
                 .id(driverIdToUpdate)
+                .createdDate(driverCreationDate)
                 .friendship(
                     Friendship.builder()
                         .driverId(dbRecommendedByDriverId)
                         .friendId(driverIdToUpdate)
-                        .startDate(friendshipStartDate)
+                        .startDate(driverCreationDate)
                         .build())
                 .build());
 

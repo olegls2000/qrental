@@ -15,5 +15,7 @@ public interface FriendshipRepository {
 
   FriendshipJakartaEntity findByFriendId(final Long friendId);
 
+  List<FriendshipJakartaEntity> findByDriverId(final Long driverId);
+
   void deleteById(final Long id);
 }

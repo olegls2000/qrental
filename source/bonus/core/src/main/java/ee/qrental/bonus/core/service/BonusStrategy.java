@@ -4,7 +4,7 @@ import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 
 public interface BonusStrategy {
 
@@ -17,7 +17,7 @@ public interface BonusStrategy {
 
   boolean canApply(final BonusProgram bonusProgram);
 
-  Optional<TransactionAddRequest> calculateBonus(final Obligation obligation, final BigDecimal weekPositiveAmount);
+  List<TransactionAddRequest> calculateBonus(final Obligation obligation, final BigDecimal weekPositiveAmount);
 
   String getBonusCode();
 }

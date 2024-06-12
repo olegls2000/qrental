@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 
 import ee.qrental.bonus.api.in.query.GetBonusCalculationQuery;
 import ee.qrental.bonus.api.in.query.GetBonusProgramQuery;
+import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.bonus.api.in.usecase.BonusCalculationAddUseCase;
 import ee.qrental.bonus.api.out.*;
 import ee.qrental.bonus.core.mapper.*;
@@ -13,6 +14,7 @@ import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
+import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -30,13 +32,17 @@ public class BonusServiceConfig {
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
       final GetCallSignLinkQuery callSignLinkQuery,
-      final GetContractQuery contractQuery) {
+      final GetContractQuery contractQuery,
+      final GetDriverQuery driverQuery,
+      final GetObligationQuery obligationQuery) {
     return asList(
         new TwoWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new NewDriverBonusStrategy(
             transactionQuery, transactionTypeQuery, callSignLinkQuery, contractQuery),
-        new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery));
+        new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery),
+        new FriendshipBonusStrategy(
+            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery));
   }
 
   @Bean

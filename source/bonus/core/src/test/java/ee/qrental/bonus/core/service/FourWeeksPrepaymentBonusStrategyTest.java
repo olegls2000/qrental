@@ -27,7 +27,8 @@ class FourWeeksPrepaymentBonusStrategyTest {
   void init() {
     transactionQuery = mock(GetTransactionQuery.class);
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
-    instanceUnderTest = new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery);
+    instanceUnderTest =
+        new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery);
   }
 
   @Test
@@ -105,11 +106,11 @@ class FourWeeksPrepaymentBonusStrategyTest {
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
 
     // when
-    final var addTransactionRequestOpt =
+    final var addTransactionRequests =
         instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isEmpty());
+    assertTrue(addTransactionRequests.isEmpty());
   }
 
   @Test
@@ -129,12 +130,12 @@ class FourWeeksPrepaymentBonusStrategyTest {
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when
-    final var addTransactionRequestOpt =
+    final var addTransactionRequests =
         instanceUnderTest.calculateBonus(obligation, weekPositiveAmount);
 
     // then
-    assertTrue(addTransactionRequestOpt.isPresent());
-    final var addRequestTransaction = addTransactionRequestOpt.get();
+    assertEquals(1, addTransactionRequests.size());
+    final var addRequestTransaction = addTransactionRequests.get(0);
     assertEquals(0, BigDecimal.valueOf(40).compareTo(addRequestTransaction.getAmount()));
     assertEquals("Bonus Transaction for 4W Strategy", addRequestTransaction.getComment());
     assertEquals(2L, addRequestTransaction.getDriverId());

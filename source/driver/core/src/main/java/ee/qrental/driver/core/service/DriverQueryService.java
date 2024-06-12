@@ -5,24 +5,28 @@ import static java.util.stream.Collectors.toList;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.api.in.response.DriverResponse;
+import ee.qrental.driver.api.in.response.FriendshipResponse;
 import ee.qrental.driver.api.out.DriverLoadPort;
+import ee.qrental.driver.api.out.FriendshipLoadPort;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
 import java.util.Comparator;
 import java.util.List;
+
+import ee.qrental.driver.core.mapper.FriendshipResponseMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DriverQueryService implements GetDriverQuery {
 
   private final DriverLoadPort loadPort;
-  private final DriverResponseMapper mapper;
   private final DriverUpdateRequestMapper updateRequestMapper;
-  private static final int FRIENDSHIP_WEEK_COUNT = 4;
+  private final DriverResponseMapper mapper;
+  private final FriendshipLoadPort friendshipLoadPort;
+  private final FriendshipResponseMapper friendshipResponseMapper;
 
   @Override
   public List<DriverResponse> getAll() {
-
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
         .sorted(getCallSignOrLastNameComparator())
@@ -61,8 +65,9 @@ public class DriverQueryService implements GetDriverQuery {
   }
 
   @Override
-  public List<DriverResponse> getFriends(final Long driverId) {
-    // TODO ..
-    return List.of();
+  public List<FriendshipResponse> getFriendships(final Long driverId) {
+    return friendshipLoadPort.loadByDriverId(driverId).stream()
+        .map(friendshipResponseMapper::toResponse)
+        .collect(toList());
   }
 }

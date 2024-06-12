@@ -17,7 +17,6 @@ import ee.qrental.email.api.in.request.EmailSendRequest;
 import ee.qrental.email.api.in.request.EmailType;
 import ee.qrental.email.api.in.usecase.EmailSendUseCase;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrental.user.api.in.query.GetUserAccountQuery;
@@ -81,11 +80,11 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
                           bonusStrategyOpt.ifPresent(strategiesForCalculation::add));
 
               for (final BonusStrategy strategy : strategiesForCalculation) {
-                final var transactionAddRequestOptional =
+                final var transactionAddRequests =
                     strategy.calculateBonus(obligation, weekPositiveAmount);
-                if (transactionAddRequestOptional.isPresent()) {
-                  final var bonusTransactionId =
-                      transactionAddUseCase.add(transactionAddRequestOptional.get());
+
+                for (final var transactionAddRequest : transactionAddRequests) {
+                  final var bonusTransactionId = transactionAddUseCase.add(transactionAddRequest);
                   final var bonusCode = strategy.getBonusCode();
                   final var bonusProgramId = getBonusProgramIdByCode(bonusCode, bonusPrograms);
                   final var result =

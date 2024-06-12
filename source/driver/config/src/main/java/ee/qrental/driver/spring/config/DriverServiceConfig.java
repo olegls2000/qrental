@@ -5,6 +5,7 @@ import ee.qrental.driver.api.out.*;
 import ee.qrental.driver.core.mapper.DriverAddRequestMapper;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
+import ee.qrental.driver.core.mapper.FriendshipResponseMapper;
 import ee.qrental.driver.core.service.DriverQueryService;
 import ee.qrental.driver.core.service.DriverUseCaseService;
 import ee.qrental.driver.core.validator.DriverUpdateBusinessRuleValidator;
@@ -17,9 +18,12 @@ public class DriverServiceConfig {
   @Bean
   GetDriverQuery getDriverQueryService(
       final DriverLoadPort loadPort,
+      final DriverUpdateRequestMapper updateRequestMapper,
       final DriverResponseMapper mapper,
-      final DriverUpdateRequestMapper updateRequestMapper) {
-    return new DriverQueryService(loadPort, mapper, updateRequestMapper);
+      final FriendshipLoadPort friendshipLoadPort,
+      final FriendshipResponseMapper friendshipResponseMapper) {
+    return new DriverQueryService(
+        loadPort, updateRequestMapper, mapper, friendshipLoadPort, friendshipResponseMapper);
   }
 
   @Bean

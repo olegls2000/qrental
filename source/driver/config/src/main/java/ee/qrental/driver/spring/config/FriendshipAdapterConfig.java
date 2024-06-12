@@ -1,5 +1,6 @@
 package ee.qrental.driver.spring.config;
 
+import ee.qrental.driver.adapter.adapter.FriendshipLoadAdapter;
 import ee.qrental.driver.adapter.adapter.FriendshipPersistenceAdapter;
 import ee.qrental.driver.adapter.mapper.FriendshipAdapterMapper;
 import ee.qrental.driver.adapter.repository.FriendshipRepository;
@@ -19,5 +20,11 @@ public class FriendshipAdapterConfig {
       final FriendshipAdapterMapper friendshipAdapterMapper) {
 
     return new FriendshipPersistenceAdapter(friendshipRepository, friendshipAdapterMapper);
+  }
+
+  @Bean
+  FriendshipLoadAdapter getFriendshipLoadAdapter(
+      final FriendshipRepository repository, final FriendshipAdapterMapper mapper) {
+    return new FriendshipLoadAdapter(repository, mapper);
   }
 }
