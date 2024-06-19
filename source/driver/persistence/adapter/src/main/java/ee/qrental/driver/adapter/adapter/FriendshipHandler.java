@@ -27,6 +27,10 @@ public class FriendshipHandler {
 
   private FriendshipJakartaEntity getFriendshipToSave(
       final DriverJakartaEntity driverJakartaEntity, final Driver domain) {
+    if (domain.getFriendship() == null) {
+      return null;
+    }
+
     final var friendId = domain.getFriendship().getFriendId();
     if (friendId == null) {
       return null;
