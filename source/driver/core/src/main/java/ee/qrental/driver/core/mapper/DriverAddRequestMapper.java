@@ -4,6 +4,7 @@ import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
+import ee.qrental.driver.domain.Friendship;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
   public Driver toDomain(final DriverAddRequest request) {
     return Driver.builder()
         .id(null)
+        .friendship(getFriendship(request))
         .active(request.getActive())
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
@@ -28,6 +30,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .companyVat(request.getCompanyVat())
         .companyAddress(request.getCompanyAddress())
         .driverLicenseNumber(request.getDriverLicenseNumber())
+        .driverLicenseExp(request.getDriverLicenseExp())
         .taxiLicense(request.getTaxiLicense())
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
@@ -43,7 +46,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .requiredObligation(getRequiredObligation(request))
         .comment(request.getComment())
         .createdDate(LocalDate.now())
-        .callSign(CallSign.builder().id(request.getCallSignId()).build())
+        .callSign(getCallSign(request))
         .build();
   }
 
@@ -51,5 +54,19 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
     return request.getRequiredObligation() == null
         ? BigDecimal.ZERO
         : request.getRequiredObligation();
+  }
+
+  private CallSign getCallSign(final DriverAddRequest request) {
+    if (request.getCallSignId() == null) {
+      return null;
+    }
+    return CallSign.builder().id(request.getCallSignId()).build();
+  }
+
+  private Friendship getFriendship(final DriverAddRequest request) {
+    if (request.getRecommendedByDriverId() == null) {
+      return null;
+    }
+    return Friendship.builder().driverId(request.getRecommendedByDriverId()).build();
   }
 }

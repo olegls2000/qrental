@@ -27,18 +27,14 @@ public class FriendshipHandler {
 
   private FriendshipJakartaEntity getFriendshipToSave(
       final DriverJakartaEntity driverJakartaEntity, final Driver domain) {
-    if (domain.getFriendship() == null) {
-      return null;
-    }
-
-    final var friendId = domain.getFriendship().getFriendId();
-    if (friendId == null) {
+    final var friendship = domain.getFriendship();
+    if (friendship == null) {
       return null;
     }
 
     return FriendshipJakartaEntity.builder()
-        .driver(driverJakartaEntity)
-        .friend(DriverJakartaEntity.builder().id(friendId).build())
+        .driver(DriverJakartaEntity.builder().id(friendship.getDriverId()).build())
+        .friend(driverJakartaEntity)
         .dateStart(LocalDate.now())
         .build();
   }
