@@ -1,5 +1,6 @@
 package ee.qrental.driver.spring.config;
 
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.out.*;
 import ee.qrental.driver.core.validator.DriverUpdateBusinessRuleValidator;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class DriverValidatorConfig {
 
   @Bean
-  DriverUpdateBusinessRuleValidator getDriverBusinessRuleValidator(final DriverLoadPort loadPort) {
-    return new DriverUpdateBusinessRuleValidator(loadPort);
+  DriverUpdateBusinessRuleValidator getDriverBusinessRuleValidator(
+      final DriverLoadPort loadPort, final GetQWeekQuery qWeekQuery) {
+    return new DriverUpdateBusinessRuleValidator(loadPort, qWeekQuery);
   }
 }
