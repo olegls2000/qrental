@@ -1,5 +1,5 @@
 package ee.qrental.transaction.api.out;
 
-import ee.qrental.common.core.out.port.DeletePort;
+import ee.qrent.common.out.port.DeletePort;
 
 public interface TransactionDeletePort extends DeletePort {}

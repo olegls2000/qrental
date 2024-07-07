@@ -1,6 +1,6 @@
 package ee.qrental.user.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.driver.domain.Role;
 import ee.qrental.user.api.in.request.RoleAddRequest;
 

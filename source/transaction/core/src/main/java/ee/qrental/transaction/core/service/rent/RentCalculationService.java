@@ -157,6 +157,9 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     final var carId = carLink.getCarId();
     final var car = carQuery.getById(carId);
     final var carReleaseYear = car.getReleaseDate().getYear();
+
+    //TODO change to > 5 years old, 5 make as a constant
+    //FIXME Unit Tests
     if (carReleaseYear < 2019) {
       rentAmount = rentAmount.add(OLD_CAR_RATE);
     } else {

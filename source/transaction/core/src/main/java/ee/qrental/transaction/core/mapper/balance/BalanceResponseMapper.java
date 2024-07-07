@@ -2,7 +2,7 @@ package ee.qrental.transaction.core.mapper.balance;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.response.balance.BalanceResponse;

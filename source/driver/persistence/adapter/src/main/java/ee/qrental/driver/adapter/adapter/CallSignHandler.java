@@ -24,11 +24,12 @@ public class CallSignHandler {
 
   private CallSignLinkJakartaEntity getCallSignLinkToSave(
       final DriverJakartaEntity driverJakartaEntity, final Driver domain) {
-    final var callSignId = domain.getCallSign().getId();
-    if (callSignId == null) {
+
+    final var callSign = domain.getCallSign();
+    if (callSign == null) {
       return null;
     }
-    final var callSignJakartaEntity = callSignRepository.getReferenceById(callSignId);
+    final var callSignJakartaEntity = callSignRepository.getReferenceById(callSign.getId());
 
     return CallSignLinkJakartaEntity.builder()
         .driver(driverJakartaEntity)

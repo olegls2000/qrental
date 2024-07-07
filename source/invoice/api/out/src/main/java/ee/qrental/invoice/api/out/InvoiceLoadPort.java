@@ -1,9 +1,8 @@
 package ee.qrental.invoice.api.out;
 
-import ee.qrental.common.core.out.port.LoadPort;
+import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.invoice.domain.Invoice;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface InvoiceLoadPort extends LoadPort<Invoice> {

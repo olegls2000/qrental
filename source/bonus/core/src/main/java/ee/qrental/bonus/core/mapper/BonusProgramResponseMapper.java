@@ -2,7 +2,7 @@ package ee.qrental.bonus.core.mapper;
 
 import ee.qrental.bonus.api.in.response.BonusProgramResponse;
 import ee.qrental.bonus.domain.BonusProgram;
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

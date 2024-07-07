@@ -1,8 +1,9 @@
 package ee.qrental.transaction.core.service.balance;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
@@ -36,7 +37,7 @@ public class BalanceCalculationQueryService implements GetBalanceCalculationQuer
       return null;
     }
     final var year = lastCalculatedDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculatedDate);
+    final var weekNumber = getWeekNumber(lastCalculatedDate);
     final var lastCalculatedWeek = qWeekQuery.getByYearAndNumber(year, weekNumber);
 
     return lastCalculatedWeek.getId();

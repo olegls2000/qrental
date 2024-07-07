@@ -9,8 +9,13 @@ dependencyResolutionManagement {
 }
 
 include("source:app")
-include("source:common")
 include("source:task")
+
+//Common:
+include("source:common:api")
+include("source:common:core")
+include("source:common:utils")
+include("source:common:config")
 
 //Driver domain:
 include("source:driver:api:in")

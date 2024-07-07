@@ -1,6 +1,6 @@
 package ee.qrental.driver.core.mapper;
 
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrental.driver.api.in.request.CallSignLinkUpdateRequest;
 import ee.qrental.driver.api.out.CallSignLoadPort;
 import ee.qrental.driver.domain.CallSignLink;

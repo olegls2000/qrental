@@ -2,7 +2,7 @@ package ee.qrental.bonus.core.mapper;
 
 import ee.qrental.bonus.api.in.response.ObligationCalculationResponse;
 import ee.qrental.bonus.domain.ObligationCalculation;
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import lombok.AllArgsConstructor;
 

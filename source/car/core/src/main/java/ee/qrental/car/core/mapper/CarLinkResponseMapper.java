@@ -5,7 +5,7 @@ import static java.lang.String.format;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.response.CarLinkResponse;
 import ee.qrental.car.domain.CarLink;
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import lombok.AllArgsConstructor;

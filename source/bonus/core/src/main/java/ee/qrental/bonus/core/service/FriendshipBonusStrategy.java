@@ -41,6 +41,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
   @Override
   public List<TransactionAddRequest> calculateBonus(
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
+      //TODO Check why transaction was not created
     final var driverId = obligation.getDriverId();
     final var matchCount = obligation.getMatchCount();
     final var qWeekId = obligation.getQWeekId();

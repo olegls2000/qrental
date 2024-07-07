@@ -1,6 +1,6 @@
 package ee.qrental.transaction.domain;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.common.utils.QTimeUtils;
 import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import ee.qrental.transaction.domain.type.TransactionType;
 import java.math.BigDecimal;

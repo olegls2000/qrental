@@ -1,6 +1,6 @@
 package ee.qrental.invoice.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractAddRequest;
+import ee.qrent.common.in.request.AbstractAddRequest;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.validator;
 
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.transaction.api.in.request.kind.TransactionKindAddRequest;
 import ee.qrental.transaction.api.out.kind.TransactionKindLoadPort;
 import lombok.AllArgsConstructor;

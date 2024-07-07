@@ -1,7 +1,7 @@
 package ee.qrental.car.core.mapper;
 
 import ee.qrental.car.domain.CarStatus;
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.car.api.in.request.CarAddRequest;
 import ee.qrental.car.domain.Car;
 

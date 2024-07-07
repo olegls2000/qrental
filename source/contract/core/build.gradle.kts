@@ -1,5 +1,6 @@
 dependencies{
-    implementation(project(":source:common"))
+    implementation(project(":source:common:api"))
+    implementation(project(":source:common:utils"))
     implementation(project(":source:contract:api:in"))
     implementation(project(":source:contract:api:out"))
     implementation(project(":source:contract:domain"))

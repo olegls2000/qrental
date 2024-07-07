@@ -1,10 +1,11 @@
 package ee.qrental.constant.core.mapper;
 
-import static ee.qrental.common.core.utils.QTimeUtils.*;
+
+import static ee.qrental.common.utils.QTimeUtils.*;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.constant.api.in.request.QWeekAddRequest;
 import ee.qrental.constant.domain.QWeek;
 

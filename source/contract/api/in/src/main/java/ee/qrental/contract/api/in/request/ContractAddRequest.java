@@ -1,7 +1,6 @@
 package ee.qrental.contract.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractAddRequest;
-import ee.qrental.common.core.utils.QWeek;
+import ee.qrent.common.in.request.AbstractAddRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

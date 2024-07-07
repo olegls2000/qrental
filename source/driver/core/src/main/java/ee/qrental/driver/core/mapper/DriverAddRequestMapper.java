@@ -1,6 +1,6 @@
 package ee.qrental.driver.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.driver.api.in.request.DriverAddRequest;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;

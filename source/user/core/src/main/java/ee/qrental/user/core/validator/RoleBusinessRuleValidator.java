@@ -3,8 +3,8 @@ package ee.qrental.user.core.validator;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.validation.QValidator;
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.QValidator;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.driver.domain.Role;
 import ee.qrental.user.api.out.RoleLoadPort;
 import ee.qrental.user.api.out.UserAccountLoadPort;

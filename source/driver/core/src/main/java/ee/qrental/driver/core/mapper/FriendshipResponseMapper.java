@@ -1,6 +1,6 @@
 package ee.qrental.driver.core.mapper;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 
 import ee.qrental.driver.api.in.response.FriendshipResponse;
 

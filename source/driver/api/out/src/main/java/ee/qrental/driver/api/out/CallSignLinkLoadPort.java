@@ -1,6 +1,6 @@
 package ee.qrental.driver.api.out;
 
-import ee.qrental.common.core.out.port.LoadPort;
+import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.driver.domain.CallSignLink;
 import java.time.LocalDate;
 import java.util.List;

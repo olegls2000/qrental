@@ -1,6 +1,6 @@
 package ee.qrental.contract.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.contract.api.in.request.AuthorizationAddRequest;
 import ee.qrental.contract.domain.Authorization;
 import ee.qrental.driver.api.in.query.GetDriverQuery;

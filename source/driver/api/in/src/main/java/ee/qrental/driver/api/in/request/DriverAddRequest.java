@@ -1,6 +1,6 @@
 package ee.qrental.driver.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractAddRequest;
+import ee.qrent.common.in.request.AbstractAddRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Getter;

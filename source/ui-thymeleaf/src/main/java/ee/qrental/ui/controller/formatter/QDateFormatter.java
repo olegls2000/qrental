@@ -1,6 +1,7 @@
 package ee.qrental.ui.controller.formatter;
 
-import static ee.qrental.common.core.utils.QTimeUtils.Q_DATE_FORMATTER;
+
+import static ee.qrental.common.utils.QTimeUtils.Q_DATE_FORMATTER;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 import java.time.LocalDate;

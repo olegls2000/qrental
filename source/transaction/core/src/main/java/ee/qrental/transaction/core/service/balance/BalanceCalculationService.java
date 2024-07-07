@@ -1,12 +1,12 @@
 package ee.qrental.transaction.core.service.balance;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.SAVING;
 import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.*;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -155,7 +155,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       return null;
     }
     final var year = lastCalculationDate.getYear();
-    final var weekNumber = QTimeUtils.getWeekNumber(lastCalculationDate);
+    final var weekNumber = getWeekNumber(lastCalculationDate);
 
     return qWeekQuery.getByYearAndNumber(year, weekNumber);
   }

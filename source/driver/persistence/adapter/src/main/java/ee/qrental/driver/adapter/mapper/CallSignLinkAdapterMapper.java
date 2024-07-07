@@ -1,6 +1,6 @@
 package ee.qrental.driver.adapter.mapper;
 
-import ee.qrental.common.core.out.mapper.DomainMapper;
+import ee.qrent.common.out.mapper.DomainMapper;
 import ee.qrental.driver.domain.CallSignLink;
 import ee.qrental.driver.entity.jakarta.CallSignLinkJakartaEntity;
 import ee.qrental.driver.entity.jakarta.DriverJakartaEntity;

@@ -1,11 +1,11 @@
 package ee.qrental.constant.domain;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getFirstDayOfWeekInYear;
-import static ee.qrental.common.core.utils.QTimeUtils.getLastDayOfWeekInYear;
-
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+
+import static ee.qrental.common.utils.QTimeUtils.getFirstDayOfWeekInYear;
+import static ee.qrental.common.utils.QTimeUtils.getLastDayOfWeekInYear;
 
 @SuperBuilder
 @Getter

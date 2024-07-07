@@ -2,7 +2,7 @@ package ee.qrental.transaction.core.validator;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;

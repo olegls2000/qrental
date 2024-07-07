@@ -2,7 +2,7 @@ package ee.qrental.transaction.core.mapper.type;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import ee.qrental.transaction.domain.type.TransactionType;
 

@@ -1,8 +1,8 @@
 package db.migration;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.lang.String.format;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import java.sql.Date;
 import java.time.LocalDate;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
@@ -21,7 +21,7 @@ public class V20240302220637__UpdateInvoiceCalculationByQWeekId extends BaseJava
         final var id = resultSetInvoiceCalculation.getLong("id");
         final var startDateSql = resultSetInvoiceCalculation.getDate("start_date");
         final var startDate = startDateSql.toLocalDate();
-        final var weekNumber = QTimeUtils.getWeekNumber(startDate);
+        final var weekNumber = getWeekNumber(startDate);
         final var weekYear = startDate.getYear();
         try (final var statementSelectQWeekId =
             context

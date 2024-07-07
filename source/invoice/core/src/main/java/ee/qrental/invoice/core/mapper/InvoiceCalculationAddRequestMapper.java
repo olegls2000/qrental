@@ -1,6 +1,6 @@
 package ee.qrental.invoice.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrental.invoice.domain.InvoiceCalculation;
 import java.util.ArrayList;

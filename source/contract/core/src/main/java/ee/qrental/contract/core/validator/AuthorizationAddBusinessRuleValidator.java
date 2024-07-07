@@ -2,7 +2,7 @@ package ee.qrental.contract.core.validator;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.contract.api.in.request.AuthorizationAddRequest;
 import ee.qrental.contract.api.out.AuthorizationLoadPort;
 import lombok.AllArgsConstructor;

@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import ee.qrental.car.api.in.request.CarLinkAddRequest;
 import ee.qrental.car.api.out.CarLinkLoadPort;
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

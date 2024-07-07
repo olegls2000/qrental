@@ -2,7 +2,7 @@ package ee.qrental.user.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.domain.UserAccount;
 import ee.qrental.user.api.in.response.UserAccountResponse;
 import lombok.AllArgsConstructor;

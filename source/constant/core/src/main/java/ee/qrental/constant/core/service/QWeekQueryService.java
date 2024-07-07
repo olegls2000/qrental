@@ -1,6 +1,6 @@
 package ee.qrental.constant.core.service;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrental.common.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -65,7 +66,7 @@ public class QWeekQueryService implements GetQWeekQuery {
   public QWeekResponse getCurrentWeek() {
     final var nowDate = LocalDate.now();
     final var year = nowDate.getYear();
-    final var number = QTimeUtils.getWeekNumber(nowDate);
+    final var number = getWeekNumber(nowDate);
     final var currentQWeek = loadPort.loadByYearAndNumber(year, number);
     if (currentQWeek == null) {
       throw new RuntimeException(

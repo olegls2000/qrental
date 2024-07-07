@@ -3,8 +3,8 @@ package ee.qrental.invoice.core.mapper;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
-import ee.qrental.common.core.utils.QWeek;
+import ee.qrent.common.in.mapper.AddRequestMapper;
+import ee.qrental.common.utils.QWeek;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.firm.api.in.query.GetFirmQuery;
 import ee.qrental.invoice.api.in.request.InvoiceAddRequest;

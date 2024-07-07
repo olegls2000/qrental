@@ -22,7 +22,7 @@ import static com.lowagie.text.Font.COURIER;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
-import static ee.qrental.common.core.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.round;
 import static java.awt.Color.white;
 import static java.lang.String.format;
 

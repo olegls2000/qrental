@@ -3,6 +3,7 @@ plugins {
 }
 dependencies {
     implementation(project(":source:ui-thymeleaf"))
+    implementation(project(":source:common:config"))
     implementation(project(":source:driver:config"))
     implementation(project(":source:driver:persistence:flyway"))
     implementation(project(":source:car:config"))

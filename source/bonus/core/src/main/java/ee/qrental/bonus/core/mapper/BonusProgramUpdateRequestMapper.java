@@ -1,8 +1,8 @@
 package ee.qrental.bonus.core.mapper;
 
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrental.bonus.api.in.request.BonusProgramUpdateRequest;
 import ee.qrental.bonus.domain.BonusProgram;
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

@@ -1,6 +1,6 @@
 package ee.qrental.invoice.core.mapper;
 
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrental.invoice.api.in.request.InvoiceUpdateRequest;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
 import ee.qrental.invoice.domain.Invoice;

@@ -4,8 +4,8 @@ import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.MEDIUM;
 
-import ee.qrental.common.core.in.validation.QValidator;
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.QValidator;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;

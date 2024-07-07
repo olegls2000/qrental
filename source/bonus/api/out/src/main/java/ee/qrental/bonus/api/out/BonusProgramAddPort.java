@@ -1,6 +1,7 @@
 package ee.qrental.bonus.api.out;
 
+import ee.qrent.common.out.port.AddPort;
 import ee.qrental.bonus.domain.BonusProgram;
-import ee.qrental.common.core.out.port.AddPort;
+
 
 public interface BonusProgramAddPort extends AddPort<BonusProgram> {}

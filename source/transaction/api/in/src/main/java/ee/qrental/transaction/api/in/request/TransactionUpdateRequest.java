@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractUpdateRequest;
+import ee.qrent.common.in.request.AbstractUpdateRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Getter;

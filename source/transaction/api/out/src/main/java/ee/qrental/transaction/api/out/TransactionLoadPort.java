@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.out;
 
-import ee.qrental.common.core.out.port.LoadPort;
+import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.time.LocalDate;
 import java.util.List;

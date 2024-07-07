@@ -1,15 +1,17 @@
 package db.migration;
 
-import ee.qrental.common.core.utils.QWeekIterator;
-import ee.qrental.common.core.utils.Week;
+
+import ee.qrental.common.utils.QWeekIterator;
+import ee.qrental.common.utils.Week;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 
 import java.time.LocalDate;
 import java.time.Month;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getFirstDayOfWeekInYear;
-import static ee.qrental.common.core.utils.QTimeUtils.getLastDayOfWeekInYear;
+
+import static ee.qrental.common.utils.QTimeUtils.getFirstDayOfWeekInYear;
+import static ee.qrental.common.utils.QTimeUtils.getLastDayOfWeekInYear;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 

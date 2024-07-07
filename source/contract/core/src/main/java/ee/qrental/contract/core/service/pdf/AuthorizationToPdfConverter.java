@@ -3,7 +3,7 @@ package ee.qrental.contract.core.service.pdf;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
-import static ee.qrental.common.core.utils.QTimeUtils.Q_DATE_FORMATTER;
+import static ee.qrental.common.utils.QTimeUtils.Q_DATE_FORMATTER;
 import static java.awt.Color.white;
 import static java.lang.String.format;
 

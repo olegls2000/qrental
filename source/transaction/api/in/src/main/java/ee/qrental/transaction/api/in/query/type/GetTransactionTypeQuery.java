@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.in.query.type;
 
-import ee.qrental.common.core.in.query.BaseGetQuery;
+import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeUpdateRequest;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import java.util.List;

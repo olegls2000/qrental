@@ -1,6 +1,7 @@
 package ee.qrental.constant.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractDeleteRequest;
+
+import ee.qrent.common.in.request.AbstractDeleteRequest;
 
 public class QWeekDeleteRequest extends AbstractDeleteRequest {
   public QWeekDeleteRequest(final Long id) {

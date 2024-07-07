@@ -1,6 +1,6 @@
 package ee.qrental.contract.core.mapper;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.contract.api.in.response.ContractResponse;
 import ee.qrental.contract.domain.Contract;
 

@@ -2,7 +2,7 @@ package ee.qrental.user.core.mapper;
 
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.driver.domain.Role;
 import ee.qrental.driver.domain.UserAccount;
 import ee.qrental.user.api.in.request.UserAccountAddRequest;

@@ -1,16 +1,17 @@
 package ee.qrental.invoice.core.validator;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getWeekNumber;
-import static java.time.temporal.ChronoUnit.DAYS;
 
-import ee.qrental.common.core.in.validation.QValidator;
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+
+import ee.qrent.common.in.validation.QValidator;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrental.invoice.domain.InvoiceCalculation;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 
 @AllArgsConstructor
 public class InvoiceCalculationBusinessRuleValidator implements QValidator<InvoiceCalculation> {

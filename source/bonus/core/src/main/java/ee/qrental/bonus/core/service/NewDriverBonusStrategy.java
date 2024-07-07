@@ -5,6 +5,7 @@ import static java.util.Collections.singletonList;
 
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -18,15 +19,18 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.25);
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetContractQuery contractQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   public NewDriverBonusStrategy(
-      final GetTransactionQuery transactionQuery,
-      final GetTransactionTypeQuery transactionTypeQuery,
-      final GetCallSignLinkQuery callSignLinkQuery,
-      final GetContractQuery contractQuery) {
+          final GetTransactionQuery transactionQuery,
+          final GetTransactionTypeQuery transactionTypeQuery,
+          final GetCallSignLinkQuery callSignLinkQuery,
+          final GetContractQuery contractQuery,
+          final GetQWeekQuery qWeekQuery) {
     super(transactionQuery, transactionTypeQuery);
     this.callSignLinkQuery = callSignLinkQuery;
     this.contractQuery = contractQuery;
+      this.qWeekQuery = qWeekQuery;
   }
 
   @Override
@@ -35,6 +39,12 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   }
 
   private boolean isDriverNew(final Long driverId) {
+
+    //TODO:   Fix Unit Test
+    // TODO: new driver if:
+    // First Car link  start date, and do not count partial first week-> if Wednesday is start date,
+    // we calculate weeks from next Monday
+    // Driver is new during first 4 entire weeks
     final var callSignLinks = callSignLinkQuery.getCallSignLinksByDriverId(driverId);
     final var callSignLinksCount = callSignLinks.size();
     if (callSignLinksCount > 1) {
@@ -104,10 +114,12 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     final var qWeekId = obligation.getQWeekId();
     final var rentAndNonLabelFineAmountAbs =
         getRentAndNonLabelFineTransactionsAbsAmount(driverId, qWeekId);
-
+    final var nextWeek = qWeekQuery.getOneAfterById(qWeekId);
     final var totalDiscount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
     final var bonusTransaction = new TransactionAddRequest();
-    bonusTransaction.setDate(LocalDate.now());
+
+    //TODO:   Fix Unit Test
+    bonusTransaction.setDate(nextWeek.getStart());
     bonusTransaction.setComment(getComment());
     bonusTransaction.setDriverId(driverId);
     bonusTransaction.setAmount(totalDiscount);

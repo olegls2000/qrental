@@ -2,12 +2,10 @@ package ee.qrental.invoice.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.invoice.api.in.response.InvoiceCalculationResponse;
 import ee.qrental.invoice.domain.InvoiceCalculation;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

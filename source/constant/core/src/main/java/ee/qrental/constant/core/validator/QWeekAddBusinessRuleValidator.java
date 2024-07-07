@@ -1,7 +1,7 @@
 package ee.qrental.constant.core.validator;
 
-import ee.qrental.common.core.in.validation.ViolationsCollector;
-import ee.qrental.common.core.utils.QTimeUtils;
+import ee.qrent.common.in.validation.ViolationsCollector;
+import ee.qrental.common.utils.QTimeUtils;
 import ee.qrental.constant.api.in.request.QWeekAddRequest;
 import ee.qrental.constant.api.out.QWeekLoadPort;
 import lombok.AllArgsConstructor;

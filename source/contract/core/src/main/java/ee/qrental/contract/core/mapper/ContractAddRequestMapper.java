@@ -1,6 +1,6 @@
 package ee.qrental.contract.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.contract.api.in.request.ContractAddRequest;
 import ee.qrental.contract.domain.Contract;
 import ee.qrental.contract.domain.ContractDuration;
@@ -10,7 +10,6 @@ import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;

@@ -2,7 +2,7 @@ package ee.qrental.car.core.mapper;
 
 import ee.qrental.car.api.in.request.CarLinkUpdateRequest;
 import ee.qrental.car.domain.CarLink;
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 
 public class CarLinkUpdateRequestMapper implements UpdateRequestMapper<CarLinkUpdateRequest, CarLink> {
 

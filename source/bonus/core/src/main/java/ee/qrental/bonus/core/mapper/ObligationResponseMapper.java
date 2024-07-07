@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import ee.qrental.bonus.api.in.response.ObligationResponse;
 import ee.qrental.bonus.domain.Obligation;
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import lombok.AllArgsConstructor;
 

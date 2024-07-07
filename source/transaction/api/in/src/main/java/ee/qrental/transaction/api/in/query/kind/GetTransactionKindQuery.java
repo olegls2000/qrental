@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.in.query.kind;
 
-import ee.qrental.common.core.in.query.BaseGetQuery;
+import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.transaction.api.in.request.kind.TransactionKindUpdateRequest;
 import ee.qrental.transaction.api.in.response.kind.TransactionKindResponse;
 

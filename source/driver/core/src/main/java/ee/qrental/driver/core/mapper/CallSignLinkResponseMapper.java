@@ -2,7 +2,7 @@ package ee.qrental.driver.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.request.CallSignLinkResponse;
 import ee.qrental.driver.domain.CallSignLink;

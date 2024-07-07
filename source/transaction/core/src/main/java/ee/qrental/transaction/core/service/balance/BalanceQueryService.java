@@ -1,13 +1,13 @@
 package ee.qrental.transaction.core.service.balance;
 
-import static ee.qrental.common.core.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QTimeUtils.*;
 import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.DRY_RUN;
 import static java.math.BigDecimal.ZERO;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrental.common.core.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
@@ -23,16 +23,13 @@ import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrental.transaction.core.mapper.balance.BalanceResponseMapper;
 import ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy;
-import ee.qrental.transaction.core.service.balance.calculator.BalanceWrapper;
 import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
 import lombok.AllArgsConstructor;
-import lombok.val;
 
 @AllArgsConstructor
 public class BalanceQueryService implements GetBalanceQuery {
@@ -181,12 +178,12 @@ public class BalanceQueryService implements GetBalanceQuery {
 
       return round(balance.getAmountsSumWithoutRepairment());
     }
-    final var endDate = QTimeUtils.getLastDayOfWeekInYear(year, weekNumber);
+    final var endDate = getLastDayOfWeekInYear(year, weekNumber);
     final var filterBuilder =
         PeriodAndKindAndDriverTransactionFilter.builder().dateEnd(endDate).driverId(driverId);
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     if (latestBalance == null) {
-      final var startDate = QTimeUtils.getFirstDayOfYear(year);
+      final var startDate = getFirstDayOfYear(year);
       final var filter =
           filterBuilder
               .dateStart(startDate)
@@ -199,7 +196,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var latestCalculatedWeekNumber = latestCalculatedWeek.getNumber();
 
     final var earliestNotCalculatedWeek = latestCalculatedWeekNumber + 1;
-    final var startDate = QTimeUtils.getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
+    final var startDate = getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
     final var filter =
         filterBuilder
             .dateStart(startDate)
@@ -225,7 +222,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         PeriodAndKindAndDriverTransactionFilter.builder().dateEnd(endDate).driverId(driverId);
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     if (latestBalance == null) {
-      final var startDate = QTimeUtils.getFirstDayOfYear(qWeekQuery.getFirstWeek().getYear());
+      final var startDate = getFirstDayOfYear(qWeekQuery.getFirstWeek().getYear());
       final var filter =
           filterBuilder
               .dateStart(startDate)
@@ -275,7 +272,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var latestBalanceYear = latestBalanceWeek.getYear();
     final var latestBalanceWeekNumber = latestBalanceWeek.getNumber();
     final var latestCalculatedDate =
-        QTimeUtils.getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
+        getLastDayOfWeekInYear(latestBalanceYear, latestBalanceWeekNumber);
 
     return latestCalculatedDate.plusDays(1L);
   }

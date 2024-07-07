@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.mapper.type;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.transaction.api.in.request.type.TransactionTypeAddRequest;
 import ee.qrental.transaction.domain.kind.TransactionKind;
 import ee.qrental.transaction.domain.type.TransactionType;

@@ -1,12 +1,8 @@
 package ee.qrental.driver.core.mapper;
 
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
-import ee.qrental.driver.api.in.request.CallSignLinkUpdateRequest;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrental.driver.api.in.request.FirmLinkUpdateRequest;
-import ee.qrental.driver.api.out.CallSignLoadPort;
-import ee.qrental.driver.domain.CallSignLink;
 import ee.qrental.driver.domain.FirmLink;
-import ee.qrental.firm.api.in.query.GetFirmQuery;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

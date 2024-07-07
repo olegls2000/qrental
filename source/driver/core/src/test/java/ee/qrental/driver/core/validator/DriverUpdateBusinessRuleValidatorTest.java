@@ -1,36 +1,43 @@
 package ee.qrental.driver.core.validator;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ee.qrent.common.in.time.QDateTime;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.driver.api.in.request.DriverUpdateRequest;
 import ee.qrental.driver.api.out.DriverLoadPort;
 import ee.qrental.driver.domain.Driver;
 import ee.qrental.driver.domain.Friendship;
+import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 class DriverUpdateBusinessRuleValidatorTest {
 
   private DriverUpdateBusinessRuleValidator instanceUnderTest;
   private DriverLoadPort loadPort;
+  private GetQWeekQuery qWeekQuery;
+  private QDateTime qDateTime;
 
   @BeforeEach
   void init() {
     loadPort = mock(DriverLoadPort.class);
-    instanceUnderTest = new DriverUpdateBusinessRuleValidator(loadPort);
+    qWeekQuery = mock(GetQWeekQuery.class);
+    qDateTime = mock(QDateTime.class);
+    instanceUnderTest = new DriverUpdateBusinessRuleValidator(loadPort, qWeekQuery, qDateTime);
   }
 
   @Test
-  public void testIfDriverDidNotHaveFriendshipBeforeUpdate() {
+  public void testIfDriverDidNotHaveRecommendationAndNoNewRecommendationInRequest() {
     // given
     final var driverIdToUpdate = 5L;
-    final var updateRequest = DriverUpdateRequest.builder().id(driverIdToUpdate).build();
+    final var updateRequest =
+        DriverUpdateRequest.builder().id(driverIdToUpdate).recommendedByDriverId(null).build();
     when(loadPort.loadById(driverIdToUpdate))
         .thenReturn(Driver.builder().id(driverIdToUpdate).friendship(null).build());
 
@@ -42,26 +49,16 @@ class DriverUpdateBusinessRuleValidatorTest {
   }
 
   @Test
-  public void testIfNoUpdatesForFriendship() {
+  public void testIfDriverHasRecommendationAndSameRecommendationInRequest() {
     // given
     final var driverIdToUpdate = 5L;
-    final var requestRecommendedByDriverId = 11L;
-    final var dbRecommendedByDriverId = 10L;
     final var updateRequest =
-        DriverUpdateRequest.builder()
-            .id(driverIdToUpdate)
-            .recommendedByDriverId(requestRecommendedByDriverId)
-            .build();
-
+        DriverUpdateRequest.builder().id(driverIdToUpdate).recommendedByDriverId(44L).build();
     when(loadPort.loadById(driverIdToUpdate))
         .thenReturn(
             Driver.builder()
                 .id(driverIdToUpdate)
-                .friendship(
-                    Friendship.builder()
-                        .driverId(dbRecommendedByDriverId)
-                        .friendId(driverIdToUpdate)
-                        .build())
+                .friendship(Friendship.builder().driverId(44L).friendId(5L).build())
                 .build());
 
     // when
@@ -72,31 +69,37 @@ class DriverUpdateBusinessRuleValidatorTest {
   }
 
   @Test
-  public void testIfDriversFriendshipWasCreatedOnCurrentWeek() {
+  public void testIfDriverHasRecommendationAndNewRecommendationInRequestAndWeekIsNotPassed() {
     // given
     final var driverIdToUpdate = 5L;
-    final var requestRecommendedByDriverId = 11L;
-    final var dbRecommendedByDriverId = 10L;
-
+    final var requestRecommendedByDriverId = 44L;
+    final var dbRecommendedByDriverId = 33L;
     final var updateRequest =
         DriverUpdateRequest.builder()
             .id(driverIdToUpdate)
             .recommendedByDriverId(requestRecommendedByDriverId)
             .build();
-    final var driverCreationDate = LocalDate.now().minus(6, DAYS);
 
     when(loadPort.loadById(driverIdToUpdate))
         .thenReturn(
             Driver.builder()
                 .id(driverIdToUpdate)
-                .createdDate(driverCreationDate)
+                .createdDate(LocalDate.of(2024, Month.JANUARY, 1)) // MONDAY
                 .friendship(
                     Friendship.builder()
                         .driverId(dbRecommendedByDriverId)
                         .friendId(driverIdToUpdate)
-                        .startDate(driverCreationDate)
                         .build())
                 .build());
+    when(qDateTime.getToday()).thenReturn(LocalDate.of(2024, Month.JANUARY, 7)); // SUNDAY
+    when(qWeekQuery.getByYearAndNumber(2024, 1))
+        .thenReturn(
+            QWeekResponse.builder()
+                .number(1)
+                .year(2024)
+                .start(LocalDate.of(2024, Month.JANUARY, 1))
+                .end(LocalDate.of(2024, Month.JANUARY, 7))
+                .build()); // SUNDAY
 
     // when
     final var violationCollector = instanceUnderTest.validate(updateRequest);
@@ -106,30 +109,37 @@ class DriverUpdateBusinessRuleValidatorTest {
   }
 
   @Test
-  public void testIfDriversFriendshipWasCreatedOnPreviousWeek() {
+  public void testIfDriverHasRecommendationAndNewRecommendationInRequestAndWeekIsPassed() {
     // given
     final var driverIdToUpdate = 5L;
-    final var requestRecommendedByDriverId = 11L;
-    final var dbRecommendedByDriverId = 10L;
-
+    final var requestRecommendedByDriverId = 44L;
+    final var dbRecommendedByDriverId = 33L;
     final var updateRequest =
         DriverUpdateRequest.builder()
             .id(driverIdToUpdate)
             .recommendedByDriverId(requestRecommendedByDriverId)
             .build();
-    final var friendshipStartDate = LocalDate.now().minus(7, DAYS);
 
     when(loadPort.loadById(driverIdToUpdate))
         .thenReturn(
             Driver.builder()
                 .id(driverIdToUpdate)
+                .createdDate(LocalDate.of(2024, Month.JANUARY, 1)) // MONDAY
                 .friendship(
                     Friendship.builder()
                         .driverId(dbRecommendedByDriverId)
                         .friendId(driverIdToUpdate)
-                        .startDate(friendshipStartDate)
                         .build())
                 .build());
+    when(qDateTime.getToday()).thenReturn(LocalDate.of(2024, Month.JANUARY, 8)); // SUNDAY
+    when(qWeekQuery.getByYearAndNumber(2024, 1))
+        .thenReturn(
+            QWeekResponse.builder()
+                .number(1)
+                .year(2024)
+                .start(LocalDate.of(2024, Month.JANUARY, 1))
+                .end(LocalDate.of(2024, Month.JANUARY, 7))
+                .build()); // SUNDAY
 
     // when
     final var violationCollector = instanceUnderTest.validate(updateRequest);

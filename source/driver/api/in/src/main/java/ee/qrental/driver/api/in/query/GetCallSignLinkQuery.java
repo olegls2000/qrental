@@ -1,6 +1,6 @@
 package ee.qrental.driver.api.in.query;
 
-import ee.qrental.common.core.in.query.BaseGetQuery;
+import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.driver.api.in.request.CallSignLinkResponse;
 import ee.qrental.driver.api.in.request.CallSignLinkUpdateRequest;
 import java.time.LocalDate;

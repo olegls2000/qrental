@@ -1,6 +1,6 @@
 package ee.qrental.user.api.out;
 
-import ee.qrental.common.core.out.port.LoadPort;
+import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.driver.domain.UserAccount;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package ee.qrental.constant.core.mapper;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.constant.domain.QWeek;
 

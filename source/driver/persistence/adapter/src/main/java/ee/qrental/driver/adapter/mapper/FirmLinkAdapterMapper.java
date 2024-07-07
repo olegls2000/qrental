@@ -1,6 +1,7 @@
 package ee.qrental.driver.adapter.mapper;
 
-import ee.qrental.common.core.out.mapper.DomainMapper;
+//import common.out.mapper.DomainMapper;
+import ee.qrent.common.out.mapper.DomainMapper;
 import ee.qrental.driver.domain.FirmLink;
 import ee.qrental.driver.entity.jakarta.FirmLinkJakartaEntity;
 import lombok.AllArgsConstructor;

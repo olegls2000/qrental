@@ -2,7 +2,7 @@ package ee.qrental.car.core.mapper;
 
 import ee.qrental.car.api.in.response.CarResponse;
 import ee.qrental.car.domain.Car;
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 
 import static java.lang.String.format;
 

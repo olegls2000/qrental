@@ -1,8 +1,8 @@
 package ee.qrental.bonus.core.mapper;
 
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.bonus.api.in.request.BonusCalculationAddRequest;
 import ee.qrental.bonus.domain.BonusCalculation;
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 

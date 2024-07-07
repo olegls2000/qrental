@@ -1,12 +1,15 @@
 package ee.qrental.transaction.core.service.strategy;
 
-import ee.qrental.common.core.utils.QTimeUtils;
-import ee.qrental.common.core.utils.QWeek;
+
+import ee.qrental.common.utils.QWeek;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
 import ee.qrental.transaction.api.out.TransactionLoadPort;
 import ee.qrental.transaction.domain.Transaction;
 import java.util.List;
 import lombok.AllArgsConstructor;
+
+import static ee.qrental.common.utils.QTimeUtils.getFirstDayOfWeekInYear;
+import static ee.qrental.common.utils.QTimeUtils.getLastDayOfWeekInYear;
 
 @AllArgsConstructor
 public class TransactionLoadStrategyByYearAndWeek implements TransactionLoadStrategy {
@@ -24,7 +27,7 @@ public class TransactionLoadStrategyByYearAndWeek implements TransactionLoadStra
     final var weekNumber = request.getWeek().getNumber();
 
     return transactionLoadPort.loadAllBetweenDays(
-        QTimeUtils.getFirstDayOfWeekInYear(year, weekNumber),
-        QTimeUtils.getLastDayOfWeekInYear(year, weekNumber));
+        getFirstDayOfWeekInYear(year, weekNumber),
+        getLastDayOfWeekInYear(year, weekNumber));
   }
 }

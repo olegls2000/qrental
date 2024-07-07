@@ -1,6 +1,6 @@
 package ee.qrental.firm.core.mapper;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.firm.api.in.request.WeekObligationAddRequest;
 import ee.qrental.firm.domain.Firm;
 

@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.in.query;
 
-import ee.qrental.common.core.in.query.BaseGetQuery;
+import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrental.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrental.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;

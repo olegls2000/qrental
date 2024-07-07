@@ -1,6 +1,6 @@
 package ee.qrental.contract.core.mapper;
 
-import ee.qrental.common.core.in.mapper.UpdateRequestMapper;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrental.contract.api.in.request.AuthorizationUpdateRequest;
 import ee.qrental.contract.api.out.AuthorizationLoadPort;
 import ee.qrental.contract.domain.Authorization;

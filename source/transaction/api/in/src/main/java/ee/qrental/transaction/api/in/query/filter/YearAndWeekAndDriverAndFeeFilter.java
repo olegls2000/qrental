@@ -1,6 +1,6 @@
 package ee.qrental.transaction.api.in.query.filter;
 
-import ee.qrental.common.core.utils.QWeek;
+import ee.qrental.common.utils.QWeek;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +13,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @ToString
 public class YearAndWeekAndDriverAndFeeFilter {
-    private Integer year;
-    private QWeek week;
-    private Long driverId;
-    private FeeOption feeOption = FeeOption.WITH_FEE;
+  private Integer year;
+  private QWeek week;
+  private Long driverId;
+  private FeeOption feeOption = FeeOption.WITH_FEE;
 }

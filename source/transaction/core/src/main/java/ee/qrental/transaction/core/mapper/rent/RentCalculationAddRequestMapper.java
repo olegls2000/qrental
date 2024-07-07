@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.mapper.rent;
 
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.domain.rent.RentCalculation;
 

@@ -1,6 +1,6 @@
 package ee.qrental.car.api.in.request;
 
-import ee.qrental.common.core.in.request.AbstractRequest;
+import ee.qrent.common.in.request.AbstractRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

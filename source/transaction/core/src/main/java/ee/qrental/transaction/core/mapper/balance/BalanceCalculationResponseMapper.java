@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.mapper.balance;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.transaction.api.in.response.balance.BalanceCalculationResponse;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import java.util.stream.Collectors;

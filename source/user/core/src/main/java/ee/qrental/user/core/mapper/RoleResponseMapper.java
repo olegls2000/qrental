@@ -1,7 +1,7 @@
 package ee.qrental.user.core.mapper;
 
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.domain.Role;
 import ee.qrental.user.api.in.response.RoleResponse;
 import lombok.AllArgsConstructor;

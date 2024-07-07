@@ -1,8 +1,6 @@
 package ee.qrental.driver.api.in.response;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

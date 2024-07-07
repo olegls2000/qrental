@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
-import static ee.qrental.common.core.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.round;
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;

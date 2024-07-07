@@ -1,6 +1,7 @@
 package ee.qrental.transaction.api.in.request.rent;
 
-import ee.qrental.common.core.in.request.AbstractAddRequest;
+//import common.inrequest.AbstractAddRequest;
+import ee.qrent.common.in.request.AbstractAddRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

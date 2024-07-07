@@ -1,6 +1,7 @@
 package ee.qrental.firm.core.mapper;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.firm.api.in.response.FirmResponse;
 import ee.qrental.firm.domain.Firm;
 

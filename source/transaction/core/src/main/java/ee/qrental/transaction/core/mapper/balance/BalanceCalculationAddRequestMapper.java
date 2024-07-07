@@ -2,7 +2,7 @@ package ee.qrental.transaction.core.mapper.balance;
 
 import ee.qrental.transaction.api.in.request.balance.BalanceCalculationAddRequest;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
-import ee.qrental.common.core.in.mapper.AddRequestMapper;
+import ee.qrent.common.in.mapper.AddRequestMapper;
 import java.util.ArrayList;
 
 public class BalanceCalculationAddRequestMapper

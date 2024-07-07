@@ -34,12 +34,13 @@ public class BonusServiceConfig {
       final GetCallSignLinkQuery callSignLinkQuery,
       final GetContractQuery contractQuery,
       final GetDriverQuery driverQuery,
-      final GetObligationQuery obligationQuery) {
+      final GetObligationQuery obligationQuery,
+      final GetQWeekQuery qWeekQuery) {
     return asList(
         new TwoWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new NewDriverBonusStrategy(
-            transactionQuery, transactionTypeQuery, callSignLinkQuery, contractQuery),
+            transactionQuery, transactionTypeQuery, callSignLinkQuery, contractQuery, qWeekQuery),
         new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery),
         new FriendshipBonusStrategy(
             transactionQuery, transactionTypeQuery, driverQuery, obligationQuery));

@@ -1,10 +1,11 @@
 package ee.qrental.transaction.core.validator;
 
-import static ee.qrental.common.core.utils.QTimeUtils.getLastSundayFromDate;
+
+import static ee.qrental.common.utils.QTimeUtils.getLastSundayFromDate;
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import ee.qrental.common.core.in.validation.QValidator;
-import ee.qrental.common.core.in.validation.ViolationsCollector;
+import ee.qrent.common.in.validation.QValidator;
+import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.transaction.api.out.balance.BalanceCalculationLoadPort;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import java.time.LocalDate;

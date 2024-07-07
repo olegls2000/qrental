@@ -1,6 +1,6 @@
 package ee.qrental.task.core;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;

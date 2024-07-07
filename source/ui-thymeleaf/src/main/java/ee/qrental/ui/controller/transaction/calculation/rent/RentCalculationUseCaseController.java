@@ -1,9 +1,10 @@
 package ee.qrental.ui.controller.transaction.calculation.rent;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.RENTS_ROOT_PATH;
 
-import ee.qrental.common.core.utils.QTimeUtils;
+
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.request.rent.RentCalculationAddRequest;
 import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
@@ -32,7 +33,7 @@ public class RentCalculationUseCaseController {
 
     //TODO replace with qWeekQuery.getCurrentWeek()
     final LocalDate currentDate = LocalDate.now();
-    final var currentWeek = qWeekQuery.getByYearAndNumber(currentDate.getYear(), QTimeUtils.getWeekNumber(currentDate));
+    final var currentWeek = qWeekQuery.getByYearAndNumber(currentDate.getYear(), getWeekNumber(currentDate));
 
 
     rentCalculationRequest.setQWeekId(currentWeek.getId());
@@ -52,7 +53,7 @@ public class RentCalculationUseCaseController {
       final LocalDate currentDate = LocalDate.now();
 
       //TODO replace with qWeekQuery.getCurrentWeek()
-      final var currentWeek = qWeekQuery.getByYearAndNumber(currentDate.getYear(), QTimeUtils.getWeekNumber(currentDate));
+      final var currentWeek = qWeekQuery.getByYearAndNumber(currentDate.getYear(), getWeekNumber(currentDate));
 
       model.addAttribute("nextWeek", currentWeek);
 

@@ -1,9 +1,10 @@
 package ee.qrental.transaction.core.mapper;
 
-import static ee.qrental.common.core.utils.QStringUtils.contract;
+import static ee.qrental.common.utils.QStringUtils.contract;
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.domain.Transaction;

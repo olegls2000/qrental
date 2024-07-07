@@ -1,7 +1,7 @@
 package ee.qrental.transaction.api.in.request.balance;
 
-import ee.qrental.common.core.in.request.AbstractAddRequest;
-import ee.qrental.common.core.utils.QWeek;
+import ee.qrent.common.in.request.AbstractAddRequest;
+
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -34,6 +34,20 @@ public abstract class AbstractBonusStrategy implements BonusStrategy {
     return bonusTransactionType.getId();
   }
 
+  // TODO fix Unit test
+  protected boolean isCarInAppropriation() {
+    // Does Car from Car Link have appropriation flag
+    // if appropriation is active, the only Friend bonus available
+    return true;
+  }
+
+  // TODO fix Unit test
+  protected boolean isCarOld() {
+    //  old checking: calculateRentTransactionAmount(..
+    // if car is old the only Friend bonus available
+    return true;
+  }
+
   protected final BigDecimal getRentAndNonLabelFineTransactionsAbsAmount(
       final Long driverId, final Long qWeekId) {
     return getTransactionQuery().getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()

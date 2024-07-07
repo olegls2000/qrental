@@ -1,6 +1,7 @@
 package ee.qrental.car.api.out;
 
-import ee.qrental.common.core.out.port.LoadPort;
+
+import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.car.domain.CarLink;
 
 import java.time.LocalDate;

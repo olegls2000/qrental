@@ -1,6 +1,6 @@
 package ee.qrental.user.api.in.query;
 
-import ee.qrental.common.core.in.query.BaseGetQuery;
+import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.user.api.in.request.UserAccountUpdateRequest;
 import ee.qrental.user.api.in.response.UserAccountResponse;
 

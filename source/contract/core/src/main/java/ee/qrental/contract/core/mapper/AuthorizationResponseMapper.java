@@ -2,7 +2,7 @@ package ee.qrental.contract.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrental.common.core.in.mapper.ResponseMapper;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrental.contract.api.in.response.AuthorizationResponse;
 import ee.qrental.contract.domain.Authorization;
 

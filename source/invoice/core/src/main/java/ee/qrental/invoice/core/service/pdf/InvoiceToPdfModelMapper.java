@@ -1,12 +1,10 @@
 package ee.qrental.invoice.core.service.pdf;
-
-import static ee.qrental.common.core.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.round;
 import static java.math.BigDecimal.ZERO;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;
 import static java.util.stream.Collectors.toMap;
 
-import ee.qrental.common.core.utils.QNumberUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.invoice.api.out.InvoiceLoadPort;
