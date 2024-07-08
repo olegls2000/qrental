@@ -18,6 +18,8 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
   CarLinkJakartaEntity findActiveByDriverIdAndDate(
       @Param("driverId") final Long driverId, @Param("date") final LocalDate date);
 
+  CarLinkJakartaEntity findFirstByDriverIdOrderByDateStartDesc(final Long driverId);
+
   @Query(
       value =
           "SELECT cl.* FROM car_link cl "

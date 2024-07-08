@@ -2,6 +2,7 @@ package ee.qrental.bonus.spring.config;
 
 import static java.util.Arrays.asList;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.bonus.api.in.query.GetBonusCalculationQuery;
 import ee.qrental.bonus.api.in.query.GetBonusProgramQuery;
 import ee.qrental.bonus.api.in.query.GetObligationQuery;
@@ -31,16 +32,17 @@ public class BonusServiceConfig {
   List<BonusStrategy> getBonusStrategies(
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
-      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetCarLinkQuery carLinkQuery,
       final GetContractQuery contractQuery,
       final GetDriverQuery driverQuery,
       final GetObligationQuery obligationQuery,
-      final GetQWeekQuery qWeekQuery) {
+      final GetQWeekQuery qWeekQuery,
+      final QDateTime qDateTime) {
     return asList(
         new TwoWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new NewDriverBonusStrategy(
-            transactionQuery, transactionTypeQuery, callSignLinkQuery, contractQuery, qWeekQuery),
+            transactionQuery, transactionTypeQuery, carLinkQuery, contractQuery, qWeekQuery, qDateTime),
         new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery),
         new FriendshipBonusStrategy(
             transactionQuery, transactionTypeQuery, driverQuery, obligationQuery));

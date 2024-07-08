@@ -34,19 +34,21 @@ public class CarLinkLoadAdapter implements CarLinkLoadPort {
   }
 
   @Override
+  public CarLink loadFirstByDriverId(Long driverId) {
+
+    return mapper.mapToDomain(repository.findFirstByDriverId(driverId));
+  }
+
+  @Override
   public List<CarLink> loadActive() {
     final var nowDate = LocalDate.now();
 
-    return repository.findActiveByDate(nowDate).stream()
-        .map(mapper::mapToDomain)
-        .collect(toList());
+    return repository.findActiveByDate(nowDate).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
   public List<CarLink> loadActiveByDate(final LocalDate date) {
-    return repository.findActiveByDate(date).stream()
-        .map(mapper::mapToDomain)
-        .collect(toList());
+    return repository.findActiveByDate(date).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
@@ -56,9 +58,7 @@ public class CarLinkLoadAdapter implements CarLinkLoadPort {
 
   @Override
   public List<CarLink> loadClosedByDate(LocalDate date) {
-    return repository.findClosedByDate(date).stream()
-            .map(mapper::mapToDomain)
-            .collect(toList());
+    return repository.findClosedByDate(date).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override

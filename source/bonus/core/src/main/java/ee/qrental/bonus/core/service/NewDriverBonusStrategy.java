@@ -1,36 +1,43 @@
 package ee.qrental.bonus.core.service;
 
+import static ee.qrental.common.utils.QTimeUtils.getLastSundayFromDate;
+import static java.lang.Math.abs;
+import static java.time.Period.between;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.contract.api.in.query.GetContractQuery;
-import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(0.25);
-  private final GetCallSignLinkQuery callSignLinkQuery;
+  private static final Integer NEW_DRIVER_PERIOD_IN_DAYS = 28;
+  private final GetCarLinkQuery carLinkQuery;
   private final GetContractQuery contractQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final QDateTime qDateTime;
 
   public NewDriverBonusStrategy(
-          final GetTransactionQuery transactionQuery,
-          final GetTransactionTypeQuery transactionTypeQuery,
-          final GetCallSignLinkQuery callSignLinkQuery,
-          final GetContractQuery contractQuery,
-          final GetQWeekQuery qWeekQuery) {
+      final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final GetCarLinkQuery carLinkQuery,
+      final GetContractQuery contractQuery,
+      final GetQWeekQuery qWeekQuery,
+      QDateTime qDateTime) {
     super(transactionQuery, transactionTypeQuery);
-    this.callSignLinkQuery = callSignLinkQuery;
+    this.carLinkQuery = carLinkQuery;
     this.contractQuery = contractQuery;
-      this.qWeekQuery = qWeekQuery;
+    this.qWeekQuery = qWeekQuery;
+    this.qDateTime = qDateTime;
   }
 
   @Override
@@ -39,39 +46,27 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   }
 
   private boolean isDriverNew(final Long driverId) {
-
-    //TODO:   Fix Unit Test
-    // TODO: new driver if:
-    // First Car link  start date, and do not count partial first week-> if Wednesday is start date,
-    // we calculate weeks from next Monday
-    // Driver is new during first 4 entire weeks
-    final var callSignLinks = callSignLinkQuery.getCallSignLinksByDriverId(driverId);
-    final var callSignLinksCount = callSignLinks.size();
-    if (callSignLinksCount > 1) {
+    final var firstCarLink = carLinkQuery.getFirstLinkByDriverId(driverId);
+    if (firstCarLink == null) {
       System.out.println(
-          "Driver with id: "
-              + driverId
-              + " is not new, it has "
-              + callSignLinksCount
-              + " Call Signs");
+          "Driver with id: " + driverId + " did not have Car Link, hence no Rent Contracts");
       return false;
     }
 
-    if (callSignLinksCount == 0) {
-      System.out.println(
-          "Driver with id: " + driverId + " does not have Call Signs, hence no Rent Contracts");
-      return false;
-    }
-    final var callSignLink = callSignLinks.get(0);
+    final var dateStart = firstCarLink.getDateStart();
+    final var firstMonday = getLastSundayFromDate(dateStart).plusDays(1);
+    final var today = qDateTime.getToday();
 
-    final var endDate = callSignLink.getDateEnd();
-    if (endDate == null || endDate.isAfter(LocalDate.now())) {
-      System.out.println(
-          "Driver with id: " + driverId + " has active Call Sign Link, hence Rent Contract");
+    final var period = between(firstMonday, today);
+    int activeDates = abs(period.getDays());
+
+    if (activeDates < NEW_DRIVER_PERIOD_IN_DAYS) {
+      System.out.println("Driver with id: " + driverId + " has Car Link, less then 4 entire weeks");
       return true;
     }
+
     System.out.println(
-        "Driver with id: " + driverId + " has no active Call Sign Link, hence no Rent Contract");
+        "Driver with id: " + driverId + " has active Car Link, more then 4 entire weeks");
     return false;
   }
 
@@ -93,11 +88,24 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     return false;
   }
 
+  /**
+   * First Car link start date, and do not count partial first week-> if Wednesday is start date, we
+   * calculate weeks from next Monday Driver is new during first 4 entire weeks
+   *
+   * @param obligation
+   * @param weekPositiveAmount
+   * @return
+   */
   @Override
   public List<TransactionAddRequest> calculateBonus(
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
-
     final var driverId = obligation.getDriverId();
+    if (obligation.getMatchCount() <= 0) {
+      System.out.println(
+          "Obligation was not matched for current Week, New Driver Bonus is not allowed for Driver with id: "
+              + driverId);
+      return emptyList();
+    }
 
     final var isNew = isDriverNew(driverId);
     if (!isNew) {
@@ -118,7 +126,6 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     final var totalDiscount = rentAndNonLabelFineAmountAbs.multiply(DISCOUNT_RATE);
     final var bonusTransaction = new TransactionAddRequest();
 
-    //TODO:   Fix Unit Test
     bonusTransaction.setDate(nextWeek.getStart());
     bonusTransaction.setComment(getComment());
     bonusTransaction.setDriverId(driverId);

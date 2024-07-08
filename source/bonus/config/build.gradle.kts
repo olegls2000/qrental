@@ -1,4 +1,6 @@
 dependencies {
+    implementation(project(":source:common:api"))
+
     implementation(project(":source:bonus:core"))
     implementation(project(":source:bonus:api:in"))
 

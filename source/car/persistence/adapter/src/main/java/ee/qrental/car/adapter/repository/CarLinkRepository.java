@@ -16,6 +16,8 @@ public interface CarLinkRepository {
 
   CarLinkJakartaEntity findActiveByDriverIdAndDate(final Long driverId, final LocalDate date);
 
+  CarLinkJakartaEntity findFirstByDriverId(final Long driverId);
+
   List<CarLinkJakartaEntity> findActiveByDate(final LocalDate date);
 
   Long findCountActiveByDate(final LocalDate date);

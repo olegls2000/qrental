@@ -40,6 +40,11 @@ public class CarLinkRepositoryImpl implements CarLinkRepository {
   }
 
   @Override
+  public CarLinkJakartaEntity findFirstByDriverId(Long driverId) {
+    return springDataRepository.findFirstByDriverIdOrderByDateStartDesc(driverId);
+  }
+
+  @Override
   public List<CarLinkJakartaEntity> findActiveByDate(final LocalDate date) {
     return springDataRepository.findActiveByDate(date);
   }

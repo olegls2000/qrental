@@ -1,6 +1,5 @@
 package ee.qrental.car.api.out;
 
-
 import ee.qrent.common.out.port.LoadPort;
 import ee.qrental.car.domain.CarLink;
 
@@ -9,6 +8,8 @@ import java.util.List;
 
 public interface CarLinkLoadPort extends LoadPort<CarLink> {
   CarLink loadActiveByDriverId(final Long driverId);
+
+  CarLink loadFirstByDriverId(final Long driverId);
 
   List<CarLink> loadActive();
 

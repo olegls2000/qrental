@@ -97,6 +97,16 @@ public class CarLinkQueryService implements GetCarLinkQuery {
   }
 
   @Override
+  public CarLinkResponse getFirstLinkByDriverId(Long driverId) {
+    final var domain = loadPort.loadActiveByDriverId(driverId);
+    if (domain == null) {
+      System.out.println(format("Driver with id = %d does not have Cal Link", driverId));
+      return null;
+    }
+    return mapper.toResponse(domain);
+  }
+
+  @Override
   public List<CarLinkResponse> getActive() {
 
     return loadPort.loadActiveByDate(LocalDate.now()).stream()
