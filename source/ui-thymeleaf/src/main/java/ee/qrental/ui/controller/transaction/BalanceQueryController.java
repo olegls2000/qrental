@@ -251,6 +251,7 @@ public class BalanceQueryController {
     }
     model.addAttribute("activeContract", activeContract.getNumber());
     model.addAttribute("activeContractId", activeContract.getId());
+    model.addAttribute("activeContractDuration", activeContract.getDuration());
   }
 
   private void addCarDataToModel(final Long driverId, final Model model) {

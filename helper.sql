@@ -65,18 +65,18 @@ from balance_calculation_result bcr
 where bcr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024));
 
 delete
 from balance_transaction btr
 where btr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024));
 
 delete
 from balance bl
-where q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
+where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
 
 delete
 from transaction tx
@@ -103,12 +103,12 @@ from balance;
 --## Remove Invoice Calculations for week:
 delete
 from invoice inv
-where inv.q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
+where inv.q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
 
 delete
 from invoice_calculation invc
-where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024)
-   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 10 and qw.year = 2024);
+where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024)
+   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
 -- invoice items must be deleted by Cascade!
 -- invoice_calculation_result must be deleted by Cascade!
 -- invoice_transaction must be deleted by Cascade!

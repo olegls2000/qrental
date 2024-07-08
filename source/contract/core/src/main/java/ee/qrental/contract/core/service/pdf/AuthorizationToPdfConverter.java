@@ -193,8 +193,8 @@ public class AuthorizationToPdfConverter {
     final var body1cell8 =
         new Cell(
             new Paragraph(
-                "I have entered into a [car rental/credit] agreement with Q TAKSO VEOD OÜ a company"
-                    + "incorporated in the Republic of Estonia with company number 14169274 and registered"
+                "I have entered into a [car rental/credit] agreement with Q RENTAL GROUP OÜ a company"
+                    + "incorporated in the Republic of Estonia with company number 16599536 and registered"
                     + "office at Lasnamäe tn 30a Lasnamäe linnaosa, Tallinn Harju maakond 11413 (hereinafter"
                     + "the “Company”);",
                 new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
