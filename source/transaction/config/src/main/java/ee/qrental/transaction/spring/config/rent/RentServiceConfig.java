@@ -1,5 +1,6 @@
 package ee.qrental.transaction.spring.config.rent;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -45,7 +46,8 @@ public class RentServiceConfig {
       final RentCalculationAddBusinessRuleValidator addBusinessRuleValidator,
       final EmailSendUseCase emailSendUseCase,
       final GetUserAccountQuery userAccountQuery,
-      final GetQWeekQuery weekQuery) {
+      final GetQWeekQuery weekQuery,
+      final QDateTime qDateTime) {
 
     return new RentCalculationService(
         carLinkQuery,
@@ -58,6 +60,7 @@ public class RentServiceConfig {
         addBusinessRuleValidator,
         emailSendUseCase,
         userAccountQuery,
-        weekQuery);
+        weekQuery,
+        qDateTime);
   }
 }

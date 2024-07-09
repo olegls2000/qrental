@@ -10,8 +10,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @SuperBuilder
 @Getter
 public class Car {
-
-  // TODO add constant 5 years
   private Long id;
   private Boolean active;
   private CarStatus status;
@@ -46,13 +44,6 @@ public class Car {
   private Boolean brandingForus;
   private Boolean brandingUber;
   private Boolean brandingTallink;
-
-
-  // TODO
-  public boolean isOld(){
-    //return LocalDate.now().isBefore(releaseDate) > 5;
-    return true;
-  }
 
   public RagStatus getInsuranceRagStatus() {
     final var daysBetween = DAYS.between(LocalDate.now(), insuranceDateEnd);

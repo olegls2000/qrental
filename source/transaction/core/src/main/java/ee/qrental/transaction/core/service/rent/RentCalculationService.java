@@ -2,11 +2,11 @@ package ee.qrental.transaction.core.service.rent;
 
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NO_LABEL_FINE;
-import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.car.api.in.query.GetCarQuery;
 import ee.qrental.car.api.in.response.CarLinkResponse;
@@ -33,9 +33,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import lombok.AllArgsConstructor;
-
+//TODO add Unit Test
 @AllArgsConstructor
 public class RentCalculationService implements RentCalculationAddUseCase {
+  private static final Integer NEW_CAR_AGE = 5;
   private static final BigDecimal OLD_CAR_RATE = BigDecimal.valueOf(150L);
   private static final BigDecimal NEW_CAR_RATE = BigDecimal.valueOf(230L);
   private static final BigDecimal ELEGANCE_RATE = BigDecimal.valueOf(10L);
@@ -53,6 +54,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
   private final EmailSendUseCase emailSendUseCase;
   private final GetUserAccountQuery userAccountQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final QDateTime qDateTime;
 
   @Transactional
   @Override
@@ -157,10 +159,9 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     final var carId = carLink.getCarId();
     final var car = carQuery.getById(carId);
     final var carReleaseYear = car.getReleaseDate().getYear();
-
-    //TODO change to > 5 years old, 5 make as a constant
-    //FIXME Unit Tests
-    if (carReleaseYear < 2019) {
+    final var currentYear = qDateTime.getToday().getYear();
+    final var carAge = currentYear - carReleaseYear;
+    if (carAge > NEW_CAR_AGE) {
       rentAmount = rentAmount.add(OLD_CAR_RATE);
     } else {
       rentAmount = rentAmount.add(NEW_CAR_RATE);
