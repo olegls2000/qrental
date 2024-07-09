@@ -9,9 +9,12 @@ public class ContractToPdfModelMapper {
 
     final var duration = getStringDuration(contract.getContractDuration());
 
+    final var duration1 = getStringDuration1(contract.getContractDuration());
+
     return ContractPdfModel.builder()
         .number(contract.getNumber())
         .duration(duration)
+        .duration1(duration1)
         .renterName(contract.getRenterName())
         .renterRegistrationNumber(contract.getRenterRegistrationNumber())
         .renterAddress(contract.getRenterAddress())
@@ -43,4 +46,14 @@ public class ContractToPdfModelMapper {
       case TWELVE_WEEKS -> "kaksteist";
     };
   }
+
+  private String getStringDuration1(final ContractDuration contractDuration) {
+    return switch (contractDuration) {
+      case FOUR_WEEKS -> "seitse";
+      case TWELVE_WEEKS -> "neliteist";
+    };
+  }
+
+
+
 }

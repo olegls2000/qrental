@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class ContractPdfModel {
     private String number;
     private String duration;
+    private String duration1;
     private String renterName;
     private String renterRegistrationNumber;
     private String renterAddress;
