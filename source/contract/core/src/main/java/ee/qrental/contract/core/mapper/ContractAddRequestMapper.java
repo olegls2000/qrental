@@ -56,7 +56,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .qFirmEmail(qFirm.getEmail())
         .qFirmCeo(qFirm.getCeoName())
         .qFirmCeoDeputies(qFirm.getDeputies())
-        .created(LocalDate.now())
+        .created(request.getDate())
         .qFirmVatNumber(qFirm.getVatNumber())
         .qFirmIban(qFirm.getIban())
         .qFirmVatPhone(qFirm.getPhone())
