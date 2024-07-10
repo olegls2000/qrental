@@ -28,6 +28,9 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
     final var currentDate = LocalDate.now();
     final var contractNumber = getContractNumber(currentDate, driverId);
     final var renterName = getRenterName(driver);
+    final var renterAddress = getRenterAddress(driver);
+    final var companyCeoTaxNumber = getCompanyCeoTaxNumber(driver);
+    final var renterCeoName = getRenterCeoName(driver);
     final var renterRegistrationNumber = getRenterRegistrationNumber(driver);
     final var driverAddress = getDriverAddress(driver);
 
@@ -39,8 +42,8 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .number(contractNumber)
         .renterName(renterName)
         .renterRegistrationNumber(renterRegistrationNumber)
-        .renterCeoName(driver.getCompanyCeoName())
-        .renterCeoIsikukood(driver.getCompanyCeoTaxNumber())
+        .renterCeoName(renterCeoName)
+        .renterCeoIsikukood(companyCeoTaxNumber)
         .renterPhone(driver.getPhone())
         .renterEmail(driver.getEmail())
         .driverId(driverId)
@@ -57,7 +60,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .qFirmVatNumber(qFirm.getVatNumber())
         .qFirmIban(qFirm.getIban())
         .qFirmVatPhone(qFirm.getPhone())
-        .renterAddress(driver.getCompanyAddress())
+        .renterAddress(renterAddress)
         .driverAddress(driverAddress)
         .contractDuration(getContractDurationByLabel(request.getContractDuration()))
         .build();
@@ -80,6 +83,27 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
     return driverCompanyName;
   }
 
+  private Long getCompanyCeoTaxNumber(final DriverResponse driver) {
+    final var companyCeoTaxNumber = driver.getCompanyCeoTaxNumber();
+    if (companyCeoTaxNumber == null ) {
+      final var esindajaIsikukood = driver.getIsikukood();
+      return  esindajaIsikukood;
+    }
+    return companyCeoTaxNumber;
+  }
+
+
+  private String getRenterCeoName(final DriverResponse driver) {
+    final var driverCompanyCeoName = driver.getCompanyCeoName();
+    if (driverCompanyCeoName == null || driverCompanyCeoName.isEmpty() || driverCompanyCeoName.equals(" ") ) {
+      final var renterCeoFirstName = driver.getFirstName();
+      final var renterCeoLastName = driver.getLastName();
+      return format("%s %s", renterCeoFirstName, renterCeoLastName);
+    }
+    return driverCompanyCeoName;
+  }
+
+
   private String getContractNumber(final LocalDate currentDate, final Long driverId) {
     final var dateString = currentDate.format(ofPattern("yyyyMMdd"));
     return String.format("%s-%d", dateString, driverId);
@@ -87,9 +111,25 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
 
   private String getRenterRegistrationNumber(final DriverResponse driver) {
     final var renterRegistrationNumber = driver.getCompanyRegistrationNumber();
-
+    if (renterRegistrationNumber == null || renterRegistrationNumber.isEmpty()) {
+      final var renterIsikukood = driver.getIsikukood();
+      return format("%s", renterIsikukood);
+    }
     return renterRegistrationNumber;
   }
+
+  private String getRenterAddress(final DriverResponse driver) {
+    final var renterAddress = driver.getCompanyAddress();
+    if (renterAddress == null || renterAddress.isEmpty()) {
+      final var renterAddress1 = driver.getAddress();
+      return format("%s", renterAddress1);
+    }
+    return renterAddress;
+  }
+
+
+
+
 
   private String getDriverAddress(final DriverResponse driver) {
     final var driverAddress = driver.getAddress();
