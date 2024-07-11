@@ -50,7 +50,7 @@ public class BonusServiceConfig {
             qDateTime),
         new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery, qWeekQuery),
         new FriendshipBonusStrategy(
-            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qDateTime));
+            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qWeekQuery));
   }
 
   @Bean

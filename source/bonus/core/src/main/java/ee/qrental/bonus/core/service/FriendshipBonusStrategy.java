@@ -7,6 +7,7 @@ import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -20,7 +21,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
 
   private final GetDriverQuery driverQuery;
   private final GetObligationQuery obligationQuery;
-  private final QDateTime qDateTime;
+  private final GetQWeekQuery qWeekQuery;
   private static final BigDecimal FRIENDSHIP_RATE = BigDecimal.valueOf(0.05d);
   private static final int WEEKS_AMOUNT_FOR_BONUS_CALCULATION = 10;
 
@@ -29,11 +30,11 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
       GetTransactionTypeQuery transactionTypeQuery,
       GetDriverQuery driverQuery,
       GetObligationQuery obligationQuery,
-      QDateTime qDateTime) {
+      GetQWeekQuery qWeekQuery) {
     super(transactionQuery, transactionTypeQuery);
     this.driverQuery = driverQuery;
     this.obligationQuery = obligationQuery;
-    this.qDateTime = qDateTime;
+    this.qWeekQuery = qWeekQuery;
   }
 
   @Override
@@ -65,7 +66,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
           }
           final var friend = driverQuery.getById(friendId);
           final var friendCreationDate = friend.getCreatedDate();
-          final var currentDate = qDateTime.getToday();
+          final var currentDate = qWeekQuery.getOneAfterById(qWeekId).getStart();
           final var weeksBetween = WEEKS.between(friendCreationDate, currentDate);
           if (weeksBetween > WEEKS_AMOUNT_FOR_BONUS_CALCULATION) {
             System.out.println(

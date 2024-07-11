@@ -13,6 +13,7 @@ import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.bonus.api.in.response.ObligationResponse;
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.api.in.response.FriendshipResponse;
@@ -31,7 +32,7 @@ class FriendshipBonusStrategyTest {
   private GetTransactionTypeQuery transactionTypeQuery;
   private GetDriverQuery driverQuery;
   private GetObligationQuery obligationQuery;
-  private QDateTime qDateTime;
+  private GetQWeekQuery qWeekQuery;
 
   private FriendshipBonusStrategy instanceUnderTest;
 
@@ -41,11 +42,11 @@ class FriendshipBonusStrategyTest {
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
     driverQuery = mock(GetDriverQuery.class);
     obligationQuery = mock(GetObligationQuery.class);
-    qDateTime = mock(QDateTime.class);
+    qWeekQuery = mock(GetQWeekQuery.class);
 
     instanceUnderTest =
         new FriendshipBonusStrategy(
-            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qDateTime);
+            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qWeekQuery);
   }
 
   @Test
