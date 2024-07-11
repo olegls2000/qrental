@@ -81,7 +81,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
           final var discount = rentAndNonLabelFineTransactionsAbsAmount.multiply(FRIENDSHIP_RATE);
           final var transactionTypeId = getBonusTransactionTypeId();
           final var bonusTransaction = new TransactionAddRequest();
-          bonusTransaction.setDate(LocalDate.now());
+          bonusTransaction.setDate(currentDate);
           bonusTransaction.setComment(getComment());
           bonusTransaction.setDriverId(driverId);
           bonusTransaction.setAmount(discount);
