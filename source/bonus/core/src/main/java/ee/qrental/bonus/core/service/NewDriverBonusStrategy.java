@@ -1,9 +1,6 @@
 package ee.qrental.bonus.core.service;
 
-import static ee.qrental.common.utils.QTimeUtils.getLastSundayFromDate;
 import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
-import static java.lang.Math.abs;
-import static java.time.Period.between;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -18,7 +15,6 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class NewDriverBonusStrategy extends AbstractBonusStrategy {
@@ -48,7 +44,7 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     return bonusProgram.getActive() && STRATEGY_NEW_DRIVER_CODE.equals(bonusProgram.getCode());
   }
 
-  private boolean isDriverNew(final Long driverId) {
+  private boolean isDriverNew(final Long driverId, final Long obligationQWeekId) {
     final var firstCarLink = carLinkQuery.getFirstLinkByDriverId(driverId);
     if (firstCarLink == null) {
       System.out.println(
@@ -62,7 +58,7 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     final var carLinkStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
     final var carLinkStartWeekNext = qWeekQuery.getOneAfterById(carLinkStartWeek.getId());
     final var firstMonday = carLinkStartWeekNext.getStart();
-    final var today = qDateTime.getToday();
+    final var today = qWeekQuery.getOneAfterById(obligationQWeekId).getStart();
 
     final var activeDates = DAYS.between(firstMonday, today);
     if (activeDates < NEW_DRIVER_PERIOD_IN_DAYS) {
@@ -105,6 +101,7 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
   public List<TransactionAddRequest> calculateBonus(
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
     final var driverId = obligation.getDriverId();
+    final var qWeekId = obligation.getQWeekId();
     if (obligation.getMatchCount() <= 0) {
       System.out.println(
           "Obligation was not matched for current Week, New Driver Bonus is not allowed for Driver with id: "
@@ -112,7 +109,7 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
       return emptyList();
     }
 
-    final var isNew = isDriverNew(driverId);
+    final var isNew = isDriverNew(driverId, qWeekId);
     if (!isNew) {
 
       return emptyList();
@@ -124,7 +121,6 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
       return emptyList();
     }
 
-    final var qWeekId = obligation.getQWeekId();
     final var rentAndNonLabelFineAmountAbs =
         getRentAndNonLabelFineTransactionsAbsAmount(driverId, qWeekId);
     final var nextWeek = qWeekQuery.getOneAfterById(qWeekId);
