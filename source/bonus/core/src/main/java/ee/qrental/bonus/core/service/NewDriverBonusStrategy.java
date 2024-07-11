@@ -15,6 +15,8 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
 public class NewDriverBonusStrategy extends AbstractBonusStrategy {
@@ -53,13 +55,16 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     }
 
     final var dateStart = firstCarLink.getDateStart();
-    final var dateStartYear = dateStart.getYear();
-    final var dateStarWeekNumber = getWeekNumber(dateStart);
-    final var carLinkStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
-    final var carLinkStartWeekNext = qWeekQuery.getOneAfterById(carLinkStartWeek.getId());
-    final var firstMonday = carLinkStartWeekNext.getStart();
-    final var today = qWeekQuery.getOneAfterById(obligationQWeekId).getStart();
+    LocalDate firstMonday = dateStart;
+    if (dateStart.getDayOfWeek() != DayOfWeek.MONDAY) {
+      final var dateStartYear = dateStart.getYear();
+      final var dateStarWeekNumber = getWeekNumber(dateStart);
+      final var carLinkStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
+      final var carLinkStartWeekNext = qWeekQuery.getOneAfterById(carLinkStartWeek.getId());
+      firstMonday = carLinkStartWeekNext.getStart();
+    }
 
+    final var today = qWeekQuery.getOneAfterById(obligationQWeekId).getStart();
     final var activeDates = DAYS.between(firstMonday, today);
     if (activeDates < NEW_DRIVER_PERIOD_IN_DAYS) {
       System.out.println("Driver with id: " + driverId + " has Car Link, less then 4 entire weeks");
