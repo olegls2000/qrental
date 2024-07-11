@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 class ReliablePartnerBonusStrategyTest {
   private GetTransactionQuery transactionQuery;
   private GetTransactionTypeQuery transactionTypeQuery;
+  private GetQWeekQuery qWeekQuery;
 
   private BonusStrategy instanceUnderTest;
 
@@ -26,7 +28,9 @@ class ReliablePartnerBonusStrategyTest {
   void init() {
     transactionQuery = mock(GetTransactionQuery.class);
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
-    instanceUnderTest = new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery);
+    qWeekQuery = mock(GetQWeekQuery.class);
+    instanceUnderTest =
+        new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery, qWeekQuery);
   }
 
   @Test

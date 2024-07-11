@@ -42,10 +42,15 @@ public class BonusServiceConfig {
         new TwoWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new FourWeeksPrepaymentBonusStrategy(transactionQuery, transactionTypeQuery),
         new NewDriverBonusStrategy(
-            transactionQuery, transactionTypeQuery, carLinkQuery, contractQuery, qWeekQuery, qDateTime),
-        new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery),
+            transactionQuery,
+            transactionTypeQuery,
+            carLinkQuery,
+            contractQuery,
+            qWeekQuery,
+            qDateTime),
+        new ReliablePartnerBonusStrategy(transactionQuery, transactionTypeQuery, qWeekQuery),
         new FriendshipBonusStrategy(
-            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery));
+            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qDateTime));
   }
 
   @Bean

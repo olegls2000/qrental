@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
@@ -14,11 +15,14 @@ import java.util.List;
 
 public class ReliablePartnerBonusStrategy extends AbstractBonusStrategy {
   private static final Integer BONUS_THRESHOLD_MATCH_COUNT = 4;
+  private GetQWeekQuery qWeekQuery;
 
   public ReliablePartnerBonusStrategy(
       final GetTransactionQuery transactionQuery,
-      final GetTransactionTypeQuery transactionTypeQuery) {
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final GetQWeekQuery qWeekQuery) {
     super(transactionQuery, transactionTypeQuery);
+    this.qWeekQuery = qWeekQuery;
   }
 
   @Override
@@ -45,7 +49,8 @@ public class ReliablePartnerBonusStrategy extends AbstractBonusStrategy {
 
     final var discount = rentAndNonLabelFineTransactionsAbsAmount.multiply(discountRate);
     final var bonusTransaction = new TransactionAddRequest();
-    bonusTransaction.setDate(LocalDate.now());
+    final var transactionDate = qWeekQuery.getOneAfterById(qWeekId).getStart();
+    bonusTransaction.setDate(transactionDate);
     bonusTransaction.setComment(getComment());
     bonusTransaction.setDriverId(driverId);
     bonusTransaction.setAmount(discount);
