@@ -4,6 +4,7 @@ import static ee.qrental.common.utils.QTimeUtils.getLastSundayFromDate;
 import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.lang.Math.abs;
 import static java.time.Period.between;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -17,6 +18,7 @@ import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class NewDriverBonusStrategy extends AbstractBonusStrategy {
@@ -62,9 +64,7 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     final var firstMonday = carLinkStartWeekNext.getStart();
     final var today = qDateTime.getToday();
 
-    final var period = between(firstMonday, today);
-    int activeDates = abs(period.getDays());
-
+    final var activeDates = DAYS.between(firstMonday, today);
     if (activeDates < NEW_DRIVER_PERIOD_IN_DAYS) {
       System.out.println("Driver with id: " + driverId + " has Car Link, less then 4 entire weeks");
       return true;
