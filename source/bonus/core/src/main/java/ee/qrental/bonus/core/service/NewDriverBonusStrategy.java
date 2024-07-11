@@ -1,6 +1,7 @@
 package ee.qrental.bonus.core.service;
 
 import static ee.qrental.common.utils.QTimeUtils.getLastSundayFromDate;
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.lang.Math.abs;
 import static java.time.Period.between;
 import static java.util.Collections.emptyList;
@@ -54,7 +55,11 @@ public class NewDriverBonusStrategy extends AbstractBonusStrategy {
     }
 
     final var dateStart = firstCarLink.getDateStart();
-    final var firstMonday = getLastSundayFromDate(dateStart).plusDays(1);
+    final var dateStartYear = dateStart.getYear();
+    final var dateStarWeekNumber = getWeekNumber(dateStart);
+    final var carLinkStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
+    final var carLinkStartWeekNext = qWeekQuery.getOneAfterById(carLinkStartWeek.getId());
+    final var firstMonday = carLinkStartWeekNext.getStart();
     final var today = qDateTime.getToday();
 
     final var period = between(firstMonday, today);
