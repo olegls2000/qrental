@@ -1,7 +1,9 @@
 package ee.qrental.bonus.core.service;
 
+import static java.time.temporal.ChronoUnit.WEEKS;
 import static java.util.Collections.emptyList;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
@@ -11,7 +13,6 @@ import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
 
   private final GetDriverQuery driverQuery;
   private final GetObligationQuery obligationQuery;
+  private final QDateTime qDateTime;
   private static final BigDecimal FRIENDSHIP_RATE = BigDecimal.valueOf(0.05d);
   private static final int WEEKS_AMOUNT_FOR_BONUS_CALCULATION = 10;
 
@@ -26,10 +28,12 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
       GetTransactionQuery transactionQuery,
       GetTransactionTypeQuery transactionTypeQuery,
       GetDriverQuery driverQuery,
-      GetObligationQuery obligationQuery) {
+      GetObligationQuery obligationQuery,
+      QDateTime qDateTime) {
     super(transactionQuery, transactionTypeQuery);
     this.driverQuery = driverQuery;
     this.obligationQuery = obligationQuery;
+    this.qDateTime = qDateTime;
   }
 
   @Override
@@ -41,7 +45,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
   @Override
   public List<TransactionAddRequest> calculateBonus(
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
-      //TODO Check why transaction was not created
+    // TODO Check why transaction was not created
     final var driverId = obligation.getDriverId();
     final var matchCount = obligation.getMatchCount();
     final var qWeekId = obligation.getQWeekId();
@@ -61,8 +65,8 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
           }
           final var friend = driverQuery.getById(friendId);
           final var friendCreationDate = friend.getCreatedDate();
-          final var currentDate = LocalDate.now();
-          final var weeksBetween = ChronoUnit.WEEKS.between(friendCreationDate, currentDate);
+          final var currentDate = qDateTime.getToday();
+          final var weeksBetween = WEEKS.between(friendCreationDate, currentDate);
           if (weeksBetween > WEEKS_AMOUNT_FOR_BONUS_CALCULATION) {
             System.out.println(
                 "No bonus transaction for the friendship, because it was created more then "

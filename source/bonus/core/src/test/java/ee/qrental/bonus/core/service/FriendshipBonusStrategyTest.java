@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.bonus.api.in.response.ObligationResponse;
 import ee.qrental.bonus.domain.BonusProgram;
@@ -21,7 +22,6 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +31,7 @@ class FriendshipBonusStrategyTest {
   private GetTransactionTypeQuery transactionTypeQuery;
   private GetDriverQuery driverQuery;
   private GetObligationQuery obligationQuery;
+  private QDateTime qDateTime;
 
   private FriendshipBonusStrategy instanceUnderTest;
 
@@ -40,10 +41,11 @@ class FriendshipBonusStrategyTest {
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
     driverQuery = mock(GetDriverQuery.class);
     obligationQuery = mock(GetObligationQuery.class);
+    qDateTime = mock(QDateTime.class);
 
     instanceUnderTest =
         new FriendshipBonusStrategy(
-            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery);
+            transactionQuery, transactionTypeQuery, driverQuery, obligationQuery, qDateTime);
   }
 
   @Test
@@ -175,7 +177,7 @@ class FriendshipBonusStrategyTest {
         .thenReturn(ObligationResponse.builder().matchCount(1).build());
     final var friendCreationDate = LocalDate.now().minus(10, WEEKS);
     when(driverQuery.getById(222L))
-            .thenReturn(DriverResponse.builder().id(222L).createdDate(friendCreationDate).build());
+        .thenReturn(DriverResponse.builder().id(222L).createdDate(friendCreationDate).build());
 
     final var rentTransaction =
         TransactionResponse.builder()
