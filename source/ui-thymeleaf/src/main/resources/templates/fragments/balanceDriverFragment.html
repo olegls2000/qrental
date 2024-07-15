@@ -110,6 +110,39 @@
                         </td>
                     </tr>
                 </table>
+                <table class="table table-sm table-borderless align-middle mt-4 mb-4">
+                    <tr>
+                        <th scope="col" >Contract start date:</th>
+                        <th scope="col" >Contract end date:</th>
+                        <th scope="col" >Duration:</th>
+                        <th scope="col" >Weeks left:</th>
+                    </tr>
+                    <tr>
+                    <td>
+                        <a>
+                        <span th:text="${activeContractStartDate}">???</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a>
+                            <span th:text="${activeContract}">???</span>
+                            <span th:text="${activeContractDuration}">???</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a>
+                            <span th:text="${activeContractDuration}">???</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a>
+                            <span th:text="${activeContract}">???</span>
+                            <span th:text="${activeContractDuration}">???</span>
+                        </a>
+                    </td>
+                    </tr>
+                </table>
+
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
                         <small th:text="|Latest Balance year: ${latestBalanceYear}, week: ${latestBalanceWeek}|"
