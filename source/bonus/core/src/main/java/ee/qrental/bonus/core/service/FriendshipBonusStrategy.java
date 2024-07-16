@@ -23,7 +23,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
   private final GetObligationQuery obligationQuery;
   private final GetQWeekQuery qWeekQuery;
   private static final BigDecimal FRIENDSHIP_RATE = BigDecimal.valueOf(0.05d);
-  private static final int WEEKS_AMOUNT_FOR_BONUS_CALCULATION = 10;
+  private static final int WEEKS_AMOUNT_FOR_BONUS_CALCULATION = 24;
 
   public FriendshipBonusStrategy(
       GetTransactionQuery transactionQuery,

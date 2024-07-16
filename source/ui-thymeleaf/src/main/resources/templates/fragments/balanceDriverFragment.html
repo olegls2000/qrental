@@ -114,7 +114,7 @@
                     <tr>
                         <th scope="col" >Contract start date:</th>
                         <th scope="col" >Contract end date:</th>
-                        <th scope="col" >Duration:</th>
+                        <th scope="col" >Duration (weeks):</th>
                         <th scope="col" >Weeks left:</th>
                     </tr>
                     <tr>
@@ -125,8 +125,7 @@
                     </td>
                     <td>
                         <a>
-                            <span th:text="${activeContract}">???</span>
-                            <span th:text="${activeContractDuration}">???</span>
+                           <span th:text="${activeContractEndDate}">???</span>
                         </a>
                     </td>
                     <td>
@@ -136,8 +135,7 @@
                     </td>
                     <td>
                         <a>
-                            <span th:text="${activeContract}">???</span>
-                            <span th:text="${activeContractDuration}">???</span>
+                           <span th:text="${activeContractWeeksToEnd}">???</span>
                         </a>
                     </td>
                     </tr>

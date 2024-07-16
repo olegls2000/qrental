@@ -15,15 +15,15 @@ where ocr.obligation_calculation_id in
        where q_week_id in
              (select id
               from q_week
-              where year = 2024 /*and number = 25*/));
+              where year = 2024 and number = 23));
 
 delete
 from obligation ob
-where ob.q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
+where ob.q_week_id in (select id from q_week where year = 2024 and number = 23);
 
 delete
 from obligation_calculation
-where q_week_id in (select id from q_week where year = 2024 /*and number = 25*/);
+where q_week_id in (select id from q_week where year = 2024 and number = 23);
 
 --------------------------------------------------------------------------------------------------------
 
@@ -65,26 +65,26 @@ from balance_calculation_result bcr
 where bcr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 23 and qw.year = 2024));
 
 delete
 from balance_transaction btr
 where btr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 23 and qw.year = 2024));
 
 delete
 from balance bl
-where q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
+where q_week_id in (select qw.id from q_week qw where qw.number = 23 and qw.year = 2024);
 
 delete
 from transaction tx
 where tx.transaction_type_id in (select distinct(id)
                                  from transaction_type
                                  where name in ('fee replenish', 'compensation', 'fee debt'))
-  and tx.date >= '2024-03-04'::date
-  and tx.date <= '2024-03-10'::date;
+  and tx.date >= '2024-06-03'::date
+  and tx.date <= '2024-06-09'::date;
 
 --## Remove all Balance Calculations:
 delete

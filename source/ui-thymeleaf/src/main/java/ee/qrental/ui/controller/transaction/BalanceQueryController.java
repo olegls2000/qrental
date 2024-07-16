@@ -1,7 +1,9 @@
 package ee.qrental.ui.controller.transaction;
 
+import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.BALANCE_ROOT_PATH;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import ee.qrental.bonus.api.in.query.GetObligationQuery;
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
@@ -18,6 +20,8 @@ import ee.qrental.transaction.api.in.response.balance.BalanceRawContextResponse;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import ee.qrental.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -249,10 +253,39 @@ public class BalanceQueryController {
 
       return;
     }
+    // count dates
+
+    final var dateStart = activeContract.getCreated();
+    LocalDate firstMonday = dateStart;
+    if (dateStart.getDayOfWeek() != DayOfWeek.MONDAY) {
+      final var dateStartYear = dateStart.getYear();
+      final var dateStarWeekNumber = getWeekNumber(dateStart);
+      final var contractStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
+      final var contractStartWeekNext = qWeekQuery.getOneAfterById(contractStartWeek.getId());
+      firstMonday = contractStartWeekNext.getStart();
+    }
+    final var datesDuration = activeContract.getDuration()*7;
+    final var dateEnd = firstMonday.plusDays(datesDuration);
+
+    final var today = qWeekQuery.getCurrentWeek().getStart();
+    final var activeDays = DAYS.between(firstMonday, today);
+    final var activeWeeks = activeDays/7;
+    final var daysLeft = (dateEnd.minusDays(activeDays));
+          var weeksToEndOfContract = activeContract.getDuration() - activeWeeks ;
+    if (activeWeeks >= activeContract.getDuration()) {
+           weeksToEndOfContract = 0;
+       };
+
+
+
+
     model.addAttribute("activeContract", activeContract.getNumber());
     model.addAttribute("activeContractId", activeContract.getId());
     model.addAttribute("activeContractDuration", activeContract.getDuration());
-    model.addAttribute("activeContractStartDate",activeContract.getCreated());
+    model.addAttribute("activeContractStartDate",firstMonday);
+    model.addAttribute("activeContractEndDate",dateEnd);
+    model.addAttribute("activeContractWeeksToEnd",weeksToEndOfContract);
+
   }
 
   private void addCarDataToModel(final Long driverId, final Model model) {

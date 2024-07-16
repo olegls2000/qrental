@@ -3154,7 +3154,7 @@ public class ContractToPdfConverter {
         final var body13acell4 =
                 new Cell(new Paragraph("Rentnikul on õigus leping igal ajal mistahes põhjusel lõpetada esitades Rendileandjale selle kohta kirjaliku teate. " +
                         "Rendileandja lõpetab lepingu Rentnikult lepingu lõpetamise kohta teate saamist hiljemalt 7 (seitsme) päeva jooksul. Auto renditeenuste lõpetamiseks " +
-                        "kohustub rentnik teavitada oma soovist renditud auto tagastada seitse päeva ette järgmise esmaspäevani. Lepingu lõpetamine ei vabasta " +
+                        "kohustub rentnik teavitada oma soovist renditud auto tagastada " + model.getDuration1()+  " päeva ette järgmise esmaspäevani. Lepingu lõpetamine ei vabasta " +
                         "Rentniku enne lepingu lõpetamist tekkinud kohustuste täitmisest. ",
                         new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)));
         body13acell4.setBorder(NO_BORDER);
