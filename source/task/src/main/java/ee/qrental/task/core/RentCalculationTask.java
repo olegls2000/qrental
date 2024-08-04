@@ -7,7 +7,6 @@ import ee.qrental.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 

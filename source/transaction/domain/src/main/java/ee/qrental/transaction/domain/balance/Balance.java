@@ -28,8 +28,6 @@ public class Balance {
         .subtract(feeAbleAmount);
   }
 
-
-
   @Override
   public String toString() {
     return "Balance{"

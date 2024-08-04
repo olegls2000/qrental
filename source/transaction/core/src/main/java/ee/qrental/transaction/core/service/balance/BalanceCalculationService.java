@@ -23,7 +23,6 @@ import ee.qrental.transaction.domain.Transaction;
 import ee.qrental.transaction.domain.balance.Balance;
 import ee.qrental.transaction.domain.balance.BalanceCalculation;
 import ee.qrental.transaction.domain.balance.BalanceCalculationResult;
-import ee.qrental.transaction.domain.kind.TransactionKindsCode;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Month;

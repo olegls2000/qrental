@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":source:firm:api:in"))
     implementation(project(":source:constant:api:in"))
     implementation(project(":source:bonus:api:in"))
+    implementation(project(":source:insurance:api:in"))
     implementation(project(":source:common:api"))
     implementation(project(":source:common:utils"))
 

@@ -1,0 +1,78 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update an Insurance Case',
+            content=~{fragments/insuranceCaseUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+<div th:fragment="updateForm">
+    <form method="post"
+          th:action="@{/insurance/cases/update}"
+          th:object="${updateRequest}">
+        <input id="insuranceCaseId" required
+               th:field="*{id}"
+               type="text"
+               hidden/>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted"
+                       for="driverId">Driver:</label>
+                <select id="driverId"
+                        class="form-select"
+                        th:field="*{driverId}">
+                    <option th:each="driver : ${drivers}"
+                            th:value="${driver.id}"
+                            th:text="|${driver.lastName} ${driver.firstName}, isikukood: ${driver.isikukood}|">??
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted"
+                       for="carId">Car:</label>
+                <select id="carId"
+                        class="form-select"
+                        th:field="*{carId}">
+                    <option th:each="car : ${cars}"
+                            th:value="${car.id}"
+                            th:text="|${car.manufacturer} ${car.model}, plate number: ${car.regNumber}|">??
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="occurrenceDateId">Occurrence Date:</label>
+                    <input class="form-control" id="occurrenceDateId" placeholder="Enter occurrence"
+                           required
+                           th:field="*{occurrenceDate}"
+                           type="date"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="damageAmountId">Damage amount, EUR</label>
+                    <input class="form-control" id="damageAmountId" placeholder="Enter Damage amount" required
+                           th:field="*{damageAmount}"
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="descriptionId">Description: </label>
+                <textarea class="form-control"
+                          id="descriptionId"
+                          placeholder="Enter a Case Description"
+                          th:field="*{description}"/>
+            </div>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update'
+        )">
+        </div>
+    </form>
+</div>

@@ -83,6 +83,17 @@ include("source:invoice:persistence:repository")
 include("source:invoice:persistence:flyway")
 include("source:invoice:config")
 
+//Insurance domain:
+include("source:insurance:api:in")
+include("source:insurance:api:out")
+include("source:insurance:domain")
+include("source:insurance:core")
+include("source:insurance:persistence:adapter")
+include("source:insurance:persistence:entity")
+include("source:insurance:persistence:repository")
+include("source:insurance:persistence:flyway")
+include("source:insurance:config")
+
 //Contract domain:
 include("source:contract:api:in")
 include("source:contract:api:out")

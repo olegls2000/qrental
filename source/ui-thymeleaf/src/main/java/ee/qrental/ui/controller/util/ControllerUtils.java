@@ -20,6 +20,7 @@ public class ControllerUtils {
   public static final String CONSTANT_ROOT_PATH = "/constants";
   public static final String WEEK_ROOT_PATH = "/weeks";
   public static final String BONUS_PROGRAM_PATH = "/bonus-programs";
+  public static final String INSURANCE_ROOT_PATH = "/insurance";
   public static final String INVOICE_ROOT_PATH = "/invoices";
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String RENTS_ROOT_PATH = "/rents";
