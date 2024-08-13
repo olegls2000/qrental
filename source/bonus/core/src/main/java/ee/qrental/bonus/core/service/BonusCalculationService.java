@@ -1,5 +1,6 @@
 package ee.qrental.bonus.core.service;
 
+import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
@@ -63,6 +64,13 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
             driverId -> {
               final var obligation =
                   obligationLoadPort.loadByDriverIdAndByQWeekId(driverId, qWeekId);
+              if (obligation == null) {
+                throw new RuntimeException(
+                    format(
+                        "Obligation was not calculated for %d - %d week, for driver.id = %d",
+                        qWeek.getYear(), qWeek.getNumber(), driverId));
+              }
+
               final var weekPositiveAmount =
                   transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
                       .filter(transaction -> "P".equals(transaction.getKind()))
