@@ -1,0 +1,32 @@
+<div th:fragment="assembledForm" class="row mt-5">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Insurance Case Balances history</h4>
+                <a class="btn-close position-absolute top-0 end-0 m-2"
+                   aria-label="Close"
+                   href="#" onclick="history.back();">
+                </a>
+                <div>
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Week</th>
+                            <th>Damage remaining, EUR</th>
+                            <th>Self Responsibility remaining, EUR</th>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(insuranceCaseBalances)}">
+                            <td colspan="5">No Insurance Case Balances available</td>
+                        </tr>
+                        <tr th:each="insuranceCaseBalance : ${insuranceCaseBalances}">
+                            <td th:text="${insuranceCaseBalance.qWeekInfo}">???</td>
+                            <td th:text="${insuranceCaseBalance.damageRemaining}">???</td>
+                            <td th:text="${insuranceCaseBalance.selfResponsibilityRemaining}">???</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

@@ -1,0 +1,24 @@
+package ee.qrental.insurance.repository.spring;
+
+import ee.qrental.insurance.entity.jakarta.InsuranceCaseBalanceJakartaEntity;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface InsuranceCaseBalanceSpringDataRepository
+    extends JpaRepository<InsuranceCaseBalanceJakartaEntity, Long> {
+
+  @Query(
+      value =
+          "select bl.* from insurance_case_balance bl LEFT JOIN q_week qw on bl.q_week_id = qw.id "
+              + "where bl.insurance_case_id = :insuranceCaseId "
+              + "order by qw.year desc, qw.number desc limit 1",
+      nativeQuery = true)
+  InsuranceCaseBalanceJakartaEntity findLatestByInsuranceCaseId(
+      final @Param("insuranceCaseId") Long insuranceCaseId);
+
+  List<InsuranceCaseBalanceJakartaEntity> findAllByInsuranceCaseId(final Long insuranceCaseId);
+}

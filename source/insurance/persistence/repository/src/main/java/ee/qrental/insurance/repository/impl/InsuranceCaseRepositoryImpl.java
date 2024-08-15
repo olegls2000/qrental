@@ -17,6 +17,11 @@ public class InsuranceCaseRepositoryImpl implements InsuranceCaseRepository {
   }
 
   @Override
+  public List<InsuranceCaseJakartaEntity> findActive() {
+    return springDataRepository.findAllByActiveIsTrue();
+  }
+
+  @Override
   public InsuranceCaseJakartaEntity save(final InsuranceCaseJakartaEntity entity) {
     return springDataRepository.save(entity);
   }

@@ -48,13 +48,13 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
 
   @Transactional
   @Override
-  public void add(final ObligationCalculationAddRequest addRequest) {
+  public Long add(final ObligationCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
     final var violationsCollector = addBusinessRuleValidator.validate(addRequest);
     if (violationsCollector.hasViolations()) {
       addRequest.setViolations(violationsCollector.getViolations());
 
-      return;
+      return null;
     }
     final var domain = addRequestMapper.toDomain(addRequest);
     final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
@@ -83,12 +83,13 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
               final var result = getResult(savedObligation.getId());
               domain.getResults().add(result);
             });
-    calculationAddPort.add(domain);
+    final var savedCalculation = calculationAddPort.add(domain);
     sendEmails(domain.getResults(), qWeek.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf(
         "----> Time: Obligation Calculation took %d milli seconds \n", calculationDuration);
+    return savedCalculation.getId();
   }
 
   private Integer getMatchCount(

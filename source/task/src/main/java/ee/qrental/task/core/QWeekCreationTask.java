@@ -11,6 +11,7 @@ public class QWeekCreationTask {
 
   private final QWeekAddUseCase qWeekAddUseCase;
 
+
   /**
    * +---------------- minute (0 - 59)
    * | +------------- hour (0 - 23)

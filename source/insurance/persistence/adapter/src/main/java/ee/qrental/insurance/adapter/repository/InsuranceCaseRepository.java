@@ -6,6 +6,8 @@ import java.util.List;
 public interface InsuranceCaseRepository {
   List<InsuranceCaseJakartaEntity> findAll();
 
+  List<InsuranceCaseJakartaEntity> findActive();
+
   InsuranceCaseJakartaEntity save(final InsuranceCaseJakartaEntity entity);
 
   InsuranceCaseJakartaEntity getReferenceById(final Long id);

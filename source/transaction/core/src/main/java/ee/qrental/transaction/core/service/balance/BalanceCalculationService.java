@@ -80,9 +80,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
                   final var weekTransactions =
                       transactionQuery.getAllByDriverIdAndQWeekId(driverId, week.getId()).stream()
                           .collect(
-                              groupingBy(
-                                  transactionResponse ->
-                                      transactionResponse.getKind()));
+                              groupingBy(transactionResponse -> transactionResponse.getKind()));
                   final var balanceWrapper =
                       calculatorSavingStrategy.calculateBalance(
                           driver, week, previousQWeekBalance, weekTransactions);

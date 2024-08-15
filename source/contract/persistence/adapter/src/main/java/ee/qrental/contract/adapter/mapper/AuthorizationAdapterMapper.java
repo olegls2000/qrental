@@ -1,6 +1,5 @@
 package ee.qrental.contract.adapter.mapper;
 
-
 import ee.qrental.contract.domain.Authorization;
 import ee.qrental.contract.entity.jakarta.AuthorizationJakartaEntity;
 import lombok.AllArgsConstructor;
@@ -33,7 +32,8 @@ public class AuthorizationAdapterMapper {
         .driverIsikukood(domain.getDriverIsikukood())
         .driverFirstName(domain.getDriverFirstName())
         .driverLastName(domain.getDriverLastName())
-        .driverEmail(domain.getDriverEmail()).created(domain.getCreated())
+        .driverEmail(domain.getDriverEmail())
+        .created(domain.getCreated())
         .build();
   }
 }

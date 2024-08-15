@@ -1,0 +1,34 @@
+<div th:fragment="calculationsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/insuranceCasesTabFragment :: insuranceCasesTabs('calculations')"></ul>
+    <h2 class="py-3">Insurance Calculations</h2>
+    <div th:replace="fragments/latestBalanceWeekFragment :: latestBalanceWeek"></div>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/insurance/calculations/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi bi-calculator"></span>
+                </a>
+            </th>
+            <th>Action Date</th>
+            <th>Start Week</th>
+            <th>End Week</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(calculations)}">
+            <td colspan="5">No Insurance Calculations were done yet</td>
+        </tr>
+        <tr th:each="calculation : ${calculations}">
+            <td><a class="btn btn-sm btn-warning"
+                   th:href="@{/insurance/calculations/{id}(id=${calculation.id})}">
+                <span class="bi bi-card-checklist"></span></a></td>
+            <td th:text="${qDateFormatter.format(calculation.actionDate)}">???</td>
+            <td th:text="${calculation.startWeek}">???</td>
+            <td th:text="${calculation.endWeek}">???</td>
+            <td th:text="${calculation.comment}">???</td>
+        </tr>
+    </table>
+</div>

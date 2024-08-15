@@ -33,7 +33,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import lombok.AllArgsConstructor;
-//TODO add Unit Test
+
+// TODO add Unit Test
 @AllArgsConstructor
 public class RentCalculationService implements RentCalculationAddUseCase {
   private static final Integer NEW_CAR_AGE = 5;
@@ -58,12 +59,12 @@ public class RentCalculationService implements RentCalculationAddUseCase {
 
   @Transactional
   @Override
-  public void add(final RentCalculationAddRequest addRequest) {
+  public Long add(final RentCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
     final var violationsCollector = addBusinessRuleValidator.validate(addRequest);
     if (violationsCollector.hasViolations()) {
       addRequest.setViolations(violationsCollector.getViolations());
-      return;
+      return null;
     }
 
     final var domain = addRequestMapper.toDomain(addRequest);
@@ -86,11 +87,12 @@ public class RentCalculationService implements RentCalculationAddUseCase {
         domain.getResults().add(calculationResultForNoLabelFine);
       }
     }
-    rentCalculationAddPort.add(domain);
+    final var savedCalculation = rentCalculationAddPort.add(domain);
     sendEmails(domain.getResults(), qWeek.getNumber());
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
+    return savedCalculation.getId();
   }
 
   private boolean isNoLabelFineRequired(final Long carId) {

@@ -24,4 +24,9 @@ public class InsuranceCaseLoadAdapter implements InsuranceCaseLoadPort {
   public InsuranceCase loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
+
+  @Override
+  public List<InsuranceCase> loadActive() {
+    return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+  }
 }

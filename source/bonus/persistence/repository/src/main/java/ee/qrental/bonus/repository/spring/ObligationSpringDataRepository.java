@@ -15,7 +15,6 @@ public interface ObligationSpringDataRepository
       nativeQuery = true)
   ObligationJakartaEntity findOneByDriverIdAndQWeekId(
       @Param("driverId") final Long driverId, @Param("qWeekId") final Long qWeekId);
-
   List<ObligationJakartaEntity> findAllByIdIn(final List<Long> ids);
 
   @Query(

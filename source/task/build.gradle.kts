@@ -1,6 +1,7 @@
 dependencies {
     implementation(project(":source:transaction:api:in"))
     implementation(project(":source:bonus:api:in"))
+    implementation(project(":source:insurance:api:in"))
     implementation(project(":source:constant:api:in"))
     implementation(project(":source:common:api"))
     implementation("org.springframework:spring-context-support")

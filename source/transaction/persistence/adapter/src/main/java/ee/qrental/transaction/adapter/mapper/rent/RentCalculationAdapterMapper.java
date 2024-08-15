@@ -6,6 +6,10 @@ import ee.qrental.transaction.entity.jakarta.rent.RentCalculationJakartaEntity;
 import ee.qrental.transaction.entity.jakarta.rent.RentCalculationResultJakartaEntity;
 import lombok.AllArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 public class RentCalculationAdapterMapper {
 
@@ -13,21 +17,33 @@ public class RentCalculationAdapterMapper {
     if (entity == null) {
       return null;
     }
+
     return RentCalculation.builder()
         .id(entity.getId())
         .actionDate(entity.getActionDate())
         .qWeekId(entity.getQWeekId())
-        .results(entity.getResults().stream().map(this::mapToDomain).toList())
+        .results(mapResultsToDomains(entity.getResults()))
         .comment(entity.getComment())
         .build();
   }
 
-  private RentCalculationResult mapToDomain(final RentCalculationResultJakartaEntity resultEntity) {
+  private List<RentCalculationResult> mapResultsToDomains(
+      final List<RentCalculationResultJakartaEntity> resultsList) {
 
-    return RentCalculationResult.builder()
-        .id(resultEntity.getId())
-        .carLinkId(resultEntity.getCarLinkId())
-        .transactionId(resultEntity.getTransactionId())
-        .build();
+    if (resultsList == null) {
+      return null;
+    }
+    final var result =
+        resultsList.stream()
+            .map(
+                entity ->
+                    RentCalculationResult.builder()
+                        .id(entity.getId())
+                        .carLinkId(entity.getCarLinkId())
+                        .transactionId(entity.getTransactionId())
+                        .build())
+            .collect(Collectors.toList());
+
+    return Collections.unmodifiableList(result);
   }
 }

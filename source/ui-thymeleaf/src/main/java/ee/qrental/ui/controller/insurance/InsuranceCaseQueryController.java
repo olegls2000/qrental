@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static ee.qrental.ui.controller.util.ControllerUtils.INSURANCE_ROOT_PATH;
@@ -20,5 +21,11 @@ public class InsuranceCaseQueryController {
   public String getTableView(final Model model) {
     model.addAttribute("insuranceCases", insuranceCaseQuery.getAll());
     return "insuranceCases";
+  }
+
+  @GetMapping("/cases/balances/{id}")
+  public String getInsuranceCaseBalancesTableView(@PathVariable("id") long id, final Model model) {
+    model.addAttribute("insuranceCaseBalances", insuranceCaseQuery.getInsuranceCaseBalancesByInsuranceCase(id));
+    return "forms/viewInsuranceCaseBalances";
   }
 }
