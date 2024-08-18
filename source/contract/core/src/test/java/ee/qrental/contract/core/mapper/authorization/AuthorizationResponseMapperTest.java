@@ -10,7 +10,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorizationResponseMapperTest {
-    private final AuthorizationResponseMapper instance = new AuthorizationResponseMapper();
+    private final AuthorizationResponseMapper instanceUnderTest = new AuthorizationResponseMapper();
 
     @Test
     public void testIfResponseIsNull() {
@@ -19,7 +19,7 @@ class AuthorizationResponseMapperTest {
         Authorization domain = null;
 
         // when
-        final var result = instance.toResponse(domain);
+        final var result = instanceUnderTest.toResponse(domain);
 
         // then
         assertNull(result);
@@ -40,11 +40,11 @@ class AuthorizationResponseMapperTest {
                         .created(LocalDate.of(2024, Month.JANUARY, 13))
                         .build();
         // when
-        final var response = instance.toResponse(domain);
+        final var response = instanceUnderTest.toResponse(domain);
 
         // then
         assertNotNull(response);
-        assertEquals("Authorization Bolt for Driver: 39503150234, Vladimir Vladimirovich", instance.toObjectInfo(domain));
+        assertEquals("Authorization Bolt for Driver: 39503150234, Vladimir Vladimirovich", instanceUnderTest.toObjectInfo(domain));
         assertEquals(3L, response.getId());
         assertEquals(5L, response.getDriverId());
         assertEquals(39503150234L, response.getDriverIsikukood());

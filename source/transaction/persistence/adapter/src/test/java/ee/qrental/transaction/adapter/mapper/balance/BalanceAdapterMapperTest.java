@@ -11,7 +11,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BalanceAdapterMapperTest {
-    private final BalanceAdapterMapper instance = new BalanceAdapterMapper();
+    private final BalanceAdapterMapper instanceUnderTest = new BalanceAdapterMapper();
 
     @Test
     public void testIfMapEntityToDomainIsNull() {
@@ -20,7 +20,7 @@ class BalanceAdapterMapperTest {
         BalanceJakartaEntity domain = null;
 
         // when
-        final var result = instance.mapToDomain(domain);
+        final var result = instanceUnderTest.mapToDomain(domain);
 
         // then
         assertNull(result);
@@ -44,7 +44,7 @@ class BalanceAdapterMapperTest {
                         .derived(true)
                         .build();
         // when
-        final var domain = instance.mapToDomain(entity);
+        final var domain = instanceUnderTest.mapToDomain(entity);
 
         // then
         assertNotNull(domain);
@@ -79,7 +79,7 @@ class BalanceAdapterMapperTest {
                         .build();
 
         // when
-        final var entity = instance.mapToEntity(domain);
+        final var entity = instanceUnderTest.mapToEntity(domain);
         final var amountSumWithoutRepairment = domain.getAmountsSumWithoutRepairment();
         final var stringBalance = domain.toString();
 

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RentCalculationAdapterMapperTest {
 
-    private final RentCalculationAdapterMapper instance = new RentCalculationAdapterMapper();
+    private final RentCalculationAdapterMapper instanceUnderTest = new RentCalculationAdapterMapper();
 
     @Test
     public void testIfMapEntityToDomainIsNull() {
@@ -21,7 +21,7 @@ class RentCalculationAdapterMapperTest {
         RentCalculationJakartaEntity domain = null;
 
         // when
-        final var result = instance.mapToDomain(domain);
+        final var result = instanceUnderTest.mapToDomain(domain);
 
         // then
         assertNull(result);
@@ -47,7 +47,7 @@ class RentCalculationAdapterMapperTest {
                         .build();
 
         // when
-        final var domain = instance.mapToDomain(entity);
+        final var domain = instanceUnderTest.mapToDomain(entity);
 
         // then
         assertNotNull(domain);
@@ -77,7 +77,7 @@ class RentCalculationAdapterMapperTest {
                         .build();
 
         // when
-        final var domain = instance.mapToDomain(entity);
+        final var domain = instanceUnderTest.mapToDomain(entity);
 
         // then
         assertNotNull(domain);

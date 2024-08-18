@@ -11,7 +11,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorizationAdapterMapperTest {
-    private final AuthorizationAdapterMapper instance = new AuthorizationAdapterMapper();
+    private final AuthorizationAdapterMapper instanceUnderTest = new AuthorizationAdapterMapper();
 
     @Test
     public void testIfMapEntityToDomainIsNull() {
@@ -20,7 +20,7 @@ class AuthorizationAdapterMapperTest {
         AuthorizationJakartaEntity domain = null;
 
         // when
-        final var result = instance.mapToDomain(domain);
+        final var result = instanceUnderTest.mapToDomain(domain);
 
         // then
         assertNull(result);
@@ -41,7 +41,7 @@ class AuthorizationAdapterMapperTest {
                         .created(LocalDate.of(2024, Month.JANUARY, 13))
                         .build();
         // when
-        final var domain = instance.mapToDomain(entity);
+        final var domain = instanceUnderTest.mapToDomain(entity);
 
         // then
         assertNotNull(domain);
@@ -70,7 +70,7 @@ class AuthorizationAdapterMapperTest {
                         .build();
 
         // when
-        final var entity = instance.mapToEntity(domain);
+        final var entity = instanceUnderTest.mapToEntity(domain);
 
         // then
         assertNotNull(entity);
