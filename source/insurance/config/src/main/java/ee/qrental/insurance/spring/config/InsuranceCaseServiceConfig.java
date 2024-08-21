@@ -5,10 +5,7 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.*;
-import ee.qrental.insurance.core.service.InsuranceCalculationQueryService;
-import ee.qrental.insurance.core.service.InsuranceCalculationUseCaseService;
-import ee.qrental.insurance.core.service.InsuranceCaseQueryService;
-import ee.qrental.insurance.core.service.InsuranceCaseUseCaseService;
+import ee.qrental.insurance.core.service.*;
 import ee.qrental.insurance.core.validator.InsuranceCaseAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -67,6 +64,7 @@ public class InsuranceCaseServiceConfig {
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
       final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseBalanceLoadPort caseBalanceLodPort,
+      final InsuranceCaseBalanceDeriveService deriveService,
       final InsuranceCaseBalanceAddPort caseBalanceAddPort,
       final InsuranceCalculationLoadPort calculationLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
@@ -80,7 +78,7 @@ public class InsuranceCaseServiceConfig {
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
         caseBalanceLodPort,
-        caseBalanceAddPort,
+        deriveService,
         calculationLoadPort,
         calculationAddPort,
         calculationAddRequestMapper,
@@ -89,5 +87,13 @@ public class InsuranceCaseServiceConfig {
         transactionTypeQuery,
         qWeekQuery,
         qDateTime);
+  }
+
+  @Bean
+  InsuranceCaseBalanceDeriveService getInsuranceCaseBalanceDeriveService(
+      final TransactionAddUseCase transactionAddUseCase,
+      final GetTransactionTypeQuery transactionTypeQuery) {
+
+    return new InsuranceCaseBalanceDeriveService(transactionAddUseCase, transactionTypeQuery);
   }
 }

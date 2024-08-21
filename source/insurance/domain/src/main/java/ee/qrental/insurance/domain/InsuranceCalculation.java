@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,5 +17,6 @@ public class InsuranceCalculation {
   private Long startQWeekId;
   private Long endQWeekId;
   private LocalDate actionDate;
+  private List<InsuranceCaseBalance> insuranceCaseBalances;
   private String comment;
 }

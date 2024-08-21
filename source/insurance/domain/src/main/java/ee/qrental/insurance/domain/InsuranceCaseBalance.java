@@ -14,4 +14,5 @@ public class InsuranceCaseBalance {
   private Long qWeekId;
   private BigDecimal damageRemaining;
   private BigDecimal selfResponsibilityRemaining;
+  private InsuranceCase insuranceCase;
 }
