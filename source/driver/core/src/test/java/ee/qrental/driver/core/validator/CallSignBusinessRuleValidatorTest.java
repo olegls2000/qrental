@@ -98,61 +98,63 @@ class CallSignBusinessRuleValidatorTest {
     @Test
     public void testDomainValidateUpdate() {
         // given
-        final var driverIdToAdd = 5L;
-        final var callSignId = 4;
+        final long id = 555L;
+        final int callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToAdd)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadById(driverIdToAdd)).thenReturn(CallSign.builder().id(driverIdToAdd).build());
-        when(callSignLinkLoadPort.loadById(driverIdToAdd)).thenReturn(CallSignLink.builder().id(driverIdToAdd).build());
+        when(loadPort.loadById(id)).thenReturn(CallSign.builder().id(id).build());
+        when(callSignLinkLoadPort.loadById(id)).thenReturn(CallSignLink.builder().id(id).build());
 
         // when
         final var violationCollector = instanceUnderTest.validateUpdate(domain);
 
         // then
         assertFalse(violationCollector.hasViolations());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getCallSign(), callSignId);
+        assertEquals(domain.getId(), id);
+        assertEquals(domain.getCallSign(), callSign);
         assertEquals(domain.getComment(), "Test");
     }
 
     @Test
     public void testDomainValidateUpdateCheckExistence() {
         // given
-        final var driverIdToAdd = 5L;
-        final var callSignId = 4;
+        final long id = 5L;
+        final int callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToAdd)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadById(driverIdToAdd)).thenReturn(null);
+        when(loadPort.loadById(id)).thenReturn(null);
 
         // when
         final var violationCollector = instanceUnderTest.validateUpdate(domain);
 
         // then
         assertTrue(violationCollector.hasViolations());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getCallSign(), callSignId);
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Update of CallSign Link failed. No Record with id = 5", violation);
+        assertEquals(domain.getId(), id);
+        assertEquals(domain.getCallSign(), callSign);
         assertEquals(domain.getComment(), "Test");
     }
 
     @Test
     public void testDomainValidateUpdateCheckUniquenessDifferenceDriverIdToUpdate() {
         // given
-        final var driverIdToAdd = 5L;
-        final var callSignId = 4;
+        final var id = 5L;
+        final var callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToAdd)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
@@ -163,32 +165,36 @@ class CallSignBusinessRuleValidatorTest {
 
         // then
         assertTrue(violationCollector.hasViolations());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getCallSign(), callSignId);
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Update of CallSign Link failed. No Record with id = 5", violation);
+        assertEquals(domain.getId(), id);
+        assertEquals(domain.getCallSign(), callSign);
         assertEquals(domain.getComment(), "Test");
     }
 
     @Test
     public void testDomainValidateUpdateCheckUniquenessNotDifferenceDriverIdToUpdate() {
         // given
-        final var driverIdToUpdate = 5L;
-        final var callSignId = 4;
+        final var id = 5L;
+        final var callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToUpdate)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadByCallSign(domain.getCallSign())).thenReturn(CallSign.builder().id(driverIdToUpdate).build());
+        when(loadPort.loadByCallSign(domain.getCallSign())).thenReturn(CallSign.builder().id(id).build());
 
         // when
         final var violationCollector = instanceUnderTest.validateUpdate(domain);
 
         // then
         assertTrue(violationCollector.hasViolations());
-        assertEquals(domain.getId(), driverIdToUpdate);
-        assertEquals(domain.getCallSign(), callSignId);
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Update of CallSign Link failed. No Record with id = 5", violation);
+        assertEquals(domain.getId(), id);
+        assertEquals(domain.getCallSign(), callSign);
         assertEquals(domain.getComment(), "Test");
     }
 }

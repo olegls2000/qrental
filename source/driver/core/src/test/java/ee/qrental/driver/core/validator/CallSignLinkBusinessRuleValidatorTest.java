@@ -27,18 +27,18 @@ class CallSignLinkBusinessRuleValidatorTest {
     public void testDomainValidateAdd() {
         // given
         final var driverIdToAdd = 5L;
-        final var idToAdd = 6L;
-        final var callSignId = 4;
+        final var id = 6L;
+        final var callSign = 4;
 
-        final var callSign = CallSign.builder()
-                .id(idToAdd)
-                .callSign(callSignId)
+        final var callSignInstance = CallSign.builder()
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
         final var domain = CallSignLink.builder()
                 .id(driverIdToAdd)
-                .callSign(callSign)
+                .callSign(callSignInstance)
                 .driverId(driverIdToAdd)
                 .dateStart(LocalDate.now())
                 .dateEnd(LocalDate.of(2024, Month.NOVEMBER, 16))
@@ -49,7 +49,7 @@ class CallSignLinkBusinessRuleValidatorTest {
         final var violationCollector = instanceUnderTest.validateAdd(domain);
 
         // then
-        assertNotNull(callSign);
+        assertNotNull(callSignInstance);
         assertTrue(domain.isActive());
         assertEquals(domain.getId(), driverIdToAdd);
         assertEquals(domain.getDriverId(), driverIdToAdd);
@@ -64,31 +64,31 @@ class CallSignLinkBusinessRuleValidatorTest {
     public void testDomainValidateAddCheckIsCallSignNotFree() {
         // given
         final var driverIdToAdd = 5L;
-        final var idToAdd = 6L;
-        final var callSignId = 4;
+        final var id = 6L;
+        final var callSign = 4;
 
-        final var callSign = CallSign.builder()
-                .id(idToAdd)
-                .callSign(callSignId)
+        final var callSignInstance = CallSign.builder()
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
         final var domain = CallSignLink.builder()
                 .id(driverIdToAdd)
-                .callSign(callSign)
+                .callSign(callSignInstance)
                 .driverId(driverIdToAdd)
                 .dateStart(LocalDate.now())
                 .dateEnd(LocalDate.of(2024, Month.NOVEMBER, 16))
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadActiveByCallSignId(idToAdd)).thenReturn(domain);
+        when(loadPort.loadActiveByCallSignId(id)).thenReturn(domain);
 
         // when
         final var violationCollector = instanceUnderTest.validateAdd(domain);
 
         // then
-        assertNotNull(callSign);
+        assertNotNull(callSignInstance);
         assertTrue(domain.isActive());
         assertEquals(domain.getId(), driverIdToAdd);
         assertEquals(domain.getDriverId(), driverIdToAdd);
@@ -97,39 +97,41 @@ class CallSignLinkBusinessRuleValidatorTest {
         assertEquals(domain.getDateStart(), LocalDate.now());
         assertEquals(domain.getDateEnd(), LocalDate.of(2024, Month.NOVEMBER, 16));
         assertTrue(violationCollector.hasViolations());
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Call Sign: '4' already uses by active Link and can not be linked.", violation);
     }
 
     @Test
     public void testDomainValidateDelete() {
         // given
-        final var driverIdToAdd = 5L;
-        final var idToAdd = 6L;
-        final var callSignId = 4;
+        final var driverIdToDelete = 5L;
+        final var id = 6L;
+        final var callSign = 4;
 
-        final var callSign = CallSign.builder()
-                .id(idToAdd)
-                .callSign(callSignId)
+        final var callSignInstance = CallSign.builder()
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
         final var domain = CallSignLink.builder()
-                .id(driverIdToAdd)
-                .callSign(callSign)
-                .driverId(driverIdToAdd)
+                .id(driverIdToDelete)
+                .callSign(callSignInstance)
+                .driverId(driverIdToDelete)
                 .dateStart(LocalDate.now())
                 .dateEnd(LocalDate.of(2024, Month.NOVEMBER, 16))
                 .comment("Test")
                 .build();
 
         // when
-        final var violationCollector = instanceUnderTest.validateDelete(idToAdd);
+        final var violationCollector = instanceUnderTest.validateDelete(id);
 
         // then
-        assertNotNull(callSign);
+        assertNotNull(callSignInstance);
         assertTrue(domain.isActive());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getDriverId(), driverIdToAdd);
-        assertEquals(domain.getId(), driverIdToAdd);
+        assertEquals(domain.getId(), driverIdToDelete);
+        assertEquals(domain.getDriverId(), driverIdToDelete);
+        assertEquals(domain.getId(), driverIdToDelete);
         assertEquals(domain.getComment(), "Test");
         assertEquals(domain.getDateStart(), LocalDate.now());
         assertEquals(domain.getDateEnd(), LocalDate.of(2024, Month.NOVEMBER, 16));
@@ -139,36 +141,36 @@ class CallSignLinkBusinessRuleValidatorTest {
     @Test
     public void testDomainValidateUpdate() {
         // given
-        final var driverIdToAdd = 5L;
-        final var idToAdd = 6L;
-        final var callSignId = 4;
+        final var driverIdToUpdate = 5L;
+        final var id = 6L;
+        final var callSign = 4;
 
-        final var callSign = CallSign.builder()
-                .id(idToAdd)
-                .callSign(callSignId)
+        final var callSignInstance = CallSign.builder()
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
         final var domain = CallSignLink.builder()
-                .id(driverIdToAdd)
-                .callSign(callSign)
-                .driverId(driverIdToAdd)
+                .id(driverIdToUpdate)
+                .callSign(callSignInstance)
+                .driverId(driverIdToUpdate)
                 .dateStart(LocalDate.now())
                 .dateEnd(LocalDate.of(2024, Month.NOVEMBER, 16))
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadById(driverIdToAdd)).thenReturn(CallSignLink.builder().id(driverIdToAdd).build());
+        when(loadPort.loadById(driverIdToUpdate)).thenReturn(CallSignLink.builder().id(driverIdToUpdate).build());
 
         // when
         final var violationCollector = instanceUnderTest.validateUpdate(domain);
 
         // then
-        assertNotNull(callSign);
+        assertNotNull(callSignInstance);
         assertTrue(domain.isActive());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getDriverId(), driverIdToAdd);
-        assertEquals(domain.getId(), driverIdToAdd);
+        assertEquals(domain.getId(), driverIdToUpdate);
+        assertEquals(domain.getDriverId(), driverIdToUpdate);
+        assertEquals(domain.getId(), driverIdToUpdate);
         assertEquals(domain.getComment(), "Test");
         assertEquals(domain.getDateStart(), LocalDate.now());
         assertEquals(domain.getDateEnd(), LocalDate.of(2024, Month.NOVEMBER, 16));
@@ -178,39 +180,41 @@ class CallSignLinkBusinessRuleValidatorTest {
     @Test
     public void testDomainValidateUpdateCheckExistence() {
         // given
-        final var driverIdToAdd = 5L;
-        final var idToAdd = 6L;
-        final var callSignId = 4;
+        final var driverIdToUpdate = 5L;
+        final var id = 6L;
+        final var callSign = 4;
 
-        final var callSign = CallSign.builder()
-                .id(idToAdd)
-                .callSign(callSignId)
+        final var callSignInstance = CallSign.builder()
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
         final var domain = CallSignLink.builder()
-                .id(driverIdToAdd)
-                .callSign(callSign)
-                .driverId(driverIdToAdd)
+                .id(driverIdToUpdate)
+                .callSign(callSignInstance)
+                .driverId(driverIdToUpdate)
                 .dateStart(LocalDate.now())
                 .dateEnd(LocalDate.of(2024, Month.NOVEMBER, 16))
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadById(driverIdToAdd)).thenReturn(null);
+        when(loadPort.loadById(driverIdToUpdate)).thenReturn(null);
 
         // when
         final var violationCollector = instanceUnderTest.validateUpdate(domain);
 
         // then
-        assertNotNull(callSign);
+        assertNotNull(callSignInstance);
         assertTrue(domain.isActive());
-        assertEquals(domain.getId(), driverIdToAdd);
-        assertEquals(domain.getDriverId(), driverIdToAdd);
-        assertEquals(domain.getId(), driverIdToAdd);
+        assertEquals(domain.getId(), driverIdToUpdate);
+        assertEquals(domain.getDriverId(), driverIdToUpdate);
+        assertEquals(domain.getId(), driverIdToUpdate);
         assertEquals(domain.getComment(), "Test");
         assertEquals(domain.getDateStart(), LocalDate.now());
         assertEquals(domain.getDateEnd(), LocalDate.of(2024, Month.NOVEMBER, 16));
         assertTrue(violationCollector.hasViolations());
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Update of CallSign Link failed. No Record with id = 5", violation);
     }
 }
