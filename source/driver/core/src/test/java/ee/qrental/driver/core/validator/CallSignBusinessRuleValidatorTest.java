@@ -28,12 +28,12 @@ class CallSignBusinessRuleValidatorTest {
     @Test
     public void testDomainValidateAdd() {
         // given
-        final var driverIdToAdd = 5L;
-        final var callSignId = 4;
+        final long id = 555L;
+        final int callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToAdd)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
@@ -47,22 +47,24 @@ class CallSignBusinessRuleValidatorTest {
     @Test
     public void testDomainUniquenessValidateAdd() {
         // given
-        final var driverIdToAdd = 5L;
-        final var callSignId = 4;
+        final long id = 555L;
+        final int callSign = 4;
 
         final var domain = CallSign.builder()
-                .id(driverIdToAdd)
-                .callSign(callSignId)
+                .id(id)
+                .callSign(callSign)
                 .comment("Test")
                 .build();
 
-        when(loadPort.loadByCallSign(domain.getCallSign())).thenReturn(CallSign.builder().callSign(1).build());
+        when(loadPort.loadByCallSign(4)).thenReturn(CallSign.builder().id(555L).callSign(4).build());
 
         // when
         final var violationCollector = instanceUnderTest.validateAdd(domain);
 
         // then
         assertTrue(violationCollector.hasViolations());
+        final var violation = violationCollector.getViolations().get(0);
+        assertEquals("Call Sign 4 already exists", violation);
     }
 
     @Test
