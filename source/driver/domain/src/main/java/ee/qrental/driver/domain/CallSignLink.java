@@ -20,9 +20,7 @@ public class CallSignLink {
     if (dateEnd == null) {
       return true;
     }
-    if (dateEnd.isAfter(LocalDate.now())) {
-      return true;
-    }
-    return false;
+
+    return dateEnd.isAfter(LocalDate.now());
   }
 }

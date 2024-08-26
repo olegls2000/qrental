@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.Collections;
+import java.util.List;
+
 @AllArgsConstructor
 public class RentCalculationAdapterMapper {
 
@@ -43,6 +46,21 @@ public class RentCalculationAdapterMapper {
                         .transactionId(entity.getTransactionId())
                         .build())
             .collect(Collectors.toList());
+
+    return Collections.unmodifiableList(result);
+    if (resultsList == null) {
+      return null;
+    }
+    final var result =
+        resultsList.stream()
+            .map(
+                entity ->
+                    RentCalculationResult.builder()
+                        .id(entity.getId())
+                        .carLinkId(entity.getCarLinkId())
+                        .transactionId(entity.getTransactionId())
+                        .build())
+            .toList();
 
     return Collections.unmodifiableList(result);
   }

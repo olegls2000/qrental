@@ -7,74 +7,88 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentCalculationAdapterMapperTest {
 
   private final RentCalculationAdapterMapper instance = new RentCalculationAdapterMapper();
+    private final RentCalculationAdapterMapper instanceUnderTest = new RentCalculationAdapterMapper();
 
   @Test
   public void checkSmth() {
+    @Test
+    public void testIfMapEntityToDomainIsNull() {
 
-    RentCalculationJakartaEntity entity = null;
+        // given
+        RentCalculationJakartaEntity domain = null;
 
-    final var result = instance.mapToDomain(entity);
+        // when
+        final var result = instanceUnderTest.mapToDomain(domain);
 
-    assertNull(result);
-  }
+        // then
+        assertNull(result);
+    }
 
-  @Test
-  public void checkSmth2() {
+    @Test
+    public void testShouldMapEntityToDomainSuccessfully() {
 
-    RentCalculationJakartaEntity entity =
-        RentCalculationJakartaEntity.builder()
-            .id(3L)
-            .actionDate(LocalDate.of(2024, Month.JANUARY, 13))
-            .qWeekId(44L)
-            .comment("comment")
-            .results(
-                Arrays.asList(
-                    RentCalculationResultJakartaEntity.builder()
-                        .id(55L)
-                        .transactionId(66L)
-                        .carLinkId(77L)
-                        .build()))
-            .build();
+        // given
+        RentCalculationJakartaEntity entity =
+                RentCalculationJakartaEntity.builder()
+                        .id(3L)
+                        .actionDate(LocalDate.of(2024, Month.JANUARY, 13))
+                        .qWeekId(44L)
+                        .comment("comment")
+                        .results(
+                                Collections.singletonList(
+                                        RentCalculationResultJakartaEntity.builder()
+                                                .id(55L)
+                                                .transactionId(66L)
+                                                .carLinkId(77L)
+                                                .build()))
+                        .build();
 
-    final var domain = instance.mapToDomain(entity);
+        // when
+        final var domain = instanceUnderTest.mapToDomain(entity);
 
-    assertNotNull(domain);
-    assertEquals(3L, domain.getId());
-    assertEquals(LocalDate.of(2024, Month.JANUARY, 13), domain.getActionDate());
-    assertEquals(44L, domain.getQWeekId());
-    assertEquals("comment", domain.getComment());
-    assertEquals(1, domain.getResults().size());
+        // then
+        assertNotNull(domain);
+        assertEquals(3L, domain.getId());
+        assertEquals(LocalDate.of(2024, Month.JANUARY, 13), domain.getActionDate());
+        assertEquals(44L, domain.getQWeekId());
+        assertEquals("comment", domain.getComment());
+        assertEquals(1, domain.getResults().size());
 
-    final var calculationResult = domain.getResults().get(0);
-    assertEquals(55L, calculationResult.getId());
-    assertEquals(66L, calculationResult.getTransactionId());
-    assertEquals(77L, calculationResult.getCarLinkId());
-  }
+        final var calculationResult = domain.getResults().get(0);
+        assertEquals(55L, calculationResult.getId());
+        assertEquals(66L, calculationResult.getTransactionId());
+        assertEquals(77L, calculationResult.getCarLinkId());
+    }
 
-  @Test
-  public void checkSmth3() {
-    RentCalculationJakartaEntity entity =
-        RentCalculationJakartaEntity.builder()
-            .id(3L)
-            .actionDate(LocalDate.of(2024, Month.JANUARY, 13))
-            .qWeekId(44L)
-            .comment("comment")
-            .results(null)
-            .build();
+    @Test
+    public void testShouldMapEntityToDomainWhenResultsAreNull() {
 
-    final var domain = instance.mapToDomain(entity);
+        // given
+        RentCalculationJakartaEntity entity =
+                RentCalculationJakartaEntity.builder()
+                        .id(3L)
+                        .actionDate(LocalDate.of(2024, Month.JANUARY, 13))
+                        .qWeekId(44L)
+                        .comment("comment")
+                        .results(null)
+                        .build();
 
-    assertNotNull(domain);
-    assertEquals(3L, domain.getId());
-    assertEquals(LocalDate.of(2024, Month.JANUARY, 13), domain.getActionDate());
-    assertEquals(44L, domain.getQWeekId());
-    assertEquals("comment", domain.getComment());
-    assertNull(domain.getResults());
-  }
+        // when
+        final var domain = instanceUnderTest.mapToDomain(entity);
+
+        // then
+        assertNotNull(domain);
+        assertEquals(3L, domain.getId());
+        assertEquals(LocalDate.of(2024, Month.JANUARY, 13), domain.getActionDate());
+        assertEquals(44L, domain.getQWeekId());
+        assertEquals("comment", domain.getComment());
+        assertNull(domain.getResults());
+    }
 }
