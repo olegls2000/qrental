@@ -60,7 +60,9 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
             final var qWeekId = week.getId();
             final var driverId = activeCase.getDriverId();
             final var insuranceCaseBalance = getInsuranceCaseBalance(activeCase, qWeekId);
-            final var damageTransaction = getDamageTransaction(driverId, week);
+            final var damageTransaction =
+                getDamageTransaction(driverId, week, insuranceCaseBalance);
+
             final var paidSelfResponsibilityAmountAbs =
                 getAbsSelfResponsibilityTransactionsAmountAbs(driverId, qWeekId);
 
@@ -102,8 +104,15 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   }
 
   private TransactionAddRequest getDamageTransaction(
-      final Long driverId, final QWeekResponse qWeek) {
-    final var amountForDamageCompensation = getDamageCompensationAmount(driverId, qWeek.getId());
+      final Long driverId,
+      final QWeekResponse qWeek,
+      final InsuranceCaseBalance insuranceCaseBalance) {
+    var amountForDamageCompensation = getDamageCompensationAmount(driverId, qWeek.getId());
+
+    if (amountForDamageCompensation.compareTo(ZERO) == 0) {
+      amountForDamageCompensation = insuranceCaseBalance.getDamageRemaining();
+    }
+
     final var damagePaymentTransaction = new TransactionAddRequest();
     damagePaymentTransaction.setComment(
         "Automatically created transaction for the damage compensation.");
