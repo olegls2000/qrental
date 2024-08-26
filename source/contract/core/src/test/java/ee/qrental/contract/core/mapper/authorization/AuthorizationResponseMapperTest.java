@@ -10,47 +10,49 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthorizationResponseMapperTest {
-    private final AuthorizationResponseMapper instanceUnderTest = new AuthorizationResponseMapper();
+  private final AuthorizationResponseMapper instanceUnderTest = new AuthorizationResponseMapper();
 
-    @Test
-    public void testIfResponseIsNull() {
+  @Test
+  public void testIfResponseIsNull() {
 
-        // given
-        Authorization domain = null;
+    // given
+    final Authorization domain = null;
 
-        // when
-        final var result = instanceUnderTest.toResponse(domain);
+    // when
+    final var result = instanceUnderTest.toResponse(domain);
 
-        // then
-        assertNull(result);
-    }
+    // then
+    assertNull(result);
+  }
 
-    @Test
-    public void testShouldResponseSuccessfully() {
+  @Test
+  public void testShouldResponseSuccessfully() {
 
-        // given
-        Authorization domain =
-                Authorization.builder()
-                        .id(3L)
-                        .driverId(5L)
-                        .driverIsikukood(39503150234L)
-                        .driverFirstName("Vladimir")
-                        .driverLastName("Vladimirovich")
-                        .driverEmail("test@gmail.com")
-                        .created(LocalDate.of(2024, Month.JANUARY, 13))
-                        .build();
-        // when
-        final var response = instanceUnderTest.toResponse(domain);
+    // given
+    final var domain =
+        Authorization.builder()
+            .id(3L)
+            .driverId(5L)
+            .driverIsikukood(39503150234L)
+            .driverFirstName("Vladimir")
+            .driverLastName("Vladimirovich")
+            .driverEmail("test@gmail.com")
+            .created(LocalDate.of(2024, Month.JANUARY, 13))
+            .build();
+    // when
+    final var response = instanceUnderTest.toResponse(domain);
 
-        // then
-        assertNotNull(response);
-        assertEquals("Authorization Bolt for Driver: 39503150234, Vladimir Vladimirovich", instanceUnderTest.toObjectInfo(domain));
-        assertEquals(3L, response.getId());
-        assertEquals(5L, response.getDriverId());
-        assertEquals(39503150234L, response.getDriverIsikukood());
-        assertEquals("Vladimir", response.getDriverFirstName());
-        assertEquals("Vladimirovich", response.getDriverLastName());
-        assertEquals("test@gmail.com", response.getDriverEmail());
-        assertEquals(LocalDate.of(2024, Month.JANUARY, 13), response.getCreated());
-    }
+    // then
+    assertNotNull(response);
+    assertEquals(
+        "Authorization Bolt for Driver: 39503150234, Vladimir Vladimirovich",
+        instanceUnderTest.toObjectInfo(domain));
+    assertEquals(3L, response.getId());
+    assertEquals(5L, response.getDriverId());
+    assertEquals(39503150234L, response.getDriverIsikukood());
+    assertEquals("Vladimir", response.getDriverFirstName());
+    assertEquals("Vladimirovich", response.getDriverLastName());
+    assertEquals("test@gmail.com", response.getDriverEmail());
+    assertEquals(LocalDate.of(2024, Month.JANUARY, 13), response.getCreated());
+  }
 }

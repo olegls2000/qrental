@@ -18,30 +18,30 @@ public class RentCalculationAdapterMapper {
     }
 
     return RentCalculation.builder()
-            .id(entity.getId())
-            .actionDate(entity.getActionDate())
-            .qWeekId(entity.getQWeekId())
-            .results(mapResultsToDomains(entity.getResults()))
-            .comment(entity.getComment())
-            .build();
+        .id(entity.getId())
+        .actionDate(entity.getActionDate())
+        .qWeekId(entity.getQWeekId())
+        .results(mapResultsToDomains(entity.getResults()))
+        .comment(entity.getComment())
+        .build();
   }
 
   private List<RentCalculationResult> mapResultsToDomains(
-          final List<RentCalculationResultJakartaEntity> resultsList) {
+      final List<RentCalculationResultJakartaEntity> resultsList) {
 
     if (resultsList == null) {
       return null;
     }
     final var result =
-            resultsList.stream()
-                    .map(
-                            entity ->
-                                    RentCalculationResult.builder()
-                                            .id(entity.getId())
-                                            .carLinkId(entity.getCarLinkId())
-                                            .transactionId(entity.getTransactionId())
-                                            .build())
-                    .toList();
+        resultsList.stream()
+            .map(
+                entity ->
+                    RentCalculationResult.builder()
+                        .id(entity.getId())
+                        .carLinkId(entity.getCarLinkId())
+                        .transactionId(entity.getTransactionId())
+                        .build())
+            .toList();
 
     return Collections.unmodifiableList(result);
   }
