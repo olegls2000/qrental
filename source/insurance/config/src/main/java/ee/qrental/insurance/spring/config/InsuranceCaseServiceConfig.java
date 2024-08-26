@@ -65,15 +65,13 @@ public class InsuranceCaseServiceConfig {
       final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseBalanceLoadPort caseBalanceLodPort,
       final InsuranceCaseBalanceDeriveService deriveService,
-      final InsuranceCaseBalanceAddPort caseBalanceAddPort,
       final InsuranceCalculationLoadPort calculationLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery,
-      final GetQWeekQuery qWeekQuery,
-      final QDateTime qDateTime) {
+      final GetQWeekQuery qWeekQuery) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
@@ -85,8 +83,7 @@ public class InsuranceCaseServiceConfig {
         transactionQuery,
         transactionAddUseCase,
         transactionTypeQuery,
-        qWeekQuery,
-        qDateTime);
+        qWeekQuery);
   }
 
   @Bean

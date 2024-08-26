@@ -41,7 +41,6 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetQWeekQuery qWeekQuery;
-  private final QDateTime qDateTime;
 
   @Transactional
   @Override
