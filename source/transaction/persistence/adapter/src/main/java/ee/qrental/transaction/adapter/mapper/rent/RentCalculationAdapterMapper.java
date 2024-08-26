@@ -1,17 +1,14 @@
 package ee.qrental.transaction.adapter.mapper.rent;
 
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
+
 import ee.qrental.transaction.domain.rent.RentCalculation;
 import ee.qrental.transaction.domain.rent.RentCalculationResult;
 import ee.qrental.transaction.entity.jakarta.rent.RentCalculationJakartaEntity;
 import ee.qrental.transaction.entity.jakarta.rent.RentCalculationResultJakartaEntity;
+import java.util.List;
 import lombok.AllArgsConstructor;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import java.util.Collections;
-import java.util.List;
 
 @AllArgsConstructor
 public class RentCalculationAdapterMapper {
@@ -45,23 +42,8 @@ public class RentCalculationAdapterMapper {
                         .carLinkId(entity.getCarLinkId())
                         .transactionId(entity.getTransactionId())
                         .build())
-            .collect(Collectors.toList());
+            .collect(toList());
 
-    return Collections.unmodifiableList(result);
-    if (resultsList == null) {
-      return null;
-    }
-    final var result =
-        resultsList.stream()
-            .map(
-                entity ->
-                    RentCalculationResult.builder()
-                        .id(entity.getId())
-                        .carLinkId(entity.getCarLinkId())
-                        .transactionId(entity.getTransactionId())
-                        .build())
-            .toList();
-
-    return Collections.unmodifiableList(result);
+    return unmodifiableList(result);
   }
 }
