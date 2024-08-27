@@ -42,7 +42,9 @@ public class ObligationAdapterConfig {
   @Bean
   ObligationCalculationPersistenceAdapter getObligationCalculationPersistenceAdapter(
       final ObligationCalculationRepository calculationRepository,
-      final ObligationCalculationResultRepository resultRepository) {
-    return new ObligationCalculationPersistenceAdapter(calculationRepository, resultRepository);
+      final ObligationCalculationResultRepository resultRepository,
+      final ObligationCalculationAdapterMapper mapper) {
+    return new ObligationCalculationPersistenceAdapter(
+        calculationRepository, resultRepository, mapper);
   }
 }

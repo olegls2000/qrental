@@ -1,5 +1,6 @@
 package ee.qrental.bonus.adapter.adapter;
 
+import ee.qrental.bonus.adapter.mapper.ObligationCalculationAdapterMapper;
 import ee.qrental.bonus.adapter.repository.ObligationCalculationRepository;
 import ee.qrental.bonus.adapter.repository.ObligationCalculationResultRepository;
 import ee.qrental.bonus.api.out.ObligationCalculationAddPort;
@@ -14,19 +15,20 @@ public class ObligationCalculationPersistenceAdapter implements ObligationCalcul
 
   private final ObligationCalculationRepository calculationRepository;
   private final ObligationCalculationResultRepository resultRepository;
+  private final ObligationCalculationAdapterMapper mapper;
 
   @Override
   public ObligationCalculation add(final ObligationCalculation domain) {
-    final var rentCalculationEntity =
+    final var calculationEntity =
         ObligationCalculationJakartaEntity.builder()
             .actionDate(domain.getActionDate())
             .qWeekId(domain.getQWeekId())
             .comment(domain.getComment())
             .build();
-    final var rentCalculationEntitySaved = calculationRepository.save(rentCalculationEntity);
-    saveResults(domain, rentCalculationEntitySaved);
+    final var calculationEntitySaved = calculationRepository.save(calculationEntity);
+    saveResults(domain, calculationEntitySaved);
 
-    return null;
+    return mapper.mapToDomain(calculationEntitySaved);
   }
 
   private void saveResults(
