@@ -133,8 +133,17 @@ class NewDriverBonusStrategyTest {
   public void
       testCalculateBonusForDriverWithMatchedObligationAndWithCarLinkCalculationAfter4Weeks() {
     // given
-    final var obligation = Obligation.builder().driverId(55L).matchCount(1).build();
+    final var obligation = Obligation.builder().driverId(55L).qWeekId(33L).matchCount(1).build();
     final var weekPositiveAmount = BigDecimal.ONE;
+    final var qWeekResponse =
+        QWeekResponse.builder()
+            .id(222L)
+            .year(2024)
+            .number(30)
+            .start(LocalDate.of(2024, Month.JULY, 9))
+            .end(LocalDate.of(2024, Month.AUGUST, 20))
+            .description("Test")
+            .build();
     when(carLinkQuery.getFirstLinkByDriverId(55L))
         .thenReturn(
             CarLinkResponse.builder()
@@ -142,6 +151,9 @@ class NewDriverBonusStrategyTest {
                 .dateStart(LocalDate.of(2023, Month.JANUARY, 11)) // Wednesday
                 .build());
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2023, Month.FEBRUARY, 13)); // Monday
+    when(qWeekQuery.getByYearAndNumber(2023, 2)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(222L)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(33L)).thenReturn(qWeekResponse);
 
     // when
     final var bonusTransactionsAddRequests =
@@ -155,8 +167,17 @@ class NewDriverBonusStrategyTest {
   public void
       testCalculateBonusForDriverWithMatchedObligationAndWithCarLinkCalculationWithoutContractWithin4Weeks() {
     // given
-    final var obligation = Obligation.builder().driverId(55L).matchCount(1).build();
+    final var obligation = Obligation.builder().driverId(55L).qWeekId(33L).matchCount(1).build();
     final var weekPositiveAmount = BigDecimal.ONE;
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(222L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
     when(carLinkQuery.getFirstLinkByDriverId(55L))
         .thenReturn(
             CarLinkResponse.builder()
@@ -165,6 +186,9 @@ class NewDriverBonusStrategyTest {
                 .build());
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2023, Month.FEBRUARY, 12)); // Monday
     when(contractQuery.getActiveContractByDriverId(55L)).thenReturn(null);
+    when(qWeekQuery.getByYearAndNumber(2023, 2)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(222L)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(33L)).thenReturn(qWeekResponse);
 
     // when
     final var bonusTransactionsAddRequests =
@@ -178,8 +202,17 @@ class NewDriverBonusStrategyTest {
   public void
       testCalculateBonusForDriverWithMatchedObligationAndWithCarLinkCalculationWithNon12WeeksContractWithin4Weeks() {
     // given
-    final var obligation = Obligation.builder().driverId(55L).matchCount(1).build();
+    final var obligation = Obligation.builder().driverId(55L).qWeekId(33L).matchCount(1).build();
     final var weekPositiveAmount = BigDecimal.ONE;
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(222L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
     when(carLinkQuery.getFirstLinkByDriverId(55L))
         .thenReturn(
             CarLinkResponse.builder()
@@ -189,6 +222,9 @@ class NewDriverBonusStrategyTest {
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2023, Month.FEBRUARY, 12)); // Monday
     when(contractQuery.getActiveContractByDriverId(55L))
         .thenReturn(ContractResponse.builder().active(true).duration(11).build());
+    when(qWeekQuery.getByYearAndNumber(2023, 2)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(222L)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(33L)).thenReturn(qWeekResponse);
 
     // when
     final var bonusTransactionsAddRequests =
@@ -204,6 +240,15 @@ class NewDriverBonusStrategyTest {
     // given
     final var obligation = Obligation.builder().driverId(55L).matchCount(1).qWeekId(9L).build();
     final var weekPositiveAmount = BigDecimal.ONE;
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(222L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
     when(carLinkQuery.getFirstLinkByDriverId(55L))
         .thenReturn(
             CarLinkResponse.builder()
@@ -225,6 +270,9 @@ class NewDriverBonusStrategyTest {
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
     when(qWeekQuery.getOneAfterById(9L))
         .thenReturn(QWeekResponse.builder().start(LocalDate.of(2023, Month.FEBRUARY, 13)).build());
+    when(qWeekQuery.getByYearAndNumber(2023, 2)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(222L)).thenReturn(qWeekResponse);
+    when(qWeekQuery.getOneAfterById(33L)).thenReturn(qWeekResponse);
 
     // when
     final var bonusTransactionsAddRequests =

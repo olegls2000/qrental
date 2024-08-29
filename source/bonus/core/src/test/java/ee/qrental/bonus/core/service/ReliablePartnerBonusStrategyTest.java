@@ -9,11 +9,15 @@ import static org.mockito.Mockito.when;
 import ee.qrental.bonus.domain.BonusProgram;
 import ee.qrental.bonus.domain.Obligation;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.response.type.TransactionTypeResponse;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -104,10 +108,20 @@ class ReliablePartnerBonusStrategyTest {
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(33L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+    when(qWeekQuery.getOneAfterById(9L)).thenReturn(qWeekResponse);
 
     // when
     final var addTransactionRequests =
@@ -133,10 +147,20 @@ class ReliablePartnerBonusStrategyTest {
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(33L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+    when(qWeekQuery.getOneAfterById(9L)).thenReturn(qWeekResponse);
 
     // when
     final var addTransactionRequests =
@@ -159,10 +183,20 @@ class ReliablePartnerBonusStrategyTest {
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(33L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+    when(qWeekQuery.getOneAfterById(9L)).thenReturn(qWeekResponse);
 
     // when
     final var addTransactionRequests =
@@ -185,10 +219,20 @@ class ReliablePartnerBonusStrategyTest {
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
+    final var qWeekResponse =
+            QWeekResponse.builder()
+                    .id(33L)
+                    .year(2024)
+                    .number(30)
+                    .start(LocalDate.of(2024, Month.JULY, 9))
+                    .end(LocalDate.of(2024, Month.AUGUST, 20))
+                    .description("Test")
+                    .build();
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
     when(transactionTypeQuery.getByName("bonus"))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
+    when(qWeekQuery.getOneAfterById(9L)).thenReturn(qWeekResponse);
 
     // when
     final var addTransactionRequests =

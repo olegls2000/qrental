@@ -1,9 +1,11 @@
 package ee.qrental.transaction.core.validator;
 
+import static ee.qrental.common.utils.QTimeUtils.Q_DATE_FORMATTER;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.MEDIUM;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.QValidator;
 import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -119,9 +121,9 @@ public class TransactionUpdateDeleteBusinessRuleValidator implements QValidator<
     final var transactionDate = domain.getDate();
     if (transactionDate.isBefore(balanceLatestCalculatedDate)
         || transactionDate.equals(balanceLatestCalculatedDate)) {
-      final var formattedTransactionDate = transactionDate.format(ofLocalizedDate(MEDIUM));
+      final var formattedTransactionDate = Q_DATE_FORMATTER.format(transactionDate);
       final var formattedBalanceCalculatedDate =
-          balanceLatestCalculatedDate.format(ofLocalizedDate(MEDIUM));
+              Q_DATE_FORMATTER.format(balanceLatestCalculatedDate);
       violationCollector.collect(
           format(
               "Transaction new date %s must be after the latest calculated Balance date: %s",

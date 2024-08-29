@@ -216,12 +216,7 @@ class TransactionBusinessRuleValidatorTest {
     // then
     assertTrue(violationsCollector.hasViolations());
     assertEquals(1, violationsCollector.getViolations().size());
-    assertTrue(
-        violationsCollector
-            .getViolations()
-            .get(0)
-            .equals(
-                "Transaction new date 25 Jan 2023 must be after the latest calculated Balance date: 26 Jan 2023"));
+    assertEquals("Transaction new date 25-01-2023 must be after the latest calculated Balance date: 26-01-2023", violationsCollector.getViolations().get(0));
   }
 
   @Test
@@ -242,12 +237,7 @@ class TransactionBusinessRuleValidatorTest {
     // then
     assertTrue(violationsCollector.hasViolations());
     assertEquals(1, violationsCollector.getViolations().size());
-    assertTrue(
-        violationsCollector
-            .getViolations()
-            .get(0)
-            .equals(
-                "Transaction new date 26 Jan 2023 must be after the latest calculated Balance date: 26 Jan 2023"));
+    assertEquals("Transaction new date 26-01-2023 must be after the latest calculated Balance date: 26-01-2023", violationsCollector.getViolations().get(0));
   }
 
   @Test
