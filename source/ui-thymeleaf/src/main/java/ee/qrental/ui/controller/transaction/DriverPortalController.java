@@ -11,6 +11,7 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
+import ee.qrental.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
@@ -32,12 +33,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(BALANCE_ROOT_PATH)
 @AllArgsConstructor
-public class BalanceQueryController {
+public class DriverPortalController {
 
   private final QDateFormatter qDateFormatter;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceQuery balanceQuery;
+  private final GetInsuranceCaseBalanceQuery insuranceCaseBalanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
@@ -68,6 +70,7 @@ public class BalanceQueryController {
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
+    addInsuranceDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
 
     return "detailView/balanceDriver";
@@ -84,6 +87,7 @@ public class BalanceQueryController {
     addContractDataToModel(driverId, model);
     addCarDataToModel(driverId, model);
     addTotalFinancialDataToModel(driverId, model);
+    addInsuranceDataToModel(driverId, model);
     addObligationDataToModel(driverId, model);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     List<TransactionResponse> transactions;
@@ -100,6 +104,7 @@ public class BalanceQueryController {
               .toList();
       addBalancePeriodDataToModel(model, rawBalanceContext);
       addObligationPeriodDataToModel(model, driverId, requestedQWeekId);
+      addInsuranceRequestedWeekBalance(model, driverId, requestedQWeekId);
     } else {
       transactions = transactionQuery.getAllByDriverId(driverId);
     }
@@ -193,6 +198,22 @@ public class BalanceQueryController {
     model.addAttribute("driverPhone", driver.getPhone());
     model.addAttribute("driverDeposit", driver.getDeposit());
     model.addAttribute("qFirmId", driver.getQFirmId());
+    model.addAttribute("hasQKasko", driver.getHasQKasko());
+
+  }
+
+  private void addInsuranceRequestedWeekBalance(
+      final Model model, final Long driverId, final Long requestedQWeekId) {
+    model.addAttribute(
+        "insuranceBalanceTotalByDriverIdAndQWeekId",
+        insuranceCaseBalanceQuery.getInsuranceBalanceTotalByDriverIdAndQWeekId(
+            driverId, requestedQWeekId));
+  }
+
+  private void addInsuranceDataToModel(final Long driverId, final Model model) {
+    model.addAttribute(
+        "insuranceBalanceTotal",
+        insuranceCaseBalanceQuery.getInsuranceBalanceTotalByDriverForCurrentWeek(driverId));
   }
 
   private void addTotalFinancialDataToModel(final Long driverId, final Model model) {
@@ -204,10 +225,7 @@ public class BalanceQueryController {
     final var rawFeeTotal = latestDerivedRawBalance.getFeeAmount();
     model.addAttribute("rawBalanceTotal", rawBalanceTotal);
     model.addAttribute("rawFeeTotal", rawFeeTotal);
-    model.addAttribute("rawRepairment", latestDerivedRawBalance.getRepairmentAmount());
     model.addAttribute("total", rawBalanceTotal.add(rawFeeTotal));
-    model.addAttribute(
-        "rawRepairmentWithQKasko", balanceQuery.getAmountRepairmentByDriverWithQKasko(driverId));
 
     final var latestCalculatedBalance = balanceQuery.getLatest();
     if (latestCalculatedBalance == null) {
@@ -260,32 +278,28 @@ public class BalanceQueryController {
     if (dateStart.getDayOfWeek() != DayOfWeek.MONDAY) {
       final var dateStartYear = dateStart.getYear();
       final var dateStarWeekNumber = getWeekNumber(dateStart);
-      final var contractStartWeek = qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
+      final var contractStartWeek =
+          qWeekQuery.getByYearAndNumber(dateStartYear, dateStarWeekNumber);
       final var contractStartWeekNext = qWeekQuery.getOneAfterById(contractStartWeek.getId());
       firstMonday = contractStartWeekNext.getStart();
     }
-    final var datesDuration = activeContract.getDuration()*7;
+    final var datesDuration = activeContract.getDuration() * 7;
     final var dateEnd = firstMonday.plusDays(datesDuration);
 
     final var today = qWeekQuery.getCurrentWeek().getStart();
     final var activeDays = DAYS.between(firstMonday, today);
-    final var activeWeeks = activeDays/7;
+    final var activeWeeks = activeDays / 7;
     final var daysLeft = (dateEnd.minusDays(activeDays));
-          var weeksToEndOfContract = activeContract.getDuration() - activeWeeks ;
+    var weeksToEndOfContract = activeContract.getDuration() - activeWeeks;
     if (activeWeeks >= activeContract.getDuration()) {
-           weeksToEndOfContract = 0;
-       };
-
-
-
-
+      weeksToEndOfContract = 0;
+    }
     model.addAttribute("activeContract", activeContract.getNumber());
     model.addAttribute("activeContractId", activeContract.getId());
     model.addAttribute("activeContractDuration", activeContract.getDuration());
-    model.addAttribute("activeContractStartDate",firstMonday);
-    model.addAttribute("activeContractEndDate",dateEnd);
-    model.addAttribute("activeContractWeeksToEnd",weeksToEndOfContract);
-
+    model.addAttribute("activeContractStartDate", firstMonday);
+    model.addAttribute("activeContractEndDate", dateEnd);
+    model.addAttribute("activeContractWeeksToEnd", weeksToEndOfContract);
   }
 
   private void addCarDataToModel(final Long driverId, final Model model) {

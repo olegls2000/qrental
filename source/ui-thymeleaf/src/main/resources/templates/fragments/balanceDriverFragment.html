@@ -112,32 +112,32 @@
                 </table>
                 <table class="table table-sm table-borderless align-middle mt-4 mb-4">
                     <tr>
-                        <th scope="col" >Contract start date:</th>
-                        <th scope="col" >Contract end date:</th>
-                        <th scope="col" >Duration (weeks):</th>
-                        <th scope="col" >Weeks left:</th>
+                        <th scope="col">Contract start date:</th>
+                        <th scope="col">Contract end date:</th>
+                        <th scope="col">Duration (weeks):</th>
+                        <th scope="col">Weeks left:</th>
                     </tr>
                     <tr>
-                    <td>
-                        <a>
-                        <span th:text="${activeContractStartDate}">???</span>
-                        </a>
-                    </td>
-                    <td>
-                        <a>
-                           <span th:text="${activeContractEndDate}">???</span>
-                        </a>
-                    </td>
-                    <td>
-                        <a>
-                            <span th:text="${activeContractDuration}">???</span>
-                        </a>
-                    </td>
-                    <td>
-                        <a>
-                           <span th:text="${activeContractWeeksToEnd}">???</span>
-                        </a>
-                    </td>
+                        <td>
+                            <a>
+                                <span th:text="${activeContractStartDate}">???</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a>
+                                <span th:text="${activeContractEndDate}">???</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a>
+                                <span th:text="${activeContractDuration}">???</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a>
+                                <span th:text="${activeContractWeeksToEnd}">???</span>
+                            </a>
+                        </td>
                     </tr>
                 </table>
 
@@ -191,13 +191,19 @@
 
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
-                        <small th:text="|Repairment Raw due: ${rawRepairment} EURO |"
+                        <small th:text="|Has QKasko: ${hasQKasko} |"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-danger bg-danger border-danger'">???</small>
                     </div>
                     <div class="col-md-auto">
-                        <small th:text="|Repairment Raw due with Q-Kasko: ${rawRepairmentWithQKasko} EURO|"
+                        <small th:text="|Insurance damage remaining total: ${insuranceBalanceTotal.damageRemainingTotal} EURO|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                               th:classappend="'text-danger bg-danger border-danger'">???</small>
+                    </div>
+                    <div class="col-md-auto">
+                        <small th:text="|Insurance Self responsibility remaining total: ${insuranceBalanceTotal.selfResponsibilityRemainingTotal} EURO|"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 "
                                th:classappend="'text-danger bg-danger border-danger'">???</small>

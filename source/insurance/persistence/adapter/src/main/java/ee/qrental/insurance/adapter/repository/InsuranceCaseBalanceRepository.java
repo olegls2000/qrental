@@ -9,6 +9,9 @@ public interface InsuranceCaseBalanceRepository {
 
   List<InsuranceCaseBalanceJakartaEntity> findAllByInsuranceCaseId(final Long insuranceCaseId);
 
+  List<InsuranceCaseBalanceJakartaEntity> findAllByQWeekIdAndDriverId(
+      final Long qWeekId, final Long driverId);
+
   InsuranceCaseBalanceJakartaEntity save(
       final InsuranceCaseBalanceJakartaEntity insuranceCaseBalance);
 }

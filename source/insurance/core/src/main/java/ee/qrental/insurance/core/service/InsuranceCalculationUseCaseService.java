@@ -5,13 +5,13 @@ import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.*;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
-import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
+import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceDeriveService;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;

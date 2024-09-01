@@ -137,7 +137,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
   }
 
-  @Override
+/*  @Override
   public BigDecimal getAmountRepairmentByDriver(final Long driverId) {
     final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     final var repairmentBalanceSum =
@@ -149,9 +149,9 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var rawSum = getRawTransactionsSum(latestBalance, driverId, repairmentTransactionKindIds);
 
     return round(repairmentBalanceSum.add(rawSum));
-  }
+  }*/
 
-  @Override
+/*  @Override
   public BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId) {
     final var totalRepairment = getAmountRepairmentByDriver(driverId).abs();
     final var selfResponsibility = BigDecimal.valueOf(500);
@@ -167,46 +167,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var totalDriverResponsibility = driversResponsibilityShare.add(selfResponsibility);
 
     return totalDriverResponsibility.negate();
-  }
-
-  @Override
-  public BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber) {
-    final var balance =
-        balanceLoadPort.loadByDriverIdAndYearAndWeekNumberOrDefault(driverId, year, weekNumber);
-    if (balance != null) {
-
-      return round(balance.getAmountsSumWithoutRepairment());
-    }
-    final var endDate = getLastDayOfWeekInYear(year, weekNumber);
-    final var filterBuilder =
-        PeriodAndKindAndDriverTransactionFilter.builder().dateEnd(endDate).driverId(driverId);
-    final var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    if (latestBalance == null) {
-      final var startDate = getFirstDayOfYear(year);
-      final var filter =
-          filterBuilder
-              .dateStart(startDate)
-              .transactionKindIds(getNonRepairmentTransactionKindIds())
-              .build();
-
-      return getSumOfTransactionByFilter(filter);
-    }
-    final var latestCalculatedWeek = qWeekQuery.getById(latestBalance.getQWeekId());
-    final var latestCalculatedWeekNumber = latestCalculatedWeek.getNumber();
-
-    final var earliestNotCalculatedWeek = latestCalculatedWeekNumber + 1;
-    final var startDate = getFirstDayOfWeekInYear(year, earliestNotCalculatedWeek);
-    final var filter =
-        filterBuilder
-            .dateStart(startDate)
-            .transactionKindIds(getNonRepairmentTransactionKindIds())
-            .build();
-    final var fromBalance = latestBalance.getAmountsSumWithoutRepairment();
-    final var rawTransactionSum = getSumOfTransactionByFilter(filter);
-
-    return round(fromBalance.add(rawTransactionSum));
-  }
+  }*/
 
   @Override
   public BigDecimal getRawBalanceTotalByDriverIdAndQWeekId(

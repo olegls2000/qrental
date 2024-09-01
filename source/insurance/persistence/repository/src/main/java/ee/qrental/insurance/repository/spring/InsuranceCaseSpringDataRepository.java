@@ -9,4 +9,6 @@ public interface InsuranceCaseSpringDataRepository
     extends JpaRepository<InsuranceCaseJakartaEntity, Long> {
 
   List<InsuranceCaseJakartaEntity> findAllByActiveIsTrue();
+
+  List<InsuranceCaseJakartaEntity> findAllByActiveIsTrueAndDriverId(final Long driverId);
 }

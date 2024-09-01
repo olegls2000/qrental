@@ -37,6 +37,7 @@ public class DriverResponse {
   private BigDecimal deposit;
   private Boolean hasRequiredObligation;
   private BigDecimal requiredObligation;
+  private Boolean hasQKasko;
   private Long qFirmId;
   private String qFirmName;
   private String comment;

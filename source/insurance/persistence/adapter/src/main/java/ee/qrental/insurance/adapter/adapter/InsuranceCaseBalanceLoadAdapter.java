@@ -27,4 +27,12 @@ public class InsuranceCaseBalanceLoadAdapter implements InsuranceCaseBalanceLoad
         .map(entity -> mapper.mapToDomain(entity))
         .toList();
   }
+
+  @Override
+  public List<InsuranceCaseBalance> loadAllByQWeekIdAndDriverId(
+      final Long qWeekId, final Long driverId) {
+    return repository.findAllByQWeekIdAndDriverId(qWeekId, driverId).stream()
+        .map(entity -> mapper.mapToDomain(entity))
+        .toList();
+  }
 }

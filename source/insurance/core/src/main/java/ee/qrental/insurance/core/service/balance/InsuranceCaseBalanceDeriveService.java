@@ -1,4 +1,4 @@
-package ee.qrental.insurance.core.service;
+package ee.qrental.insurance.core.service.balance;
 
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_SELF_RESPONSIBILITY_OVERPAYMENT;
 import static java.lang.String.format;
@@ -38,23 +38,18 @@ public class InsuranceCaseBalanceDeriveService {
 
     // Balance.selfResponsibilityRemaining = 100, paidSelfResponsibility amount = 300 (200 is
     // overpayment), new positive transaction: 300
-    // -> Balance.selfResponsibilityRemaining = 0, rest of money goes to the new positive transaction
+    // -> Balance.selfResponsibilityRemaining = 0, rest of money goes to the new positive
+    // transaction
     if (selfResponsibilityRemaining.compareTo(paidSelfResponsibilityAmount) < 0) {
       final var updatedSelfResponsibilityRemaining = ZERO;
       balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
 
       final var overpaymentAmount =
           paidSelfResponsibilityAmount.subtract(selfResponsibilityRemaining);
-      final var selfResposibilityOverpaymentTransaction = new TransactionAddRequest();
-      selfResposibilityOverpaymentTransaction.setComment(
-          "Automatically created transaction for the compensation self responsibility overpayment.");
-      selfResposibilityOverpaymentTransaction.setDriverId(driverId);
-      selfResposibilityOverpaymentTransaction.setAmount(overpaymentAmount);
-      selfResposibilityOverpaymentTransaction.setTransactionTypeId(
-          getSelfResponsibilityOverPaymentTransactionTypeId());
-      selfResposibilityOverpaymentTransaction.setDate(qWeek.getStart());
+      final var selfResponsibilityOverpaymentTransaction =
+          getTransactionAddRequest(qWeek, driverId, overpaymentAmount);
 
-      transactionAddUseCase.add(selfResposibilityOverpaymentTransaction);
+      transactionAddUseCase.add(selfResponsibilityOverpaymentTransaction);
     }
 
     final var damageRemaining = balanceToDerive.getDamageRemaining();
@@ -81,6 +76,19 @@ public class InsuranceCaseBalanceDeriveService {
         && balanceToDerive.getSelfResponsibilityRemaining().compareTo(ZERO) == 0) {
       balanceToDerive.getInsuranceCase().setActive(false);
     }
+  }
+
+  private TransactionAddRequest getTransactionAddRequest(
+      QWeekResponse qWeek, Long driverId, BigDecimal overpaymentAmount) {
+    final var selfResponsibilityOverpaymentTransaction = new TransactionAddRequest();
+    selfResponsibilityOverpaymentTransaction.setComment(
+        "Automatically created transaction for the compensation self responsibility overpayment.");
+    selfResponsibilityOverpaymentTransaction.setDriverId(driverId);
+    selfResponsibilityOverpaymentTransaction.setAmount(overpaymentAmount);
+    selfResponsibilityOverpaymentTransaction.setTransactionTypeId(
+        getSelfResponsibilityOverPaymentTransactionTypeId());
+    selfResponsibilityOverpaymentTransaction.setDate(qWeek.getStart());
+    return selfResponsibilityOverpaymentTransaction;
   }
 
   final Long getSelfResponsibilityOverPaymentTransactionTypeId() {

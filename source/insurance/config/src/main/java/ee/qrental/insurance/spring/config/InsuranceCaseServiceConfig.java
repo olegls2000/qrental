@@ -1,11 +1,12 @@
 package ee.qrental.insurance.spring.config;
 
-import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.*;
 import ee.qrental.insurance.core.service.*;
+import ee.qrental.insurance.core.service.balance.*;
 import ee.qrental.insurance.core.validator.InsuranceCaseAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -14,9 +15,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 @Configuration
 @EnableTransactionManagement
 public class InsuranceCaseServiceConfig {
+
+  @Bean
+  public List<InsuranceCaseBalanceCalculatorStrategy> getInsuranceCaseCalculatorStrategies(
+      final TransactionAddUseCase transactionAddUseCase,
+      final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final InsuranceCaseBalanceDeriveService deriveService) {
+
+    return asList(
+        new InsuranceCaseBalanceCalculationStrategyDryRun(
+            transactionQuery, transactionTypeQuery, deriveService),
+        new InsuranceCaseBalanceCalculationStrategySaving(
+            transactionAddUseCase, transactionQuery, transactionTypeQuery, deriveService));
+  }
+
+  @Bean
+  GetInsuranceCaseBalanceQuery getInsuranceCaseBalanceQuery(
+      final GetQWeekQuery qWeekQuery,
+      final InsuranceCaseBalanceLoadPort balanceLoadPort,
+      final InsuranceCaseLoadPort caseLoadPort,
+      final InsuranceCalculationLoadPort calculationLoadPort,
+      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies) {
+    return new InsuranceCaseBalanceQueryService(
+        qWeekQuery, balanceLoadPort, caseLoadPort, calculationLoadPort, calculatorStrategies);
+  }
 
   @Bean
   GetInsuranceCaseQuery getInsuranceCaseQueryService(

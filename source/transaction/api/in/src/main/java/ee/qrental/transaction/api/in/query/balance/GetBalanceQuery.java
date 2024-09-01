@@ -14,23 +14,13 @@ public interface GetBalanceQuery {
 
   BalanceResponse getRawCurrentByDriver(final Long driverId);
 
-  BigDecimal getAmountRepairmentByDriver(final Long driverId);
+ // BigDecimal getAmountRepairmentByDriver(final Long driverId);
 
-  BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId);
+ // BigDecimal getAmountRepairmentByDriverWithQKasko(final Long driverId);
 
   BalanceResponse getLatest();
 
   BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
-
-  /**
-   * Calculate period between versions
-   *
-   * @deprecated
-   *     <p>Use {@link GetBalanceQuery#getRawBalanceTotalByDriverIdAndQWeekId(Long, Long)} instead.
-   */
-  @Deprecated
-  BigDecimal getRawBalanceTotalByDriverIdAndYearAndWeekNumber(
-      final Long driverId, final Integer year, final Integer weekNumber);
 
   BigDecimal getRawBalanceTotalByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 

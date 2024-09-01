@@ -3,6 +3,7 @@ package ee.qrental.driver.core.mapper;
 import static java.lang.String.format;
 
 import ee.qrent.common.in.mapper.ResponseMapper;
+import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.api.in.response.DriverResponse;
 import ee.qrental.driver.domain.CallSign;
 import ee.qrental.driver.domain.Driver;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driver> {
   private final GetFirmQuery firmQuery;
+  private final GetContractQuery contractQuery;
 
   @Override
   public DriverResponse toResponse(final Driver domain) {
@@ -52,9 +54,18 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .requiredObligation(domain.getRequiredObligation())
         .qFirmId(qFirmId)
         .qFirmName(qFirmName)
+        .hasQKasko(hasQKasko(domain.getId()))
         .comment(domain.getComment())
         .createdDate(domain.getCreatedDate())
         .build();
+  }
+
+  private Boolean hasQKasko(final Long driverId) {
+    final var activeContract = contractQuery.getActiveContractByDriverId(driverId);
+    if (activeContract == null) {
+      return false;
+    }
+    return activeContract.getDuration() == 12;
   }
 
   private Integer getCallSign(final CallSign callSign) {

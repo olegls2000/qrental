@@ -9,4 +9,6 @@ public interface InsuranceCaseBalanceLoadPort {
   InsuranceCaseBalance loadLatestByInsuranceCseId(final Long insuranceCseId);
 
   List<InsuranceCaseBalance> loadAllByInsuranceCseId(final Long insuranceCseId);
+
+  List<InsuranceCaseBalance> loadAllByQWeekIdAndDriverId(final Long qWeekId, final Long driverId);
 }

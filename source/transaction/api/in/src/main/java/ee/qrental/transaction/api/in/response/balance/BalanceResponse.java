@@ -14,7 +14,6 @@ public class BalanceResponse {
   private BigDecimal feeAmount;
   private BigDecimal positiveAmount;
   private BigDecimal amount;
-  private BigDecimal repairmentAmount;
   private Long qWeekId;
   private Integer year;
   private Integer weekNumber;

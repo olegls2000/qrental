@@ -1,5 +1,6 @@
 package ee.qrental.driver.spring.config;
 
+import ee.qrental.contract.api.in.query.GetContractQuery;
 import ee.qrental.driver.core.mapper.DriverAddRequestMapper;
 import ee.qrental.driver.core.mapper.DriverResponseMapper;
 import ee.qrental.driver.core.mapper.DriverUpdateRequestMapper;
@@ -16,8 +17,9 @@ public class DriverMapperConfig {
   }
 
   @Bean
-  DriverResponseMapper getDriverResponseMapper(final GetFirmQuery firmQuery) {
-    return new DriverResponseMapper(firmQuery);
+  DriverResponseMapper getDriverResponseMapper(
+      final GetFirmQuery firmQuery, final GetContractQuery contractQuery) {
+    return new DriverResponseMapper(firmQuery, contractQuery);
   }
 
   @Bean
