@@ -15,10 +15,10 @@ public class InsuranceCaseAddBusinessRuleValidator {
   public ViolationsCollector validate(final InsuranceCaseAddRequest request) {
     final var violationsCollector = new ViolationsCollector();
     final var occurrenceDate = request.getOccurrenceDate();
-    if (occurrenceDate.isBefore(qDateTime.getToday())) {
-      violationsCollector.collect("Occurrence date must be after current date");
-    }
-
+    //if (occurrenceDate.isBefore(qDateTime.getToday())) {
+    //  violationsCollector.collect("Occurrence date must be after current date");
+    //}
+    //TODO check only closed Weeks Balance Calculation or Insurance Calculation
     return violationsCollector;
   }
 }
