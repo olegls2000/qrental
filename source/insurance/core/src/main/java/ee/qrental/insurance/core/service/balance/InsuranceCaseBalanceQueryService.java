@@ -33,7 +33,7 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
   public InsuranceBalanceTotalResponse getInsuranceBalanceTotalByDriverForCurrentWeek(final Long driverId) {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
 
-    return getInsuranceBalanceTotalByDriverIdAndQWeekId(currentQWeek.getId(), driverId);
+    return getInsuranceBalanceTotalByDriverIdAndQWeekId(driverId, currentQWeek.getId());
   }
 
   @Override
