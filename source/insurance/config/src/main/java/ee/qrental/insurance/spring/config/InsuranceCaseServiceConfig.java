@@ -1,5 +1,6 @@
 package ee.qrental.insurance.spring.config;
 
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseQuery;
@@ -25,6 +26,7 @@ public class InsuranceCaseServiceConfig {
 
   @Bean
   public List<InsuranceCaseBalanceCalculatorStrategy> getInsuranceCaseCalculatorStrategies(
+      final GetCarLinkQuery carLinkQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
@@ -32,9 +34,13 @@ public class InsuranceCaseServiceConfig {
 
     return asList(
         new InsuranceCaseBalanceCalculationStrategyDryRun(
-            transactionQuery, transactionTypeQuery, deriveService),
+            carLinkQuery, transactionQuery, transactionTypeQuery, deriveService),
         new InsuranceCaseBalanceCalculationStrategySaving(
-            transactionAddUseCase, transactionQuery, transactionTypeQuery, deriveService));
+            carLinkQuery,
+            transactionAddUseCase,
+            transactionQuery,
+            transactionTypeQuery,
+            deriveService));
   }
 
   @Bean

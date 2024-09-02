@@ -1,6 +1,6 @@
 package ee.qrental.insurance.core.service.balance;
 
-import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_SELF_RESPONSIBILITY_OVERPAYMENT;
+import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_SELF_RESPONSIBILITY;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
@@ -93,13 +93,13 @@ public class InsuranceCaseBalanceDeriveService {
 
   final Long getSelfResponsibilityOverPaymentTransactionTypeId() {
     final var selfResponsibilityOverpaymentTransactionType =
-        transactionTypeQuery.getByName(TRANSACTION_TYPE_SELF_RESPONSIBILITY_OVERPAYMENT);
+        transactionTypeQuery.getByName(TRANSACTION_TYPE_SELF_RESPONSIBILITY);
     if (selfResponsibilityOverpaymentTransactionType == null) {
       throw new RuntimeException(
           format(
               "Transaction Type with name: %s, does not exist. "
                   + "Please create it, before Insurance Case Damage calculation",
-              TRANSACTION_TYPE_SELF_RESPONSIBILITY_OVERPAYMENT));
+              TRANSACTION_TYPE_SELF_RESPONSIBILITY));
     }
     return selfResponsibilityOverpaymentTransactionType.getId();
   }

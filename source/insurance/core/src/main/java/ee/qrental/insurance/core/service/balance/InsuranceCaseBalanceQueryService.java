@@ -30,7 +30,8 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
   private final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies;
 
   @Override
-  public InsuranceBalanceTotalResponse getInsuranceBalanceTotalByDriverForCurrentWeek(final Long driverId) {
+  public InsuranceBalanceTotalResponse getInsuranceBalanceTotalByDriverForCurrentWeek(
+      final Long driverId) {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
 
     return getInsuranceBalanceTotalByDriverIdAndQWeekId(driverId, currentQWeek.getId());
@@ -41,6 +42,10 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
       final Long driverId, final Long qWeekId) {
 
     final var lastCalculatedQWeekId = calculationLoadPort.loadLastCalculatedQWeekId();
+    if (lastCalculatedQWeekId == null) {
+
+      return calculateBalance(qWeekId, driverId);
+    }
     final var lastCalculatedQWeek = qWeekQuery.getById(lastCalculatedQWeekId);
     final var requestedQWeek = qWeekQuery.getById(qWeekId);
 

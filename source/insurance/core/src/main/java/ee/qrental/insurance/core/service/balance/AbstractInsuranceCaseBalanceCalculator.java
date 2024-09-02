@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.service.balance;
 
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
@@ -24,6 +25,7 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
   private static final BigDecimal DEFAULT_SELF_RESPONSIBILITY = BigDecimal.valueOf(500);
   private static final BigDecimal PERCENTAGE_FROM_RENT_AMOUNT = BigDecimal.valueOf(0.25d);
 
+  private final GetCarLinkQuery carLinkQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final InsuranceCaseBalanceDeriveService deriveService;
@@ -84,7 +86,8 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
       final InsuranceCaseBalance insuranceCaseBalance) {
     var amountForDamageCompensation = getDamageCompensationAmount(driverId, qWeek.getId());
 
-    if (amountForDamageCompensation.compareTo(ZERO) == 0) {
+    final var activeCarLink = carLinkQuery.getActiveLinkByDriverId(driverId);
+    if (activeCarLink == null) {
       amountForDamageCompensation = insuranceCaseBalance.getDamageRemaining();
     }
 

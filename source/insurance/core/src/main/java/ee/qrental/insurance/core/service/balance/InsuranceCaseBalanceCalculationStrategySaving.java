@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.service.balance;
 
+import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
@@ -10,11 +11,12 @@ public class InsuranceCaseBalanceCalculationStrategySaving
   private final TransactionAddUseCase transactionAddUseCase;
 
   public InsuranceCaseBalanceCalculationStrategySaving(
+      final GetCarLinkQuery carLinkQuery,
       TransactionAddUseCase transactionAddUseCase,
       GetTransactionQuery transactionQuery,
       GetTransactionTypeQuery transactionTypeQuery,
       InsuranceCaseBalanceDeriveService deriveService) {
-    super(transactionQuery, transactionTypeQuery, deriveService);
+    super(carLinkQuery, transactionQuery, transactionTypeQuery, deriveService);
     this.transactionAddUseCase = transactionAddUseCase;
   }
 
