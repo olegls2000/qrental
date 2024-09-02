@@ -49,12 +49,10 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
 
     saveTransactionIfNecessary(damageTransaction);
 
-    return null;
+    return requestedWeekBalance;
   }
 
   protected abstract void saveTransactionIfNecessary(final TransactionAddRequest damageTransaction);
-
-
 
   private InsuranceCaseBalance getInsuranceCaseBalance(
       final InsuranceCase insuranceCase,
