@@ -1,5 +1,6 @@
 package ee.qrental.constant.core.service;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.common.utils.QTimeUtils;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
@@ -17,6 +18,7 @@ import static ee.qrental.common.utils.QTimeUtils.getWeekNumber;
 import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @AllArgsConstructor
 public class QWeekQueryService implements GetQWeekQuery {
@@ -29,6 +31,7 @@ public class QWeekQueryService implements GetQWeekQuery {
   private final QWeekLoadPort loadPort;
   private final QWeekResponseMapper mapper;
   private final QWeekUpdateRequestMapper updateRequestMapper;
+  private final QDateTime qDateTime;
 
   @Override
   public List<QWeekResponse> getAll() {
@@ -64,16 +67,22 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public QWeekResponse getCurrentWeek() {
-    final var nowDate = LocalDate.now();
-    final var year = nowDate.getYear();
-    final var number = getWeekNumber(nowDate);
-    final var currentQWeek = loadPort.loadByYearAndNumber(year, number);
-    if (currentQWeek == null) {
+    final var nowDate = qDateTime.getToday();
+
+    return getByDate(nowDate);
+  }
+
+  @Override
+  public QWeekResponse getByDate(final LocalDate date) {
+    final var year = date.getYear();
+    final var number = getWeekNumber(date);
+    final var qWeek = loadPort.loadByYearAndNumber(year, number);
+    if (qWeek == null) {
       throw new RuntimeException(
           format("Q Week number: %d for the %d year is missing", number, year));
     }
 
-    return mapper.toResponse(currentQWeek);
+    return mapper.toResponse(qWeek);
   }
 
   @Override
@@ -135,18 +144,21 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   @Override
-  public List<QWeekResponse> getAllBetweenByIdsReversedOrder(final Long startWeekId, final Long endWeekId) {
+  public List<QWeekResponse> getAllBetweenByIdsReversedOrder(
+      final Long startWeekId, final Long endWeekId) {
     return loadPort.loadAllBetweenByIds(startWeekId, endWeekId).stream()
         .map(mapper::toResponse)
         .sorted(REVERSED_COMPARATOR)
         .collect(toList());
   }
+
   @Override
-  public List<QWeekResponse> getAllBetweenByIdsDefaultOrder(final Long startWeekId, final Long endWeekId) {
+  public List<QWeekResponse> getAllBetweenByIdsDefaultOrder(
+      final Long startWeekId, final Long endWeekId) {
     return loadPort.loadAllBetweenByIds(startWeekId, endWeekId).stream()
-            .map(mapper::toResponse)
-            .sorted(DEFAULT_COMPARATOR)
-            .collect(toList());
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
   }
 
   @Override

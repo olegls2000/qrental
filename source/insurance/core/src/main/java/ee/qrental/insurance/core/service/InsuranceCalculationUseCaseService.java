@@ -1,6 +1,7 @@
 package ee.qrental.insurance.core.service;
 
 import static ee.qrental.constant.api.in.query.GetQWeekQuery.DEFAULT_COMPARATOR;
+import static ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculatorStrategy.SAVING;
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.*;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -11,6 +12,7 @@ import ee.qrental.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
+import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculatorStrategy;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceDeriveService;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
@@ -41,6 +43,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies;
 
   @Transactional
   @Override
@@ -55,7 +58,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         qWeekQuery.getQWeeksFromPeriodOrdered(startWeekId, endWeekId, DEFAULT_COMPARATOR);
     weeksForCalculation.forEach(
         week -> {
-          final var activeCases = caseLoadPort.loadActive();
+          final var activeCases = caseLoadPort.loadActiveByQWeekId(week.getId());
           for (final var activeCase : activeCases) {
             final var qWeekId = week.getId();
             final var driverId = activeCase.getDriverId();
@@ -79,6 +82,16 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         "----> Time: Insurance Cases Balance Calculation took %d milli seconds \n",
         calculationDuration);
     return savedCalculation.getId();
+  }
+
+  private InsuranceCaseBalanceCalculatorStrategy getSaveStrategy() {
+    return calculatorStrategies.stream()
+        .filter(strategy -> strategy.canApply(SAVING))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new RuntimeException(
+                    "No Insurance Case Balance Calculator strategy found for 'saving'"));
   }
 
   private Long getStartWeekId() {

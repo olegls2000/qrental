@@ -6,7 +6,7 @@ import java.util.List;
 public interface InsuranceCaseRepository {
   List<InsuranceCaseJakartaEntity> findAll();
 
-  List<InsuranceCaseJakartaEntity> findActive();
+  List<InsuranceCaseJakartaEntity> findActiveByQWeekId(final Long qWeekId);
 
   List<InsuranceCaseJakartaEntity> findActiveByDriverId(final Long driverId);
 

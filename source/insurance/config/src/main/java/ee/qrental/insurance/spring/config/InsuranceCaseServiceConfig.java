@@ -107,7 +107,8 @@ public class InsuranceCaseServiceConfig {
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery,
-      final GetQWeekQuery qWeekQuery) {
+      final GetQWeekQuery qWeekQuery,
+      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
@@ -119,7 +120,8 @@ public class InsuranceCaseServiceConfig {
         transactionQuery,
         transactionAddUseCase,
         transactionTypeQuery,
-        qWeekQuery);
+        qWeekQuery,
+        calculatorStrategies);
   }
 
   @Bean

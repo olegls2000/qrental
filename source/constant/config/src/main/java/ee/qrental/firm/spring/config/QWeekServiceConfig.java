@@ -1,5 +1,6 @@
 package ee.qrental.firm.spring.config;
 
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.out.QWeekAddPort;
 import ee.qrental.constant.api.out.QWeekDeletePort;
@@ -19,8 +20,9 @@ public class QWeekServiceConfig {
   public GetQWeekQuery getQWeekQueryService(
       final QWeekLoadPort loadPort,
       final QWeekResponseMapper mapper,
-      final QWeekUpdateRequestMapper updateRequestMapper) {
-    return new QWeekQueryService(loadPort, mapper, updateRequestMapper);
+      final QWeekUpdateRequestMapper updateRequestMapper,
+      final QDateTime qDateTime) {
+    return new QWeekQueryService(loadPort, mapper, updateRequestMapper, qDateTime);
   }
 
   @Bean
@@ -33,6 +35,12 @@ public class QWeekServiceConfig {
       final QWeekUpdateRequestMapper updateRequestMapper,
       final QWeekAddBusinessRuleValidator addBusinessRuleValidator) {
     return new QWeekUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper, addBusinessRuleValidator);
+        addPort,
+        updatePort,
+        deletePort,
+        loadPort,
+        addRequestMapper,
+        updateRequestMapper,
+        addBusinessRuleValidator);
   }
 }

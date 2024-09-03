@@ -26,8 +26,8 @@ public class InsuranceCaseLoadAdapter implements InsuranceCaseLoadPort {
   }
 
   @Override
-  public List<InsuranceCase> loadActive() {
-    return repository.findActive().stream().map(mapper::mapToDomain).collect(toList());
+  public List<InsuranceCase> loadActiveByQWeekId(final Long qWeekId) {
+    return repository.findActiveByQWeekId(qWeekId).stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override

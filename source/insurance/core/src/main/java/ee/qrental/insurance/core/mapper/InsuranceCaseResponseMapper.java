@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import ee.qrent.common.in.mapper.ResponseMapper;
 
 import ee.qrental.car.api.in.query.GetCarQuery;
+import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.insurance.api.in.response.InsuranceCaseResponse;
 import ee.qrental.insurance.domain.InsuranceCase;
@@ -16,13 +17,14 @@ public class InsuranceCaseResponseMapper
 
   private final GetDriverQuery driverQuery;
   private final GetCarQuery carQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public InsuranceCaseResponse toResponse(final InsuranceCase domain) {
 
     final var driver = driverQuery.getById(domain.getDriverId());
     final var car = carQuery.getById(domain.getCarId());
-
+    final var qWeek = qWeekQuery.getById(domain.getStartQWeekId());
     return InsuranceCaseResponse.builder()
         .id(domain.getId())
         .active(domain.getActive())
@@ -32,6 +34,7 @@ public class InsuranceCaseResponseMapper
         .carId(domain.getCarId())
         .carInfo(format("%s %s, %s", car.getManufacturer(), car.getModel(), car.getRegNumber()))
         .occurrenceDate(domain.getOccurrenceDate())
+        .occurrenceWeekInfo(format("%d - %d", qWeek.getYear(), qWeek.getNumber()))
         .damageAmount(domain.getDamageAmount())
         .description(domain.getDescription())
         .build();

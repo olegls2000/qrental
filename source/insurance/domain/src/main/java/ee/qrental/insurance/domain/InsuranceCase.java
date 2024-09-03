@@ -15,6 +15,7 @@ public class InsuranceCase {
   private Long driverId;
   private Long carId;
   private LocalDate occurrenceDate;
+  private Long startQWeekId;
   private BigDecimal damageAmount;
   private Boolean active;
   private String description;

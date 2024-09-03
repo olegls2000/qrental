@@ -16,14 +16,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InsuranceMapperConfig {
   @Bean
-  InsuranceCaseAddRequestMapper getInsuranceCaseAddRequestMapper() {
-    return new InsuranceCaseAddRequestMapper();
+  InsuranceCaseAddRequestMapper getInsuranceCaseAddRequestMapper(
+      final GetQWeekQuery getQWeekQuery) {
+    return new InsuranceCaseAddRequestMapper(getQWeekQuery);
   }
 
   @Bean
   InsuranceCaseResponseMapper getInsuranceCaseResponseMapper(
-      final GetDriverQuery driverQuery, final GetCarQuery carQuery) {
-    return new InsuranceCaseResponseMapper(driverQuery, carQuery);
+      final GetDriverQuery driverQuery,
+      final GetCarQuery carQuery,
+      final GetQWeekQuery qWeekQuery) {
+    return new InsuranceCaseResponseMapper(driverQuery, carQuery, qWeekQuery);
   }
 
   @Bean

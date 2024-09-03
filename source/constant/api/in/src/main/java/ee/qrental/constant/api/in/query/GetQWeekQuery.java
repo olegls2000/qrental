@@ -1,10 +1,10 @@
 package ee.qrental.constant.api.in.query;
 
-
 import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrental.constant.api.in.request.QWeekUpdateRequest;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,6 +20,8 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
   List<QWeekResponse> getAllByYear(final Integer year);
 
   QWeekResponse getCurrentWeek();
+
+  QWeekResponse getByDate(final LocalDate date);
 
   List<QWeekResponse> getQWeeksFromPeriodOrdered(
       final Long starQtWeekId, final Long endQWeekId, final Comparator<QWeekResponse> comparator);

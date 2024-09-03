@@ -15,6 +15,7 @@ public class InsuranceCaseResponse {
   private Long carId;
   private BigDecimal damageAmount;
   private LocalDate occurrenceDate;
+  private String occurrenceWeekInfo;
   private Boolean active;
   private String description;
 }

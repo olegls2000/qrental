@@ -34,6 +34,9 @@ public class InsuranceCaseJakartaEntity {
   @Column(name = "occurrence_date")
   private LocalDate occurrenceDate;
 
+  @Column(name = "start_q_week_id")
+  private Long startQWeekId;
+
   @Column(name = "damage_amount")
   private BigDecimal damageAmount;
 

@@ -17,6 +17,7 @@ public class InsuranceCaseAdapterMapper {
         .damageAmount(entity.getDamageAmount())
         .description(entity.getDescription())
         .occurrenceDate(entity.getOccurrenceDate())
+        .startQWeekId(entity.getStartQWeekId())
         .active(entity.getActive())
         .build();
   }
@@ -32,6 +33,7 @@ public class InsuranceCaseAdapterMapper {
         .damageAmount(domain.getDamageAmount())
         .description(domain.getDescription())
         .occurrenceDate(domain.getOccurrenceDate())
+        .startQWeekId(domain.getStartQWeekId())
         .active(domain.getActive())
         .build();
   }
