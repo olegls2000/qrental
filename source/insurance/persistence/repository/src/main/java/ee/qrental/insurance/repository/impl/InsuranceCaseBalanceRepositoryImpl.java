@@ -17,6 +17,11 @@ public record InsuranceCaseBalanceRepositoryImpl(
   }
 
   @Override
+  public InsuranceCaseBalanceJakartaEntity findByInsuranceCaseIdAndQWeekId(final Long insuranceCaseId,final Long qWeekId) {
+    return  springDataRepository.findByInsuranceCaseIdAnqQWeekId(insuranceCaseId, qWeekId);
+  }
+
+  @Override
   public List<InsuranceCaseBalanceJakartaEntity> findAllByInsuranceCaseId(Long insuranceCaseId) {
     return springDataRepository.findAllByInsuranceCaseId(insuranceCaseId);
   }

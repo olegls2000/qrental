@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface InsuranceCaseBalanceLoadPort {
 
-  InsuranceCaseBalance loadLatestByInsuranceCseId(final Long insuranceCseId);
+  InsuranceCaseBalance loadLatestByInsuranceCaseId(final Long insuranceCseId);
+
+  InsuranceCaseBalance loadByInsuranceCaseIdAndQWeekId(
+      final Long insuranceCseId, final Long qWeekId);
 
   List<InsuranceCaseBalance> loadAllByInsuranceCseId(final Long insuranceCseId);
 

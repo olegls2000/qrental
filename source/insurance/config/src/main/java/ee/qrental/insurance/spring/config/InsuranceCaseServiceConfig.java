@@ -100,7 +100,6 @@ public class InsuranceCaseServiceConfig {
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
       final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseBalanceLoadPort caseBalanceLodPort,
-      final InsuranceCaseBalanceDeriveService deriveService,
       final InsuranceCalculationLoadPort calculationLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
@@ -113,12 +112,10 @@ public class InsuranceCaseServiceConfig {
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
         caseBalanceLodPort,
-        deriveService,
         calculationLoadPort,
         calculationAddPort,
         calculationAddRequestMapper,
         transactionQuery,
-        transactionAddUseCase,
         transactionTypeQuery,
         qWeekQuery,
         calculatorStrategies);

@@ -29,4 +29,12 @@ public interface InsuranceCaseBalanceSpringDataRepository
       nativeQuery = true)
   List<InsuranceCaseBalanceJakartaEntity> findAllByQWeekIdAndInsuranceCaseDriverId(
       final @Param("qWeekId") Long qWeekId, final @Param("driverId") Long driverId);
+
+  @Query(
+      value =
+          "select bl.* from insurance_case_balance bl "
+              + "where bl.insurance_case_id = :insuranceCaseId and q_week_id = :qWeekId",
+      nativeQuery = true)
+  InsuranceCaseBalanceJakartaEntity findByInsuranceCaseIdAnqQWeekId(
+      final @Param("insuranceCaseId") Long insuranceCaseId, final @Param("qWeekId") Long qWeekId);
 }

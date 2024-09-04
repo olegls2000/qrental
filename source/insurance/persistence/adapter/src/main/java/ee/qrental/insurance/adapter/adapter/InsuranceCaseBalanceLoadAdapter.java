@@ -15,8 +15,16 @@ public class InsuranceCaseBalanceLoadAdapter implements InsuranceCaseBalanceLoad
   private final InsuranceCaseBalanceAdapterMapper mapper;
 
   @Override
-  public InsuranceCaseBalance loadLatestByInsuranceCseId(final Long insuranceCseId) {
+  public InsuranceCaseBalance loadLatestByInsuranceCaseId(final Long insuranceCseId) {
     final var entity = repository.findLatestByInsuranceCaseId(insuranceCseId);
+
+    return mapper.mapToDomain(entity);
+  }
+
+  @Override
+  public InsuranceCaseBalance loadByInsuranceCaseIdAndQWeekId(
+      final Long insuranceCseId, final Long qWeekId) {
+    final var entity = repository.findByInsuranceCaseIdAndQWeekId(insuranceCseId, qWeekId);
 
     return mapper.mapToDomain(entity);
   }

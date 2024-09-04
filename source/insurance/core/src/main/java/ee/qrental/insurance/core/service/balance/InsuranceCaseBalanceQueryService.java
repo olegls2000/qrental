@@ -85,7 +85,7 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
       final InsuranceCaseBalanceCalculatorStrategy calculator) {
     InsuranceCaseBalance requestedWeekBalance = null;
     final var latestCalculatedBalance =
-        balanceLoadPort.loadLatestByInsuranceCseId(insuranceCase.getId());
+        balanceLoadPort.loadLatestByInsuranceCaseId(insuranceCase.getId());
 
     final QWeekResponse startWeek = getStartWeek(insuranceCase, latestCalculatedBalance);
     InsuranceCaseBalance previousWeekBalance = latestCalculatedBalance;

@@ -13,14 +13,12 @@ import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculatorStrategy;
-import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceDeriveService;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
-import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,12 +33,10 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
 
   private final InsuranceCaseLoadPort caseLoadPort;
   private final InsuranceCaseBalanceLoadPort caseBalanceLoadPort;
-  private final InsuranceCaseBalanceDeriveService deriveService;
   private final InsuranceCalculationLoadPort calculationLoadPort;
   private final InsuranceCalculationAddPort calculationAddPort;
   private final InsuranceCalculationAddRequestMapper calculationAddRequestMapper;
   private final GetTransactionQuery transactionQuery;
-  private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetQWeekQuery qWeekQuery;
   private final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies;
@@ -48,31 +44,24 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   @Transactional
   @Override
   public Long add(final InsuranceCalculationAddRequest request) {
+    System.out.println("----> Insurance Cases Balance Calculation started ...");
     final var calculationStartTime = System.currentTimeMillis();
     final var startWeekId = getStartWeekId();
     final var endWeekId = getEndWeekId(request);
     final var domain = calculationAddRequestMapper.toDomain(request);
     domain.setStartQWeekId(startWeekId);
-
+    final var saveStrategy = getSaveStrategy();
     final var weeksForCalculation =
         qWeekQuery.getQWeeksFromPeriodOrdered(startWeekId, endWeekId, DEFAULT_COMPARATOR);
     weeksForCalculation.forEach(
-        week -> {
-          final var activeCases = caseLoadPort.loadActiveByQWeekId(week.getId());
+        qWeek -> {
+          final var qWeekId = qWeek.getId();
+          final var activeCases = caseLoadPort.loadActiveByQWeekId(qWeekId);
           for (final var activeCase : activeCases) {
-            final var qWeekId = week.getId();
-            final var driverId = activeCase.getDriverId();
-            final var insuranceCaseBalance = getInsuranceCaseBalance(activeCase, qWeekId);
-            final var damageTransaction =
-                getDamageTransaction(driverId, week, insuranceCaseBalance);
-
-            final var paidSelfResponsibilityAmountAbs =
-                getAbsSelfResponsibilityTransactionsAmountAbs(driverId, qWeekId);
-
-            deriveService.derive(
-                insuranceCaseBalance, damageTransaction, paidSelfResponsibilityAmountAbs, week);
-            transactionAddUseCase.add(damageTransaction);
-            domain.getInsuranceCaseBalances().add(insuranceCaseBalance);
+            final var previousWeekBalance = getPreviousWeekBalance(activeCase, qWeek);
+            final var requestedWeekBalance =
+                saveStrategy.calculateBalance(activeCase, qWeek, previousWeekBalance);
+            domain.getInsuranceCaseBalances().add(requestedWeekBalance);
           }
         });
     final var savedCalculation = calculationAddPort.add(domain);
@@ -82,6 +71,16 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         "----> Time: Insurance Cases Balance Calculation took %d milli seconds \n",
         calculationDuration);
     return savedCalculation.getId();
+  }
+
+  private InsuranceCaseBalance getPreviousWeekBalance(
+      final InsuranceCase insuranceCase, final QWeekResponse qWeek) {
+    final var previousQWeek = qWeekQuery.getOneBeforeById(qWeek.getId());
+    final var previousQWeekId = previousQWeek.getId();
+    final var previousWeekBalance =
+        caseBalanceLoadPort.loadByInsuranceCaseIdAndQWeekId(insuranceCase.getId(), previousQWeekId);
+
+    return previousWeekBalance;
   }
 
   private InsuranceCaseBalanceCalculatorStrategy getSaveStrategy() {
@@ -146,7 +145,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
 
   private InsuranceCaseBalance getInsuranceCaseBalance(
       final InsuranceCase insuranceCase, final Long qWeekId) {
-    var latestBalance = caseBalanceLoadPort.loadLatestByInsuranceCseId(insuranceCase.getId());
+    var latestBalance = caseBalanceLoadPort.loadLatestByInsuranceCaseId(insuranceCase.getId());
     if (latestBalance == null) {
       final var damageRemaining =
           insuranceCase.getDamageAmount().subtract(DEFAULT_SELF_RESPONSIBILITY);

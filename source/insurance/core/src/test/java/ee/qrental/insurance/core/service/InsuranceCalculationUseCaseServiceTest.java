@@ -5,12 +5,16 @@ import static org.mockito.Mockito.mock;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
+import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculatorStrategy;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceDeriveService;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class InsuranceCalculationUseCaseServiceTest {
   private InsuranceCalculationUseCaseService instanceUnderTest;
@@ -26,6 +30,7 @@ class InsuranceCalculationUseCaseServiceTest {
   private TransactionAddUseCase transactionAddUseCase;
   private GetTransactionTypeQuery transactionTypeQuery;
   private GetQWeekQuery qWeekQuery;
+  private List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies;
 
   @BeforeEach
   void init() {
@@ -39,19 +44,19 @@ class InsuranceCalculationUseCaseServiceTest {
     transactionAddUseCase = mock(TransactionAddUseCase.class);
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
     qWeekQuery = mock(GetQWeekQuery.class);
+    calculatorStrategies = new ArrayList<>();
 
     instanceUnderTest =
         new InsuranceCalculationUseCaseService(
             insuranceCaseLoadPort,
             insuranceCaseBalanceLoadPort,
-            deriveService,
             calculationLoadPort,
             calculationAddPort,
             calculationAddRequestMapper,
             transactionQuery,
-            transactionAddUseCase,
             transactionTypeQuery,
-            qWeekQuery);
+            qWeekQuery,
+            calculatorStrategies);
   }
 
   @Test
