@@ -21,6 +21,8 @@ public interface TransactionRepository {
 
   List<TransactionJakartaEntity> findAllByRentCalculationId(final Long rentCalculationId);
 
+  List<TransactionJakartaEntity> findAllByInsuranceCalculationId(final Long insuranceCalculationId);
+
   List<TransactionJakartaEntity> findAllByBonusCalculationId(final Long bonusCalculationId);
 
   TransactionJakartaEntity getReferenceById(Long id);

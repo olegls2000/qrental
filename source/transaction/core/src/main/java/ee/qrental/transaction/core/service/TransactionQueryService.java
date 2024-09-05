@@ -79,6 +79,12 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
+  public List<TransactionResponse> getAllByInsuranceCalculationId(final Long insuranceCalculationId) {
+    return mapToTransactionResponseList(
+            transactionLoadPort.loadAllByInsuranceCalculationId(insuranceCalculationId));
+  }
+
+  @Override
   public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter) {
     return mapToTransactionResponseList(
         loadStrategies.stream()

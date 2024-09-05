@@ -3,6 +3,7 @@ package ee.qrental.insurance.repository.spring;
 import ee.qrental.insurance.entity.jakarta.InsuranceCaseJakartaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,5 +21,6 @@ public interface InsuranceCaseSpringDataRepository
               + "and qw.year <= (select year from q_week where id = :qWeekId) "
               + "and qw.number <= (select number from q_week where id = :qWeekId);",
       nativeQuery = true)
-  List<InsuranceCaseJakartaEntity> findAllByActiveIsTrueAndQweekId(final Long qWeekId);
+  List<InsuranceCaseJakartaEntity> findAllByActiveIsTrueAndQweekId(
+      final @Param("qWeekId") Long qWeekId);
 }

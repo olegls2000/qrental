@@ -51,6 +51,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
+  public List<TransactionJakartaEntity> findAllByInsuranceCalculationId(final Long insuranceCalculationId) {
+    return springDataRepository.findAllByInsuranceCalculationId(insuranceCalculationId);
+  }
+
+  @Override
   public List<TransactionJakartaEntity> findAllByBonusCalculationId(final Long bonusCalculationId) {
     return springDataRepository.findAllByBonusCalculationId(bonusCalculationId);
   }

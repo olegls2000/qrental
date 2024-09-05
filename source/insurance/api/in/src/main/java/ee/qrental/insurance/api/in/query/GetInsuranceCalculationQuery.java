@@ -6,4 +6,6 @@ import java.util.List;
 public interface GetInsuranceCalculationQuery {
 
   List<InsuranceCalculationResponse> getAll();
+
+  InsuranceCalculationResponse getById(final Long id);
 }

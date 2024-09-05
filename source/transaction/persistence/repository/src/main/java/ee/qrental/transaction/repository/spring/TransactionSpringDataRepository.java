@@ -38,6 +38,18 @@ public interface TransactionSpringDataRepository
   @Query(
       value =
           "SELECT * FROM transaction tx "
+                  + "WHERE tx.id  in ("
+                  + "select icbxt.transaction_id from insurance_case_balance_x_transaction icbxt "
+                  + "where icbxt.insurance_case_balance_id in " +
+                  "(select icb.id from insurance_case_balance icb where icb.insurance_calculation_id = :insuranceCalculationId) "
+                  + ")",
+      nativeQuery = true)
+  List<TransactionJakartaEntity> findAllByInsuranceCalculationId(
+      @Param("insuranceCalculationId") final Long insuranceCalculationId);
+
+  @Query(
+      value =
+          "SELECT * FROM transaction tx "
               + "WHERE tx.id  in ("
               + "select clr.transaction_id from bonus_calculation_result clr "
               + "where clr.bonus_calculation_id = :bonusCalculationId)",

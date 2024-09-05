@@ -4,6 +4,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +35,7 @@ public class InsuranceCalculationJakartaEntity {
 
   @Column(name = "comment")
   private String comment;
+
+  @OneToMany(mappedBy = "insuranceCalculation")
+  private List<InsuranceCaseBalanceJakartaEntity> insuranceCaseBalances;
 }

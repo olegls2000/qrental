@@ -5,12 +5,14 @@ import static ee.qrental.ui.controller.util.ControllerUtils.INSURANCE_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InsuranceCalculationQueryController {
 
   private final GetInsuranceCalculationQuery calculationQuery;
+  private final GetTransactionQuery transactionQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final QDateFormatter qDateFormatter;
@@ -29,6 +32,18 @@ public class InsuranceCalculationQueryController {
     addLatestDataToModel(model);
     model.addAttribute("calculations", calculationQuery.getAll());
     return "insuranceCalculations";
+  }
+
+  @GetMapping(value = "/calculations/{id}")
+  public String getCalculationView(@PathVariable("id") long id, final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    final var calculation = calculationQuery.getById(id);
+    final var transactions = transactionQuery.getAllByInsuranceCalculationId(id);
+
+    model.addAttribute("calculation", calculation);
+    model.addAttribute("transactions", transactions);
+
+    return "detailView/insuranceCalculation";
   }
 
   private void addLatestDataToModel(final Model model) {

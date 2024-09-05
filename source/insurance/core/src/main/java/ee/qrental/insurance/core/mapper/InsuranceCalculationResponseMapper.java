@@ -17,11 +17,6 @@ public class InsuranceCalculationResponseMapper
   @Override
   public InsuranceCalculationResponse toResponse(final InsuranceCalculation domain) {
 
-    final var startWeekId = domain.getStartQWeekId();
-    final var startWeek = qWeekQuery.getById(startWeekId);
-    final var endWeekId = domain.getEndQWeekId();
-    final var endWeek = qWeekQuery.getById(endWeekId);
-
     return InsuranceCalculationResponse.builder()
         .id(domain.getId())
         .startWeek(getWeekString(domain.getStartQWeekId()))

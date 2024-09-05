@@ -127,6 +127,13 @@ delete
 from invoice_item;
 --------------------------------------------------
 
+--------------------------------------------------------------------------------------------------------
+--## Insurance Calculations:
+
+delete from insurance_case_balance icb;
+delete from insurance_case_balance_x_transaction icbt;
+delete from insurance_calculation;
+
 
 --#### SELECTS:
 

@@ -35,4 +35,8 @@ public class InsuranceCaseBalanceJakartaEntity {
   @ManyToOne
   @JoinColumn(name = "insurance_case_id")
   private InsuranceCaseJakartaEntity insuranceCase;
+
+  @ManyToOne
+  @JoinColumn(name = "insurance_calculation_id")
+  private InsuranceCalculationJakartaEntity insuranceCalculation;
 }

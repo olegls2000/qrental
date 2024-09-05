@@ -30,5 +30,7 @@ public interface TransactionLoadPort extends LoadPort<Transaction> {
 
   List<Transaction> loadAllByRentCalculationId(final Long rentCalculationId);
 
+  List<Transaction> loadAllByInsuranceCalculationId(final Long insuranceCalculationId);
+
   List<Transaction> loadAllByBonusCalculationId(final Long bonusCalculationId);
 }

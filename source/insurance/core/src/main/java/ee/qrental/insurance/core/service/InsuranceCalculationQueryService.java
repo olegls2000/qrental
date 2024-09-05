@@ -19,4 +19,10 @@ public class InsuranceCalculationQueryService implements GetInsuranceCalculation
   public List<InsuranceCalculationResponse> getAll() {
     return loadPort.loadAll().stream().map(responseMapper::toResponse).collect(toList());
   }
+
+  @Override
+  public InsuranceCalculationResponse getById(Long id) {
+    final var domain = loadPort.loadById(id);
+    return responseMapper.toResponse(domain);
+  }
 }
