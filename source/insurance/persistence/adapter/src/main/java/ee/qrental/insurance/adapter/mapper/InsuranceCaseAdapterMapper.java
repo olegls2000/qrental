@@ -19,6 +19,7 @@ public class InsuranceCaseAdapterMapper {
         .occurrenceDate(entity.getOccurrenceDate())
         .startQWeekId(entity.getStartQWeekId())
         .active(entity.getActive())
+        .withQKasko(entity.getWithQKasko())
         .build();
   }
 
@@ -35,6 +36,7 @@ public class InsuranceCaseAdapterMapper {
         .occurrenceDate(domain.getOccurrenceDate())
         .startQWeekId(domain.getStartQWeekId())
         .active(domain.getActive())
+        .withQKasko(domain.getWithQKasko())
         .build();
   }
 }

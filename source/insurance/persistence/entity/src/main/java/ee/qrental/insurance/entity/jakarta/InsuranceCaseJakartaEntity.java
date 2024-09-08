@@ -45,6 +45,9 @@ public class InsuranceCaseJakartaEntity {
 
   private Boolean active;
 
+  @Column(name = "with_q_kasko")
+  private Boolean withQKasko;
+
   @OneToMany(mappedBy = "insuranceCase")
   List<InsuranceCaseBalanceJakartaEntity> balances;
 }

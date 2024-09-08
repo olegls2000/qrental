@@ -36,6 +36,7 @@ public class InsuranceCaseResponseMapper
         .occurrenceDate(domain.getOccurrenceDate())
         .occurrenceWeekInfo(format("%d - %d", qWeek.getYear(), qWeek.getNumber()))
         .damageAmount(domain.getDamageAmount())
+        .withQKasko(domain.getWithQKasko())
         .description(domain.getDescription())
         .build();
   }
