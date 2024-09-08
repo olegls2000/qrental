@@ -25,6 +25,7 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
   private final String DAMAGE_COMPENSATION_TRANSACTION_TYPE_NAME = "damage payment";
   private static final BigDecimal DEFAULT_SELF_RESPONSIBILITY = BigDecimal.valueOf(500);
   private static final BigDecimal PERCENTAGE_FROM_RENT_AMOUNT = BigDecimal.valueOf(0.25d);
+  private static final BigDecimal Q_KASKO_DISCOUNT_RATE = BigDecimal.valueOf(2);
 
   private final GetCarLinkQuery carLinkQuery;
   private final GetTransactionQuery transactionQuery;
@@ -65,8 +66,23 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
       final Long qWeekId,
       final InsuranceCaseBalance previousWeekBalance) {
     if (previousWeekBalance == null) {
-      final var damageRemaining =
-          insuranceCase.getDamageAmount().subtract(DEFAULT_SELF_RESPONSIBILITY);
+      final var origanalDamage = insuranceCase.getDamageAmount();
+      if (origanalDamage.compareTo(DEFAULT_SELF_RESPONSIBILITY) <= 0) {
+        return InsuranceCaseBalance.builder()
+            .id(null)
+            .insuranceCase(insuranceCase)
+            .damageRemaining(origanalDamage)
+            .selfResponsibilityRemaining(ZERO)
+            .transactionIds(new ArrayList<>())
+            .qWeekId(qWeekId)
+            .build();
+      }
+
+      var damageRemaining = origanalDamage.subtract(DEFAULT_SELF_RESPONSIBILITY);
+      if (insuranceCase.getWithQKasko()) {
+        damageRemaining = damageRemaining.divide(Q_KASKO_DISCOUNT_RATE);
+      }
+
       return InsuranceCaseBalance.builder()
           .id(null)
           .insuranceCase(insuranceCase)
