@@ -4,6 +4,7 @@ import static ee.qrental.ui.controller.util.ControllerUtils.INSURANCE_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
@@ -21,9 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class InsuranceCalculationUseCaseController {
 
-  private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final InsuranceCalculationAddUseCase addUseCase;
+  private final GetInsuranceCalculationQuery insuranceCalculationQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
@@ -53,11 +55,8 @@ public class InsuranceCalculationUseCaseController {
   }
 
   private List<QWeekResponse> getWeeks() {
-    final var lastCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
-    if (lastCalculatedWeekId == null) {
-      return qWeekQuery.getAll();
-    }
 
-    return qWeekQuery.getAllAfterById(lastCalculatedWeekId);
+    return qWeekQuery.getAllBetweenByIdsDefaultOrder(
+        insuranceCalculationQuery.getStartQWeekId(), insuranceCalculationQuery.getEndQWeekId());
   }
 }

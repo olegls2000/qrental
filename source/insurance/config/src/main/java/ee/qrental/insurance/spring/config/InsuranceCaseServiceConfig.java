@@ -8,8 +8,10 @@ import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.*;
 import ee.qrental.insurance.core.service.*;
 import ee.qrental.insurance.core.service.balance.*;
+import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 import ee.qrental.insurance.core.validator.InsuranceCaseAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
 import org.springframework.context.annotation.Bean;
@@ -91,9 +93,12 @@ public class InsuranceCaseServiceConfig {
   @Bean
   InsuranceCalculationQueryService getInsuranceCalculationQueryService(
       final InsuranceCalculationLoadPort loadPort,
-      final InsuranceCalculationResponseMapper responseMapper) {
+      final InsuranceCalculationResponseMapper responseMapper,
+      final GetQWeekQuery qWeekQuery,
+      final GetRentCalculationQuery rentCalculationQuery) {
 
-    return new InsuranceCalculationQueryService(loadPort, responseMapper);
+    return new InsuranceCalculationQueryService(
+        loadPort, responseMapper, qWeekQuery, rentCalculationQuery);
   }
 
   @Bean
@@ -107,7 +112,8 @@ public class InsuranceCaseServiceConfig {
       final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionTypeQuery transactionTypeQuery,
       final GetQWeekQuery qWeekQuery,
-      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies) {
+      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies,
+      final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
@@ -118,7 +124,8 @@ public class InsuranceCaseServiceConfig {
         transactionQuery,
         transactionTypeQuery,
         qWeekQuery,
-        calculatorStrategies);
+        calculatorStrategies,
+        addBusinessRuleValidator);
   }
 
   @Bean

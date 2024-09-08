@@ -13,6 +13,7 @@ import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculatorStrategy;
+import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
@@ -40,12 +41,19 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final GetQWeekQuery qWeekQuery;
   private final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies;
+  private final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator;
 
   @Transactional
   @Override
   public Long add(final InsuranceCalculationAddRequest request) {
     System.out.println("----> Insurance Cases Balance Calculation started ...");
     final var calculationStartTime = System.currentTimeMillis();
+    final var violationsCollector = addBusinessRuleValidator.validateAdd(request);
+    if (violationsCollector.hasViolations()) {
+      request.setViolations(violationsCollector.getViolations());
+
+      return null;
+    }
     final var startWeekId = getStartWeekId();
     final var endWeekId = getEndWeekId(request);
     final var domain = calculationAddRequestMapper.toDomain(request);

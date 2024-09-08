@@ -8,4 +8,8 @@ public interface GetInsuranceCalculationQuery {
   List<InsuranceCalculationResponse> getAll();
 
   InsuranceCalculationResponse getById(final Long id);
+
+  Long getStartQWeekId();
+
+  Long getEndQWeekId();
 }
