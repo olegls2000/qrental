@@ -21,8 +21,8 @@ public class InsuranceCaseBalanceCalculationStrategySaving
   }
 
   @Override
-  protected void saveTransactionIfNecessary(final TransactionAddRequest damageTransaction) {
-    transactionAddUseCase.add(damageTransaction);
+  protected Long saveTransactionIfNecessary(final TransactionAddRequest damageTransaction) {
+    return transactionAddUseCase.add(damageTransaction);
   }
 
   @Override

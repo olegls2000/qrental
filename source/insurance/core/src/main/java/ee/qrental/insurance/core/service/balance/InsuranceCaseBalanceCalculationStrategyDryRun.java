@@ -17,7 +17,11 @@ public class InsuranceCaseBalanceCalculationStrategyDryRun
   }
 
   @Override
-  protected void saveTransactionIfNecessary(TransactionAddRequest damageTransaction) {}
+  protected Long saveTransactionIfNecessary(TransactionAddRequest damageTransaction) {
+    System.out.println("Dry run strategy does not save Damage transactions");
+
+    return null;
+  }
 
   @Override
   public boolean canApply(final String strategyName) {

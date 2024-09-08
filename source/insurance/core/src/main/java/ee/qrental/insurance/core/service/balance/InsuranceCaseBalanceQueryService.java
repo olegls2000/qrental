@@ -94,6 +94,11 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
         qWeekQuery.getQWeeksFromPeriodOrdered(
             startWeek.getId(), requestedQWeekId, DEFAULT_COMPARATOR);
 
+    if (weeksForCalculation.isEmpty()) {
+      return balanceLoadPort.loadByInsuranceCaseIdAndQWeekId(
+          insuranceCase.getId(), requestedQWeekId);
+    }
+
     for (int i = 0; i < weeksForCalculation.size(); i++) {
       final var week = weeksForCalculation.get(i);
       final var balance = calculator.calculateBalance(insuranceCase, week, previousWeekBalance);

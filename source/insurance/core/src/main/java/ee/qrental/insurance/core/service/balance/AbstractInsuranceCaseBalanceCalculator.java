@@ -11,6 +11,7 @@ import ee.qrental.transaction.api.in.response.TransactionResponse;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.*;
@@ -49,12 +50,15 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
     deriveService.derive(
         requestedWeekBalance, damageTransaction, paidSelfResponsibilityAmountAbs, requestedQWeek);
 
-    saveTransactionIfNecessary(damageTransaction);
+    final var transactionId = saveTransactionIfNecessary(damageTransaction);
+    if (transactionId != null) {
+      requestedWeekBalance.getTransactionIds().add(transactionId);
+    }
 
     return requestedWeekBalance;
   }
 
-  protected abstract void saveTransactionIfNecessary(final TransactionAddRequest damageTransaction);
+  protected abstract Long saveTransactionIfNecessary(final TransactionAddRequest damageTransaction);
 
   private InsuranceCaseBalance getInsuranceCaseBalance(
       final InsuranceCase insuranceCase,
@@ -68,6 +72,7 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
           .insuranceCase(insuranceCase)
           .damageRemaining(damageRemaining)
           .selfResponsibilityRemaining(DEFAULT_SELF_RESPONSIBILITY)
+          .transactionIds(new ArrayList<>())
           .qWeekId(qWeekId)
           .build();
     }
@@ -76,6 +81,7 @@ public abstract class AbstractInsuranceCaseBalanceCalculator
         .insuranceCase(insuranceCase)
         .damageRemaining(previousWeekBalance.getDamageRemaining())
         .selfResponsibilityRemaining(previousWeekBalance.getSelfResponsibilityRemaining())
+        .transactionIds(new ArrayList<>())
         .qWeekId(qWeekId)
         .build();
   }

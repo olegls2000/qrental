@@ -23,7 +23,7 @@ public class InsuranceCaseQueryController {
     return "insuranceCases";
   }
 
-  @GetMapping("/cases/balances/{id}")
+  @GetMapping("/cases/{id}/balances")
   public String getInsuranceCaseBalancesTableView(@PathVariable("id") long id, final Model model) {
     model.addAttribute("insuranceCaseBalances", insuranceCaseQuery.getInsuranceCaseBalancesByInsuranceCase(id));
     return "forms/viewInsuranceCaseBalances";

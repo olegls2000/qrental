@@ -6,6 +6,7 @@ import ee.qrental.insurance.adapter.mapper.InsuranceCaseAdapterMapper;
 import ee.qrental.insurance.adapter.mapper.InsuranceCaseBalanceAdapterMapper;
 import ee.qrental.insurance.adapter.repository.InsuranceCalculationRepository;
 import ee.qrental.insurance.adapter.repository.InsuranceCaseBalanceRepository;
+import ee.qrental.insurance.adapter.repository.InsuranceCaseBalanceTransactionRepository;
 import ee.qrental.insurance.adapter.repository.InsuranceCaseRepository;
 import ee.qrental.insurance.api.out.InsuranceCaseBalanceLoadPort;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +22,14 @@ public class InsuranceAdapterConfig {
   @Bean
   InsuranceCaseLoadAdapter getInsuranceCaseLoadAdapter(
       final InsuranceCaseRepository repository, final InsuranceCaseAdapterMapper mapper) {
+
     return new InsuranceCaseLoadAdapter(repository, mapper);
   }
 
   @Bean
   InsuranceCasePersistenceAdapter getInsuranceCasePersistenceAdapter(
       final InsuranceCaseRepository repository, final InsuranceCaseAdapterMapper mapper) {
+
     return new InsuranceCasePersistenceAdapter(repository, mapper);
   }
 
@@ -40,15 +43,25 @@ public class InsuranceAdapterConfig {
 
   @Bean
   InsuranceCalculationPersistenceAdapter getInsuranceCalculationPersistenceAdapter(
-      final InsuranceCalculationRepository repository,
-      final InsuranceCalculationAdapterMapper mapper) {
-    return new InsuranceCalculationPersistenceAdapter(repository, mapper);
+      final InsuranceCalculationRepository calculationRepository,
+      final InsuranceCaseBalanceRepository balanceRepository,
+      final InsuranceCaseBalanceTransactionRepository balanceTransactionRepository,
+      final InsuranceCalculationAdapterMapper calculationMapper,
+      final InsuranceCaseBalanceAdapterMapper balanceMapper) {
+
+    return new InsuranceCalculationPersistenceAdapter(
+        calculationRepository,
+        balanceRepository,
+        balanceTransactionRepository,
+        calculationMapper,
+        balanceMapper);
   }
 
   @Bean
   InsuranceCalculationLoadAdapter getInsuranceCalculationLoadAdapter(
       final InsuranceCalculationRepository repository,
       final InsuranceCalculationAdapterMapper mapper) {
+
     return new InsuranceCalculationLoadAdapter(repository, mapper);
   }
 }

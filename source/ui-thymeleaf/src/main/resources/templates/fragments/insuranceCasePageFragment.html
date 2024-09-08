@@ -12,9 +12,7 @@
                     <span class="bi-plus-circle"></span>
                 </a>
             </th>
-            <th style="width: 1% !important;">Delete</th>
             <th style="width: 1% !important;">Portal</th>
-            <th style="width: 1% !important;">Balance</th>
             <th>Is Active</th>
             <th>Driver</th>
             <th>Car</th>
@@ -28,24 +26,14 @@
         </tr>
         <tr th:each="insuranceCase : ${insuranceCases}">
             <td class="text-center">
-                <a class="btn btn-sm btn-warning"
-                   th:href="@{/insurance/cases/update-form/{id}(id=${insuranceCase.id})}">
-                    <span class="bi-pencil-square"></span></a>
-            </td>
-            <td class="text-center">
-                <a class="btn btn-sm btn-danger"
-                   th:href="@{/insurance/cases/delete-form/{id}(id=${insuranceCase.id})}">
-                    <span class="bi-trash"></span></a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/insurance/cases/{id}/balances(id=${insuranceCase.id})}">
+                    <span class="bi bi-clock-history"></span></a>
             </td>
             <td class="text-center">
                 <a class="btn btn-sm btn-info"
                    th:href="@{/balances/driver/{id}(id=${insuranceCase.driverId})}">
                     <span class="bi bi-card-checklist"></span></a>
-            </td>
-            <td class="text-center">
-                <a class="btn btn-sm btn-info"
-                   th:href="@{/insurance/cases/balances/{id}(id=${insuranceCase.id})}">
-                    <span class="bi bi-clock-history"></span></a>
             </td>
             <td th:text="${insuranceCase.active}"></td>
             <td th:text="${insuranceCase.driverInfo}"></td>

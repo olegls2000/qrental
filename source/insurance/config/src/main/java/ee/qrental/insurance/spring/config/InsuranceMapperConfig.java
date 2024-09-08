@@ -5,6 +5,7 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.driver.api.in.query.GetDriverQuery;
 import ee.qrental.insurance.adapter.adapter.InsuranceCaseBalancePersistenceAdapter;
 import ee.qrental.insurance.adapter.mapper.InsuranceCalculationAdapterMapper;
+import ee.qrental.insurance.adapter.mapper.InsuranceCaseAdapterMapper;
 import ee.qrental.insurance.adapter.mapper.InsuranceCaseBalanceAdapterMapper;
 import ee.qrental.insurance.adapter.repository.InsuranceCaseBalanceRepository;
 import ee.qrental.insurance.api.out.InsuranceCaseLoadPort;
@@ -36,8 +37,9 @@ public class InsuranceMapperConfig {
   }
 
   @Bean
-  InsuranceCaseBalanceAdapterMapper getInsuranceCaseBalanceAdapterMapper() {
-    return new InsuranceCaseBalanceAdapterMapper();
+  InsuranceCaseBalanceAdapterMapper getInsuranceCaseBalanceAdapterMapper(
+      final InsuranceCaseAdapterMapper insuranceCaseAdapterMapper) {
+    return new InsuranceCaseBalanceAdapterMapper(insuranceCaseAdapterMapper);
   }
 
   @Bean

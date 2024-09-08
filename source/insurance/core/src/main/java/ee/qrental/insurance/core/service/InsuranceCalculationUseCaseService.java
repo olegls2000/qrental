@@ -57,12 +57,15 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         qWeek -> {
           final var qWeekId = qWeek.getId();
           final var activeCases = caseLoadPort.loadActiveByQWeekId(qWeekId);
-          for (final var activeCase : activeCases) {
-            final var previousWeekBalance = getPreviousWeekBalance(activeCase, qWeek);
-            final var requestedWeekBalance =
-                saveStrategy.calculateBalance(activeCase, qWeek, previousWeekBalance);
-            domain.getInsuranceCaseBalances().add(requestedWeekBalance);
+          if (activeCases.isEmpty()) {
+            return;
           }
+          final var activeCase = activeCases.stream().findFirst().get();
+          System.out.println();
+          final var previousWeekBalance = getPreviousWeekBalance(activeCase, qWeek);
+          final var requestedWeekBalance =
+              saveStrategy.calculateBalance(activeCase, qWeek, previousWeekBalance);
+          domain.getInsuranceCaseBalances().add(requestedWeekBalance);
         });
     final var savedCalculation = calculationAddPort.add(domain);
     final var calculationEndTime = System.currentTimeMillis();

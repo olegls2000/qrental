@@ -90,7 +90,7 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
 
   @Override
   public List<Transaction> loadAllByInsuranceCalculationId(final Long insuranceCalculationId) {
-    return repository.findAllByRentCalculationId(insuranceCalculationId).stream()
+    return repository.findAllByInsuranceCalculationId(insuranceCalculationId).stream()
             .map(mapper::mapToDomain)
             .collect(toList());
   }

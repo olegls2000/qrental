@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @SuperBuilder
 @Getter
@@ -15,4 +16,5 @@ public class InsuranceCaseBalance {
   private BigDecimal damageRemaining;
   private BigDecimal selfResponsibilityRemaining;
   private InsuranceCase insuranceCase;
+  private List<Long> transactionIds;
 }
