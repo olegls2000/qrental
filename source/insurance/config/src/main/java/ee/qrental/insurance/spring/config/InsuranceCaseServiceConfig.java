@@ -2,6 +2,7 @@ package ee.qrental.insurance.spring.config;
 
 import ee.qrental.car.api.in.query.GetCarLinkQuery;
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrental.insurance.api.out.*;
@@ -89,31 +90,30 @@ public class InsuranceCaseServiceConfig {
       final InsuranceCalculationLoadPort loadPort,
       final InsuranceCalculationResponseMapper responseMapper,
       final GetQWeekQuery qWeekQuery,
-      final GetRentCalculationQuery rentCalculationQuery) {
+      final GetRentCalculationQuery rentCalculationQuery,
+      final GetBalanceQuery balanceQuery) {
 
     return new InsuranceCalculationQueryService(
-        loadPort, responseMapper, qWeekQuery, rentCalculationQuery);
+        loadPort, responseMapper, qWeekQuery, rentCalculationQuery, balanceQuery);
   }
 
   @Bean
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
       final InsuranceCaseLoadPort caseLoadPort,
-      final InsuranceCalculationLoadPort calculationLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetQWeekQuery qWeekQuery,
       final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
-      final GetBalanceQuery balanceQuery,
+      final GetInsuranceCalculationQuery insuranceCalculationQuery,
       final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
-        calculationLoadPort,
         calculationAddPort,
         calculationAddRequestMapper,
         qWeekQuery,
         insuranceCaseBalanceCalculator,
-        balanceQuery,
+        insuranceCalculationQuery,
         addBusinessRuleValidator);
   }
 

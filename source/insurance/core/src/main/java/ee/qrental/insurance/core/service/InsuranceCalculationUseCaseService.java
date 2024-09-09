@@ -4,7 +4,7 @@ import static ee.qrental.constant.api.in.query.GetQWeekQuery.DEFAULT_COMPARATOR;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 
-import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.insurance.api.out.*;
@@ -12,7 +12,6 @@ import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculator;
 import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 
-import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import jakarta.transaction.Transactional;
 
 import lombok.AllArgsConstructor;
@@ -21,12 +20,11 @@ import lombok.AllArgsConstructor;
 public class InsuranceCalculationUseCaseService implements InsuranceCalculationAddUseCase {
 
   private final InsuranceCaseLoadPort caseLoadPort;
-  private final InsuranceCalculationLoadPort calculationLoadPort;
   private final InsuranceCalculationAddPort calculationAddPort;
   private final InsuranceCalculationAddRequestMapper calculationAddRequestMapper;
   private final GetQWeekQuery qWeekQuery;
   private final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator;
-  private final GetBalanceQuery balanceQuery;
+  private final GetInsuranceCalculationQuery insuranceCalculationQuery;
   private final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator;
 
   @Transactional
@@ -40,7 +38,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
 
       return null;
     }
-    final var startWeekId = getStartWeekId();
+    final var startWeekId = insuranceCalculationQuery.getStartQWeekId();
     final var endWeekId = getEndWeekId(request);
     final var domain = calculationAddRequestMapper.toDomain(request);
     domain.setStartQWeekId(startWeekId);
@@ -71,46 +69,6 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         calculationDuration);
 
     return savedCalculation.getId();
-  }
-
-  private Long getStartWeekId() {
-    final var latestCalculatedBalanceQWeek = getLatestBalanceCalculatedQWeek();
-    final var lastInsuranceCalculatedQWeek = getLatestInsuranceCalculatedQWeek();
-
-    final var startWeek =
-        getLatestQWeek(latestCalculatedBalanceQWeek, lastInsuranceCalculatedQWeek);
-
-    return startWeek.getId();
-  }
-
-  private QWeekResponse getLatestQWeek(final QWeekResponse qWeek1, final QWeekResponse qWeek2) {
-    if (qWeek1 == null) {
-      return qWeek2;
-    }
-    if (qWeek2 == null) {
-      return qWeek1;
-    }
-
-    if (qWeek1.compareTo(qWeek2) >= 0) {
-      return qWeek1;
-    }
-    return qWeek2;
-  }
-
-  private QWeekResponse getLatestInsuranceCalculatedQWeek() {
-    final var lastCalculatedQWeekId = calculationLoadPort.loadLastCalculatedQWeekId();
-    if (lastCalculatedQWeekId == null) {
-      return qWeekQuery.getFirstWeek();
-    }
-    return qWeekQuery.getOneAfterById(lastCalculatedQWeekId);
-  }
-
-  private QWeekResponse getLatestBalanceCalculatedQWeek() {
-    final var latestCalculatedBalance = balanceQuery.getLatest();
-    if (latestCalculatedBalance == null) {
-      return null;
-    }
-    return qWeekQuery.getOneAfterById(latestCalculatedBalance.getQWeekId());
   }
 
   private Long getEndWeekId(final InsuranceCalculationAddRequest request) {

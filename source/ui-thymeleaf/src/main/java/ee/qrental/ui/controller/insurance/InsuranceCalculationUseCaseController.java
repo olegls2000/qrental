@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class InsuranceCalculationUseCaseController {
 
-  private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final InsuranceCalculationAddUseCase addUseCase;
   private final GetInsuranceCalculationQuery insuranceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
