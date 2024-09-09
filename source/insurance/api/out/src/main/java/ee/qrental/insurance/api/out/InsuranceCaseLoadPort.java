@@ -6,7 +6,7 @@ import ee.qrental.insurance.domain.InsuranceCase;
 import java.util.List;
 
 public interface InsuranceCaseLoadPort extends LoadPort<InsuranceCase> {
-  List<InsuranceCase> loadActiveByQWeekId(final Long qWeekId);
+  List<InsuranceCase> loadActiveByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 
-  List<InsuranceCase> loadActiveByDriverId(final Long driverId);
+  List<InsuranceCase> loadActiveByQWeekId(final Long qWeekId);
 }

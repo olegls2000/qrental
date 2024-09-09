@@ -8,7 +8,8 @@ public interface InsuranceCaseRepository {
 
   List<InsuranceCaseJakartaEntity> findActiveByQWeekId(final Long qWeekId);
 
-  List<InsuranceCaseJakartaEntity> findActiveByDriverId(final Long driverId);
+  List<InsuranceCaseJakartaEntity> findActiveByDriverIdAndQWeekId(
+      final Long driverId, final Long qWeekId);
 
   InsuranceCaseJakartaEntity save(final InsuranceCaseJakartaEntity entity);
 

@@ -17,13 +17,14 @@ public class InsuranceCaseRepositoryImpl implements InsuranceCaseRepository {
   }
 
   @Override
-  public List<InsuranceCaseJakartaEntity> findActiveByQWeekId(final Long qWeekId) {
-    return springDataRepository.findAllByActiveIsTrueAndQweekId(qWeekId);
+  public List<InsuranceCaseJakartaEntity> findActiveByDriverIdAndQWeekId(
+      final Long driverId, final Long qWeekId) {
+    return springDataRepository.findAllByActiveIsTrueAndDriverIdAndQWeekId(qWeekId, driverId);
   }
 
   @Override
-  public List<InsuranceCaseJakartaEntity> findActiveByDriverId(final Long driverId) {
-    return springDataRepository.findAllByActiveIsTrueAndDriverId(driverId);
+  public List<InsuranceCaseJakartaEntity> findActiveByQWeekId(final Long qWeekId) {
+    return springDataRepository.findAllByActiveIsTrueAndQweekId(qWeekId);
   }
 
   @Override

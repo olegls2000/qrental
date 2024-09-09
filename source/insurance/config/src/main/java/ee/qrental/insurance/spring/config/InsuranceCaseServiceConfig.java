@@ -11,6 +11,7 @@ import ee.qrental.insurance.core.service.balance.*;
 import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 import ee.qrental.insurance.core.validator.InsuranceCaseAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
@@ -18,42 +19,35 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-
 @Configuration
 @EnableTransactionManagement
 public class InsuranceCaseServiceConfig {
 
   @Bean
-  public List<InsuranceCaseBalanceCalculatorStrategy> getInsuranceCaseCalculatorStrategies(
+  InsuranceCaseBalanceCalculator getInsuranceCaseBalanceCalculator(
+      final InsuranceCaseBalanceLoadPort insuranceCaseBalanceLoadPort,
       final GetCarLinkQuery carLinkQuery,
-      final TransactionAddUseCase transactionAddUseCase,
       final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
-      final InsuranceCaseBalanceDeriveService deriveService) {
-
-    return asList(
-        new InsuranceCaseBalanceCalculationStrategyDryRun(
-            carLinkQuery, transactionQuery, transactionTypeQuery, deriveService),
-        new InsuranceCaseBalanceCalculationStrategySaving(
-            carLinkQuery,
-            transactionAddUseCase,
-            transactionQuery,
-            transactionTypeQuery,
-            deriveService));
+      final InsuranceCaseBalanceDeriveService deriveService,
+      final TransactionAddUseCase transactionAddUseCase) {
+    return new InsuranceCaseBalanceCalculatorService(
+        insuranceCaseBalanceLoadPort,
+        carLinkQuery,
+        transactionQuery,
+        transactionTypeQuery,
+        deriveService,
+        transactionAddUseCase);
   }
 
   @Bean
   GetInsuranceCaseBalanceQuery getInsuranceCaseBalanceQuery(
       final GetQWeekQuery qWeekQuery,
       final InsuranceCaseBalanceLoadPort balanceLoadPort,
-      final InsuranceCaseLoadPort caseLoadPort,
-      final InsuranceCalculationLoadPort calculationLoadPort,
-      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies) {
+      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
+      final InsuranceCaseLoadPort insuranceCaseLoadPort) {
     return new InsuranceCaseBalanceQueryService(
-        qWeekQuery, balanceLoadPort, caseLoadPort, calculationLoadPort, calculatorStrategies);
+        qWeekQuery, balanceLoadPort, insuranceCaseBalanceCalculator, insuranceCaseLoadPort);
   }
 
   @Bean
@@ -104,27 +98,22 @@ public class InsuranceCaseServiceConfig {
   @Bean
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
       final InsuranceCaseLoadPort caseLoadPort,
-      final InsuranceCaseBalanceLoadPort caseBalanceLodPort,
       final InsuranceCalculationLoadPort calculationLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
-      final GetTransactionQuery transactionQuery,
-      final TransactionAddUseCase transactionAddUseCase,
-      final GetTransactionTypeQuery transactionTypeQuery,
       final GetQWeekQuery qWeekQuery,
-      final List<InsuranceCaseBalanceCalculatorStrategy> calculatorStrategies,
+      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
+      final GetBalanceQuery balanceQuery,
       final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
-        caseBalanceLodPort,
         calculationLoadPort,
         calculationAddPort,
         calculationAddRequestMapper,
-        transactionQuery,
-        transactionTypeQuery,
         qWeekQuery,
-        calculatorStrategies,
+        insuranceCaseBalanceCalculator,
+        balanceQuery,
         addBusinessRuleValidator);
   }
 

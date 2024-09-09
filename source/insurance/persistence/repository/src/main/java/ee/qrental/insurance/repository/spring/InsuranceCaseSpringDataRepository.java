@@ -9,8 +9,18 @@ import java.util.List;
 
 public interface InsuranceCaseSpringDataRepository
     extends JpaRepository<InsuranceCaseJakartaEntity, Long> {
-
-  List<InsuranceCaseJakartaEntity> findAllByActiveIsTrueAndDriverId(final Long driverId);
+  @Query(
+      value =
+          "select ic.* from insurance_case ic "
+              + "LEFT JOIN q_week qw on qw.id = ic.start_q_week_id "
+              + "where "
+              + "ic.active = true "
+              + "and ic.driver_id = :driverId "
+              + "and qw.year <= (select year from q_week where id = :qWeekId) "
+              + "and qw.number <= (select number from q_week where id = :qWeekId);",
+      nativeQuery = true)
+  List<InsuranceCaseJakartaEntity> findAllByActiveIsTrueAndDriverIdAndQWeekId(
+      final @Param("driverId") Long driverId, final @Param("qWeekId") Long qWeekId);
 
   @Query(
       value =
