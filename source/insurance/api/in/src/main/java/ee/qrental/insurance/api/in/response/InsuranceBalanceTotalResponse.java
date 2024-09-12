@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class InsuranceBalanceTotalResponse {
+  private BigDecimal damageInitialTotal;
   private BigDecimal damageRemainingTotal;
   private BigDecimal selfResponsibilityRemainingTotal;
 }

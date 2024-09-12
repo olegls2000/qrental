@@ -191,6 +191,12 @@
 
                 <div class="row justify-content-md-center mb-3">
                     <div class="col-md-auto">
+                        <small th:text="|Initial Damage total: ${insuranceBalanceTotal.damageInitialTotal} EURO|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                               th:classappend="'text-danger bg-danger border-danger'">???</small>
+                    </div>
+                    <div class="col-md-auto">
                         <small th:text="|Has QKasko: ${hasQKasko} |"
                                class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2 "

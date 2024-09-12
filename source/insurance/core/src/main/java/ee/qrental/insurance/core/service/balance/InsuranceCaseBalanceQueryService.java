@@ -36,11 +36,13 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
         InsuranceBalanceTotalResponse.builder()
             .selfResponsibilityRemainingTotal(ZERO)
             .damageRemainingTotal(ZERO)
+            .damageInitialTotal(ZERO)
             .build();
 
     final var activeInsuranceCases =
         insuranceCaseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId);
     for (final var insuranceCase : activeInsuranceCases) {
+      sumInitialDamage(insuranceCase, balanceTotal);
       final var latestBalance = balanceLoadPort.loadLatestByInsuranceCaseId(insuranceCase.getId());
       if (latestBalance != null) {
         final var newSelfResponsibility =
@@ -57,6 +59,12 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
       }
     }
     return balanceTotal;
+  }
+
+  private void sumInitialDamage(
+      final InsuranceCase insuranceCase, final InsuranceBalanceTotalResponse balanceTotal) {
+    final var currentInitialTotal = balanceTotal.getDamageInitialTotal();
+    balanceTotal.setDamageInitialTotal(currentInitialTotal.add(insuranceCase.getDamageAmount()));
   }
 
   private static BigDecimal getNewSelfResponsibilityTotal(
