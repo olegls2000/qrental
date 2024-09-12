@@ -199,7 +199,6 @@ public class DriverPortalController {
     model.addAttribute("driverDeposit", driver.getDeposit());
     model.addAttribute("qFirmId", driver.getQFirmId());
     model.addAttribute("hasQKasko", driver.getHasQKasko());
-
   }
 
   private void addInsuranceRequestedWeekBalance(

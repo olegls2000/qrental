@@ -18,4 +18,6 @@ public interface GetTransactionKindQuery
   List<TransactionKindResponse> getAllNonRepairmentExceptNonFeeAble();
 
   List<TransactionKindResponse> getAllRepairment();
+
+  List<TransactionKindResponse> getAllSelfResponsibility();
 }

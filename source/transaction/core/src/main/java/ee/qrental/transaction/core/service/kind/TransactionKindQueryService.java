@@ -66,6 +66,13 @@ public class TransactionKindQueryService implements GetTransactionKindQuery {
   }
 
   @Override
+  public List<TransactionKindResponse> getAllSelfResponsibility() {
+    return loadPort.loadAllByCodeIn(asList(TransactionKindsCode.SR.name())).stream()
+        .map(mapper::toResponse)
+        .collect(toList());
+  }
+
+  @Override
   public List<TransactionKindResponse> getAllNonRepairmentExceptNonFeeAble() {
     return loadPort
         .loadAllByCodeIn(

@@ -13,6 +13,7 @@ import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleVa
 import ee.qrental.insurance.core.validator.InsuranceCaseAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
@@ -46,9 +47,18 @@ public class InsuranceCaseServiceConfig {
       final GetQWeekQuery qWeekQuery,
       final InsuranceCaseBalanceLoadPort balanceLoadPort,
       final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
-      final InsuranceCaseLoadPort insuranceCaseLoadPort) {
+      final InsuranceCaseLoadPort insuranceCaseLoadPort,
+      final GetInsuranceCalculationQuery insuranceCalculationQuery,
+      final GetTransactionQuery transactionQuery,
+      final GetTransactionKindQuery transactionKindQuery) {
     return new InsuranceCaseBalanceQueryService(
-        qWeekQuery, balanceLoadPort, insuranceCaseBalanceCalculator, insuranceCaseLoadPort);
+        qWeekQuery,
+        balanceLoadPort,
+        insuranceCaseBalanceCalculator,
+        insuranceCaseLoadPort,
+        insuranceCalculationQuery,
+        transactionQuery,
+        transactionKindQuery);
   }
 
   @Bean

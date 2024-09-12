@@ -64,6 +64,7 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
         .loadByKindCodesIn(
             asList(
                 TransactionKindsCode.F.name(),
+                TransactionKindsCode.SR.name(),
                 TransactionKindsCode.R.name(),
                 TransactionKindsCode.NFA.name(),
                 TransactionKindsCode.FA.name()))

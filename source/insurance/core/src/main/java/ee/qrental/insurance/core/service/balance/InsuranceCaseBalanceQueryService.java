@@ -3,6 +3,7 @@ package ee.qrental.insurance.core.service.balance;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
+import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrental.insurance.api.in.response.InsuranceBalanceTotalResponse;
 import ee.qrental.insurance.api.out.InsuranceCaseBalanceLoadPort;
@@ -11,6 +12,12 @@ import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
+import ee.qrental.transaction.api.in.query.GetTransactionQuery;
+import ee.qrental.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
+import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
+import ee.qrental.transaction.api.in.response.TransactionResponse;
+import ee.qrental.transaction.api.in.response.kind.TransactionKindResponse;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -19,6 +26,9 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
   private final InsuranceCaseBalanceLoadPort balanceLoadPort;
   private final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator;
   private final InsuranceCaseLoadPort insuranceCaseLoadPort;
+  private final GetInsuranceCalculationQuery insuranceCalculationQuery;
+  private final GetTransactionQuery transactionQuery;
+  private final GetTransactionKindQuery transactionKindQuery;
 
   @Override
   public InsuranceBalanceTotalResponse getInsuranceBalanceTotalByDriverForCurrentWeek(
@@ -41,6 +51,7 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
 
     final var activeInsuranceCases =
         insuranceCaseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId);
+
     for (final var insuranceCase : activeInsuranceCases) {
       sumInitialDamage(insuranceCase, balanceTotal);
       final var latestBalance = balanceLoadPort.loadLatestByInsuranceCaseId(insuranceCase.getId());
@@ -58,6 +69,12 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
         balanceTotal.setSelfResponsibilityRemainingTotal(newSelfResponsibility);
       }
     }
+
+    final var paidSelfResponsibilityTotal = getPaidSelfResponsibilityTotal(driverId, qWeekId);
+    final var adjustedSelfResponsibility =
+        balanceTotal.getSelfResponsibilityRemainingTotal().subtract(paidSelfResponsibilityTotal);
+    balanceTotal.setSelfResponsibilityRemainingTotal(adjustedSelfResponsibility);
+
     return balanceTotal;
   }
 
@@ -91,5 +108,28 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
         insuranceCase, firstBalance);
 
     return firstBalance;
+  }
+
+  private BigDecimal getPaidSelfResponsibilityTotal(final Long driverId, final Long qWeekEndId) {
+    final var transactionKindIds =
+        transactionKindQuery.getAllSelfResponsibility().stream()
+            .map(TransactionKindResponse::getId)
+            .toList();
+    final var startQWeekId = insuranceCalculationQuery.getStartQWeekId();
+    final var startQWeek = qWeekQuery.getById(startQWeekId);
+    final var endQWeek = qWeekQuery.getById(qWeekEndId);
+    final var filter =
+        PeriodAndKindAndDriverTransactionFilter.builder()
+            .dateStart(startQWeek.getStart())
+            .dateEnd(endQWeek.getEnd())
+            .driverId(driverId)
+            .transactionKindIds(transactionKindIds)
+            .build();
+
+    return transactionQuery.getAllByFilter(filter).stream()
+        .map(TransactionResponse::getRealAmount)
+        .map(BigDecimal::abs)
+        .reduce(BigDecimal::add)
+        .orElse(ZERO);
   }
 }

@@ -5,6 +5,7 @@ public enum TransactionKindsCode {
   NFA("Non Fee Able"),
   FA("Fee Able"),
   P("Positive"),
+  SR("Self Responsibility"),
   R("Repairment");
 
   private String name;
