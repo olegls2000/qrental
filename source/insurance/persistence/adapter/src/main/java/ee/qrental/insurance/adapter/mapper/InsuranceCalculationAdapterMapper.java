@@ -12,8 +12,7 @@ public class InsuranceCalculationAdapterMapper {
     return InsuranceCalculation.builder()
         .id(entity.getId())
         .actionDate(entity.getActionDate())
-        .startQWeekId(entity.getStartQWeekId())
-        .endQWeekId(entity.getEndQWeekId())
+        .qWeekId(entity.getQWeekId())
         .comment(entity.getComment())
         .build();
   }
@@ -25,8 +24,7 @@ public class InsuranceCalculationAdapterMapper {
     return InsuranceCalculationJakartaEntity.builder()
         .id(domain.getId())
         .actionDate(domain.getActionDate())
-        .startQWeekId(domain.getStartQWeekId())
-        .endQWeekId(domain.getEndQWeekId())
+        .qWeekId(domain.getQWeekId())
         .comment(domain.getComment())
         .build();
   }

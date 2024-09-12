@@ -15,8 +15,7 @@ public class InsuranceCalculationAddRequestMapper {
 
     return InsuranceCalculation.builder()
         .actionDate(request.getActionDate())
-        .startQWeekId(null)
-        .endQWeekId(request.getQWeekId())
+        .qWeekId(request.getQWeekId())
         .insuranceCaseBalances(new ArrayList<>())
         .comment(request.getComment())
         .build();

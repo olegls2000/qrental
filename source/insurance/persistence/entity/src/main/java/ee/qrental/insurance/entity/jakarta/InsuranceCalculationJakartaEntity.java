@@ -27,11 +27,8 @@ public class InsuranceCalculationJakartaEntity {
   @Column(name = "action_date")
   private LocalDate actionDate;
 
-  @Column(name = "start_q_week_id")
-  private Long startQWeekId;
-
-  @Column(name = "end_q_week_id")
-  private Long endQWeekId;
+  @Column(name = "q_week_id")
+  private Long qWeekId;
 
   @Column(name = "comment")
   private String comment;

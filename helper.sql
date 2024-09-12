@@ -220,11 +220,6 @@ WHERE qw.year = (SELECT year FROM q_week WHERE id = :startWeekId) AND
       qw.number < (SELECT number FROM q_week WHERE id = :endWeekId)
    OR qw.year < (SELECT year FROM q_week WHERE id = :startWeekId);
 
-2023,51
-2023,52
-2024,1
-
-
 select qw.*
 from q_week qw
 WHERE (qw.year * 100 + qw.number) >
@@ -232,14 +227,18 @@ WHERE (qw.year * 100 + qw.number) >
   AND (qw.year * 100 + qw.number) <
       (select (q_week.year * 100 + q_week.number) from q_week WHERE q_week.id = :endWeekId);
 
-
-SELECT monthyear,
-       animal_type,
-       outcome_type,
-       (age_in_days / 365) AS `Years Old`
-FROM austin_animal_center_age_at_outcome
-WHERE (age_in_days / 365) > 8
-
-
 select *
 from q_week;
+
+--Total DB clean up:
+delete from firm_link where driver_id not in (28, 103, 95, 5);
+delete from invoice_transaction where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
+delete from bonus_calculation_result where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
+delete from transaction where driver_id not in (28, 103, 95, 5);
+delete from call_sign_link where driver_id not in (28, 103, 95, 5);
+delete from invoice where driver_id not in (28, 103, 95, 5);
+delete from car_link where driver_id not in (28, 103, 95, 5);
+delete from friendship where driver_id not in (28, 103, 95, 5);
+delete from contract where driver_id not in (28, 103, 95, 5);
+delete from authorization_bolt where driver_id not in (28, 103, 95, 5);
+delete from driver where id not in (28, 103, 95, 5);

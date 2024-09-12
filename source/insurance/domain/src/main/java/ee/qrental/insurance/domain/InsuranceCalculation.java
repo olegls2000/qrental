@@ -14,8 +14,7 @@ import java.util.List;
 @SuperBuilder
 public class InsuranceCalculation {
   private Long id;
-  private Long startQWeekId;
-  private Long endQWeekId;
+  private Long qWeekId;
   private LocalDate actionDate;
   private List<InsuranceCaseBalance> insuranceCaseBalances;
   private String comment;

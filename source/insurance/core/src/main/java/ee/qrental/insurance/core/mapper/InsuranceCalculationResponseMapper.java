@@ -19,8 +19,7 @@ public class InsuranceCalculationResponseMapper
 
     return InsuranceCalculationResponse.builder()
         .id(domain.getId())
-        .startWeek(getWeekString(domain.getStartQWeekId()))
-        .endWeek(getWeekString(domain.getEndQWeekId()))
+        .qWeek(getWeekString(domain.getQWeekId()))
         .actionDate(domain.getActionDate())
         .build();
   }
@@ -30,9 +29,7 @@ public class InsuranceCalculationResponseMapper
 
     return format(
         "Insurance Calculation was made on: %s. For the period: %s ... %s ",
-        domain.getActionDate().toString(),
-        getWeekString(domain.getStartQWeekId()),
-        getWeekString(domain.getEndQWeekId()));
+        domain.getActionDate().toString(), getWeekString(domain.getQWeekId()));
   }
 
   private String getWeekString(final Long qWeekId) {

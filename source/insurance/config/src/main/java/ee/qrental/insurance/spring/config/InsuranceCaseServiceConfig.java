@@ -104,7 +104,6 @@ public class InsuranceCaseServiceConfig {
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetQWeekQuery qWeekQuery,
       final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
-      final GetInsuranceCalculationQuery insuranceCalculationQuery,
       final InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator) {
 
     return new InsuranceCalculationUseCaseService(
@@ -113,7 +112,6 @@ public class InsuranceCaseServiceConfig {
         calculationAddRequestMapper,
         qWeekQuery,
         insuranceCaseBalanceCalculator,
-        insuranceCalculationQuery,
         addBusinessRuleValidator);
   }
 

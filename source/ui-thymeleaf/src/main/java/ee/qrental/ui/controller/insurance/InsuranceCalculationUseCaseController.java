@@ -1,5 +1,6 @@
 package ee.qrental.ui.controller.insurance;
 
+import static ee.qrental.ui.controller.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrental.ui.controller.util.ControllerUtils.INSURANCE_ROOT_PATH;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -9,6 +10,8 @@ import ee.qrental.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrental.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import java.util.List;
+
+import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,11 +28,13 @@ public class InsuranceCalculationUseCaseController {
   private final InsuranceCalculationAddUseCase addUseCase;
   private final GetInsuranceCalculationQuery insuranceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final QDateFormatter qDateFormatter;
 
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addAddRequestToModel(new InsuranceCalculationAddRequest(), model);
-    model.addAttribute("weeks", getWeeks());
+    model.addAttribute("nextWeek", getNextWeekForCalculation());
 
     return "forms/addInsuranceCalculation";
   }
@@ -39,8 +44,9 @@ public class InsuranceCalculationUseCaseController {
       @ModelAttribute final InsuranceCalculationAddRequest addRequest, final Model model) {
     addUseCase.add(addRequest);
     if (addRequest.hasViolations()) {
+      model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
       addAddRequestToModel(addRequest, model);
-      model.addAttribute("weeks", getWeeks());
+      model.addAttribute("nextWeek", getNextWeekForCalculation());
 
       return "forms/addInsuranceCalculation";
     }
@@ -53,9 +59,8 @@ public class InsuranceCalculationUseCaseController {
     model.addAttribute("addRequest", addRequest);
   }
 
-  private List<QWeekResponse> getWeeks() {
-
-    return qWeekQuery.getAllBetweenByIdsDefaultOrder(
-        insuranceCalculationQuery.getStartQWeekId(), insuranceCalculationQuery.getEndQWeekId());
+  private QWeekResponse getNextWeekForCalculation() {
+    final var nextWeekId = insuranceCalculationQuery.getStartQWeekId();
+    return qWeekQuery.getById(nextWeekId);
   }
 }

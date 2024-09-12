@@ -11,7 +11,7 @@ public interface InsuranceCalculationSpringDataRepository
       value =
           "select qw.id "
               + "from insurance_calculation ic "
-              + "         LEFT JOIN q_week qw on ic.end_q_week_id = qw.id "
+              + "         LEFT JOIN q_week qw on ic.q_week_id = qw.id "
               + "order by qw.year desc, qw.number desc "
               + "limit 1;",
       nativeQuery = true)

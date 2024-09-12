@@ -9,8 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class InsuranceCalculationResponse {
   private Long id;
-  private String startWeek;
-  private String endWeek;
+  private String qWeek;
   private LocalDate actionDate;
   private String comment;
 }
