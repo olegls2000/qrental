@@ -12,7 +12,7 @@ public interface RentCalculationSpringDataRepository
           "select qw.id "
               + "from rent_calculation rc "
               + "         LEFT JOIN q_week qw on rc.q_week_id = qw.id "
-              + "order by qw.year, qw.number desc "
+              + "order by qw.year desc, qw.number desc "
               + "limit 1;",
       nativeQuery = true)
   Long getLastCalculationQWeekId();

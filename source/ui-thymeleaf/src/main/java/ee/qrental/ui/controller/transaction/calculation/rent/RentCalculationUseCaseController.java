@@ -30,12 +30,7 @@ public class RentCalculationUseCaseController {
   public String addForm(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var rentCalculationRequest = new RentCalculationAddRequest();
-
-    //TODO replace with qWeekQuery.getCurrentWeek()
-    final LocalDate currentDate = LocalDate.now();
-    final var currentWeek = qWeekQuery.getByYearAndNumber(currentDate.getYear(), getWeekNumber(currentDate));
-
-
+    final var currentWeek = qWeekQuery.getCurrentWeek();
     rentCalculationRequest.setQWeekId(currentWeek.getId());
     addAddRequestToModel(rentCalculationRequest, model);
     model.addAttribute("nextWeek", currentWeek);
