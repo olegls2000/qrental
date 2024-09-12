@@ -7,6 +7,7 @@ import ee.qrental.constant.api.in.query.GetQWeekQuery;
 import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.balance.GetBalanceCalculationQuery;
+import ee.qrental.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrental.ui.controller.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class InsuranceCalculationQueryController {
   private final GetTransactionQuery transactionQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
+  private final GetRentCalculationQuery rentCalculationQuery;
   private final QDateFormatter qDateFormatter;
 
   @GetMapping("/calculations")
@@ -47,14 +49,39 @@ public class InsuranceCalculationQueryController {
   }
 
   private void addLatestDataToModel(final Model model) {
-    final var latestCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
-    if (latestCalculatedWeekId == null) {
-      model.addAttribute("latestBalanceWeek", "Balance was not calculated");
+    final var latestRentCalculatedWeekId = rentCalculationQuery.getLastCalculatedQWeekId();
+    if (latestRentCalculatedWeekId == null) {
+      model.addAttribute("latestRentWeek", "Rent was not calculated");
 
       return;
     }
 
-    final var latestCalculatedWeek = qWeekQuery.getById(latestCalculatedWeekId);
+    final var latestRentWeek = qWeekQuery.getById(latestRentCalculatedWeekId);
+    final var latestRentWeekLabel =
+        String.format("%d (%s)", latestRentWeek.getNumber(), latestRentWeek.getEnd());
+    model.addAttribute("latestRentWeek", latestRentWeekLabel);
+
+    final var latestInsuranceBalanceWeekId = calculationQuery.getLastCalculatedQWeekId();
+    if (latestInsuranceBalanceWeekId == null) {
+      model.addAttribute("latestInsuranceBalanceWeek", "Insurance Balance was not calculated");
+
+      return;
+    }
+
+    final var latestInsuranceBalanceWeek = qWeekQuery.getById(latestInsuranceBalanceWeekId);
+    final var latestInsuranceBalanceWeekLabel =
+        String.format(
+            "%d (%s)", latestInsuranceBalanceWeek.getNumber(), latestInsuranceBalanceWeek.getEnd());
+    model.addAttribute("latestInsuranceBalanceWeek", latestInsuranceBalanceWeekLabel);
+
+    final var latestFinancialCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
+    if (latestFinancialCalculatedWeekId == null) {
+      model.addAttribute("latestFinancialBalanceWeek", "Financial Balance was not calculated");
+
+      return;
+    }
+
+    final var latestCalculatedWeek = qWeekQuery.getById(latestFinancialCalculatedWeekId);
     final var latestBalanceWeekLabel =
         String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
     model.addAttribute("latestBalanceWeek", latestBalanceWeekLabel);

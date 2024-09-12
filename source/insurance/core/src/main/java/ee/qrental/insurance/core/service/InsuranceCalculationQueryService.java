@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
 
-
 import ee.qrental.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrental.insurance.api.in.query.GetInsuranceCalculationQuery;
 import ee.qrental.insurance.api.in.response.InsuranceCalculationResponse;
@@ -38,13 +37,23 @@ public class InsuranceCalculationQueryService implements GetInsuranceCalculation
 
   @Override
   public Long getStartQWeekId() {
+    final var latestCalculatedBalanceQWeek = getOneAfterLatestBalanceCalculatedQWeek();
+    final var lastInsuranceCalculatedQWeek = getOneAfterLatestInsuranceCalculatedQWeek();
+
+    final var startWeek =
+        getLatestQWeek(latestCalculatedBalanceQWeek, lastInsuranceCalculatedQWeek);
+
+    return startWeek.getId();
+  }
+
+  @Override
+  public Long getLastCalculatedQWeekId() {
     final var latestCalculatedBalanceQWeek = getLatestBalanceCalculatedQWeek();
     final var lastInsuranceCalculatedQWeek = getLatestInsuranceCalculatedQWeek();
 
-    final var startWeek =
-            getLatestQWeek(latestCalculatedBalanceQWeek, lastInsuranceCalculatedQWeek);
+    final var result = getLatestQWeek(latestCalculatedBalanceQWeek, lastInsuranceCalculatedQWeek);
 
-    return startWeek.getId();
+    return result.getId();
   }
 
   private QWeekResponse getLatestInsuranceCalculatedQWeek() {
@@ -52,10 +61,26 @@ public class InsuranceCalculationQueryService implements GetInsuranceCalculation
     if (lastCalculatedQWeekId == null) {
       return qWeekQuery.getFirstWeek();
     }
-    return qWeekQuery.getOneAfterById(lastCalculatedQWeekId);
+    return qWeekQuery.getById(lastCalculatedQWeekId);
   }
 
   private QWeekResponse getLatestBalanceCalculatedQWeek() {
+    final var latestCalculatedBalance = balanceQuery.getLatest();
+    if (latestCalculatedBalance == null) {
+      return null;
+    }
+    return qWeekQuery.getById(latestCalculatedBalance.getQWeekId());
+  }
+
+  private QWeekResponse getOneAfterLatestInsuranceCalculatedQWeek() {
+    final var lastCalculatedQWeekId = calculationLoadPort.loadLastCalculatedQWeekId();
+    if (lastCalculatedQWeekId == null) {
+      return qWeekQuery.getFirstWeek();
+    }
+    return qWeekQuery.getOneAfterById(lastCalculatedQWeekId);
+  }
+
+  private QWeekResponse getOneAfterLatestBalanceCalculatedQWeek() {
     final var latestCalculatedBalance = balanceQuery.getLatest();
     if (latestCalculatedBalance == null) {
       return null;
@@ -75,11 +100,5 @@ public class InsuranceCalculationQueryService implements GetInsuranceCalculation
       return qWeek1;
     }
     return qWeek2;
-  }
-
-
-  @Override
-  public Long getEndQWeekId() {
-    return rentCalculationQuery.getLastCalculatedQWeekId();
   }
 }

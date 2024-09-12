@@ -11,5 +11,5 @@ public interface GetInsuranceCalculationQuery {
 
   Long getStartQWeekId();
 
-  Long getEndQWeekId();
+  Long getLastCalculatedQWeekId();
 }
