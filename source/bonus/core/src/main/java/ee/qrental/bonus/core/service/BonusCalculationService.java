@@ -65,10 +65,11 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
               final var obligation =
                   obligationLoadPort.loadByDriverIdAndByQWeekId(driverId, qWeekId);
               if (obligation == null) {
-                throw new RuntimeException(
-                    format(
-                        "Obligation was not calculated for %d - %d week, for driver.id = %d",
-                        qWeek.getYear(), qWeek.getNumber(), driverId));
+         //       throw new RuntimeException(
+         //           format(
+         //               "Obligation was not calculated for %d - %d week, for driver.id = %d",
+         //               qWeek.getYear(), qWeek.getNumber(), driverId));
+         return;
               }
 
               final var weekPositiveAmount =

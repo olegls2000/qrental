@@ -48,6 +48,9 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
     // TODO Check why transaction was not created
     final var driverId = obligation.getDriverId();
+    if (obligation == null){
+        return emptyList();
+    }
     final var matchCount = obligation.getMatchCount();
     final var qWeekId = obligation.getQWeekId();
     if (matchCount == 0) {

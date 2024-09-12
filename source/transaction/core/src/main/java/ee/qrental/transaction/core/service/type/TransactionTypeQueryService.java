@@ -67,6 +67,7 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
                 TransactionKindsCode.SR.name(),
                 TransactionKindsCode.R.name(),
                 TransactionKindsCode.NFA.name(),
+                TransactionKindsCode.SR.name(),
                 TransactionKindsCode.FA.name()))
         .stream()
         .map(mapper::toResponse)
