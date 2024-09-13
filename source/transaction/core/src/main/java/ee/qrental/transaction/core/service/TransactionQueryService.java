@@ -75,13 +75,14 @@ public class TransactionQueryService implements GetTransactionQuery {
   @Override
   public List<TransactionResponse> getAllByBonusCalculationId(final Long bonusCalculationId) {
     return mapToTransactionResponseList(
-            transactionLoadPort.loadAllByBonusCalculationId(bonusCalculationId));
+        transactionLoadPort.loadAllByBonusCalculationId(bonusCalculationId));
   }
 
   @Override
-  public List<TransactionResponse> getAllByInsuranceCalculationId(final Long insuranceCalculationId) {
+  public List<TransactionResponse> getAllByInsuranceCalculationId(
+      final Long insuranceCalculationId) {
     return mapToTransactionResponseList(
-            transactionLoadPort.loadAllByInsuranceCalculationId(insuranceCalculationId));
+        transactionLoadPort.loadAllByInsuranceCalculationId(insuranceCalculationId));
   }
 
   @Override
@@ -96,10 +97,14 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(final PeriodAndKindAndDriverTransactionFilter filter) {
+  public List<TransactionResponse> getAllByFilter(
+      final PeriodAndKindAndDriverTransactionFilter filter) {
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
-            filter.getDriverId(), filter.getDateStart(), filter.getDateEnd()));
+        transactionLoadPort.loadAllByDriverIdAndKindIdAndBetweenDays(
+            filter.getDriverId(),
+            filter.getTransactionKindIds(),
+            filter.getDateStart(),
+            filter.getDateEnd()));
   }
 
   @Override
