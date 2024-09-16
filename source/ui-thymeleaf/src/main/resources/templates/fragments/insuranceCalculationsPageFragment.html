@@ -35,8 +35,7 @@
                 </a>
             </th>
             <th>Action Date</th>
-            <th>Start Week</th>
-            <th>End Week</th>
+            <th>Week</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(calculations)}">
@@ -47,8 +46,7 @@
                    th:href="@{/insurance/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span></a></td>
             <td th:text="${qDateFormatter.format(calculation.actionDate)}">???</td>
-            <td th:text="${calculation.startWeek}">???</td>
-            <td th:text="${calculation.endWeek}">???</td>
+            <td th:text="${calculation.qWeek}">???</td>
             <td th:text="${calculation.comment}">???</td>
         </tr>
     </table>

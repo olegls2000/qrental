@@ -37,26 +37,25 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     final var domain = calculationAddRequestMapper.toDomain(request);
     final var qWeekId = request.getQWeekId();
     final var activeCases = caseLoadPort.loadActiveByQWeekId(qWeekId);
-    if (activeCases.isEmpty()) {
-      return null;
+    if (!activeCases.isEmpty()) {
+
+      final var qWeek = qWeekQuery.getById(qWeekId);
+      final var insuranceCasesGroupByDriver =
+          activeCases.stream().collect(groupingBy(InsuranceCase::getDriverId));
+      System.out.println(
+          "----> Insurance Cases Balance Calculation. Calculated week: "
+              + qWeek.getYear()
+              + "-"
+              + qWeek.getNumber());
+
+      insuranceCasesGroupByDriver.forEach(
+          (driverId, insuranceCases) -> {
+            final var activeCase = insuranceCases.stream().findFirst().get();
+            final var requestedWeekBalance =
+                insuranceCaseBalanceCalculator.calculateBalance(activeCase, qWeek);
+            domain.getInsuranceCaseBalances().add(requestedWeekBalance);
+          });
     }
-    final var qWeek = qWeekQuery.getById(qWeekId);
-    final var insuranceCasesGroupByDriver =
-        activeCases.stream().collect(groupingBy(InsuranceCase::getDriverId));
-    System.out.println(
-        "----> Insurance Cases Balance Calculation. Calculated week: "
-            + qWeek.getYear()
-            + "-"
-            + qWeek.getNumber());
-
-    insuranceCasesGroupByDriver.forEach(
-        (driverId, insuranceCases) -> {
-          final var activeCase = insuranceCases.stream().findFirst().get();
-          final var requestedWeekBalance =
-              insuranceCaseBalanceCalculator.calculateBalance(activeCase, qWeek);
-          domain.getInsuranceCaseBalances().add(requestedWeekBalance);
-        });
-
     final var savedCalculation = calculationAddPort.add(domain);
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;

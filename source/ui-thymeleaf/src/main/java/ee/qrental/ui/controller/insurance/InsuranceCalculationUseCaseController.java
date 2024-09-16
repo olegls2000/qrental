@@ -33,8 +33,11 @@ public class InsuranceCalculationUseCaseController {
   @GetMapping(value = "/calculations/add-form")
   public String addForm(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    addAddRequestToModel(new InsuranceCalculationAddRequest(), model);
-    model.addAttribute("nextWeek", getNextWeekForCalculation());
+    final var nextQWeek = getNextWeekForCalculation();
+    final var addRequest = new InsuranceCalculationAddRequest();
+    addRequest.setQWeekId(nextQWeek.getId());
+    addAddRequestToModel(addRequest, model);
+    model.addAttribute("nextWeek", nextQWeek);
 
     return "forms/addInsuranceCalculation";
   }
