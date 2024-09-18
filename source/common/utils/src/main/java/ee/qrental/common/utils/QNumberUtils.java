@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class QNumberUtils {
-  public static BigDecimal round(final BigDecimal value) {
+  public static BigDecimal qRound(final BigDecimal value) {
     if (value == null) {
       return null;
     }

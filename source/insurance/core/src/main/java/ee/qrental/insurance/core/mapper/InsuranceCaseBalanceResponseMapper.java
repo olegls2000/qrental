@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.mapper;
 
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static java.lang.String.format;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -17,8 +18,8 @@ public class InsuranceCaseBalanceResponseMapper {
 
     return InsuranceCaseBalanceResponse.builder()
         .qWeekInfo(format("%d - %d", qWeekResponse.getYear(), qWeekResponse.getNumber()))
-        .damageRemaining(domain.getDamageRemaining())
-        .selfResponsibilityRemaining(domain.getSelfResponsibilityRemaining())
+        .damageRemaining(qRound(domain.getDamageRemaining()))
+        .selfResponsibilityRemaining(qRound(domain.getSelfResponsibilityRemaining()))
         .build();
   }
 }

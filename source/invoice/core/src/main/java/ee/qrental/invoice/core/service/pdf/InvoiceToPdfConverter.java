@@ -22,7 +22,7 @@ import static com.lowagie.text.Font.COURIER;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
-import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static java.awt.Color.white;
 import static java.lang.String.format;
 
@@ -425,7 +425,7 @@ public class InvoiceToPdfConverter {
     if (number == null) {
       return "-- eur";
     }
-    final var numberFinal = round(number);
+    final var numberFinal = qRound(number);
     final DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
     df.setMinimumFractionDigits(2);

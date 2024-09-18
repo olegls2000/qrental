@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
-import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -74,11 +74,11 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(100d)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(10d)), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(200d)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(400d)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(BigDecimal.valueOf(500d)), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(100d)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(10d)), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(200d)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(400d)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(BigDecimal.valueOf(500d)), balanceToDerive.getPositiveAmount());
   }
 
   @Test
@@ -126,11 +126,11 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(120d)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(17d)), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(230d)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(440d)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(BigDecimal.valueOf(500d)), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(120d)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(17d)), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(230d)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(440d)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(BigDecimal.valueOf(500d)), balanceToDerive.getPositiveAmount());
   }
 
   @Test
@@ -178,11 +178,11 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(100d)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(30)), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(100d)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(30)), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
   }
 
   @Test
@@ -226,11 +226,11 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(120)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(ZERO), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(120)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(ZERO), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
   }
 
   @Test
@@ -274,11 +274,11 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(40d)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(60d)), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(40d)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(60d)), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(230)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(440)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(BigDecimal.valueOf(500)), balanceToDerive.getPositiveAmount());
   }
 
   @Test
@@ -315,10 +315,10 @@ class BalanceCalculationStrategyDryRunTest {
     assertEquals(11L, balanceToDerive.getQWeekId());
     assertFalse(balanceToDerive.getDerived());
     assertEquals(77L, balanceToDerive.getDriverId());
-    assertEquals(round(BigDecimal.valueOf(20)), balanceToDerive.getFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(7d)), balanceToDerive.getFeeAmount());
-    assertEquals(round(BigDecimal.valueOf(30)), balanceToDerive.getNonFeeAbleAmount());
-    assertEquals(round(BigDecimal.valueOf(40)), balanceToDerive.getRepairmentAmount());
-    assertEquals(round(ZERO), balanceToDerive.getPositiveAmount());
+    assertEquals(qRound(BigDecimal.valueOf(20)), balanceToDerive.getFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(7d)), balanceToDerive.getFeeAmount());
+    assertEquals(qRound(BigDecimal.valueOf(30)), balanceToDerive.getNonFeeAbleAmount());
+    assertEquals(qRound(BigDecimal.valueOf(40)), balanceToDerive.getRepairmentAmount());
+    assertEquals(qRound(ZERO), balanceToDerive.getPositiveAmount());
   }
 }

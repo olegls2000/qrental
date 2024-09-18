@@ -1,5 +1,5 @@
 package ee.qrental.invoice.core.service.pdf;
-import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static java.math.BigDecimal.ZERO;
 import static java.time.format.DateTimeFormatter.ofLocalizedDate;
 import static java.time.format.FormatStyle.SHORT;
@@ -46,7 +46,7 @@ public class InvoiceToPdfModelMapper {
     final var qFirmVatNumber = invoice.getQFirmVatNumber();
     final var qFirmBank = invoice.getQFirmBank();
     final var qFirmIban = invoice.getQFirmIban();
-    final var sum = round(invoice.getSum());
+    final var sum = qRound(invoice.getSum());
 
     final var vatPercentage = getVatRate(invoice, invoiceWeek);
     final var vatAmount = sum.multiply(vatPercentage.movePointLeft(2));
@@ -88,19 +88,19 @@ public class InvoiceToPdfModelMapper {
         .qFirmVatNumber(qFirmVatNumber)
         .qFirmBank(qFirmBank)
         .qFirmIban(qFirmIban)
-        .sum(round(sum))
-        .vatPercentage(round(vatPercentage))
-        .vatAmount(round(vatAmount))
-        .sumWithVat(round(sumWithVat))
+        .sum(qRound(sum))
+        .vatPercentage(qRound(vatPercentage))
+        .vatAmount(qRound(vatAmount))
+        .sumWithVat(qRound(sumWithVat))
         .items(items)
-        .debt(round(debt))
-        .advancePayment(round(advancePayment))
-        .total(round(total))
-        .previousWeekBalanceFee(round(previousWeekBalanceFee))
-        .currentWeekFee(round(currentWeekFee))
-        .totalWithFee(round(totalWithFee))
-        .block2A(round(block2AValue))
-        .block2B(round(invoice.getPreviousWeekPositiveTxSum()))
+        .debt(qRound(debt))
+        .advancePayment(qRound(advancePayment))
+        .total(qRound(total))
+        .previousWeekBalanceFee(qRound(previousWeekBalanceFee))
+        .currentWeekFee(qRound(currentWeekFee))
+        .totalWithFee(qRound(totalWithFee))
+        .block2A(qRound(block2AValue))
+        .block2B(qRound(invoice.getPreviousWeekPositiveTxSum()))
         .build();
   }
 

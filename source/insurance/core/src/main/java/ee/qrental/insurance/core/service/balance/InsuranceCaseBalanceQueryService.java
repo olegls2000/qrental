@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.service.balance;
 
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -44,9 +45,9 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
 
     final var balanceTotal =
         InsuranceBalanceTotalResponse.builder()
-            .selfResponsibilityRemainingTotal(ZERO)
-            .damageRemainingTotal(ZERO)
-            .damageInitialTotal(ZERO)
+            .selfResponsibilityRemainingTotal(qRound(ZERO))
+            .damageRemainingTotal(qRound(ZERO))
+            .damageInitialTotal(qRound(ZERO))
             .build();
 
     final var activeInsuranceCases =
@@ -75,7 +76,17 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
         balanceTotal.getSelfResponsibilityRemainingTotal().subtract(paidSelfResponsibilityTotal);
     balanceTotal.setSelfResponsibilityRemainingTotal(adjustedSelfResponsibility);
 
-    return balanceTotal;
+    return roundAmounts(balanceTotal);
+  }
+
+  private static InsuranceBalanceTotalResponse roundAmounts(
+      final InsuranceBalanceTotalResponse balance) {
+    balance.setDamageInitialTotal(qRound(balance.getDamageRemainingTotal()));
+    balance.setDamageRemainingTotal(qRound(balance.getDamageRemainingTotal()));
+    balance.setSelfResponsibilityRemainingTotal(
+        qRound(balance.getSelfResponsibilityRemainingTotal()));
+
+    return balance;
   }
 
   private void sumInitialDamage(

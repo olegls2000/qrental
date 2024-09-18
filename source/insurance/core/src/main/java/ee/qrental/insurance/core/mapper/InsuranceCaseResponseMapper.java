@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.mapper;
 
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static java.lang.String.format;
 
 import ee.qrent.common.in.mapper.ResponseMapper;
@@ -35,7 +36,7 @@ public class InsuranceCaseResponseMapper
         .carInfo(format("%s %s, %s", car.getManufacturer(), car.getModel(), car.getRegNumber()))
         .occurrenceDate(domain.getOccurrenceDate())
         .occurrenceWeekInfo(format("%d - %d", qWeek.getYear(), qWeek.getNumber()))
-        .damageAmount(domain.getDamageAmount())
+        .damageAmount(qRound(domain.getDamageAmount()))
         .withQKasko(domain.getWithQKasko())
         .description(domain.getDescription())
         .build();

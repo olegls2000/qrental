@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.service.balance.calculator;
 
-import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static ee.qrental.transaction.domain.kind.TransactionKindsCode.*;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
@@ -38,7 +38,7 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
 
     final var driverId = driver.getId();
     final var feeAmountForPreviousWeek =
-        round(getFeeAmountForPreviousWeek(driver, previousWeekBalance));
+        qRound(getFeeAmountForPreviousWeek(driver, previousWeekBalance));
 
     handleFeeTransaction(feeAmountForPreviousWeek, requestedQWeek, driverId, transactionsByKind);
 
@@ -132,9 +132,9 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     }
 
     if (previousWeekBalance == null) {
-      return round(transactionAmountSum);
+      return qRound(transactionAmountSum);
     }
 
-    return round(transactionAmountSum.add(getAmount.apply(previousWeekBalance)));
+    return qRound(transactionAmountSum.add(getAmount.apply(previousWeekBalance)));
   }
 }

@@ -1,6 +1,6 @@
 package ee.qrental.transaction.core.service.balance;
 
-import static ee.qrental.common.utils.QNumberUtils.round;
+import static ee.qrental.common.utils.QNumberUtils.qRound;
 import static ee.qrental.common.utils.QTimeUtils.*;
 import static ee.qrental.transaction.core.service.balance.calculator.BalanceCalculatorStrategy.DRY_RUN;
 import static java.math.BigDecimal.ZERO;
@@ -175,7 +175,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var balance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
     if (balance != null) {
 
-      return round(balance.getAmountsSumWithoutRepairment());
+      return qRound(balance.getAmountsSumWithoutRepairment());
     }
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var endDate = qWeek.getEnd();
@@ -203,7 +203,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var fromBalance = latestBalance.getAmountsSumWithoutRepairment();
     final var rawTransactionSum = getSumOfTransactionByFilter(filter);
 
-    return round(fromBalance.add(rawTransactionSum));
+    return qRound(fromBalance.add(rawTransactionSum));
   }
 
   @Override
@@ -256,7 +256,7 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var result =
         rawTransactions.stream().map(Transaction::getRealAmount).reduce(ZERO, BigDecimal::add);
 
-    return round(result);
+    return qRound(result);
   }
 
   private List<Long> getNonRepairmentTransactionKindIds() {
