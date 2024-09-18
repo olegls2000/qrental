@@ -126,10 +126,8 @@ public class InsuranceCaseServiceConfig {
   }
 
   @Bean
-  InsuranceCaseBalanceDeriveService getInsuranceCaseBalanceDeriveService(
-      final TransactionAddUseCase transactionAddUseCase,
-      final GetTransactionTypeQuery transactionTypeQuery) {
+  InsuranceCaseBalanceDeriveService getInsuranceCaseBalanceDeriveService() {
 
-    return new InsuranceCaseBalanceDeriveService(transactionAddUseCase, transactionTypeQuery);
+    return new InsuranceCaseBalanceDeriveService();
   }
 }
