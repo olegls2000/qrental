@@ -45,8 +45,9 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
     final var driverId = insuranceCase.getDriverId();
     final var requestedQWeekId = requestedQWeek.getId();
     final var requestedWeekBalance = getInsuranceCaseBalance(insuranceCase, requestedQWeekId);
+    final var hasActiveContract = hasActiveContract(driverId);
     final var damageTransaction =
-        getDamageTransaction(driverId, requestedQWeek, requestedWeekBalance);
+        getDamageTransaction(driverId, requestedQWeek, requestedWeekBalance, hasActiveContract);
     final var selfResponsibilityTransactionOpt =
         getSelfResponsibilityTransactionOpt(driverId, requestedQWeek);
     deriveService.derive(requestedWeekBalance, damageTransaction, selfResponsibilityTransactionOpt);
@@ -117,14 +118,19 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
     return result;
   }
 
+  private boolean hasActiveContract(final Long driverId) {
+    final var activeCarLink = carLinkQuery.getActiveLinkByDriverId(driverId);
+
+    return activeCarLink != null;
+  }
+
   private TransactionAddRequest getDamageTransaction(
       final Long driverId,
       final QWeekResponse qWeek,
-      final InsuranceCaseBalance insuranceCaseBalance) {
+      final InsuranceCaseBalance insuranceCaseBalance,
+      final boolean hasActiveContract) {
     var amountForDamageCompensation = getDamageCompensationAmount(driverId, qWeek.getId());
-
-    final var activeCarLink = carLinkQuery.getActiveLinkByDriverId(driverId);
-    if (activeCarLink == null) {
+    if (!hasActiveContract) {
       amountForDamageCompensation = insuranceCaseBalance.getDamageRemaining();
     }
 
@@ -141,18 +147,27 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
   }
 
   private Optional<TransactionAddRequest> getSelfResponsibilityTransactionOpt(
-      final Long driverId, final QWeekResponse qWeek) {
-    final var requestedSelfResponsibilityAmountAbs =
-        getRequestedSelfResponsibilityAmountAbs(driverId, qWeek.getId());
-    if (requestedSelfResponsibilityAmountAbs.compareTo(ZERO) == 0) {
+      final Long driverId,
+      final QWeekResponse qWeek,
+      final InsuranceCaseBalance insuranceCaseBalance,
+      final boolean hasActiveContract) {
+    var selfResponsibilityAmount = ZERO;
 
-      return empty();
+    if (!hasActiveContract) {
+      selfResponsibilityAmount = insuranceCaseBalance.getSelfResponsibilityRemaining();
+    } else {
+      selfResponsibilityAmount = getRequestedSelfResponsibilityAmountAbs(driverId, qWeek.getId());
+      if (selfResponsibilityAmount.compareTo(ZERO) == 0) {
+
+        return empty();
+      }
     }
+
     final var selfResponsibilityTransaction = new TransactionAddRequest();
     selfResponsibilityTransaction.setComment(
         "Automatically created transaction for the Self Responsibility Payment Request compensation.");
     selfResponsibilityTransaction.setDriverId(driverId);
-    selfResponsibilityTransaction.setAmount(requestedSelfResponsibilityAmountAbs);
+    selfResponsibilityTransaction.setAmount(selfResponsibilityAmount);
     selfResponsibilityTransaction.setTransactionTypeId(
         getTransactionTypeIdByName(SELF_RESPONSIBILITY_COMPENSATION_TRANSACTION_TYPE_NAME));
     selfResponsibilityTransaction.setDate(qWeek.getStart());
