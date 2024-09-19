@@ -35,14 +35,12 @@ public class InsuranceCaseBalanceDeriveService {
       balanceToDerive.setDamageRemaining(updatedDamageRemaining);
     }
 
-    // Balance.damageRemaining = 10, transactional amount = 20,
+    // Balance.damageRemaining = 10, transactional amount = 25,
     // -> Balance.damageRemaining = 0, transactional amount = 10
     if (damageRemaining.compareTo(damageTransactionAmount) < 0) {
       final var updatedDamageRemaining = ZERO;
       balanceToDerive.setDamageRemaining(updatedDamageRemaining);
-      final var updatedDamagePaymentTransactionAmount =
-          damageTransactionAmount.subtract(damageRemaining);
-      damageTransaction.setAmount(updatedDamagePaymentTransactionAmount);
+      damageTransaction.setAmount(damageRemaining);
     }
   }
 
