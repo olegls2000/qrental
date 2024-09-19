@@ -1,5 +1,6 @@
 package ee.qrental.insurance.core.service;
 
+import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.groupingBy;
 
 import ee.qrental.constant.api.in.query.GetQWeekQuery;
@@ -10,6 +11,7 @@ import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculator;
 import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 import ee.qrental.insurance.domain.InsuranceCase;
+import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -17,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class InsuranceCalculationUseCaseService implements InsuranceCalculationAddUseCase {
 
   private final InsuranceCaseLoadPort caseLoadPort;
+  private final InsuranceCaseUpdatePort caseUpdatePort;
   private final InsuranceCalculationAddPort calculationAddPort;
   private final InsuranceCalculationAddRequestMapper calculationAddRequestMapper;
   private final GetQWeekQuery qWeekQuery;
@@ -54,6 +57,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
             final var requestedWeekBalance =
                 insuranceCaseBalanceCalculator.calculateBalance(activeCase, qWeek);
             domain.getInsuranceCaseBalances().add(requestedWeekBalance);
+            checkAndDeactivateIfNecessary(requestedWeekBalance, activeCase);
           });
     }
     final var savedCalculation = calculationAddPort.add(domain);
@@ -64,5 +68,14 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         calculationDuration);
 
     return savedCalculation.getId();
+  }
+
+  private void checkAndDeactivateIfNecessary(
+      final InsuranceCaseBalance balance, final InsuranceCase insuranceCase) {
+    if (balance.getDamageRemaining().compareTo(ZERO) == 0
+        && balance.getSelfResponsibilityRemaining().compareTo(ZERO) == 0) {
+      insuranceCase.setActive(false);
+      caseUpdatePort.update(insuranceCase);
+    }
   }
 }

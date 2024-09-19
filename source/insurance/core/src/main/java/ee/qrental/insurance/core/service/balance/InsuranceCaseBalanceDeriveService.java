@@ -16,12 +16,6 @@ public class InsuranceCaseBalanceDeriveService {
 
     deriveSelfResponsibilityAmounts(balanceToDerive, selfResponsibilityTransactionOpt);
     deriveDamageAmounts(balanceToDerive, damageTransaction);
-
-    // In case of all financial debt for the Insurance Case is paid, Insurance case become inactive
-    if (balanceToDerive.getDamageRemaining().compareTo(ZERO) == 0
-        && balanceToDerive.getSelfResponsibilityRemaining().compareTo(ZERO) == 0) {
-      balanceToDerive.getInsuranceCase().setActive(false);
-    }
   }
 
   private static void deriveDamageAmounts(
