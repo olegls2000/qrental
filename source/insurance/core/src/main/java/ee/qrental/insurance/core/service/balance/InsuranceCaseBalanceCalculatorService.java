@@ -49,7 +49,8 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
     final var damageTransaction =
         getDamageTransaction(driverId, requestedQWeek, requestedWeekBalance, hasActiveContract);
     final var selfResponsibilityTransactionOpt =
-        getSelfResponsibilityTransactionOpt(driverId, requestedQWeek);
+        getSelfResponsibilityTransactionOpt(
+            driverId, requestedQWeek, requestedWeekBalance, hasActiveContract);
     deriveService.derive(requestedWeekBalance, damageTransaction, selfResponsibilityTransactionOpt);
     saveDamageTransaction(damageTransaction, requestedWeekBalance);
     saveSelfResponsibilityTransaction(selfResponsibilityTransactionOpt, requestedWeekBalance);
