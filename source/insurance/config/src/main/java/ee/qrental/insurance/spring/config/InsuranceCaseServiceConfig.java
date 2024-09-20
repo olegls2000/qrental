@@ -110,6 +110,7 @@ public class InsuranceCaseServiceConfig {
   @Bean
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
       final InsuranceCaseLoadPort caseLoadPort,
+      final InsuranceCaseUpdatePort caseUpdatePort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetQWeekQuery qWeekQuery,
@@ -118,6 +119,7 @@ public class InsuranceCaseServiceConfig {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
+        caseUpdatePort,
         calculationAddPort,
         calculationAddRequestMapper,
         qWeekQuery,
