@@ -103,12 +103,12 @@ from balance;
 --## Remove Invoice Calculations for week:
 delete
 from invoice inv
-where inv.q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
+where inv.q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024);
 
 delete
 from invoice_calculation invc
-where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024)
-   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 17 and qw.year = 2024);
+where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024)
+   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024);
 -- invoice items must be deleted by Cascade!
 -- invoice_calculation_result must be deleted by Cascade!
 -- invoice_transaction must be deleted by Cascade!
@@ -134,7 +134,11 @@ delete from insurance_case_balance_x_transaction icbt;
 delete from insurance_case_balance icb;
 delete from insurance_calculation;
 
-
+select *
+from transaction
+where transaction_type_id in (select distinct(id)
+                              from transaction_type
+                              where name in ('damage payment', 'self responsibility payment'));
 --#### SELECTS:
 
 --## Rent Calculations:

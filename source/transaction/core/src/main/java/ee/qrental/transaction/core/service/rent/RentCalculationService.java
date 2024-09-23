@@ -92,6 +92,7 @@ public class RentCalculationService implements RentCalculationAddUseCase {
     final var calculationEndTime = System.currentTimeMillis();
     final var calculationDuration = calculationEndTime - calculationStartTime;
     System.out.printf("----> Time: Rent Calculation took %d milli seconds \n", calculationDuration);
+
     return savedCalculation.getId();
   }
 

@@ -26,7 +26,7 @@ public class RentCalculationPersistenceAdapter implements RentCalculationAddPort
     final var calculationEntitySaved = rentCalculationRepository.save(rentCalculationEntity);
     saveResults(domain, calculationEntitySaved);
 
-    return null;
+    return RentCalculation.builder().id(calculationEntitySaved.getId()).build();
   }
 
   private void saveResults(

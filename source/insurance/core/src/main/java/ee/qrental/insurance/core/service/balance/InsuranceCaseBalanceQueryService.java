@@ -11,14 +11,13 @@ import ee.qrental.insurance.api.out.InsuranceCaseBalanceLoadPort;
 import ee.qrental.insurance.api.out.InsuranceCaseLoadPort;
 import ee.qrental.insurance.domain.InsuranceCase;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrental.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrental.transaction.api.in.response.TransactionResponse;
 import ee.qrental.transaction.api.in.response.kind.TransactionKindResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -81,7 +80,7 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
 
   private static InsuranceBalanceTotalResponse roundAmounts(
       final InsuranceBalanceTotalResponse balance) {
-    balance.setDamageInitialTotal(qRound(balance.getDamageRemainingTotal()));
+    balance.setDamageInitialTotal(qRound(balance.getDamageInitialTotal()));
     balance.setDamageRemainingTotal(qRound(balance.getDamageRemainingTotal()));
     balance.setSelfResponsibilityRemainingTotal(
         qRound(balance.getSelfResponsibilityRemainingTotal()));
