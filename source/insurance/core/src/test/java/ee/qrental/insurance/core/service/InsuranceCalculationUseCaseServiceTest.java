@@ -7,6 +7,7 @@ import ee.qrental.insurance.api.out.*;
 import ee.qrental.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceCalculator;
 import ee.qrental.insurance.core.service.balance.InsuranceCaseBalanceDeriveService;
+import ee.qrental.insurance.core.validator.InsuranceCalculationAddBusinessRuleValidator;
 import ee.qrental.transaction.api.in.query.GetTransactionQuery;
 import ee.qrental.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrental.transaction.api.in.usecase.TransactionAddUseCase;
@@ -19,44 +20,33 @@ import java.util.List;
 class InsuranceCalculationUseCaseServiceTest {
   private InsuranceCalculationUseCaseService instanceUnderTest;
 
-  private InsuranceCaseLoadPort insuranceCaseLoadPort;
-  private InsuranceCaseBalanceLoadPort insuranceCaseBalanceLoadPort;
-  private InsuranceCaseBalanceAddPort insuranceCaseBalanceAddPort;
-  private InsuranceCaseBalanceDeriveService deriveService;
-  private InsuranceCalculationLoadPort calculationLoadPort;
+  private InsuranceCaseLoadPort caseLoadPort;
+  private InsuranceCaseUpdatePort caseUpdatePort;
   private InsuranceCalculationAddPort calculationAddPort;
   private InsuranceCalculationAddRequestMapper calculationAddRequestMapper;
-  private GetTransactionQuery transactionQuery;
-  private TransactionAddUseCase transactionAddUseCase;
-  private GetTransactionTypeQuery transactionTypeQuery;
   private GetQWeekQuery qWeekQuery;
-  private List<InsuranceCaseBalanceCalculator> calculatorStrategies;
+  private InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator;
+  private InsuranceCalculationAddBusinessRuleValidator addBusinessRuleValidator;
 
   @BeforeEach
   void init() {
-    insuranceCaseLoadPort = mock(InsuranceCaseLoadPort.class);
-    insuranceCaseBalanceLoadPort = mock(InsuranceCaseBalanceLoadPort.class);
-    deriveService = mock(InsuranceCaseBalanceDeriveService.class);
-    calculationLoadPort = mock(InsuranceCalculationLoadPort.class);
-    insuranceCaseBalanceAddPort = mock(InsuranceCaseBalanceAddPort.class);
+    caseLoadPort = mock(InsuranceCaseLoadPort.class);
+    caseUpdatePort = mock(InsuranceCaseUpdatePort.class);
+    calculationAddPort = mock(InsuranceCalculationAddPort.class);
     calculationAddRequestMapper = mock(InsuranceCalculationAddRequestMapper.class);
-    transactionQuery = mock(GetTransactionQuery.class);
-    transactionAddUseCase = mock(TransactionAddUseCase.class);
-    transactionTypeQuery = mock(GetTransactionTypeQuery.class);
     qWeekQuery = mock(GetQWeekQuery.class);
-    calculatorStrategies = new ArrayList<>();
+    insuranceCaseBalanceCalculator = mock(InsuranceCaseBalanceCalculator.class);
+    addBusinessRuleValidator = mock(InsuranceCalculationAddBusinessRuleValidator.class);
 
     instanceUnderTest =
         new InsuranceCalculationUseCaseService(
-            insuranceCaseLoadPort,
-            insuranceCaseBalanceLoadPort,
-            calculationLoadPort,
+            caseLoadPort,
+            caseUpdatePort,
             calculationAddPort,
             calculationAddRequestMapper,
-            transactionQuery,
-            transactionTypeQuery,
             qWeekQuery,
-            calculatorStrategies);
+            insuranceCaseBalanceCalculator,
+            addBusinessRuleValidator);
   }
 
   @Test

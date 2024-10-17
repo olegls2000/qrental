@@ -3,6 +3,8 @@ package ee.qrental.insurance.core.service.balance;
 import static java.math.BigDecimal.ZERO;
 import ee.qrental.insurance.domain.InsuranceCaseBalance;
 import ee.qrental.transaction.api.in.request.TransactionAddRequest;
+
+import java.math.BigDecimal;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 
@@ -17,6 +19,64 @@ public class InsuranceCaseBalanceDeriveService {
     deriveSelfResponsibilityAmounts(
         balanceToDerive, selfResponsibilityTransactionOpt, damageTransaction);
     deriveDamageAmounts(balanceToDerive, damageTransaction);
+  }
+
+  private static void deriveSelfResponsibilityAmounts(
+      final InsuranceCaseBalance balanceToDerive,
+      final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt,
+      final TransactionAddRequest damageTransaction) {
+
+    if (selfResponsibilityTransactionOpt.isEmpty()) {
+      final var selfResponsibilityRemaining = balanceToDerive.getSelfResponsibilityRemaining();
+      final var automaticDamageChargeAbs = damageTransaction.getAmount().abs();
+
+      // Balance.selfResponsibilityRemaining = 50, automatic damage charge = 100
+      // -> Balance.selfResponsibilityRemaining = 0,  -> Balance.damageRemaining += 50
+      if (selfResponsibilityRemaining.compareTo(automaticDamageChargeAbs) <= 0) {
+        deriveIfSelfResponsibilityLessThenAutomaticAmount(
+            balanceToDerive, selfResponsibilityRemaining);
+        return;
+      }
+      deriveIfSelfResponsibilityGraterThenAutomaticAmount(
+          balanceToDerive, automaticDamageChargeAbs);
+      return;
+    }
+    final var selfResponsibilityTransaction = selfResponsibilityTransactionOpt.get();
+    final var selfResponsibilityRemaining = balanceToDerive.getSelfResponsibilityRemaining();
+    final var selfResponsibilityAmount = selfResponsibilityTransaction.getAmount();
+
+    // Balance.selfResponsibilityRemaining = 400, paidSelfResponsibility amount = 300,
+    // -> Balance.selfResponsibilityRemaining = 100, transactional amount = 300
+    if (selfResponsibilityRemaining.compareTo(selfResponsibilityAmount) >= 0) {
+      final var updatedSelfResponsibilityRemaining =
+          selfResponsibilityRemaining.subtract(selfResponsibilityAmount);
+      balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
+    } else if (selfResponsibilityRemaining.compareTo(selfResponsibilityAmount) < 0) {
+      final var updatedSelfResponsibilityRemaining = ZERO;
+      balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
+      selfResponsibilityTransaction.setAmount(selfResponsibilityRemaining);
+    }
+  }
+
+  private static void deriveIfSelfResponsibilityLessThenAutomaticAmount(
+      InsuranceCaseBalance balanceToDerive, BigDecimal selfResponsibilityRemaining) {
+    balanceToDerive.setSelfResponsibilityRemaining(ZERO);
+    final var updatedDamageRemaining =
+        balanceToDerive.getDamageRemaining().add(selfResponsibilityRemaining);
+    balanceToDerive.setDamageRemaining(updatedDamageRemaining);
+  }
+
+  private static void deriveIfSelfResponsibilityGraterThenAutomaticAmount(
+      InsuranceCaseBalance balanceToDerive, BigDecimal automaticDamageChargeAbs) {
+    // Balance.selfResponsibilityRemaining = 150, automatic damage charge = 100
+    // -> Balance.selfResponsibilityRemaining = 50,  -> Balance.damageRemaining += 100
+    final var updatedSelfResponsibilityRemaining =
+        balanceToDerive.getSelfResponsibilityRemaining().subtract(automaticDamageChargeAbs);
+    balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
+
+    final var updatedDamageRemaining =
+        balanceToDerive.getDamageRemaining().add(automaticDamageChargeAbs);
+    balanceToDerive.setDamageRemaining(updatedDamageRemaining);
   }
 
   private static void deriveDamageAmounts(
@@ -36,56 +96,6 @@ public class InsuranceCaseBalanceDeriveService {
       final var updatedDamageRemaining = ZERO;
       balanceToDerive.setDamageRemaining(updatedDamageRemaining);
       damageTransaction.setAmount(damageRemaining);
-    }
-  }
-
-  private static void deriveSelfResponsibilityAmounts(
-      final InsuranceCaseBalance balanceToDerive,
-      final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt,
-      final TransactionAddRequest damageTransaction) {
-
-    if (selfResponsibilityTransactionOpt.isEmpty()) {
-      final var selfResponsibilityRemaining = balanceToDerive.getSelfResponsibilityRemaining();
-      final var automaticDamageChargeAbs = damageTransaction.getAmount().abs();
-
-      // Balance.selfResponsibilityRemaining = 50, automatic damage charge = 100
-      // -> Balance.selfResponsibilityRemaining = 0,  -> Balance.damageRemaining += 50
-      if (selfResponsibilityRemaining.compareTo(automaticDamageChargeAbs) <= 0) {
-        balanceToDerive.setSelfResponsibilityRemaining(ZERO);
-        final var updatedDamageRemaining =
-            balanceToDerive.getDamageRemaining().add(selfResponsibilityRemaining);
-        balanceToDerive.setDamageRemaining(updatedDamageRemaining);
-        return;
-      }
-      // Balance.selfResponsibilityRemaining = 150, automatic damage charge = 100
-      // -> Balance.selfResponsibilityRemaining = 50,  -> Balance.damageRemaining += 100
-      final var updatedSelfResponsibilityRemaining =
-          balanceToDerive.getSelfResponsibilityRemaining().subtract(automaticDamageChargeAbs);
-      balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
-
-      final var updatedDamageRemaining =
-          balanceToDerive.getDamageRemaining().add(automaticDamageChargeAbs);
-      balanceToDerive.setDamageRemaining(updatedDamageRemaining);
-      return;
-    }
-    final var selfResponsibilityTransaction = selfResponsibilityTransactionOpt.get();
-    final var selfResponsibilityRemaining = balanceToDerive.getSelfResponsibilityRemaining();
-    final var selfResponsibilityAmount = selfResponsibilityTransaction.getAmount();
-
-    // Balance.selfResponsibilityRemaining = 400, paidSelfResponsibility amount = 300,
-    // -> Balance.selfResponsibilityRemaining = 100, transactional amount = 300
-    if (selfResponsibilityRemaining.compareTo(selfResponsibilityAmount) >= 0) {
-      final var updatedSelfResponsibilityRemaining =
-          selfResponsibilityRemaining.subtract(selfResponsibilityAmount);
-      balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
-    }
-
-    // Balance.selfResponsibilityRemaining = 400, paidSelfResponsibility amount = 500,
-    // -> Balance.selfResponsibilityRemaining = 0, transactional amount = 400
-    if (selfResponsibilityRemaining.compareTo(selfResponsibilityAmount) < 0) {
-      final var updatedSelfResponsibilityRemaining = ZERO;
-      balanceToDerive.setSelfResponsibilityRemaining(updatedSelfResponsibilityRemaining);
-      selfResponsibilityTransaction.setAmount(selfResponsibilityRemaining);
     }
   }
 }
