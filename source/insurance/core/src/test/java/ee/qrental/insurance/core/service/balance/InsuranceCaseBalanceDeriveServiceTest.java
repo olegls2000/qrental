@@ -5,8 +5,8 @@ import ee.qrental.transaction.api.in.request.TransactionAddRequest;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
+import static java.math.BigDecimal.ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InsuranceCaseBalanceDeriveServiceTest {
@@ -15,163 +15,173 @@ public class InsuranceCaseBalanceDeriveServiceTest {
       new InsuranceCaseBalanceDeriveService();
 
   @Test
-  public void testIfNoSRRequestAndSRRemainingGreaterThanAutomaticTransactionAmount() {
+  public void testIfNoSelfRespRequestAndAutomaticWriteOffLessThanDamageRemaining() {
     // given
     final var balanceToDerive =
         InsuranceCaseBalance.builder()
             .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
+            .damageRemaining(BigDecimal.valueOf(200))
             .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt = Optional.empty();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(ZERO);
 
     // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
 
     // then
-    assertEquals(BigDecimal.valueOf(400), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(100), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(500), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(ZERO, selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(130), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(70), damageTransaction.getAmount());
   }
 
   @Test
-  public void testIfNoSRRequestAndSRRemainingLessThanAutomaticTransactionAmount() {
+  public void testIfNoSelfRespRequestAndAutomaticWriteOffGreaterThanDamageRemaining() {
+    // given
+    final var balanceToDerive =
+        InsuranceCaseBalance.builder()
+            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
+            .damageRemaining(BigDecimal.valueOf(50))
+            .build();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(ZERO);
+
+    // when
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
+
+    // then
+    assertEquals(BigDecimal.valueOf(480), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(20), selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(50), damageTransaction.getAmount());
+  }
+
+  @Test
+  public void
+      testIfNoSelfRespRequestAndAutomaticWriteOffGreaterThenSumOfDamageRemainingAndSelfResponsibilityRemaining() {
+    // given
+    final var balanceToDerive =
+        InsuranceCaseBalance.builder()
+            .selfResponsibilityRemaining(BigDecimal.valueOf(10))
+            .damageRemaining(BigDecimal.valueOf(50))
+            .build();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(ZERO);
+
+    // when
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
+
+    // then
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(10), selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(50), damageTransaction.getAmount());
+  }
+
+  @Test
+  public void testIfNoSelfRespRequestAndNonZeroAutomaticWriteOffAndZeroDamageRemaining() {
+    // given
+    final var balanceToDerive =
+        InsuranceCaseBalance.builder()
+            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
+            .damageRemaining(BigDecimal.valueOf(0))
+            .build();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(ZERO);
+
+    // when
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
+
+    // then
+    assertEquals(BigDecimal.valueOf(430), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(70), selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(0), damageTransaction.getAmount());
+  }
+
+  @Test
+  public void
+      testIfNoSelfRespRequestAndAutomaticWriteOffLessThenSumOfDamageRemainingAndSelfResponsibilityRemaining() {
     // given
     final var balanceToDerive =
         InsuranceCaseBalance.builder()
             .selfResponsibilityRemaining(BigDecimal.valueOf(50))
-            .damageRemaining(BigDecimal.valueOf(100))
+            .damageRemaining(BigDecimal.valueOf(50))
             .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt = Optional.empty();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(ZERO);
 
     // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
+
+    // then
+    assertEquals(BigDecimal.valueOf(30), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(20), selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(50), damageTransaction.getAmount());
+  }
+
+  @Test
+  public void testIfNonZeroSelfRespRequestLessThanSelfResponsibilityRemaining() {
+    // given
+    final var balanceToDerive =
+        InsuranceCaseBalance.builder()
+            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
+            .damageRemaining(BigDecimal.valueOf(70))
+            .build();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(BigDecimal.valueOf(400));
+
+    // when
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
+
+    // then
+    assertEquals(BigDecimal.valueOf(100), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(400), selfResponsibilityTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(70), damageTransaction.getAmount());
+  }
+
+  @Test
+  public void testIfNonZeroSelfRespRequestEqualToSelfResponsibilityRemaining() {
+    // given
+    final var balanceToDerive =
+        InsuranceCaseBalance.builder()
+            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
+            .damageRemaining(BigDecimal.valueOf(70))
+            .build();
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(BigDecimal.valueOf(500));
+
+    // when
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
 
     // then
     assertEquals(BigDecimal.valueOf(0), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(50), balanceToDerive.getDamageRemaining());
-  }
-
-  @Test
-  public void testIfSRRequestLesThanSRRemaining() {
-    // given
-    final var balanceToDerive =
-        InsuranceCaseBalance.builder()
-            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
-            .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(450)));
-
-    // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
-
-    // then
-    assertEquals(BigDecimal.valueOf(50), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(500), selfResponsibilityTransaction.getAmount());
     assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
+    assertEquals(BigDecimal.valueOf(70), damageTransaction.getAmount());
   }
 
   @Test
-  public void testIfSRRequestEqualsSRRemaining() {
+  public void testIfNonZeroSelfRespRequestGreaterThanSelfResponsibilityRemaining() {
     // given
     final var balanceToDerive =
         InsuranceCaseBalance.builder()
             .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
+            .damageRemaining(BigDecimal.valueOf(70))
             .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(500)));
+    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(70));
+    final var selfResponsibilityTransaction = getTransactionAddRequest(BigDecimal.valueOf(600));
 
     // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
+    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransaction);
 
     // then
     assertEquals(BigDecimal.valueOf(0), balanceToDerive.getSelfResponsibilityRemaining());
+    assertEquals(BigDecimal.valueOf(500), selfResponsibilityTransaction.getAmount());
     assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
-  }
-
-  @Test
-  public void testIfSRRequestGreaterThanSRRemaining() {
-    // given
-    final var balanceToDerive =
-        InsuranceCaseBalance.builder()
-            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
-            .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(550)));
-
-    // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
-
-    // then
-    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
-  }
-
-  @Test
-  public void testIfAutomaticTransactionAmountLessThanDamageRemaining() {
-    // given
-    final var balanceToDerive =
-        InsuranceCaseBalance.builder()
-            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
-            .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(60));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(200)));
-
-    // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
-
-    // then
-    assertEquals(BigDecimal.valueOf(300), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(40), balanceToDerive.getDamageRemaining());
-  }
-
-  @Test
-  public void testIfAutomaticTransactionAmountEqualsToDamageRemaining() {
-    // given
-    final var balanceToDerive =
-        InsuranceCaseBalance.builder()
-            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
-            .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(100));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(200)));
-
-    // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
-
-    // then
-    assertEquals(BigDecimal.valueOf(300), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
-  }
-
-  @Test
-  public void testIfAutomaticTransactionAmountGreaterThanDamageRemaining() {
-    // given
-    final var balanceToDerive =
-        InsuranceCaseBalance.builder()
-            .selfResponsibilityRemaining(BigDecimal.valueOf(500))
-            .damageRemaining(BigDecimal.valueOf(100))
-            .build();
-    final var damageTransaction = getTransactionAddRequest(BigDecimal.valueOf(140));
-    final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt =
-        Optional.of(getTransactionAddRequest(BigDecimal.valueOf(200)));
-
-    // when
-    instanceUnderTest.derive(balanceToDerive, damageTransaction, selfResponsibilityTransactionOpt);
-
-    // then
-    assertEquals(BigDecimal.valueOf(300), balanceToDerive.getSelfResponsibilityRemaining());
-    assertEquals(BigDecimal.valueOf(0), balanceToDerive.getDamageRemaining());
-    assertEquals(BigDecimal.valueOf(100), damageTransaction.getAmount());
+    assertEquals(BigDecimal.valueOf(70), damageTransaction.getAmount());
   }
 
   private TransactionAddRequest getTransactionAddRequest(final BigDecimal amount) {

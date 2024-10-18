@@ -48,12 +48,12 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
     final var hasActiveContract = hasActiveContract(driverId);
     final var damageTransaction =
         getDamageTransaction(driverId, requestedQWeek, requestedWeekBalance, hasActiveContract);
-    final var selfResponsibilityTransactionOpt =
-        getSelfResponsibilityTransactionOpt(
+    final var selfResponsibilityTransaction =
+        getSelfResponsibilityTransaction(
             driverId, requestedQWeek, requestedWeekBalance, hasActiveContract);
-    deriveService.derive(requestedWeekBalance, damageTransaction, selfResponsibilityTransactionOpt);
+    deriveService.derive(requestedWeekBalance, damageTransaction, selfResponsibilityTransaction);
     saveDamageTransaction(damageTransaction, requestedWeekBalance);
-    saveSelfResponsibilityTransaction(selfResponsibilityTransactionOpt, requestedWeekBalance);
+    saveSelfResponsibilityTransaction(selfResponsibilityTransaction, requestedWeekBalance);
 
     return requestedWeekBalance;
   }
@@ -67,13 +67,13 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
   }
 
   private void saveSelfResponsibilityTransaction(
-      final Optional<TransactionAddRequest> selfResponsibilityTransactionOpt,
+      final TransactionAddRequest selfResponsibilityTransaction,
       final InsuranceCaseBalance requestedWeekBalance) {
-    if (selfResponsibilityTransactionOpt.isEmpty()) {
+    if (selfResponsibilityTransaction.getAmount().compareTo(ZERO) == 0) {
 
       return;
     }
-    final var transactionId = transactionAddUseCase.add(selfResponsibilityTransactionOpt.get());
+    final var transactionId = transactionAddUseCase.add(selfResponsibilityTransaction);
     if (transactionId != null) {
       requestedWeekBalance.getTransactionIds().add(transactionId);
     }
@@ -147,7 +147,7 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
     return damagePaymentTransaction;
   }
 
-  private Optional<TransactionAddRequest> getSelfResponsibilityTransactionOpt(
+  private TransactionAddRequest getSelfResponsibilityTransaction(
       final Long driverId,
       final QWeekResponse qWeek,
       final InsuranceCaseBalance insuranceCaseBalance,
@@ -158,10 +158,6 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
       selfResponsibilityAmount = insuranceCaseBalance.getSelfResponsibilityRemaining();
     } else {
       selfResponsibilityAmount = getRequestedSelfResponsibilityAmountAbs(driverId, qWeek.getId());
-      if (selfResponsibilityAmount.compareTo(ZERO) == 0) {
-
-        return empty();
-      }
     }
 
     final var selfResponsibilityTransaction = new TransactionAddRequest();
@@ -173,7 +169,7 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
         getTransactionTypeIdByName(SELF_RESPONSIBILITY_COMPENSATION_TRANSACTION_TYPE_NAME));
     selfResponsibilityTransaction.setDate(qWeek.getStart());
 
-    return Optional.of(selfResponsibilityTransaction);
+    return selfResponsibilityTransaction;
   }
 
   private BigDecimal getDamageCompensationAmount(final Long driverId, final Long qWeekId) {
