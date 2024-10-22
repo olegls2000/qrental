@@ -15,7 +15,8 @@ where ocr.obligation_calculation_id in
        where q_week_id in
              (select id
               from q_week
-              where year = 2024 and number = 23));
+              where year = 2024
+                and number = 23));
 
 delete
 from obligation ob
@@ -130,9 +131,12 @@ from invoice_item;
 --------------------------------------------------------------------------------------------------------
 --## Insurance Calculations:
 
-delete from insurance_case_balance_x_transaction icbt;
-delete from insurance_case_balance icb;
-delete from insurance_calculation;
+delete
+from insurance_case_balance_x_transaction icbt;
+delete
+from insurance_case_balance icb;
+delete
+from insurance_calculation;
 
 select *
 from transaction
@@ -235,14 +239,40 @@ select *
 from q_week;
 
 --Total DB clean up:
-delete from firm_link where driver_id not in (28, 103, 95, 5);
-delete from invoice_transaction where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
-delete from bonus_calculation_result where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
-delete from transaction where driver_id not in (28, 103, 95, 5);
-delete from call_sign_link where driver_id not in (28, 103, 95, 5);
-delete from invoice where driver_id not in (28, 103, 95, 5);
-delete from car_link where driver_id not in (28, 103, 95, 5);
-delete from friendship where driver_id not in (28, 103, 95, 5);
-delete from contract where driver_id not in (28, 103, 95, 5);
-delete from authorization_bolt where driver_id not in (28, 103, 95, 5);
-delete from driver where id not in (28, 103, 95, 5);
+delete
+from firm_link
+where driver_id not in (28, 103, 95, 5);
+delete
+from invoice_transaction
+where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
+delete
+from bonus_calculation_result
+where transaction_id in (select id from transaction where driver_id not in (28, 103, 95, 5));
+delete
+from transaction
+where driver_id not in (28, 103, 95, 5);
+delete
+from call_sign_link
+where driver_id not in (28, 103, 95, 5);
+delete
+from invoice
+where driver_id not in (28, 103, 95, 5);
+delete
+from car_link
+where driver_id not in (28, 103, 95, 5);
+delete
+from friendship
+where driver_id not in (28, 103, 95, 5);
+delete
+from contract
+where driver_id not in (28, 103, 95, 5);
+delete
+from authorization_bolt
+where driver_id not in (28, 103, 95, 5);
+delete
+from driver
+where id not in (28, 103, 95, 5);
+
+
+-- Detect duplicates:
+SELECT name, COUNT(*) FROM transaction_type GROUP BY name HAVING COUNT(*) > 1
