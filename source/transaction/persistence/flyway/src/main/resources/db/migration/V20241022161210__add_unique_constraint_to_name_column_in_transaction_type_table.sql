@@ -1,0 +1,1 @@
+ALTER TABLE transaction_type ADD CONSTRAINT transaction_type_name_unq UNIQUE (name);
