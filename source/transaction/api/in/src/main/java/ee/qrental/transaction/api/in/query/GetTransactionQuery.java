@@ -23,6 +23,8 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByInsuranceCalculationId(final Long insuranceCalculationId);
 
+  List<TransactionResponse> getAllByInsuranceCaseId(final Long insuranceCaseId);
+
   List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter);
 
   List<TransactionResponse> getAllByFilter(final PeriodAndKindAndDriverTransactionFilter filter);

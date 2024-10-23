@@ -96,6 +96,13 @@ public class TransactionLoadAdapter implements TransactionLoadPort {
   }
 
   @Override
+  public List<Transaction> loadAllByInsuranceCaseId(final Long insuranceCaseId) {
+    return repository.findAllByInsuranceCaseId(insuranceCaseId).stream()
+            .map(mapper::mapToDomain)
+            .collect(toList());
+  }
+
+  @Override
   public List<Transaction> loadAllByBonusCalculationId(final Long bonusCalculationId) {
     return repository.findAllByBonusCalculationId(bonusCalculationId).stream()
         .map(mapper::mapToDomain)

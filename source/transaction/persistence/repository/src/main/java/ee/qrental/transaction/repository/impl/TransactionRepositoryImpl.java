@@ -29,19 +29,19 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
   @Override
   public List<TransactionJakartaEntity> findAllByDateBetween(
-      LocalDate dateStart, LocalDate dateEnd) {
+      final LocalDate dateStart, final LocalDate dateEnd) {
     return springDataRepository.findAllByDateBetween(dateStart, dateEnd);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllByDateBetweenAndDriverId(
-      LocalDate dateStart, LocalDate dateEnd, Long driverId) {
+      final LocalDate dateStart, final LocalDate dateEnd, Long driverId) {
     return springDataRepository.findAllByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
-      LocalDate dateStart, LocalDate dateEnd, Long driverId) {
+      final LocalDate dateStart, final LocalDate dateEnd, final Long driverId) {
     return springDataRepository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
   }
 
@@ -51,8 +51,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
-  public List<TransactionJakartaEntity> findAllByInsuranceCalculationId(final Long insuranceCalculationId) {
+  public List<TransactionJakartaEntity> findAllByInsuranceCalculationId(
+      final Long insuranceCalculationId) {
     return springDataRepository.findAllByInsuranceCalculationId(insuranceCalculationId);
+  }
+
+  @Override
+  public List<TransactionJakartaEntity> findAllByInsuranceCaseId(final Long insuranceCaseId) {
+    return springDataRepository.findAllByInsuranceCaseId(insuranceCaseId);
   }
 
   @Override

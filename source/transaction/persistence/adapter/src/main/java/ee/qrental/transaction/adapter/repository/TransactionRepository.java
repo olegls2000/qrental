@@ -23,6 +23,8 @@ public interface TransactionRepository {
 
   List<TransactionJakartaEntity> findAllByInsuranceCalculationId(final Long insuranceCalculationId);
 
+  List<TransactionJakartaEntity> findAllByInsuranceCaseId(final Long insuranceCaseId);
+
   List<TransactionJakartaEntity> findAllByBonusCalculationId(final Long bonusCalculationId);
 
   TransactionJakartaEntity getReferenceById(Long id);

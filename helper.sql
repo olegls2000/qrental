@@ -275,4 +275,4 @@ where id not in (28, 103, 95, 5);
 
 
 -- Detect duplicates:
-SELECT name, COUNT(*) FROM transaction_type GROUP BY name HAVING COUNT(*) > 1
+SELECT name, COUNT(*) FROM transaction_type GROUP BY name HAVING COUNT(*) > 1;

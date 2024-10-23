@@ -15,12 +15,10 @@ import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static ee.qrental.transaction.api.in.utils.TransactionTypeConstant.*;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
-import static java.util.Optional.empty;
 
 @AllArgsConstructor
 public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalanceCalculator {
@@ -132,7 +130,14 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
       final boolean hasActiveContract) {
     var amountForDamageCompensation = getDamageCompensationAmount(driverId, qWeek.getId());
     if (!hasActiveContract) {
-      amountForDamageCompensation = insuranceCaseBalance.getDamageRemaining();
+      final var originalDamageAmount = insuranceCaseBalance.getInsuranceCase().getDamageAmount();
+      final var insuranceCaseId = insuranceCaseBalance.getInsuranceCase().getId();
+      final var paidAmount =
+          transactionQuery.getAllByInsuranceCaseId(insuranceCaseId).stream()
+              .map(TransactionResponse::getRealAmount)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      amountForDamageCompensation = originalDamageAmount.subtract(paidAmount);
     }
 
     final var damagePaymentTransaction = new TransactionAddRequest();
@@ -154,10 +159,10 @@ public class InsuranceCaseBalanceCalculatorService implements InsuranceCaseBalan
       final boolean hasActiveContract) {
     var selfResponsibilityAmount = ZERO;
 
-    if (!hasActiveContract) {
-      selfResponsibilityAmount = insuranceCaseBalance.getSelfResponsibilityRemaining();
-    } else {
+    if (hasActiveContract) {
       selfResponsibilityAmount = getRequestedSelfResponsibilityAmountAbs(driverId, qWeek.getId());
+    } else {
+      selfResponsibilityAmount = insuranceCaseBalance.getSelfResponsibilityRemaining();
     }
 
     final var selfResponsibilityTransaction = new TransactionAddRequest();
