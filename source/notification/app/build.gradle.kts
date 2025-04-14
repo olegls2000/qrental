@@ -19,3 +19,7 @@ dependencies {
 tasks.withType<Jar>() {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+tasks.jar {
+    archiveFileName.set("app-notification.jar")
+}

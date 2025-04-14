@@ -33,6 +33,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
+tasks.jar {
+    archiveFileName.set("app-billing.jar")
+}
+
 tasks.withType<Jar>() {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
