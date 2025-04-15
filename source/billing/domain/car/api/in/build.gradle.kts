@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("car-api-in.jar")
+    archiveFileName.set("billing-car-api-in.jar")
 }

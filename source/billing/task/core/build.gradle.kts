@@ -18,3 +18,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    archiveFileName.set("billing-task-core.jar")
+}

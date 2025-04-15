@@ -1,3 +1,8 @@
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ofPattern
+
 plugins {
     id("org.springframework.boot") version "3.1.1"
 }
@@ -28,13 +33,14 @@ dependencies {
     implementation(project(":source:billing:task"))
     implementation(project(":source:billing:security:config"))
 
-
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
-tasks.jar {
-    archiveFileName.set("app-billing.jar")
+var dateTimeAppender = now().format(ofPattern("yyyy-MM-dd-HH-mm"));
+
+tasks.bootJar {
+    archiveFileName.set("billing-app-" + dateTimeAppender + ".jar")
 }
 
 tasks.withType<Jar>() {

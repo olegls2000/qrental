@@ -25,5 +25,5 @@ tasks.test {
     }
 }
 tasks.jar {
-    archiveFileName.set("constant-core.jar")
+    archiveFileName.set("billing-constant-core.jar")
 }

@@ -4,5 +4,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("car-domain.jar")
+    archiveFileName.set("billing-car-domain.jar")
 }

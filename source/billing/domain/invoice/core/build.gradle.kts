@@ -20,5 +20,5 @@ dependencies{
 }
 
 tasks.jar {
-    archiveFileName.set("invoice-core.jar")
+    archiveFileName.set("billing-invoice-core.jar")
 }

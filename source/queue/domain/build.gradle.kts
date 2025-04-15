@@ -18,3 +18,7 @@ tasks.test {
         events("passed")
     }
 }
+
+tasks.jar {
+    archiveFileName.set("queue-domain.jar")
+}

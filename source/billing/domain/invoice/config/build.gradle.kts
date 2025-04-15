@@ -22,5 +22,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("invoice-config.jar")
+    archiveFileName.set("billing-invoice-config.jar")
 }

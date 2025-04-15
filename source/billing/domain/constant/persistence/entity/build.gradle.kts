@@ -5,5 +5,5 @@ dependencies{
 }
 
 tasks.jar {
-    archiveFileName.set("constant-persistence-entity.jar")
+    archiveFileName.set("billing-constant-persistence-entity.jar")
 }

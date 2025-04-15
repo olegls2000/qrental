@@ -21,5 +21,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("insurance-config.jar")
+    archiveFileName.set("billing-insurance-config.jar")
 }

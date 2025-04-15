@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("firm-persistence-flyway.jar")
+    archiveFileName.set("billing-firm-persistence-flyway.jar")
 }

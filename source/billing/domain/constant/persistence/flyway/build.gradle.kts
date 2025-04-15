@@ -6,5 +6,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("constant-persistence-flyway.jar")
+    archiveFileName.set("billing-constant-persistence-flyway.jar")
 }

@@ -9,5 +9,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("security-core.jar")
+    archiveFileName.set("billing-security-core.jar")
 }

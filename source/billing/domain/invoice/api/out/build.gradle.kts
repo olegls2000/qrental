@@ -6,5 +6,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("invoice-api-out.jar")
+    archiveFileName.set("billing-invoice-api-out.jar")
 }

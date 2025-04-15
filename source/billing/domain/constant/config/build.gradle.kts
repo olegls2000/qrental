@@ -12,5 +12,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("constant-config.jar")
+    archiveFileName.set("billing-constant-config.jar")
 }

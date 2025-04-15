@@ -23,5 +23,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("transaction-config.jar")
+    archiveFileName.set("billing-transaction-config.jar")
 }

@@ -1,3 +1,6 @@
+import java.time.LocalDateTime.now
+import java.time.format.DateTimeFormatter.ofPattern
+
 plugins {
     id("org.springframework.boot") version "3.1.1"
 }
@@ -20,6 +23,8 @@ tasks.withType<Jar>() {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-tasks.jar {
-    archiveFileName.set("app-notification.jar")
+var dateTimeAppender = now().format(ofPattern("yyyy-MM-dd-HH-mm"));
+
+tasks.bootJar {
+    archiveFileName.set("notification-app-" + dateTimeAppender + ".jar")
 }

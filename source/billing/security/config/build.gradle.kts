@@ -11,5 +11,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("security-config.jar")
+    archiveFileName.set("billing-security-config.jar")
 }

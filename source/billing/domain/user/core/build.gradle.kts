@@ -15,5 +15,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("user-core.jar")
+    archiveFileName.set("billing-user-core.jar")
 }

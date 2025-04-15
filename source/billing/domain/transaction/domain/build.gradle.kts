@@ -6,5 +6,5 @@ dependencies {
 
 
 tasks.jar {
-    archiveFileName.set("transaction-domain.jar")
+    archiveFileName.set("billing-transaction-domain.jar")
 }

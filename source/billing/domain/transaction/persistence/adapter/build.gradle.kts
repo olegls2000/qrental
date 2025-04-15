@@ -24,5 +24,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("transaction-persistence-adapter.jar")
+    archiveFileName.set("billing-transaction-persistence-adapter.jar")
 }

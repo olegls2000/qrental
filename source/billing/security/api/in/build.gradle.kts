@@ -4,5 +4,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("security-api-in.jar")
+    archiveFileName.set("billing-security-api-in.jar")
 }

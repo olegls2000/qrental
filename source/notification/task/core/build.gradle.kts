@@ -14,3 +14,6 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+tasks.jar {
+    archiveFileName.set("notification-task-core.jar")
+}

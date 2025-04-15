@@ -27,5 +27,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("car-core.jar")
+    archiveFileName.set("billing-car-core.jar")
 }

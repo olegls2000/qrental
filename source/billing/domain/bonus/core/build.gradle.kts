@@ -37,5 +37,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("bonus-core.jar")
+    archiveFileName.set("billing-bonus-core.jar")
 }

@@ -58,5 +58,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("ui-thymeleaf.jar")
+    archiveFileName.set("billing-ui-thymeleaf.jar")
 }

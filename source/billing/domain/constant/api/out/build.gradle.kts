@@ -5,5 +5,5 @@ dependencies {
     annotationProcessor(libs.q.lombok)
 }
 tasks.jar {
-    archiveFileName.set("constant-api-out.jar")
+    archiveFileName.set("billing-constant-api-out.jar")
 }

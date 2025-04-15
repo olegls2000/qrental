@@ -9,5 +9,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("contract-persistence-repository.jar")
+    archiveFileName.set("billing-contract-persistence-repository.jar")
 }

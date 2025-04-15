@@ -3,3 +3,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     runtimeOnly("org.postgresql:postgresql")
 }
+tasks.jar {
+    archiveFileName.set("notification-email-persistence-flyway.jar")
+}

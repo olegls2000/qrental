@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("constant-domain.jar")
+    archiveFileName.set("billing-constant-domain.jar")
 }

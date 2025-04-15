@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-domain.jar")
+    archiveFileName.set("billing-driver-domain.jar")
 }

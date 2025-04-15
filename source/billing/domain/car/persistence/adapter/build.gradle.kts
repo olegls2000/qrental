@@ -8,5 +8,5 @@ dependencies {
     annotationProcessor(libs.q.lombok)
 }
 tasks.jar {
-    archiveFileName.set("car-persistence-adapter.jar")
+    archiveFileName.set("billing-car-persistence-adapter.jar")
 }

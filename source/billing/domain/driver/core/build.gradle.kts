@@ -33,5 +33,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-core.jar")
+    archiveFileName.set("billing-driver-core.jar")
 }

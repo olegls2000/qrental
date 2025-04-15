@@ -17,5 +17,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-config.jar")
+    archiveFileName.set("billing-driver-config.jar")
 }

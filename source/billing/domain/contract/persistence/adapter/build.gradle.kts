@@ -25,5 +25,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("contract-persistence-adapter.jar")
+    archiveFileName.set("billing-contract-persistence-adapter.jar")
 }

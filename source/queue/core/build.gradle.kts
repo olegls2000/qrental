@@ -24,5 +24,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("car-core.jar")
+    archiveFileName.set("queue-core.jar")
 }

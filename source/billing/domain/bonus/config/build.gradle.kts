@@ -23,5 +23,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("bonus-config.jar")
+    archiveFileName.set("billing-bonus-config.jar")
 }

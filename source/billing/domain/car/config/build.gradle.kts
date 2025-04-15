@@ -16,5 +16,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("car-config.jar")
+    archiveFileName.set("billing-car-config.jar")
 }

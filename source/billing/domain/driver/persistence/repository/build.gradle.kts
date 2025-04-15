@@ -9,5 +9,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-persistence-repository.jar")
+    archiveFileName.set("billing-driver-persistence-repository.jar")
 }

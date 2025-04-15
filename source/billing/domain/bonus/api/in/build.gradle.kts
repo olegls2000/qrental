@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("bonus-api-in.jar")
+    archiveFileName.set("billing-bonus-api-in.jar")
 }

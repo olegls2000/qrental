@@ -10,5 +10,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("transaction-persistence-repository.jar")
+    archiveFileName.set("billing-transaction-persistence-repository.jar")
 }

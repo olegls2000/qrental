@@ -33,5 +33,5 @@ tasks.test {
 }
 
 tasks.jar {
-    archiveFileName.set("insurance-core.jar")
+    archiveFileName.set("billing-insurance-core.jar")
 }

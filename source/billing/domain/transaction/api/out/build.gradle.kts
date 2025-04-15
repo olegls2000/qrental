@@ -8,5 +8,5 @@ dependencies {
 
 
 tasks.jar {
-    archiveFileName.set("transaction-api-out.jar")
+    archiveFileName.set("billing-transaction-api-out.jar")
 }

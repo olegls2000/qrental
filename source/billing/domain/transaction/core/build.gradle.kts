@@ -34,5 +34,5 @@ tasks.test {
 
 
 tasks.jar {
-    archiveFileName.set("transaction-core.jar")
+    archiveFileName.set("billing-transaction-core.jar")
 }

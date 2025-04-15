@@ -6,5 +6,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("driver-api-out.jar")
+    archiveFileName.set("billing-driver-api-out.jar")
 }

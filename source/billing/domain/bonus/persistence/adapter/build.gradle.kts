@@ -9,5 +9,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("bonus-persistence-adapter.jar")
+    archiveFileName.set("billing-bonus-persistence-adapter.jar")
 }

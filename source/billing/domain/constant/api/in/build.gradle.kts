@@ -5,5 +5,5 @@ dependencies {
 }
 
 tasks.jar {
-    archiveFileName.set("constant-api-in.jar")
+    archiveFileName.set("billing-constant-api-in.jar")
 }

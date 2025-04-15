@@ -33,3 +33,6 @@ tasks.test {
         events("passed")
     }
 }
+tasks.jar {
+    archiveFileName.set("notification-rest.jar")
+}
