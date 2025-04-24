@@ -57,7 +57,6 @@ public class ContractCloseUseCaseService implements ContractCloseUseCase {
         .insuranceCaseId(insuranceCasePreCloseResponse.getInsuranceCaseId())
         .originalAmount(insuranceCasePreCloseResponse.getOriginalAmount())
         .paidAmount(insuranceCasePreCloseResponse.getPaidAmount())
-        .withQKasko(insuranceCasePreCloseResponse.getWithQKasko())
         .paymentAmount(insuranceCasePreCloseResponse.getPaymentAmount())
         .build();
   }

@@ -75,6 +75,6 @@ public class ContractQueryController extends AbstractDriverQueryController {
   public String sendByEmail(final ContractSendByEmailRequest emailSendRequest) {
     contractSendByEmailUseCase.sendByEmail(emailSendRequest);
 
-    return "redirect:" + CONTRACT_ROOT_PATH;
+    return "redirect:" + CONTRACT_ROOT_PATH + "/active";
   }
 }

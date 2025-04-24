@@ -44,15 +44,6 @@
                     <td th:text="${insuranceCase.originalAmount}">???</td>
                 </tr>
                 <tr>
-                    <td>With Q-Kasko:</td>
-                    <td th:if="${insuranceCase.withQKasko}">Yes</td>
-                    <td th:unless="${insuranceCase.withQKasko}">No</td>
-                </tr>
-                <tr>
-                    <td>Damage after Q-Kasko deduction:</td>
-                    <td th:text="${insuranceCase.paymentAmount}">???</td>
-                </tr>
-                <tr>
                     <td>Paid Damage, EUR:</td>
                     <td th:text="${insuranceCase.paidAmount}">???</td>
                 </tr>

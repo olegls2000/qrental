@@ -14,7 +14,6 @@ public class InsuranceCasePreCloseResponse {
   private Long insuranceCaseId;
   private Long driverId;
   private String driverInfo;
-  private Boolean withQKasko;
   private BigDecimal paymentAmount;
   private BigDecimal paidAmount;
   private BigDecimal originalAmount;

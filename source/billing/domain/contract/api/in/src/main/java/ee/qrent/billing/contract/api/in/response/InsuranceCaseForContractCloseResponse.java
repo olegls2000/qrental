@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @SuperBuilder
 public class InsuranceCaseForContractCloseResponse {
   private Long insuranceCaseId;
-  private Boolean withQKasko;
   private BigDecimal paymentAmount;
   private BigDecimal paidAmount;
   private BigDecimal originalAmount;

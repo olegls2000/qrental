@@ -34,8 +34,6 @@ public class InsuranceCaseCloseUseCaseService implements InsuranceCaseCloseUseCa
   private final InsuranceCaseUpdatePort updatePort;
   private final InsuranceCaseLoadPort loadPort;
   private final CloseRequestValidator<InsuranceCaseCloseRequest> closeRequestValidator;
-  private final GetQKaskoQuery getQKaskoQuery;
-  private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
@@ -46,18 +44,13 @@ public class InsuranceCaseCloseUseCaseService implements InsuranceCaseCloseUseCa
     final var toCloseInsuranceCase = loadPort.loadById(insuranceCaseId);
     final var driverId = toCloseInsuranceCase.getDriverId();
     final var driverInfo = driverQuery.getObjectInfo(driverId);
-    final var qWeekId = qWeekQuery.getCurrentWeek().getId();
-    final var withQKasko = getQKaskoQuery.hasQKasko(driverId, qWeekId);
-    final var amountToPayAdjustedByQKasko =
-        getAmountToPayAdjustedByQKasko(toCloseInsuranceCase, withQKasko);
     final var paidAmount = getAmountPaid(toCloseInsuranceCase);
-    final var paymentAmount = amountToPayAdjustedByQKasko.subtract(paidAmount);
+    final var paymentAmount = toCloseInsuranceCase.getDamageAmount().subtract(paidAmount);
 
     return InsuranceCasePreCloseResponse.builder()
         .insuranceCaseId(insuranceCaseId)
         .driverId(driverId)
         .driverInfo(driverInfo)
-        .withQKasko(withQKasko)
         .paymentAmount(paymentAmount)
         .paidAmount(paidAmount)
         .originalAmount(toCloseInsuranceCase.getDamageAmount())
@@ -82,6 +75,9 @@ public class InsuranceCaseCloseUseCaseService implements InsuranceCaseCloseUseCa
     final var preCloseResponse = getPreCloseResponse(insuranceCaseId);
     final var damageTransaction = getDamageTransaction(preCloseResponse);
     transactionAddUseCase.add(damageTransaction);
+    if(damageTransaction.hasViolations()){
+      throw new RuntimeException("Transaction was not created, please check violations: " + damageTransaction.getViolations());
+    }
     final var toCloseInsuranceCase = loadPort.loadById(insuranceCaseId);
     toCloseInsuranceCase.setActive(false);
     updatePort.update(toCloseInsuranceCase);

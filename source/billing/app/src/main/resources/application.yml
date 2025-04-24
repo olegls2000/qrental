@@ -16,8 +16,8 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
-      #hibernate:
-      #ddl-auto: update
+    hibernate:
+     ddl-auto: update
 
 management:
   endpoints:
