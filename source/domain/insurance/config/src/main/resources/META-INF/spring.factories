@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-ee.qrental.insurance.spring.config.InsuranceAdapterConfig,\
-ee.qrental.insurance.spring.config.InsuranceMapperConfig,\
-ee.qrental.insurance.spring.config.InsuranceCaseServiceConfig,\
-ee.qrental.insurance.spring.config.InsuranceRepositoryConfig,\
-ee.qrental.insurance.spring.config.InsuranceCaseValidatorConfig

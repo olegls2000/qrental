@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.queue.config.spring.QueueAdapterConfig,\
+ee.qrent.queue.config.spring.QueueMapperConfig,\
+ee.qrent.queue.config.spring.QueueServiceConfig

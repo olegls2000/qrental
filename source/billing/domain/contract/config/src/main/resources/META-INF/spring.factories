@@ -1,0 +1,16 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.contract.config.spring.ContractAdapterConfig,\
+ee.qrent.billing.contract.config.spring.ContractMapperConfig,\
+ee.qrent.billing.contract.config.spring.ContractServiceConfig,\
+ee.qrent.billing.contract.config.spring.ContractRepositoryConfig,\
+ee.qrent.billing.contract.config.spring.ContractValidatorConfig,\
+ee.qrent.billing.contract.config.spring.AbsenceAdapterConfig,\
+ee.qrent.billing.contract.config.spring.AbsenceMapperConfig,\
+ee.qrent.billing.contract.config.spring.AbsenceServiceConfig,\
+ee.qrent.billing.contract.config.spring.AbsenceRepositoryConfig,\
+ee.qrent.billing.contract.config.spring.AbsenceValidatorConfig,\
+ee.qrent.billing.contract.config.spring.AuthorizationAdapterConfig,\
+ee.qrent.billing.contract.config.spring.AuthorizationMapperConfig,\
+ee.qrent.contract.spring.config.AuthorizationBoltServiceConfig,\
+ee.qrent.billing.contract.config.spring.AuthorizationRepositoryConfig,\
+ee.qrent.billing.contract.config.spring.AuthorizationValidatorConfig

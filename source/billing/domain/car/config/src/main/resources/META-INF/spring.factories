@@ -1,0 +1,10 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.car.config.spring.CarAdapterConfig,\
+ee.qrent.car.spring.config.CarLinkAdapterConfig,\
+ee.qrent.billing.car.config.spring.CarMapperConfig,\
+ee.qrent.car.spring.config.CarLinkMapperConfig,\
+ee.qrent.billing.car.config.spring.CarServiceConfig,\
+ee.qrent.car.spring.config.CarLinkServiceConfig,\
+ee.qrent.billing.car.config.spring.CarRepositoryConfig,\
+ee.qrent.billing.car.config.spring.CarLinkRepositoryConfig,\
+ee.qrent.car.spring.config.CarLinkValidatorConfig

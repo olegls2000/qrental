@@ -1,0 +1,11 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.user.config.spring.UserAccountAdapterConfig,\
+ee.qrent.billing.user.config.spring.UserAccountValidatorConfig,\
+ee.qrent.billing.user.config.spring.UserAccountMapperConfig,\
+ee.qrent.billing.user.config.spring.UserAccountServiceConfig,\
+ee.qrent.billing.user.config.spring.UserAccountRepositoryConfig,\
+ee.qrent.billing.user.config.spring.RoleAdapterConfig,\
+ee.qrent.billing.user.config.spring.RoleValidatorConfig,\
+ee.qrent.billing.user.config.spring.RoleMapperConfig,\
+ee.qrent.billing.user.config.spring.RoleServiceConfig,\
+ee.qrent.billing.user.config.spring.RoleRepositoryConfig

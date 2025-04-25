@@ -6,7 +6,7 @@ plugins {
     id("java-library")
     id("com.gorylenko.gradle-git-properties") version "2.3.2"
 }
-group = "ee.qrental"
+group = "ee.qrent.billing"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21

@@ -1,0 +1,79 @@
+<div th:fragment="driverPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/driverTabFragment.html :: driverTabs('drivers')"></ul>
+
+    <h2 class="py-3">Drivers</h2>
+    <table class="table table-sm table-striped table-bordered align-middle">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/drivers/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th style="width: 1% !important;">Delete</th>
+            <th style="width: 1% !important;">Portal</th>
+            <th>Call Sign</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Isikukood</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Contact Types</th>
+            <th>Invoices by email</th>
+            <th>Charge Fee</th>
+            <th>Legal Entity Type</th>
+            <th>Deposit</th>
+            <th>Created on</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(drivers)}">
+            <td colspan="5">No drivers</td>
+        </tr>
+        <tr th:each="driver : ${drivers}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/drivers/update-form/{id}(id=${driver.id})}">
+                    <span class="bi-pencil-square"></span></a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/drivers/delete-form/{id}(id=${driver.id})}">
+                    <span class="bi-trash"></span></a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/balances/driver/{id}(id=${driver.id})}">
+                    <span class="bi bi-card-checklist"></span></a>
+            </td>
+            <td th:text="${driver.callSign}">??</td>
+            <td th:text="${driver.firstName}">??</td>
+            <td th:text="${driver.lastName}">??</td>
+            <td th:text="${driver.isikukood}">??</td>
+            <td th:text="${driver.phone}">??</td>
+            <td th:text="${driver.email}">??</td>
+            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+               th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                <span class="bi-pencil-square"></span>
+            </a>
+            <td>
+                <i th:if="${driver.byTelegram}" class="bi bi-telegram"></i>
+                <i th:if="${driver.byWhatsApp}" class="bi bi-whatsapp"></i>
+                <i th:if="${driver.byViber}" class="bi bi-vimeo"></i>
+                <i th:if="${driver.byEmail}" class="bi bi-envelope-at"></i>
+                <i th:if="${driver.bySms}" class="bi bi-chat-left-dots"></i>
+                <i th:if="${driver.byPhone}" class="bi bi-telephone"></i>
+            </td>
+            <td>
+                <span th:text="${driver.needInvoicesByEmail} ? 'Yes' : 'No'"></span>
+            </td>
+            <td>
+                <span th:text="${driver.needFee} ? 'Yes' : 'No'"></span>
+            </td>
+            <td th:text="${driver.legalEntityType}">??</td>
+            <td th:text="${driver.deposit}">??</td>
+            <td th:text="${qDateFormatter.format(driver.createdDate)}">???</td>
+        </tr>
+    </table>
+</div>

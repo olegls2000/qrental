@@ -1,0 +1,1 @@
+alter table driver alter column company_name drop not null;

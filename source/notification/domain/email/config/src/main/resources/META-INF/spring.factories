@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.notification.email.config.spring.EmailNotificationAdapterConfig,\
+ee.qrent.notification.email.config.spring.EmailNotificationMapperConfig,\
+ee.qrent.notification.email.config.spring.EmailNotificationRepositoryConfig,\
+ee.qrent.notification.email.config.spring.EmailNotificationServiceConfig
