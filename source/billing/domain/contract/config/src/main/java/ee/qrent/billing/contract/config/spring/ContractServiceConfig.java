@@ -100,6 +100,7 @@ public class ContractServiceConfig {
     return asList(
         new ContractToPdfConversionStrategyBefore2025(),
         new ContractToPdfConversionStrategyAfter2024(),
+        new ContractToPdfConversionStrategyFrom1May2024(),
         new ContractToPdfConversionStrategyNewDriver(loadPort));
   }
 
