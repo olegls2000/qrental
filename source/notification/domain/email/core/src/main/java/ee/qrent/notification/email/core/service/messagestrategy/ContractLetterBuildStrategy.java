@@ -17,6 +17,7 @@ import static ee.qrent.notification.email.api.in.request.EmailType.CONTRACT_EMAI
 public class ContractLetterBuildStrategy implements LetterBuildStrategy {
 
   private final TemplateEngine templateEngine;
+  private final String Q_RENT_EMAIL = "billing@qrent.ee";
 
   @Override
   public boolean canApply(final EmailSendRequest emailSendRequest) {
@@ -28,7 +29,7 @@ public class ContractLetterBuildStrategy implements LetterBuildStrategy {
       throws MessagingException, IOException {
     final var contractNumber = emailSendRequest.getProperties().get("contractNumber").toString();
     final var recipients = emailSendRequest.getRecipients().toArray(new String[0]);
-    final var from = "billing@qrent.ee";
+    final var from = Q_RENT_EMAIL;
     final var subject = "Contract: " + contractNumber;
     final var attachmentFileName = String.format("Contract-%s.pdf", contractNumber);
     final var attachment = new ByteArrayResource(emailSendRequest.getAttachment().readAllBytes());
