@@ -1,5 +1,6 @@
 package ee.qrent.billing.contract.core.service.pdf;
 
+import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

@@ -5,7 +5,6 @@ import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
-import static java.awt.Color.white;
 import static java.lang.String.format;
 
 import com.lowagie.text.*;
@@ -17,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @RequiredArgsConstructor
-public class ContractToPdfConversionStrategyFrom1May2024
+public class LegacyContractToPdfConversionStrategyFrom1May2024
         extends AbstractContractToPdfConversionStrategy {
 
   @Override

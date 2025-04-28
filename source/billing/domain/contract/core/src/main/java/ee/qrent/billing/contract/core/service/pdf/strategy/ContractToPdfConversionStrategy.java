@@ -1,4 +1,6 @@
-package ee.qrent.billing.contract.core.service.pdf;
+package ee.qrent.billing.contract.core.service.pdf.strategy;
+
+import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
 
 import java.io.InputStream;
 

@@ -16,13 +16,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ContractToPdfConversionStrategyNewDriverTest {
-  private ContractToPdfConversionStrategyNewDriver instanceUnderTest;
+  private LegacyContractToPdfConversionStrategyNewDriver instanceUnderTest;
   private ContractLoadPort loadPort;
 
   @BeforeEach
   void init() {
     loadPort = mock(ContractLoadPort.class);
-    instanceUnderTest = new ContractToPdfConversionStrategyNewDriver(loadPort);
+    instanceUnderTest = new LegacyContractToPdfConversionStrategyNewDriver(loadPort);
   }
 
   @Test

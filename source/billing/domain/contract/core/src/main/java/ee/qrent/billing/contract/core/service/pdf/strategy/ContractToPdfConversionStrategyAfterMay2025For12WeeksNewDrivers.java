@@ -1,4 +1,4 @@
-package ee.qrent.billing.contract.core.service.pdf;
+package ee.qrent.billing.contract.core.service.pdf.strategy;
 
 import static com.lowagie.text.Font.*;
 import static com.lowagie.text.PageSize.A4;
@@ -10,22 +10,28 @@ import static java.lang.String.format;
 
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
+import ee.qrent.billing.contract.api.out.ContractLoadPort;
+import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-@RequiredArgsConstructor
-public class ContractToPdfConversionStrategyFrom1May2024NewDriver
+public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     extends AbstractContractToPdfConversionStrategy {
 
-  @Override
-  public boolean canApply(final ContractPdfModel contract) {
-    final var contractCreatedDate = contract.getCreated();
+  public ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers(
+      ContractLoadPort loadPort) {
+    super(loadPort);
+  }
 
-    return contractCreatedDate.isAfter(NEW_CONTRACTS_START_DATE)
-        || contractCreatedDate.isEqual(NEW_CONTRACTS_START_DATE);
+  @Override
+  public boolean canApply(final ContractPdfModel model) {
+
+    return isContractAfterNewContractDate(model)
+        && isDriverNew(model)
+        && isContractFor12Weeks(model);
   }
 
   @SneakyThrows
@@ -50,7 +56,7 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
             "Lepingu põhitingimused ja kasutatavate mõistete selgitused on toodud lepingu üldtingimustes ja nende lisades, mis on käesoleva lepingu lahutamatuks osaks. "
                 + "Rentnik kinnitab, et on tutvunud käesoleva lepingu tingimustega, “Tüüptingimused” lepingulisa tingimustega ja “TSK Tingimused” lepingulisa tingimustega, mõistab neid ja on nendega nõus."));
     chapter1.addCell(getSubChapterNumber("1.2"));
-   //TODO  www.111.222.333
+    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa “Tüüptingimused” nr. 25042025 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:41:26 +00:00) ning on saadaval järgmisel lingil:"
@@ -139,21 +145,21 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
     chapter2.addCell(getChapterSummary("Täiendava sisekindlustus (edaspidi TSK)"));
     chapter2.addCell(getSubChapterNumber("2.1"));
     chapter2.addCell(
-            // TODO  www.111.222.333
+        // TODO  www.111.222.333
         getSubChapterText(
             " Käesoleva lepingulisa “TSK Tingimused” nr.250425 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:38:34 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_dig_allkiri_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.1"));
     chapter2.addCell(
-            // TODO  www.111.222.333
+        // TODO  www.111.222.333
         getSubChapterText(
             "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_pdf_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.2"));
     chapter2.addCell(
-            // TODO  www.111.222.333
+        // TODO  www.111.222.333
         getSubChapterText(
             "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_pdf_rus"
@@ -178,8 +184,8 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
     chapter2.addCell(getSubChapterNumber("2.6"));
     chapter2.addCell(
         getSubChapterText(
-            "Samuti kinnitab Rentnik, et on ta teadlik sellest, et \"TSK tingimused\" lepingulisa sätestatud tingimuste rikkumisel, kaotab TSK oma kehtivuse. Rentniku kohustus hüvitada rendiperioodi ajal rendiautole " +
-                    "tekitatud kahju ja selle ulatus arvutatakse siis vastavalt käesolevas lepingus ja lepingulisa \"Tüüptingimused\" tingimustes sätestatule."));
+            "Samuti kinnitab Rentnik, et on ta teadlik sellest, et \"TSK tingimused\" lepingulisa sätestatud tingimuste rikkumisel, kaotab TSK oma kehtivuse. Rentniku kohustus hüvitada rendiperioodi ajal rendiautole "
+                + "tekitatud kahju ja selle ulatus arvutatakse siis vastavalt käesolevas lepingus ja lepingulisa \"Tüüptingimused\" tingimustes sätestatule."));
     chapter2.addCell(getSubChapterNumber("2.7"));
     chapter2.addCell(
         getSubChapterText(
@@ -205,8 +211,8 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
     chapter3.addCell(getSubChapterNumber("3.4"));
     chapter3.addCell(
         getSubChapterText(
-            "Rentnik kohustub tasuma Rendileandjale ettemaksu iga täispika kalendri rendinädala eest, vastavalt summale, mis on määratud üleandmise-vastuvõtmise aktile, kas sularahas Rendileandja kontoris, mis asub aadressil Lasnamäe 30a," +
-                    " Tallinn, või ülekandega Rendileandja pangakontole (või muule Rendileandja esindaja poolt määratud kontole) asjakohase selgitusega „autorent + auto number“. Panga- või sularahaülekanne peab olema tehtud hiljemalt jooksva nädala teisipäevaks kella 16:00’ni."));
+            "Rentnik kohustub tasuma Rendileandjale ettemaksu iga täispika kalendri rendinädala eest, vastavalt summale, mis on määratud üleandmise-vastuvõtmise aktile, kas sularahas Rendileandja kontoris, mis asub aadressil Lasnamäe 30a,"
+                + " Tallinn, või ülekandega Rendileandja pangakontole (või muule Rendileandja esindaja poolt määratud kontole) asjakohase selgitusega „autorent + auto number“. Panga- või sularahaülekanne peab olema tehtud hiljemalt jooksva nädala teisipäevaks kella 16:00’ni."));
     chapter3.addCell(getSubChapterNumber("3.5"));
     chapter3.addCell(
         getSubChapterText(
@@ -430,7 +436,7 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
 
     pdfDocument.add(chapter5);
 
-    ////////Star New Driver
+    //////// Star New Driver
 
     final var chapter16 = getChapterTable();
     chapter16.addCell(getChapterSummary("Lisa"));
@@ -467,38 +473,33 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
     campania.setBorder(NO_BORDER);
     campania.setBorder(NO_BORDER);
 
-    final var campaniacell2 =
-            new Cell(new Paragraph("", new Font(TIMES_ROMAN, 9, BOLD)));
+    final var campaniacell2 = new Cell(new Paragraph("", new Font(TIMES_ROMAN, 9, BOLD)));
     campaniacell2.setBorder(NO_BORDER);
     campaniacell2.setHorizontalAlignment(LEFT);
     campania.addCell(campaniacell2);
 
     final var campaniachapter = getChapterTable();
     campaniachapter.addCell(getChapterNumber("1"));
-    campaniachapter.addCell(
-            getChapterSummary(
-                    "Kampaania üldtingimused"));
+    campaniachapter.addCell(getChapterSummary("Kampaania üldtingimused"));
 
     campaniachapter.addCell(getSubChapterNumber("1.1"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    "Kampaania kestab 12 järjestikust täiskalendrinädalat alates rendilepingu allkirjastamise ja auto üleandmise kuupäevast."));
+        getSubChapterText(
+            "Kampaania kestab 12 järjestikust täiskalendrinädalat alates rendilepingu allkirjastamise ja auto üleandmise kuupäevast."));
 
     campaniachapter.addCell(getSubChapterNumber("1.2"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    "Boonusprogramm kehtib ainult uuele Rentnikule, kes sõlmib rendilepingu Q Rental Group OÜ-ga " +
-                            "esmakordselt ega ole varem kasutanud Rendileandja rendiautosid."));
+        getSubChapterText(
+            "Boonusprogramm kehtib ainult uuele Rentnikule, kes sõlmib rendilepingu Q Rental Group OÜ-ga "
+                + "esmakordselt ega ole varem kasutanud Rendileandja rendiautosid."));
 
     campaniachapter.addCell(getChapterNumber("2"));
-    campaniachapter.addCell(
-            getChapterSummary(
-                    "Boonuse arvestamine"));
+    campaniachapter.addCell(getChapterSummary("Boonuse arvestamine"));
 
     campaniachapter.addCell(getSubChapterNumber("2.1"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    "Nädalaboonuse arvestamise aluseks võetakse rendiauto üleandmise-vastuvõtmise aktis märgitud kehtiv nädalarendi hind."));
+        getSubChapterText(
+            "Nädalaboonuse arvestamise aluseks võetakse rendiauto üleandmise-vastuvõtmise aktis märgitud kehtiv nädalarendi hind."));
 
     campaniachapter.addCell(getSubChapterNumber("2.2"));
     campaniachapter.addCell(
@@ -509,48 +510,47 @@ public class ContractToPdfConversionStrategyFrom1May2024NewDriver
 
     campaniachapter.addCell(getSubChapterNumber("2.3"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    " Boonus kantakse Rentniku kontole või arvestatakse saldole ainult juhul, kui eelneva nädala renditasu ja" +
-                            " kõik võlakohustused on tasutud korrektselt ja tähtaegselt (vt p. 2.4 ja 2.5).   "));
+        getSubChapterText(
+            " Boonus kantakse Rentniku kontole või arvestatakse saldole ainult juhul, kui eelneva nädala renditasu ja"
+                + " kõik võlakohustused on tasutud korrektselt ja tähtaegselt (vt p. 2.4 ja 2.5).   "));
 
     campaniachapter.addCell(getSubChapterNumber("2.4"));
     campaniachapter.addCell(
         getSubChapterText(
             " Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:\n"
                 + "– kas sularahas Rendileandja kontoris aadressil Lasnamäe 30a, Tallinn,\n"
-                + "– või ülekandega Rendileandja pangakontole (või muule määratud kontole)," +
-                    " märkides selgituseks „autorent + auto number“, hiljemalt teisipäevaks kell 16:00 jooksva nädala eest.\n "));
+                + "– või ülekandega Rendileandja pangakontole (või muule määratud kontole),"
+                + " märkides selgituseks „autorent + auto number“, hiljemalt teisipäevaks kell 16:00 jooksva nädala eest.\n "));
 
     campaniachapter.addCell(getSubChapterNumber("2.5"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    "Kui Rentnikul on eelmisest nädalast tasumata võlgnevusi, kohustub ta tasuma lisaks 25% kehtivast nädalarendi hinnast nende katteks."));
+        getSubChapterText(
+            "Kui Rentnikul on eelmisest nädalast tasumata võlgnevusi, kohustub ta tasuma lisaks 25% kehtivast nädalarendi hinnast nende katteks."));
 
     campaniachapter.addCell(getSubChapterNumber("2.6"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    " Kui Rentnik ei täida punktides 2.4 ja 2.5 sätestatud kohustusi, ei lisandu vastava nädala boonus Rentniku saldole."));
+        getSubChapterText(
+            " Kui Rentnik ei täida punktides 2.4 ja 2.5 sätestatud kohustusi, ei lisandu vastava nädala boonus Rentniku saldole."));
 
     campaniachapter.addCell(getChapterNumber("3"));
     campaniachapter.addCell(getChapterSummary("Ennetähtaegne lõpetamine ja rikkumine"));
 
     campaniachapter.addCell(getSubChapterNumber("3.1"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    "Kui Rentnik rikub kampaanias sätestatud tingimusi või lõpetab rendilepingu nr. " +
-                             contractNumber +
-                            "ennetähtaegselt enne miinimumperioodi " +
-                            "(määratud rendilepingu punktis 14), on Rentnik kohustatud tasuma ühekordse leppetrahvi summas 432 eurot."));
+        getSubChapterText(
+            "Kui Rentnik rikub kampaanias sätestatud tingimusi või lõpetab rendilepingu nr. "
+                + contractNumber
+                + "ennetähtaegselt enne miinimumperioodi "
+                + "(määratud rendilepingu punktis 14), on Rentnik kohustatud tasuma ühekordse leppetrahvi summas 432 eurot."));
 
     campaniachapter.addCell(getSubChapterNumber("3.2"));
     campaniachapter.addCell(
-            getSubChapterText(
-                    " See summa vastab 12 nädala jooksul määratud boonuste kogusummale ja kehtib sõltumata muudest lepingu kohustustest. " +
-                            "Leppetrahvile lisanduvad kõik muud rendilepingu ja tüüptingimustega ettenähtud sanktsioonid."));
+        getSubChapterText(
+            " See summa vastab 12 nädala jooksul määratud boonuste kogusummale ja kehtib sõltumata muudest lepingu kohustustest. "
+                + "Leppetrahvile lisanduvad kõik muud rendilepingu ja tüüptingimustega ettenähtud sanktsioonid."));
     pdfDocument.add(campaniachapter);
 
     ////////////  End New driver
-
 
     final var signature = getChapterTable();
     final var signaturecell1 =

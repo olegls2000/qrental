@@ -5,13 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.Month;
 
-import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
-import ee.qrent.billing.contract.core.service.pdf.ContractToPdfConversionStrategyBefore2025;
 import org.junit.jupiter.api.Test;
 
 class ContractToPdfConversionStrategyBefore2025Test {
-  private ContractToPdfConversionStrategyBefore2025 instanceUnderTest =
-      new ContractToPdfConversionStrategyBefore2025();
+  private LegacyContractToPdfConversionStrategyBefore2025 instanceUnderTest =
+      new LegacyContractToPdfConversionStrategyBefore2025();
 
   @Test
   public void testIfContractStartedBeforeTheNewContractsData() {

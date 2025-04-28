@@ -1,6 +1,9 @@
-package ee.qrent.billing.contract.core.service.pdf;
+package ee.qrent.billing.contract.core.service.pdf.strategy;
 
 import com.lowagie.text.*;
+import ee.qrent.billing.contract.api.out.ContractLoadPort;
+import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.time.LocalDate;
@@ -14,9 +17,37 @@ import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
 import static java.awt.Color.white;
 
+@RequiredArgsConstructor
 public abstract class AbstractContractToPdfConversionStrategy
     implements ContractToPdfConversionStrategy {
-  protected static final LocalDate NEW_CONTRACTS_START_DATE = LocalDate.of(2025, Month.JANUARY, 1);
+  protected static final LocalDate NEW_CONTRACTS_START_DATE = LocalDate.of(2025, Month.APRIL, 28);
+
+  private final ContractLoadPort loadPort;
+
+  protected boolean isContractBeforeNewContractDate(final ContractPdfModel model) {
+    return model.getCreated().isBefore(NEW_CONTRACTS_START_DATE);
+  }
+
+  protected boolean isContractAfterNewContractDate(final ContractPdfModel model) {
+    final var created = model.getCreated();
+
+    return created.isAfter(NEW_CONTRACTS_START_DATE) || created.isEqual(NEW_CONTRACTS_START_DATE);
+  }
+
+  protected boolean isDriverNew(final ContractPdfModel model) {
+    final var driverId = model.getDriverId();
+    final var driversContracts = loadPort.loadAllByDriverId(driverId);
+    if (driversContracts.size() > 1) {
+
+      return false;
+    }
+
+    return true;
+  }
+
+  protected boolean isContractFor12Weeks(final ContractPdfModel model) {
+    return model.getDuration().equals("kaksteist");
+  }
 
   protected void addLhvChapterIfNecessary(
       final ContractPdfModel model, final Document pdfDocument) {

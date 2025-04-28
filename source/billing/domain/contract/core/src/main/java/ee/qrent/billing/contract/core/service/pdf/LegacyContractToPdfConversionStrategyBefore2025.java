@@ -2,7 +2,8 @@ package ee.qrent.billing.contract.core.service.pdf;
 
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
-import lombok.RequiredArgsConstructor;
+import ee.qrent.billing.contract.api.out.ContractLoadPort;
+import ee.qrent.billing.contract.core.service.pdf.strategy.AbstractContractToPdfConversionStrategy;
 import lombok.SneakyThrows;
 
 import java.io.ByteArrayInputStream;
@@ -16,9 +17,12 @@ import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.RIGHT;
 import static java.awt.Color.white;
 
-@RequiredArgsConstructor
-public class ContractToPdfConversionStrategyBefore2025
+public class LegacyContractToPdfConversionStrategyBefore2025
     extends AbstractContractToPdfConversionStrategy {
+
+  public LegacyContractToPdfConversionStrategyBefore2025(ContractLoadPort loadPort) {
+    super(loadPort);
+  }
 
   @Override
   public boolean canApply(final ContractPdfModel contract) {

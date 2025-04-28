@@ -1,30 +1,56 @@
 package ee.qrent.billing.contract.core.service.pdf;
 
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.PdfWriter;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
 import static com.lowagie.text.Font.*;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
 import static java.awt.Color.white;
+import static java.lang.String.format;
+
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfWriter;
+import ee.qrent.billing.contract.api.out.ContractLoadPort;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @RequiredArgsConstructor
-public class ContractToPdfConversionStrategyAfter2024
+public class LegacyContractToPdfConversionStrategyNewDriver
     extends AbstractContractToPdfConversionStrategy {
-  @Override
-  public boolean canApply(final ContractPdfModel contract) {
-    final var contractCreatedDate = contract.getCreated();
 
-    return contractCreatedDate.isAfter(NEW_CONTRACTS_START_DATE)
-        || contractCreatedDate.isEqual(NEW_CONTRACTS_START_DATE);
+  private static final Integer MIN_REQUIRED_WEEKS_IN_CONTRACT = 12;
+
+  private final ContractLoadPort loadPort;
+
+  @Override
+  public boolean canApply(final ContractPdfModel pdfModel) {
+    final var driverId = pdfModel.getDriverId();
+    final var driversContracts = loadPort.loadAllByDriverId(driverId);
+    if (driversContracts.size() != 1) {
+      System.out.println(
+          this.getClass().getSimpleName()
+              + " applicable only for the new Drivers means has only one contract");
+      return false;
+    }
+    final var contract = driversContracts.get(0);
+    final var durationWeeksCount = contract.getContractDuration().getWeeksCount();
+    if (durationWeeksCount != MIN_REQUIRED_WEEKS_IN_CONTRACT) {
+      System.out.println(
+          "Current Strategy applicable only for the new Drivers with 12 Weeks Contract");
+
+      return false;
+    }
+
+    final var startDate = contract.getDateStart();
+    if (startDate.isBefore(NEW_CONTRACTS_START_DATE)) {
+      return false;
+    }
+
+    return true;
   }
 
   @SneakyThrows
@@ -39,7 +65,6 @@ public class ContractToPdfConversionStrategyAfter2024
     pdfDocument.add(getRenterTable(model));
     pdfDocument.add(getTenantTable(model));
     addLhvChapterIfNecessary(model, pdfDocument);
-
     final var chapter1 = getChapterTable();
     chapter1.addCell(getChapterNumber("I"));
     chapter1.addCell(getChapterSummary("Üldsätted"));
@@ -276,7 +301,7 @@ public class ContractToPdfConversionStrategyAfter2024
     rendileandja2.addCell(rendileandja2cell2);
 
     final var rendileandja2cell3 =
-        new Cell(new Paragraph("Kehtivad alates 01.01.2025", new Font(TIMES_ROMAN, 7, BOLD)));
+        new Cell(new Paragraph("Kehtivad alates 03.12.2024", new Font(TIMES_ROMAN, 7, BOLD)));
     rendileandja2cell3.setBorder(NO_BORDER);
     rendileandja2cell3.setHorizontalAlignment(LEFT);
     rendileandja2.addCell(rendileandja2cell3);
@@ -1115,7 +1140,8 @@ public class ContractToPdfConversionStrategyAfter2024
     final var chapter15 = getChapterTable();
     chapter15.addCell(getChapterSummary("Lisa"));
     final var body15acell2 =
-        new Cell(new Paragraph("nr 1.  Trahvid ja kahjutasud", new Font(TIMES_ROMAN, 9, BOLD)));
+        new Cell(
+            new Paragraph("nr 1 p. IIX Trahvid ja kahjutasud", new Font(TIMES_ROMAN, 9, BOLD)));
     body15acell2.setBorder(NO_BORDER);
     body15acell2.setHorizontalAlignment(LEFT);
     chapter15.addCell(body15acell2);
@@ -1155,7 +1181,7 @@ public class ContractToPdfConversionStrategyAfter2024
     chapter15.addCell(body15acell9);
     chapter15.addCell(
         getSubChapterText(
-            "sõiduki juhtimise eest alkoholijoobes (üle 0,00 promilli), narkootiliste ja muude psühhotroopsete ainete mõju"
+            "D.\tsõiduki juhtimise eest alkoholijoobes (üle 0,00 promilli), narkootiliste ja muude psühhotroopsete ainete mõju"
                 + " all (või kui tarvitasite alkoholi või muid joovastavaid aineid pärast liiklusõnnetust, enne kui õnnetuse "
                 + "asjaolud välja selgitati, või vältisite vere alkoholisisalduse mõõtmist või joobetesti tegemist "
                 + "(vere alkoholisisaldust ja joovet mõistetakse nii, nagu on määratletud õigusaktides). "
@@ -1211,6 +1237,109 @@ public class ContractToPdfConversionStrategyAfter2024
                 + " kokkulepitud rendipäeva hinnale lisaks ka remondikulud vastavalt üleandmise-vastuvõtmise "
                 + "aktis märgitud nädala hinnale ning remondiarvele."));
     pdfDocument.add(chapter15);
+
+    final var chapter16 = getChapterTable();
+    chapter16.addCell(getChapterSummary("Lisa"));
+    final var contractNumber = model.getNumber();
+    final var body16acell2 =
+        new Cell(
+            new Paragraph(
+                "nr. 2. Lepingule nr. " + contractNumber, new Font(TIMES_ROMAN, 9, BOLD)));
+    body16acell2.setBorder(NO_BORDER);
+    body16acell2.setHorizontalAlignment(LEFT);
+    chapter16.addCell(body16acell2);
+
+    final var body16acell3 = new Cell(new Paragraph("", new Font(TIMES_ROMAN, 9, NORMAL)));
+    body16acell3.setBorder(NO_BORDER);
+    body16acell3.setHorizontalAlignment(LEFT);
+    chapter16.addCell(body15acell3);
+    chapter16.addCell(
+        getSubChapterText(
+            format(
+                "Käesoleva lepingulisaga reguleerivad pooled Rentniku kasutuses oleva Rendileandja rendiauto rendihinda esimeste järgnevate "
+                    + "12 (kaksteist) täiskalendrinädalate jooksul rendilepingu nr. %s ja  \"Uus Juht\" sooduskampaania alusel.",
+                contractNumber)));
+
+    final var campania = new Table(1);
+    campania.setPadding(0f);
+    campania.setSpacing(0f);
+    campania.setWidth(100f);
+    campania.setBorderColor(white);
+    campania.setHorizontalAlignment(LEFT);
+    campania.setBorder(NO_BORDER);
+    campania.setBorder(NO_BORDER);
+
+    final var campaniacell2 =
+        new Cell(new Paragraph(" Kampaania üldtingimused", new Font(TIMES_ROMAN, 9, BOLD)));
+    campaniacell2.setBorder(NO_BORDER);
+    campaniacell2.setHorizontalAlignment(LEFT);
+    campania.addCell(campaniacell2);
+
+    final var campaniachapter = getChapterTable();
+    campaniachapter.addCell(getChapterNumber("1"));
+    campaniachapter.addCell(
+        getChapterSummary(
+            "Kampaania kestus on 12 (kaksteist) järgnevat täiskalendrinädalat alates "
+                + "rendilepingu allkirjastamise ja auto kättesaamise kuupäevast."));
+
+    campaniachapter.addCell(getChapterNumber("2"));
+    campaniachapter.addCell(
+        getChapterSummary(
+            "Soodustus kehtib ainult uuele juhile, kes on sõlminud rendilepingu "
+                + "Q Rental Group OÜ'ga esimest korda. Samas, ei ole rentnik varem rendiautot Rendileandja poolt renti võtnud."));
+
+    campaniachapter.addCell(getChapterNumber("3"));
+    campaniachapter.addCell(getChapterSummary("Allahindluse arvutamine"));
+
+    campaniachapter.addCell(getSubChapterNumber("3.1"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Nädala auto rendiallahindluse arveldamiseks võtavad pooled aluseks rendiauto üleandmise-vastuvõtmise "
+                + "aktis määratud täiskalendrinädala rendihinda."));
+    campaniachapter.addCell(getSubChapterNumber("3.2"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Käesolevas lepingulisas sätestatud kampaania alusel, saab Rentnik üleandmise-vastuvõtmise aktis "
+                + "määratud kehtivast rendihinnast 25% allahindlust esimese, neljanda, seitsmenda ja üheksanda nädalate renditasu eest (graafik lisatud)."));
+    campaniachapter.addCell(getSubChapterNumber("3.3"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Käesolevas lepingulisas kirjeldatud kampaania alusel, saab Rentnik üleandmise-vastuvõtmise aktis "
+                + "määratud kehtivast rendihinnast 10% allahindlust teise, kolmanda, viienda, kuuenda, kaheksanda, kümnenda, üheteistkümnenda ja kaheteistkümnenda"
+                + " nädalate renditasu eest lähtuvalt (graafik lisatud)."));
+    campaniachapter.addCell(getSubChapterNumber("3.4"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Pooled leppisid kokku, et käesolevas lepingulisas sätestatud allahindluskanne lisatakse juhi saldole "
+                + "ainult siis, kui Rentiku eelmise rendinädala tasu ja tema eelmise nädala võla hüvitamiskohustused on õigeaegselt ja korrektselt tasutud (tasumise "
+                + "kord kirjeldatud p. 3.4.1 ja p 3.4.2)."));
+    campaniachapter.addCell(getSubChapterNumber("3.4.1"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Rentnik kohustub tasuma rendileandjale ettemaksu iga nädala rendi eest sularahas Rendileandja kontoris,"
+                + " mis asub aadressil Lasnamäe 30a, Tallinn, või ülekandega Rendileandja pangakontole (või muule Rendileandja esindajaga maaratud pangakontole) "
+                + "asjakohase selgitusega – ”autorent + auto number”, mitte hiljem, kui iga jooksva nädala teisipäeva kella 16:00’ni."));
+    campaniachapter.addCell(getSubChapterNumber("3.4.2"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Rentnik kohustub oma eelmise perioodi võlakohustuste katteks tasuma täiendavalt 25% kehtivast "
+                + "nädalarendi hinnast, kui sellised võlakohustused on tal olemas."));
+    campaniachapter.addCell(getSubChapterNumber("3.5"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Kui on Rentnikul olemas eelmise nädala eest tasumata kohustused (kirjeldatud p. 3.4.1 ja p 3.4.2), ei lisandu käesoleva lepingulisa"
+                + " punktides 3.2 ja 3.3 sätestatud allahindluskanne Rentniku vastava nädala saldole."));
+    campaniachapter.addCell(getSubChapterNumber("4"));
+    campaniachapter.addCell(
+        getSubChapterText(
+            "Rentnikupoolse käesolevas lisas sätestatud kokkulepe rikkumisel ja rendilepingu ennetähtaegsel lõpetamisel ehk rendilepingus nr 1234 "
+                + "p 14  määratud Renditeenuse osutamise miinimumperioodi tähtaja rikkumisel, on rentnik kohustatud tasuma kampaania rikkumise eest "
+                + "ühekordse leppetrahvi, mis on võrdne käesoleva lepingulisa sätestatud 12-nädalase üldallahindlusega summas 432 eurot. "
+                + "Käesolevas punktis nimetatud leppetrahv on sõltumatu ning puudutab vaid käesolevas kokkulepes määratud kampaaniat. "
+                + "Nimetatud leppetrahvile liisanduvad veel lepingu tüüptingimustes sätestatud kohustused."));
+    pdfDocument.add(campaniachapter);
+
+    ////////////  End New driver
 
     final var signature = getChapterTable();
     final var signaturecell1 =

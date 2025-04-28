@@ -8,6 +8,10 @@ import ee.qrent.billing.contract.core.mapper.ContractResponseMapper;
 import ee.qrent.billing.contract.core.mapper.ContractUpdateRequestMapper;
 import ee.qrent.billing.contract.core.service.*;
 import ee.qrent.billing.contract.core.service.pdf.*;
+import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategy;
+import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers;
+import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyAfterMay2025ForAllDrivers;
+import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyBeforeMay2025;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.common.in.validation.CloseRequestValidator;
@@ -98,10 +102,9 @@ public class ContractServiceConfig {
       final ContractLoadPort loadPort) {
 
     return asList(
-        new ContractToPdfConversionStrategyBefore2025(),
-        new ContractToPdfConversionStrategyAfter2024(),
-        new ContractToPdfConversionStrategyFrom1May2024(),
-        new ContractToPdfConversionStrategyNewDriver(loadPort));
+        new ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers(loadPort),
+        new ContractToPdfConversionStrategyAfterMay2025ForAllDrivers(loadPort),
+        new ContractToPdfConversionStrategyBeforeMay2025(loadPort));
   }
 
   @Bean
@@ -119,7 +122,6 @@ public class ContractServiceConfig {
 
   @Bean
   ContractSendByEmailUseCase getContractSendByEmailUseCase(
-
       final ContractLoadPort invoiceLoadPort,
       final ContractPdfUseCase invoicePdfUseCase,
       final QueueEntryPushUseCase notificationQueuePushUseCase,
