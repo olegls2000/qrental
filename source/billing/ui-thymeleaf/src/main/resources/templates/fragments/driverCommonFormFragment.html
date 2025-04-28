@@ -13,6 +13,74 @@
         }
     </script>
 </div>
+
+<div th:fragment="onChangeLegalEntityScript">
+    <script>
+        function onChangeLegalEntity(legalEntityTypeOptions) {
+            const selectedLegalEntityType = legalEntityTypeOptions.value;
+            const lhvAccount = document.getElementById("lhvAccountId");
+            const companyName = document.getElementById("companyNameId");
+            const companyRegNumber = document.getElementById("companyRegNumberId");
+            const companyVat = document.getElementById("companyVatId");
+            const companyCeoFirstName = document.getElementById("companyCeoFirstNameId");
+            const companyCeoLastName = document.getElementById("companyCeoLastNameId");
+            const companyCeoTaxNumber = document.getElementById("companyCeoTaxNumberId");
+            const companyAddress = document.getElementById("companyAddressId");
+
+            if (selectedLegalEntityType === 'SELF_EMPLOYED') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+
+            if (selectedLegalEntityType === 'LHV_ACCOUNT') {
+                lhvAccount.disabled = false;
+
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+            if (selectedLegalEntityType === 'COMPANY') {
+                companyName.disabled = false;
+                companyRegNumber.disabled = false;
+                companyVat.disabled = false;
+                companyCeoFirstName.disabled = false;
+                companyCeoLastName.disabled = false;
+                companyCeoTaxNumber.disabled = false;
+                companyAddress.disabled = false;
+
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+            }
+        }
+    </script>
+</div>
+
+
 <div th:fragment="legalEntityFragment">
     <script th:inline="javascript">
         function onClickLegalEntityType(legalEntityTypeOptions) {
@@ -177,7 +245,6 @@
     </div>
     <script th:inline="javascript">
         setLegalEntityInputs();
-
         function setLegalEntityInputs() {
             var selectedLegalEntityType = [[${updateRequest.legalEntityType}]];
             updateLegalEntityInputs(selectedLegalEntityType);

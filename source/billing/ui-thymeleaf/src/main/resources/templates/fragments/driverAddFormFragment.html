@@ -9,6 +9,7 @@
 
 <div th:fragment="addForm">
     <div th:replace="fragments/driverCommonFormFragment :: onChangeRequiredObligationScript"></div>
+    <div th:replace="fragments/driverCommonFormFragment :: onChangeLegalEntityScript"></div>
 
     <form method="post"
           th:action="@{/drivers/add}"
@@ -254,7 +255,99 @@
                 </div>
             </div>
         </div>
-        <div th:replace="fragments/driverCommonFormFragment :: legalEntityFragment"></div>
+        <p class="fs-5">Drivers Legal entity:</p>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="self_employed_id"
+                           onclick="onChangeLegalEntity(this)" value="SELF_EMPLOYED"
+                           th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="self_employed_id">Self employed</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="lhv_account_id"
+                           onclick="onChangeLegalEntity(this)" value="LHV_ACCOUNT" th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="lhv_account_id">LHV Bank account</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="company_id"
+                           onclick="onChangeLegalEntity(this)" value="COMPANY" th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="company_id">Company</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="lhvAccountId">LHV Account:</label>
+                    <input class="form-control" id="lhvAccountId" placeholder="Enter LHV Account"
+                           th:field="*{lhvAccount}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyNameId">Company name</label>
+                    <input class="form-control" id="companyNameId" placeholder="Enter Company Name"
+                           th:field="*{companyName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyRegNumberId">Registration Number</label>
+                    <input class="form-control" id="companyRegNumberId" placeholder="Enter Registration Number"
+                           th:field="*{regNumber}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyVatId">VAT</label>
+                    <input class="form-control" id="companyVatId" placeholder="Enter VAT"
+                           th:field="*{companyVat}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoFirstNameId">CEO first name</label>
+                    <input class="form-control" id="companyCeoFirstNameId" placeholder="Enter first name"
+                           th:field="*{companyCeoFirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoLastNameId">CEO last name</label>
+                    <input class="form-control" id="companyCeoLastNameId" placeholder="Enter last name"
+                           th:field="*{companyCeoLastName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoTaxNumberId">CEO isikukood</label>
+                    <input class="form-control" id="companyCeoTaxNumberId" placeholder="Enter tax number"
+                           th:field="*{companyCeoTaxNumber}"
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="companyAddressId">Address</label>
+            <input class="form-control" id="companyAddressId" placeholder="Enter Address"
+                   th:field="*{companyAddress}"
+                   type="text"/>
+        </div>
         <div class="form-group">
             <div class="mb-3">
                 <label class="form-label text-muted" for="commentId">Comment</label>
@@ -266,9 +359,7 @@
         </div>
 
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
-            submitValue='Add',
-            cancelHref='/drivers'
-        )">
+            submitValue='Add')">
         </div>
     </form>
 </div>
