@@ -33,8 +33,6 @@ class InsuranceCaseCloseUseCaseServiceTest {
   private InsuranceCaseUpdatePort updatePort;
   private InsuranceCaseLoadPort loadPort;
   private InsuranceCaseCloseRequestValidator closeRuleValidator;
-  private GetQKaskoQuery getQKaskoQuery;
-  private GetQWeekQuery qWeekQuery;
   private GetDriverQuery driverQuery;
   private GetTransactionQuery transactionQuery;
   private GetTransactionTypeQuery transactionTypeQuery;
@@ -46,8 +44,6 @@ class InsuranceCaseCloseUseCaseServiceTest {
     updatePort = mock(InsuranceCaseUpdatePort.class);
     loadPort = mock(InsuranceCaseLoadPort.class);
     closeRuleValidator = mock(InsuranceCaseCloseRequestValidator.class);
-    getQKaskoQuery = mock(GetQKaskoQuery.class);
-    qWeekQuery = mock(GetQWeekQuery.class);
     driverQuery = mock(GetDriverQuery.class);
     transactionQuery = mock(GetTransactionQuery.class);
     transactionTypeQuery = mock(GetTransactionTypeQuery.class);
@@ -58,8 +54,6 @@ class InsuranceCaseCloseUseCaseServiceTest {
             updatePort,
             loadPort,
             closeRuleValidator,
-            getQKaskoQuery,
-            qWeekQuery,
             driverQuery,
             transactionQuery,
             transactionTypeQuery,
@@ -68,11 +62,10 @@ class InsuranceCaseCloseUseCaseServiceTest {
   }
 
   @Test
-  public void testPreCloseResponseWithoutQKasko() {
+  public void testPreCloseResponse() {
     // given
     final var insuranceCaseId = 55L;
     final var driverId = 44L;
-    final var qWeekId = 33L;
     when(loadPort.loadById(insuranceCaseId))
         .thenReturn(
             InsuranceCase.builder()
@@ -81,8 +74,6 @@ class InsuranceCaseCloseUseCaseServiceTest {
                 .driverId(driverId)
                 .build());
     when(driverQuery.getObjectInfo(driverId)).thenReturn("Driver Object Info");
-    when(qWeekQuery.getCurrentWeek()).thenReturn(QWeekResponse.builder().id(qWeekId).build());
-    when(getQKaskoQuery.hasQKasko(driverId, qWeekId)).thenReturn(FALSE);
     when(transactionQuery.getAllByInsuranceCaseId(insuranceCaseId))
         .thenReturn(
             asList(
@@ -97,78 +88,8 @@ class InsuranceCaseCloseUseCaseServiceTest {
     assertEquals(55L, result.getInsuranceCaseId());
     assertEquals(44L, result.getDriverId());
     assertEquals("Driver Object Info", result.getDriverInfo());
-    assertEquals(false, result.getWithQKasko());
     assertEquals(BigDecimal.valueOf(3000), result.getOriginalAmount());
     assertEquals(BigDecimal.valueOf(510), result.getPaidAmount());
     assertTrue(BigDecimal.valueOf(2490).compareTo(result.getPaymentAmount()) == 0);
-  }
-
-  @Test
-  public void testPreCloseResponseWithQKasko() {
-    // given
-    final var insuranceCaseId = 55L;
-    final var driverId = 44L;
-    final var qWeekId = 33L;
-    when(loadPort.loadById(insuranceCaseId))
-        .thenReturn(
-            InsuranceCase.builder()
-                .id(insuranceCaseId)
-                .damageAmount(BigDecimal.valueOf(3500))
-                .driverId(driverId)
-                .build());
-    when(driverQuery.getObjectInfo(driverId)).thenReturn("Driver Object Info");
-    when(qWeekQuery.getCurrentWeek()).thenReturn(QWeekResponse.builder().id(qWeekId).build());
-    when(getQKaskoQuery.hasQKasko(driverId, qWeekId)).thenReturn(TRUE);
-    when(transactionQuery.getAllByInsuranceCaseId(insuranceCaseId))
-        .thenReturn(
-            asList(
-                TransactionResponse.builder().realAmount(BigDecimal.valueOf(-310)).build(),
-                TransactionResponse.builder().realAmount(BigDecimal.valueOf(-200)).build()));
-
-    // when
-    final var result = instanceUnderTest.getPreCloseResponse(insuranceCaseId);
-
-    // then
-    assertNotNull(result);
-    assertEquals(55L, result.getInsuranceCaseId());
-    assertEquals(44L, result.getDriverId());
-    assertEquals("Driver Object Info", result.getDriverInfo());
-    assertEquals(true, result.getWithQKasko());
-    assertEquals(BigDecimal.valueOf(3500), result.getOriginalAmount());
-    assertEquals(BigDecimal.valueOf(510), result.getPaidAmount());
-    assertTrue(BigDecimal.valueOf(990).compareTo(result.getPaymentAmount()) == 0);
-  }
-
-  @Test
-  public void testPreCloseResponseWithQKaskoButLessThenSelfResponsibility() {
-    // given
-    final var insuranceCaseId = 55L;
-    final var driverId = 44L;
-    final var qWeekId = 33L;
-    when(loadPort.loadById(insuranceCaseId))
-        .thenReturn(
-            InsuranceCase.builder()
-                .id(insuranceCaseId)
-                .damageAmount(BigDecimal.valueOf(500))
-                .driverId(driverId)
-                .build());
-    when(driverQuery.getObjectInfo(driverId)).thenReturn("Driver Object Info");
-    when(qWeekQuery.getCurrentWeek()).thenReturn(QWeekResponse.builder().id(qWeekId).build());
-    when(getQKaskoQuery.hasQKasko(driverId, qWeekId)).thenReturn(TRUE);
-    when(transactionQuery.getAllByInsuranceCaseId(insuranceCaseId))
-        .thenReturn(Collections.emptyList());
-
-    // when
-    final var result = instanceUnderTest.getPreCloseResponse(insuranceCaseId);
-
-    // then
-    assertNotNull(result);
-    assertEquals(55L, result.getInsuranceCaseId());
-    assertEquals(44L, result.getDriverId());
-    assertEquals("Driver Object Info", result.getDriverInfo());
-    assertEquals(true, result.getWithQKasko());
-    assertEquals(BigDecimal.valueOf(500), result.getOriginalAmount());
-    assertEquals(BigDecimal.valueOf(0), result.getPaidAmount());
-    assertTrue(BigDecimal.valueOf(500).compareTo(result.getPaymentAmount()) == 0);
   }
 }
