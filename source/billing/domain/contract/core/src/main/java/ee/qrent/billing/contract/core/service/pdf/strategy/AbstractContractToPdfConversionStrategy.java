@@ -29,9 +29,9 @@ public abstract class AbstractContractToPdfConversionStrategy
   }
 
   protected boolean isContractAfterNewContractDate(final ContractPdfModel model) {
-    final var created = model.getCreated();
+    final var dateStart = model.getDateStart();
 
-    return created.isAfter(NEW_CONTRACTS_START_DATE) || created.isEqual(NEW_CONTRACTS_START_DATE);
+    return dateStart.isAfter(NEW_CONTRACTS_START_DATE) || dateStart.isEqual(NEW_CONTRACTS_START_DATE);
   }
 
   protected boolean isDriverNew(final ContractPdfModel model) {

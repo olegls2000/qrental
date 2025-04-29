@@ -15,6 +15,7 @@ public class ContractToPdfModelMapper {
         .driverId(contract.getDriverId())
         .durationWeeksCount(contract.getContractDuration().getWeeksCount())
         .number(contract.getNumber())
+         .dateStart(contract.getDateStart())
         .duration(duration)
         .duration1(duration1)
         .renterName(contract.getRenterName())
