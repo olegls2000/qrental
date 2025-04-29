@@ -19,16 +19,14 @@ import lombok.SneakyThrows;
 public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     extends AbstractContractToPdfConversionStrategy {
 
-  public ContractToPdfConversionStrategyAfterMay2025ForAllDrivers(ContractLoadPort loadPort) {
+  public ContractToPdfConversionStrategyAfterMay2025ForAllDrivers(final ContractLoadPort loadPort) {
     super(loadPort);
   }
 
   @Override
   public boolean canApply(final ContractPdfModel model) {
 
-    return isContractAfterNewContractDate(model)
-        && !isDriverNew(model)
-        && !isContractFor12Weeks(model);
+    return isContractAfterNewContractDate(model) && !isDriverNew(model);
   }
 
   @SneakyThrows

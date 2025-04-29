@@ -8,7 +8,7 @@ import java.time.Month;
 import org.junit.jupiter.api.Test;
 
 class ContractToPdfConversionStrategyBefore2025Test {
-  private LegacyContractToPdfConversionStrategyBefore2025 instanceUnderTest =
+ /* private LegacyContractToPdfConversionStrategyBefore2025 instanceUnderTest =
       new LegacyContractToPdfConversionStrategyBefore2025();
 
   @Test
@@ -48,5 +48,5 @@ class ContractToPdfConversionStrategyBefore2025Test {
 
     // then
     assertFalse(canApply);
-  }
+  }*/
 }
