@@ -16,6 +16,7 @@ import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
 import static java.awt.Color.white;
+import static java.lang.String.format;
 
 @RequiredArgsConstructor
 public abstract class AbstractContractToPdfConversionStrategy
@@ -23,6 +24,39 @@ public abstract class AbstractContractToPdfConversionStrategy
   protected static final LocalDate NEW_CONTRACTS_START_DATE = LocalDate.of(2025, Month.APRIL, 28);
 
   private final ContractLoadPort loadPort;
+
+  protected String getDuration(final ContractPdfModel model){
+    switch (model.getDuration()){
+      case  "FOUR_WEEKS":
+        return "neli";
+      case "TWELVE_WEEKS":
+        return "kaksteist";
+      default:
+        throw new RuntimeException("Unknown duration: " + model.getDuration());
+    }
+  }
+
+  protected String getNoticePeriod(final ContractPdfModel model){
+    switch (model.getDuration()){
+      case  "FOUR_WEEKS":
+        return "kaks";
+      case "TWELVE_WEEKS":
+        return "neli";
+      default:
+        throw new RuntimeException("Unknown duration: " + model.getDuration());
+    }
+  }
+
+  protected String getNoticePeriod1(final ContractPdfModel model){
+    switch (model.getDuration()){
+      case  "FOUR_WEEKS":
+        return "kahe";
+      case "TWELVE_WEEKS":
+        return "nelja";
+      default:
+        throw new RuntimeException("Unknown duration: " + model.getDuration());
+    }
+  }
 
   protected boolean isContractBeforeNewContractDate(final ContractPdfModel model) {
     return model.getCreated().isBefore(NEW_CONTRACTS_START_DATE);
@@ -46,7 +80,7 @@ public abstract class AbstractContractToPdfConversionStrategy
   }
 
   protected boolean isContractFor12Weeks(final ContractPdfModel model) {
-    return model.getDuration().equals("kaksteist");
+    return model.getDuration().equals("TWELVE_WEEKS");
   }
 
   protected void addLhvChapterIfNecessary(
@@ -54,6 +88,7 @@ public abstract class AbstractContractToPdfConversionStrategy
     if (model.getRenterLhvAccount() != null) {
       final var chapterLhv = getChapterTable();
       final var lhvAccount = model.getRenterLhvAccount();
+      chapterLhv.addCell(getSubChapterText(""));
       chapterLhv.addCell(
           getSubChapterText(
               "Lepingu allkirjastamisega kinnitab rentnik, et kavatseb rendileandja rendiautot kasutades teostada oma äritegevust ning on ta selleks loonud LHV ettevõtluskonto järgmise numbriga: "
@@ -208,7 +243,20 @@ public abstract class AbstractContractToPdfConversionStrategy
 
   protected static Table getChapterTable() {
     final var chapter = new Table(2);
-    chapter.setWidths(new float[] {1, 20});
+    chapter.setWidths(new float[] {7, 100});
+    chapter.setPadding(0f);
+    chapter.setSpacing(0f);
+    chapter.setWidth(100f);
+    chapter.setBorderColor(white);
+    chapter.setHorizontalAlignment(LEFT);
+    chapter.setBorder(NO_BORDER);
+
+    return chapter;
+  }
+
+  protected static Table get1columnTable() {
+    final var chapter = new Table(1);
+    chapter.setWidths(new float[] {100});
     chapter.setPadding(0f);
     chapter.setSpacing(0f);
     chapter.setWidth(100f);

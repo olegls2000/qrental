@@ -106,6 +106,8 @@ public class DriverUseCaseController {
     updateUseCase.update(updateRequest);
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);
+      addCallSignOptionsToModel(model, updateRequest);
+      addRecommendedByOptionsToModel(model);
 
       return "forms/updateDriver";
     }

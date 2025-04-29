@@ -7,8 +7,6 @@ public class ContractToPdfModelMapper {
 
   public ContractPdfModel getPdfModel(final Contract contract) {
 
-    final var duration = getStringDuration(contract.getContractDuration());
-
     final var duration1 = getStringDuration1(contract.getContractDuration());
 
     return ContractPdfModel.builder()
@@ -16,7 +14,7 @@ public class ContractToPdfModelMapper {
         .durationWeeksCount(contract.getContractDuration().getWeeksCount())
         .number(contract.getNumber())
          .dateStart(contract.getDateStart())
-        .duration(duration)
+        .duration(contract.getContractDuration().name())
         .duration1(duration1)
         .renterName(contract.getRenterName())
         .renterLhvAccount(contract.getRenterLhvAccount())
@@ -42,13 +40,6 @@ public class ContractToPdfModelMapper {
         .carManufacturer(contract.getCarManufacturer())
         .carModel(contract.getCarModel())
         .build();
-  }
-
-  private String getStringDuration(final ContractDuration contractDuration) {
-    return switch (contractDuration) {
-      case FOUR_WEEKS -> "neli";
-      case TWELVE_WEEKS -> "kaksteist";
-    };
   }
 
   private String getStringDuration1(final ContractDuration contractDuration) {
