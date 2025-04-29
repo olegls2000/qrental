@@ -65,6 +65,8 @@ public class DriverUseCaseController {
 
     if (addRequest.hasViolations()) {
       model.addAttribute(ADD_REQUEST_ATTRIBUTE, addRequest);
+      addQFirmsToModel(model);
+      addCallSignOptionsToModel(model);
 
       return "forms/addDriver";
     }
