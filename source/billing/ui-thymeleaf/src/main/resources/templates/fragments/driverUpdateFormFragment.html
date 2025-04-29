@@ -110,8 +110,9 @@
                            for="qFirmId">Select Q-Firm</label>
                     <select id="qFirmId"
                             class="form-select"
+                            required
                             onchange="onChangeContractData()"
-                            th:field="*{qFirmId}">
+                            th:field="*{qFirmId}" >
                         <option th:each="qFirm : ${qFirms}"
                                 th:value="${qFirm.id}"
                                 th:text="${qFirm.name}"></option>
