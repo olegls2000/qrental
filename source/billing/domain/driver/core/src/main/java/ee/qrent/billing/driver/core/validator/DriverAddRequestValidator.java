@@ -45,6 +45,9 @@ public class DriverAddRequestValidator extends AbstractDriverRequestValidator
     if (request.getLegalEntityType().equals(LegalEntityType.LHV_ACCOUNT.name())) {
       checkLhvAccount(request.getLhvAccount(), violationsCollector);
     }
+    if (request.getLegalEntityType().equals(LegalEntityType.SELF_EMPLOYED.name())) {
+      checkRegistrationNumber(request.getRegNumber(), violationsCollector);
+    }
     checkComment(request.getComment(), violationsCollector);
 
     return violationsCollector;
