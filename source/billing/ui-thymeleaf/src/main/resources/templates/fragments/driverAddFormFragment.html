@@ -259,6 +259,14 @@
         <div class="row mb-3">
             <div class="col">
                 <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="person_id"
+                           onclick="onChangeLegalEntity(this)" value="PERSON"
+                           th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="person_id">Person</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="self_employed_id"
                            onclick="onChangeLegalEntity(this)" value="SELF_EMPLOYED"
                            th:field="*{legalEntityType}">

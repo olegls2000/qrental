@@ -27,6 +27,25 @@
             const companyCeoTaxNumber = document.getElementById("companyCeoTaxNumberId");
             const companyAddress = document.getElementById("companyAddressId");
 
+            if (selectedLegalEntityType === 'PERSON') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+
             if (selectedLegalEntityType === 'SELF_EMPLOYED') {
                 lhvAccount.disabled = true;
                 lhvAccount.value = "";
@@ -98,6 +117,25 @@
             const companyCeoTaxNumber = document.getElementById("companyCeoTaxNumberId");
             const companyAddress = document.getElementById("companyAddressId");
 
+            if (selectedLegalEntityType === 'PERSON') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+
             if (selectedLegalEntityType === 'SELF_EMPLOYED') {
                 lhvAccount.disabled = true;
                 lhvAccount.value = "";
@@ -152,6 +190,14 @@
 
     <p class="fs-5">Drivers Legal entity:</p>
     <div class="row mb-3">
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="person_id"
+                       onclick="onClickLegalEntityType(this)" value="PERSON"
+                       th:field="*{legalEntityType}">
+                <label class="form-check-label text-muted" for="person_id">Person</label>
+            </div>
+        </div>
         <div class="col">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="self_employed_id"

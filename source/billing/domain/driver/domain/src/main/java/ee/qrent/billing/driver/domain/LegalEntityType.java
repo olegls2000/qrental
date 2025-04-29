@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum LegalEntityType {
   NOT_DEFINED("Not defined"),
+  PERSON("Person"),
   LHV_ACCOUNT("LHV Bank account"),
   SELF_EMPLOYED("Self employed"),
   COMPANY("Company");

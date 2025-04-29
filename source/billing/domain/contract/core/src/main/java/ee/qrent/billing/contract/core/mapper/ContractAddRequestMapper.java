@@ -42,6 +42,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .id(null)
         .number(contractNumber)
         .renterName(renterName)
+
         .renterLhvAccount(driver.getLhvAccount())
         .renterRegistrationNumber(renterRegistrationNumber)
         .renterCeoName(renterCeoName)
@@ -78,13 +79,40 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
   }
 
   private String getRenterName(final DriverResponse driver) {
-    final var driverCompanyName = driver.getCompanyName();
-    if (driverCompanyName == null || driverCompanyName.isEmpty()) {
-      final var driverFirstName = driver.getFirstName();
-      final var driverLastName = driver.getLastName();
-      return format("%s %s", driverFirstName, driverLastName);
+    final var legalEntity = driver.getLegalEntityType();
+    final var driverFirstName = driver.getFirstName();
+    final var driverLastName = driver.getLastName();
+
+    switch (legalEntity) {
+      case "PERSON":
+        return format("%s %s", driverFirstName, driverLastName);
+      case "SELF_EMPLOYED":
+        return format("%s %s FIE", driverFirstName, driverLastName);
+      case "LHV_ACCOUNT":
+        return format("%s %s", driverFirstName, driverLastName);
+      case "COMPANY":
+        return driver.getCompanyCeoName();
+      default:
+        throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
     }
-    return driverCompanyName;
+  }
+
+  private Long getRenterTaxNumber(final DriverResponse driver) {
+    final var legalEntity = driver.getLegalEntityType();
+    final var driverTaxNumber = driver.getIsikukood();
+
+    switch (legalEntity) {
+      case "PERSON":
+        return driverTaxNumber;
+      case "SELF_EMPLOYED":
+        return driverTaxNumber;
+      case "LHV_ACCOUNT":
+        return driverTaxNumber;
+      case "COMPANY":
+        return driver.getCompanyCeoTaxNumber();
+      default:
+        throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    }
   }
 
   private Long getCompanyCeoTaxNumber(final DriverResponse driver) {

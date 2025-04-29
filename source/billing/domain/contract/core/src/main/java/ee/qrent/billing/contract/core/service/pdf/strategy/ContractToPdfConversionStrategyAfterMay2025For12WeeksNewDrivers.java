@@ -295,7 +295,9 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(getSubChapterNumber("4.6.1"));
     chapter4.addCell(
         getSubChapterText(
-            " Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja (Uus Rentnik 12345678910) avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
+            " Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja ("
+                + model.getRenterName()
+                + " 12345678910) avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
     chapter4.addCell(getSubChapterNumber("4.6.2"));
     chapter4.addCell(
         getSubChapterText(
@@ -500,7 +502,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.2"));
     campaniachapter.addCell(
         getSubChapterText(
-                """
+            """
                         2.2 Rentnik saab rendihinna alusel rahalise boonuse järgmiselt (täpsem boonusgraafik on lisatud käesolevale lisale):
                         – 25% boonus 1., 4., 7. ja 9. nädala eest;
                         – 10% boonus 2., 3., 5., 6., 8., 10., 11. ja 12. nädala eest.
@@ -515,7 +517,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.4"));
     campaniachapter.addCell(
         getSubChapterText(
-                """
+            """
                          Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:
                         – kas sularahas Rendileandja kontoris aadressil Lasnamäe 30a, Tallinn,
                         – või ülekandega Rendileandja pangakontole (või muule määratud kontole),\
