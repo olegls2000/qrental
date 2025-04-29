@@ -15,7 +15,6 @@ import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
@@ -56,21 +55,18 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
             "Lepingu põhitingimused ja kasutatavate mõistete selgitused on toodud lepingu üldtingimustes ja nende lisades, mis on käesoleva lepingu lahutamatuks osaks. "
                 + "Rentnik kinnitab, et on tutvunud käesoleva lepingu tingimustega, “Tüüptingimused” lepingulisa tingimustega ja “TSK Tingimused” lepingulisa tingimustega, mõistab neid ja on nendega nõus."));
     chapter1.addCell(getSubChapterNumber("1.2"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa “Tüüptingimused” nr. 25042025 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:41:26 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tüüptingimused/tt_dig_allkiri_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tüüptingimused/tt_pdf_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.2"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
@@ -128,16 +124,18 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
         getSubChapterText(
             "Rentnik kinnitab oma allkirjaga tema nõusolekut osaleda Rendileandja korraldatavates boonuskampaaniates. Nende boonuskampaaniate toimumise ajad ja tingimused ei ole eelnevalt kindlaks määratud "
                 + "ning Rentnik nõustub, et Rendileandja võib nende toimumisel ja Rentniku vastuväidete puudumisel teha korrigeerivaid kandeid Rentniku saldole. Rentnik tunnistab, et selliste boonuskannete tegemine ei ole Rendileandja kohustus ning Rendileandja võib neid igal ajal omal äranägemisel alustada, jätkata või lõpetada. Samal ajal, käesoleva kalendrinädala mistahes boonuskampaania aktiveerimise tingimusteks on Rentnikupoolne õigeaegne ja täielik eelmise nädala renditasu tasumine ning käesolevas lepingus määratud võlakohustuste osa hüvitamine (hüvitamise kord on kirjeldatud punktides 3.4 ja 3.5)."));
-    // TODO 12 4
     chapter1.addCell(getSubChapterNumber("1.13"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesolev leping on tähtajatu. Samal ajal, Rendileandja poolt käesoleva koostöölepingu alusel osutatava renditeenuse miinimumperiood on kaksteist (neli) järjestikut täispika kalendrinädalat, mille eest peab renditeenuse maksumus olema tasutud. Renditeenuse osutamise miinimumperioodi arvestus algab kuupäevast, mis on määratud käesoleva lepingu alusel koostatud esimese rendiauto üleandmise-vastuvõtmise aktis, juhul kui see akt allkirjastatakse lepingu sõlmimise päeval või hiljem. Kui Rentnikul on lepingu allkirjastamise hetkel Rendileandja rendiauto juba kasutuses, algab miinimumperioodi arvestus käesoleva lepingu allkirjastamise kuupäevast."));
-    // TODO 12 4
+            "Käesolev leping on tähtajatu. Samal ajal, Rendileandja poolt käesoleva koostöölepingu alusel osutatava renditeenuse miinimumperiood on "
+                + getDuration(model)
+                + " järjestikut täispika kalendrinädalat, mille eest peab renditeenuse maksumus olema tasutud. Renditeenuse osutamise miinimumperioodi arvestus algab kuupäevast, mis on määratud käesoleva lepingu alusel koostatud esimese rendiauto üleandmise-vastuvõtmise aktis, juhul kui see akt allkirjastatakse lepingu sõlmimise päeval või hiljem. Kui Rentnikul on lepingu allkirjastamise hetkel Rendileandja rendiauto juba kasutuses, algab miinimumperioodi arvestus käesoleva lepingu allkirjastamise kuupäevast."));
     chapter1.addCell(getSubChapterNumber("1.14"));
     chapter1.addCell(
         getSubChapterText(
-            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt neli (kaks) täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise nelja (kahe) täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul (neli (kaks) täispika kalendrinädalat) ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
+            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt neli (kaks) täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise "
+                + getNoticePeriod1(model)
+                + " täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul (neli (kaks) täispika kalendrinädalat) ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
     pdfDocument.add(chapter1);
 
     final var chapter2 = getChapterTable();
@@ -145,21 +143,18 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter2.addCell(getChapterSummary("Täiendava sisekindlustus (edaspidi TSK)"));
     chapter2.addCell(getSubChapterNumber("2.1"));
     chapter2.addCell(
-        // TODO  www.111.222.333
         getSubChapterText(
             " Käesoleva lepingulisa “TSK Tingimused” nr.250425 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:38:34 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_dig_allkiri_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.1"));
     chapter2.addCell(
-        // TODO  www.111.222.333
         getSubChapterText(
             "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_pdf_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.2"));
     chapter2.addCell(
-        // TODO  www.111.222.333
         getSubChapterText(
             "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_pdf_rus"
@@ -278,11 +273,12 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(
         getSubChapterText(
             "Rentnik on kohustatud toimetama rendiauto tehnilisele hooldusele SMS-sõnumis ja/või e-kirjas märgitud ajaks, mis on talle saadetud käesolevas lepingus märgitud kontaktandmete alusel. Hooldus toimub aadressil Lasnamäe 30a, Tallinn, Brisko OÜ töökojas. Pooled on kokku leppinud, et eelmainitud teade ei tohi olla saadetud varem kui 18 tundi enne hoolduse toimumise aega. Juhul kui Rentnik ei saa tuua sõidukit hooldusesse määratud ajaks, on ta kohustatud sellest teatama hiljemalt 3 tunni jooksul pärast vastava teate saamist ja mitte hiljem kui teate saamise päeval kell 18:00. Kui Rentnik ei täida seda tingimust õigeks ajaks vääramatu jõu puudumisel, on Rendileandjal õigus nõuda Rentnikult trahvi summas 30 eurot."));
-    // TODO 12 4
     chapter4.addCell(getSubChapterNumber("4.4.3"));
     chapter4.addCell(
         getSubChapterText(
-            " Käesoleva lepingu allkirjastamisega kinitab Rentnik, et on ta teadlik ja nõus järgmise tingimusega: Käesolevas lepingus punktis 4.4.1 kirjeldatud tingimuste loomine ja järgneva rendiauto kõrvaldamine Rentniku kasutusest võrdsustatakse Rentniku poolt lepingu lõpetamisest teatamisega, mis on kirjeldatud käesoleva lepingu punktis 1.14. Seetõttu jõustub käesoleva lepingu punktis 1.14 toodud tingimus, mis kohustab Rentnikku tasuma renditasu järgnevate nelja (kahe) täispika kalendrinädala eest pärast eespool kirjeldatud Rentniku poolt lepingu lõpetamisest teatamist."));
+            " Käesoleva lepingu allkirjastamisega kinitab Rentnik, et on ta teadlik ja nõus järgmise tingimusega: Käesolevas lepingus punktis 4.4.1 kirjeldatud tingimuste loomine ja järgneva rendiauto kõrvaldamine Rentniku kasutusest võrdsustatakse Rentniku poolt lepingu lõpetamisest teatamisega, mis on kirjeldatud käesoleva lepingu punktis 1.14. Seetõttu jõustub käesoleva lepingu punktis 1.14 toodud tingimus, mis kohustab Rentnikku tasuma renditasu järgnevate "
+                + getNoticePeriod1(model)
+                + " täispika kalendrinädala eest pärast eespool kirjeldatud Rentniku poolt lepingu lõpetamisest teatamist."));
     chapter4.addCell(getSubChapterNumber("4.4.4"));
     chapter4.addCell(
         getSubChapterText(
@@ -504,9 +500,11 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.2"));
     campaniachapter.addCell(
         getSubChapterText(
-            "2.2 Rentnik saab rendihinna alusel rahalise boonuse järgmiselt (täpsem boonusgraafik on lisatud käesolevale lisale):\n"
-                + "– 25% boonus 1., 4., 7. ja 9. nädala eest;\n"
-                + "– 10% boonus 2., 3., 5., 6., 8., 10., 11. ja 12. nädala eest.\n   "));
+                """
+                        2.2 Rentnik saab rendihinna alusel rahalise boonuse järgmiselt (täpsem boonusgraafik on lisatud käesolevale lisale):
+                        – 25% boonus 1., 4., 7. ja 9. nädala eest;
+                        – 10% boonus 2., 3., 5., 6., 8., 10., 11. ja 12. nädala eest.
+                          \s"""));
 
     campaniachapter.addCell(getSubChapterNumber("2.3"));
     campaniachapter.addCell(
@@ -517,10 +515,12 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.4"));
     campaniachapter.addCell(
         getSubChapterText(
-            " Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:\n"
-                + "– kas sularahas Rendileandja kontoris aadressil Lasnamäe 30a, Tallinn,\n"
-                + "– või ülekandega Rendileandja pangakontole (või muule määratud kontole),"
-                + " märkides selgituseks „autorent + auto number“, hiljemalt teisipäevaks kell 16:00 jooksva nädala eest.\n "));
+                """
+                         Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:
+                        – kas sularahas Rendileandja kontoris aadressil Lasnamäe 30a, Tallinn,
+                        – või ülekandega Rendileandja pangakontole (või muule määratud kontole),\
+                         märkides selgituseks „autorent + auto number“, hiljemalt teisipäevaks kell 16:00 jooksva nädala eest.
+                        \s"""));
 
     campaniachapter.addCell(getSubChapterNumber("2.5"));
     campaniachapter.addCell(

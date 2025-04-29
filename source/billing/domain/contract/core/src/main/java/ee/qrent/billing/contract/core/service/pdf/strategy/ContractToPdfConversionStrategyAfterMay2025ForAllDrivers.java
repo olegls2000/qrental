@@ -13,7 +13,6 @@ import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
@@ -51,21 +50,18 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
             "Lepingu põhitingimused ja kasutatavate mõistete selgitused on toodud lepingu üldtingimustes ja nende lisades, mis on käesoleva lepingu lahutamatuks osaks. "
                 + "Rentnik kinnitab, et on tutvunud käesoleva lepingu tingimustega, “Tüüptingimused” lepingulisa tingimustega ja “TSK Tingimused” lepingulisa tingimustega, mõistab neid ja on nendega nõus."));
     chapter1.addCell(getSubChapterNumber("1.2"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa “Tüüptingimused” nr. 25042025 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:41:26 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tüüptingimused/tt_dig_allkiri_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tüüptingimused/tt_pdf_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.2"));
-    // TODO  www.111.222.333
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
