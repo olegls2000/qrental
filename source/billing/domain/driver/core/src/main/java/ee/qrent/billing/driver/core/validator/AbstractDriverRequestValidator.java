@@ -190,6 +190,12 @@ public abstract class AbstractDriverRequestValidator {
     violationsCollector.collect("Invalid email pattern,please follow the example: email@gmail.com");
   }
 
+  protected void checkQFirm(
+      final Long attributeValue, final ViolationsCollector violationsCollector) {
+    final var attributeName = "Q Firm";
+    attributeChecker.checkRequired(attributeName, attributeValue, violationsCollector);
+  }
+
   protected void checkCompanyName(
       final String attributeValue, final ViolationsCollector violationsCollector) {
     final var attributeName = "Company name";
@@ -260,10 +266,10 @@ public abstract class AbstractDriverRequestValidator {
   }
 
   protected void checkLhvAccount(
-          final String attributeValue, final ViolationsCollector violationsCollector) {
+      final String attributeValue, final ViolationsCollector violationsCollector) {
     final var attributeName = "LHV Account";
     attributeChecker.checkRequired(attributeName, attributeValue, violationsCollector);
     attributeChecker.checkStringLengthFixed(
-            attributeName, attributeValue, LENGTH_FIXED_LHV_ACCOUNT, violationsCollector);
+        attributeName, attributeValue, LENGTH_FIXED_LHV_ACCOUNT, violationsCollector);
   }
 }

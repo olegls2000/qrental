@@ -46,6 +46,7 @@ public class DriverUpdateRequestValidator extends AbstractDriverRequestValidator
     checkTaxiLicense(request.getTaxiLicense(), violationsCollector);
     checkPhoneNumber(request.getPhone(), violationsCollector);
     checkEmail(request.getEmail(), violationsCollector);
+    checkQFirm(request.getQFirmId(), violationsCollector);
     if (request.getLegalEntityType().equals(LegalEntityType.COMPANY.name())) {
       checkCompanyName(request.getCompanyName(), violationsCollector);
       checkRegistrationNumber(request.getRegNumber(), violationsCollector);
