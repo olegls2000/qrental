@@ -48,24 +48,25 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     chapter1.addCell(
         getSubChapterText(
             "Lepingu põhitingimused ja kasutatavate mõistete selgitused on toodud lepingu üldtingimustes ja nende lisades, mis on käesoleva lepingu lahutamatuks osaks. "
-                + "Rentnik kinnitab, et on tutvunud käesoleva lepingu tingimustega, “Tüüptingimused” lepingulisa tingimustega ja “TSK Tingimused” lepingulisa tingimustega, mõistab neid ja on nendega nõus."));
+                + "Rentnik kinnitab, et on tutvunud käesoleva lepingu tingimustega, “Tüüptingimused” lepingulisa tingimustega ja “TSK Tingimused” lepingulisa tingimustega, mõistab" +
+                    " neid ja on nendega nõus."));
     chapter1.addCell(getSubChapterNumber("1.2"));
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa “Tüüptingimused” nr. 25042025 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:41:26 +00:00) ning on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tüüptingimused/tt_dig_allkiri_est"));
+                + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tüüptingimused/tt_pdf_est"));
+                + "www.qrent.ee/tuuptingimused/tt_pdf_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.2"));
     chapter1.addCell(
         getSubChapterText(
             "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tüüptingimused/tt_pdf_rus"
+                + "www.qrent.ee/tuuptingimused/tt_pdf_rus"
                 + "(tõlge võib olla ebatäpne ja on üksnes informatiivse tähendusega)"));
 
     chapter1.addCell(getSubChapterNumber("1.3"));
@@ -427,7 +428,7 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
 
     pdfDocument.add(chapter5);
 
-    final var signature = getChapterTable();
+    final var signature = getOneColumnTable();
     final var signaturecell1 =
         new Cell(new Paragraph("RENDILEANDJA:  ", new Font(TIMES_ROMAN, 9, BOLD)));
     signaturecell1.setBorder(NO_BORDER);

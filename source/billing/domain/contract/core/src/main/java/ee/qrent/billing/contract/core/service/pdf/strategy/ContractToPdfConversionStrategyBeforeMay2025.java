@@ -991,7 +991,7 @@ public class ContractToPdfConversionStrategyBeforeMay2025
             "Kui Rendileandjale tagastatud sõiduk vajab remonti, kannab Rentnik iga remondipäeva eest lepingus kokkulepitud rendipäeva hinnale lisaks ka remondikulud vastavalt üleandmise-vastuvõtmise aktis märgitud nädala hinnale ning remondiarvele."));
     pdfDocument.add(chapter15);
 
-    final var signature = getChapterTable();
+    final var signature = getOneColumnTable();
     final var signaturecell1 =
         new Cell(new Paragraph("RENDILEANDJA:  ", new Font(TIMES_ROMAN, 9, BOLD)));
     signaturecell1.setBorder(NO_BORDER);

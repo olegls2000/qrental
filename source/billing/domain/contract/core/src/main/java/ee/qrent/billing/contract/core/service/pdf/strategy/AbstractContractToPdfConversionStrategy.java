@@ -146,8 +146,9 @@ public abstract class AbstractContractToPdfConversionStrategy
     final var headlineCell =
         new Cell(
             new Paragraph(
-                "Rendileping  sõiduauto taksoteenuse ja majandustegevuse kasutamiseks   Nr. "
-                    + model.getNumber(),
+                "Koostööleping   Nr. "
+                    + model.getNumber()
+                    +"- rendiauto taksoteenuse ja majandustegevuse kasutamiseks (üldtingimused). ",
                 new Font(TIMES_ROMAN, 10, BOLD)));
     headlineCell.setBorder(NO_BORDER);
     headlineCell.setHorizontalAlignment(CENTER);
@@ -254,7 +255,7 @@ public abstract class AbstractContractToPdfConversionStrategy
     return chapter;
   }
 
-  protected static Table get1columnTable() {
+  protected static Table getOneColumnTable() {
     final var chapter = new Table(1);
     chapter.setWidths(new float[] {100});
     chapter.setPadding(0f);
