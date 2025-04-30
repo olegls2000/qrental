@@ -33,7 +33,8 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .phone(domain.getPhone())
         .email(domain.getEmail())
         .address(domain.getAddress())
-        .legalEntityType(domain.getLegalEntityType().getLabel())
+        .legalEntityType(domain.getLegalEntityType().name())
+        .legalEntityTypeLabel(domain.getLegalEntityType().getLabel())
         .lhvAccount(domain.getLhvAccount())
         .companyName(domain.getCompanyName())
         .companyCeoName(
