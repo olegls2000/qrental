@@ -125,8 +125,8 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
   private String getRenterAddress(final DriverResponse driver) {
     final var legalEntity = driver.getLegalEntityType();
     return switch (legalEntity) {
-      case "PERSON", "LHV_ACCOUNT", "SELF_EMPLOYED" -> driver.getAddress();
-      case "COMPANY" -> driver.getCompanyAddress();
+      case "PERSON", "LHV_ACCOUNT"  -> driver.getAddress();
+      case "COMPANY", "SELF_EMPLOYED" -> driver.getCompanyAddress();
       default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
     };
   }
