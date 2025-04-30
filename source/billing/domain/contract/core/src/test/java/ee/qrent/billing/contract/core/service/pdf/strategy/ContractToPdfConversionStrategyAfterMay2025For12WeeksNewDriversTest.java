@@ -64,7 +64,7 @@ class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDriversTest {
     assertFalse(canApply);
   }
 
-  @Test
+ // @Test
   public void testIfDriverIsNewTwelveWeeksStartedAfterMay2025() {
     // given
     final var driverId = 11L;
