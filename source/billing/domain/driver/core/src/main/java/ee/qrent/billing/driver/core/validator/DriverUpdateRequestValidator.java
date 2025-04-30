@@ -61,6 +61,7 @@ public class DriverUpdateRequestValidator extends AbstractDriverRequestValidator
     }
     if (request.getLegalEntityType().equals(LegalEntityType.SELF_EMPLOYED.name())) {
       checkRegistrationNumber(request.getRegNumber(), violationsCollector);
+      checkCompanyAddress(request.getCompanyAddress(), violationsCollector);
     }
     checkComment(request.getComment(), violationsCollector);
     checkRecommendation(request, violationsCollector);
