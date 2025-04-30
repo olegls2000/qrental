@@ -25,7 +25,7 @@
                     <option th:value="null">No recommendation</option>
                     <option th:each="driver : ${recommendedByOptions}"
                             th:value="${driver.id}"
-                            th:text="|${driver.lastName} ${driver.firstName}, isikukood: ${driver.isikukood}|">??
+                            th:text="|${driver.lastName} ${driver.firstName}, isikukood: ${driver.taxNumber}|">??
                     </option>
                 </select>
             </div>

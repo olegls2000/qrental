@@ -38,7 +38,7 @@
                                         th:field="*{driverId}">
                                     <option th:each="driver : ${drivers}"
                                             th:value="${driver.id}"
-                                            th:text="|${driver.firstName} ${driver.lastName} - ${driver.isikukood}|"></option>
+                                            th:text="|${driver.firstName} ${driver.lastName} - ${driver.taxNumber}|"></option>
                                 </select>
                             </div>
                         </div>
