@@ -31,7 +31,7 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
   @SneakyThrows
   @Override
   public InputStream getPdfInputStream(final ContractPdfModel model) {
-    final var pdfDocument = new Document(A4, 40f, 40f, 50f, 50f);
+    final var pdfDocument = getDocument();
     final var outputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(pdfDocument, outputStream);
     pdfDocument.open();
@@ -466,7 +466,7 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     signature.addCell(signaturecell5);
 
     final var signaturecell6 =
-        new Cell(new Paragraph(model.getRenterName(), new Font(TIMES_ROMAN, 9, BOLD)));
+        new Cell(new Paragraph(model.getRenter(), new Font(TIMES_ROMAN, 9, BOLD)));
     signaturecell6.setBorder(NO_BORDER);
     signaturecell6.setHorizontalAlignment(LEFT);
     signature.addCell(signaturecell6);

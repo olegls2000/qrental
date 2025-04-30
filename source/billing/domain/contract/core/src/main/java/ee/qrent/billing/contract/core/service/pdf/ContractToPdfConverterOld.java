@@ -234,7 +234,7 @@ public class ContractToPdfConverterOld {
         rentnik.addCell(rentnikcell1);
 
         final var rentnikcell2 =
-                new Cell(new Paragraph("Rentniku nimi: " + getTextOrEmpty(model.getRenterName()),
+                new Cell(new Paragraph("Rentniku nimi: " + getTextOrEmpty(model.getRenter()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rentnikcell2.setBorder(NO_BORDER);
         rentnikcell2.setHorizontalAlignment(LEFT);
@@ -256,14 +256,14 @@ public class ContractToPdfConverterOld {
         rentnik.addCell(rentnikcell4);
 
         final var rentnikcell5 =
-                new Cell(new Paragraph("Rentniku juhatuse liige või seadusliku esindaja nimi: " + getTextOrEmpty(model.getRenterCeoName()),
+                new Cell(new Paragraph("Rentniku juhatuse liige või seadusliku esindaja nimi: " + getTextOrEmpty(model.getRenterSignerName()),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rentnikcell5.setBorder(NO_BORDER);
         rentnikcell5.setHorizontalAlignment(LEFT);
         rentnik.addCell(rentnikcell5);
 
         final var rentnikcell6 =
-                new Cell(new Paragraph("Rentniku juhatuse liige või seadusliku esindaja isikukood: " + model.getRenterCeoTaxNumber(),
+                new Cell(new Paragraph("Rentniku juhatuse liige või seadusliku esindaja isikukood: " + model.getRenterSignerTaxNumber(),
                         new Font(Font.TIMES_ROMAN, 9, Font.NORMAL)));
         rentnikcell6.setBorder(NO_BORDER);
         rentnikcell6.setHorizontalAlignment(LEFT);
@@ -1659,7 +1659,7 @@ public class ContractToPdfConverterOld {
         signature.addCell(signaturecell5);
 
         final var signaturecell6 =
-                new Cell(new Paragraph(model.getRenterName(),
+                new Cell(new Paragraph(model.getRenter(),
                         new Font(Font.TIMES_ROMAN, 9, Font.BOLD)));
         signaturecell6.setBorder(NO_BORDER);
         signaturecell6.setHorizontalAlignment(LEFT);

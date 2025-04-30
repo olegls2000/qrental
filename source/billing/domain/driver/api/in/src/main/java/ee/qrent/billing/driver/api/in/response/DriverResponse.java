@@ -12,7 +12,7 @@ public class DriverResponse {
   private Boolean active;
   private String firstName;
   private String lastName;
-  private Long isikukood;
+  private Long taxNumber;
   private Integer callSign;
   private String phone;
   private String email;

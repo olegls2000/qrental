@@ -21,7 +21,7 @@ public class AuthorizationAddRequestMapper
     return Authorization.builder()
         .id(null)
         .driverId(driverId)
-        .driverIsikukood(driver.getIsikukood())
+        .driverIsikukood(driver.getTaxNumber())
         .driverFirstName(driver.getFirstName())
         .driverLastName(driver.getLastName())
         .driverEmail(driver.getEmail())

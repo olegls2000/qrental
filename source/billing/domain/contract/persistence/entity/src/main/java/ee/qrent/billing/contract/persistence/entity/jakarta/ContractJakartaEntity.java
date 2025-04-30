@@ -32,8 +32,8 @@ public class ContractJakartaEntity {
   @Column(name = "contract_duration")
   private String contractDuration;
 
-  @Column(name = "renter_name")
-  private String renterName;
+  @Column(name = "renter")
+  private String renter;
 
   @Column(name = "renter_lhv_account")
   private String renterLhvAccount;
@@ -41,11 +41,11 @@ public class ContractJakartaEntity {
   @Column(name = "renter_registration_number")
   private String renterRegistrationNumber;
 
-  @Column(name = "renter_ceo_name")
-  private String renterCeoName;
+  @Column(name = "renter_signer_name")
+  private String renterSignerName;
 
-  @Column(name = "renter_ceo_isikukood")
-  private Long renterCeoIsikukood;
+  @Column(name = "renter_signer_tax_number")
+  private Long renterSignerTaxNumber;
 
   @Column(name = "renter_phone")
   private String renterPhone;
@@ -56,8 +56,8 @@ public class ContractJakartaEntity {
   @Column(name = "driver_id")
   private Long driverId;
 
-  @Column(name = "driver_isikukood")
-  private Long driverIsikukood;
+  @Column(name = "driver_tax_number")
+  private Long driverTaxNumber;
 
   @Column(name = "driver_licence_number")
   private String driverLicenceNumber;

@@ -31,7 +31,7 @@ public class InsuranceCaseResponseMapper
         .active(domain.getActive())
         .driverId(domain.getDriverId())
         .driverInfo(
-            format("%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getIsikukood()))
+            format("%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getTaxNumber()))
         .carId(domain.getCarId())
         .carInfo(format("%s %s, %s", car.getManufacturer(), car.getModel(), car.getRegNumber()))
         .occurrenceDate(domain.getOccurrenceDate())

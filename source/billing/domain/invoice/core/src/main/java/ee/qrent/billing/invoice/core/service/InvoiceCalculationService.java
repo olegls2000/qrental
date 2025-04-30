@@ -137,7 +137,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                 final var driverInfo =
                     format(
                         "%s %s, %d",
-                        driver.getFirstName(), driver.getLastName(), driver.getIsikukood());
+                        driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
                 final var qFirm = getQFirmForInvoice(driver, weekStartDay, weekYear, weekNumber);
                 final var invoiceNumber = getInvoiceNumber(weekYear, weekNumber, driverId);
                 final var previousQWeekBalance = getWeekBalanceOrDefault(driverId, previousQWeek);

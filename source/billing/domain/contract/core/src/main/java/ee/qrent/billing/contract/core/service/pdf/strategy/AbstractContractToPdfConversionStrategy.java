@@ -12,11 +12,11 @@ import java.time.Month;
 import static com.lowagie.text.Font.BOLD;
 import static com.lowagie.text.Font.NORMAL;
 import static com.lowagie.text.Font.TIMES_ROMAN;
+import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
 import static java.awt.Color.white;
-import static java.lang.String.format;
 
 @RequiredArgsConstructor
 public abstract class AbstractContractToPdfConversionStrategy
@@ -24,6 +24,10 @@ public abstract class AbstractContractToPdfConversionStrategy
   protected static final LocalDate NEW_CONTRACTS_START_DATE = LocalDate.of(2025, Month.APRIL, 28);
 
   private final ContractLoadPort loadPort;
+
+  protected Document getDocument(){
+    return new Document(A4, 40f, 40f, 50f, 50f);
+  }
 
   protected String getDuration(final ContractPdfModel model){
     switch (model.getDuration()){
@@ -208,7 +212,7 @@ public abstract class AbstractContractToPdfConversionStrategy
     tenantTable.setBorder(NO_BORDER);
     final var tenantDataLabel = "RENTNIKU ANDMED: ";
     tenantTable.addCell(getQCellBold(tenantDataLabel));
-    final var tenantNameValue = "Rentniku nimi: " + getTextOrEmpty(model.getRenterName());
+    final var tenantNameValue = "Rentniku nimi: " + getTextOrEmpty(model.getRenter());
     tenantTable.addCell(getQCell(tenantNameValue));
     final var tenantRegNumberValue =
         "Rentniku reg. nr. või isikukood: " + getTextOrEmpty(model.getRenterRegistrationNumber());
@@ -217,10 +221,10 @@ public abstract class AbstractContractToPdfConversionStrategy
     tenantTable.addCell(getQCell(tenantAddressValue));
     final var tenantCeoNameValue =
         "Rentniku seadusliku või volitatud esindaja nimi:  "
-            + getTextOrEmpty(model.getRenterCeoName());
+            + getTextOrEmpty(model.getRenterSignerName());
     tenantTable.addCell(getQCell(tenantCeoNameValue));
     final var tenantCeoTaxNumberValue =
-        "Rentniku seadusliku või volitatud esindaja isikukood:  " + model.getRenterCeoTaxNumber();
+        "Rentniku seadusliku või volitatud esindaja isikukood:  " + model.getRenterSignerTaxNumber();
     tenantTable.addCell(getQCell(tenantCeoTaxNumberValue));
     final var tenantDriverLicenceNumberValue =
         "Rentniku või selle seadusliku ega volitatud esindaja juhiloa number:  "

@@ -32,7 +32,7 @@ public class ContractToPdfConversionStrategyBeforeMay2025
   @SneakyThrows
   @Override
   public InputStream getPdfInputStream(final ContractPdfModel model) {
-    final var pdfDocument = new Document(A4, 40f, 40f, 50f, 50f);
+    final var pdfDocument = getDocument();
     final var outputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(pdfDocument, outputStream);
     pdfDocument.open();
@@ -134,15 +134,15 @@ public class ContractToPdfConversionStrategyBeforeMay2025
     chapter3.addCell(
         getSubChapterText(
             "Rentnik (esindaja ) füüsilise isikuna ("
-                + getTextOrEmpty(model.getRenterCeoName())
+                + getTextOrEmpty(model.getRenterSignerName())
                 + " "
-                + model.getRenterCeoTaxNumber()
+                + model.getRenterSignerTaxNumber()
                 + ") avaldab ja kinnitab oma allkirjaga tagasivõtmatult,"
                 + "et ta käendab käesolevas lepingus tekkitavad kohustused mis tekkivad majandustegevuse raames, kuivõrd olles Põhivõlgniku juhatuse liige ja Põhivõlgniku tegelik "
                 + "kasusaav omanik ("
-                + getTextOrEmpty(model.getRenterCeoName())
+                + getTextOrEmpty(model.getRenterSignerName())
                 + " "
-                + model.getRenterCeoTaxNumber()
+                + model.getRenterSignerTaxNumber()
                 + "), tagab Käendaja nimetatud lepingus tekkivad kohustused antava käendusega Pooled avaldavad, "
                 + "et nad ei käsitle käesoleva võlatunnistuse antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt,"
                 + " tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
@@ -1029,7 +1029,7 @@ public class ContractToPdfConversionStrategyBeforeMay2025
     signature.addCell(signaturecell5);
 
     final var signaturecell6 =
-        new Cell(new Paragraph(model.getRenterName(), new Font(TIMES_ROMAN, 9, BOLD)));
+        new Cell(new Paragraph(model.getRenter(), new Font(TIMES_ROMAN, 9, BOLD)));
     signaturecell6.setBorder(NO_BORDER);
     signaturecell6.setHorizontalAlignment(LEFT);
     signature.addCell(signaturecell6);

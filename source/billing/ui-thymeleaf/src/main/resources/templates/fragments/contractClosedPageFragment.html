@@ -37,9 +37,9 @@
             <td th:text="${qDateFormatter.format(contract.dateStart)}">???</td>
             <td th:if="${contract.dateEnd == null}">No date</td>
             <td th:if="${contract.dateEnd != null}" th:text="${qDateFormatter.format(contract.dateEnd)}">???</td>
-            <td th:text="${contract.renterName}">???</td>
+            <td th:text="${contract.renter}">???</td>
             <td th:text="${contract.renterRegistrationNumber}">???</td>
-            <td th:text="${contract.renterCeoName}">???</td>
+            <td th:text="${contract.renterSignerName}">???</td>
             <td th:text="${contract.driverIsikukood}">???</td>
             <td th:text="${contract.qFirmName}">???</td>
             <td th:text="${contract.qFirmCeo}">???</td>

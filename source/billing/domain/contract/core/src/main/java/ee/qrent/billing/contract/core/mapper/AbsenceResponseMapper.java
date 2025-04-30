@@ -25,7 +25,7 @@ public class AbsenceResponseMapper implements ResponseMapper<AbsenceResponse, Ab
         .driverId(domain.getDriverId())
         .driverFirstName(driver.getFirstName())
         .driverLastName(driver.getLastName())
-        .driverIsikukood(driver.getIsikukood())
+        .driverIsikukood(driver.getTaxNumber())
         .reason(domain.getReason().getDisplayValue())
         .withCar(domain.getWithCar())
         .comment(domain.getComment())

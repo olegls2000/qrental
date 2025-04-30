@@ -11,9 +11,9 @@
             <th>Duration, weeks</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th>Renter Company</th>
-            <th>Renter Company Reg. number</th>
-            <th>Renter Company CEO</th>
+            <th>Renter</th>
+            <th>Renter Reg. number</th>
+            <th>Renter Signer</th>
             <th>Driver Isikukood</th>
             <th>Q-Firm name</th>
             <th>Q-Firm CEO</th>
@@ -50,9 +50,9 @@
             <td th:text="${qDateFormatter.format(contract.dateStart)}">???</td>
             <td th:if="${contract.dateEnd == null}">No date</td>
             <td th:if="${contract.dateEnd != null}" th:text="${qDateFormatter.format(contract.dateEnd)}">???</td>
-            <td th:text="${contract.renterName}">???</td>
+            <td th:text="${contract.renter}">???</td>
             <td th:text="${contract.renterRegistrationNumber}">???</td>
-            <td th:text="${contract.renterCeoName}">???</td>
+            <td th:text="${contract.renterSignerName}">???</td>
             <td th:text="${contract.driverIsikukood}">???</td>
             <td th:text="${contract.qFirmName}">???</td>
             <td th:text="${contract.qFirmCeo}">???</td>

@@ -28,29 +28,23 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
     final var driverId = request.getDriverId();
     final var driver = driverQuery.getById(driverId);
     final var contractNumber = generateContractNumber(driverId, qDateTime.getNow());
-    final var renterName = getRenterName(driver);
-    final var renterAddress = getRenterAddress(driver);
-    final var companyCeoTaxNumber = getCompanyCeoTaxNumber(driver);
-    final var renterCeoName = getRenterCeoName(driver);
-    final var renterRegistrationNumber = getRenterRegistrationNumber(driver);
-    final var driverAddress = getDriverAddress(driver);
-
     final var qFirmId = request.getQFirmId();
     final var qFirm = firmQuery.getById(qFirmId);
 
     return Contract.builder()
         .id(null)
         .number(contractNumber)
-        .renterName(renterName)
-
+        .renter(getRenter(driver))
         .renterLhvAccount(driver.getLhvAccount())
-        .renterRegistrationNumber(renterRegistrationNumber)
-        .renterCeoName(renterCeoName)
-        .renterCeoIsikukood(companyCeoTaxNumber)
+        .renterRegistrationNumber(getRenterRegistrationNumber(driver))
+        .renterSignerName(getRenterSignerName(driver))
+        .renterSignerTaxNumber(getRenterSignerTaxNumber(driver))
+        .renterAddress(getRenterAddress(driver))
         .renterPhone(driver.getPhone())
         .renterEmail(driver.getEmail())
         .driverId(driverId)
-        .driverIsikukood(driver.getIsikukood())
+        .driverAddress(driver.getAddress())
+        .driverTaxNumber(driver.getTaxNumber())
         .driverLicenceNumber(driver.getDriverLicenseNumber())
         .qFirmId(qFirmId)
         .qFirmName(qFirm.getName())
@@ -65,8 +59,6 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .qFirmVatNumber(qFirm.getVatNumber())
         .qFirmIban(qFirm.getIban())
         .qFirmVatPhone(qFirm.getPhone())
-        .renterAddress(renterAddress)
-        .driverAddress(driverAddress)
         .contractDuration(getContractDurationByLabel(request.getContractDuration()))
         .build();
   }
@@ -75,65 +67,34 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
     return stream(ContractDuration.values())
         .filter(duration -> duration.getLabel().equals(label))
         .findFirst()
-        .get();
+        .orElseThrow(
+            () -> new RuntimeException(format("No contract duration found for label '%s'", label)));
   }
 
-  private String getRenterName(final DriverResponse driver) {
+  private String getRenter(final DriverResponse driver) {
     final var legalEntity = driver.getLegalEntityType();
     final var driverFirstName = driver.getFirstName();
     final var driverLastName = driver.getLastName();
 
-    switch (legalEntity) {
-      case "PERSON":
-        return format("%s %s", driverFirstName, driverLastName);
-      case "SELF_EMPLOYED":
-        return format("%s %s FIE", driverFirstName, driverLastName);
-      case "LHV_ACCOUNT":
-        return format("%s %s", driverFirstName, driverLastName);
-      case "COMPANY":
-        return driver.getCompanyCeoName();
-      default:
-        throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
-    }
+    return switch (legalEntity) {
+      case "PERSON", "LHV_ACCOUNT" -> format("%s %s", driverFirstName, driverLastName);
+      case "SELF_EMPLOYED" -> format("%s %s FIE", driverFirstName, driverLastName);
+      case "COMPANY" -> driver.getCompanyName();
+      default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    };
   }
 
-  private Long getRenterTaxNumber(final DriverResponse driver) {
+  private String getRenterSignerName(final DriverResponse driver) {
     final var legalEntity = driver.getLegalEntityType();
-    final var driverTaxNumber = driver.getIsikukood();
+    final var driverFirstName = driver.getFirstName();
+    final var driverLastName = driver.getLastName();
 
-    switch (legalEntity) {
-      case "PERSON":
-        return driverTaxNumber;
-      case "SELF_EMPLOYED":
-        return driverTaxNumber;
-      case "LHV_ACCOUNT":
-        return driverTaxNumber;
-      case "COMPANY":
-        return driver.getCompanyCeoTaxNumber();
-      default:
-        throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
-    }
-  }
-
-  private Long getCompanyCeoTaxNumber(final DriverResponse driver) {
-    final var companyCeoTaxNumber = driver.getCompanyCeoTaxNumber();
-    if (companyCeoTaxNumber == null) {
-      final var esindajaIsikukood = driver.getIsikukood();
-      return esindajaIsikukood;
-    }
-    return companyCeoTaxNumber;
-  }
-
-  private String getRenterCeoName(final DriverResponse driver) {
-    final var driverCompanyCeoName = driver.getCompanyCeoName();
-    if (driverCompanyCeoName == null
-        || driverCompanyCeoName.isEmpty()
-        || driverCompanyCeoName.equals(" ")) {
-      final var renterCeoFirstName = driver.getFirstName();
-      final var renterCeoLastName = driver.getLastName();
-      return format("%s %s", renterCeoFirstName, renterCeoLastName);
-    }
-    return driverCompanyCeoName;
+    return switch (legalEntity) {
+      case "PERSON", "LHV_ACCOUNT", "SELF_EMPLOYED" ->
+          format("%s %s", driverFirstName, driverLastName);
+      case "COMPANY" -> driver.getCompanyCeoName();
+      default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    };
   }
 
   private String generateContractNumber(final Long driverId, final LocalDateTime startTime) {
@@ -143,26 +104,30 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
   }
 
   private String getRenterRegistrationNumber(final DriverResponse driver) {
-    final var renterRegistrationNumber = driver.getCompanyRegistrationNumber();
-    if (renterRegistrationNumber == null || renterRegistrationNumber.isEmpty()) {
-      final var renterIsikukood = driver.getIsikukood();
-      return format("%s", renterIsikukood);
-    }
-    return renterRegistrationNumber;
+    final var driverTaxNumberString = driver.getTaxNumber().toString();
+    final var legalEntity = driver.getLegalEntityType();
+    return switch (legalEntity) {
+      case "PERSON", "LHV_ACCOUNT" -> driverTaxNumberString;
+      case "SELF_EMPLOYED", "COMPANY" -> driver.getCompanyRegistrationNumber();
+      default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    };
+  }
+
+  private Long getRenterSignerTaxNumber(final DriverResponse driver) {
+    final var legalEntity = driver.getLegalEntityType();
+    return switch (legalEntity) {
+      case "PERSON", "LHV_ACCOUNT", "SELF_EMPLOYED" -> driver.getTaxNumber();
+      case "COMPANY" -> driver.getCompanyCeoTaxNumber();
+      default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    };
   }
 
   private String getRenterAddress(final DriverResponse driver) {
-    final var renterAddress = driver.getCompanyAddress();
-    if (renterAddress == null || renterAddress.isEmpty()) {
-      final var renterAddress1 = driver.getAddress();
-      return format("%s", renterAddress1);
-    }
-    return renterAddress;
-  }
-
-  private String getDriverAddress(final DriverResponse driver) {
-    final var driverAddress = driver.getAddress();
-
-    return driverAddress;
+    final var legalEntity = driver.getLegalEntityType();
+    return switch (legalEntity) {
+      case "PERSON", "LHV_ACCOUNT", "SELF_EMPLOYED" -> driver.getAddress();
+      case "COMPANY" -> driver.getCompanyAddress();
+      default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
+    };
   }
 }

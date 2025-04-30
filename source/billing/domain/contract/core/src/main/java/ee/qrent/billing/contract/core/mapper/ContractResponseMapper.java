@@ -22,15 +22,15 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
         .id(domain.getId())
         .number(domain.getNumber())
         .duration(domain.getContractDuration().getWeeksCount())
-        .renterName(domain.getRenterName())
+        .renter(domain.getRenter())
         .renterRegistrationNumber(domain.getRenterRegistrationNumber())
         .renterAddress(domain.getRenterAddress())
-        .renterCeoName(domain.getRenterCeoName())
-        .renterCeoIsikukood(domain.getRenterCeoIsikukood())
+        .renterSignerName(domain.getRenterSignerName())
+        .renterSignerTaxNumber(domain.getRenterSignerTaxNumber())
         .renterPhone(domain.getRenterPhone())
         .renterEmail(domain.getRenterEmail())
         .driverId(domain.getDriverId())
-        .driverIsikukood(domain.getDriverIsikukood())
+        .driverIsikukood(domain.getDriverTaxNumber())
         .driverLicenceNumber(domain.getDriverLicenceNumber())
         .driverAddress(domain.getDriverAddress())
         .qFirmId(domain.getQFirmId())
@@ -62,7 +62,7 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
 
   @Override
   public String toObjectInfo(final Contract domain) {
-    return format("Number: %s, Renter: %s", domain.getNumber(), domain.getRenterName());
+    return format("Number: %s, Renter: %s", domain.getNumber(), domain.getRenter());
   }
 
   private Long getWeeksLeftCount(final Contract domain) {

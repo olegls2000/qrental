@@ -36,7 +36,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
   @SneakyThrows
   @Override
   public InputStream getPdfInputStream(final ContractPdfModel model) {
-    final var pdfDocument = new Document(A4, 40f, 40f, 50f, 50f);
+    final var pdfDocument = getDocument();
     final var outputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(pdfDocument, outputStream);
     pdfDocument.open();
@@ -296,7 +296,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(
         getSubChapterText(
             " Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja ("
-                + model.getRenterName()
+                + model.getRenter()
                 + " 12345678910) avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
     chapter4.addCell(getSubChapterNumber("4.6.2"));
     chapter4.addCell(
@@ -592,7 +592,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     signature.addCell(signaturecell5);
 
     final var signaturecell6 =
-        new Cell(new Paragraph(model.getRenterName(), new Font(TIMES_ROMAN, 9, BOLD)));
+        new Cell(new Paragraph(model.getRenter(), new Font(TIMES_ROMAN, 9, BOLD)));
     signaturecell6.setBorder(NO_BORDER);
     signaturecell6.setHorizontalAlignment(LEFT);
     signature.addCell(signaturecell6);

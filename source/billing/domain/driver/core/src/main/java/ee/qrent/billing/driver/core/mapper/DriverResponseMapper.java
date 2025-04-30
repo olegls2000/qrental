@@ -29,7 +29,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .callSign(callSign)
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
-        .isikukood(domain.getTaxNumber())
+        .taxNumber(domain.getTaxNumber())
         .phone(domain.getPhone())
         .email(domain.getEmail())
         .address(domain.getAddress())

@@ -14,11 +14,11 @@ public class ContractResponse {
   private boolean active;
   private String number;
   private Integer duration;
-  private String renterName;
+  private String renter;
   private String renterRegistrationNumber;
   private String renterAddress;
-  private String renterCeoName;
-  private Long renterCeoIsikukood;
+  private String renterSignerName;
+  private Long renterSignerTaxNumber;
   private String renterPhone;
   private String renterEmail;
   private Long driverId;

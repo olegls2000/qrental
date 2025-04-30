@@ -13,12 +13,12 @@ public class ContractPdfModel {
   private String number;
   private String duration;
   private String duration1;
-  private String renterName;
+  private String renter;
   private String renterLhvAccount;
   private String renterRegistrationNumber;
   private String renterAddress;
-  private String renterCeoName;
-  private Long renterCeoTaxNumber;
+  private String renterSignerName;
+  private Long renterSignerTaxNumber;
   private String renterPhone;
   private String renterEmail;
   private Long driverTaxNumber;
