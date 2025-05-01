@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,17 +27,18 @@ class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDriversTest {
   }
 
   @Test
-  public void testIfDriverIsNewTwelveWeeksStartedBeforeMay2025() {
+  public void testIfDriverIsNewTwelveWeeksStartedBeforeMay2025AndDriversContractsMoreThan1() {
     // given
     final var driverId = 11L;
     final var contract = Contract.builder().build();
+    final var contract2 = Contract.builder().build();
     final var pdfModel =
         ContractPdfModel.builder()
             .driverId(driverId)
-            .dateStart(LocalDate.of(2025, Month.APRIL, 27))
+            .dateStart(LocalDate.of(2025, Month.APRIL, 29))
             .duration("kaksteist")
             .build();
-    when(loadPort.loadAllByDriverId(driverId)).thenReturn(singletonList(contract));
+    when(loadPort.loadAllByDriverId(driverId)).thenReturn(List.of(contract, contract2));
 
     // when
     final var canApply = instanceUnderTest.canApply(pdfModel);
@@ -44,17 +46,39 @@ class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDriversTest {
     // then
     assertFalse(canApply);
   }
+
+  @Test
+  public void testIfDriverIsNewTwelveWeeksStartedBeforeMay2025() {
+    // given
+    final var driverId = 11L;
+    final var contract = Contract.builder().build();
+    final var contract2 = Contract.builder().build();
+    final var pdfModel =
+        ContractPdfModel.builder()
+            .driverId(driverId)
+            .dateStart(LocalDate.of(2025, Month.APRIL, 27))
+            .duration("kaksteist")
+            .build();
+    when(loadPort.loadAllByDriverId(driverId)).thenReturn(List.of(contract, contract2));
+
+    // when
+    final var canApply = instanceUnderTest.canApply(pdfModel);
+
+    // then
+    assertFalse(canApply);
+  }
+
   @Test
   public void testIfDriverIsNewFourWeeksStartedAfterMay2025() {
     // given
     final var driverId = 11L;
     final var contract = Contract.builder().build();
     final var pdfModel =
-            ContractPdfModel.builder()
-                    .driverId(driverId)
-                    .dateStart(LocalDate.of(2025, Month.APRIL, 28))
-                    .duration("neli")
-                    .build();
+        ContractPdfModel.builder()
+            .driverId(driverId)
+            .dateStart(LocalDate.of(2025, Month.APRIL, 28))
+            .duration("neli")
+            .build();
     when(loadPort.loadAllByDriverId(driverId)).thenReturn(singletonList(contract));
 
     // when
@@ -70,11 +94,11 @@ class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDriversTest {
     final var driverId = 11L;
     final var contract = Contract.builder().build();
     final var pdfModel =
-            ContractPdfModel.builder()
-                    .driverId(driverId)
-                    .dateStart(LocalDate.of(2025, Month.APRIL, 28))
-                    .duration("kaksteist")
-                    .build();
+        ContractPdfModel.builder()
+            .driverId(driverId)
+            .dateStart(LocalDate.of(2025, Month.APRIL, 28))
+            .duration("kaksteist")
+            .build();
     when(loadPort.loadAllByDriverId(driverId)).thenReturn(singletonList(contract));
 
     // when
