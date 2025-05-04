@@ -1,5 +1,6 @@
 package ee.qrent.billing.contract.api.in.query;
 
+import ee.qrent.billing.contract.api.in.response.RenterResponse;
 import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrent.billing.contract.api.in.request.ContractUpdateRequest;
 import ee.qrent.billing.contract.api.in.response.ContractResponse;
@@ -22,4 +23,6 @@ public interface GetContractQuery extends BaseGetQuery<ContractUpdateRequest, Co
   Long getCountActive();
 
   Long getCountClosed();
+
+  RenterResponse getRenterByDriverId(Long driverId);
 }

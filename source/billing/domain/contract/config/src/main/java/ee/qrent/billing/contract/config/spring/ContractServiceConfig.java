@@ -41,14 +41,22 @@ public class ContractServiceConfig {
   @Bean
   GetContractQuery getContractQueryService(
       final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery getDriverQuery,
       final ContractEndDateCalculator endDateCalculator,
       final ContractLoadPort loadPort,
       final ContractResponseMapper mapper,
       final ContractUpdateRequestMapper updateRequestMapper,
-      final QDateTime qDateTime) {
+      final QDateTime qDateTime
+     ) {
 
     return new ContractQueryService(
-        qWeekQuery, endDateCalculator, loadPort, mapper, updateRequestMapper, qDateTime);
+        qWeekQuery,
+        getDriverQuery,
+        endDateCalculator,
+        loadPort,
+        mapper,
+        updateRequestMapper,
+        qDateTime);
   }
 
   @Bean

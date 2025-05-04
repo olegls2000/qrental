@@ -4,6 +4,8 @@ import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrent.billing.contract.api.in.response.RenterResponse;
+import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
@@ -26,6 +28,7 @@ public class ContractQueryService implements GetContractQuery {
       comparing(ContractResponse::getCreated);
 
   private final GetQWeekQuery qWeekQuery;
+  private final GetDriverQuery driverQuery;
   private final ContractEndDateCalculator endDateCalculator;
   private final ContractLoadPort loadPort;
   private final ContractResponseMapper mapper;
@@ -124,5 +127,12 @@ public class ContractQueryService implements GetContractQuery {
   @Override
   public Long getCountClosed() {
     return loadPort.loadCountClosedByDate(qDateTime.getToday());
+  }
+
+  @Override
+  public RenterResponse getRenterByDriverId(final Long driverId) {
+    final var driver = driverQuery.getById(driverId);
+    // TODO..
+    return null;
   }
 }
