@@ -133,9 +133,15 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter1.addCell(getSubChapterNumber("1.14"));
     chapter1.addCell(
         getSubChapterText(
-            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt neli (kaks) täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise "
-                + getNoticePeriod1(model)
-                + " täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul (neli (kaks) täispika kalendrinädalat) ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
+            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt "
+                    + "kaks "
+                    + " täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva " +
+                    "rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise " +
+                    "kahe " +
+                    "täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul " +
+                    "(kaks täispika kalendrinädalat) " +
+                    "ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 " +
+                    "kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
     pdfDocument.add(chapter1);
 
     final var chapter2 = getChapterTable();
@@ -430,7 +436,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter5.addCell(getSubChapterNumber("5.4"));
     chapter5.addCell(
         getSubChapterText(
-            "Rendileandja ja Rentniku vahel uue koostöölepingu sõlmimine muudab kõik varasemad nende vahel sõlmitud koostöölepinguid tühiseks käesoleva lepingu sõlmimise ning allkirjastamise kuupäevast."));
+            "Rendileandja ja Rentniku vahel uue koostöölepingu sõlmimine muudab kõik varasemad nende vahel sõlmitud koostöölepinguid tühiseks käesoleva lepingu sõlmimise ning allkirjastamise kuupäevast.\n\n\n\n\n"));
 
     pdfDocument.add(chapter5);
 
@@ -444,7 +450,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
             new Paragraph(
                 "\"Uus Juht\" boonuskampaania Lisa lepingule nr.  "
                     + contractNumber
-                    + " Boonusprogrammi tingimused ",
+                    + "  Boonusprogrammi tingimused ",
                 new Font(TIMES_ROMAN, 9, BOLD)));
     body16acell2.setBorder(NO_BORDER);
     body16acell2.setHorizontalAlignment(LEFT);
@@ -461,6 +467,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
                     + "eest makstava renditasu boonustingimusi esimese 12 (kaheteistkümne) täiskalendrinädala "
                     + "jooksul vastavalt rendilepingule nr.  %s ja boonuskampaaniale \"Uus Juht\"",
                 contractNumber)));
+    pdfDocument.add(chapter16);
 
     final var campania = new Table(1);
     campania.setPadding(0f);
