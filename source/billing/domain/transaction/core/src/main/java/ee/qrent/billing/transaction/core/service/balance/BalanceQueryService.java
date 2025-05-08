@@ -32,16 +32,16 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   private BalanceCalculatorStrategy getDryRunStrategy() {
     return calculatorStrategies.stream()
-        .filter(strategy -> strategy.canApply(DRY_RUN))
-        .findFirst()
-        .get();
+            .filter(strategy -> strategy.canApply(DRY_RUN))
+            .findFirst()
+            .get();
   }
 
   @Override
   public List<BalanceResponse> getAll() {
     return balanceLoadPort.loadAll().stream()
-        .map(balanceResponseMapper::toResponse)
-        .collect(toList());
+            .map(balanceResponseMapper::toResponse)
+            .collect(toList());
   }
 
   @Override
@@ -50,9 +50,9 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   private Map<String, List<TransactionResponse>> getTransactionsMap(
-      final Long driverId, final Long qWeekId) {
+          final Long driverId, final Long qWeekId) {
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-        .collect(groupingBy(transactionResponse -> transactionResponse.getKind()));
+            .collect(groupingBy(transactionResponse -> transactionResponse.getKind()));
   }
 
   private QWeekResponse getStartWeekForRawCalculation(final Balance latestBalance) {
@@ -65,36 +65,36 @@ public class BalanceQueryService implements GetBalanceQuery {
 
   @Override
   public BalanceRawContextResponse getRawContextByDriverIdAndQWeekId(
-      final Long driverId, final Long qWeekId) {
+          final Long driverId, final Long qWeekId) {
     Balance requestedWeekBalance;
     Balance previousWeekBalance;
-    requestedWeekBalance =
-        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
+    Map<String, List<TransactionResponse>> transactionsMap = null;
+
     final var previousWeekId = qWeekQuery.getOneBeforeById(qWeekId).getId();
-    previousWeekBalance =
-        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, previousWeekId, true);
+    requestedWeekBalance =
+            balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
+    if (requestedWeekBalance != null) {
+      previousWeekBalance =
+              balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, previousWeekId, true);
 
-    if (requestedWeekBalance != null && previousWeekBalance != null) {
       return BalanceRawContextResponse.builder()
-          .requestedWeekBalance(balanceResponseMapper.toResponse(requestedWeekBalance))
-          .previousWeekBalance(balanceResponseMapper.toResponse(previousWeekBalance))
-          .transactionsByKind(getTransactionsMap(driverId, qWeekId))
-          .build();
+              .requestedWeekBalance(balanceResponseMapper.toResponse(requestedWeekBalance))
+              .previousWeekBalance(balanceResponseMapper.toResponse(previousWeekBalance))
+              .transactionsByKind(getTransactionsMap(driverId, qWeekId))
+              .build();
     }
-
     var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
     final var startQWeek = getStartWeekForRawCalculation(latestBalance);
     previousWeekBalance = latestBalance;
     final var weeksForCalculation =
-        qWeekQuery.getAllBetweenByIdsDefaultOrder(startQWeek.getId(), qWeekId);
+            qWeekQuery.getAllBetweenByIdsDefaultOrder(startQWeek.getId(), qWeekId);
     final var calculator = getDryRunStrategy();
     final var driver = driverQuery.getById(driverId);
-    Map<String, List<TransactionResponse>> transactionsMap = null;
     for (int i = 0; i < weeksForCalculation.size(); i++) {
       final var week = weeksForCalculation.get(i);
       final var weekTransactions = getTransactionsMap(driverId, week.getId());
       final var balanceWrapper =
-          calculator.calculateBalance(driver, week, previousWeekBalance, weekTransactions);
+              calculator.calculateBalance(driver, week, previousWeekBalance, weekTransactions);
       requestedWeekBalance = balanceWrapper.getRequestedWeekBalance();
       transactionsMap = balanceWrapper.getTransactionsByKind();
 
@@ -104,10 +104,10 @@ public class BalanceQueryService implements GetBalanceQuery {
     }
 
     return BalanceRawContextResponse.builder()
-        .requestedWeekBalance(balanceResponseMapper.toResponse(requestedWeekBalance))
-        .previousWeekBalance(balanceResponseMapper.toResponse(previousWeekBalance))
-        .transactionsByKind(transactionsMap)
-        .build();
+            .requestedWeekBalance(balanceResponseMapper.toResponse(requestedWeekBalance))
+            .previousWeekBalance(balanceResponseMapper.toResponse(previousWeekBalance))
+            .transactionsByKind(transactionsMap)
+            .build();
   }
 
   @Override
@@ -115,13 +115,13 @@ public class BalanceQueryService implements GetBalanceQuery {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
 
     return getRawContextByDriverIdAndQWeekId(driverId, currentQWeek.getId())
-        .getRequestedWeekBalance();
+            .getRequestedWeekBalance();
   }
 
   @Override
   public BalanceResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
     return balanceResponseMapper.toResponse(
-        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
+            balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true));
   }
 
   @Override

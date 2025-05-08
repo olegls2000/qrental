@@ -57,7 +57,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter1.addCell(getSubChapterNumber("1.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa “Tüüptingimused” nr. 25042025 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:41:26 +00:00) ning on saadaval järgmisel lingil:"
+            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
@@ -150,7 +150,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter2.addCell(getSubChapterNumber("2.1"));
     chapter2.addCell(
         getSubChapterText(
-            " Käesoleva lepingulisa “TSK Tingimused” nr.250425 lepingulisa on koostatud ja allkirjastatud 25.04.2025 (Signature Timestamp UTC - 25.04.2025 08:38:34 +00:00) ning on saadaval järgmisel lingil:"
+            " Käesoleva lepingulisa “TSK Tingimused” nr. 070525 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 13:24:24 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_dig_allkiri_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.1"));
