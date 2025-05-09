@@ -83,17 +83,19 @@ public class BalanceQueryService implements GetBalanceQuery {
   public BalanceRawContextResponse getRawContextByDriverIdAndQWeekId(
       final Long driverId, final Long qWeekId) {
     var latestBalance = balanceLoadPort.loadLatestByDriver(driverId);
-    final var latestQWeekId = latestBalance.getQWeekId();
     final var previousWeekId = qWeekQuery.getOneBeforeById(qWeekId).getId();
-    if (latestQWeekId > qWeekId) {
-      return BalanceRawContextResponse.builder()
-          .requestedWeekBalance(balanceResponseMapper.toResponse(getDefault(qWeekId, driverId)))
-          .previousWeekBalance(
-              balanceResponseMapper.toResponse(getDefault(previousWeekId, driverId)))
-          .transactionsByKind(getTransactionsMap(driverId, qWeekId))
-          .build();
-    }
+    if( latestBalance != null) {
+      final var latestQWeekId = latestBalance.getQWeekId();
 
+      if (latestQWeekId > qWeekId) {
+        return BalanceRawContextResponse.builder()
+                .requestedWeekBalance(balanceResponseMapper.toResponse(getDefault(qWeekId, driverId)))
+                .previousWeekBalance(
+                        balanceResponseMapper.toResponse(getDefault(previousWeekId, driverId)))
+                .transactionsByKind(getTransactionsMap(driverId, qWeekId))
+                .build();
+      }
+    }
     Balance requestedWeekBalance;
     Balance previousWeekBalance;
     requestedWeekBalance =

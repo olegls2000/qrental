@@ -41,7 +41,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     final var writer = PdfWriter.getInstance(pdfDocument, outputStream);
     pdfDocument.open();
     pdfDocument.add(getHeaderTable(model));
-    pdfDocument.add(new Paragraph("\n"));
+    pdfDocument.add(new Paragraph(""));
     pdfDocument.add(getRenterTable(model));
     pdfDocument.add(getTenantTable(model));
     addLhvChapterIfNecessary(model, pdfDocument);
@@ -57,20 +57,20 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter1.addCell(getSubChapterNumber("1.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil:"
+            "Käesoleva lepingulisa “Tüüptingimused” nr.07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00 : 0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil: "
                 + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
+            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil: "
                 + "www.qrent.ee/tuuptingimused/tt_pdf_est"));
 
     chapter1.addCell(getSubChapterNumber("1.2.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tuuptingimused/tt_pdf_rus"
+            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tuuptingimused/tt_pdf_rus "
                 + "(tõlge võib olla ebatäpne ja on üksnes informatiivse tähendusega)"));
 
     chapter1.addCell(getSubChapterNumber("1.3"));
@@ -102,17 +102,17 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter1.addCell(getSubChapterNumber("1.9"));
     chapter1.addCell(
         getSubChapterText(
-            " Käesoleva lepingu ja “Tüüptingimused” lepingulisa tingimuste ebaõige täitmise või täitmata jätmise korral kannavad pooled vastutust käesoleva lepingu, “Tüüptingimused” lepingulisa ja kehtivate õigusnormide järgi."));
+            "Käesoleva lepingu ja “Tüüptingimused” lepingulisa tingimuste ebaõige täitmise või täitmata jätmise korral kannavad pooled vastutust käesoleva lepingu, “Tüüptingimused” lepingulisa ja kehtivate õigusnormide järgi."));
 
     chapter1.addCell(getSubChapterNumber("1.10"));
     chapter1.addCell(
         getSubChapterText(
-            " Kui ei ole Rentnik käesoleva lepingu ja “Tüüptingimused” lepingulisa tingimuste muudatustega tutvunud ega pole oma nõusolekut muudatustega kahe täispika kalendrinädalate jooksul alates teavitamisest kinnitanud, loetakse, et on ta need tingimused vastu võtnud."));
+            "Kui ei ole Rentnik käesoleva lepingu ja “Tüüptingimused” lepingulisa tingimuste muudatustega tutvunud ega pole oma nõusolekut muudatustega kahe täispika kalendrinädalate jooksul alates teavitamisest kinnitanud, loetakse, et on ta need tingimused vastu võtnud."));
 
     chapter1.addCell(getSubChapterNumber("1.11"));
     chapter1.addCell(
         getSubChapterText(
-            " Rendileandja ja Rentnik sõlmivad käesoleva lepingu oma majandustegevuse raames, mille alusel on Rentnikul õigus võtta renti igat hõivatumata autot Rendileandja autopargist oma tulu teenimise eesmärgil, s.o taksoteenuste osutamiseks. Vastavalt käesolevale rendilepingule kohustub Rendileandja andma Rentnikule kasutada käesolevas lepingus, selle “Tüüptingimused” lepingulisas ning üleandmise-vastuvõtmise aktis määratud rendieseme (hõivatumata auto Rendileandja autopargist, kui see on olemas). Selle eest on Rentnik kohustatud tasuma Rendileandjale renditasu (rent) kogu rendiperioodi eest."));
+            "Rendileandja ja Rentnik sõlmivad käesoleva lepingu oma majandustegevuse raames, mille alusel on Rentnikul õigus võtta renti igat hõivatumata autot Rendileandja autopargist oma tulu teenimise eesmärgil, s.o taksoteenuste osutamiseks. Vastavalt käesolevale rendilepingule kohustub Rendileandja andma Rentnikule kasutada käesolevas lepingus, selle “Tüüptingimused” lepingulisas ning üleandmise-vastuvõtmise aktis määratud rendieseme (hõivatumata auto Rendileandja autopargist, kui see on olemas). Selle eest on Rentnik kohustatud tasuma Rendileandjale renditasu (rent) kogu rendiperioodi eest."));
 
     chapter1.addCell(getSubChapterNumber("1.12"));
     chapter1.addCell(
@@ -150,7 +150,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter2.addCell(getSubChapterNumber("2.1"));
     chapter2.addCell(
         getSubChapterText(
-            " Käesoleva lepingulisa “TSK Tingimused” nr. 070525 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 13:24:24 +00:00) ning on saadaval järgmisel lingil:"
+            "Käesoleva lepingulisa “TSK Tingimused” nr. 070525 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 13:24:24 +00:00) ning on saadaval järgmisel lingil:"
                 + "www.qrent.ee/tsk/tsk_dig_allkiri_est"));
 
     chapter2.addCell(getSubChapterNumber("2.1.1"));
@@ -208,7 +208,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter3.addCell(getSubChapterNumber("3.3"));
     chapter3.addCell(
         getSubChapterText(
-            "3 Auto renditeenuse tagatisraha on 500 eurot, mida Rendileandjal on õigus nõuda osade kaupa või ühe summaga. Rendileandjal on õigus tasaarveldada rendilepingu lõpetamisel Rentniku täitmata kohustused tagatisrahaga."));
+            "Auto renditeenuse tagatisraha on 500 eurot, mida Rendileandjal on õigus nõuda osade kaupa või ühe summaga. Rendileandjal on õigus tasaarveldada rendilepingu lõpetamisel Rentniku täitmata kohustused tagatisrahaga."));
     chapter3.addCell(getSubChapterNumber("3.4"));
     chapter3.addCell(
         getSubChapterText(
@@ -217,7 +217,8 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter3.addCell(getSubChapterNumber("3.5"));
     chapter3.addCell(
         getSubChapterText(
-            "Juhul, kui on Rentnikul eelmise perioodi võlgnevusi, kohustub ta tasuma kehtiva nädalase rendihinna lisaks 25% käesoleva võlgnevuse osaliseks katteks."));
+            "Juhul, kui Rentnikul on eelmise perioodi võlgnevusi, kohustub ta tasuma kehtivale nädalasele rendihinnale lisaks 25% rendiauto üleandmise-vastuvõtmisaktis märgitud baasilisest " +
+                    "rendihinnast (enne boonuste ja allahindluste rakendamist) võlgnevuse osaliseks katteks."));
     chapter3.addCell(getSubChapterNumber("3.6"));
     chapter3.addCell(
         getSubChapterText(
@@ -266,15 +267,15 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(getSubChapterNumber("4.4.1"));
     chapter4.addCell(
         getSubChapterText(
-            " Rentnikupoolsel käesoleva lepingu punktis 4.4 ja “Tüüptingimused” lepingulisa punktis III sätestatud tingimuste olulisel rikkumisel jätab Rendileandja endale õigust oma äranägemisel otsustada, kas peatada rendiauto funktsionaalsuse Rentniku rahalise olukorra paranemiseni või lõpetada Rentnikule osutatava renditeenuse ja kõrvaldada rendiauto tema kasutusest."));
+            "Rentnikupoolsel käesoleva lepingu punktis 4.4 ja “Tüüptingimused” lepingulisa punktis III sätestatud tingimuste olulisel rikkumisel jätab Rendileandja endale õigust oma äranägemisel otsustada, kas peatada rendiauto funktsionaalsuse Rentniku rahalise olukorra paranemiseni või lõpetada Rentnikule osutatava renditeenuse ja kõrvaldada rendiauto tema kasutusest."));
     chapter4.addCell(getSubChapterNumber("4.4.2.1"));
     chapter4.addCell(
         getSubChapterText(
-            " Rentnik on kohustatud toimetama rendiauto ülevaatuseks 3 tunni jooksul peale vastava nõude saamist Rentniku kontorisse aadressil Lasnamäe 30a, Tallinn, kui selline nõue on esitatud Rentnikul hiljemalt kella 15:00’ni tööpäeval või hiljemalt kella 11:00’ni laupäeval. Kui nõue esitati hiljem kui eelnevas lauses näidatud ajaks, on Rentnik kohustatud tooma sõiduki kontrolliks järgmisel päeval v.a. Põhapäeva. Kui Rentnik ei täida seda tingimust õigeks ajaks vääramatu jõu puudumisel, on Rendileandjal õigus nõuda Rentnikult trahvi summas 30 eurot selle ja iga sellise kordava juhtumi eest."));
+            "Rentnik on kohustatud toimetama rendiauto ülevaatuseks 3 tunni jooksul peale vastava nõude saamist Rentniku kontorisse aadressil Lasnamäe 30a, Tallinn, kui selline nõue on esitatud Rentnikul hiljemalt kella 15:00’ni tööpäeval või hiljemalt kella 11:00’ni laupäeval. Kui nõue esitati hiljem kui eelnevas lauses näidatud ajaks, on Rentnik kohustatud tooma sõiduki kontrolliks järgmisel päeval v.a. Põhapäeva. Kui Rentnik ei täida seda tingimust õigeks ajaks vääramatu jõu puudumisel, on Rendileandjal õigus nõuda Rentnikult trahvi summas 30 eurot selle ja iga sellise kordava juhtumi eest."));
     chapter4.addCell(getSubChapterNumber("4.4.2.2"));
     chapter4.addCell(
         getSubChapterText(
-            " Rentnik on kohustatud tagastama Sõiduki Rendileandjale samadel tingimustel, mis on sätestatud käesoleva lepingu punktis 4.4.2.1, vastava nõude saamisel juhul, kui Rentnik on oluliselt rikkunud käesoleva lepingu punktis 4.4 sätestatud renditingimused. Kui Rentnik ei täida seda tingimust õigeks ajaks vääramatu jõu puudumisel, on Rendileandjal õigus nõuda Rentnikult trahvi summas 120 eurot iga ööpäeva eest, mis on möödunud alates sellise nõude saamisest Rentniku poolt."));
+            "Rentnik on kohustatud tagastama Sõiduki Rendileandjale samadel tingimustel, mis on sätestatud käesoleva lepingu punktis 4.4.2.1, vastava nõude saamisel juhul, kui Rentnik on oluliselt rikkunud käesoleva lepingu punktis 4.4 sätestatud renditingimused. Kui Rentnik ei täida seda tingimust õigeks ajaks vääramatu jõu puudumisel, on Rendileandjal õigus nõuda Rentnikult trahvi summas 120 eurot iga ööpäeva eest, mis on möödunud alates sellise nõude saamisest Rentniku poolt."));
     chapter4.addCell(getSubChapterNumber("4.4.2.3"));
     chapter4.addCell(
         getSubChapterText(
@@ -282,28 +283,27 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(getSubChapterNumber("4.4.3"));
     chapter4.addCell(
         getSubChapterText(
-            " Käesoleva lepingu allkirjastamisega kinitab Rentnik, et on ta teadlik ja nõus järgmise tingimusega: Käesolevas lepingus punktis 4.4.1 kirjeldatud tingimuste loomine ja järgneva rendiauto kõrvaldamine Rentniku kasutusest võrdsustatakse Rentniku poolt lepingu lõpetamisest teatamisega, mis on kirjeldatud käesoleva lepingu punktis 1.14. Seetõttu jõustub käesoleva lepingu punktis 1.14 toodud tingimus, mis kohustab Rentnikku tasuma renditasu järgnevate "
+            "Käesoleva lepingu allkirjastamisega kinitab Rentnik, et on ta teadlik ja nõus järgmise tingimusega: Käesolevas lepingus punktis 4.4.1 kirjeldatud tingimuste loomine ja järgneva rendiauto kõrvaldamine Rentniku kasutusest võrdsustatakse Rentniku poolt lepingu lõpetamisest teatamisega, mis on kirjeldatud käesoleva lepingu punktis 1.14. Seetõttu jõustub käesoleva lepingu punktis 1.14 toodud tingimus, mis kohustab Rentnikku tasuma renditasu järgnevate "
                 + getNoticePeriod1(model)
                 + " täispika kalendrinädala eest pärast eespool kirjeldatud Rentniku poolt lepingu lõpetamisest teatamist."));
     chapter4.addCell(getSubChapterNumber("4.4.4"));
     chapter4.addCell(
         getSubChapterText(
-            " Peale selle, Rentnikupoolse eelnevas punktis 4.4.1 kirjeldatud tingimuste loomise ja sellele järgneva rendiauto kõrvaldamise eest määratakse rahatrahv summas 500 eurot, kui rendiauto kõrvaldamise ajal asub Tallinnas. Kui rendiauto kõrvaldamise ajal asub Tallinnast väljaspool, lisatakse trahvi summale veel 2 eurot iga kilomeetri eest Tallinna piirist auto asukohani. Kui auto kõrvaldamise ajal ei ole sõiduk liiklemiskõlblik, lisatakse ülaltoodud summadele evakuaatori tasu."));
+            "Peale selle, Rentnikupoolse eelnevas punktis 4.4.1 kirjeldatud tingimuste loomise ja sellele järgneva rendiauto kõrvaldamise eest määratakse rahatrahv summas 500 eurot, kui rendiauto kõrvaldamise ajal asub Tallinnas. Kui rendiauto kõrvaldamise ajal asub Tallinnast väljaspool, lisatakse trahvi summale veel 2 eurot iga kilomeetri eest Tallinna piirist auto asukohani. Kui auto kõrvaldamise ajal ei ole sõiduk liiklemiskõlblik, lisatakse ülaltoodud summadele evakuaatori tasu."));
     chapter4.addCell(getSubChapterNumber("4.4.5"));
     chapter4.addCell(
         getSubChapterText(
-            " Rendiauto võib olla tagastatud Rentnikule kasutamiseks, kui kõrvaldamise põhjuseks oli vaid võlgnevus Rendileandja ees, mis hiljem hüvitati. Sellisel juhul ei kompenseerita Rentnikule aega, mille jooksul rendiauto oli Rendileandja valduses, vaid peab see olema tasutud vastavalt käesoleva lepingu punktides 3.4 ja 3.5 kirjeldatud tingimustele. Sel juhul tagastatakse auto Rentnikule “Tüüptingimused” lepingulisa punktis 4.1 määratud väljastamiskohas."));
+            "Rendiauto võib olla tagastatud Rentnikule kasutamiseks, kui kõrvaldamise põhjuseks oli vaid võlgnevus Rendileandja ees, mis hiljem hüvitati. Sellisel juhul ei kompenseerita Rentnikule aega, mille jooksul rendiauto oli Rendileandja valduses, vaid peab see olema tasutud vastavalt käesoleva lepingu punktides 3.4 ja 3.5 kirjeldatud tingimustele. Sel juhul tagastatakse auto Rentnikule “Tüüptingimused” lepingulisa punktis 4.1 määratud väljastamiskohas."));
     chapter4.addCell(getSubChapterNumber("4.5"));
     chapter4.addCell(
         getSubChapterText(
-            " Pooled on leppinud kokku eraldi, et käesolev leping on sõlmitud Rentniku majandustegevuse raames ning sellele ei kohaldata VÕS sätestatud tarbija õigusi."));
-    // TODO UUS rentnik 111111111
+            "Pooled on leppinud kokku eraldi, et käesolev leping on sõlmitud Rentniku majandustegevuse raames ning sellele ei kohaldata VÕS sätestatud tarbija õigusi."));
     chapter4.addCell(getSubChapterNumber("4.6.1"));
     chapter4.addCell(
         getSubChapterText(
-            " Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja ("
+            "Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja ("
                 + model.getRenter()
-                + " 12345678910) avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
+                + ") avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
     chapter4.addCell(getSubChapterNumber("4.6.2"));
     chapter4.addCell(
         getSubChapterText(
@@ -323,13 +323,13 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(getSubChapterNumber("4.6.2.4"));
     chapter4.addCell(
         getSubChapterText(
-            " Rendiandja on teavitatud 24 tunni jooksul ja kõik materjalid on saadetud tema e-postile.    "));
+            "Rendiandja on teavitatud 24 tunni jooksul ja kõik materjalid on saadetud tema e-postile.    "));
     chapter4.addCell(getSubChapterNumber("4.6.3"));
     chapter4.addCell(
         getSubChapterText(
             "Juhtumid, kus vastutuse piirang EI KEHTI (rendnik vastutab kahju täissumma eest):     "));
     chapter4.addCell(getSubChapterNumber("4.6.3.1"));
-    chapter4.addCell(getSubChapterText(" Auto juht oli alkoholi- või uimastimõju all.     "));
+    chapter4.addCell(getSubChapterText("Auto juht oli alkoholi- või uimastimõju all.     "));
     chapter4.addCell(getSubChapterNumber("4.6.3.2"));
     chapter4.addCell(
         getSubChapterText(
@@ -370,7 +370,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter4.addCell(getSubChapterNumber("4.6.3.13"));
     chapter4.addCell(
         getSubChapterText(
-            " Kui esineb vähemalt üks nendest (punktid 4.6.3.1-4.6.3.12) rikkumistest, kaotab rendnik õiguse vastutuse piirangule ja on kohustatud hüvitama kogu kahju ulatuses.    "));
+            "Kui esineb vähemalt üks nendest (punktid 4.6.3.1-4.6.3.12) rikkumistest, kaotab rendnik õiguse vastutuse piirangule ja on kohustatud hüvitama kogu kahju ulatuses.    "));
     chapter4.addCell(getSubChapterNumber("4.6.4"));
     chapter4.addCell(
         getSubChapterText(
@@ -436,14 +436,14 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     chapter5.addCell(getSubChapterNumber("5.4"));
     chapter5.addCell(
         getSubChapterText(
-            "Rendileandja ja Rentniku vahel uue koostöölepingu sõlmimine muudab kõik varasemad nende vahel sõlmitud koostöölepinguid tühiseks käesoleva lepingu sõlmimise ning allkirjastamise kuupäevast.\n\n\n\n\n"));
+            "Rendileandja ja Rentniku vahel uue koostöölepingu sõlmimine muudab kõik varasemad nende vahel sõlmitud koostöölepinguid tühiseks käesoleva lepingu sõlmimise ning allkirjastamise kuupäevast."));
 
     pdfDocument.add(chapter5);
 
     //////// Star New Driver
 
     final var chapter16 = getChapterTable();
-    chapter16.addCell(getChapterSummary("Lisa"));
+    chapter16.addCell(getChapterSummary("\n\n\n\n\n\n\n\nLisa"));
     final var contractNumber = model.getNumber();
     final var body16acell2 =
         new Cell(
@@ -518,14 +518,14 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.3"));
     campaniachapter.addCell(
         getSubChapterText(
-            " Boonus kantakse Rentniku kontole või arvestatakse saldole ainult juhul, kui eelneva nädala renditasu ja"
+            "Boonus kantakse Rentniku kontole või arvestatakse saldole ainult juhul, kui eelneva nädala renditasu ja"
                 + " kõik võlakohustused on tasutud korrektselt ja tähtaegselt (vt p. 2.4 ja 2.5).   "));
 
     campaniachapter.addCell(getSubChapterNumber("2.4"));
     campaniachapter.addCell(
         getSubChapterText(
             """
-                         Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:
+                        Rentnik on kohustatud tasuma iga nädala rendi eest ettemaksuna:
                         – kas sularahas Rendileandja kontoris aadressil Lasnamäe 30a, Tallinn,
                         – või ülekandega Rendileandja pangakontole (või muule määratud kontole),\
                          märkides selgituseks „autorent + auto number“, hiljemalt teisipäevaks kell 16:00 jooksva nädala eest.
@@ -539,7 +539,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("2.6"));
     campaniachapter.addCell(
         getSubChapterText(
-            " Kui Rentnik ei täida punktides 2.4 ja 2.5 sätestatud kohustusi, ei lisandu vastava nädala boonus Rentniku saldole."));
+            "Kui Rentnik ei täida punktides 2.4 ja 2.5 sätestatud kohustusi, ei lisandu vastava nädala boonus Rentniku saldole."));
 
     campaniachapter.addCell(getChapterNumber("3"));
     campaniachapter.addCell(getChapterSummary("Ennetähtaegne lõpetamine ja rikkumine"));
@@ -555,7 +555,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     campaniachapter.addCell(getSubChapterNumber("3.2"));
     campaniachapter.addCell(
         getSubChapterText(
-            " See summa vastab 12 nädala jooksul määratud boonuste kogusummale ja kehtib sõltumata muudest lepingu kohustustest. "
+            "See summa vastab 12 nädala jooksul määratud boonuste kogusummale ja kehtib sõltumata muudest lepingu kohustustest. "
                 + "Leppetrahvile lisanduvad kõik muud rendilepingu ja tüüptingimustega ettenähtud sanktsioonid."));
     pdfDocument.add(campaniachapter);
 
