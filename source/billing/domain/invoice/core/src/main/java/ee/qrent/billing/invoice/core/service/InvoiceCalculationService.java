@@ -126,7 +126,9 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
                         .dateStart(weekStartDay)
                         .dateEnd(weekEndDay)
                         .transactionKindIds(
-                            transactionKindQuery.getAllByCodes(asList("F", "NFA", "FA", "P", "R")).stream()
+                            transactionKindQuery
+                                .getAllByCodes(asList("F", "NFA", "FA", "P", "R"))
+                                .stream()
                                 .map(TransactionKindResponse::getId)
                                 .toList())
                         .build();
@@ -237,6 +239,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private BalanceResponse getWeekBalanceOrDefault(final Long driverId, final QWeekResponse qWeek) {
+   //TODO move to the common place
     final var zeroBalance =
         BalanceResponse.builder()
             .qWeekId(null)
@@ -244,28 +247,17 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
             .feeAmount(ZERO)
             .feeAbleAmount(ZERO)
             .nonFeeAbleAmount(ZERO)
+            .amount(ZERO)
             .driverId(driverId)
             .build();
 
     if (qWeek == null) {
       return zeroBalance;
     }
-
-    final var balancesCount = balanceQuery.getCountByDriver(driverId);
-    if (balancesCount == 0) {
-      return zeroBalance;
-    }
-
+    // for the first week
     final var weekBalance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeek.getId());
 
-    if (weekBalance == null) {
-      throw new RuntimeException(
-          format(
-              "Balance for the qWeek %d and driver with id %d, must exist",
-              qWeek.getNumber(), driverId));
-    }
-
-    return weekBalance;
+    return weekBalance == null ? zeroBalance : weekBalance;
   }
 
   private QWeekResponse getLatestCalculatedWeek() {
