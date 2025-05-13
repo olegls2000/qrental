@@ -12,6 +12,7 @@ public class BillingTaskScheduler {
   private final ObligationCalculationTask obligationCalculationTask;
   private final QWeekCreationTask qWeekCreationTask;
   private final RentCalculationTask rentCalculationTask;
+  private final MondayFinancialReportTask mondayFinancialReportTask;
 
   // seconds minutes hours day-of-month month day-of-week
   //   0       0      8        *         *        ?
@@ -36,5 +37,10 @@ public class BillingTaskScheduler {
   @Scheduled(cron = "0 16 0 * * MON")
   public void scheduleObligationCalculationTask() {
     runTaskUseCase.run(obligationCalculationTask);
+  }
+
+  @Scheduled(cron = "0 21 0 * * MON")
+  public void scheduleMondayFinancialReportTask() {
+    runTaskUseCase.run(mondayFinancialReportTask);
   }
 }

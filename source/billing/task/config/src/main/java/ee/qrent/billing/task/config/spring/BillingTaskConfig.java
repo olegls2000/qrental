@@ -65,18 +65,26 @@ public class BillingTaskConfig {
   }
 
   @Bean
+  public MondayFinancialReportTask getMondayFinancialReportTask() {
+
+    return new MondayFinancialReportTask();
+  }
+
+  @Bean
   public BillingTaskScheduler getBillingTaskScheduler(
       final RunTaskUseCase runTaskUseCase,
       final InsuranceCaseCalculationTask insuranceCalculationTask,
       final ObligationCalculationTask obligationCalculationTask,
       final QWeekCreationTask qWeekCreationTask,
-      final RentCalculationTask rentCalculationTask) {
+      final RentCalculationTask rentCalculationTask,
+      final MondayFinancialReportTask mondayFinancialReportTask) {
 
     return new BillingTaskScheduler(
         runTaskUseCase,
         insuranceCalculationTask,
         obligationCalculationTask,
         qWeekCreationTask,
-        rentCalculationTask);
+        rentCalculationTask,
+        mondayFinancialReportTask);
   }
 }
