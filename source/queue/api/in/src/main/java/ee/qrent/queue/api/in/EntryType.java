@@ -1,6 +1,7 @@
 package ee.qrent.queue.api.in;
 
 public enum EntryType {
+  MONDAY_FINANCIAL_EMAIL,
   INVOICE_EMAIL,
   CONTRACT_EMAIL,
   AUTHORIZATION_EMAIL,

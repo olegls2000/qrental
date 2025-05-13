@@ -3,11 +3,14 @@ package ee.qrent.billing.task.config.spring;
 import ee.qrent.billing.bonus.api.in.usecase.ObligationCalculationAddUseCase;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.usecase.QWeekAddUseCase;
+import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
+import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrent.billing.task.core.*;
 import ee.qrent.billing.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.usecase.RunTaskUseCase;
+import ee.qrent.queue.api.in.QueueEntryPushUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -65,9 +68,12 @@ public class BillingTaskConfig {
   }
 
   @Bean
-  public MondayFinancialReportTask getMondayFinancialReportTask() {
+  public MondayFinancialReportTask getMondayFinancialReportTask(
+      final GetDriverQuery getDriverQuery,
+      final QueueEntryPushUseCase queueEntryPushUseCase,
+      final QDateTime qDateTime) {
 
-    return new MondayFinancialReportTask();
+    return new MondayFinancialReportTask(getDriverQuery, queueEntryPushUseCase, qDateTime);
   }
 
   @Bean
