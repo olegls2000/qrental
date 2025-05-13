@@ -1,9 +1,12 @@
 package ee.qrent.billing.transaction.core.service.balance;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
@@ -11,7 +14,9 @@ import ee.qrent.billing.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrent.billing.transaction.core.mapper.balance.BalanceResponseMapper;
 import ee.qrent.billing.transaction.core.service.balance.BalanceQueryService;
 import ee.qrent.billing.transaction.core.service.balance.calculator.BalanceCalculatorStrategy;
+import ee.qrent.billing.transaction.domain.type.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class BalanceQueryServiceTest {
 
@@ -40,5 +45,28 @@ class BalanceQueryServiceTest {
             balanceLoadPort,
             balanceResponseMapper,
             asList(calculatorStrategies));
+  }
+
+  @Test
+  public void testGetRawContextByDriverIdAndQWeekIdIfDriverDoesntHaveBalances() {
+    // given
+    final var driverId = 1L;
+    final Long requestedWeekId = 10L;
+    final Long previousWeekId = 9L;
+    when(qWeekQuery.getOneBeforeById(requestedWeekId))
+        .thenReturn(QWeekResponse.builder().id(previousWeekId).build());
+
+    when(balanceLoadPort.loadLatestByDriver(driverId)).thenReturn(null);
+    when(balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, requestedWeekId, true))
+        .thenReturn(null);
+    when(balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, previousWeekId, true))
+        .thenReturn(null);
+
+    // when
+    final var rawContext =
+        instanceUnderTest.getRawContextByDriverIdAndQWeekId(driverId, requestedWeekId);
+
+    // then
+    assertNull(rawContext);
   }
 }

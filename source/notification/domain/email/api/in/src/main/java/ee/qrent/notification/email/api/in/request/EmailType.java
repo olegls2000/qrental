@@ -1,6 +1,7 @@
 package ee.qrent.notification.email.api.in.request;
 
 public enum EmailType {
+  MONDAY_FINANCIAL_EMAIL,
   INVOICE_EMAIL,
   CONTRACT_EMAIL,
   AUTHORIZATION_EMAIL,
