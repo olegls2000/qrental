@@ -14,4 +14,6 @@ public interface GetCarQuery extends BaseGetQuery<CarUpdateRequest, CarResponse>
   List<CarResponse> getAllByFilter(final CarFilter filterRequest);
 
   Map<String, String> getAllStatuses();
+
+  CarResponse getByRegistrationNumber(final String registrationNumber);
 }

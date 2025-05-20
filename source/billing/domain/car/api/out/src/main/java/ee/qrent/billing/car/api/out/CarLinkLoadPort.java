@@ -9,8 +9,6 @@ import java.util.List;
 public interface CarLinkLoadPort extends LoadPort<CarLink> {
   CarLink loadActiveByDriverId(final Long driverId);
 
-  CarLink loadFirstByDriverId(final Long driverId);
-
   List<CarLink> loadActive();
 
   List<CarLink> loadActiveByDate(final LocalDate date);

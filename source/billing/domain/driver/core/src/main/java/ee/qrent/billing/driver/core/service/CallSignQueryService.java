@@ -42,4 +42,10 @@ public class CallSignQueryService implements GetCallSignQuery {
   public List<CallSignResponse> getAvailable() {
     return loadPort.loadAvailable().stream().map(mapper::toResponse).collect(toList());
   }
+
+  @Override
+  public CallSignResponse getByCallSign(final Integer callSign) {
+    // TODO report
+    return null;
+  }
 }

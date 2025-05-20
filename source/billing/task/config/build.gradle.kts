@@ -5,6 +5,7 @@ dependencies {
     implementation(project(":source:billing:domain:bonus:api:in"))
     implementation(project(":source:billing:domain:insurance:api:in"))
     implementation(project(":source:billing:domain:constant:api:in"))
+    implementation(project(":source:billing:domain:report:api:in"))
     implementation(project(":source:billing:task:core"))
     implementation(project(":source:queue:api:in"))
 

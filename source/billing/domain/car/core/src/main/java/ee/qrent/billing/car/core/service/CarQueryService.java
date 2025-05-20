@@ -68,9 +68,10 @@ public class CarQueryService implements GetCarQuery {
     final var notActiveCars =
         allCars.stream().filter(car -> !activeCarIds.contains(car.getId())).collect(toList());
 
-    return notActiveCars.stream().map(car -> mapper.toResponse(car))
-            .sorted(STATUS_COMPARATOR)
-            .collect(toList());
+    return notActiveCars.stream()
+        .map(car -> mapper.toResponse(car))
+        .sorted(STATUS_COMPARATOR)
+        .collect(toList());
   }
 
   public List<CarResponse> getNotAvailableCars() {
@@ -99,5 +100,11 @@ public class CarQueryService implements GetCarQuery {
   @Override
   public Map<String, String> getAllStatuses() {
     return stream(CarStatus.values()).collect(toMap(Enum::name, CarStatus::getLabel));
+  }
+
+  @Override
+  public CarResponse getByRegistrationNumber(final String registrationNumber) {
+    // TODO report
+    return null;
   }
 }

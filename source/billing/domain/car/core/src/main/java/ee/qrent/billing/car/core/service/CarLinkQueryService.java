@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrent.billing.driver.api.in.response.CallSignResponse;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.car.api.in.request.CarLinkUpdateRequest;
@@ -128,6 +129,12 @@ public class CarLinkQueryService implements GetCarLinkQuery {
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
+  }
+
+  @Override
+  public CarLinkResponse getActiveByQWeekIdAndDriverId(final Long weekId, final Long driverId) {
+      // TODO report
+    return null;
   }
 
   @Override

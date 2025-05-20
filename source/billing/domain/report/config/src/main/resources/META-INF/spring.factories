@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.report.spring.config.WeeklyReportAdapterConfig,\
+ee.qrent.billing.report.spring.config.WeeklyReportMapperConfig,\
+ee.qrent.billing.report.spring.config.WeeklyReportServiceConfig,\
+ee.qrent.billing.report.spring.config.WeeklyReportRepositoryConfig,\
+ee.qrent.billing.report.spring.config.WeeklyReportValidatorConfig

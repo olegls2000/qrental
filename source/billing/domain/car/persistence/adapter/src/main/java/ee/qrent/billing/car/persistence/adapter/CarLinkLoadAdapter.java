@@ -34,12 +34,6 @@ public class CarLinkLoadAdapter implements CarLinkLoadPort {
   }
 
   @Override
-  public CarLink loadFirstByDriverId(Long driverId) {
-
-    return mapper.mapToDomain(repository.findFirstByDriverId(driverId));
-  }
-
-  @Override
   public List<CarLink> loadActive() {
     final var nowDate = LocalDate.now();
 
