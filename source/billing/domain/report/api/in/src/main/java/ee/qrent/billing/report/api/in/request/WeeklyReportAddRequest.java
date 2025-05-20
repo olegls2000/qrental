@@ -12,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class WeeklyReportAddRequest extends AbstractAddRequest {
   private Long qWeekId;
+
   private WeeklyReportType type;
 }

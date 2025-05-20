@@ -3,6 +3,8 @@ package ee.qrent.billing.report.spring.config;
 import ee.qrent.billing.invoice.api.out.*;
 import ee.qrent.billing.invoice.core.mapper.*;
 import ee.qrent.billing.invoice.core.service.*;
+import ee.qrent.billing.report.core.mapper.*;
+import ee.qrent.billing.report.core.service.*;
 import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
@@ -15,8 +17,8 @@ import ee.qrent.billing.invoice.api.in.request.InvoiceAddRequest;
 import ee.qrent.billing.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrent.billing.invoice.api.in.usecase.InvoicePdfUseCase;
 import ee.qrent.billing.invoice.api.in.usecase.InvoiceSendByEmailUseCase;
-import ee.qrent.billing.invoice.core.service.pdf.InvoiceToPdfConverter;
-import ee.qrent.billing.invoice.core.service.pdf.InvoiceToPdfModelMapper;
+import ee.qrent.billing.report.core.service.pdf.InvoiceToPdfConverter;
+import ee.qrent.billing.report.core.service.pdf.InvoiceToPdfModelMapper;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -38,15 +40,15 @@ public class WeeklyReportServiceConfig {
   }
 
   @Bean
-  InvoiceUseCaseService getInvoiceUseCaseService(
+  WeeklyReportUseCaseService getInvoiceUseCaseService(
       final InvoiceAddPort addPort,
       final InvoiceUpdatePort updatePort,
       final InvoiceDeletePort deletePort,
       final InvoiceLoadPort loadPort,
-      final InvoiceAddRequestMapper addRequestMapper,
+      final WeeklyReportAddRequestMapper addRequestMapper,
       final InvoiceUpdateRequestMapper updateRequestMapper,
       final AddRequestValidator<InvoiceAddRequest> addRequestValidator) {
-    return new InvoiceUseCaseService(
+    return new WeeklyReportUseCaseService(
         addPort,
         updatePort,
         deletePort,

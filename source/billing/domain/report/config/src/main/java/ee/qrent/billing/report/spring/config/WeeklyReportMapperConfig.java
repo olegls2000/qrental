@@ -5,6 +5,7 @@ import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.invoice.core.mapper.*;
 import ee.qrent.billing.invoice.api.out.InvoiceLoadPort;
+import ee.qrent.billing.report.core.mapper.*;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WeeklyReportMapperConfig {
   @Bean
-  InvoiceAddRequestMapper getInvoiceAddRequestMapper(
+  WeeklyReportAddRequestMapper getInvoiceAddRequestMapper(
       final GetDriverQuery driverQuery,
       final GetTransactionQuery transactionQuery,
       final GetFirmQuery firmQuery) {
-    return new InvoiceAddRequestMapper(driverQuery, transactionQuery, firmQuery);
+    return new WeeklyReportAddRequestMapper(driverQuery, transactionQuery, firmQuery);
   }
 
   @Bean
