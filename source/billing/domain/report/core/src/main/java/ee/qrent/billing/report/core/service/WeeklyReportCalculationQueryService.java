@@ -31,6 +31,7 @@ public class WeeklyReportCalculationQueryService implements GetWeeklyReportCalcu
     return responseMapper.toObjectInfo(loadPort.loadById(id));
   }
 
+  //TODO get rid of this method
   @Override
   public Object getUpdateRequestById(final Long id) {
     return null;

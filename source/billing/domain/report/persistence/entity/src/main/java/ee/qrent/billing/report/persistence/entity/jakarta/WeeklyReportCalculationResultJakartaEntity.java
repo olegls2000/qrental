@@ -27,5 +27,5 @@ public class WeeklyReportCalculationResultJakartaEntity {
 
     @ManyToOne
     @JoinColumn(name = "weekly_report_id")
-    private WeeklyReportJakartaEntity invoice;
+    private WeeklyReportJakartaEntity weeklyReport;
 }
