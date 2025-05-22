@@ -11,7 +11,7 @@ dependencies{
     implementation(project(":source:billing:domain:driver:api:in"))
     implementation(project(":source:billing:domain:car:api:in"))
     implementation(project(":source:billing:domain:transaction:api:in"))
-
+    implementation(project(":source:billing:domain:firm:api:in"))
 
     implementation(libs.q.jakarta.transaction)
 

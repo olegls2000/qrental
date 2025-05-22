@@ -14,18 +14,12 @@ public class WeeklyReport {
   private Long id;
   private Long qWeekId;
   private Long driverId;
-  private String driverName;
-  private Long driverTaxNumber;
-  private Integer callSign;
-  private String carRegistrationNumber;
-  private Integer weekYear;
-  private Integer weekNumber;
+  private Integer callSignId;
+  private String carId;
   private LocalDate startDate;
   private LocalDate endDate;
   private Long qFirmId;
-  private String qFirmName;
   private BigDecimal deposit;
-  // ?
   private BigDecimal paidDeposit;
   private WeeklyReportObligationStatus status;
   private BigDecimal balanceAmount;

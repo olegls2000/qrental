@@ -12,6 +12,21 @@ public class WeeklyReportRepositoryImpl implements WeeklyReportRepository {
   private final WeeklyReportSpringDataRepository springDataRepository;
 
   @Override
+  public List<WeeklyReportJakartaEntity> findAll() {
+    return springDataRepository.findAll();
+  }
+
+  @Override
+  public WeeklyReportJakartaEntity getReferenceById(final Long id) {
+    return springDataRepository.getReferenceById(id);
+  }
+
+  @Override
+  public List<WeeklyReportJakartaEntity> findByCalculationId(final Long calculationId) {
+    return springDataRepository.findByCalculationId(calculationId);
+  }
+
+  @Override
   public WeeklyReportJakartaEntity save(final WeeklyReportJakartaEntity entity) {
     return springDataRepository.save(entity);
   }

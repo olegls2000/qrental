@@ -4,5 +4,11 @@ import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportJakartaEnt
 import java.util.List;
 
 public interface WeeklyReportRepository {
+  List<WeeklyReportJakartaEntity> findAll();
+
+  WeeklyReportJakartaEntity getReferenceById(final Long id);
+
+  List<WeeklyReportJakartaEntity> findByCalculationId(final Long calculationId);
+
   WeeklyReportJakartaEntity save(final WeeklyReportJakartaEntity entity);
 }
