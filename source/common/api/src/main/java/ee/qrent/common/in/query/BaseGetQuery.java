@@ -10,5 +10,6 @@ public interface BaseGetQuery<U, R> {
 
   String getObjectInfo(final Long id);
 
+  //TODO move to the Update Use Case
   U getUpdateRequestById(final Long id);
 }

@@ -10,8 +10,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Getter
 @Setter
-public class WeeklyReportAddRequest extends AbstractAddRequest {
+public class WeeklyReportCalculationAddRequest extends AbstractAddRequest {
   private Long qWeekId;
-
   private WeeklyReportType type;
+  private String comment;
 }

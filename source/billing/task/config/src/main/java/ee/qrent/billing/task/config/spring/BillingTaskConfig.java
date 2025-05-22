@@ -4,7 +4,7 @@ import ee.qrent.billing.bonus.api.in.usecase.ObligationCalculationAddUseCase;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.usecase.QWeekAddUseCase;
 import ee.qrent.billing.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
-import ee.qrent.billing.report.api.in.usecase.WeeklyReportAddUseCase;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportCalculationAddUseCase;
 import ee.qrent.billing.task.core.*;
 import ee.qrent.billing.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
 import ee.qrent.common.in.time.QDateTime;
@@ -67,7 +67,7 @@ public class BillingTaskConfig {
 
   @Bean
   public WeeklyReportMondayTask getBillingWeeklyReportMondayTask(
-          final WeeklyReportAddUseCase addUseCase, final GetQWeekQuery qWeekQuery) {
+          final WeeklyReportCalculationAddUseCase addUseCase, final GetQWeekQuery qWeekQuery) {
 
     return new WeeklyReportMondayTask(addUseCase, qWeekQuery);
   }

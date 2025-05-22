@@ -37,6 +37,7 @@ import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTr
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
+import ee.qrent.common.out.port.AddPort;
 import ee.qrent.queue.api.in.QueueEntryPushRequest;
 import ee.qrent.queue.api.in.QueueEntryPushUseCase;
 import jakarta.transaction.Transactional;
@@ -66,24 +67,23 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   private final InvoiceCalculationLoadPort loadPort;
   private final InvoiceCalculationAddRequestMapper addRequestMapper;
   private final AddRequestValidator<InvoiceCalculationAddRequest> addRequestValidator;
-  private final InvoiceCalculationAddPort invoiceCalculationAddPort;
+  private final AddPort<InvoiceCalculation> invoiceCalculationAddPort;
   private final InvoiceToPdfConverter invoiceToPdfConverter;
   private final InvoiceToPdfModelMapper invoiceToPdfModelMapper;
   private final QDateTime qDateTime;
 
   @Transactional
   @Override
-  public void add(final InvoiceCalculationAddRequest addRequest) {
-    final var calculationStartTime = System.currentTimeMillis();
-    final var violationsCollector = addRequestValidator.validate(addRequest);
+  public void add(final InvoiceCalculationAddRequest request) {
+    final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
-      addRequest.setViolations(violationsCollector.getViolations());
+      request.setViolations(violationsCollector.getViolations());
       return;
     }
-    final var requestedQWeekId = addRequest.getQWeekId();
-    final var domain = addRequestMapper.toDomain(addRequest);
+    final var requestedQWeekId = request.getQWeekId();
+    final var domain = addRequestMapper.toDomain(request);
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
-    final var actionDate = addRequest.getActionDate();
+    final var actionDate = request.getActionDate();
     var latestCalculatedWeek = getLatestCalculatedWeek();
     domain.setStartQWeekId(latestCalculatedWeek.getId());
     final var nextAfterLatestCalculated = qWeekQuery.getOneAfterById(latestCalculatedWeek.getId());
@@ -217,9 +217,6 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
         });
     invoiceCalculationAddPort.add(domain);
     sendEmails(domain);
-    final var calculationEndTime = System.currentTimeMillis();
-    final var calculationDuration = calculationEndTime - calculationStartTime;
-    System.out.printf("Invoice Calculation took %d milli seconds", calculationDuration);
   }
 
   private void checkIfBalanceForCurrentWeekExists(
@@ -239,7 +236,7 @@ public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
   }
 
   private BalanceResponse getWeekBalanceOrDefault(final Long driverId, final QWeekResponse qWeek) {
-   //TODO move to the common place
+    // TODO move to the common place
     final var zeroBalance =
         BalanceResponse.builder()
             .qWeekId(null)

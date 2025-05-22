@@ -21,8 +21,8 @@ public class WeeklyReportMapperConfig {
   }
 
   @Bean
-  InvoiceResponseMapper getInvoiceResponseMapper(final GetQWeekQuery qWeekQuery) {
-    return new InvoiceResponseMapper(qWeekQuery);
+  WeeklyReportResponseMapper getInvoiceResponseMapper(final GetQWeekQuery qWeekQuery) {
+    return new WeeklyReportResponseMapper(qWeekQuery);
   }
 
   @Bean
@@ -31,13 +31,13 @@ public class WeeklyReportMapperConfig {
   }
 
   @Bean
-  InvoiceCalculationAddRequestMapper getInvoiceCalculationAddRequestMapper() {
-    return new InvoiceCalculationAddRequestMapper();
+  WeeklyReportCalculationAddRequestMapper getInvoiceCalculationAddRequestMapper() {
+    return new WeeklyReportCalculationAddRequestMapper();
   }
 
   @Bean
-  InvoiceCalculationResponseMapper getInvoiceCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
-    return new InvoiceCalculationResponseMapper(qWeekQuery);
+  WeeklyReportCalculationResponseMapper getInvoiceCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
+    return new WeeklyReportCalculationResponseMapper(qWeekQuery);
   }
 
   @Bean

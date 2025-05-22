@@ -3,7 +3,7 @@ package ee.qrent.billing.report.core.mapper;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrent.billing.report.api.in.request.WeeklyReportAddRequest;
+import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
 import ee.qrent.billing.report.domain.WeeklyReport;
 import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrent.common.utils.QWeek;
@@ -22,14 +22,14 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class WeeklyReportAddRequestMapper implements AddRequestMapper<WeeklyReportAddRequest, WeeklyReport> {
+public class WeeklyReportAddRequestMapper implements AddRequestMapper<WeeklyReportCalculationAddRequest, WeeklyReport> {
 
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetFirmQuery firmQuery;
 
   @Override
-  public List<WeeklyReport> toDomain(WeeklyReportAddRequest request) {
+  public List<WeeklyReport> toDomain(WeeklyReportCalculationAddRequest request) {
 
 
     return WeeklyReport.builder()
