@@ -1,30 +1,19 @@
 package ee.qrent.billing.report.spring.config;
 
-import ee.qrent.billing.invoice.api.out.*;
-import ee.qrent.billing.invoice.core.mapper.*;
-import ee.qrent.billing.invoice.core.service.*;
+import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
+import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
+import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
 import ee.qrent.billing.report.core.mapper.*;
 import ee.qrent.billing.report.core.service.*;
-import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
-import ee.qrent.common.in.time.QDateTime;
-import ee.qrent.common.in.validation.AddRequestValidator;
-import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
-import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
-import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
-import ee.qrent.billing.invoice.api.in.query.GetInvoiceQuery;
-import ee.qrent.billing.invoice.api.in.request.InvoiceAddRequest;
-import ee.qrent.billing.invoice.api.in.request.InvoiceCalculationAddRequest;
-import ee.qrent.billing.invoice.api.in.usecase.InvoicePdfUseCase;
-import ee.qrent.billing.invoice.api.in.usecase.InvoiceSendByEmailUseCase;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfConverter;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfModelMapper;
-import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
-import ee.qrent.queue.api.in.QueueEntryPushUseCase;
+import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
+import ee.qrent.common.in.time.QDateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -34,34 +23,43 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class WeeklyReportServiceConfig {
 
   @Bean
-  GetInvoiceQuery getInvoiceQueryService(
-      final InvoiceLoadPort loadPort,
-      final WeeklyReportResponseMapper mapper,
-      final InvoiceUpdateRequestMapper updateRequestMapper) {
-    return new InvoiceQueryService(loadPort, mapper, updateRequestMapper);
+  WeeklyReportCalculationQueryService getWeeklyReportCalculationQueryService(
+      final WeeklyReportCalculationLoadPort loadPort,
+      final WeeklyReportCalculationResponseMapper mapper) {
+
+    return new WeeklyReportCalculationQueryService(loadPort, mapper);
+  }
+
+  @Bean
+  GetWeeklyReportQuery getWeeklyReportQueryService(
+      final WeeklyReportLoadPort loadPort, final WeeklyReportResponseMapper mapper) {
+
+    return new WeeklyReportQueryService(loadPort, mapper);
   }
 
   @Bean
   WeeklyReportCalculationUseCaseService getWeeklyReportCalculationUseCaseService(
-      final InvoiceAddPort addPort,
-      final InvoiceUpdatePort updatePort,
-      final InvoiceDeletePort deletePort,
-      final InvoiceLoadPort loadPort,
-      final WeeklyReportAddRequestMapper addRequestMapper,
-      final InvoiceUpdateRequestMapper updateRequestMapper,
-      final AddRequestValidator<InvoiceAddRequest> addRequestValidator) {
+      final WeeklyReportCalculationAddRequestValidator addRequestValidator,
+      final WeeklyReportCalculationAddRequestMapper addRequestMapper,
+      final WeeklyReportCalculationAddPort addPort,
+      final QDateTime qDateTime,
+      final GetObligationQuery obligationQuery,
+      final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery driverQuery) {
+
     return new WeeklyReportCalculationUseCaseService(
-        addPort,
-        updatePort,
-        deletePort,
-        loadPort,
+        addRequestValidator,
         addRequestMapper,
-        updateRequestMapper,
-        addRequestValidator);
+        addPort,
+        qDateTime,
+        obligationQuery,
+        qWeekQuery,
+        driverQuery);
   }
 
   @Bean
   WeeklyReportToPdfConverter getWeeklyReportToPdfConverter() {
+
     return new WeeklyReportToPdfConverter();
   }
 
@@ -72,57 +70,11 @@ public class WeeklyReportServiceConfig {
   }
 
   @Bean
-  WeeklyReportCalculationQueryService getWeeklyReportCalculationQueryService(
-      final WeeklyReportCalculationLoadPort loadPort,
-      final WeeklyReportCalculationResponseMapper responseMapper) {
-    return new WeeklyReportCalculationQueryService(loadPort, responseMapper);
-  }
+  WeeklyReportPdfUseCase getInvoicePdfUseCase(
+      final WeeklyReportLoadPort loadPort,
+      final WeeklyReportToPdfModelMapper mapper,
+      final WeeklyReportToPdfConverter converter) {
 
-  @Bean
-  InvoiceCalculationService getInvoiceCalculationService(
-      final GetQWeekQuery qWeekQuery,
-      final GetDriverQuery driverQuery,
-      final GetFirmQuery firmQuery,
-      final GetBalanceQuery balanceQuery,
-      final GetTransactionQuery transactionQuery,
-      final GetTransactionTypeQuery transactionTypeQuery,
-      final GetTransactionKindQuery transactionKindQuery,
-      final GetFirmLinkQuery firmLinkQuery,
-      final QueueEntryPushUseCase notificationQueuePushUseCase,
-      final InvoiceCalculationLoadPort loadPort,
-      final WeeklyReportCalculationAddRequestMapper addRequestMapper,
-      final AddRequestValidator<InvoiceCalculationAddRequest> addRequestValidator,
-      final InvoiceCalculationAddPort invoiceCalculationAddPort,
-      final WeeklyReportToPdfConverter invoiceToPdfConverter,
-      final WeeklyReportToPdfModelMapper invoiceToPdfModelMapper,
-      final QDateTime qDateTime) {
-
-    return new InvoiceCalculationService(
-        qWeekQuery,
-        driverQuery,
-        firmQuery,
-        balanceQuery,
-        transactionQuery,
-        transactionTypeQuery,
-        transactionKindQuery,
-        firmLinkQuery,
-        notificationQueuePushUseCase,
-        loadPort,
-        addRequestMapper,
-        addRequestValidator,
-        invoiceCalculationAddPort,
-        invoiceToPdfConverter,
-        invoiceToPdfModelMapper,
-        qDateTime);
-  }
-
-
-  @Bean
-  InvoicePdfUseCase getInvoicePdfUseCase(
-      final InvoiceLoadPort loadPort,
-      final WeeklyReportToPdfConverter converter,
-      final WeeklyReportToPdfModelMapper mapper) {
-
-    return new InvoicePdfUseCaseImpl(loadPort, converter, mapper);
+    return new WeeklyReportPdfUseCaseImpl(loadPort, mapper, converter);
   }
 }

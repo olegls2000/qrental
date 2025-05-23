@@ -14,21 +14,21 @@ import lombok.AllArgsConstructor;
 public class WeeklyReportCalculationQueryService implements GetWeeklyReportCalculationQuery {
 
   private final WeeklyReportCalculationLoadPort loadPort;
-  private final WeeklyReportCalculationResponseMapper responseMapper;
+  private final WeeklyReportCalculationResponseMapper mapper;
 
   @Override
   public List<WeeklyReportCalculationResponse> getAll() {
-    return loadPort.loadAll().stream().map(responseMapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
   }
 
   @Override
   public WeeklyReportCalculationResponse getById(final Long id) {
-    return responseMapper.toResponse(loadPort.loadById(id));
+    return mapper.toResponse(loadPort.loadById(id));
   }
 
   @Override
   public String getObjectInfo(final Long id) {
-    return responseMapper.toObjectInfo(loadPort.loadById(id));
+    return mapper.toObjectInfo(loadPort.loadById(id));
   }
 
   //TODO get rid of this method

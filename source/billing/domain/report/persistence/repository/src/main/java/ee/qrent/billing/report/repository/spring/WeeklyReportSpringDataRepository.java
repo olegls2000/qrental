@@ -13,7 +13,7 @@ public interface WeeklyReportSpringDataRepository
   @Query(
       value =
           "select inv.* from weekly_report wr "
-              + " LEFT JOIN weekly_report_calculation_result wrcr ON wr.id = wrcr.invoice_id "
+              + " LEFT JOIN weekly_report_calculation_result wrcr ON wr.id = wrcr.weekly_report_id "
               + " where wrcr.calculation_id =:calculationId",
       nativeQuery = true)
   List<WeeklyReportJakartaEntity> findByCalculationId(

@@ -7,4 +7,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories
 @EntityScan("ee.qrent.billing.report.persistence.entity.jakarta")
-public class ReportSpringDataConfig {}
+public class WeeklyReportSpringDataConfig {}

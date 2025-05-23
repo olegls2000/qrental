@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- ee.qrent.billing.report.ReportSpringDataConfig
+ ee.qrent.billing.report.WeeklyReportSpringDataConfig

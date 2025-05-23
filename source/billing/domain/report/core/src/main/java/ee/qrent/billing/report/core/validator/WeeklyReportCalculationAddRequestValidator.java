@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import static java.lang.String.format;
 
 @AllArgsConstructor
-public class WeeklyReportAddRequestValidator
+public class WeeklyReportCalculationAddRequestValidator
     implements AddRequestValidator<WeeklyReportCalculationAddRequest> {
 
   private final GetObligationCalculationQuery obligationCalculationQuery;

@@ -25,4 +25,12 @@ public class WeeklyReportCalculationAdapterMapper {
 
     return WeeklyReportCalculationResult.builder().build();
   }
+
+  public WeeklyReportCalculationJakartaEntity mapToEntity(
+      final WeeklyReportCalculation calculation) {
+    if (calculation == null) {
+      return null;
+    }
+    return WeeklyReportCalculationJakartaEntity.builder().build();
+  }
 }

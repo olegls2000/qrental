@@ -1,47 +1,60 @@
 package ee.qrent.billing.report.spring.config;
 
+import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
+import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
+import ee.qrent.billing.car.api.in.query.GetCarQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
-import ee.qrent.billing.invoice.core.mapper.*;
-import ee.qrent.billing.invoice.api.out.InvoiceLoadPort;
+import ee.qrent.billing.report.adapter.mapper.WeeklyReportAdapterMapper;
+import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapper;
 import ee.qrent.billing.report.core.mapper.*;
-import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
+import ee.qrent.common.in.time.QDateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WeeklyReportMapperConfig {
   @Bean
-  WeeklyReportAddRequestMapper getInvoiceAddRequestMapper(
+  WeeklyReportCalculationAddRequestMapper getWeeklyReportCalculationAddRequestMapper(
+      final QDateTime qDateTime) {
+
+    return new WeeklyReportCalculationAddRequestMapper(qDateTime);
+  }
+
+  @Bean
+  WeeklyReportResponseMapper getWeeklyReportResponseMapper(
+      final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
-      final GetTransactionQuery transactionQuery,
+      final GetCarLinkQuery carLinkQuery,
       final GetFirmQuery firmQuery) {
-    return new WeeklyReportAddRequestMapper(driverQuery, transactionQuery, firmQuery);
+    return new WeeklyReportResponseMapper(qWeekQuery, driverQuery, carLinkQuery, firmQuery);
   }
 
   @Bean
-  WeeklyReportResponseMapper getInvoiceResponseMapper(final GetQWeekQuery qWeekQuery) {
-    return new WeeklyReportResponseMapper(qWeekQuery);
-  }
-
-  @Bean
-  InvoiceUpdateRequestMapper getInvoiceUpdateRequestMapper(final InvoiceLoadPort loadPort) {
-    return new InvoiceUpdateRequestMapper(loadPort);
-  }
-
-  @Bean
-  WeeklyReportCalculationAddRequestMapper getInvoiceCalculationAddRequestMapper() {
-    return new WeeklyReportCalculationAddRequestMapper();
-  }
-
-  @Bean
-  WeeklyReportCalculationResponseMapper getInvoiceCalculationResponseMapper(final GetQWeekQuery qWeekQuery) {
+  WeeklyReportCalculationResponseMapper getWeeklyReportCalculationResponseMapper(
+      final GetQWeekQuery qWeekQuery) {
     return new WeeklyReportCalculationResponseMapper(qWeekQuery);
   }
 
   @Bean
-  InvoiceCalculationAdapterMapper getInvoiceCalculationAdapterMapper() {
-    return new InvoiceCalculationAdapterMapper();
+  WeeklyReportAdapterMapper getWeeklyReportAdapterMapper(
+      final GetDriverQuery driverQuery,
+      final GetCallSignQuery callSignQuery,
+      final GetQWeekQuery qWeekQuery,
+      final GetCarLinkQuery carLinkQuery,
+      final GetCarQuery carQuery,
+      final GetFirmQuery firmQuery,
+      final GetObligationQuery obligationQuery) {
+
+    return new WeeklyReportAdapterMapper(
+        driverQuery, callSignQuery, qWeekQuery, carLinkQuery, carQuery, firmQuery, obligationQuery);
+  }
+
+  @Bean
+  WeeklyReportCalculationAdapterMapper getWeeklyReportCalculationAdapterMapper() {
+
+    return new WeeklyReportCalculationAdapterMapper();
   }
 }

@@ -12,8 +12,8 @@ import lombok.AllArgsConstructor;
 public class WeeklyReportPdfUseCaseImpl implements WeeklyReportPdfUseCase {
 
   private final WeeklyReportLoadPort loadPort;
-  private final WeeklyReportToPdfConverter converter;
   private final WeeklyReportToPdfModelMapper mapper;
+  private final WeeklyReportToPdfConverter converter;
 
   @Override
   public InputStream getPdfInputStreamById(final Long id) {

@@ -15,24 +15,24 @@ import lombok.AllArgsConstructor;
 public class WeeklyReportQueryService implements GetWeeklyReportQuery {
 
   private final WeeklyReportLoadPort loadPort;
-  private final WeeklyReportResponseMapper responseMapper;
+  private final WeeklyReportResponseMapper mapper;
 
   @Override
   public List<WeeklyReportResponse> getAll() {
     return loadPort.loadAll().stream()
-        .map(responseMapper::toResponse)
+        .map(mapper::toResponse)
         .sorted(getInvoiceYearAndWeekComparator())
         .collect(toList());
   }
 
   @Override
   public WeeklyReportResponse getById(final Long id) {
-    return responseMapper.toResponse(loadPort.loadById(id));
+    return mapper.toResponse(loadPort.loadById(id));
   }
 
   @Override
   public String getObjectInfo(Long id) {
-    return responseMapper.toObjectInfo(loadPort.loadById(id));
+    return mapper.toObjectInfo(loadPort.loadById(id));
   }
 
   // TODO get rid of this method
@@ -44,7 +44,7 @@ public class WeeklyReportQueryService implements GetWeeklyReportQuery {
   @Override
   public List<WeeklyReportResponse> getAllByCalculationId(Long calculationId) {
     return loadPort.loadAllByCalculationId(calculationId).stream()
-        .map(responseMapper::toResponse)
+        .map(mapper::toResponse)
         .sorted(getInvoiceYearAndWeekComparator())
         .toList();
   }

@@ -1,18 +1,17 @@
 package ee.qrent.billing.report.adapter.adapter;
 
+import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapper;
+import ee.qrent.billing.report.adapter.repository.WeeklyReportCalculationRepository;
 
-import ee.qrent.billing.report.adapter.mapper.WeeklyReportAdapterMapper;
-import ee.qrent.billing.report.adapter.repository.WeeklyReportRepository;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
-import ee.qrent.billing.report.domain.WeeklyReport;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class WeeklyReportPersistenceAdapter implements WeeklyReportCalculationAddPort {
+public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCalculationAddPort {
 
-  private final WeeklyReportRepository repository;
-  private final WeeklyReportAdapterMapper mapper;
+  private final WeeklyReportCalculationRepository repository;
+  private final WeeklyReportCalculationAdapterMapper mapper;
 
   @Override
   public WeeklyReportCalculation add(final WeeklyReportCalculation domain) {

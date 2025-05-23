@@ -22,7 +22,6 @@ import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.firm.api.in.response.FirmResponse;
 import ee.qrent.billing.invoice.api.in.request.InvoiceCalculationAddRequest;
 import ee.qrent.billing.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
-import ee.qrent.billing.invoice.api.out.InvoiceCalculationAddPort;
 import ee.qrent.billing.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrent.billing.invoice.core.mapper.InvoiceCalculationAddRequestMapper;
 import ee.qrent.billing.invoice.core.service.pdf.InvoiceToPdfConverter;
