@@ -26,4 +26,9 @@ public class WeeklyReportCalculationLoadAdapter implements WeeklyReportCalculati
     final var entity = repository.getReferenceById(id);
     return mapper.mapToDomain(entity);
   }
+
+  @Override
+  public Long loadLastCalculatedQWeekId() {
+    return repository.getLastCalculatedQWeekId();
+  }
 }

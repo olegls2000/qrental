@@ -1,6 +1,4 @@
-import java.time.LocalDateTime
 import java.time.LocalDateTime.now
-import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ofPattern
 
 plugins {
@@ -16,6 +14,8 @@ dependencies {
     implementation(project(":source:billing:domain:car:persistence:flyway"))
     implementation(project(":source:billing:domain:invoice:config"))
     implementation(project(":source:billing:domain:invoice:persistence:flyway"))
+    implementation(project(":source:billing:domain:report:config"))
+    implementation(project(":source:billing:domain:report:persistence:flyway"))
     implementation(project(":source:billing:domain:contract:config"))
     implementation(project(":source:billing:domain:contract:persistence:flyway"))
     implementation(project(":source:billing:domain:firm:config"))

@@ -10,4 +10,6 @@ public interface WeeklyReportCalculationRepository {
   List<WeeklyReportCalculationJakartaEntity> findAll();
 
   WeeklyReportCalculationJakartaEntity getReferenceById(final Long id);
+
+  Long getLastCalculatedQWeekId();
 }

@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class InvoiceCalculationService implements InvoiceCalculationAddUseCase {
+public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUseCase {
 
   private static final BigDecimal VAT_RATE = BigDecimal.valueOf(0.819672d);
 

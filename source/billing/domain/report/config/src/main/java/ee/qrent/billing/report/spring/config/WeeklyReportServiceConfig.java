@@ -3,6 +3,7 @@ package ee.qrent.billing.report.spring.config;
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
@@ -23,11 +24,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class WeeklyReportServiceConfig {
 
   @Bean
-  WeeklyReportCalculationQueryService getWeeklyReportCalculationQueryService(
+  GetWeeklyReportCalculationQuery getWeeklyReportCalculationQueryService(
       final WeeklyReportCalculationLoadPort loadPort,
-      final WeeklyReportCalculationResponseMapper mapper) {
+      final WeeklyReportCalculationResponseMapper mapper,
+      final GetQWeekQuery qWeekQuery) {
 
-    return new WeeklyReportCalculationQueryService(loadPort, mapper);
+    return new WeeklyReportCalculationQueryService(loadPort, mapper, qWeekQuery);
   }
 
   @Bean
@@ -70,7 +72,7 @@ public class WeeklyReportServiceConfig {
   }
 
   @Bean
-  WeeklyReportPdfUseCase getInvoicePdfUseCase(
+  WeeklyReportPdfUseCase getWeeklyReportPdfUseCase(
       final WeeklyReportLoadPort loadPort,
       final WeeklyReportToPdfModelMapper mapper,
       final WeeklyReportToPdfConverter converter) {

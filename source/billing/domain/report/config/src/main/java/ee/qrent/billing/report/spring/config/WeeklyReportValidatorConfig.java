@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class WeeklyReportValidatorConfig {
 
   @Bean
-  AddRequestValidator<WeeklyReportCalculationAddRequest> getWeeklyReportAddRequestValidator(
+  WeeklyReportCalculationAddRequestValidator getWeeklyReportAddRequestValidator(
       final GetObligationCalculationQuery obligationCalculationQuery,
       final GetQWeekQuery qWeekQuery) {
 

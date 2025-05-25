@@ -45,17 +45,12 @@ public class WeeklyReportAdapterMapper {
     return WeeklyReport.builder()
         .id(entity.getId())
         .driverId(driverId)
-        .driverName(format("%s %s", driver.getFirstName(), driver.getLastName()))
-        .driverTaxNumber(driver.getTaxNumber())
-        .callSign(driver.getCallSign())
-        .carRegistrationNumber(carLink.getRegistrationNumber())
-        .weekYear(qWeek.getYear())
-        .weekNumber(qWeek.getNumber())
-        .startDate(qWeek.getStart())
-        .endDate(qWeek.getEnd())
+        // TODO add callSign Id
+        .callSignId(null)
+        // TODO add car Id
+        .carId(null)
         .qWeekId(qWeekId)
         .qFirmId(entity.getQFirmId())
-        .qFirmName(qFirm.getName())
         .deposit(driver.getDeposit())
         .paidDeposit(BigDecimal.valueOf(999999999999l))
         .status(getObligationStatus(qWeekId, driverId))
@@ -95,15 +90,14 @@ public class WeeklyReportAdapterMapper {
   }
 
   public WeeklyReportJakartaEntity mapToEntity(final WeeklyReport domain) {
-    final var callSign = callSignQuery.getByCallSign(domain.getCallSign());
-    final var car = carQuery.getByRegistrationNumber(domain.getCarRegistrationNumber());
+    final var callSign = callSignQuery.getById(domain.getCallSignId());
 
     return WeeklyReportJakartaEntity.builder()
         .id(domain.getId())
         .qWeekId(domain.getQWeekId())
         .driverId(domain.getDriverId())
-        .callSignId(callSign.getId())
-        .carId(car.getId())
+        .callSignId(domain.getCallSignId())
+        .carId(domain.getCarId())
         .qFirmId(domain.getQFirmId())
         .obligationStatus(mapToWeeklyReportObligationStatusJakarta(domain.getStatus()))
         .obligationTotal(domain.getDetail().getObligationTotal())

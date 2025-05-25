@@ -76,7 +76,7 @@ public class InvoiceServiceConfig {
   }
 
   @Bean
-  InvoiceCalculationService getInvoiceCalculationService(
+  InvoiceCalculationUseCaseService getInvoiceCalculationService(
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
       final GetFirmQuery firmQuery,
@@ -94,7 +94,7 @@ public class InvoiceServiceConfig {
       final InvoiceToPdfModelMapper invoiceToPdfModelMapper,
       final QDateTime qDateTime) {
 
-    return new InvoiceCalculationService(
+    return new InvoiceCalculationUseCaseService(
         qWeekQuery,
         driverQuery,
         firmQuery,

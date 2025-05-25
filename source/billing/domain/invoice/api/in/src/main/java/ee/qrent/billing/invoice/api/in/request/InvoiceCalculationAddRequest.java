@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InvoiceCalculationAddRequest extends AbstractAddRequest {
-
   private LocalDate actionDate = LocalDate.now();
   private Long qWeekId;
   private String comment;

@@ -30,4 +30,9 @@ public class WeeklyReportCalculationRepositoryImpl implements WeeklyReportCalcul
 
     return springDataRepository.getReferenceById(id);
   }
+
+  @Override
+  public Long getLastCalculatedQWeekId() {
+    return springDataRepository.getLastCalculationQWeekId();
+  }
 }

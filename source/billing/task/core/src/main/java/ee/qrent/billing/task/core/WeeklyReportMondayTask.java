@@ -16,11 +16,9 @@ public class WeeklyReportMondayTask implements QTask {
   @Override
   public Runnable getRunnable() {
     return () -> {
-      final WeeklyReportCalculationAddRequest addRequest =
-          WeeklyReportCalculationAddRequest.builder()
-              .qWeekId(qWeekQuery.getCurrentWeek().getId())
-              .type(WeeklyReportType.MONDAY_REPORT)
-              .build();
+      final WeeklyReportCalculationAddRequest addRequest = new WeeklyReportCalculationAddRequest();
+      addRequest.setQWeekId(qWeekQuery.getCurrentWeek().getId());
+      addRequest.setType(WeeklyReportType.MONDAY_REPORT);
       addUseCase.add(addRequest);
       if (addRequest.hasViolations()) {
         throw new RuntimeException(addRequest.getViolations().toString());

@@ -14,8 +14,8 @@ public class WeeklyReport {
   private Long id;
   private Long qWeekId;
   private Long driverId;
-  private Integer callSignId;
-  private String carId;
+  private Long callSignId;
+  private Long carId;
   private LocalDate startDate;
   private LocalDate endDate;
   private Long qFirmId;

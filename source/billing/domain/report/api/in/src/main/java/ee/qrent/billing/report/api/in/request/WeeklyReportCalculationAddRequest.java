@@ -6,11 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @Getter
 @Setter
 public class WeeklyReportCalculationAddRequest extends AbstractAddRequest {
+  private LocalDate actionDate = LocalDate.now();
   private Long qWeekId;
   private WeeklyReportType type;
   private String comment;

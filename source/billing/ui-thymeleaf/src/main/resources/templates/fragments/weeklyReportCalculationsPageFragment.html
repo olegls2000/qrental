@@ -1,0 +1,33 @@
+<div th:fragment="calculationsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/weeklyReportTabFragment :: weeklyReportTabs('calculations')"></ul>
+    <h2 class="py-3">Weekly Report Calculations</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/reports/calculations/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi bi-calculator"></span>
+                </a>
+            </th>
+            <th>Requested Week</th>
+            <th>Action Date</th>
+            <th>Reports Count</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(calculations)}">
+            <td colspan="5">No Weekly Report Calculations were done yet</td>
+        </tr>
+        <tr th:each="calculation : ${calculations}">
+            <td><a class="btn btn-sm btn-warning"
+                   th:href="@{/reports/calculations/{id}(id=${calculation.id})}">
+                <span class="bi bi-card-checklist"></span></a></td>
+            <td th:text="${calculation.requestedWeek}">???</td>
+            <td th:text="${calculation.actionDate}">???</td>
+            <td th:text="${calculation.weeklyReportCount}">???</td>
+            <td th:text="${calculation.comment}">???</td>
+        </tr>
+    </table>
+</div>
