@@ -167,6 +167,7 @@ public class DriverPortalController {
       model.addAttribute("periodObligationAmount", "not calculated");
       model.addAttribute("periodObligationAmountPaid", "not calculated");
       model.addAttribute("periodObligationAmountLeftToPay", "not calculated");
+      model.addAttribute("periodObligationMatchCount", 0);
 
       return;
     }

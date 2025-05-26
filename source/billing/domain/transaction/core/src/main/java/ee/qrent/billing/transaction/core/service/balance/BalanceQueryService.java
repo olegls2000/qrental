@@ -66,8 +66,10 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   private Balance getDefault(final Long qWeekId, final Long driverId) {
+    final var requestedBalance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
 
-    return Balance.builder()
+
+    return requestedBalance != null ? requestedBalance : Balance.builder()
         .qWeekId(qWeekId)
         .feeAbleAmount(BigDecimal.ZERO)
         .feeAmount(BigDecimal.ZERO)
