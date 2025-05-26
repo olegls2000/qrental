@@ -34,6 +34,7 @@ public class ContractQueryService implements GetContractQuery {
 
   @Override
   public List<ContractResponse> getAll() {
+
     return loadPort.loadAll().stream()
         .peek(endDateCalculator::setEndDate)
         .map(mapper::toResponse)
@@ -74,8 +75,7 @@ public class ContractQueryService implements GetContractQuery {
   }
 
   @Override
-  public ContractResponse getActiveContractByDriverIdAndQWeekId(
-      final Long driverId, final Long qWekId) {
+  public ContractResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long qWekId) {
     final var qWeek = qWeekQuery.getById(qWekId);
     final var activeContractOnRequestedWeek =
         loadPort.loadActiveByDateAndDriverId(qWeek.getStart(), driverId);
@@ -86,11 +86,13 @@ public class ContractQueryService implements GetContractQuery {
 
   @Override
   public List<String> getAllDurations() {
+
     return stream(ContractDuration.values()).map(ContractDuration::getLabel).toList();
   }
 
   @Override
   public List<ContractResponse> getAllActiveForCurrentDate() {
+
     return loadPort.loadActiveByDate(qDateTime.getToday()).stream()
         .peek(endDateCalculator::setEndDate)
         .map(mapper::toResponse)
@@ -109,6 +111,7 @@ public class ContractQueryService implements GetContractQuery {
 
   @Override
   public List<ContractResponse> getClosed() {
+
     return loadPort.loadClosedByDate(qDateTime.getToday()).stream()
         .peek(endDateCalculator::setEndDate)
         .map(mapper::toResponse)
@@ -118,11 +121,13 @@ public class ContractQueryService implements GetContractQuery {
 
   @Override
   public Long getCountActive() {
+
     return loadPort.loadCountActiveByDate(qDateTime.getToday());
   }
 
   @Override
   public Long getCountClosed() {
+
     return loadPort.loadCountClosedByDate(qDateTime.getToday());
   }
 }

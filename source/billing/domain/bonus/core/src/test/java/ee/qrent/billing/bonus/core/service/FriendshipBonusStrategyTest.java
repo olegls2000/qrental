@@ -131,7 +131,7 @@ class FriendshipBonusStrategyTest {
     final var weekPositiveAmount = BigDecimal.ONE;
     when(driverQuery.getFriendships(2L))
         .thenReturn(singletonList(FriendshipResponse.builder().friendId(222L).build()));
-    when(obligationQuery.getByQWeekIdAndDriverId(9L, 222L))
+    when(obligationQuery.getByDriverIdAndQWeekId(222L, 9L))
         .thenReturn(ObligationResponse.builder().matchCount(0).build());
 
     // when
@@ -154,7 +154,7 @@ class FriendshipBonusStrategyTest {
     final var friendCreationDate = LocalDate.now().minus(11, WEEKS);
     when(driverQuery.getById(222L))
         .thenReturn(DriverResponse.builder().id(222L).createdDate(friendCreationDate).build());
-    when(obligationQuery.getByQWeekIdAndDriverId(9L, 222L))
+    when(obligationQuery.getByDriverIdAndQWeekId(222L, 9L))
         .thenReturn(ObligationResponse.builder().matchCount(1).build());
     when(qWeekQuery.getOneAfterById(9L))
         .thenReturn(QWeekResponse.builder().start(friendCreationDate.plus(25, WEEKS)).build());
@@ -175,7 +175,7 @@ class FriendshipBonusStrategyTest {
 
     when(driverQuery.getFriendships(2L))
         .thenReturn(singletonList(FriendshipResponse.builder().friendId(222L).build()));
-    when(obligationQuery.getByQWeekIdAndDriverId(9L, 222L))
+    when(obligationQuery.getByDriverIdAndQWeekId(222L, 9L))
         .thenReturn(ObligationResponse.builder().matchCount(1).build());
     final var friendCreationDate = LocalDate.now().minus(10, WEEKS);
     when(driverQuery.getById(222L))

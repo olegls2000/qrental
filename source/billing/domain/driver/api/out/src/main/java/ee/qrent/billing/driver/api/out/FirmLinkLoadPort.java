@@ -5,5 +5,7 @@ import ee.qrent.billing.driver.domain.FirmLink;
 import java.time.LocalDate;
 
 public interface FirmLinkLoadPort extends LoadPort<FirmLink> {
-    FirmLink loadOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate);
+  FirmLink loadOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate);
+
+  FirmLink loadOneActiveByDriverIdAndDate(final Long driverId, final LocalDate date);
 }

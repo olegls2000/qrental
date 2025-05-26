@@ -24,7 +24,7 @@ public class WeeklyReportCalculationResponseMapper
 
     return WeeklyReportCalculationResponse.builder()
         .id(domain.getId())
-        .reportsCount(domain.getResults().size())
+        .reportsCount(domain.getReportTransactionLinks().size())
         .year(reportQWeek.getYear())
         .weekNumber(reportQWeek.getNumber())
         .dateStart(reportQWeek.getStart())

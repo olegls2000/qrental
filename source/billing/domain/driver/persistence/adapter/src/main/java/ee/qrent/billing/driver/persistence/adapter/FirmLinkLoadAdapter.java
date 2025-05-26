@@ -18,15 +18,26 @@ public class FirmLinkLoadAdapter implements FirmLinkLoadPort {
 
   @Override
   public List<FirmLink> loadAll() {
+
     return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
   public FirmLink loadById(final Long id) {
+
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
+
   @Override
-  public FirmLink loadOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate) {
-    return mapper.mapToDomain(repository.findOneByDriverIdAndRequiredDate(driverId, requiredDate));
+  public FirmLink loadOneByDriverIdAndRequiredDate(
+      final Long driverId, final LocalDate requiredDate) {
+
+    return mapper.mapToDomain(repository.findOneByDriverIdAndDate(driverId, requiredDate));
+  }
+
+  @Override
+  public FirmLink loadOneActiveByDriverIdAndDate(final Long driverId, final LocalDate date) {
+
+    return mapper.mapToDomain(repository.findOneByDriverIdAndDate(driverId, date));
   }
 }

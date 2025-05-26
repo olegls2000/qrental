@@ -3,7 +3,7 @@ package ee.qrent.billing.driver.api.in.query;
 import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrent.billing.driver.api.in.request.CallSignLinkResponse;
 import ee.qrent.billing.driver.api.in.request.CallSignLinkUpdateRequest;
-import java.time.LocalDate;
+
 import java.util.List;
 
 public interface GetCallSignLinkQuery
@@ -11,9 +11,7 @@ public interface GetCallSignLinkQuery
 
   CallSignLinkResponse getActiveCallSignLinkByDriverId(final Long driverId);
 
-  List<CallSignLinkResponse> getCallSignLinksByDriverId(final Long driverId);
-
-  CallSignLinkResponse getCallSignLinkByDriverIdAndDate(final Long driverId, final LocalDate date);
+  CallSignLinkResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 
   List<CallSignLinkResponse> getActive();
 

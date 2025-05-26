@@ -1,5 +1,6 @@
 package ee.qrent.billing.driver.config.spring;
 
+import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.out.*;
 import ee.qrent.billing.driver.core.mapper.*;
 import ee.qrent.common.in.time.QDateTime;
@@ -19,16 +20,20 @@ public class CallSignLinkServiceConfig {
   GetCallSignLinkQuery getCallSignLinkQueryService(
       final CallSignLinkLoadPort loadPort,
       final CallSignLinkResponseMapper mapper,
-      final CallSignLinkUpdateRequestMapper updateRequestMapper) {
-    return new CallSignLinkQueryService(loadPort, mapper, updateRequestMapper);
+      final CallSignLinkUpdateRequestMapper updateRequestMapper,
+      final GetQWeekQuery qWeekQuery) {
+
+    return new CallSignLinkQueryService(loadPort, mapper, updateRequestMapper, qWeekQuery);
   }
 
   @Bean
   GetFirmLinkQuery getFirmLinkQueryService(
       final FirmLinkLoadPort loadPort,
       final FirmLinkResponseMapper mapper,
-      final FirmLinkUpdateRequestMapper updateRequestMapper) {
-    return new FirmLinkQueryService(loadPort, mapper, updateRequestMapper);
+      final FirmLinkUpdateRequestMapper updateRequestMapper,
+      final GetQWeekQuery qWeekQuery) {
+
+    return new FirmLinkQueryService(loadPort, mapper, updateRequestMapper, qWeekQuery);
   }
 
   @Bean
@@ -41,6 +46,7 @@ public class CallSignLinkServiceConfig {
       final CallSignLinkUpdateRequestMapper updateRequestMapper,
       final CallSignLinkRequestValidator requestValidator,
       final QDateTime qDateTime) {
+
     return new CallSignLinkUseCaseService(
         addPort,
         updatePort,
@@ -48,7 +54,7 @@ public class CallSignLinkServiceConfig {
         loadPort,
         addRequestMapper,
         updateRequestMapper,
-            requestValidator,
+        requestValidator,
         qDateTime);
   }
 }

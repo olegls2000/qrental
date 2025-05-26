@@ -14,6 +14,6 @@ public class InvoiceCalculation {
   private Long startQWeekId;
   private Long endQWeekId;
   private LocalDate actionDate;
-  private List<InvoiceCalculationResult> results;
+  private List<InvoiceTransactionsLink> transactionsLinks;
   private String comment;
 }

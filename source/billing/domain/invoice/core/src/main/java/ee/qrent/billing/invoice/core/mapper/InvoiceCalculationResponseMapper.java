@@ -28,7 +28,7 @@ public class InvoiceCalculationResponseMapper
         .actionDate(domain.getActionDate())
         .startWeek(startQWeek.toString())
         .endWeek(endQWeek.toString())
-        .invoicesCount(domain.getResults().size())
+        .invoicesCount(domain.getTransactionsLinks().size())
         .comment(domain.getComment())
         .build();
   }

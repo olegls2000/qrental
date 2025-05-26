@@ -162,7 +162,7 @@ public class DriverPortalController {
   private void addObligationPeriodDataToModel(
       final Model model, final Long driverId, final Long requestedQWeekId) {
     final var periodObligation =
-        obligationQuery.getByQWeekIdAndDriverId(requestedQWeekId, driverId);
+        obligationQuery.getByDriverIdAndQWeekId(driverId, requestedQWeekId);
     if (periodObligation == null) {
       model.addAttribute("periodObligationAmount", "not calculated");
       model.addAttribute("periodObligationAmountPaid", "not calculated");

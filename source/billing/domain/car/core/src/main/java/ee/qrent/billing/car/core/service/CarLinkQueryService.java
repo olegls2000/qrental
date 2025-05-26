@@ -4,7 +4,6 @@ import static java.lang.String.format;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
-import ee.qrent.billing.driver.api.in.response.CallSignResponse;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.car.api.in.request.CarLinkUpdateRequest;
@@ -56,6 +55,7 @@ public class CarLinkQueryService implements GetCarLinkQuery {
 
   @Override
   public List<CarLinkResponse> getAll() {
+
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
@@ -67,8 +67,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
     final var domain = loadPort.loadById(id);
     if (domain == null) {
       System.out.println(format("Link with id = %d was not found", id));
+
       return null;
     }
+
     return mapper.toResponse(domain);
   }
 
@@ -77,8 +79,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
     final var domain = loadPort.loadById(id);
     if (domain == null) {
       System.out.println(format("Link with id = %d was not found", id));
+
       return null;
     }
+
     return mapper.toObjectInfo(domain);
   }
 
@@ -87,8 +91,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
     final var domain = loadPort.loadById(id);
     if (domain == null) {
       System.out.println(format("Link with id = %d was not found", id));
+
       return null;
     }
+
     return updateRequestMapper.toRequest(domain);
   }
 
@@ -97,8 +103,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
     final var domain = loadPort.loadActiveByDriverId(driverId);
     if (domain == null) {
       System.out.println(format("Active Link for driver with id = %d was not found", driverId));
+
       return null;
     }
+
     return mapper.toResponse(domain);
   }
 
@@ -107,8 +115,10 @@ public class CarLinkQueryService implements GetCarLinkQuery {
     final var domain = loadPort.loadActiveByDriverId(driverId);
     if (domain == null) {
       System.out.println(format("Driver with id = %d does not have Cal Link", driverId));
+
       return null;
     }
+
     return mapper.toResponse(domain);
   }
 
@@ -132,13 +142,15 @@ public class CarLinkQueryService implements GetCarLinkQuery {
   }
 
   @Override
-  public CarLinkResponse getActiveByQWeekIdAndDriverId(final Long weekId, final Long driverId) {
-      // TODO report
-    return null;
+  public CarLinkResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long weekId) {
+    final var qWeek = qWeekQuery.getById(weekId);
+
+    return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, qWeek.getStart()));
   }
 
   @Override
   public Long getCountActiveForCurrentDate() {
+
     return loadPort.loadCountActiveByDate(qDateTime.getToday());
   }
 
@@ -154,6 +166,7 @@ public class CarLinkQueryService implements GetCarLinkQuery {
 
   @Override
   public Long getCountClosedForCurrentDate() {
+
     return loadPort.loadCountClosedByDate(qDateTime.getToday());
   }
 }

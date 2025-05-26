@@ -46,8 +46,8 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
       final Obligation obligation, final BigDecimal weekPositiveAmount) {
     // TODO Check why transaction was not created
     final var driverId = obligation.getDriverId();
-    if (obligation == null){
-        return emptyList();
+    if (obligation == null) {
+      return emptyList();
     }
     final var matchCount = obligation.getMatchCount();
     final var qWeekId = obligation.getQWeekId();
@@ -59,10 +59,11 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
     friendships.forEach(
         friendship -> {
           final var friendId = friendship.getFriendId();
-          final var friendObligation = obligationQuery.getByQWeekIdAndDriverId(qWeekId, friendId);
+          final var friendObligation = obligationQuery.getByDriverIdAndQWeekId(qWeekId, friendId);
           if (friendObligation.getMatchCount() == 0) {
             System.out.println(
                 "No bonus transaction for the friendship, because Friend didn't match an Obligation");
+
             return;
           }
           final var friend = driverQuery.getById(friendId);
@@ -74,6 +75,7 @@ public class FriendshipBonusStrategy extends AbstractBonusStrategy {
                 "No bonus transaction for the friendship, because it was created more then "
                     + WEEKS_AMOUNT_FOR_BONUS_CALCULATION
                     + " weeks ago");
+
             return;
           }
 

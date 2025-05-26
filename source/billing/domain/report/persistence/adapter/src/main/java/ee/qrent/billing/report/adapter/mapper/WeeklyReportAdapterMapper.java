@@ -38,7 +38,7 @@ public class WeeklyReportAdapterMapper {
     final var qWeekId = entity.getQWeekId();
     final var qFirmId = entity.getQFirmId();
     final var driver = driverQuery.getById(driverId);
-    final var carLink = carLinkQuery.getActiveByQWeekIdAndDriverId(qWeekId, driverId);
+    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(qWeekId, driverId);
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var qFirm = firmQuery.getById(qFirmId);
 
@@ -60,7 +60,7 @@ public class WeeklyReportAdapterMapper {
 
   private WeeklyReportObligationStatus getObligationStatus(
       final long qWeekId, final long driverId) {
-    final var obligation = obligationQuery.getByQWeekIdAndDriverId(qWeekId, driverId);
+    final var obligation = obligationQuery.getByDriverIdAndQWeekId(qWeekId, driverId);
     if (obligation == null) {
       throw new RuntimeException(
           format(

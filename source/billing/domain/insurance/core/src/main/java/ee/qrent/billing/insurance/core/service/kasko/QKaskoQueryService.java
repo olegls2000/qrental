@@ -13,7 +13,7 @@ public class QKaskoQueryService implements GetQKaskoQuery {
   @Override
   public boolean hasQKasko(final Long driverId, final Long qWeekId) {
     final var activeContractOnRequestedWeek =
-        contractQuery.getActiveContractByDriverIdAndQWeekId(driverId, qWeekId);
+        contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (activeContractOnRequestedWeek == null) {
 
       return false;

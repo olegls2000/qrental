@@ -23,6 +23,7 @@ public class FirmHandler {
   private FirmLinkJakartaEntity getFirmLinkToSave(
       final DriverJakartaEntity driverJakartaEntity, final Driver domain) {
     final var firmId = domain.getQFirmId();
+
     return FirmLinkJakartaEntity.builder()
         .driver(driverJakartaEntity)
         .firmId(firmId)
@@ -34,7 +35,7 @@ public class FirmHandler {
   public void updateHandle(final Driver domain, final DriverJakartaEntity driverSaved) {
     final var driverId = domain.getId();
     final var activeFirmLink =
-        firmLinkRepository.findOneByDriverIdAndRequiredDate(driverId, LocalDate.now());
+        firmLinkRepository.findOneByDriverIdAndDate(driverId, LocalDate.now());
     final var firmIdFromDomain = domain.getQFirmId();
     if (firmIdFromDomain == null && activeFirmLink == null) {
       System.out.printf(

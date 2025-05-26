@@ -20,4 +20,6 @@ public interface CarLinkLoadPort extends LoadPort<CarLink> {
   Long loadCountClosedByDate(final LocalDate date);
 
   List<CarLink> loadActiveByCarId(final Long carId);
+
+  CarLink loadByDriverIdAndDate(final Long driverId, final LocalDate date);
 }

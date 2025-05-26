@@ -4,6 +4,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
+import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.request.CallSignLinkResponse;
 import ee.qrent.billing.driver.api.in.request.CallSignLinkUpdateRequest;
@@ -26,6 +27,7 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   private final CallSignLinkLoadPort loadPort;
   private final CallSignLinkResponseMapper mapper;
   private final CallSignLinkUpdateRequestMapper updateRequestMapper;
+  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public List<CallSignLinkResponse> getAll() {
@@ -46,7 +48,7 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   }
 
   @Override
-  public CallSignLinkUpdateRequest getUpdateRequestById(Long id) {
+  public CallSignLinkUpdateRequest getUpdateRequestById(final Long id) {
     return updateRequestMapper.toRequest(loadPort.loadById(id));
   }
 
@@ -56,17 +58,11 @@ public class CallSignLinkQueryService implements GetCallSignLinkQuery {
   }
 
   @Override
-  public List<CallSignLinkResponse> getCallSignLinksByDriverId(final Long driverId) {
-    return loadPort.loadByDriverId(driverId).stream()
-        .map(mapper::toResponse)
-        .sorted(DEFAULT_COMPARATOR)
-        .collect(toList());
-  }
+  public CallSignLinkResponse getActiveByDriverIdAndQWeekId(
+      final Long driverId, final Long qWeekId) {
+    final var qWeek = qWeekQuery.getById(qWeekId);
 
-  @Override
-  public CallSignLinkResponse getCallSignLinkByDriverIdAndDate(
-      final Long driverId, final LocalDate date) {
-    return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, date));
+    return mapper.toResponse(loadPort.loadByDriverIdAndDate(driverId, qWeek.getStart()));
   }
 
   @Override

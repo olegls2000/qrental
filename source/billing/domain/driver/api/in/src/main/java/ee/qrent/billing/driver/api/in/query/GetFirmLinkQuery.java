@@ -6,8 +6,10 @@ import ee.qrent.billing.driver.api.in.request.FirmLinkUpdateRequest;
 
 import java.time.LocalDate;
 
-public interface GetFirmLinkQuery
-    extends BaseGetQuery<FirmLinkUpdateRequest, FirmLinkResponse> {
+public interface GetFirmLinkQuery extends BaseGetQuery<FirmLinkUpdateRequest, FirmLinkResponse> {
 
-    FirmLinkResponse getOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDate);
+  FirmLinkResponse getOneByDriverIdAndRequiredDate(
+      final Long driverId, final LocalDate requiredDate);
+
+  FirmLinkResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 }

@@ -13,7 +13,7 @@ public class InvoiceCalculationAddRequestMapper
         .actionDate(request.getActionDate())
         .startQWeekId(null) //calculated and set in Service
         .endQWeekId(request.getQWeekId())
-        .results(new ArrayList<>())
+        .transactionsLinks(new ArrayList<>())
         .comment(request.getComment())
         .build();
   }

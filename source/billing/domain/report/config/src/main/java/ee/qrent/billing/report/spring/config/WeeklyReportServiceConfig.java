@@ -1,8 +1,11 @@
 package ee.qrent.billing.report.spring.config;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
+import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
@@ -14,7 +17,8 @@ import ee.qrent.billing.report.core.service.*;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfConverter;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfModelMapper;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
-import ee.qrent.common.in.time.QDateTime;
+import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
+import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -44,19 +48,27 @@ public class WeeklyReportServiceConfig {
       final WeeklyReportCalculationAddRequestValidator addRequestValidator,
       final WeeklyReportCalculationAddRequestMapper addRequestMapper,
       final WeeklyReportCalculationAddPort addPort,
-      final QDateTime qDateTime,
       final GetObligationQuery obligationQuery,
       final GetQWeekQuery qWeekQuery,
-      final GetDriverQuery driverQuery) {
+      final GetDriverQuery driverQuery,
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetCarLinkQuery carLinkQuery,
+      final GetFirmLinkQuery firmLinkQuery,
+      final GetBalanceQuery balanceQuery,
+      final GetTransactionQuery getTransactionQuery) {
 
     return new WeeklyReportCalculationUseCaseService(
         addRequestValidator,
         addRequestMapper,
         addPort,
-        qDateTime,
         obligationQuery,
         qWeekQuery,
-        driverQuery);
+        driverQuery,
+        callSignLinkQuery,
+        carLinkQuery,
+        firmLinkQuery,
+        balanceQuery,
+        getTransactionQuery);
   }
 
   @Bean

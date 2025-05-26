@@ -5,7 +5,7 @@ import ee.qrent.billing.invoice.api.out.InvoiceCalculationAddPort;
 import ee.qrent.billing.invoice.api.out.InvoiceCalculationDeletePort;
 import ee.qrent.billing.invoice.adapter.mapper.InvoiceAdapterMapper;
 import ee.qrent.billing.invoice.domain.InvoiceCalculation;
-import ee.qrent.billing.invoice.domain.InvoiceCalculationResult;
+import ee.qrent.billing.invoice.domain.InvoiceTransactionsLink;
 import ee.qrent.billing.invoice.persistence.entity.jakarta.InvoiceCalculationJakartaEntity;
 import ee.qrent.billing.invoice.persistence.entity.jakarta.InvoiceCalculationResultJakartaEntity;
 import ee.qrent.billing.invoice.persistence.entity.jakarta.InvoiceTransactionJakartaEntity;
@@ -36,8 +36,8 @@ public class InvoiceCalculationPersistenceAdapter
     final var invoiceCalculationEntitySaved =
         invoiceCalculationRepository.save(invoiceCalculationEntity);
 
-    final var invoiceCalculationResults = domain.getResults();
-    for (InvoiceCalculationResult result : invoiceCalculationResults) {
+    final var invoiceCalculationResults = domain.getTransactionsLinks();
+    for (InvoiceTransactionsLink result : invoiceCalculationResults) {
       final var invoice = result.getInvoice();
       final var invoiceEntity = invoiceMapper.mapToEntity(invoice);
       final var invoiceEntitySaved = invoiceRepository.save(invoiceEntity);

@@ -15,6 +15,6 @@ public class WeeklyReportCalculation {
   private Long id;
   private Long qWeekId;
   private LocalDate actionDate;
-  private List<WeeklyReportCalculationResult> results;
+  private List<WeeklyReportTransactionsLink> reportTransactionLinks;
   private String comment;
 }

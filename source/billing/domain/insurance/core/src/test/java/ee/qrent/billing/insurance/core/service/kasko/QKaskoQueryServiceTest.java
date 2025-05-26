@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.contract.api.in.response.ContractResponse;
-import ee.qrent.billing.insurance.core.service.kasko.QKaskoQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,7 @@ public class QKaskoQueryServiceTest {
     // given
     final var driverId = 5L;
     final var qWeekId = 60L;
-    when(contractQuery.getActiveContractByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(null);
+    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(null);
 
     // when
     final var result = instanceUnderTest.hasQKasko(driverId, qWeekId);
@@ -45,7 +44,7 @@ public class QKaskoQueryServiceTest {
     // given
     final var driverId = 5L;
     final var qWeekId = 60L;
-    when(contractQuery.getActiveContractByDriverIdAndQWeekId(driverId, qWeekId))
+    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(ContractResponse.builder().duration(11).build());
 
     // when
@@ -60,7 +59,7 @@ public class QKaskoQueryServiceTest {
     // given
     final var driverId = 5L;
     final var qWeekId = 60L;
-    when(contractQuery.getActiveContractByDriverIdAndQWeekId(driverId, qWeekId))
+    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
                 .duration(12)

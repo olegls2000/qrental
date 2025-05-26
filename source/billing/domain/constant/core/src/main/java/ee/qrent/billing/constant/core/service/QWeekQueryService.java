@@ -85,15 +85,16 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public QWeekResponse getByDate(final LocalDate date) {
-    final var yearWeek =  YearWeek.from( date );
+    final var yearWeek = YearWeek.from(date);
 
     final var year = yearWeek.getYear();
     final var number = yearWeek.getWeek();
-    final var qWeek = loadPort.loadByYearAndNumber(year, number);
+    var qWeek = loadPort.loadByYearAndNumber(year, number);
     if (qWeek == null) {
       final var qWeekAddRequest = new QWeekAddRequest();
       qWeekAddRequest.setWeekDate(date);
-      qWeekUseCaseService.add(qWeekAddRequest);
+      final var savedQWeekId = qWeekUseCaseService.add(qWeekAddRequest);
+      qWeek = loadPort.loadById(savedQWeekId);
     }
 
     return mapper.toResponse(qWeek);

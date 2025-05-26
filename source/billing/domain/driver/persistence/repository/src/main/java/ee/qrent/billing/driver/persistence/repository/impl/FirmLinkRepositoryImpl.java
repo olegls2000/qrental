@@ -15,12 +15,8 @@ public class FirmLinkRepositoryImpl implements FirmLinkRepository {
 
   @Override
   public FirmLinkJakartaEntity save(FirmLinkJakartaEntity entity) {
-    return springDataRepository.save(entity);
-  }
 
-  @Override
-  public void deleteById(final Long id) {
-    springDataRepository.deleteById(id);
+    return springDataRepository.save(entity);
   }
 
   @Override
@@ -29,13 +25,19 @@ public class FirmLinkRepositoryImpl implements FirmLinkRepository {
   }
 
   @Override
-  public FirmLinkJakartaEntity findOneByDriverIdAndRequiredDate(
-          final Long driverId, final LocalDate requiredDate) {
-    return springDataRepository.findOneByDriverIdAndRequiredDate(driverId, requiredDate);
+  public void deleteById(final Long id) {
+    springDataRepository.deleteById(id);
   }
 
   @Override
   public List<FirmLinkJakartaEntity> findAll() {
+
     return springDataRepository.findAll();
+  }
+
+  @Override
+  public FirmLinkJakartaEntity findOneByDriverIdAndDate(final Long driverId, final LocalDate date) {
+
+    return springDataRepository.findOneByDriverIdAndDate(driverId, date);
   }
 }

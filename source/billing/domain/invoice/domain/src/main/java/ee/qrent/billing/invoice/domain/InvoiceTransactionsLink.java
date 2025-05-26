@@ -8,7 +8,7 @@ import java.util.Set;
 @SuperBuilder
 @Getter
 @Setter
-public class InvoiceCalculationResult {
+public class InvoiceTransactionsLink {
   private Invoice invoice;
   private Set<Long> transactionIds;
 }

@@ -11,8 +11,8 @@ public interface FirmLinkRepository {
   void deleteById(final Long id);
 
   FirmLinkJakartaEntity getReferenceById(final Long id);
-  FirmLinkJakartaEntity findOneByDriverIdAndRequiredDate(final Long driverId, final LocalDate requiredDatee);
+
+  FirmLinkJakartaEntity findOneByDriverIdAndDate(final Long driverId, final LocalDate date);
+
   List<FirmLinkJakartaEntity> findAll();
-
-
 }

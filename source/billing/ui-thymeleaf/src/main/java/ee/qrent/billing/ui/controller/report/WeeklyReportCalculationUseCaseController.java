@@ -46,18 +46,17 @@ public class WeeklyReportCalculationUseCaseController {
       addWeeksToModel(model);
       addAddTypesToModel(model);
 
-      return "forms/addCalculation";
+      return "forms/addWeeklyReportCalculation";
     }
 
-    return "redirect:" + INVOICE_ROOT_PATH + "/calculations";
+    return "redirect:" + REPORT_ROOT_PATH + "/calculations";
   }
 
   private List<QWeekResponse> getWeeks() {
-    // final var lastCalculatedWeekId = weeklyReportCalculationQuery.getLastCalculatedQWeekId();
-    final var lastCalculatedWeekId = 118L;
-    // if (lastCalculatedWeekId == null) {
-    //  return qWeekQuery.getAll();
-    // }
+    final var lastCalculatedWeekId = weeklyReportCalculationQuery.getLastCalculatedQWeekId();
+    if (lastCalculatedWeekId == null) {
+      return qWeekQuery.getAll();
+    }
 
     return qWeekQuery.getAllAfterById(lastCalculatedWeekId);
   }

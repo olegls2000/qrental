@@ -28,7 +28,7 @@ import ee.qrent.billing.invoice.core.service.pdf.InvoiceToPdfConverter;
 import ee.qrent.billing.invoice.core.service.pdf.InvoiceToPdfModelMapper;
 import ee.qrent.billing.invoice.domain.Invoice;
 import ee.qrent.billing.invoice.domain.InvoiceCalculation;
-import ee.qrent.billing.invoice.domain.InvoiceCalculationResult;
+import ee.qrent.billing.invoice.domain.InvoiceTransactionsLink;
 import ee.qrent.billing.invoice.domain.InvoiceItem;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
@@ -207,11 +207,11 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
                 final var transactionIds =
                     driversTransactions.stream().map(TransactionResponse::getId).collect(toSet());
                 final var result =
-                    InvoiceCalculationResult.builder()
+                    InvoiceTransactionsLink.builder()
                         .invoice(invoice)
                         .transactionIds(transactionIds)
                         .build();
-                domain.getResults().add(result);
+                domain.getTransactionsLinks().add(result);
               });
         });
     invoiceCalculationAddPort.add(domain);
@@ -290,10 +290,10 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
   }
 
   private void sendEmails(InvoiceCalculation invoiceCalculation) {
-    final var invoicesCount = invoiceCalculation.getResults().size();
+    final var invoicesCount = invoiceCalculation.getTransactionsLinks().size();
     var handledInvoices = new AtomicInteger();
-    invoiceCalculation.getResults().stream()
-        .map(InvoiceCalculationResult::getInvoice)
+    invoiceCalculation.getTransactionsLinks().stream()
+        .map(InvoiceTransactionsLink::getInvoice)
         .sorted(comparing(Invoice::getNumber))
         .forEach(
             invoice -> {

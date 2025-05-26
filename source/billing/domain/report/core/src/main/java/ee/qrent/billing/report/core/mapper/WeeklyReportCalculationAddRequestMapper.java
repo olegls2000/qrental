@@ -19,7 +19,7 @@ public class WeeklyReportCalculationAddRequestMapper
     return WeeklyReportCalculation.builder()
         .actionDate(qDateTime.getToday())
         .qWeekId(request.getQWeekId())
-        .results(new ArrayList<>())
+        .reportTransactionLinks(new ArrayList<>())
         .comment(request.getComment())
         .build();
   }
