@@ -1,6 +1,6 @@
 package ee.qrent.billing.ui.controller.report;
 
-import static ee.qrent.billing.ui.controller.ControllerUtils.WEEKLY_REPORT_ROOT_PATH;
+import static ee.qrent.billing.ui.controller.ControllerUtils.REPORT_ROOT_PATH;
 import static ee.qrent.billing.ui.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(WEEKLY_REPORT_ROOT_PATH)
+@RequestMapping(REPORT_ROOT_PATH)
 @AllArgsConstructor
 public class WeeklyReportCalculationQueryController {
 

@@ -1,13 +1,11 @@
 package ee.qrent.billing.ui.controller.report;
 
 import static ee.qrent.billing.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
-import static ee.qrent.billing.ui.controller.ControllerUtils.WEEKLY_REPORT_ROOT_PATH;
+import static ee.qrent.billing.ui.controller.ControllerUtils.REPORT_ROOT_PATH;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
-import ee.qrent.billing.invoice.api.in.query.GetInvoiceCalculationQuery;
-import ee.qrent.billing.invoice.api.in.request.InvoiceCalculationAddRequest;
-import ee.qrent.billing.invoice.api.in.usecase.InvoiceCalculationAddUseCase;
+
 import java.util.List;
 
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(WEEKLY_REPORT_ROOT_PATH)
+@RequestMapping(REPORT_ROOT_PATH)
 @AllArgsConstructor
 public class WeeklyReportCalculationUseCaseController {
 
