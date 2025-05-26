@@ -108,6 +108,7 @@ public class DriverUseCaseController {
       model.addAttribute("updateRequest", updateRequest);
       addCallSignOptionsToModel(model, updateRequest);
       addRecommendedByOptionsToModel(model);
+      addQFirmsToModel(model);
 
       return "forms/updateDriver";
     }
