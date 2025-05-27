@@ -61,7 +61,9 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
     var latestCalculatedWeek = getLatestCalculatedWeek();
     setStartAndEndDates(domain, latestCalculatedWeek, requestedQWeek);
     final var latestCalculatedWeekId =
-        latestCalculatedWeek == null ? null : latestCalculatedWeek.getId();
+        latestCalculatedWeek == null
+            ? qWeekQuery.getFirstWeek().getId()
+            : latestCalculatedWeek.getId();
     final var nextAfterCalculatedQWeek = qWeekQuery.getOneAfterById(latestCalculatedWeekId);
     final var nextAfterCalculatedQWeekId =
         nextAfterCalculatedQWeek == null ? null : nextAfterCalculatedQWeek.getId();

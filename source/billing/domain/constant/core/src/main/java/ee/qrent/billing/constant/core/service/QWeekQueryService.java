@@ -124,6 +124,7 @@ public class QWeekQueryService implements GetQWeekQuery {
     var previousWeekYear = qWeekYear;
     var previousWeekNumber = qWeekNumber - 1;
     if (qWeekYear == 2023 && qWeekNumber == 1) {
+
       return null;
     }
 
@@ -160,7 +161,7 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public QWeekResponse getFirstWeek() {
-    return mapper.toResponse(loadPort.loadByYearAndNumber(2023, 1));
+    return mapper.toResponse(loadPort.loadByYearAndNumber(2025, 1));
   }
 
   @Override

@@ -79,32 +79,51 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final DriverResponse driver, final QWeekResponse requestedQWeek) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
-
-    final var callSignLink = callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    final var callSignId = callSignLink.getCallSignId();
-
-    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    final var carId = carLink.getCarId();
-
-    final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    final var firmId = firmLink.getFirmId();
-
     final var balance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
         .driverId(driverId)
-        .callSignId(callSignId)
-        .carId(carId)
+        .callSignId(getCallSignId(driverId, qWeekId))
+        .carId(getCarId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
-        .qFirmId(firmId)
+        .qFirmId(getQFirmId(driverId, qWeekId))
         .deposit(driver.getDeposit())
         .paidDeposit(BigDecimal.valueOf(999))
         .status(getWeeklyReportObligationStatus(driverId, qWeekId, balance))
         .balanceAmount(balance.getAmount())
         .comment("Automatically generated weekly report")
         .build();
+  }
+
+  private Long getCallSignId(final Long driverId, final Long qWeekId) {
+    final var callSignLink = callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    if (callSignLink == null) {
+      throw new RuntimeException(
+          format(
+              "No Call-sign-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+    }
+    return callSignLink.getCallSignId();
+  }
+
+  private Long getCarId(final Long driverId, final Long qWeekId) {
+    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    if (carLink == null) {
+      return 1L;
+     /* throw new RuntimeException(
+          format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
+    }
+    return carLink.getCarId();
+  }
+
+  private Long getQFirmId(final Long driverId, final Long qWeekId) {
+    final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    if (firmLink == null) {
+      throw new RuntimeException(
+          format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+    }
+    return firmLink.getFirmId();
   }
 
   private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
