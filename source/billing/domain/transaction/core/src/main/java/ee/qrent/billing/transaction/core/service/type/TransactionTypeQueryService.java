@@ -64,11 +64,10 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
         .loadByKindCodesIn(
             asList(
                 TransactionKindsCode.F.name(),
-                TransactionKindsCode.SR.name(),
-                TransactionKindsCode.R.name(),
+                TransactionKindsCode.FA.name(),
                 TransactionKindsCode.NFA.name(),
                 TransactionKindsCode.SR.name(),
-                TransactionKindsCode.FA.name()))
+                TransactionKindsCode.R.name()))
         .stream()
         .map(mapper::toResponse)
         .collect(toList());

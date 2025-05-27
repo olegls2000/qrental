@@ -13,14 +13,13 @@ public interface TransactionTypeSpringDataRepository
 
   @Query(
       value =
-          "SELECT * FROM transaction_type tx "
-              + "WHERE tx.transaction_kind_id  in ("
-              + "select txk.id from transaction_kind txk "
-              + "where txk.code in :kindCodes) ",
+          "SELECT * FROM transaction_type tx WHERE tx.transaction_kind_id in (select txk.id from transaction_kind txk where txk.code in (:kindCodes))",
       nativeQuery = true)
   List<TransactionTypeJakartaEntity> findAllByKindCodesIn(
       @Param("kindCodes") final List<String> kindCodes);
 
-  @Query(value = "SELECT * FROM transaction_type txt WHERE txt.name in :names", nativeQuery = true)
+  @Query(
+      value = "SELECT * FROM transaction_type txt WHERE txt.name in (:names)",
+      nativeQuery = true)
   List<TransactionTypeJakartaEntity> findAllByNameIn(@Param("names") final List<String> names);
 }

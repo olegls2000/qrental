@@ -234,6 +234,8 @@ public class DriverPortalController {
     if (latestCalculatedBalance == null) {
       model.addAttribute("latestBalanceWeek", "Balance was not calculated");
 
+      model.addAttribute("latestBalanceYear", "not available");
+      model.addAttribute("latestBalanceWeek", "not available");
       return;
     }
     model.addAttribute("latestBalanceYear", latestCalculatedBalance.getYear());
