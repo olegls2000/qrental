@@ -29,4 +29,11 @@ public class WeeklyReportRepositoryConfig {
 
     return new WeeklyReportTransactionRepositoryImpl(springDataRepository);
   }
+
+  @Bean
+  WeeklyReportCalculationResultRepository getWeeklyReportCalculationResultRepositoryImpl(
+      final WeeklyReportCalculationResultSpringDataRepository springDataRepository) {
+
+    return new WeeklyReportCalculationResultRepositoryImpl(springDataRepository);
+  }
 }

@@ -22,11 +22,7 @@ import java.math.BigDecimal;
 public class WeeklyReportAdapterMapper {
 
   private final GetDriverQuery driverQuery;
-  private final GetCallSignQuery callSignQuery;
   private final GetQWeekQuery qWeekQuery;
-  private final GetCarLinkQuery carLinkQuery;
-  private final GetCarQuery carQuery;
-  private final GetFirmQuery firmQuery;
   private final GetObligationQuery obligationQuery;
 
   public WeeklyReport mapToDomain(final WeeklyReportJakartaEntity entity) {
@@ -36,25 +32,37 @@ public class WeeklyReportAdapterMapper {
 
     final var driverId = entity.getDriverId();
     final var qWeekId = entity.getQWeekId();
-    final var qFirmId = entity.getQFirmId();
     final var driver = driverQuery.getById(driverId);
-    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(qWeekId, driverId);
     final var qWeek = qWeekQuery.getById(qWeekId);
-    final var qFirm = firmQuery.getById(qFirmId);
 
     return WeeklyReport.builder()
         .id(entity.getId())
-        .driverId(driverId)
-        // TODO add callSign Id
-        .callSignId(null)
-        // TODO add car Id
-        .carId(null)
         .qWeekId(qWeekId)
+        .driverId(driverId)
+        .callSignId(entity.getCallSignId())
+        .carId(entity.getCarId())
         .qFirmId(entity.getQFirmId())
+        .startDate(qWeek.getStart())
+        .endDate(qWeek.getEnd())
         .deposit(driver.getDeposit())
         .paidDeposit(BigDecimal.valueOf(999999999999l))
         .status(getObligationStatus(qWeekId, driverId))
-        .detail(WeeklyReportDetail.builder().build())
+        .balanceAmount(BigDecimal.valueOf(999999999999l))
+        .obligationTotal(entity.getObligationTotal())
+        .obligationRent(entity.getObligationRent())
+        .obligationDebt(entity.getObligationDebt())
+        .obligationRepairment(entity.getObligationRepairment())
+        .obligationRepairmentFranchise(entity.getObligationRepairmentFranchise())
+        .obligationOthers(entity.getObligationOthers())
+        .obligationFee(entity.getObligationFee())
+        .bonusNewDriver(entity.getBonusNewDriver())
+        .bonusReliablePartner(entity.getBonusReliablePartner())
+        .bonusBolt(entity.getBonusBolt())
+        .bonusFriend(entity.getBonusFriend())
+        .obligationRentAdjustmentBolt(entity.getObligationRentAdjustmentBolt())
+        .obligationRentAdjustmentForus(entity.getObligationRentAdjustmentForus())
+        .prepayment(entity.getPrepayment())
+        .comment(entity.getComment())
         .build();
   }
 
@@ -84,13 +92,7 @@ public class WeeklyReportAdapterMapper {
         "Obligation match count has unexpected negative value: " + obligation.getMatchCount());
   }
 
-  public WeeklyReportDetail mapToDetailDomain(final WeeklyReportJakartaEntity entity) {
-    // TODO report
-    return WeeklyReportDetail.builder().build();
-  }
-
   public WeeklyReportJakartaEntity mapToEntity(final WeeklyReport domain) {
-    final var callSign = callSignQuery.getById(domain.getCallSignId());
 
     return WeeklyReportJakartaEntity.builder()
         .id(domain.getId())
@@ -100,20 +102,20 @@ public class WeeklyReportAdapterMapper {
         .carId(domain.getCarId())
         .qFirmId(domain.getQFirmId())
         .obligationStatus(mapToWeeklyReportObligationStatusJakarta(domain.getStatus()))
-        .obligationTotal(domain.getDetail().getObligationTotal())
-        .obligationRent(domain.getDetail().getObligationRent())
-        .obligationDebt(domain.getDetail().getObligationDebt())
-        .obligationRepairment(domain.getDetail().getObligationRepairment())
-        .obligationRepairmentFranchise(domain.getDetail().getObligationRepairmentFranchise())
-        .obligationOthers(domain.getDetail().getObligationOthers())
-        .obligationFee(domain.getDetail().getObligationFee())
-        .bonusNewDriver(domain.getDetail().getBonusNewDriver())
-        .bonusReliablePartner(domain.getDetail().getBonusReliablePartner())
-        .bonusBolt(domain.getDetail().getBonusBolt())
-        .bonusFriend(domain.getDetail().getBonusFriend())
-        .obligationRentAdjustmentBolt(domain.getDetail().getObligationRentAdjustmentBolt())
-        .obligationRentAdjustmentForus(domain.getDetail().getObligationRentAdjustmentForus())
-        .prepayment(domain.getDetail().getPrepayment())
+        .obligationTotal(domain.getObligationTotal())
+        .obligationRent(domain.getObligationRent())
+        .obligationDebt(domain.getObligationDebt())
+        .obligationRepairment(domain.getObligationRepairment())
+        .obligationRepairmentFranchise(domain.getObligationRepairmentFranchise())
+        .obligationOthers(domain.getObligationOthers())
+        .obligationFee(domain.getObligationFee())
+        .bonusNewDriver(domain.getBonusNewDriver())
+        .bonusReliablePartner(domain.getBonusReliablePartner())
+        .bonusBolt(domain.getBonusBolt())
+        .bonusFriend(domain.getBonusFriend())
+        .obligationRentAdjustmentBolt(domain.getObligationRentAdjustmentBolt())
+        .obligationRentAdjustmentForus(domain.getObligationRentAdjustmentForus())
+        .prepayment(domain.getPrepayment())
         .comment(domain.getComment())
         .build();
   }

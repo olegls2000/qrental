@@ -23,14 +23,10 @@ public class WeeklyReportCalculationAdapterMapper {
   private WeeklyReportTransactionsLink mapToDomain(
       final WeeklyReportCalculationResultJakartaEntity resultEntity) {
 
-    return WeeklyReportTransactionsLink.builder().build();
-  }
+    return WeeklyReportTransactionsLink.builder()
 
-  public WeeklyReportCalculationJakartaEntity mapToEntity(
-      final WeeklyReportCalculation calculation) {
-    if (calculation == null) {
-      return null;
-    }
-    return WeeklyReportCalculationJakartaEntity.builder().build();
+
+
+            .build();
   }
 }

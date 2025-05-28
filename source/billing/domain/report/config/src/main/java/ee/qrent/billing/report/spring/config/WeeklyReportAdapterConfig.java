@@ -29,9 +29,17 @@ public class WeeklyReportAdapterConfig {
 
   @Bean
   WeeklyReportCalculationPersistenceAdapter getWeeklyReportPersistenceAdapter(
-      final WeeklyReportCalculationRepository repository,
-      final WeeklyReportCalculationAdapterMapper mapper) {
+      final WeeklyReportCalculationRepository calculationRepository,
+      final WeeklyReportCalculationResultRepository weeklyReportCalculationResultRepository,
+      final WeeklyReportRepository weeklyReportRepository,
+      final WeeklyReportTransactionRepository weeklyReportTransactionRepository,
+      final WeeklyReportAdapterMapper weeklyReportMapper) {
 
-    return new WeeklyReportCalculationPersistenceAdapter(repository, mapper);
+    return new WeeklyReportCalculationPersistenceAdapter(
+        calculationRepository,
+        weeklyReportCalculationResultRepository,
+        weeklyReportRepository,
+        weeklyReportTransactionRepository,
+        weeklyReportMapper);
   }
 }

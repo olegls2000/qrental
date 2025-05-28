@@ -80,19 +80,34 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
     final var balance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
+    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
         .driverId(driverId)
         .callSignId(getCallSignId(driverId, qWeekId))
         .carId(getCarId(driverId, qWeekId))
+        .qFirmId(getQFirmId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
-        .qFirmId(getQFirmId(driverId, qWeekId))
         .deposit(driver.getDeposit())
         .paidDeposit(BigDecimal.valueOf(999))
         .status(getWeeklyReportObligationStatus(driverId, qWeekId, balance))
         .balanceAmount(balance.getAmount())
+        .obligationTotal(obligation == null ? BigDecimal.valueOf(999) : obligation.getAmount())
+        .obligationRent(BigDecimal.valueOf(999))
+        .obligationDebt(BigDecimal.valueOf(999))
+        .obligationRepairment(BigDecimal.valueOf(999))
+        .obligationRepairmentFranchise(BigDecimal.valueOf(999))
+        .obligationOthers(BigDecimal.valueOf(999))
+        .obligationFee(BigDecimal.valueOf(999))
+        .bonusNewDriver(BigDecimal.valueOf(999))
+        .bonusReliablePartner(BigDecimal.valueOf(999))
+        .bonusBolt(BigDecimal.valueOf(999))
+        .bonusFriend(BigDecimal.valueOf(999))
+        .obligationRentAdjustmentBolt(BigDecimal.valueOf(999))
+        .obligationRentAdjustmentForus(BigDecimal.valueOf(999))
+        .prepayment(BigDecimal.valueOf(999))
         .comment("Automatically generated weekly report")
         .build();
   }
@@ -100,9 +115,10 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private Long getCallSignId(final Long driverId, final Long qWeekId) {
     final var callSignLink = callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (callSignLink == null) {
-      throw new RuntimeException(
-          format(
-              "No Call-sign-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+      return 11111L;
+      /* throw new RuntimeException(
+      format(
+          "No Call-sign-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
     }
     return callSignLink.getCallSignId();
   }
@@ -110,9 +126,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private Long getCarId(final Long driverId, final Long qWeekId) {
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (carLink == null) {
-      return 1L;
-     /* throw new RuntimeException(
-          format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
+      return 11111L;
+      /* throw new RuntimeException(
+      format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
     }
     return carLink.getCarId();
   }
@@ -120,8 +136,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private Long getQFirmId(final Long driverId, final Long qWeekId) {
     final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (firmLink == null) {
-      throw new RuntimeException(
-          format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+      return 11111L;
+      /* throw new RuntimeException(
+      format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
     }
     return firmLink.getFirmId();
   }
@@ -129,16 +146,20 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
       final Long driverId, final Long qWeekId, final BalanceResponse balance) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-    if (obligation == null) {
+    /*    if (obligation == null) {
       throw new RuntimeException(
           format(
               "Obligation  for the driver.id: %d and week.id: %d does not exist. Please calculate it first.",
               driverId, qWeekId));
-    }
+    }*/
 
-    if (obligation.getMatchCount() > 0) {
+    if (obligation == null || obligation.getMatchCount() > 0) {
 
       return WeeklyReportObligationStatus.COMPLETED;
+    }
+
+    if (balance == null) {
+      return WeeklyReportObligationStatus.NOT_COMPLETED;
     }
 
     if (balance.getAmount().compareTo(BigDecimal.ZERO) > 0) {

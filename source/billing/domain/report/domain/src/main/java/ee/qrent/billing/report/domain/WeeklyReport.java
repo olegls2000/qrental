@@ -16,13 +16,26 @@ public class WeeklyReport {
   private Long driverId;
   private Long callSignId;
   private Long carId;
+  private Long qFirmId;
   private LocalDate startDate;
   private LocalDate endDate;
-  private Long qFirmId;
   private BigDecimal deposit;
   private BigDecimal paidDeposit;
   private WeeklyReportObligationStatus status;
   private BigDecimal balanceAmount;
-  private WeeklyReportDetail detail;
+  private BigDecimal obligationTotal;
+  private BigDecimal obligationRent;
+  private BigDecimal obligationDebt;
+  private BigDecimal obligationRepairment;
+  private BigDecimal obligationRepairmentFranchise;
+  private BigDecimal obligationOthers;
+  private BigDecimal obligationFee;
+  private BigDecimal bonusNewDriver;
+  private BigDecimal bonusReliablePartner;
+  private BigDecimal bonusBolt;
+  private BigDecimal bonusFriend;
+  private BigDecimal obligationRentAdjustmentBolt;
+  private BigDecimal obligationRentAdjustmentForus;
+  private BigDecimal prepayment;
   private String comment;
 }
