@@ -50,12 +50,12 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   @Transactional
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
-    final var violationsCollector = addRequestValidator.validate(request);
+ /*   final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 
       return null;
-    }
+    }*/
     final var requestedQWeekId = request.getQWeekId();
     final var domain = addRequestMapper.toDomain(request);
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
@@ -81,6 +81,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var qWeekId = requestedQWeek.getId();
     final var balance = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
+
+    final var transactions = getTransactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId);
+
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
@@ -146,28 +149,27 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
       final Long driverId, final Long qWeekId, final BalanceResponse balance) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-    /*    if (obligation == null) {
+        if (obligation == null) {
       throw new RuntimeException(
           format(
               "Obligation  for the driver.id: %d and week.id: %d does not exist. Please calculate it first.",
               driverId, qWeekId));
-    }*/
+    }
 
-    if (obligation == null || obligation.getMatchCount() > 0) {
+    if (obligation.getMatchCount() > 0) {
 
       return WeeklyReportObligationStatus.COMPLETED;
     }
 
-    if (balance == null) {
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
-
-    if (balance.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-
+    if(obligation.getMatchCount() ==0 && raw balance On Wed incl >=0 {
       return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
     }
 
-    return WeeklyReportObligationStatus.NOT_COMPLETED;
+
+    if(obligation.getMatchCount() ==0 && raw balance On Wed incl <0 {
+      return WeeklyReportObligationStatus.NOT_COMPLETED;
+    }
+
   }
 
   private WeeklyReportTransactionsLink getWeeklyReportTransactions(
