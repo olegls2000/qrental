@@ -4,6 +4,9 @@ import ee.qrent.billing.insurance.api.out.*;
 import ee.qrent.billing.insurance.core.mapper.*;
 import ee.qrent.billing.insurance.core.service.*;
 import ee.qrent.billing.insurance.core.service.balance.*;
+import ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy;
+import ee.qrent.billing.insurance.core.service.strategy.QKaskoLegacyInsuranceStrategy;
+import ee.qrent.billing.insurance.core.service.strategy.SimpleInsuranceStrategy;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.common.in.validation.CloseRequestValidator;
@@ -154,27 +157,42 @@ public class InsuranceCaseServiceConfig {
 
   @Bean
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
-      final InsuranceCaseLoadPort caseLoadPort,
-      final InsuranceCaseUpdatePort caseUpdatePort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetQWeekQuery qWeekQuery,
-      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
-      final AddRequestValidator<InsuranceCalculationAddRequest> addRequestValidator) {
+      final GetDriverQuery driverQuery,
+      final AddRequestValidator<InsuranceCalculationAddRequest> addRequestValidator,
+      final List<InsuranceCalculationStrategy> insuranceCalculationStrategies) {
 
     return new InsuranceCalculationUseCaseService(
-        caseLoadPort,
-        caseUpdatePort,
         calculationAddPort,
         calculationAddRequestMapper,
         qWeekQuery,
-        insuranceCaseBalanceCalculator,
-        addRequestValidator);
+        driverQuery,
+        addRequestValidator,
+        insuranceCalculationStrategies);
   }
 
   @Bean
   GetQKaskoQuery getGetQKaskoQuery(final GetContractQuery contractQuery) {
 
     return new QKaskoQueryService(contractQuery);
+  }
+
+  @Bean
+  List<InsuranceCalculationStrategy> getInsuranceCalculationStrategy(
+      final GetContractQuery contractQuery,
+      final InsuranceCaseLoadPort caseLoadPort,
+      final InsuranceCaseUpdatePort caseUpdatePort,
+      final GetTransactionQuery transactionQuery,
+      final TransactionAddUseCase transactionAddUseCase,
+      final QDateTime qDateTime,
+      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator) {
+
+    return asList(
+        new SimpleInsuranceStrategy(
+            contractQuery, caseLoadPort, transactionQuery, transactionAddUseCase, qDateTime),
+        new QKaskoLegacyInsuranceStrategy(
+            contractQuery, caseLoadPort, caseUpdatePort, insuranceCaseBalanceCalculator));
   }
 }

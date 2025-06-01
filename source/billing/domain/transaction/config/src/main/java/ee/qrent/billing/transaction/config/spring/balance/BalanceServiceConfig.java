@@ -5,6 +5,7 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrent.billing.transaction.api.out.TransactionLoadPort;
 import ee.qrent.billing.transaction.api.out.balance.BalanceAddPort;
@@ -58,13 +59,16 @@ public class BalanceServiceConfig {
       final GetDriverQuery driverQuery,
       final GetQWeekQuery qWeekQuery,
       final GetTransactionQuery transactionQuery,
+      final GetTransactionKindQuery transactionKindQuery,
       final BalanceLoadPort balanceLoadPort,
       final BalanceResponseMapper balanceResponseMapper,
       final List<BalanceCalculatorStrategy> calculatorStrategies) {
+
     return new BalanceQueryService(
         driverQuery,
         qWeekQuery,
         transactionQuery,
+        transactionKindQuery,
         balanceLoadPort,
         balanceResponseMapper,
         calculatorStrategies);
