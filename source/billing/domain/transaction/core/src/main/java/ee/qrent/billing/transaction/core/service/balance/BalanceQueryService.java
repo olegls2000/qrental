@@ -9,15 +9,22 @@ import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
+import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
+import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceRawContextResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
+import ee.qrent.billing.transaction.api.in.response.kind.TransactionKindResponse;
 import ee.qrent.billing.transaction.api.out.balance.BalanceLoadPort;
 import ee.qrent.billing.transaction.core.mapper.balance.BalanceResponseMapper;
 import ee.qrent.billing.transaction.core.service.balance.calculator.BalanceCalculatorStrategy;
 import ee.qrent.billing.transaction.domain.balance.Balance;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -28,6 +35,7 @@ public class BalanceQueryService implements GetBalanceQuery {
   private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetTransactionQuery transactionQuery;
+  private final GetTransactionKindQuery transactionKindQuery;
   private final BalanceLoadPort balanceLoadPort;
   private final BalanceResponseMapper balanceResponseMapper;
   private final List<BalanceCalculatorStrategy> calculatorStrategies;
@@ -154,6 +162,37 @@ public class BalanceQueryService implements GetBalanceQuery {
 
     return getRawContextByDriverIdAndQWeekId(driverId, currentQWeek.getId())
         .getRequestedWeekBalance();
+  }
+
+  @Override
+  public BalanceResponse getRawByDriverAndWednesday(
+      final Long driverId, final LocalDate wednesday) {
+    if (wednesday.getDayOfWeek() != DayOfWeek.WEDNESDAY) {
+      throw new RuntimeException("Method call allowed only with Wednesday day");
+    }
+
+    final var requestedWeek = qWeekQuery.getByDate(wednesday);
+    final var monday = requestedWeek.getStart();
+    final var previousWeek = qWeekQuery.getOneBeforeById(requestedWeek.getId());
+
+    final var transactionKindIds =
+        transactionKindQuery.getAllByCodes(Arrays.asList("P")).stream()
+            .map(TransactionKindResponse::getId)
+            .toList();
+
+    final var transactionFilter =
+        PeriodAndKindAndDriverTransactionFilter.builder()
+            .driverId(driverId)
+            .dateStart(monday)
+            .dateEnd(wednesday)
+            .transactionKindIds(transactionKindIds)
+            .build();
+
+    final var transactions = transactionQuery.getAllByFilter(transactionFilter);
+
+
+
+    return null;
   }
 
   @Override

@@ -3,6 +3,7 @@ package ee.qrent.billing.transaction.api.in.query.balance;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceRawContextResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface GetBalanceQuery {
@@ -13,6 +14,8 @@ public interface GetBalanceQuery {
   BalanceRawContextResponse getRawContextByDriverIdAndQWeekId(Long driverId, Long qWeekId);
 
   BalanceResponse getRawCurrentByDriver(final Long driverId);
+
+  BalanceResponse getRawByDriverAndWednesday(final Long driverId, final LocalDate wednesday);
 
   BalanceResponse getLatest();
 
