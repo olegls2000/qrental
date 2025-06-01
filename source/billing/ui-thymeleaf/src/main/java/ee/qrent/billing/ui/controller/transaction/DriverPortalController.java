@@ -9,6 +9,7 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.contract.api.in.query.GetAbsenceQuery;
 import ee.qrent.billing.contract.api.in.query.GetAuthorizationQuery;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
+import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
@@ -47,6 +48,7 @@ public class DriverPortalController {
   private final DriverBalanceAssembler driverBalanceAssembler;
   private final GetAuthorizationQuery authorizationQuery;
   private final GetAbsenceQuery absenceQuery;
+  private final GetDepositQuery depositQuery;
 
   @GetMapping
   public String getBalanceView(final Model model) {
@@ -200,9 +202,11 @@ public class DriverPortalController {
     model.addAttribute("driverFirstName", driver.getFirstName());
     model.addAttribute("driverLastName", driver.getLastName());
     model.addAttribute("driverPhone", driver.getPhone());
-    model.addAttribute("driverDeposit", driver.getDeposit());
     model.addAttribute("qFirmId", driver.getQFirmId());
     model.addAttribute("hasQKasko", driver.getHasQKasko());
+
+    final var paidAmountOfDeposit = depositQuery.getPaidAmountByDriverId(driverId);
+    model.addAttribute("paidAmountOfDeposit", paidAmountOfDeposit);
   }
 
   private void addInsuranceRequestedWeekBalance(
