@@ -19,14 +19,11 @@ public class WeeklyReport {
   private Long qFirmId;
   private LocalDate startDate;
   private LocalDate endDate;
-
   private Integer weeksCountTillEnd;
   //TODO: so far not implemented, required special operation: DepositReplenish, will be calculated ion demand by Driver
   private BigDecimal depositObligation;//500
   private BigDecimal depositPaid; //if paid 200, then left over is 300
-
-
-  private WeeklyReportObligationStatus status;
+  private WeeklyReportObligationStatus obligationStatus;
   private BigDecimal balanceAmountSunday;
   private BigDecimal balanceAmountMonday; //after Monday morning Calculations, calculations MUST be completed
   private String comment;

@@ -17,6 +17,7 @@ public class ControllerUtils {
   public static final String USER_ROOT_PATH = "/users";
   public static final String ROLE_ROOT_PATH = "/roles";
   public static final String FIRM_ROOT_PATH = "/firms";
+  public static final String DEPOSIT_ROOT_PATH = "/deposits";
   public static final String CAR_LINK_ROOT_PATH = "/car-links";
   public static final String CONSTANT_ROOT_PATH = "/constants";
   public static final String WEEK_ROOT_PATH = "/weeks";
@@ -32,5 +33,9 @@ public class ControllerUtils {
   public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
 
   public static final String ADD_REQUEST_ATTRIBUTE = "addRequest";
+  public static final String UPDATE_REQUEST_ATTRIBUTE = "updateRequest";
+  public static final String DELETE_REQUEST_ATTRIBUTE = "deleteRequest";
+  public static final String OBJECT_INFO_ATTRIBUTE = "objectInfo";
+
   public static final String COUNTERS_ATTRIBUTE = "counters";
 }

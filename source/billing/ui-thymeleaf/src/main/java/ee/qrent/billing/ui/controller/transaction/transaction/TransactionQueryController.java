@@ -44,7 +44,7 @@ public class TransactionQueryController {
       @ModelAttribute final WeekFilter transactionFilterRequest, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("weeks", qWeekQuery.getAll());
-    //todo move to the service
+    // todo move to the service
     if (transactionFilterRequest.getQWeekId() == null) {
       addTransactionDataToModel(transactionQuery.getAll(), model);
     } else {
@@ -73,7 +73,7 @@ public class TransactionQueryController {
 
     final var latestCalculatedWeek = qWeekQuery.getById(latestCalculatedWeekId);
     final var latestBalanceWeekLabel =
-            String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
+        String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
     model.addAttribute("latestBalanceWeek", latestBalanceWeekLabel);
   }
 }

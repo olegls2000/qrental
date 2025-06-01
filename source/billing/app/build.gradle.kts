@@ -20,6 +20,8 @@ dependencies {
     implementation(project(":source:billing:domain:contract:persistence:flyway"))
     implementation(project(":source:billing:domain:firm:config"))
     implementation(project(":source:billing:domain:firm:persistence:flyway"))
+    implementation(project(":source:billing:domain:deposit:config"))
+    implementation(project(":source:billing:domain:deposit:persistence:flyway"))
     implementation(project(":source:billing:domain:constant:config"))
     implementation(project(":source:billing:domain:constant:persistence:flyway"))
     implementation(project(":source:billing:domain:transaction:config"))

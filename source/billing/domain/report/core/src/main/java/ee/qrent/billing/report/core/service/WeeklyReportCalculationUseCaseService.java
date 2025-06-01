@@ -28,7 +28,6 @@ import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 @Transactional(SUPPORTS)
@@ -50,7 +49,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   @Transactional
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
- /*   final var violationsCollector = addRequestValidator.validate(request);
+    /*   final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
 
@@ -84,7 +83,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     final var transactions = getTransactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId);
 
-
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
         .driverId(driverId)
@@ -93,24 +91,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .qFirmId(getQFirmId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
-        .deposit(driver.getDeposit())
-        .paidDeposit(BigDecimal.valueOf(999))
-        .status(getWeeklyReportObligationStatus(driverId, qWeekId, balance))
-        .balanceAmount(balance.getAmount())
-        .obligationTotal(obligation == null ? BigDecimal.valueOf(999) : obligation.getAmount())
-        .obligationRent(BigDecimal.valueOf(999))
-        .obligationDebt(BigDecimal.valueOf(999))
-        .obligationRepairment(BigDecimal.valueOf(999))
-        .obligationRepairmentFranchise(BigDecimal.valueOf(999))
-        .obligationOthers(BigDecimal.valueOf(999))
-        .obligationFee(BigDecimal.valueOf(999))
-        .bonusNewDriver(BigDecimal.valueOf(999))
-        .bonusReliablePartner(BigDecimal.valueOf(999))
-        .bonusBolt(BigDecimal.valueOf(999))
-        .bonusFriend(BigDecimal.valueOf(999))
-        .obligationRentAdjustmentBolt(BigDecimal.valueOf(999))
-        .obligationRentAdjustmentForus(BigDecimal.valueOf(999))
-        .prepayment(BigDecimal.valueOf(999))
+        .obligationStatus(getWeeklyReportObligationStatus(driverId, qWeekId, balance))
         .comment("Automatically generated weekly report")
         .build();
   }
@@ -149,7 +130,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
       final Long driverId, final Long qWeekId, final BalanceResponse balance) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-        if (obligation == null) {
+    if (obligation == null) {
       throw new RuntimeException(
           format(
               "Obligation  for the driver.id: %d and week.id: %d does not exist. Please calculate it first.",
@@ -161,15 +142,15 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       return WeeklyReportObligationStatus.COMPLETED;
     }
 
-    if(obligation.getMatchCount() ==0 && raw balance On Wed incl >=0 {
+    /*if(obligation.getMatchCount() ==0 && raw balance On Wed incl >=0 {
       return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
-    }
+    }*/
 
-
-    if(obligation.getMatchCount() ==0 && raw balance On Wed incl <0 {
+    /* if(obligation.getMatchCount() ==0 && raw balance On Wed incl <0 {
       return WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
+    }*/
 
+    return null;
   }
 
   private WeeklyReportTransactionsLink getWeeklyReportTransactions(

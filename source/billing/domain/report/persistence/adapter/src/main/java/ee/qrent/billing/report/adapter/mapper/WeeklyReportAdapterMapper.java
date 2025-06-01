@@ -3,14 +3,9 @@ package ee.qrent.billing.report.adapter.mapper;
 import static java.lang.String.format;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
-import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
-import ee.qrent.billing.car.api.in.query.GetCarQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
-import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.report.domain.WeeklyReport;
-import ee.qrent.billing.report.domain.WeeklyReportDetail;
 import ee.qrent.billing.report.domain.WeeklyReportObligationStatus;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportObligationStatusJakarta;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportJakartaEntity;
@@ -44,24 +39,12 @@ public class WeeklyReportAdapterMapper {
         .qFirmId(entity.getQFirmId())
         .startDate(qWeek.getStart())
         .endDate(qWeek.getEnd())
-        .deposit(driver.getDeposit())
-        .paidDeposit(BigDecimal.valueOf(999999999999l))
-        .status(getObligationStatus(qWeekId, driverId))
-        .balanceAmount(BigDecimal.valueOf(999999999999l))
-        .obligationTotal(entity.getObligationTotal())
-        .obligationRent(entity.getObligationRent())
-        .obligationDebt(entity.getObligationDebt())
-        .obligationRepairment(entity.getObligationRepairment())
-        .obligationRepairmentFranchise(entity.getObligationRepairmentFranchise())
-        .obligationOthers(entity.getObligationOthers())
-        .obligationFee(entity.getObligationFee())
-        .bonusNewDriver(entity.getBonusNewDriver())
-        .bonusReliablePartner(entity.getBonusReliablePartner())
-        .bonusBolt(entity.getBonusBolt())
-        .bonusFriend(entity.getBonusFriend())
-        .obligationRentAdjustmentBolt(entity.getObligationRentAdjustmentBolt())
-        .obligationRentAdjustmentForus(entity.getObligationRentAdjustmentForus())
-        .prepayment(entity.getPrepayment())
+        .weeksCountTillEnd(null)
+        .depositObligation(null)
+        .depositPaid(null)
+        .obligationStatus(getObligationStatus(qWeekId, driverId))
+        .balanceAmountSunday(BigDecimal.valueOf(999999999999l))
+        .balanceAmountMonday(BigDecimal.valueOf(999999999999l))
         .comment(entity.getComment())
         .build();
   }
@@ -101,21 +84,10 @@ public class WeeklyReportAdapterMapper {
         .callSignId(domain.getCallSignId())
         .carId(domain.getCarId())
         .qFirmId(domain.getQFirmId())
-        .obligationStatus(mapToWeeklyReportObligationStatusJakarta(domain.getStatus()))
-        .obligationTotal(domain.getObligationTotal())
-        .obligationRent(domain.getObligationRent())
-        .obligationDebt(domain.getObligationDebt())
-        .obligationRepairment(domain.getObligationRepairment())
-        .obligationRepairmentFranchise(domain.getObligationRepairmentFranchise())
-        .obligationOthers(domain.getObligationOthers())
-        .obligationFee(domain.getObligationFee())
-        .bonusNewDriver(domain.getBonusNewDriver())
-        .bonusReliablePartner(domain.getBonusReliablePartner())
-        .bonusBolt(domain.getBonusBolt())
-        .bonusFriend(domain.getBonusFriend())
-        .obligationRentAdjustmentBolt(domain.getObligationRentAdjustmentBolt())
-        .obligationRentAdjustmentForus(domain.getObligationRentAdjustmentForus())
-        .prepayment(domain.getPrepayment())
+        .weeksCountTillEnd(domain.getWeeksCountTillEnd())
+        .depositObligation(domain.getDepositObligation())
+        .depositPaid(domain.getDepositPaid())
+        .obligationStatus(mapToWeeklyReportObligationStatusJakarta(domain.getObligationStatus()))
         .comment(domain.getComment())
         .build();
   }

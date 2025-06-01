@@ -27,6 +27,7 @@ public class WeeklyReportResponseMapper
     final var driver = driverQuery.getById(driverId);
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(qWeekId, driverId);
     final var qFirm = firmQuery.getById(domain.getQFirmId());
+
     return WeeklyReportResponse.builder()
         .id(domain.getId())
         .driverName(driver.getFirstName() + " " + driver.getLastName())
@@ -38,24 +39,12 @@ public class WeeklyReportResponseMapper
         .startDate(qWeek.getStart())
         .endDate(qWeek.getEnd())
         .qFirmName(qFirm.getName())
-        .deposit(domain.getDeposit())
-        .paidDeposit(domain.getPaidDeposit())
-        .status(domain.getStatus().name())
-        .balanceAmount(domain.getBalanceAmount())
-        .obligationTotal(domain.getObligationTotal())
-        .obligationRent(domain.getObligationRent())
-        .obligationDebt(domain.getObligationDebt())
-        .obligationRent(domain.getObligationRent())
-        .obligationRepairmentFranchise(domain.getObligationRepairmentFranchise())
-        .obligationOthers(domain.getObligationOthers())
-        .obligationFee(domain.getObligationFee())
-        .bonusNewDriver(domain.getBonusNewDriver())
-        .bonusReliablePartner(domain.getBonusReliablePartner())
-        .bonusBolt(domain.getBonusBolt())
-        .bonusFriend(domain.getBonusFriend())
-        .obligationRentAdjustmentBolt(domain.getObligationRentAdjustmentBolt())
-        .obligationRentAdjustmentForus(domain.getObligationRentAdjustmentForus())
-        .prepayment(domain.getPrepayment())
+        .weeksCountTillEnd(domain.getWeeksCountTillEnd())
+        .depositObligation(domain.getDepositObligation())
+        .depositPaid(domain.getDepositPaid())
+        .obligationStatus(domain.getObligationStatus().name())
+        .balanceAmountSunday(domain.getBalanceAmountSunday())
+        .balanceAmountMonday(domain.getBalanceAmountMonday())
         .comment(domain.getComment())
         .build();
   }
