@@ -6,6 +6,7 @@ import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.common.in.mapper.ResponseMapper;
 import lombok.AllArgsConstructor;
 
+import static ee.qrent.common.utils.QNumberUtils.qRound;
 import static java.lang.String.format;
 
 @AllArgsConstructor
@@ -33,7 +34,8 @@ public class DepositResponseMapper implements ResponseMapper<DepositResponse, De
     final var driver = driverQuery.getById(domain.getDriverId());
     final var driverInfo = driver.getFirstName() + " " + driver.getLastName();
     final var driverTaxNumber = driver.getTaxNumber();
+    final var stringAmount = qRound(domain.getAmount()).toPlainString();
 
-    return format("%s, %s %d", driverInfo, driverTaxNumber, domain.getAmount());
+    return format("Driver: %s, %d. Replenishment amount: %s EUR", driverInfo, driverTaxNumber, stringAmount);
   }
 }

@@ -1,8 +1,7 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete Deposit Replenishment',
-            closeRef='/firms',
-            content=~{fragments/dpositDeleteFormFragment.html :: deleteForm},
+            content=~{fragments/depositDeleteFormFragment.html :: deleteForm},
             request=${deleteRequest}
         )">
     </div>
@@ -19,7 +18,7 @@
     <div class="mb-3">
         <p class="fs-4 ">Please confirm that you want to delete next data:</p>
         <p class="fs-6 text-center"
-           th:text=${objectInfo}>Deposit replenishment info</p>
+           th:text=${objectInfo}>???</p>
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
             submitValue='Delete'
