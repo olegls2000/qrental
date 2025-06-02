@@ -165,15 +165,10 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   @Override
-  public BalanceResponse getRawByDriverAndWednesday(
-      final Long driverId, final LocalDate wednesday) {
-    if (wednesday.getDayOfWeek() != DayOfWeek.WEDNESDAY) {
-      throw new RuntimeException("Method call allowed only with Wednesday day");
-    }
-
-    final var requestedWeek = qWeekQuery.getByDate(wednesday);
+  public BalanceResponse getRawByDriverAndDate(
+      final Long driverId, final LocalDate date) {
+    final var requestedWeek = qWeekQuery.getByDate(date);
     final var monday = requestedWeek.getStart();
-    final var previousWeek = qWeekQuery.getOneBeforeById(requestedWeek.getId());
 
     final var transactionKindIds =
         transactionKindQuery.getAllByCodes(Arrays.asList("P")).stream()
@@ -184,7 +179,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         PeriodAndKindAndDriverTransactionFilter.builder()
             .driverId(driverId)
             .dateStart(monday)
-            .dateEnd(wednesday)
+            .dateEnd(date)
             .transactionKindIds(transactionKindIds)
             .build();
 

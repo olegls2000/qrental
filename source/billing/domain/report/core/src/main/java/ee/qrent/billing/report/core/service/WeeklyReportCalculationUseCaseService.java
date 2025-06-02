@@ -7,6 +7,8 @@ import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
+import ee.qrent.billing.contract.api.in.query.GetContractQuery;
+import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
@@ -23,8 +25,8 @@ import ee.qrent.billing.report.domain.WeeklyReportTransactionsLink;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
-import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 
+import ee.qrent.common.in.time.QDateTime;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -34,6 +36,8 @@ import java.util.stream.Collectors;
 @Transactional(SUPPORTS)
 @AllArgsConstructor
 public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalculationAddUseCase {
+
+  private static final BigDecimal DEPOSIT_OBLIGATION = new BigDecimal(500);
 
   private final WeeklyReportCalculationAddRequestValidator addRequestValidator;
   private final WeeklyReportCalculationAddRequestMapper addRequestMapper;
@@ -46,6 +50,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetFirmLinkQuery firmLinkQuery;
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
+  private final GetContractQuery contractQuery;
+  private final GetDepositQuery depositQuery;
+  private  final QDateTime  qDateTime;
 
   @Transactional
   @Override
@@ -57,7 +64,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       return null;
     }
     final var requestedQWeekId = request.getQWeekId();
-    final var domain = addRequestMapper.toDomain(request);
+    final var calculation = addRequestMapper.toDomain(request);
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
     driverQuery.getAll().stream()
@@ -66,10 +73,10 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
               final var weeklyReport = getWeeklyReport(driver, requestedQWeek);
               final var reportTransactions =
                   getWeeklyReportTransactions(weeklyReport, driver.getId(), requestedQWeekId);
-              domain.getReportTransactionLinks().add(reportTransactions);
+              calculation.getReportTransactionLinks().add(reportTransactions);
             });
 
-    final var addedDomain = addPort.add(domain);
+    final var addedDomain = addPort.add(calculation);
     sendEmailNotification(addedDomain);
 
     return addedDomain.getId();
@@ -80,8 +87,11 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-
-    final var transactions = transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId);
+    final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
+    final var balanceOnSunday = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
+    final var today = qDateTime.getToday();
+    final var balanceAmountAtCalculationMoment = balanceQuery.getRawByDriverAndDate(driverId, today);
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
@@ -91,7 +101,12 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .qFirmId(getQFirmId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
+        .weeksCountTillEnd(contract.getWeeksToEnd())
+        .depositObligation(DEPOSIT_OBLIGATION)
+        .depositPaid(depositPaid)
         .obligationStatus(getWeeklyReportObligationStatus(driver, requestedQWeek))
+        .balanceAmountSunday(balanceOnSunday.getAmount())
+        .balanceAmountAtCalculationMoment(null)
         .comment("Automatically generated weekly report")
         .build();
   }
@@ -143,7 +158,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     final var wednesday = qWeek.getEnd().plusDays(3l);
     final var balanceOnWednesday =
-        balanceQuery.getRawByDriverAndWednesday(driver.getId(), wednesday);
+        balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
 
     if (obligation.getMatchCount() == 0
         && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {

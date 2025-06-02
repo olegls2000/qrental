@@ -15,7 +15,7 @@ public interface GetBalanceQuery {
 
   BalanceResponse getRawCurrentByDriver(final Long driverId);
 
-  BalanceResponse getRawByDriverAndWednesday(final Long driverId, final LocalDate wednesday);
+  BalanceResponse getRawByDriverAndDate(final Long driverId, final LocalDate date);
 
   BalanceResponse getLatest();
 
