@@ -43,12 +43,17 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
   }
 
   @Override
-  public boolean canApply(final DriverResponse driver, final QWeekResponse qWeek) {
+  public boolean canApply(
+      final DriverResponse driver, final QWeekResponse qWeek, InsuranceCase insuranceCase) {
     final var contract =
         getContractQuery().getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
 
+    final var isCaseNew =
+        insuranceCase.getOccurrenceDate().isEqual(NEW_CONTRACTS_START_DATE)
+            || insuranceCase.getOccurrenceDate().isAfter(NEW_CONTRACTS_START_DATE);
+
     return contract.getDateStart().isEqual(NEW_CONTRACTS_START_DATE)
-        || contract.getDateEnd().isAfter(NEW_CONTRACTS_START_DATE);
+        || contract.getDateEnd().isAfter(NEW_CONTRACTS_START_DATE) && isCaseNew;
   }
 
   @Override

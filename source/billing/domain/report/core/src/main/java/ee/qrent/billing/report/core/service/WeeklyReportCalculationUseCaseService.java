@@ -52,7 +52,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetTransactionQuery transactionQuery;
   private final GetContractQuery contractQuery;
   private final GetDepositQuery depositQuery;
-  private  final QDateTime  qDateTime;
+  private final QDateTime qDateTime;
 
   @Transactional
   @Override
@@ -91,7 +91,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
     final var balanceOnSunday = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     final var today = qDateTime.getToday();
-    final var balanceAmountAtCalculationMoment = balanceQuery.getRawByDriverAndDate(driverId, today);
+    final var balanceAmountAtCalculationMoment =
+        balanceQuery.getRawByDriverAndDate(driverId, today);
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
@@ -106,7 +107,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .depositPaid(depositPaid)
         .obligationStatus(getWeeklyReportObligationStatus(driver, requestedQWeek))
         .balanceAmountSunday(balanceOnSunday.getAmount())
-        .balanceAmountAtCalculationMoment(null)
+        .balanceAmountAtCalculationMoment(balanceAmountAtCalculationMoment.getAmount())
         .comment("Automatically generated weekly report")
         .build();
   }
@@ -157,8 +158,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     }
 
     final var wednesday = qWeek.getEnd().plusDays(3l);
-    final var balanceOnWednesday =
-        balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
+    final var balanceOnWednesday = balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
 
     if (obligation.getMatchCount() == 0
         && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
