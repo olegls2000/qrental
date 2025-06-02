@@ -18,11 +18,11 @@ public class WeeklyReportResponse {
   private LocalDate startDate;
   private LocalDate endDate;
   private String qFirmName;
-  private Integer weeksCountTillEnd;
+  private Long weeksCountTillEnd;
   private BigDecimal depositObligation;
   private BigDecimal depositPaid;
   private String obligationStatus;
   private BigDecimal balanceAmountSunday;
-  private BigDecimal balanceAmountMonday;
+  private BigDecimal balanceAmountAtCalculationMoment;
   private String comment;
 }

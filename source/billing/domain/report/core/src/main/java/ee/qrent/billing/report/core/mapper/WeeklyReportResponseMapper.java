@@ -44,7 +44,7 @@ public class WeeklyReportResponseMapper
         .depositPaid(domain.getDepositPaid())
         .obligationStatus(domain.getObligationStatus().name())
         .balanceAmountSunday(domain.getBalanceAmountSunday())
-        .balanceAmountMonday(domain.getBalanceAmountMonday())
+        .balanceAmountAtCalculationMoment(domain.getBalanceAmountAtCalculationMoment())
         .comment(domain.getComment())
         .build();
   }

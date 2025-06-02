@@ -49,7 +49,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     final var drivers = driverQuery.getAll();
     for (var driver : drivers) {
       insuranceCalculationStrategies.stream()
-          .filter(strategy -> strategy.canApply(driver, qWeek))
+          .filter(strategy -> strategy.canApply(driver, qWeek, null))
           .findFirst()
           .orElseThrow(
               () ->
@@ -57,7 +57,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
                       format(
                           "No Insurance calculation Strategy were found for the driver.taxNumber: %d",
                           driver.getTaxNumber())))
-          .apply(driver, qWeek, domain);
+          .apply(driver, qWeek, domain, null);
     }
 
     final var savedCalculation = calculationAddPort.add(domain);

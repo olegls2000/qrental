@@ -15,6 +15,8 @@ dependencies {
     implementation(project(":source:billing:domain:car:api:in"))
     implementation(project(":source:billing:domain:firm:api:in"))
     implementation(project(":source:billing:domain:bonus:api:in"))
+    implementation(project(":source:billing:domain:contract:api:in"))
+    implementation(project(":source:billing:domain:deposit:api:in"))
 
     implementation("org.springframework:spring-context-support")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

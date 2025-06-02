@@ -40,7 +40,7 @@ public class WeeklyReportJakartaEntity {
   private Long qFirmId;
 
   @Column(name = "weeks_count_till_end")
-  private Integer weeksCountTillEnd;
+  private Long weeksCountTillEnd;
 
   @Column(name = "deposit_obligation")
   private BigDecimal depositObligation;

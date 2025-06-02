@@ -60,7 +60,8 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
   public void apply(
       final DriverResponse driver,
       final QWeekResponse qWeek,
-      final InsuranceCalculation calculation) {
+      final InsuranceCalculation calculation,
+      final InsuranceCase insuranceCase) {
     final var driverId = driver.getId();
     final var qWeekId = qWeek.getId();
     final var driverInfo =

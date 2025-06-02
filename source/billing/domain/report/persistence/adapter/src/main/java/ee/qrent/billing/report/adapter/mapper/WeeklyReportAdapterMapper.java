@@ -44,7 +44,7 @@ public class WeeklyReportAdapterMapper {
         .depositPaid(null)
         .obligationStatus(getObligationStatus(qWeekId, driverId))
         .balanceAmountSunday(BigDecimal.valueOf(999999999999l))
-        .balanceAmountMonday(BigDecimal.valueOf(999999999999l))
+        .balanceAmountAtCalculationMoment(BigDecimal.valueOf(999999999999l))
         .comment(entity.getComment())
         .build();
   }

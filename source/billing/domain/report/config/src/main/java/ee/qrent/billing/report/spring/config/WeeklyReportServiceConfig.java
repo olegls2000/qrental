@@ -3,6 +3,8 @@ package ee.qrent.billing.report.spring.config;
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.contract.api.in.query.GetContractQuery;
+import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
@@ -19,6 +21,7 @@ import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfModelMapper;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrent.common.in.time.QDateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -55,7 +58,10 @@ public class WeeklyReportServiceConfig {
       final GetCarLinkQuery carLinkQuery,
       final GetFirmLinkQuery firmLinkQuery,
       final GetBalanceQuery balanceQuery,
-      final GetTransactionQuery getTransactionQuery) {
+      final GetTransactionQuery getTransactionQuery,
+      final GetContractQuery contractQuery,
+      final GetDepositQuery depositQuery,
+      final QDateTime qDateTime) {
 
     return new WeeklyReportCalculationUseCaseService(
         addRequestValidator,
@@ -68,7 +74,10 @@ public class WeeklyReportServiceConfig {
         carLinkQuery,
         firmLinkQuery,
         balanceQuery,
-        getTransactionQuery);
+        getTransactionQuery,
+        contractQuery,
+        depositQuery,
+        qDateTime);
   }
 
   @Bean

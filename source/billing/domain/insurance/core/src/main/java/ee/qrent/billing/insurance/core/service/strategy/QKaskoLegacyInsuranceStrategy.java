@@ -31,7 +31,8 @@ public class QKaskoLegacyInsuranceStrategy extends AbstractInsuranceCalculationS
   }
 
   @Override
-  public boolean canApply(final DriverResponse driver, final QWeekResponse qWeek) {
+  public boolean canApply(
+      final DriverResponse driver, final QWeekResponse qWeek, final InsuranceCase insuranceCase) {
     final var contract =
         getContractQuery().getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
 
@@ -42,7 +43,8 @@ public class QKaskoLegacyInsuranceStrategy extends AbstractInsuranceCalculationS
   public void apply(
       final DriverResponse driver,
       final QWeekResponse qWeek,
-      final InsuranceCalculation calculation) {
+      final InsuranceCalculation calculation,
+      final InsuranceCase insuranceCase) {
     final var driverId = driver.getId();
     final var qWeekId = qWeek.getId();
     final var driverInfo =
