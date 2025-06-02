@@ -4,6 +4,7 @@ import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseLoadPort;
+import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.billing.insurance.domain.InsuranceCalculation;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
@@ -19,6 +20,7 @@ import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
+import static java.util.Arrays.asList;
 
 public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrategy {
 
@@ -31,11 +33,12 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
 
   public SimpleInsuranceStrategy(
       final GetContractQuery contractQuery,
+      final InsuranceCaseUpdatePort caseUpdatePort,
       final InsuranceCaseLoadPort caseLoadPort,
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime) {
-    super(contractQuery);
+    super(contractQuery, caseUpdatePort);
     this.caseLoadPort = caseLoadPort;
     this.transactionQuery = transactionQuery;
     this.transactionAddUseCase = transactionAddUseCase;
@@ -47,13 +50,21 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       final DriverResponse driver, final QWeekResponse qWeek, InsuranceCase insuranceCase) {
     final var contract =
         getContractQuery().getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
+    if (contract == null) {
+
+      return false;
+    }
+    final var contractStartDate = contract.getDateStart();
+    final var occurrenceDate = insuranceCase.getOccurrenceDate();
 
     final var isCaseNew =
-        insuranceCase.getOccurrenceDate().isEqual(NEW_CONTRACTS_START_DATE)
-            || insuranceCase.getOccurrenceDate().isAfter(NEW_CONTRACTS_START_DATE);
+        occurrenceDate.isEqual(NEW_CONTRACTS_START_DATE)
+            || occurrenceDate.isAfter(NEW_CONTRACTS_START_DATE);
+    final var isContractNew =
+        contractStartDate.isEqual(NEW_CONTRACTS_START_DATE)
+            || contractStartDate.isAfter(NEW_CONTRACTS_START_DATE);
 
-    return contract.getDateStart().isEqual(NEW_CONTRACTS_START_DATE)
-        || contract.getDateEnd().isAfter(NEW_CONTRACTS_START_DATE) && isCaseNew;
+    return isCaseNew && isContractNew;
   }
 
   @Override
@@ -64,46 +75,42 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       final InsuranceCase insuranceCase) {
     final var driverId = driver.getId();
     final var qWeekId = qWeek.getId();
-    final var driverInfo =
-        format(
-            "Driver: %s %s, tax number: %d",
-            driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
-    final var weekInfo = format("QWeek: %d - %d", qWeek.getYear(), qWeek.getNumber());
-    final var strategyInfo = this.getClass().getSimpleName();
-    System.out.println(
-        format("Strategy %s, will be applied for %s and %s", strategyInfo, driverInfo, weekInfo));
-
-    final var activeCases = caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (activeCases.isEmpty()) {
-      System.out.println(format("No Active insurance cases for %s and %s", driverInfo, weekInfo));
-
-      return;
-    }
-    final var activeCaseForProcessing = activeCases.stream().findFirst().get();
+    createAndSaveWeeklyPaymentTransaction(driverId, qWeekId);
+    createAndSaveDamageWriteOffTransaction(insuranceCase);
     final var weeklyTransaction = getWeeklyPaymentTransaction(driverId, qWeekId);
-    final var writeOffTransaction = getDamageWriteOffTransaction(driverId, activeCaseForProcessing);
+    final var writeOffTransaction = getDamageWriteOffTransaction(insuranceCase);
     final var weeklyTransactionId = transactionAddUseCase.add(weeklyTransaction);
     final var writeOffTransactionId = transactionAddUseCase.add(writeOffTransaction);
 
     final var requestedBalance =
         InsuranceCaseBalance.builder()
-            .insuranceCase(activeCaseForProcessing)
+            .insuranceCase(insuranceCase)
             .damageRemaining(ZERO)
             .selfResponsibilityRemaining(ZERO)
-            .transactionIds(Arrays.asList(weeklyTransactionId, writeOffTransactionId))
+            .transactionIds(asList(weeklyTransactionId, writeOffTransactionId))
             .qWeekId(qWeekId)
             .withQKasko(FALSE)
             .build();
+    calculation.getInsuranceCaseBalances().add(requestedBalance);
+    checkAndDeactivateIfNecessary(requestedBalance, insuranceCase);
   }
 
-  private TransactionAddRequest getDamageWriteOffTransaction(
-      final Long driverId, final InsuranceCase insuranceCase) {
+  private void createAndSaveWeeklyPaymentTransaction(final Long driverId, final Long qWeekId) {
+    final var transactionAddRequest = getWeeklyPaymentTransaction(driverId, qWeekId);
+    transactionAddUseCase.add(transactionAddRequest);
+  }
 
+  private void createAndSaveDamageWriteOffTransaction(final InsuranceCase insuranceCase) {
+    final var transactionAddRequest = getDamageWriteOffTransaction(insuranceCase);
+    transactionAddUseCase.add(transactionAddRequest);
+  }
+
+  private TransactionAddRequest getDamageWriteOffTransaction(final InsuranceCase insuranceCase) {
     final var writeOffAmount = getDamageWriteOffAmount(insuranceCase);
     final var damageWriteOffTransaction = new TransactionAddRequest();
     damageWriteOffTransaction.setComment(
         "Automatically created transaction for the damage compensation.");
-    damageWriteOffTransaction.setDriverId(driverId);
+    damageWriteOffTransaction.setDriverId(insuranceCase.getDriverId());
     damageWriteOffTransaction.setAmount(writeOffAmount);
 
     // TODO as about type
@@ -115,11 +122,13 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     return damageWriteOffTransaction;
   }
 
-  private BigDecimal getDamageWriteOffAmount(InsuranceCase insuranceCase) {
+  private BigDecimal getDamageWriteOffAmount(final InsuranceCase insuranceCase) {
     final var damage = insuranceCase.getDamageAmount();
     if (damage.compareTo(DAMAGE_LIMIT) >= 0) {
+
       return DAMAGE_LIMIT;
     } else {
+
       return damage;
     }
   }

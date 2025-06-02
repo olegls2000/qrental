@@ -49,6 +49,7 @@ public class InsuranceCaseServiceConfig {
       final InsuranceCaseBalanceLoadPort insuranceCaseBalanceLoadPort,
       final GetTransactionQuery transactionQuery,
       final GetInsuranceCaseQuery insuranceCaseQuery) {
+
     return asList(
         new InsuranceCaseBalanceWithQKaskoCalculationStrategy(
             qWeekQuery,
@@ -157,6 +158,7 @@ public class InsuranceCaseServiceConfig {
 
   @Bean
   InsuranceCalculationUseCaseService getInsuranceCalculationUseCaseService(
+      final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCalculationAddPort calculationAddPort,
       final InsuranceCalculationAddRequestMapper calculationAddRequestMapper,
       final GetQWeekQuery qWeekQuery,
@@ -165,6 +167,7 @@ public class InsuranceCaseServiceConfig {
       final List<InsuranceCalculationStrategy> insuranceCalculationStrategies) {
 
     return new InsuranceCalculationUseCaseService(
+        caseLoadPort,
         calculationAddPort,
         calculationAddRequestMapper,
         qWeekQuery,
@@ -182,8 +185,8 @@ public class InsuranceCaseServiceConfig {
   @Bean
   List<InsuranceCalculationStrategy> getInsuranceCalculationStrategy(
       final GetContractQuery contractQuery,
-      final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseUpdatePort caseUpdatePort,
+      final InsuranceCaseLoadPort caseLoadPort,
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime,
@@ -191,8 +194,13 @@ public class InsuranceCaseServiceConfig {
 
     return asList(
         new SimpleInsuranceStrategy(
-            contractQuery, caseLoadPort, transactionQuery, transactionAddUseCase, qDateTime),
+            contractQuery,
+            caseUpdatePort,
+            caseLoadPort,
+            transactionQuery,
+            transactionAddUseCase,
+            qDateTime),
         new QKaskoLegacyInsuranceStrategy(
-            contractQuery, caseLoadPort, caseUpdatePort, insuranceCaseBalanceCalculator));
+            contractQuery, caseUpdatePort, caseLoadPort, insuranceCaseBalanceCalculator));
   }
 }

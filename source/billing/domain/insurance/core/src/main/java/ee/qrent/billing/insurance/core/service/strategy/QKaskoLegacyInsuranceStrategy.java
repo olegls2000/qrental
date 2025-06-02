@@ -21,10 +21,10 @@ public class QKaskoLegacyInsuranceStrategy extends AbstractInsuranceCalculationS
 
   public QKaskoLegacyInsuranceStrategy(
       final GetContractQuery contractQuery,
-      final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseUpdatePort caseUpdatePort,
+      final InsuranceCaseLoadPort caseLoadPort,
       final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator) {
-    super(contractQuery);
+    super(contractQuery, caseUpdatePort);
     this.caseLoadPort = caseLoadPort;
     this.caseUpdatePort = caseUpdatePort;
     this.insuranceCaseBalanceCalculator = insuranceCaseBalanceCalculator;
@@ -35,8 +35,13 @@ public class QKaskoLegacyInsuranceStrategy extends AbstractInsuranceCalculationS
       final DriverResponse driver, final QWeekResponse qWeek, final InsuranceCase insuranceCase) {
     final var contract =
         getContractQuery().getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
+    if (contract == null) {
 
-    return contract.getDateStart().isBefore(NEW_CONTRACTS_START_DATE);
+      return false;
+    }
+    final var contractStartDate = contract.getDateStart();
+
+    return contractStartDate.isBefore(NEW_CONTRACTS_START_DATE);
   }
 
   @Override
@@ -45,36 +50,9 @@ public class QKaskoLegacyInsuranceStrategy extends AbstractInsuranceCalculationS
       final QWeekResponse qWeek,
       final InsuranceCalculation calculation,
       final InsuranceCase insuranceCase) {
-    final var driverId = driver.getId();
-    final var qWeekId = qWeek.getId();
-    final var driverInfo =
-        format(
-            "Driver: %s %s, tax number: %d",
-            driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
-    final var weekInfo = format("QWeek: %d - %d", qWeek.getYear(), qWeek.getNumber());
-    final var strategyInfo = this.getClass().getSimpleName();
-    System.out.println(
-        format("Strategy %s, will be applied for %s and %s", strategyInfo, driverInfo, weekInfo));
-
-    final var activeCases = caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (activeCases.isEmpty()) {
-      System.out.println(format("No Active insurance cases for %s and %s", driverInfo, weekInfo));
-
-      return;
-    }
-    final var activeCaseForProcessing = activeCases.stream().findFirst().get();
     final var requestedWeekBalance =
-        insuranceCaseBalanceCalculator.calculateBalance(activeCaseForProcessing, qWeek);
+        insuranceCaseBalanceCalculator.calculateBalance(insuranceCase, qWeek);
     calculation.getInsuranceCaseBalances().add(requestedWeekBalance);
-    checkAndDeactivateIfNecessary(requestedWeekBalance, activeCaseForProcessing);
-  }
-
-  private void checkAndDeactivateIfNecessary(
-      final InsuranceCaseBalance balance, final InsuranceCase insuranceCase) {
-    if (balance.getDamageRemaining().compareTo(ZERO) == 0
-        && balance.getSelfResponsibilityRemaining().compareTo(ZERO) == 0) {
-      insuranceCase.setActive(false);
-      caseUpdatePort.update(insuranceCase);
-    }
+    checkAndDeactivateIfNecessary(requestedWeekBalance, insuranceCase);
   }
 }
