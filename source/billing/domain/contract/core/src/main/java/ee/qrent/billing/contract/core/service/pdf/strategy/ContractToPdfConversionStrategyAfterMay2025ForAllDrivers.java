@@ -53,20 +53,20 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     chapter1.addCell(getSubChapterNumber("1.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est"));
+            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est "));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tuuptingimused/tt_pdf_est"));
+            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tuuptingimused/tt_pdf_est "));
 
     chapter1.addCell(getSubChapterNumber("1.2.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tuuptingimused/tt_pdf_rus"
+            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tuuptingimused/tt_pdf_rus "
                 + "(tõlge võib olla ebatäpne ja on üksnes informatiivse tähendusega)"));
 
     chapter1.addCell(getSubChapterNumber("1.3"));
@@ -150,20 +150,20 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     chapter2.addCell(getSubChapterNumber("2.1"));
     chapter2.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa “TSK Tingimused” nr. 070525 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 13:24:24 +00:00) ning on saadaval järgmisel lingil: "
-                + "www.qrent.ee/tsk/tsk_dig_allkiri_est"));
+            "Käesoleva lepingulisa “TSK Tingimused” nr. 310525 lepingulisa on koostatud ja allkirjastatud 31.05.2025 (Signature Timestamp UTC - 31.05.2025 07:36:15 +00:00) ning on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tsk/tsk_dig_allkiri_est "));
 
     chapter2.addCell(getSubChapterNumber("2.1.1"));
     chapter2.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tsk/tsk_pdf_est"));
+            "Käesoleva lepingulisa eestikeelne PDF on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tsk/tsk_pdf_est "));
 
     chapter2.addCell(getSubChapterNumber("2.1.2"));
     chapter2.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil:"
-                + "www.qrent.ee/tsk/tsk_pdf_rus"
+            "Käesoleva lepingulisa venekeelne (по-русски) PDF on saadaval järgmisel lingil: "
+                + "www.qrent.ee/tsk/tsk_pdf_rus "
                 + "(tõlge võib olla ebatäpne ja on üksnes informatiivse tähendusega)"));
 
     chapter2.addCell(getSubChapterNumber("2.2"));
