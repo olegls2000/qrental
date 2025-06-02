@@ -31,7 +31,7 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
   private final GetConstantQuery constantQuery;
 
   @Override
-  public BalanceWrapper calculateBalance(
+  public BalanceRawContext calculateBalance(
       final DriverResponse driver,
       final QWeekResponse requestedQWeek,
       final Balance previousWeekBalance,
@@ -75,7 +75,7 @@ public abstract class AbstractBalanceCalculator implements BalanceCalculatorStra
     saveBalanceIfNecessary(balance);
     final var balanceDerived = getDeriveService().getDerivedBalance(balance);
     final var derivedBalance = saveAndGetDerivedBalanceIfNecessary(balanceDerived);
-    return BalanceWrapper.builder()
+    return BalanceRawContext.builder()
         .requestedWeekBalance(derivedBalance)
         .transactionsByKind(transactionsByKind)
         .build();

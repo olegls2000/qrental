@@ -10,7 +10,8 @@ import java.util.Map;
 
 @SuperBuilder
 @Getter
-public class BalanceWrapper {
+public class BalanceRawContext {
   private Balance requestedWeekBalance;
+  private Balance previousWeekBalance;
   private Map<String, List<TransactionResponse>> transactionsByKind;
 }

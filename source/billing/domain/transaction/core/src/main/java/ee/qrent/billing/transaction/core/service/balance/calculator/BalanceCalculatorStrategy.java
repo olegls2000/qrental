@@ -13,7 +13,7 @@ public interface BalanceCalculatorStrategy {
   String DRY_RUN = "dry-run";
   String SAVING = "saving";
 
-  BalanceWrapper calculateBalance(
+  BalanceRawContext calculateBalance(
       final DriverResponse driver,
       final QWeekResponse requestedQWeek,
       final Balance previousWeekBalance,

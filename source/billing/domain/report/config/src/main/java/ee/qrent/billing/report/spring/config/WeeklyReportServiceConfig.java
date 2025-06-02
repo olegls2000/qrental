@@ -89,6 +89,7 @@ public class WeeklyReportServiceConfig {
   @Bean
   WeeklyReportToPdfModelMapper getWeeklyReportToPdfModelMapper(
       final WeeklyReportLoadPort loadPort, final GetQWeekQuery qWeekQuery) {
+
     return new WeeklyReportToPdfModelMapper(loadPort, qWeekQuery);
   }
 
