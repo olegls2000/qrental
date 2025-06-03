@@ -73,6 +73,8 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
     entity.setQFirmId(domain.getQFirmId());
     entity.setDeposit(domain.getDeposit());
     entity.setRequiredObligation(domain.getRequiredObligation());
+    entity.setDriverIdentifier(domain.getDriverIdentifier());
+    entity.setIndividualIdentifier(domain.getIndividualIdentifier());
     entity.setComment(domain.getComment());
 
     return entity;

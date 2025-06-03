@@ -48,5 +48,7 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Boolean bySms;
   private Boolean byPhone;
   private BigDecimal deposit;
+  private String driverIdentifier;
+  private String individualIdentifier;
   private String comment;
 }

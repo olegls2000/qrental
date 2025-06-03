@@ -50,6 +50,8 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .comment(request.getComment())
         .createdDate(LocalDate.now())
         .callSign(getCallSign(request))
+            .driverIdentifier(request.getDriverIdentifier())
+            .individualIdentifier(request.getIndividualIdentifier())
         .build();
   }
 

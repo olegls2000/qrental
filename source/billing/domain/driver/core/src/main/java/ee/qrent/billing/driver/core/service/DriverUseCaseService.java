@@ -97,9 +97,10 @@ public class DriverUseCaseService
         || request.getCompanyAddress() != driverFromDb.getCompanyAddress()
         || request.getFirstName() != driverFromDb.getFirstName()
         || request.getTaxNumber() != driverFromDb.getTaxNumber()
-        || request.getDriverLicenseNumber() != driverFromDb.getDriverLicenseNumber()
-        || request.getEmail() != driverFromDb.getEmail()
-        || request.getPhone() != driverFromDb.getPhone();
+//        || request.getDriverLicenseNumber() != driverFromDb.getDriverLicenseNumber()
+//        || request.getEmail() != driverFromDb.getEmail()
+//        || request.getPhone() != driverFromDb.getPhone()
+        ;
   }
 
   @Transactional
