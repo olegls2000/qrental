@@ -44,5 +44,7 @@ public class DriverResponse {
   private Long qFirmId;
   private String qFirmName;
   private String comment;
+  private String driverIdentifier;
+  private String individualIdentifier;
   private LocalDate createdDate;
 }

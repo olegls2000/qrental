@@ -122,6 +122,12 @@ public class DriverJakartaEntity {
   @Column(name = "created_date")
   private LocalDate createdDate;
 
+  @Column(name = "driver_identifier")
+  private String driverIdentifier;
+
+  @Column (name = "individual_identifier")
+  private String individualIdentifier;
+
   @OneToMany(mappedBy = "driver")
   private List<CallSignLinkJakartaEntity> callSignLinks;
 }

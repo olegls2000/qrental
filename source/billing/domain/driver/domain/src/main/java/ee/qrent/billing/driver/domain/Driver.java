@@ -47,6 +47,8 @@ public class Driver {
   private LocalDate createdDate;
   private CallSign callSign;
   private Friendship friendship;
+  private String driverIdentifier;
+  private String individualIdentifier;
 
   public boolean hasRequiredObligation() {
     return requiredObligation.compareTo(ZERO) > 0;

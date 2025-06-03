@@ -44,5 +44,7 @@ public class DriverAddRequest extends AbstractAddRequest {
   private Boolean byPhone;
   private BigDecimal deposit;
   private Long qFirmId;
+  private String driverIdentifier;
+  private String individualIdentifier;
   private String comment;
 }

@@ -51,6 +51,8 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .comment(request.getComment())
         .callSign(CallSign.builder().id(request.getCallSignId()).build())
         .friendship(friendshipDomainMapper.toDomain(request))
+            .driverIdentifier(request.getDriverIdentifier())
+            .individualIdentifier(request.getIndividualIdentifier())
         .build();
   }
 
@@ -101,7 +103,9 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .qFirmId(domain.getQFirmId())
         .hasRequiredObligation(domain.hasRequiredObligation())
         .requiredObligation(domain.getRequiredObligation())
-        .comment(domain.getComment())
+            .driverIdentifier(domain.getDriverIdentifier())
+            .individualIdentifier(domain.getIndividualIdentifier())
+            .comment(domain.getComment())
         .build();
   }
 }
