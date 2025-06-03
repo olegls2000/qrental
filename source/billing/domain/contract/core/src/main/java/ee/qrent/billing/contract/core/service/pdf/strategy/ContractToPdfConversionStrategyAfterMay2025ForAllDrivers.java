@@ -53,7 +53,7 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     chapter1.addCell(getSubChapterNumber("1.2"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil:"
+            "Käesoleva lepingulisa “Tüüptingimused” nr. 07052025 lepingulisa on koostatud ja allkirjastatud 07.05.2025 (Signature Timestamp UTC - 07.05.2025 12:05:25 +00:0007.05.2025 13:03:43 +00:00) ning on saadaval järgmisel lingil: "
                 + "www.qrent.ee/tuuptingimused/tt_dig_allkiri_est "));
 
     chapter1.addCell(getSubChapterNumber("1.2.1"));
