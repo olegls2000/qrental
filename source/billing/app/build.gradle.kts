@@ -29,6 +29,8 @@ dependencies {
     implementation(project(":source:billing:domain:bonus:config"))
     implementation(project(":source:billing:domain:bonus:persistence:flyway"))
     implementation(project(":source:billing:domain:insurance:config"))
+    implementation(project(":source:billing:domain:bolt:persistence:flyway"))
+    implementation(project(":source:billing:domain:bolt:config"))
     implementation(project(":source:billing:domain:insurance:persistence:flyway"))
     implementation(project(":source:billing:domain:user:config"))
     implementation(project(":source:billing:domain:user:persistence:flyway"))
