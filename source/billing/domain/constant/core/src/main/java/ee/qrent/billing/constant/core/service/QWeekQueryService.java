@@ -161,6 +161,14 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public QWeekResponse getFirstWeek() {
+
+    final var firstWeek = loadPort.loadByYearAndNumber(2025, 1);
+    if (firstWeek == null) {
+      final var addRequest = new QWeekAddRequest();
+      addRequest.setWeekDate(LocalDate.of(2025, 1, 1));
+      qWeekUseCaseService.add(addRequest);
+    }
+
     return mapper.toResponse(loadPort.loadByYearAndNumber(2025, 1));
   }
 

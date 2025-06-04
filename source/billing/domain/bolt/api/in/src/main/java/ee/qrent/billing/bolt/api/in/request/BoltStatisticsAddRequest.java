@@ -14,5 +14,4 @@ public class BoltStatisticsAddRequest extends AbstractAddRequest {
   private String fileName;
   private Integer month;
   private Integer year;
-  private String comment;
 }

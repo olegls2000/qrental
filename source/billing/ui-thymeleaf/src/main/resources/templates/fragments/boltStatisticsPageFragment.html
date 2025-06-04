@@ -12,10 +12,11 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
-            <th>File name</th>
             <th>Region</th>
+            <th>Year</th>
+            <th>Month</th>
+            <th>File name</th>
             <th>Created on</th>
-            <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(reports)}">
             <td colspan="5">No Firms</td>
@@ -33,10 +34,11 @@
                     <span class="bi-trash"></span>
                 </a>
             </td>
-            <td th:text="${report.fileName}"></td>
             <td th:text="${report.region}"></td>
+            <td th:text="${report.year}"></td>
+            <td th:text="${report.month}"></td>
+            <td th:text="${report.fileName}"></td>
             <td th:text="${qDateFormatter.format(report.createdOn)}">???</td>
-            <td th:text="${report.comment}"></td>
         </tr>
     </table>
 </div>

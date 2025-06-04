@@ -13,13 +13,15 @@ public class BoltStatisticsAddRequestMapper
   private final QDateTime qDateTime;
 
   @Override
-  public BoltStatistics toDomain(BoltStatisticsAddRequest request) {
+  public BoltStatistics toDomain(final BoltStatisticsAddRequest request) {
     return BoltStatistics.builder()
         .id(null)
         .createdOn(qDateTime.getToday())
         .region(request.getRegion())
         .data(request.getData())
-        .comment(request.getComment())
+        .year(request.getYear())
+        .month(request.getMonth())
+        .fileName(request.getFileName())
         .build();
   }
 }

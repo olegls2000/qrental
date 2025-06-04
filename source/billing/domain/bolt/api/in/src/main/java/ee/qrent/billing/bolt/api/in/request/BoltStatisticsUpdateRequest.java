@@ -11,5 +11,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class BoltStatisticsUpdateRequest extends AbstractUpdateRequest {
-  private String comment;
+  private String region;
+  private Integer year;
+  private Integer month;
 }

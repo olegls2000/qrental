@@ -9,8 +9,9 @@ import java.time.LocalDate;
 @Getter
 public class BoltStatisticsResponse {
   private Long id;
-  private String fileName;
   private String region;
-  private LocalDate actionDate;
-  private String comment;
+  private Integer year;
+  private Integer month;
+  private String fileName;
+  private LocalDate createdOn;
 }

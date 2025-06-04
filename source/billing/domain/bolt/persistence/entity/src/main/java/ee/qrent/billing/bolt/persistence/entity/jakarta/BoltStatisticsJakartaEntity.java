@@ -33,8 +33,14 @@ public class BoltStatisticsJakartaEntity {
   @Column(name = "region")
   private String region;
 
-  @Lob private byte[] fileData;
+  @Column(name = "year")
+  private Integer year;
 
-  @Column(name = "comment")
-  private String comment;
+  @Column(name = "month")
+  private Integer month;
+
+  /*@Blob
+  @Column(name = "data", columnDefinition = "BLOB")
+  private byte[] data;*/
+
 }

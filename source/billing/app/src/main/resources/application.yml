@@ -11,13 +11,13 @@ spring:
     locations: classpath:db/migration/billing
     table: flyway_schema_history_billing
   jpa:
-    #show-sql: true
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
-    hibernate:
-     ddl-auto: update
+    #hibernate:
+     #ddl-auto: update
 
 management:
   endpoints:

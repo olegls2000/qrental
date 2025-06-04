@@ -11,7 +11,14 @@ public class BoltStatisticsResponseMapper
 
   @Override
   public BoltStatisticsResponse toResponse(final BoltStatistics domain) {
-    return BoltStatisticsResponse.builder().id(domain.getId()).build();
+    return BoltStatisticsResponse.builder()
+        .id(domain.getId())
+        .region(domain.getRegion())
+        .year(domain.getYear())
+        .month(domain.getMonth())
+        .fileName(domain.getFileName())
+        .createdOn(domain.getCreatedOn())
+        .build();
   }
 
   @Override

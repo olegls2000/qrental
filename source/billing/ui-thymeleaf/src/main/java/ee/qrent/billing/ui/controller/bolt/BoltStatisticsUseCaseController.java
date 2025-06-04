@@ -93,7 +93,7 @@ public class BoltStatisticsUseCaseController {
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", query.getUpdateRequestById(id));
 
-    return "forms/updateFirm";
+    return "forms/updateBoltStatistics";
   }
 
   @PostMapping("/update")

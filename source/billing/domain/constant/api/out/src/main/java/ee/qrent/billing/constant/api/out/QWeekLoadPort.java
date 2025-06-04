@@ -1,6 +1,5 @@
 package ee.qrent.billing.constant.api.out;
 
-
 import ee.qrent.common.out.port.LoadPort;
 import ee.qrent.billing.constant.domain.QWeek;
 
@@ -11,6 +10,7 @@ public interface QWeekLoadPort extends LoadPort<QWeek> {
   List<QWeek> loadByYear(final Integer year);
 
   List<QWeek> loadAllBetweenByIds(final Long startWeekId, final Long endWeekId);
+
   List<QWeek> loadAllBeforeById(final Long id);
 
   List<QWeek> loadAllAfterById(final Long id);

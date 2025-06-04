@@ -1,5 +1,6 @@
 package ee.qrent.billing.bolt.config.spring;
 
+import ee.qrent.billing.bolt.api.out.BoltStatisticsLoadPort;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsAddRequestMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsResponseMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsUpdateRequestMapper;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class BoltStatisticsMapperConfig {
   @Bean
   BoltStatisticsAddRequestMapper getBoltStatisticsAddRequestMapper(final QDateTime qDateTime) {
+
     return new BoltStatisticsAddRequestMapper(qDateTime);
   }
 
@@ -20,7 +22,9 @@ public class BoltStatisticsMapperConfig {
   }
 
   @Bean
-  BoltStatisticsUpdateRequestMapper getBoltStatisticsUpdateRequestMapper() {
-    return new BoltStatisticsUpdateRequestMapper();
+  BoltStatisticsUpdateRequestMapper getBoltStatisticsUpdateRequestMapper(
+      final BoltStatisticsLoadPort loadPort) {
+
+    return new BoltStatisticsUpdateRequestMapper(loadPort);
   }
 }
