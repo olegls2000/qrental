@@ -1,5 +1,6 @@
 package ee.qrent.billing.constant.core.service;
 
+import ee.qrent.billing.constant.domain.QWeek;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.request.QWeekAddRequest;
@@ -72,20 +73,35 @@ public class QWeekQueryService implements GetQWeekQuery {
 
   @Override
   public List<QWeekResponse> getAllByYearAndMonth(final Integer year, final Integer month) {
-    // TODO ...
     final var qWeeks = new ArrayList<QWeekResponse>();
-
     final var firstDayOfMonth = LocalDate.of(year, month, 1);
+    final var yearWeek = YearWeek.from(firstDayOfMonth);
+    var weekNumber = yearWeek.getWeek();
 
-    int weekNumber = firstDayOfMonth.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+    QWeek firstWeek = null;
+    var weekWithFirstDayOfMonth = loadPort.loadByYearAndNumber(year, weekNumber);
+    final var firstDayOfWeek = weekWithFirstDayOfMonth.getStart();
+    if (firstDayOfWeek.getDayOfWeek() == DayOfWeek.MONDAY) {
+      firstWeek = weekWithFirstDayOfMonth;
+    } else {
+      weekNumber = weekNumber + 1;
+      firstWeek = loadPort.loadByYearAndNumber(year, weekNumber);
+    }
+    weekNumber = weekNumber + 1;
+    qWeeks.add(mapper.toResponse(firstWeek));
 
-    final var firstDayOfMonthDayOfWeek = firstDayOfMonth.getDayOfWeek();
-    if (firstDayOfMonthDayOfWeek == DayOfWeek.MONDAY) {
-      final var week = loadPort.loadByYearAndNumber(year, weekNumber);
-      qWeeks.add(mapper.toResponse(week));
+    QWeek weekToCheck = loadPort.loadByYearAndNumber(year, weekNumber);
+    while (isWeekBelongToMonth(weekToCheck, month)) {
+      qWeeks.add(mapper.toResponse(weekToCheck));
+      weekNumber = weekNumber + 1;
+      weekToCheck = loadPort.loadByYearAndNumber(year, weekNumber);
     }
 
     return qWeeks;
+  }
+
+  private boolean isWeekBelongToMonth(QWeek qWeek, final Integer month) {
+    return true;
   }
 
   @Override
