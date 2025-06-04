@@ -46,4 +46,10 @@ public class DriverRepositoryImpl implements DriverRepository {
 
     return springDataRepository.findAllByMatchCountAndQWeekId(matchCount, qWeekId);
   }
+
+  @Override
+  public DriverJakartaEntity findByBoltId(final String boltId) {
+
+    return springDataRepository.findByBoltId(boltId);
+  }
 }

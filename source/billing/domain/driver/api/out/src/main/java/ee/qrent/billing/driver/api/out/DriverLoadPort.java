@@ -10,4 +10,6 @@ public interface DriverLoadPort extends LoadPort<Driver> {
       final Integer matchCount, final Long latestCalculatedQWeekId);
 
   Driver loadByTaxNumber(final Long taxNumber);
+
+  Driver loadByBoltId(final String boltId);
 }

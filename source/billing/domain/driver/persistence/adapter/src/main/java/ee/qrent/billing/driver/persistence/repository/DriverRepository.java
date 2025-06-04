@@ -17,4 +17,6 @@ public interface DriverRepository {
 
   List<DriverJakartaEntity> findAllByMatchCountAndQWeekId(
       final Integer matchCount, final Long qWeekId);
+
+  DriverJakartaEntity findByBoltId(final String boltId);
 }

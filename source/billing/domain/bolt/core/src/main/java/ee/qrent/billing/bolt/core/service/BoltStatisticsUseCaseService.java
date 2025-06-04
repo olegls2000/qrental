@@ -1,19 +1,25 @@
 package ee.qrent.billing.bolt.core.service;
 
+import com.opencsv.bean.CsvToBeanBuilder;
 import ee.qrent.billing.bolt.api.in.request.BoltStatisticsAddRequest;
 import ee.qrent.billing.bolt.api.in.request.BoltStatisticsDeleteRequest;
 import ee.qrent.billing.bolt.api.in.request.BoltStatisticsUpdateRequest;
 import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsAddUseCase;
 import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsDeleteUseCase;
 import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsUpdateUseCase;
-import ee.qrent.billing.bolt.api.out.BoltStatisticsAddPort;
-import ee.qrent.billing.bolt.api.out.BoltStatisticsDeletePort;
-import ee.qrent.billing.bolt.api.out.BoltStatisticsLoadPort;
-import ee.qrent.billing.bolt.api.out.BoltStatisticsUpdatePort;
+import ee.qrent.billing.bolt.api.out.*;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsAddRequestMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsUpdateRequestMapper;
 import ee.qrent.billing.bolt.core.validator.BoltStatisticsRequestValidator;
+import ee.qrent.billing.bolt.domain.BoltOrdersCount;
+import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import lombok.AllArgsConstructor;
+
+import java.io.InputStreamReader;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
 
 @AllArgsConstructor
 public class BoltStatisticsUseCaseService
@@ -26,9 +32,45 @@ public class BoltStatisticsUseCaseService
   private final BoltStatisticsAddRequestMapper addRequestMapper;
   private final BoltStatisticsUpdateRequestMapper updateRequestMapper;
   private final BoltStatisticsRequestValidator requestValidator;
+  private final BoltOrdersCountAddPort boltOrdersCountAddPort;
+  private final GetDriverQuery driverQuery;
+  private final GetQWeekQuery qWeekQuery;
 
   @Override
   public Long add(final BoltStatisticsAddRequest request) {
+    final var individualDriversVsOrders =
+        new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
+                new InputStreamReader(request.getInputStream()))
+                .withType(BoltStatisticsCsvRecord.class)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build()
+                .stream()
+                .collect(
+                    groupingBy(
+                        BoltStatisticsCsvRecord::getIndividualId,
+                        summingInt(BoltStatisticsCsvRecord::getFinishedOrders)));
+    final var year = request.getYear();
+    final var month = request.getMonth();
+    final var qWeeks = qWeekQuery.getAllByYearAndMonth(year, month);
+
+    individualDriversVsOrders.entrySet().stream()
+        .forEach(
+            entry -> {
+              final var boltId = entry.getKey();
+              final var driver = driverQuery.getDriverByBoltId(boltId);
+              final var driverId = driver.getId();
+              final var ordersCounter = entry.getValue();
+              qWeeks.forEach(
+                  qweek ->
+                      boltOrdersCountAddPort.add(
+                          BoltOrdersCount.builder()
+                              .driverId(driverId)
+                              .boltId(boltId)
+                              .qWeekId(qweek.getId())
+                              .monthOrdersCount(ordersCounter)
+                              .build()));
+            });
+
     return addPort.add(addRequestMapper.toDomain(request)).getId();
   }
 

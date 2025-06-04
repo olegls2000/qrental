@@ -11,4 +11,6 @@ public interface GetDriverQuery extends BaseGetQuery<DriverUpdateRequest, Driver
   List<FriendshipResponse> getFriendships(final Long driverId);
 
   List<DriverResponse> getDriversWithZeroMatchCountForLatestCalculation();
+
+  DriverResponse getDriverByBoltId(final String boltId);
 }

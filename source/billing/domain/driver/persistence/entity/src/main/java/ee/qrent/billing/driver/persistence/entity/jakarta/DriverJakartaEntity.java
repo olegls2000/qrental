@@ -123,10 +123,10 @@ public class DriverJakartaEntity {
   private LocalDate createdDate;
 
   @Column(name = "driver_identifier")
-  private String driverIdentifier;
+  private String boltDriverIdentifier;
 
   @Column (name = "individual_identifier")
-  private String individualIdentifier;
+  private String boltId;
 
   @OneToMany(mappedBy = "driver")
   private List<CallSignLinkJakartaEntity> callSignLinks;

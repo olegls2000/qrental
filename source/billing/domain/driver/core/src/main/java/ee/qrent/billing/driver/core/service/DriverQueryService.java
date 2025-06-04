@@ -84,4 +84,9 @@ public class DriverQueryService implements GetDriverQuery {
             .sorted(getCallSignOrLastNameComparator())
             .collect(toList());
   }
+
+  @Override
+  public DriverResponse getDriverByBoltId(final String boltId) {
+    return mapper.toResponse(loadPort.loadByBoltId(boltId));
+  }
 }

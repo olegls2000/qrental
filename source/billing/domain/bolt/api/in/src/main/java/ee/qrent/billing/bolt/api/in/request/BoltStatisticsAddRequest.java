@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.InputStream;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class BoltStatisticsAddRequest extends AbstractAddRequest {
-  private byte[] data;
+  private InputStream inputStream;
   private String region;
   private String fileName;
   private Integer month;

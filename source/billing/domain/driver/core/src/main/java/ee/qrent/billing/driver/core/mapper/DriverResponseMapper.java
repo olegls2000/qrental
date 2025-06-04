@@ -62,8 +62,8 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .hasQKasko(hasQKasko(domain.getId()))
         .comment(domain.getComment())
         .createdDate(domain.getCreatedDate())
-            .driverIdentifier(domain.getDriverIdentifier())
-            .individualIdentifier(domain.getIndividualIdentifier())
+        .boltDriverIdentifier(domain.getDriverIdentifier())
+        .boltId(domain.getIndividualIdentifier())
         .build();
   }
 

@@ -1,7 +1,6 @@
 package ee.qrent.billing.ui.controller.bolt;
 
 import static ee.qrent.billing.ui.controller.ControllerUtils.BOLT_STATISTICS_ROOT_PATH;
-import static ee.qrent.billing.ui.controller.ControllerUtils.FIRM_ROOT_PATH;
 
 import ee.qrent.billing.bolt.api.in.query.GetBoltStatisticsQuery;
 import ee.qrent.billing.bolt.api.in.request.BoltStatisticsAddRequest;
@@ -11,9 +10,6 @@ import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsAddUseCase;
 import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsDeleteUseCase;
 import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsUpdateUseCase;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,23 +26,6 @@ public class BoltStatisticsUseCaseController {
   private final BoltStatisticsUpdateUseCase updateUseCase;
   private final BoltStatisticsDeleteUseCase deleteUseCase;
   private final GetBoltStatisticsQuery query;
-
-  /*  @GetMapping("/")
-  public String listFiles(Model model) {
-    model.addAttribute("files", fileStorageService.getAllFiles());
-    return "upload_form";
-  }*/
-
-  /*  @PostMapping("/upload")
-  public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-    try {
-      fileStorageService.store(file);
-      redirectAttributes.addFlashAttribute("message", "File uploaded successfully!");
-    } catch (IOException e) {
-      redirectAttributes.addFlashAttribute("message", "File upload failed: " + e.getMessage());
-    }
-    return "redirect:/";
-  }*/
 
   /*  @GetMapping("/download/{id}")
   public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
@@ -82,7 +61,7 @@ public class BoltStatisticsUseCaseController {
     addRequest.setRegion(region);
     addRequest.setMonth(month);
     addRequest.setYear(year);
-    addRequest.setData(reportFile.getBytes());
+    addRequest.setInputStream(reportFile.getInputStream());
     addRequest.setFileName(reportFile.getOriginalFilename());
     addUseCase.add(addRequest);
 

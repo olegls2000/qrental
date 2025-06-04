@@ -19,4 +19,6 @@ public interface DriverSpringDataRepository extends JpaRepository<DriverJakartaE
       @Param("matchCount") final Integer matchCount, @Param("qWeekId") final Long qWeekId);
 
   DriverJakartaEntity findByTaxNumber(final Long taxNumber);
+
+  DriverJakartaEntity findByBoltId(final String boltId);
 }

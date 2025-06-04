@@ -11,7 +11,10 @@ import ee.qrent.billing.constant.core.mapper.QWeekUpdateRequestMapper;
 import lombok.AllArgsConstructor;
 import org.threeten.extra.YearWeek;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -65,6 +68,24 @@ public class QWeekQueryService implements GetQWeekQuery {
         .map(mapper::toResponse)
         .sorted(REVERSED_COMPARATOR)
         .collect(toList());
+  }
+
+  @Override
+  public List<QWeekResponse> getAllByYearAndMonth(final Integer year, final Integer month) {
+    // TODO ...
+    final var qWeeks = new ArrayList<QWeekResponse>();
+
+    final var firstDayOfMonth = LocalDate.of(year, month, 1);
+
+    int weekNumber = firstDayOfMonth.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+
+    final var firstDayOfMonthDayOfWeek = firstDayOfMonth.getDayOfWeek();
+    if (firstDayOfMonthDayOfWeek == DayOfWeek.MONDAY) {
+      final var week = loadPort.loadByYearAndNumber(year, weekNumber);
+      qWeeks.add(mapper.toResponse(week));
+    }
+
+    return qWeeks;
   }
 
   @Override
