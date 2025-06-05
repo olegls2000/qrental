@@ -14,10 +14,12 @@ import ee.qrent.billing.bolt.core.validator.BoltStatisticsRequestValidator;
 import ee.qrent.billing.bolt.domain.BoltOrdersCount;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.io.InputStreamReader;
 
+import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.*;
 
@@ -36,6 +38,7 @@ public class BoltStatisticsUseCaseService
   private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
 
+  @Transactional(REQUIRES_NEW)
   @Override
   public Long add(final BoltStatisticsAddRequest request) {
 

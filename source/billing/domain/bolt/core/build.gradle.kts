@@ -8,6 +8,8 @@ dependencies{
 
     implementation("com.opencsv:opencsv:5.11")
 
+    implementation(libs.q.jakarta.transaction)
+
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
 }
