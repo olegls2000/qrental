@@ -7,9 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BoltStatisticsCsvRecord {
+
+  @CsvBindByName(column = "Driver")
+  private String driver;
+
   @CsvBindByName(column = "Individual identifier")
   private String individualId;
 
-  @CsvBindByName(column = "Finished orders")
+  @CsvBindByName(column = "Finished rides")
   private Integer finishedOrders;
 }

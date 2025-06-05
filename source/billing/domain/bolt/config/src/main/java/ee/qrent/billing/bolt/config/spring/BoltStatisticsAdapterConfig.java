@@ -1,6 +1,7 @@
 package ee.qrent.billing.bolt.config.spring;
 
 import ee.qrent.billing.bolt.persistence.adapter.BoltOrdersCountLoadAdapter;
+import ee.qrent.billing.bolt.persistence.adapter.BoltOrdersCountPersistenceAdapter;
 import ee.qrent.billing.bolt.persistence.adapter.BoltStatisticsLoadAdapter;
 import ee.qrent.billing.bolt.persistence.adapter.BoltStatisticsPersistenceAdapter;
 import ee.qrent.billing.bolt.persistence.mapper.BoltOrdersCountAdapterMapper;
@@ -42,5 +43,11 @@ public class BoltStatisticsAdapterConfig {
       final BoltStatisticsRepository repository, final BoltStatisticsAdapterMapper mapper) {
 
     return new BoltStatisticsPersistenceAdapter(repository, mapper);
+  }
+  @Bean
+  BoltOrdersCountPersistenceAdapter getBoltOrdersCountPersistenceAdapter(
+          final BoltOrdersCountRepository repository, final BoltOrdersCountAdapterMapper mapper) {
+
+    return new BoltOrdersCountPersistenceAdapter(repository, mapper);
   }
 }

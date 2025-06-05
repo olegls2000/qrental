@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 
 @SuperBuilder
@@ -14,7 +15,7 @@ public class BoltStatistics {
   private String fileName;
   private LocalDate createdOn;
   private String region;
-  private byte[] data;
+  private InputStream inputStream;
   private Integer year;
   private Integer month;
 }

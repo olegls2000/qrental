@@ -18,8 +18,8 @@ import lombok.AllArgsConstructor;
 
 import java.io.InputStreamReader;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingInt;
+import static java.lang.String.format;
+import static java.util.stream.Collectors.*;
 
 @AllArgsConstructor
 public class BoltStatisticsUseCaseService
@@ -38,6 +38,16 @@ public class BoltStatisticsUseCaseService
 
   @Override
   public Long add(final BoltStatisticsAddRequest request) {
+
+    /*  final var individualDriversVsDrivers =
+    new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
+            new InputStreamReader(request.getInputStream()))
+            .withType(BoltStatisticsCsvRecord.class)
+            .withIgnoreLeadingWhiteSpace(true)
+            .build()
+            .stream()
+            .collect(toMap(record -> record.getIndividualId(), record -> record.getDriver()));*/
+
     final var individualDriversVsOrders =
         new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
                 new InputStreamReader(request.getInputStream()))
@@ -58,6 +68,12 @@ public class BoltStatisticsUseCaseService
             entry -> {
               final var boltId = entry.getKey();
               final var driver = driverQuery.getDriverByBoltId(boltId);
+              if (driver == null) {
+                // final var driverName = individualDriversVsDrivers.get(boltId);
+                throw new RuntimeException(
+                    format("Driver %s must have Bolt Id: %s", "driverName", boltId));
+              }
+
               final var driverId = driver.getId();
               final var ordersCounter = entry.getValue();
               qWeeks.forEach(

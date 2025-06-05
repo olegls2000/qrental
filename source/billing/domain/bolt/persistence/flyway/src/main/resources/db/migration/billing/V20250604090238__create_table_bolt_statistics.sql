@@ -6,5 +6,6 @@ CREATE TABLE bolt_statistics
     region     varchar not null,
     year       int     not null,
     month      int     not null,
-    data       bytea
+    data       bytea,
+    UNIQUE (region, year, month)
 );

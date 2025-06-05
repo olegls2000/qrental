@@ -81,16 +81,16 @@ public class QWeekQueryService implements GetQWeekQuery {
     QWeek firstWeek = null;
     var weekWithFirstDayOfMonth = loadPort.loadByYearAndNumber(year, weekNumber);
     final var firstDayOfWeek = weekWithFirstDayOfMonth.getStart();
-    if (firstDayOfWeek.getDayOfWeek() == DayOfWeek.MONDAY) {
+    if (firstDayOfWeek.getMonthValue() == month) {
       firstWeek = weekWithFirstDayOfMonth;
     } else {
       weekNumber = weekNumber + 1;
       firstWeek = loadPort.loadByYearAndNumber(year, weekNumber);
     }
-    weekNumber = weekNumber + 1;
     qWeeks.add(mapper.toResponse(firstWeek));
+    weekNumber = weekNumber + 1;
 
-    QWeek weekToCheck = loadPort.loadByYearAndNumber(year, weekNumber);
+    var weekToCheck = loadPort.loadByYearAndNumber(year, weekNumber);
     while (isWeekBelongToMonth(weekToCheck, month)) {
       qWeeks.add(mapper.toResponse(weekToCheck));
       weekNumber = weekNumber + 1;
@@ -101,7 +101,8 @@ public class QWeekQueryService implements GetQWeekQuery {
   }
 
   private boolean isWeekBelongToMonth(QWeek qWeek, final Integer month) {
-    return true;
+
+    return qWeek.getStart().getMonthValue() == month;
   }
 
   @Override

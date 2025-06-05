@@ -18,7 +18,7 @@ public class BoltStatisticsAddRequestMapper
         .id(null)
         .createdOn(qDateTime.getToday())
         .region(request.getRegion())
-        .data(request.getData())
+        .inputStream(request.getInputStream())
         .year(request.getYear())
         .month(request.getMonth())
         .fileName(request.getFileName())
