@@ -86,6 +86,8 @@ public class BoltStatisticsUseCaseService
                               .driverId(driverId)
                               .boltId(boltId)
                               .qWeekId(qweek.getId())
+                              .month(month)
+                              .year(year)
                               .monthOrdersCount(ordersCounter)
                               .build()));
             });

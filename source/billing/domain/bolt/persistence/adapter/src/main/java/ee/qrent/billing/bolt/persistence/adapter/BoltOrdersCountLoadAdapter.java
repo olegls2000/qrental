@@ -9,6 +9,8 @@ import ee.qrent.billing.bolt.persistence.repository.BoltOrdersCountRepository;
 
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class BoltOrdersCountLoadAdapter implements BoltOrdersCountLoadPort {
 
@@ -16,8 +18,14 @@ public class BoltOrdersCountLoadAdapter implements BoltOrdersCountLoadPort {
   private final BoltOrdersCountAdapterMapper mapper;
 
   @Override
-  public BoltOrdersCount loadByDriverIdAndQWeekId(Long driverId, Long qWeekId) {
+  public BoltOrdersCount loadByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
 
     return mapper.mapToDomain(repository.getByDriverIdAndQWeekId(driverId, qWeekId));
+  }
+
+  @Override
+  public List<BoltOrdersCount> loadAllByYearAndMonth(final Integer year, final Integer month) {
+
+    return repository.getAllByYearAndMonth(year, month).stream().map(mapper::mapToDomain).toList();
   }
 }

@@ -12,6 +12,8 @@ public class BoltOrdersCountAdapterMapper {
         .qWeekId(entity.getQWeekId())
         .driverId(entity.getDriverId())
         .monthOrdersCount(entity.getMonthOrdersCount())
+        .month(entity.getMonth())
+        .year(entity.getYear())
         .build();
   }
 
@@ -22,6 +24,8 @@ public class BoltOrdersCountAdapterMapper {
         .qWeekId(domain.getQWeekId())
         .driverId(domain.getDriverId())
         .monthOrdersCount(domain.getMonthOrdersCount())
+        .month(domain.getMonth())
+        .year(domain.getYear())
         .build();
   }
 }

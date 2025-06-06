@@ -27,6 +27,12 @@ public class BoltOrdersCountJakartaEntity {
   @Column(name = "driver_id")
   private Long driverId;
 
+  @Column(name = "month")
+  private Integer month;
+
+  @Column(name = "year")
+  private Integer year;
+
   @Column(name = "q_week_id")
   private Long qWeekId;
 

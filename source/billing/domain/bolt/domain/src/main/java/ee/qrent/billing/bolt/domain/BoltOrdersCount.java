@@ -12,5 +12,7 @@ public class BoltOrdersCount {
   private String boltId;
   private Long driverId;
   private Long qWeekId;
+  private Integer month;
+  private Integer year;
   private Integer monthOrdersCount;
 }
