@@ -1,5 +1,6 @@
 <div th:fragment="boltStatisticsPage">
     <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/boltStatisticsTabFragment :: boltTabs('statistics')"></ul>
     <h2 class="py-3">Bolt Statistics</h2>
     <table class="table table-striped table-bordered">
         <tr>

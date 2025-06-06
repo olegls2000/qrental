@@ -1,6 +1,6 @@
 package ee.qrent.billing.bolt.persistence.adapter;
 
-import ee.qrent.billing.bolt.api.out.BoltOrdersCountLoadPort;
+import ee.qrent.billing.bolt.api.out.BoltRidesCountLoadPort;
 import ee.qrent.billing.bolt.domain.BoltOrdersCount;
 
 import ee.qrent.billing.bolt.persistence.mapper.BoltOrdersCountAdapterMapper;
@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class BoltOrdersCountLoadAdapter implements BoltOrdersCountLoadPort {
+public class BoltOrdersCountLoadAdapter implements BoltRidesCountLoadPort {
 
   private final BoltOrdersCountRepository repository;
   private final BoltOrdersCountAdapterMapper mapper;

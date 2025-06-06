@@ -21,7 +21,7 @@ public class BoltStatisticsQueryController {
   private final QDateFormatter qDateFormatter;
   private final GetBoltStatisticsQuery query;
 
-  @GetMapping
+  @GetMapping("/reports")
   public String getView(final Model model) {
     model.addAttribute("reports", query.getAll());
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);

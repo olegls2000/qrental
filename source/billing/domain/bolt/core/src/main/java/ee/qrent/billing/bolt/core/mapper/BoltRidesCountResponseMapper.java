@@ -2,24 +2,24 @@ package ee.qrent.billing.bolt.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrent.billing.bolt.api.in.response.BoltOrdersCountResponse;
+import ee.qrent.billing.bolt.api.in.response.BoltRidesCountResponse;
 import ee.qrent.billing.bolt.domain.BoltOrdersCount;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.common.in.mapper.ResponseMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class BoltOrdersCountResponseMapper
-    implements ResponseMapper<BoltOrdersCountResponse, BoltOrdersCount> {
+public class BoltRidesCountResponseMapper
+    implements ResponseMapper<BoltRidesCountResponse, BoltOrdersCount> {
 
-  private final GetDriverQuery getDriverQuery;
+  private final GetDriverQuery driverQuery;
 
   @Override
-  public BoltOrdersCountResponse toResponse(final BoltOrdersCount domain) {
+  public BoltRidesCountResponse toResponse(final BoltOrdersCount domain) {
 
-    return BoltOrdersCountResponse.builder()
+    return BoltRidesCountResponse.builder()
         .id(domain.getId())
-        .monthOrdersCount(domain.getMonthOrdersCount())
+        .monthRidesCount(domain.getMonthOrdersCount())
         .driverName(getDriverName(domain))
         .build();
   }
@@ -27,11 +27,13 @@ public class BoltOrdersCountResponseMapper
   @Override
   public String toObjectInfo(final BoltOrdersCount domain) {
 
-    return format("Year: %d, month: %d Driver: %s", domain.getMonth(), getDriverName(domain));
+    return format(
+        "Year: %d, month: %d Driver: %s",
+        domain.getYear(), domain.getMonth(), getDriverName(domain));
   }
 
   private String getDriverName(final BoltOrdersCount domain) {
-    final var driver = getDriverQuery.getById(domain.getDriverId());
+    final var driver = driverQuery.getById(domain.getDriverId());
 
     return format("%s %s", driver.getFirstName(), driver.getLastName());
   }

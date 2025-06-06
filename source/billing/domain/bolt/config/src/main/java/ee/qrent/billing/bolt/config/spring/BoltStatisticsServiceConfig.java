@@ -1,10 +1,13 @@
 package ee.qrent.billing.bolt.config.spring;
 
+import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.bolt.api.in.query.GetBoltStatisticsQuery;
 import ee.qrent.billing.bolt.api.out.*;
+import ee.qrent.billing.bolt.core.mapper.BoltRidesCountResponseMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsAddRequestMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsResponseMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsUpdateRequestMapper;
+import ee.qrent.billing.bolt.core.service.BoltOrdersCountQueryService;
 import ee.qrent.billing.bolt.core.service.BoltStatisticsQueryService;
 import ee.qrent.billing.bolt.core.service.BoltStatisticsUseCaseService;
 import ee.qrent.billing.bolt.core.validator.BoltStatisticsRequestValidator;
@@ -23,6 +26,13 @@ public class BoltStatisticsServiceConfig {
       final BoltStatisticsUpdateRequestMapper updateRequestMapper) {
 
     return new BoltStatisticsQueryService(loadPort, mapper, updateRequestMapper);
+  }
+
+  @Bean
+  GetBoltRidesCountQuery getBoltOrdersCountQueryService(
+      final BoltRidesCountLoadPort loadPort, final BoltRidesCountResponseMapper mapper) {
+
+    return new BoltOrdersCountQueryService(loadPort, mapper);
   }
 
   @Bean

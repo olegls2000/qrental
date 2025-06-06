@@ -1,0 +1,10 @@
+<ul th:fragment="boltTabs(activeTab)" class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'rides'} ? active : ''"
+           href="/bolt-statistics/rides">Rides</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'statistics'} ? active : ''"
+           href="/bolt-statistics/reports">Reports</a>
+    </li>
+</ul>

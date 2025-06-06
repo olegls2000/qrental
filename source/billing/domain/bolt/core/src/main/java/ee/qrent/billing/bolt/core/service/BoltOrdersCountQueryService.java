@@ -1,9 +1,9 @@
 package ee.qrent.billing.bolt.core.service;
 
-import ee.qrent.billing.bolt.api.in.query.GetBoltOrdersCountQuery;
-import ee.qrent.billing.bolt.api.in.response.BoltOrdersCountResponse;
-import ee.qrent.billing.bolt.api.out.BoltOrdersCountLoadPort;
-import ee.qrent.billing.bolt.core.mapper.BoltOrdersCountResponseMapper;
+import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
+import ee.qrent.billing.bolt.api.in.response.BoltRidesCountResponse;
+import ee.qrent.billing.bolt.api.out.BoltRidesCountLoadPort;
+import ee.qrent.billing.bolt.core.mapper.BoltRidesCountResponseMapper;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -13,13 +13,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @AllArgsConstructor
-public class BoltOrdersCountQueryService implements GetBoltOrdersCountQuery {
+public class BoltOrdersCountQueryService implements GetBoltRidesCountQuery {
 
-  private final BoltOrdersCountLoadPort loadPort;
-  private final BoltOrdersCountResponseMapper mapper;
+  private final BoltRidesCountLoadPort loadPort;
+  private final BoltRidesCountResponseMapper mapper;
 
   @Override
-  public List<BoltOrdersCountResponse> getAllByYearAndMonth(
+  public List<BoltRidesCountResponse> getAllByYearAndMonth(
       final Integer year, final Integer month) {
     return loadPort.loadAllByYearAndMonth(year, month).stream()
         .filter(

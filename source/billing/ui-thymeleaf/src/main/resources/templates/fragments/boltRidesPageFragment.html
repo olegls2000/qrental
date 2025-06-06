@@ -1,0 +1,59 @@
+<div th:fragment="boltRidesPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/boltStatisticsTabFragment :: boltTabs('rides')"></ul>
+    <h2 class="py-3">Bolt Rides</h2>
+    <form method="post" enctype="multipart/form-data"
+          th:action="@{/bolt-statistics/rides}">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="monthId">Select Month</label>
+                    <select name="month" id="monthId" class="form-select">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="yearId">Select Year</label>
+                    <select name="year" id="yearId" class="form-select">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <input class="btn btn-success"
+               type="submit"
+               value="Search">
+    </form>
+    <table th:if="${filtered}" class="table table-striped table-bordered">
+        <tr>
+            <th>Driver</th>
+            <th>Rides count</th>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Insurance rate, %</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(counters)}">
+            <td colspan="5">No Drivers with Bolt rides</td>
+        </tr>
+        <tr th:each="counter : ${counters}">
+            <td th:text="${counter.driverName}"></td>
+            <td th:text="${counter.year}"></td>
+            <td th:text="${counter.month}"></td>
+            <td th:text="${counter.insuranceRate}"></td>
+        </tr>
+    </table>
+</div>

@@ -5,10 +5,10 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class BoltOrdersCountResponse {
+public class BoltRidesCountResponse {
   private Long id;
   private String driverName;
-  private Integer monthOrdersCount;
+  private Integer monthRidesCount;
   private String month;
-  private Integer insuranceDiscount;
+  private Integer insuranceRate;
 }
