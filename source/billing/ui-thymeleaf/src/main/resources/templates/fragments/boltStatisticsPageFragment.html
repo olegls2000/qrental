@@ -6,7 +6,7 @@
         <tr>
             <th style="width: 1% !important;">
                 <a class="btn btn-sm btn-success"
-                   href="/bolt-statistics/add-form"
+                   href="/bolt-statistics/reports/add-form"
                    role="button"
                    aria-controls="offcanvasExample">
                     <span class="bi-plus-circle"></span>
@@ -25,13 +25,13 @@
         <tr th:each="report : ${reports}">
             <td class="text-center">
                 <a class="btn btn-sm btn-warning"
-                   th:href="@{/bolt-statistics/update-form/{id}(id=${report.id})}">
+                   th:href="@{/bolt-statistics/reports/update-form/{id}(id=${report.id})}">
                     <span class="bi-pencil-square"></span>
                 </a>
             </td>
             <td class="text-center">
                 <a class="btn btn-sm btn-danger"
-                   th:href="@{/bolt-statistics/delete-form/{id}(id=${report.id})}">
+                   th:href="@{/bolt-statistics/reports/delete-form/{id}(id=${report.id})}">
                     <span class="bi-trash"></span>
                 </a>
             </td>

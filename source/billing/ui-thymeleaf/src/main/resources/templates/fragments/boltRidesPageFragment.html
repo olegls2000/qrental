@@ -51,6 +51,7 @@
         </tr>
         <tr th:each="counter : ${counters}">
             <td th:text="${counter.driverName}"></td>
+            <td th:text="${counter.monthRidesCount}"></td>
             <td th:text="${counter.year}"></td>
             <td th:text="${counter.month}"></td>
             <td th:text="${counter.insuranceRate}"></td>

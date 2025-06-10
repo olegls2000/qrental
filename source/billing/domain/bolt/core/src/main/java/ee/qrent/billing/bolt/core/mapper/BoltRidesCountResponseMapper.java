@@ -20,7 +20,9 @@ public class BoltRidesCountResponseMapper
     return BoltRidesCountResponse.builder()
         .id(domain.getId())
         .monthRidesCount(domain.getMonthOrdersCount())
+        .month(domain.getMonth().toString())
         .driverName(getDriverName(domain))
+        .year(domain.getYear())
         .build();
   }
 

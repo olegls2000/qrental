@@ -42,14 +42,14 @@ public class BoltStatisticsUseCaseController {
         .orElse(ResponseEntity.notFound().build());
   }*/
 
-  @GetMapping(value = "/add-form")
+  @GetMapping(value = "/reports/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new BoltStatisticsAddRequest());
 
     return "forms/addBoltStatistics";
   }
 
-  @PostMapping(value = "/add")
+  @PostMapping(value = "/reports/add")
   public String add(
       @RequestParam("reportFile") MultipartFile reportFile,
       @RequestParam("region") String region,
@@ -65,10 +65,10 @@ public class BoltStatisticsUseCaseController {
     addRequest.setFileName(reportFile.getOriginalFilename());
     addUseCase.add(addRequest);
 
-    return "redirect:" + BOLT_STATISTICS_ROOT_PATH;
+    return "redirect:" + BOLT_STATISTICS_ROOT_PATH + "/reports";
   }
 
-  @GetMapping(value = "/update-form/{id}")
+  @GetMapping(value = "/reports/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", query.getUpdateRequestById(id));
 
@@ -79,10 +79,10 @@ public class BoltStatisticsUseCaseController {
   public String update(final BoltStatisticsUpdateRequest updateRequest) {
     updateUseCase.update(updateRequest);
 
-    return "redirect:" + BOLT_STATISTICS_ROOT_PATH;
+    return "redirect:" + BOLT_STATISTICS_ROOT_PATH + "/reports";
   }
 
-  @GetMapping(value = "/delete-form/{id}")
+  @GetMapping(value = "/reports/delete-form/{id}")
   public String deleteForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("deleteRequest", new BoltStatisticsDeleteRequest(id));
     model.addAttribute("objectInfo", query.getObjectInfo(id));
@@ -94,6 +94,6 @@ public class BoltStatisticsUseCaseController {
   public String delete(final BoltStatisticsDeleteRequest deleteRequest) {
     deleteUseCase.delete(deleteRequest);
 
-    return "redirect:" + BOLT_STATISTICS_ROOT_PATH;
+    return "redirect:" + BOLT_STATISTICS_ROOT_PATH + "/reports";
   }
 }

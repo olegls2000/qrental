@@ -10,5 +10,6 @@ public class BoltRidesCountResponse {
   private String driverName;
   private Integer monthRidesCount;
   private String month;
+  private Integer year;
   private Integer insuranceRate;
 }

@@ -22,8 +22,8 @@ public class BoltOrdersCountQueryService implements GetBoltRidesCountQuery {
   public List<BoltRidesCountResponse> getAllByYearAndMonth(
       final Integer year, final Integer month) {
     return loadPort.loadAllByYearAndMonth(year, month).stream()
-        .filter(
-            distinctByKey(counter -> counter.getYear().toString() + counter.getMonth().toString()))
+      /*  .filter(
+            distinctByKey(counter -> counter.getYear().toString() + counter.getMonth().toString()))*/
         .map(mapper::toResponse)
         .toList();
   }
