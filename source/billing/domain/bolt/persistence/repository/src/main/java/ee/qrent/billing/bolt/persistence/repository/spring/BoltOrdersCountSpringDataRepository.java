@@ -11,7 +11,7 @@ public interface BoltOrdersCountSpringDataRepository
 
   @Query(
       value =
-          "select boc.* from bolt_orders_count boc where boc.driver_id =:driverId and boc.q_week_id =:qWeekId",
+          "select boc.* from bolt_orders_count boc where boc.driver_id =:driverId and boc.q_week_id =:qWeekId limit 1",
       nativeQuery = true)
   BoltOrdersCountJakartaEntity findOneByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 

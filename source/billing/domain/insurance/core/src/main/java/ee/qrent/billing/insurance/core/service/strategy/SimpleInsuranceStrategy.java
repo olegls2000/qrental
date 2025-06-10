@@ -1,5 +1,6 @@
 package ee.qrent.billing.insurance.core.service.strategy;
 
+import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
@@ -14,11 +15,9 @@ import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrent.common.in.time.QDateTime;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static java.lang.Boolean.FALSE;
-import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Arrays.asList;
 
@@ -30,6 +29,7 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
   private final GetTransactionQuery transactionQuery;
   private final TransactionAddUseCase transactionAddUseCase;
   private final QDateTime qDateTime;
+  private final GetBoltRidesCountQuery boltRidesCountQuery;
 
   public SimpleInsuranceStrategy(
       final GetContractQuery contractQuery,
@@ -37,12 +37,14 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       final InsuranceCaseLoadPort caseLoadPort,
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
-      final QDateTime qDateTime) {
+      final QDateTime qDateTime,
+      final GetBoltRidesCountQuery boltRidesCountQuery ) {
     super(contractQuery, caseUpdatePort);
     this.caseLoadPort = caseLoadPort;
     this.transactionQuery = transactionQuery;
     this.transactionAddUseCase = transactionAddUseCase;
     this.qDateTime = qDateTime;
+    this.boltRidesCountQuery = boltRidesCountQuery;
   }
 
   @Override
@@ -145,7 +147,8 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
             .reduce(BigDecimal::add)
             .orElse(ZERO);
 
-    final var transactionAmount = rentAmount.multiply(BigDecimal.valueOf(0.05));
+    final var insuranceRate = getInsuranceRateBaseOnBoltRides(driverId, qWeekId);
+    final var transactionAmount = rentAmount.multiply(insuranceRate);
 
     final var insurancePaymentTransaction = new TransactionAddRequest();
     insurancePaymentTransaction.setComment("Weekly Insurance payment for the new drivers");
@@ -157,5 +160,18 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     insurancePaymentTransaction.setDate(qDateTime.getToday());
 
     return insurancePaymentTransaction;
+  }
+
+  private BigDecimal getInsuranceRateBaseOnBoltRides(final Long driverId, final Long qWeekId) {
+    final var boltRidesCount =
+        boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId);
+    if (boltRidesCount < 380) {
+
+      return BigDecimal.valueOf(0.05);
+    } else if (boltRidesCount >= 380 && boltRidesCount <= 514) {
+
+      return BigDecimal.valueOf(0.04);
+    }
+    return BigDecimal.valueOf(0.03);
   }
 }

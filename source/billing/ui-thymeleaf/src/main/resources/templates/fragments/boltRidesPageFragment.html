@@ -44,7 +44,6 @@
             <th>Rides count</th>
             <th>Year</th>
             <th>Month</th>
-            <th>Insurance rate, %</th>
         </tr>
         <tr th:if="${#lists.isEmpty(counters)}">
             <td colspan="5">No Drivers with Bolt rides</td>
@@ -54,7 +53,6 @@
             <td th:text="${counter.monthRidesCount}"></td>
             <td th:text="${counter.year}"></td>
             <td th:text="${counter.month}"></td>
-            <td th:text="${counter.insuranceRate}"></td>
         </tr>
     </table>
 </div>

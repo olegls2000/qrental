@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface GetBoltRidesCountQuery {
   List<BoltRidesCountResponse> getAllByYearAndMonth(final Integer year, final Integer month);
+
+  Integer getRidesCountByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
 }

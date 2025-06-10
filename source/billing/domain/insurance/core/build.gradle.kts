@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":source:billing:domain:constant:api:in"))
     implementation(project(":source:billing:domain:contract:api:in"))
     implementation(project(":source:billing:domain:car:api:in"))
+    implementation(project(":source:billing:domain:bolt:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

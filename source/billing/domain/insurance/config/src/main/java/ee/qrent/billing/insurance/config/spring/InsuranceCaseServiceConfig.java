@@ -1,5 +1,6 @@
 package ee.qrent.billing.insurance.config.spring;
 
+import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.insurance.api.out.*;
 import ee.qrent.billing.insurance.core.mapper.*;
 import ee.qrent.billing.insurance.core.service.*;
@@ -190,7 +191,8 @@ public class InsuranceCaseServiceConfig {
       final GetTransactionQuery transactionQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime,
-      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator) {
+      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
+      final GetBoltRidesCountQuery boltRidesCountQuery) {
 
     return asList(
         new SimpleInsuranceStrategy(
@@ -199,7 +201,8 @@ public class InsuranceCaseServiceConfig {
             caseLoadPort,
             transactionQuery,
             transactionAddUseCase,
-            qDateTime),
+            qDateTime,
+            boltRidesCountQuery),
         new QKaskoLegacyInsuranceStrategy(
             contractQuery, caseUpdatePort, caseLoadPort, insuranceCaseBalanceCalculator));
   }

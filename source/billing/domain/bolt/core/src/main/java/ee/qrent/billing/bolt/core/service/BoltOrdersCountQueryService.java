@@ -6,6 +6,7 @@ import ee.qrent.billing.bolt.api.out.BoltRidesCountLoadPort;
 import ee.qrent.billing.bolt.core.mapper.BoltRidesCountResponseMapper;
 import lombok.AllArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,11 +22,23 @@ public class BoltOrdersCountQueryService implements GetBoltRidesCountQuery {
   @Override
   public List<BoltRidesCountResponse> getAllByYearAndMonth(
       final Integer year, final Integer month) {
+    final var groupSet = new HashSet<String>();
     return loadPort.loadAllByYearAndMonth(year, month).stream()
-      /*  .filter(
-            distinctByKey(counter -> counter.getYear().toString() + counter.getMonth().toString()))*/
+        .filter(
+            count ->
+                groupSet.add(
+                    count.getBoltId() + count.getYear().toString() + count.getMonth().toString()))
         .map(mapper::toResponse)
         .toList();
+  }
+
+  @Override
+  public Integer getRidesCountByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
+    final var counter = loadPort.loadByDriverIdAndQWeekId(driverId, qWeekId);
+    if (counter == null) {
+      return Integer.valueOf(0);
+    }
+    return counter.getMonthOrdersCount();
   }
 
   private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
