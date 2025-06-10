@@ -37,6 +37,11 @@
                     text-danger bg-danger border-danger"
                     th:text="${car.status=='Brisko remont'}">???
                 </td>
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${car.status=='No Insurance'}">???
+                </td>
                 <td th:case="'AMBER'"
                     class="text-center bg-opacity-10 border border-opacity-10
                     text-secondary bg-warning border-warning"

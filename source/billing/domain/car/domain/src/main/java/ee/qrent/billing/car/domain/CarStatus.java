@@ -3,6 +3,7 @@ package ee.qrent.billing.car.domain;
 import lombok.Getter;
 
 public enum CarStatus {
+  NO_INSURANCE("No Insurance"),
   IN_USE("In use"),
   BRISKO_PARKING("Brisko parking"),
   BRISKO_SERVICE("Brisko remont"),
