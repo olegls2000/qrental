@@ -189,6 +189,7 @@ public class InsuranceCaseServiceConfig {
       final InsuranceCaseUpdatePort caseUpdatePort,
       final InsuranceCaseLoadPort caseLoadPort,
       final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime,
       final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
@@ -198,8 +199,8 @@ public class InsuranceCaseServiceConfig {
         new SimpleInsuranceStrategy(
             contractQuery,
             caseUpdatePort,
-            caseLoadPort,
             transactionQuery,
+            transactionTypeQuery,
             transactionAddUseCase,
             qDateTime,
             boltRidesCountQuery),

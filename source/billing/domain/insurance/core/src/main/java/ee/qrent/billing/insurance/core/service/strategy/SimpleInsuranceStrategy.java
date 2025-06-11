@@ -10,13 +10,14 @@ import ee.qrent.billing.insurance.domain.InsuranceCalculation;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
+import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.request.TransactionAddRequest;
 import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
 import ee.qrent.common.in.time.QDateTime;
 
 import java.math.BigDecimal;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Arrays.asList;
@@ -25,8 +26,8 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
 
   private static final BigDecimal DAMAGE_LIMIT = BigDecimal.valueOf(600);
 
-  private final InsuranceCaseLoadPort caseLoadPort;
   private final GetTransactionQuery transactionQuery;
+  private final GetTransactionTypeQuery transactionTypeQuery;
   private final TransactionAddUseCase transactionAddUseCase;
   private final QDateTime qDateTime;
   private final GetBoltRidesCountQuery boltRidesCountQuery;
@@ -34,14 +35,14 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
   public SimpleInsuranceStrategy(
       final GetContractQuery contractQuery,
       final InsuranceCaseUpdatePort caseUpdatePort,
-      final InsuranceCaseLoadPort caseLoadPort,
       final GetTransactionQuery transactionQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime,
-      final GetBoltRidesCountQuery boltRidesCountQuery ) {
+      final GetBoltRidesCountQuery boltRidesCountQuery) {
     super(contractQuery, caseUpdatePort);
-    this.caseLoadPort = caseLoadPort;
     this.transactionQuery = transactionQuery;
+    this.transactionTypeQuery = transactionTypeQuery;
     this.transactionAddUseCase = transactionAddUseCase;
     this.qDateTime = qDateTime;
     this.boltRidesCountQuery = boltRidesCountQuery;
@@ -114,11 +115,9 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
         "Automatically created transaction for the damage compensation.");
     damageWriteOffTransaction.setDriverId(insuranceCase.getDriverId());
     damageWriteOffTransaction.setAmount(writeOffAmount);
-
-    // TODO as about type
-    final var transactionTypeNameForDamage = "damage payment";
-    /* damageWriteOffTransaction.setTransactionTypeId(
-    getTransactionTypeIdByName(transactionTypeNameForDamage));*/
+    final var transactionTypeId =
+        transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).getId();
+    damageWriteOffTransaction.setTransactionTypeId(transactionTypeId);
     damageWriteOffTransaction.setDate(qDateTime.getToday());
 
     return damageWriteOffTransaction;
@@ -154,9 +153,9 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     insurancePaymentTransaction.setComment("Weekly Insurance payment for the new drivers");
     insurancePaymentTransaction.setDriverId(driverId);
     insurancePaymentTransaction.setAmount(transactionAmount);
-
-    // TODO add type ?
-    final var transactionTypeNameForSelfResponsibility = "self responsibility payment";
+    final var transactionTypeId =
+        transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE).getId();
+    insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
     insurancePaymentTransaction.setDate(qDateTime.getToday());
 
     return insurancePaymentTransaction;
