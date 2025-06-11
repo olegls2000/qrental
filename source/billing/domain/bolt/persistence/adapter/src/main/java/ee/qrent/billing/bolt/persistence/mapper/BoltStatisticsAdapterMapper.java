@@ -8,7 +8,7 @@ public class BoltStatisticsAdapterMapper {
   public BoltStatistics mapToDomain(final BoltStatisticsJakartaEntity entity) {
     return BoltStatistics.builder()
         .id(entity.getId())
-        //.data(entity.getData())
+        .data(entity.getData())
         .region(entity.getRegion())
         .fileName(entity.getFileName())
         .month(entity.getMonth())
@@ -20,7 +20,7 @@ public class BoltStatisticsAdapterMapper {
   public BoltStatisticsJakartaEntity mapToEntity(final BoltStatistics domain) {
     return BoltStatisticsJakartaEntity.builder()
         .id(domain.getId())
-        //.data(domain.getData())
+        .data(domain.getData())
         .region(domain.getRegion())
         .fileName(domain.getFileName())
         .month(domain.getMonth())

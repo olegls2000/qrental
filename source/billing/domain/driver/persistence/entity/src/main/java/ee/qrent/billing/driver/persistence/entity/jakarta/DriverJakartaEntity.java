@@ -122,10 +122,10 @@ public class DriverJakartaEntity {
   @Column(name = "created_date")
   private LocalDate createdDate;
 
-  @Column(name = "bolt_driver_identifier")
+  @Column(name = "driver_identifier")
   private String boltDriverIdentifier;
 
-  @Column (name = "bolt_id")
+  @Column (name = "individual_identifier")
   private String boltId;
 
   @OneToMany(mappedBy = "driver")

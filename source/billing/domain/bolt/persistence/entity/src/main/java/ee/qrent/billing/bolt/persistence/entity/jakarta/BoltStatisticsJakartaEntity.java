@@ -39,8 +39,7 @@ public class BoltStatisticsJakartaEntity {
   @Column(name = "month")
   private Integer month;
 
-  /*@Blob
-  @Column(name = "data", columnDefinition = "BLOB")
-  private byte[] data;*/
-
+  @Lob
+  @Column(name = "data")
+  private byte[] data;
 }

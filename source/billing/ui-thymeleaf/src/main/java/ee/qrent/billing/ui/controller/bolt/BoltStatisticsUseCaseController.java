@@ -61,7 +61,7 @@ public class BoltStatisticsUseCaseController {
     addRequest.setRegion(region);
     addRequest.setMonth(month);
     addRequest.setYear(year);
-    addRequest.setInputStream(reportFile.getInputStream());
+    addRequest.setData(reportFile.getInputStream().readAllBytes());
     addRequest.setFileName(reportFile.getOriginalFilename());
     addUseCase.add(addRequest);
 

@@ -15,7 +15,7 @@ public class BoltStatistics {
   private String fileName;
   private LocalDate createdOn;
   private String region;
-  private InputStream inputStream;
+  private byte[] data;
   private Integer year;
   private Integer month;
 }

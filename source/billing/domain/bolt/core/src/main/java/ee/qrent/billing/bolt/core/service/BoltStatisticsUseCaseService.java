@@ -17,6 +17,7 @@ import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
 import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
@@ -53,7 +54,7 @@ public class BoltStatisticsUseCaseService
 
     final var individualDriversVsOrders =
         new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
-                new InputStreamReader(request.getInputStream()))
+                new InputStreamReader(new ByteArrayInputStream(request.getData())))
                 .withType(BoltStatisticsCsvRecord.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build()
