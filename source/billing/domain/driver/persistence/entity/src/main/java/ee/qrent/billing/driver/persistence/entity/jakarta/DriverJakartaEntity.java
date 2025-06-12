@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "driver")
-
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +26,6 @@ public class DriverJakartaEntity {
 
   @Column(name = "active")
   private Boolean active;
-
 
   @Column(name = "first_name")
   private String firstName;
@@ -122,10 +120,10 @@ public class DriverJakartaEntity {
   @Column(name = "created_date")
   private LocalDate createdDate;
 
-  @Column(name = "driver_identifier")
+  @Column(name = "bolt_driver_identifier")
   private String boltDriverIdentifier;
 
-  @Column (name = "individual_identifier")
+  @Column(name = "bolt_id")
   private String boltId;
 
   @OneToMany(mappedBy = "driver")
