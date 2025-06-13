@@ -20,8 +20,10 @@ public class BoltStatisticsRepositoryImpl implements BoltStatisticsRepository {
 
   @Override
   public BoltStatisticsJakartaEntity save(final BoltStatisticsJakartaEntity entity) {
+    final var result = springDataRepository.saveNatively(entity);
+    entity.setId(1L);
 
-    return springDataRepository.save(entity);
+    return entity;
   }
 
   @Override
