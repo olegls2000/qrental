@@ -1,14 +1,24 @@
 package ee.qrent.billing.insurance.core.service;
 
+import static ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy.NEW_CONTRACTS_START_DATE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.groupingBy;
 
+import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
+import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.out.InsuranceCalculationAddPort;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseLoadPort;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy;
+import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
+import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
+import ee.qrent.billing.transaction.api.in.request.TransactionAddRequest;
+import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
+import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.insurance.api.in.request.InsuranceCalculationAddRequest;
@@ -19,6 +29,7 @@ import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,9 +40,14 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   private final InsuranceCalculationAddRequestMapper calculationAddRequestMapper;
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
-
   private final AddRequestValidator<InsuranceCalculationAddRequest> addRequestValidator;
   private final List<InsuranceCalculationStrategy> insuranceCalculationStrategies;
+  private final GetContractQuery contractQuery;
+  private final GetTransactionQuery transactionQuery;
+  private final GetBoltRidesCountQuery boltRidesCountQuery;
+  private final GetTransactionTypeQuery transactionTypeQuery;
+  private final TransactionAddUseCase transactionAddUseCase;
+  private final QDateTime qDateTime;
 
   @Transactional
   @Override
@@ -56,6 +72,19 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
               "Driver: %s %s, tax number: %d",
               driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
       final var weekInfo = format("QWeek: %d - %d", qWeek.getYear(), qWeek.getNumber());
+
+      final var contract =
+          contractQuery.getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
+      final var contractStartDate = contract.getDateStart();
+
+      final var isContractNew =
+          contractStartDate.isEqual(NEW_CONTRACTS_START_DATE)
+              || contractStartDate.isAfter(NEW_CONTRACTS_START_DATE);
+
+      if (isContractNew) {
+        createAndSaveWeeklyPaymentTransaction(driverId, qWeekId);
+      }
+
       if (activeCases.isEmpty()) {
         System.out.println(format("No Active insurance cases for %s and %s", driverInfo, weekInfo));
 
@@ -90,5 +119,50 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         "----> Time: Insurance Cases Calculation took %d milli seconds \n", calculationDuration);
 
     return savedCalculation.getId();
+  }
+
+  private Long createAndSaveWeeklyPaymentTransaction(final Long driverId, final Long qWeekId) {
+    final var transactionAddRequest = getWeeklyPaymentTransaction(driverId, qWeekId);
+    return transactionAddUseCase.add(transactionAddRequest);
+  }
+
+  private TransactionAddRequest getWeeklyPaymentTransaction(
+      final Long driverId, final Long qWeekId) {
+
+    final var rentAmount =
+        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
+            .filter(
+                transactionResponse ->
+                    TRANSACTION_TYPE_NAME_WEEKLY_RENT.equals(transactionResponse.getType()))
+            .map(tr -> tr.getRealAmount())
+            .reduce(BigDecimal::add)
+            .orElse(ZERO);
+
+    final var insuranceRate = getInsuranceRateBaseOnBoltRides(driverId, qWeekId);
+    final var transactionAmount = rentAmount.multiply(insuranceRate);
+
+    final var insurancePaymentTransaction = new TransactionAddRequest();
+    insurancePaymentTransaction.setComment("Weekly Insurance payment for the new drivers");
+    insurancePaymentTransaction.setDriverId(driverId);
+    insurancePaymentTransaction.setAmount(transactionAmount);
+    final var transactionTypeId =
+        transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE).getId();
+    insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
+    insurancePaymentTransaction.setDate(qDateTime.getToday());
+
+    return insurancePaymentTransaction;
+  }
+
+  private BigDecimal getInsuranceRateBaseOnBoltRides(final Long driverId, final Long qWeekId) {
+    final var boltRidesCount =
+        boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId);
+    if (boltRidesCount < 380) {
+
+      return BigDecimal.valueOf(0.05);
+    } else if (boltRidesCount >= 380 && boltRidesCount <= 514) {
+
+      return BigDecimal.valueOf(0.04);
+    }
+    return BigDecimal.valueOf(0.03);
   }
 }

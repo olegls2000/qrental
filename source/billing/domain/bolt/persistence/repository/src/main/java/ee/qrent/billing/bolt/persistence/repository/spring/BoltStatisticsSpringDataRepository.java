@@ -1,6 +1,5 @@
 package ee.qrent.billing.bolt.persistence.repository.spring;
 
-import ee.qrent.billing.bolt.persistence.entity.jakarta.BoltOrdersCountJakartaEntity;
 import ee.qrent.billing.bolt.persistence.entity.jakarta.BoltStatisticsJakartaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,4 +17,6 @@ public interface BoltStatisticsSpringDataRepository
       nativeQuery = true)
   Integer saveNatively(
       final @Param("entity") BoltStatisticsJakartaEntity entity);
+
+
 }

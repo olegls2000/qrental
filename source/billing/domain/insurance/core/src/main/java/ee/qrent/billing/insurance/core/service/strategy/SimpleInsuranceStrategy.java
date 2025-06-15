@@ -26,26 +26,23 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
 
   private static final BigDecimal DAMAGE_LIMIT = BigDecimal.valueOf(600);
 
-  private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
   private final TransactionAddUseCase transactionAddUseCase;
   private final QDateTime qDateTime;
-  private final GetBoltRidesCountQuery boltRidesCountQuery;
+
 
   public SimpleInsuranceStrategy(
       final GetContractQuery contractQuery,
       final InsuranceCaseUpdatePort caseUpdatePort,
-      final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
       final TransactionAddUseCase transactionAddUseCase,
-      final QDateTime qDateTime,
-      final GetBoltRidesCountQuery boltRidesCountQuery) {
+      final QDateTime qDateTime) {
     super(contractQuery, caseUpdatePort);
-    this.transactionQuery = transactionQuery;
+
     this.transactionTypeQuery = transactionTypeQuery;
     this.transactionAddUseCase = transactionAddUseCase;
     this.qDateTime = qDateTime;
-    this.boltRidesCountQuery = boltRidesCountQuery;
+
   }
 
   @Override
@@ -78,11 +75,9 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       final InsuranceCase insuranceCase) {
     final var driverId = driver.getId();
     final var qWeekId = qWeek.getId();
-    createAndSaveWeeklyPaymentTransaction(driverId, qWeekId);
+
     createAndSaveDamageWriteOffTransaction(insuranceCase);
-    final var weeklyTransaction = getWeeklyPaymentTransaction(driverId, qWeekId);
     final var writeOffTransaction = getDamageWriteOffTransaction(insuranceCase);
-    final var weeklyTransactionId = transactionAddUseCase.add(weeklyTransaction);
     final var writeOffTransactionId = transactionAddUseCase.add(writeOffTransaction);
 
     final var requestedBalance =
@@ -90,7 +85,7 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
             .insuranceCase(insuranceCase)
             .damageRemaining(ZERO)
             .selfResponsibilityRemaining(ZERO)
-            .transactionIds(asList(weeklyTransactionId, writeOffTransactionId))
+            .transactionIds(asList(writeOffTransactionId))
             .qWeekId(qWeekId)
             .withQKasko(FALSE)
             .build();
@@ -98,10 +93,7 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     checkAndDeactivateIfNecessary(requestedBalance, insuranceCase);
   }
 
-  private void createAndSaveWeeklyPaymentTransaction(final Long driverId, final Long qWeekId) {
-    final var transactionAddRequest = getWeeklyPaymentTransaction(driverId, qWeekId);
-    transactionAddUseCase.add(transactionAddRequest);
-  }
+
 
   private void createAndSaveDamageWriteOffTransaction(final InsuranceCase insuranceCase) {
     final var transactionAddRequest = getDamageWriteOffTransaction(insuranceCase);
@@ -134,43 +126,7 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     }
   }
 
-  private TransactionAddRequest getWeeklyPaymentTransaction(
-      final Long driverId, final Long qWeekId) {
 
-    final var rentAmount =
-        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-            .filter(
-                transactionResponse ->
-                    TRANSACTION_TYPE_NAME_WEEKLY_RENT.equals(transactionResponse.getType()))
-            .map(tr -> tr.getRealAmount())
-            .reduce(BigDecimal::add)
-            .orElse(ZERO);
 
-    final var insuranceRate = getInsuranceRateBaseOnBoltRides(driverId, qWeekId);
-    final var transactionAmount = rentAmount.multiply(insuranceRate);
 
-    final var insurancePaymentTransaction = new TransactionAddRequest();
-    insurancePaymentTransaction.setComment("Weekly Insurance payment for the new drivers");
-    insurancePaymentTransaction.setDriverId(driverId);
-    insurancePaymentTransaction.setAmount(transactionAmount);
-    final var transactionTypeId =
-        transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE).getId();
-    insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
-    insurancePaymentTransaction.setDate(qDateTime.getToday());
-
-    return insurancePaymentTransaction;
-  }
-
-  private BigDecimal getInsuranceRateBaseOnBoltRides(final Long driverId, final Long qWeekId) {
-    final var boltRidesCount =
-        boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId);
-    if (boltRidesCount < 380) {
-
-      return BigDecimal.valueOf(0.05);
-    } else if (boltRidesCount >= 380 && boltRidesCount <= 514) {
-
-      return BigDecimal.valueOf(0.04);
-    }
-    return BigDecimal.valueOf(0.03);
-  }
 }

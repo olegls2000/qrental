@@ -165,7 +165,13 @@ public class InsuranceCaseServiceConfig {
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
       final AddRequestValidator<InsuranceCalculationAddRequest> addRequestValidator,
-      final List<InsuranceCalculationStrategy> insuranceCalculationStrategies) {
+      final List<InsuranceCalculationStrategy> insuranceCalculationStrategies,
+      final GetContractQuery contractQuery,
+      final GetTransactionQuery transactionQuery,
+      final GetBoltRidesCountQuery boltRidesCountQuery,
+      final GetTransactionTypeQuery transactionTypeQuery,
+      final TransactionAddUseCase transactionAddUseCase,
+      final QDateTime qDateTime) {
 
     return new InsuranceCalculationUseCaseService(
         caseLoadPort,
@@ -174,7 +180,13 @@ public class InsuranceCaseServiceConfig {
         qWeekQuery,
         driverQuery,
         addRequestValidator,
-        insuranceCalculationStrategies);
+        insuranceCalculationStrategies,
+        contractQuery,
+        transactionQuery,
+        boltRidesCountQuery,
+        transactionTypeQuery,
+        transactionAddUseCase,
+        qDateTime);
   }
 
   @Bean
@@ -188,22 +200,14 @@ public class InsuranceCaseServiceConfig {
       final GetContractQuery contractQuery,
       final InsuranceCaseUpdatePort caseUpdatePort,
       final InsuranceCaseLoadPort caseLoadPort,
-      final GetTransactionQuery transactionQuery,
       final GetTransactionTypeQuery transactionTypeQuery,
       final TransactionAddUseCase transactionAddUseCase,
       final QDateTime qDateTime,
-      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator,
-      final GetBoltRidesCountQuery boltRidesCountQuery) {
+      final InsuranceCaseBalanceCalculator insuranceCaseBalanceCalculator) {
 
     return asList(
         new SimpleInsuranceStrategy(
-            contractQuery,
-            caseUpdatePort,
-            transactionQuery,
-            transactionTypeQuery,
-            transactionAddUseCase,
-            qDateTime,
-            boltRidesCountQuery),
+            contractQuery, caseUpdatePort, transactionTypeQuery, transactionAddUseCase, qDateTime),
         new QKaskoLegacyInsuranceStrategy(
             contractQuery, caseUpdatePort, caseLoadPort, insuranceCaseBalanceCalculator));
   }
