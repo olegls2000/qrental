@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class InsuranceCalculationAddRequest extends AbstractAddRequest {
-  private LocalDate actionDate = LocalDate.now();
+  private LocalDate actionDate;
   private Long qWeekId;
   private String comment;
 }

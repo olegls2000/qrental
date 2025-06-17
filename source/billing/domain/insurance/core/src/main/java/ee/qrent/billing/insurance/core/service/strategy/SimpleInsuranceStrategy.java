@@ -1,15 +1,12 @@
 package ee.qrent.billing.insurance.core.service.strategy;
 
-import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
-import ee.qrent.billing.insurance.api.out.InsuranceCaseLoadPort;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.billing.insurance.domain.InsuranceCalculation;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
-import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.request.TransactionAddRequest;
 import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
@@ -73,7 +70,6 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       final QWeekResponse qWeek,
       final InsuranceCalculation calculation,
       final InsuranceCase insuranceCase) {
-    final var driverId = driver.getId();
     final var qWeekId = qWeek.getId();
 
     createAndSaveDamageWriteOffTransaction(insuranceCase);
@@ -92,8 +88,6 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     calculation.getInsuranceCaseBalances().add(requestedBalance);
     checkAndDeactivateIfNecessary(requestedBalance, insuranceCase);
   }
-
-
 
   private void createAndSaveDamageWriteOffTransaction(final InsuranceCase insuranceCase) {
     final var transactionAddRequest = getDamageWriteOffTransaction(insuranceCase);
@@ -125,8 +119,4 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
       return damage;
     }
   }
-
-
-
-
 }

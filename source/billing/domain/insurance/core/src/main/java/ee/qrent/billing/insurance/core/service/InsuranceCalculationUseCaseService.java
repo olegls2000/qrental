@@ -12,7 +12,6 @@ import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.out.InsuranceCalculationAddPort;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseLoadPort;
-import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
@@ -24,8 +23,6 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.insurance.api.in.request.InsuranceCalculationAddRequest;
 import ee.qrent.billing.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrent.billing.insurance.core.mapper.InsuranceCalculationAddRequestMapper;
-import ee.qrent.billing.insurance.domain.InsuranceCase;
-import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -60,6 +57,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
 
       return null;
     }
+    request.setActionDate(qDateTime.getToday());
     final var domain = calculationAddRequestMapper.toDomain(request);
     final var qWeekId = request.getQWeekId();
     final var qWeek = qWeekQuery.getById(qWeekId);
@@ -72,35 +70,14 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
               "Driver: %s %s, tax number: %d",
               driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
       final var weekInfo = format("QWeek: %d - %d", qWeek.getYear(), qWeek.getNumber());
-
-      final var contract =
-          contractQuery.getActiveByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
-      final var contractStartDate = contract.getDateStart();
-
-      final var isContractNew =
-          contractStartDate.isEqual(NEW_CONTRACTS_START_DATE)
-              || contractStartDate.isAfter(NEW_CONTRACTS_START_DATE);
-
-      if (isContractNew) {
-        createAndSaveWeeklyPaymentTransaction(driverId, qWeekId);
-      }
-
+      addWeeklyInsurancePaymentTransactionIfNecessary(driverId, qWeekId);
       if (activeCases.isEmpty()) {
         System.out.println(format("No Active insurance cases for %s and %s", driverInfo, weekInfo));
 
         continue;
       }
 
-      // I think, this exception cannot be thrown
-      final var activeCaseForProcessing =
-          activeCases.stream()
-              .findFirst()
-              .orElseThrow(
-                  () ->
-                      new RuntimeException(
-                          format(
-                              "No active insurance cases found for %s and %s",
-                              driverInfo, weekInfo)));
+      final var activeCaseForProcessing = activeCases.stream().findFirst().get();
 
       insuranceCalculationStrategies.stream()
           .filter(strategy -> strategy.canApply(driver, qWeek, activeCaseForProcessing))
@@ -122,14 +99,23 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     return savedCalculation.getId();
   }
 
-  private Long createAndSaveWeeklyPaymentTransaction(final Long driverId, final Long qWeekId) {
-    final var transactionAddRequest = getWeeklyPaymentTransaction(driverId, qWeekId);
-    return transactionAddUseCase.add(transactionAddRequest);
+  private void addWeeklyInsurancePaymentTransactionIfNecessary(
+      final Long driverId, final Long qWeekId) {
+    final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    final var contractStartDate = contract.getDateStart();
+
+    final var isContractNew =
+        contractStartDate.isEqual(NEW_CONTRACTS_START_DATE)
+            || contractStartDate.isAfter(NEW_CONTRACTS_START_DATE);
+
+    if (isContractNew) {
+      final var transactionAddRequest = getWeeklyPaymentTransaction(driverId, qWeekId);
+      transactionAddUseCase.add(transactionAddRequest);
+    }
   }
 
   private TransactionAddRequest getWeeklyPaymentTransaction(
       final Long driverId, final Long qWeekId) {
-
     final var rentAmount =
         transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
             .filter(

@@ -3,9 +3,12 @@ package ee.qrent.billing.insurance.core.service;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
@@ -96,99 +99,7 @@ class InsuranceCalculationUseCaseServiceTest {
   }
 
   @Test
-  public void testIfSuccessfulInsuranceCalculationAndContractNewAndWithActiveCases() {
-    // given
-    final var qWeekId = 5L;
-    final var driverId = 2L;
-    final var violationCollector = new ViolationsCollector();
-    final var calculationAddRequest = new InsuranceCalculationAddRequest();
-    calculationAddRequest.setQWeekId(qWeekId);
-
-    final var transactionAddRequest = new TransactionAddRequest();
-    transactionAddRequest.setAmount(BigDecimal.valueOf(0.05));
-
-    final var transactionTypeResponse =
-        TransactionTypeResponse.builder()
-            .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
-            .build();
-
-    final var driver =
-        DriverResponse.builder()
-            .id(driverId)
-            .firstName("FirstName")
-            .lastName("LastName")
-            .taxNumber(1231231231L)
-            .build();
-
-    final var qWeek =
-        QWeekResponse.builder().id(qWeekId).year(LocalDate.now().getYear()).number(5).build();
-    final var insuranceCase = InsuranceCase.builder().id(1L).build();
-    final var insuranceCalculation =
-        InsuranceCalculation.builder()
-            .actionDate(calculationAddRequest.getActionDate())
-            .qWeekId(calculationAddRequest.getQWeekId())
-            .insuranceCaseBalances(new ArrayList<>())
-            .comment(calculationAddRequest.getComment())
-            .build();
-
-    when(addRequestValidator.validate(calculationAddRequest)).thenReturn(violationCollector);
-    when(calculationAddRequestMapper.toDomain(calculationAddRequest))
-        .thenReturn(insuranceCalculation);
-    when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
-    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
-    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(
-            ContractResponse.builder()
-                .id(6L)
-                .dateStart(LocalDate.of(2025, Month.APRIL, 28))
-                .build());
-    when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(
-            Collections.singletonList(
-                TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
-                    .realAmount(BigDecimal.valueOf(5))
-                    .build()));
-    when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(379);
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
-        .thenReturn(transactionTypeResponse);
-    when(qDateTime.getToday()).thenReturn(LocalDate.now());
-    when(transactionAddUseCase.add(transactionAddRequest)).thenReturn(1L);
-    when(insuranceCalculationStrategy.canApply(driver, qWeek, insuranceCase)).thenReturn(true);
-    when(calculationAddPort.add(insuranceCalculation))
-        .thenReturn(InsuranceCalculation.builder().id(1L).build());
-
-    // when
-    final var id = instanceUnderTest.add(calculationAddRequest);
-
-    // then
-    assertNotNull(id);
-    assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.05));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
-    assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
-  }
-
-  @Test
-  public void testIfRentCalculationBeforeInsuranceBalanceCalculation() {
+  public void testInvalidCalculationBecauseNoRentCalculation() {
     // given
     final var qWeekId = 5L;
     final var violationCollector = new ViolationsCollector();
@@ -215,12 +126,186 @@ class InsuranceCalculationUseCaseServiceTest {
                     violation.equals(
                         "Rent calculation must be done, before Insurance Balance calculations")));
     assertNull(id);
-    assertEquals(request.getQWeekId(), qWeekId);
+    assertEquals(qWeekId, request.getQWeekId());
   }
 
   @Test
-  public void
-      testIfSuccessfulInsuranceCalculationAndContractNewAfterNewContractsStartDateAndWithActiveCasesWithInsuranceRateBase005() {
+  public void testSuccessfulCalculationIfContractIsNewAndNoActiveCassAndRate5() {
+    // given
+    final var qWeekId = 5L;
+    final var driverId = 2L;
+    final var today = LocalDate.of(2025, 6, 1);
+    final var violationCollector = new ViolationsCollector();
+    final var calculationAddRequest = new InsuranceCalculationAddRequest();
+    calculationAddRequest.setQWeekId(qWeekId);
+    calculationAddRequest.setActionDate(today);
+
+    final var transactionTypeResponse =
+        TransactionTypeResponse.builder()
+            .id(10L)
+            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .build();
+
+    final var driver =
+        DriverResponse.builder()
+            .id(driverId)
+            .firstName("FirstName")
+            .lastName("LastName")
+            .taxNumber(1231231231L)
+            .build();
+
+    final var qWeek = QWeekResponse.builder().id(qWeekId).year(2025).number(5).build();
+    final var insuranceCalculation =
+        InsuranceCalculation.builder()
+            .actionDate(calculationAddRequest.getActionDate())
+            .qWeekId(calculationAddRequest.getQWeekId())
+            .insuranceCaseBalances(new ArrayList<>())
+            .comment(calculationAddRequest.getComment())
+            .build();
+
+    when(addRequestValidator.validate(calculationAddRequest)).thenReturn(violationCollector);
+    when(calculationAddRequestMapper.toDomain(calculationAddRequest))
+        .thenReturn(insuranceCalculation);
+    when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
+    when(qDateTime.getToday()).thenReturn(today);
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
+    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(emptyList());
+    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
+        .thenReturn(
+            ContractResponse.builder()
+                .id(6L)
+                .dateStart(LocalDate.of(2025, Month.APRIL, 28))
+                .build());
+    when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
+        .thenReturn(
+            singletonList(
+                TransactionResponse.builder()
+                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .realAmount(BigDecimal.valueOf(100))
+                    .build()));
+    when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(379);
+    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+        .thenReturn(transactionTypeResponse);
+    when(qDateTime.getToday()).thenReturn(LocalDate.now());
+    when(calculationAddPort.add(insuranceCalculation))
+        .thenReturn(InsuranceCalculation.builder().id(1L).build());
+
+    // when
+    final var id = instanceUnderTest.add(calculationAddRequest);
+
+    // then
+    assertNotNull(id);
+    assertFalse(violationCollector.hasViolations());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+
+    final var transactionCaptor = forClass(TransactionAddRequest.class);
+    verify(transactionAddUseCase, times(1)).add(transactionCaptor.capture());
+    final var transactionAddRequest = transactionCaptor.getValue();
+    assertEquals(0, BigDecimal.valueOf(5).compareTo(transactionAddRequest.getAmount()));
+    assertEquals(today, insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
+    assertNull(insuranceCalculation.getComment());
+    assertEquals(1, id);
+  }
+
+
+  //TO check:
+
+
+  @Test
+  public void testSuccessfulCalculationIfContractIsNewAndActiveCasePresentAndRate5() {
+    // given
+    final var qWeekId = 5L;
+    final var driverId = 2L;
+    final var violationCollector = new ViolationsCollector();
+    final var calculationAddRequest = new InsuranceCalculationAddRequest();
+    calculationAddRequest.setQWeekId(qWeekId);
+
+    final var transactionAddRequest = new TransactionAddRequest();
+    transactionAddRequest.setAmount(BigDecimal.valueOf(0.05));
+
+    final var transactionTypeResponse =
+        TransactionTypeResponse.builder()
+            .id(10L)
+            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .build();
+
+    final var driver =
+        DriverResponse.builder()
+            .id(driverId)
+            .firstName("FirstName")
+            .lastName("LastName")
+            .taxNumber(1231231231L)
+            .build();
+
+    final var qWeek = QWeekResponse.builder().id(qWeekId).year(2025).number(5).build();
+    final var insuranceCase = InsuranceCase.builder().id(1L).build();
+    final var insuranceCalculation =
+        InsuranceCalculation.builder()
+            .actionDate(calculationAddRequest.getActionDate())
+            .qWeekId(calculationAddRequest.getQWeekId())
+            .insuranceCaseBalances(new ArrayList<>())
+            .comment(calculationAddRequest.getComment())
+            .build();
+
+    when(addRequestValidator.validate(calculationAddRequest)).thenReturn(violationCollector);
+    when(calculationAddRequestMapper.toDomain(calculationAddRequest))
+        .thenReturn(insuranceCalculation);
+    when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
+    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
+        .thenReturn(singletonList(insuranceCase));
+    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
+        .thenReturn(
+            ContractResponse.builder()
+                .id(6L)
+                .dateStart(LocalDate.of(2025, Month.APRIL, 30))
+                .build());
+    when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
+        .thenReturn(
+            singletonList(
+                TransactionResponse.builder()
+                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .realAmount(BigDecimal.valueOf(5))
+                    .build()));
+    when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(379);
+    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+        .thenReturn(transactionTypeResponse);
+    when(qDateTime.getToday()).thenReturn(LocalDate.now());
+    when(transactionAddUseCase.add(transactionAddRequest)).thenReturn(1L);
+    when(insuranceCalculationStrategy.canApply(driver, qWeek, insuranceCase)).thenReturn(true);
+    when(calculationAddPort.add(insuranceCalculation))
+        .thenReturn(InsuranceCalculation.builder().id(1L).build());
+
+    // when
+    final var id = instanceUnderTest.add(calculationAddRequest);
+
+    // then
+    assertNotNull(id);
+    assertFalse(violationCollector.hasViolations());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.05), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
+    assertNull(insuranceCalculation.getComment());
+    assertEquals(1, id);
+  }
+
+  @Test
+  public void testSuccessfulCalculationIfContractIsNewAndActiveCasePresent() {
     // given
     final var qWeekId = 5L;
     final var driverId = 2L;
@@ -260,18 +345,18 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
                 .id(6L)
-                .dateStart(LocalDate.of(2025, Month.APRIL, 30))
+                .dateStart(LocalDate.of(2025, Month.APRIL, 28))
                 .build());
     when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
-            Collections.singletonList(
+            singletonList(
                 TransactionResponse.builder()
                     .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
                     .realAmount(BigDecimal.valueOf(5))
@@ -291,24 +376,24 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.05));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.05), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
 
   @Test
@@ -353,9 +438,9 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
@@ -364,7 +449,7 @@ class InsuranceCalculationUseCaseServiceTest {
                 .build());
     when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
-            Collections.singletonList(
+            singletonList(
                 TransactionResponse.builder()
                     .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
                     .realAmount(BigDecimal.valueOf(5))
@@ -384,24 +469,24 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.03));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.03), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
 
   @Test
@@ -446,9 +531,9 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
@@ -457,7 +542,7 @@ class InsuranceCalculationUseCaseServiceTest {
                 .build());
     when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
-            Collections.singletonList(
+            singletonList(
                 TransactionResponse.builder()
                     .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
                     .realAmount(BigDecimal.valueOf(5))
@@ -477,24 +562,24 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.04));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.04), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
 
   @Test
@@ -539,9 +624,9 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
@@ -550,7 +635,7 @@ class InsuranceCalculationUseCaseServiceTest {
                 .build());
     when(transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
-            Collections.singletonList(
+            singletonList(
                 TransactionResponse.builder()
                     .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
                     .realAmount(BigDecimal.valueOf(5))
@@ -570,24 +655,24 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.04));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.04), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
 
   @Test
@@ -631,9 +716,9 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
@@ -650,24 +735,24 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.05));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.05), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
 
   @Test
@@ -711,9 +796,8 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
-    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.emptyList());
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
+    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(emptyList());
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
@@ -730,92 +814,25 @@ class InsuranceCalculationUseCaseServiceTest {
     // then
     assertNotNull(id);
     assertFalse(violationCollector.hasViolations());
-    assertEquals(calculationAddRequest.getQWeekId(), 5L);
-    assertEquals(transactionAddRequest.getAmount(), BigDecimal.valueOf(0.05));
-    assertEquals(transactionTypeResponse.getId(), 10L);
-    assertEquals(transactionTypeResponse.getName(), TRANSACTION_TYPE_INNER_ROAD_INSURANCE);
-    assertEquals(driver.getId(), driverId);
-    assertEquals(driver.getFirstName(), "FirstName");
-    assertEquals(driver.getLastName(), "LastName");
-    assertEquals(driver.getTaxNumber(), 1231231231L);
-    assertEquals(qWeek.getId(), qWeekId);
-    assertEquals(qWeek.getYear(), 2025);
-    assertEquals(qWeek.getYear(), LocalDate.now().getYear());
-    assertEquals(qWeek.getNumber(), 5);
-    assertEquals(insuranceCase.getId(), 1L);
-    assertEquals(insuranceCalculation.getActionDate(), LocalDate.now());
-    assertEquals(insuranceCalculation.getQWeekId(), qWeekId);
-    assertEquals(insuranceCalculation.getInsuranceCaseBalances(), new ArrayList<>());
+    assertEquals(5L, calculationAddRequest.getQWeekId());
+    assertEquals(BigDecimal.valueOf(0.05), transactionAddRequest.getAmount());
+    assertEquals(10L, transactionTypeResponse.getId());
+    assertEquals(TRANSACTION_TYPE_INNER_ROAD_INSURANCE, transactionTypeResponse.getName());
+    assertEquals(driverId, driver.getId());
+    assertEquals("FirstName", driver.getFirstName());
+    assertEquals("LastName", driver.getLastName());
+    assertEquals(1231231231L, driver.getTaxNumber());
+    assertEquals(qWeekId, qWeek.getId());
+    assertEquals(2025, qWeek.getYear());
+    assertEquals(LocalDate.now().getYear(), qWeek.getYear());
+    assertEquals(5, qWeek.getNumber());
+    assertEquals(1L, insuranceCase.getId());
+    assertEquals(LocalDate.now(), insuranceCalculation.getActionDate());
+    assertEquals(qWeekId, insuranceCalculation.getQWeekId());
+    assertEquals(new ArrayList<>(), insuranceCalculation.getInsuranceCaseBalances());
     assertNull(insuranceCalculation.getComment());
-    assertEquals(id, 1);
+    assertEquals(1, id);
   }
-
-  //  @Test
-  //  public void testIfThrowExceptionWhenNoActiveInsuranceCasesFound() {
-  //    // given
-  //    final var qWeekId = 5L;
-  //    final var driverId = 2L;
-  //    final var violationCollector = new ViolationsCollector();
-  //    final var calculationAddRequest = new InsuranceCalculationAddRequest();
-  //    calculationAddRequest.setQWeekId(qWeekId);
-  //
-  //    final var transactionAddRequest = new TransactionAddRequest();
-  //    transactionAddRequest.setAmount(BigDecimal.valueOf(0.05));
-  //
-  //    final var driver =
-  //        DriverResponse.builder()
-  //            .id(driverId)
-  //            .firstName("FirstName")
-  //            .lastName("LastName")
-  //            .taxNumber(1231231231L)
-  //            .build();
-  //
-  //    final var qWeek =
-  //        QWeekResponse.builder().id(qWeekId).year(LocalDate.now().getYear()).number(5).build();
-  //    final var insuranceCase = InsuranceCase.builder().id(1L).build();
-  //    final var insuranceCalculation =
-  //        InsuranceCalculation.builder()
-  //            .actionDate(calculationAddRequest.getActionDate())
-  //            .qWeekId(calculationAddRequest.getQWeekId())
-  //            .insuranceCaseBalances(new ArrayList<>())
-  //            .comment(calculationAddRequest.getComment())
-  //            .build();
-  //
-  //    final var driverInfo =
-  //        format(
-  //            "Driver: %s %s, tax number: %d",
-  //            driver.getFirstName(), driver.getLastName(), driver.getTaxNumber());
-  //    final var weekInfo = format("QWeek: %d - %d", qWeek.getYear(), qWeek.getNumber());
-  //
-  //    when(addRequestValidator.validate(calculationAddRequest)).thenReturn(violationCollector);
-  //    when(calculationAddRequestMapper.toDomain(calculationAddRequest))
-  //        .thenReturn(insuranceCalculation);
-  //    when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-  //    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
-  //    when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-  //        .thenReturn(Collections.emptyList());
-  //    when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
-  //        .thenReturn(
-  //            ContractResponse.builder()
-  //                .id(6L)
-  //                .dateStart(LocalDate.of(2025, Month.APRIL, 27))
-  //                .build());
-  //
-  //    // when
-  //    Exception exception = null;
-  //    try {
-  //      instanceUnderTest.add(calculationAddRequest);
-  //    } catch (Exception e) {
-  //      exception = e;
-  //    }
-  //
-  //    // then
-  //    assertNotNull(exception);
-  //    assertEquals(RuntimeException.class, exception.getClass());
-  //    assertEquals(
-  //        exception.getMessage(),
-  //        format("No active insurance cases found for %s and %s", driverInfo, weekInfo));
-  //  }
 
   @Test
   public void testIfThrowExceptionWhenNoInsuranceCalculationStrategyFound() {
@@ -857,9 +874,9 @@ class InsuranceCalculationUseCaseServiceTest {
     when(calculationAddRequestMapper.toDomain(calculationAddRequest))
         .thenReturn(insuranceCalculation);
     when(qWeekQuery.getById(qWeekId)).thenReturn(qWeek);
-    when(driverQuery.getAll()).thenReturn(Collections.singletonList(driver));
+    when(driverQuery.getAll()).thenReturn(singletonList(driver));
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))
-        .thenReturn(Collections.singletonList(insuranceCase));
+        .thenReturn(singletonList(insuranceCase));
     when(contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId))
         .thenReturn(
             ContractResponse.builder()
