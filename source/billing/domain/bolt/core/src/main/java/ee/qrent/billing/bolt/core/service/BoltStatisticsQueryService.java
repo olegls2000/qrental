@@ -21,21 +21,30 @@ public class BoltStatisticsQueryService implements GetBoltStatisticsQuery {
 
   @Override
   public List<BoltStatisticsResponse> getAll() {
+
     return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
   }
 
   @Override
   public BoltStatisticsResponse getById(final Long id) {
+
     return mapper.toResponse(loadPort.loadById(id));
   }
 
   @Override
-  public String getObjectInfo(Long id) {
+  public String getObjectInfo(final Long id) {
     return mapper.toObjectInfo(loadPort.loadById(id));
   }
 
   @Override
-  public BoltStatisticsUpdateRequest getUpdateRequestById(Long id) {
+  public BoltStatisticsUpdateRequest getUpdateRequestById(final Long id) {
+
     return updateRequestMapper.toRequest(loadPort.loadById(id));
+  }
+
+  @Override
+  public byte[] getBoltStatisticsFileBiId(final Long id) {
+
+    return loadPort.loadFileById(id);
   }
 }

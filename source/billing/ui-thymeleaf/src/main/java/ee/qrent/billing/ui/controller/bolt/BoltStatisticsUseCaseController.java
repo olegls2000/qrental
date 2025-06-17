@@ -27,21 +27,6 @@ public class BoltStatisticsUseCaseController {
   private final BoltStatisticsDeleteUseCase deleteUseCase;
   private final GetBoltStatisticsQuery query;
 
-  /*  @GetMapping("/download/{id}")
-  public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
-    return fileStorageService
-        .getFile(id)
-        .map(
-            file ->
-                ResponseEntity.ok()
-                    .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + file.getFilename() + "\"")
-                    .contentType(MediaType.parseMediaType(file.getContentType()))
-                    .body(file.getFileData()))
-        .orElse(ResponseEntity.notFound().build());
-  }*/
-
   @GetMapping(value = "/reports/add-form")
   public String addForm(final Model model) {
     model.addAttribute("addRequest", new BoltStatisticsAddRequest());
@@ -71,6 +56,9 @@ public class BoltStatisticsUseCaseController {
   @GetMapping(value = "/reports/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", query.getUpdateRequestById(id));
+
+    final var statistics = query.getById(id);
+    model.addAttribute("fileName", statistics.getFileName());
 
     return "forms/updateBoltStatistics";
   }

@@ -15,25 +15,32 @@ public class BoltStatisticsRepositoryImpl implements BoltStatisticsRepository {
   @Override
   public List<BoltStatisticsJakartaEntity> findAll() {
 
-    return springDataRepository.findAll();
+    return springDataRepository.findAllWithoutData();
   }
 
   @Override
   public BoltStatisticsJakartaEntity save(final BoltStatisticsJakartaEntity entity) {
-    final var result = springDataRepository.saveNatively(entity);
-    entity.setId(1L);
+    springDataRepository.saveNatively(entity);
+    final var savedEntity =
+        springDataRepository.findByRegionAndYearAndMonth(
+            entity.getRegion(), entity.getYear(), entity.getMonth());
 
-    return entity;
+    return savedEntity;
   }
 
   @Override
   public BoltStatisticsJakartaEntity getReferenceById(final Long id) {
-
-    return springDataRepository.getReferenceById(id);
+    return springDataRepository.findOneWithoutData(id);
   }
 
   @Override
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);
+  }
+
+  @Override
+  public byte[] getDataById(final Long id) {
+
+    return springDataRepository.findDataById(id);
   }
 }

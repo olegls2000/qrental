@@ -17,11 +17,17 @@ public class BoltStatisticsLoadAdapter implements BoltStatisticsLoadPort {
 
   @Override
   public List<BoltStatistics> loadAll() {
+
     return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
-  public BoltStatistics loadById(Long id) {
+  public BoltStatistics loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
+  }
+
+  public byte[] loadFileById(final Long id) {
+
+    return repository.getDataById(id);
   }
 }

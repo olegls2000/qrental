@@ -11,4 +11,6 @@ public interface BoltStatisticsRepository {
   BoltStatisticsJakartaEntity getReferenceById(final Long id);
 
   void deleteById(final Long id);
+
+  byte[] getDataById(final Long id);
 }

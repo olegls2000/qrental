@@ -59,6 +59,11 @@
                 </select>
             </div>
         </div>
+        <div class="row">
+            <div class="mb-3">
+                <div> File name: <b th:text="${fileName}"></b></div>
+            </div>
+        </div>
         <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Update'
         )">

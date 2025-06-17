@@ -13,6 +13,7 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
+            <th style="width: 1% !important;">Download</th>
             <th>Region</th>
             <th>Year</th>
             <th>Month</th>
@@ -33,6 +34,12 @@
                 <a class="btn btn-sm btn-danger"
                    th:href="@{/bolt-statistics/reports/delete-form/{id}(id=${report.id})}">
                     <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/bolt-statistics/reports/{id}/files(id=${report.id})}">
+                    <span class="bi bi-filetype-csv"></span>
                 </a>
             </td>
             <td th:text="${report.region}"></td>
