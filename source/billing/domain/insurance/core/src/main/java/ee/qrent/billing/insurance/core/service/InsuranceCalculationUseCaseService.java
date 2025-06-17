@@ -91,6 +91,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         continue;
       }
 
+      // I think, this exception cannot be thrown
       final var activeCaseForProcessing =
           activeCases.stream()
               .findFirst()
