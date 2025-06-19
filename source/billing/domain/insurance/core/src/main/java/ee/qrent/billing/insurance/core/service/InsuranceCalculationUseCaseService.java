@@ -57,7 +57,6 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
 
       return null;
     }
-    request.setActionDate(qDateTime.getToday());
     final var domain = calculationAddRequestMapper.toDomain(request);
     final var qWeekId = request.getQWeekId();
     final var qWeek = qWeekQuery.getById(qWeekId);
