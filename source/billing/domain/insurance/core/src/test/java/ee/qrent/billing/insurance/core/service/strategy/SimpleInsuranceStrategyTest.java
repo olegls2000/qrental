@@ -8,7 +8,6 @@ import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.billing.insurance.domain.InsuranceCalculation;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
-import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.request.TransactionAddRequest;
 import ee.qrent.billing.transaction.api.in.response.type.TransactionTypeResponse;
@@ -23,11 +22,10 @@ import java.time.Month;
 import java.util.ArrayList;
 
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_DAMAGE_WRITE_OFF;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 public class SimpleInsuranceStrategyTest {
   private SimpleInsuranceStrategy instanceUnderTest;
@@ -72,7 +70,8 @@ public class SimpleInsuranceStrategyTest {
   }
 
   @Test
-  void testCannotApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsBeforeNewContractsDate() {
+  void
+      testFailedCanApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsBeforeNewContractsDate() {
     // given
     final var driverId = 3L;
     final var qWeekId = 10L;
@@ -95,7 +94,8 @@ public class SimpleInsuranceStrategyTest {
   }
 
   @Test
-  void testCanApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsEqualNewContractsDate() {
+  void
+      testSuccessfulCanApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsEqualNewContractsDate() {
     // given
     final var driverId = 3L;
     final var qWeekId = 10L;
@@ -118,7 +118,8 @@ public class SimpleInsuranceStrategyTest {
   }
 
   @Test
-  void testCanApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsAfterNewContractsDate() {
+  void
+      testSuccessfulCanApplyIfInsuranceCaseOccurrenceDateAndContractStartDateIsAfterNewContractsDate() {
     // given
     final var driverId = 3L;
     final var qWeekId = 10L;
@@ -141,7 +142,8 @@ public class SimpleInsuranceStrategyTest {
   }
 
   @Test
-  void testApply() {
+  void
+      testSuccessfulApplyCreateAndSaveDamageWriteOffTransactionAndDamageWriteOffAmountIsEqual600() {
     // given
     final var driverId = 3L;
     final var qWeekId = 10L;
@@ -149,28 +151,94 @@ public class SimpleInsuranceStrategyTest {
     final var driver = DriverResponse.builder().id(driverId).build();
     final var qWeek = QWeekResponse.builder().id(qWeekId).build();
     final var calculation =
-        InsuranceCalculation.builder()
-            .insuranceCaseBalances(
-                new ArrayList<>(singletonList(InsuranceCaseBalance.builder().build())))
-            .build();
-    final var insuranceCase = InsuranceCase.builder().damageAmount(BigDecimal.valueOf(600)).build();
+        InsuranceCalculation.builder().insuranceCaseBalances(new ArrayList<>()).build();
+    final var insuranceCase =
+        InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(600)).build();
 
     final var transactionTypeResponse =
-        TransactionTypeResponse.builder().id(10L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
-
-    final var transactionAddRequest = new TransactionAddRequest();
-    transactionAddRequest.setComment("Automatically created transaction for the damage compensation.");
-    transactionAddRequest.setAmount(BigDecimal.valueOf(600));
-    // ....
+        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
 
     when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
         .thenReturn(transactionTypeResponse);
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
-    //when(transactionAddUseCase.add()).thenReturn();
 
     // when
     instanceUnderTest.apply(driver, qWeek, calculation, insuranceCase);
 
     // then
+    final var transactionCaptor = forClass(TransactionAddRequest.class);
+    verify(transactionAddUseCase, times(2)).add(transactionCaptor.capture());
+    final var transactionAddRequest = transactionCaptor.getValue();
+
+    assertEquals(
+        "Automatically created transaction for the damage compensation.",
+        transactionAddRequest.getComment());
+    assertEquals(driverId, transactionAddRequest.getDriverId());
+    assertEquals(BigDecimal.valueOf(600), transactionAddRequest.getAmount());
+    assertEquals(15L, transactionAddRequest.getTransactionTypeId());
+    assertEquals(LocalDate.of(2025, Month.APRIL, 3), transactionAddRequest.getDate());
+  }
+
+  @Test
+  void testSuccessfulApplyAndDamageWriteOffAmountLessThan600() {
+    // given
+    final var driverId = 3L;
+    final var qWeekId = 10L;
+
+    final var driver = DriverResponse.builder().id(driverId).build();
+    final var qWeek = QWeekResponse.builder().id(qWeekId).build();
+    final var calculation =
+        InsuranceCalculation.builder().insuranceCaseBalances(new ArrayList<>()).build();
+    final var insuranceCase =
+        InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(599)).build();
+
+    final var transactionTypeResponse =
+        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
+
+    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
+        .thenReturn(transactionTypeResponse);
+    when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
+
+    // when
+    instanceUnderTest.apply(driver, qWeek, calculation, insuranceCase);
+
+    // then
+    final var transactionCaptor = forClass(TransactionAddRequest.class);
+    verify(transactionAddUseCase, times(2)).add(transactionCaptor.capture());
+    final var transactionAddRequest = transactionCaptor.getValue();
+
+    assertEquals(BigDecimal.valueOf(599), transactionAddRequest.getAmount());
+  }
+
+  @Test
+  void
+      testSuccessfulApplyCheckAndDeactivateNotNecessaryInsuranceCaseBalanceBecauseDamageRemainingAndSelfResponsibilityRemainingIsEqual0() {
+    // given
+    final var driverId = 3L;
+    final var qWeekId = 10L;
+
+    final var driver = DriverResponse.builder().id(driverId).build();
+    final var qWeek = QWeekResponse.builder().id(qWeekId).build();
+    final var calculation =
+        InsuranceCalculation.builder().insuranceCaseBalances(new ArrayList<>()).build();
+    final var insuranceCase =
+        InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(600)).build();
+
+    final var transactionTypeResponse =
+        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
+
+    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
+        .thenReturn(transactionTypeResponse);
+    when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
+
+    // when
+    instanceUnderTest.apply(driver, qWeek, calculation, insuranceCase);
+
+    // then
+    final var insuranceCaseCaptor = forClass(InsuranceCase.class);
+    verify(caseUpdatePort, times(1)).update(insuranceCaseCaptor.capture());
+    final var insuranceCaseUpdatePort = insuranceCaseCaptor.getValue();
+
+    assertFalse(insuranceCaseUpdatePort.getActive());
   }
 }
