@@ -89,14 +89,15 @@ public class DriverUseCaseService
   private boolean isContractUpdateRequired(
       final DriverUpdateRequest request, final Driver driverFromDb) {
     return driverFromDb.getQFirmId() != request.getQFirmId()
-        || (request.getCompanyName().equals(driverFromDb.getCompanyName()))
-        || request.getCompanyCeoFirstName().equals(driverFromDb.getCompanyCeoFirstName())
-        || request.getCompanyCeoLastName().equals(driverFromDb.getCompanyCeoLastName())
-        || request.getCompanyCeoTaxNumber() != driverFromDb.getCompanyCeoTaxNumber()
-        || request.getRegNumber().equals(driverFromDb.getCompanyRegistrationNumber())
-        || request.getCompanyAddress().equals(driverFromDb.getCompanyAddress())
-        || request.getFirstName().equals(driverFromDb.getFirstName())
-        || request.getTaxNumber().equals(driverFromDb.getTaxNumber())
+       //     TODO
+     //   || (!request.getCompanyName().equals(driverFromDb.getCompanyName()))
+     //   || !request.getCompanyCeoFirstName().equals(driverFromDb.getCompanyCeoFirstName())
+      //  || !request.getCompanyCeoLastName().equals(driverFromDb.getCompanyCeoLastName())
+     //   || !request.getCompanyCeoTaxNumber().equals(driverFromDb.getCompanyCeoTaxNumber())
+     //   || !request.getRegNumber().equals(driverFromDb.getCompanyRegistrationNumber())
+     //   || !request.getCompanyAddress().equals(driverFromDb.getCompanyAddress())
+     //   || !request.getFirstName().equals(driverFromDb.getFirstName())
+     //   || !request.getTaxNumber().equals(driverFromDb.getTaxNumber())
     //        || request.getDriverLicenseNumber() != driverFromDb.getDriverLicenseNumber()
     //        || request.getEmail() != driverFromDb.getEmail()
     //        || request.getPhone() != driverFromDb.getPhone()
