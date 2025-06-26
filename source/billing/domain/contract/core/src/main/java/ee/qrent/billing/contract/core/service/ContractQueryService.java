@@ -75,8 +75,8 @@ public class ContractQueryService implements GetContractQuery {
   }
 
   @Override
-  public ContractResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long qWekId) {
-    final var qWeek = qWeekQuery.getById(qWekId);
+  public ContractResponse getActiveByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
+    final var qWeek = qWeekQuery.getById(qWeekId);
     final var activeContractOnRequestedWeek =
         loadPort.loadActiveByDateAndDriverId(qWeek.getStart(), driverId);
     endDateCalculator.setEndDate(activeContractOnRequestedWeek);
