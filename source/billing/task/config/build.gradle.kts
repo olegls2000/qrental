@@ -6,6 +6,10 @@ dependencies {
     implementation(project(":source:billing:domain:insurance:api:in"))
     implementation(project(":source:billing:domain:constant:api:in"))
     implementation(project(":source:billing:domain:report:api:in"))
+    implementation(project(":source:billing:task:api:in"))
+    implementation(project(":source:billing:task:api:out"))
+    implementation(project(":source:billing:task:persistence:adapter"))
+    implementation(project(":source:billing:task:persistence:repository"))
     implementation(project(":source:billing:task:core"))
     implementation(project(":source:queue:api:in"))
 

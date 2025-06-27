@@ -4,7 +4,6 @@ dependencies {
 
         compileOnly(libs.q.lombok)
         annotationProcessor(libs.q.lombok)
-        implementation(libs.q.jakarta.transaction)
 
         testImplementation("org.junit.jupiter:junit-jupiter-engine")
         testImplementation("org.mockito:mockito-core")

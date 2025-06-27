@@ -15,6 +15,7 @@ dependencies {
 
     implementation(project(":source:queue:api:in"))
 
+    implementation(project(":source:billing:task:api:in"))
     implementation(project(":source:billing:domain:car:api:in"))
     implementation(project(":source:billing:domain:driver:api:in"))
     implementation(project(":source:billing:domain:user:api:in"))
@@ -28,7 +29,6 @@ dependencies {
     implementation(project(":source:billing:domain:bonus:api:in"))
     implementation(project(":source:billing:domain:insurance:api:in"))
     implementation(project(":source:billing:domain:bolt:api:in"))
-
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")

@@ -25,6 +25,7 @@ public class ControllerUtils {
   public static final String BONUS_PROGRAM_PATH = "/bonus-programs";
   public static final String INSURANCE_ROOT_PATH = "/insurance";
   public static final String INVOICE_ROOT_PATH = "/invoices";
+  public static final String TASK_ROOT_PATH = "/tasks";
   public static final String REPORT_ROOT_PATH = "/reports";
   public static final String TRANSACTION_ROOT_PATH = "/transactions";
   public static final String RENTS_ROOT_PATH = "/rents";

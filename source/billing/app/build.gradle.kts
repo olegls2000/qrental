@@ -34,7 +34,8 @@ dependencies {
     implementation(project(":source:billing:domain:insurance:persistence:flyway"))
     implementation(project(":source:billing:domain:user:config"))
     implementation(project(":source:billing:domain:user:persistence:flyway"))
-    implementation(project(":source:billing:task"))
+    implementation(project(":source:billing:task:config"))
+    implementation(project(":source:billing:task:persistence:flyway"))
     implementation(project(":source:billing:security:config"))
 
     implementation("org.springframework.boot:spring-boot-starter")

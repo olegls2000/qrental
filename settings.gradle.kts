@@ -38,8 +38,17 @@ include("source:notification:task:config")
 
 include("source:billing:app")
 include("source:billing:ui-thymeleaf")
+
 include("source:billing:task:config")
+include("source:billing:task:api:in")
+include("source:billing:task:api:out")
 include("source:billing:task:core")
+include("source:billing:task:domain")
+include("source:billing:task:persistence:adapter")
+include("source:billing:task:persistence:entity")
+include("source:billing:task:persistence:repository")
+include("source:billing:task:persistence:flyway")
+
 include("source:billing:security:api:in")
 include("source:billing:security:core")
 include("source:billing:security:config")

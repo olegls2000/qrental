@@ -1,13 +1,13 @@
 package ee.qrent.notification.task.core;
 
-import ee.qrent.common.in.usecase.RunTaskUseCase;
+import ee.qrent.common.in.usecase.QTaskRunner;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @AllArgsConstructor
 public class NotificationTaskScheduler {
 
-  private final RunTaskUseCase runTaskUseCase;
+  private final QTaskRunner runTaskUseCase;
   private final EmailNotificationTask task;
 
   // seconds minutes hours day-of-month month day-of-week

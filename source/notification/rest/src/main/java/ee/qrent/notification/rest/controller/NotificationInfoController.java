@@ -1,6 +1,6 @@
 package ee.qrent.notification.rest.controller;
 
-import ee.qrent.common.in.usecase.RunTaskUseCase;
+import ee.qrent.common.in.usecase.QTaskRunner;
 import ee.qrent.notification.task.core.EmailNotificationTask;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class NotificationInfoController {
 
-  private final RunTaskUseCase runTaskUseCase;
+  private final QTaskRunner runTaskUseCase;
   private final EmailNotificationTask task;
 
   @GetMapping("/process")
