@@ -5,10 +5,14 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.usecase.QWeekAddUseCase;
 import ee.qrent.billing.insurance.api.in.usecase.InsuranceCalculationAddUseCase;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportCalculationAddUseCase;
+import ee.qrent.billing.task.api.in.query.GetTaskRunResultQuery;
 import ee.qrent.billing.task.api.in.usecase.TaskRunUseCase;
 import ee.qrent.billing.task.api.out.TaskRunResultAddPort;
+import ee.qrent.billing.task.api.out.TaskRunResultLoadPort;
 import ee.qrent.billing.task.core.*;
+import ee.qrent.billing.task.core.mapper.TaskRunResultResponseMapper;
 import ee.qrent.billing.task.core.service.QTaskRunnerImpl;
+import ee.qrent.billing.task.core.service.TaskRunQueryService;
 import ee.qrent.billing.task.core.service.TaskRunService;
 import ee.qrent.billing.task.core.task.*;
 import ee.qrent.billing.transaction.api.in.usecase.rent.RentCalculationAddUseCase;
@@ -65,6 +69,13 @@ public class TaskServiceConfig {
         qWeekCreationTask,
         rentCalculationTask,
         mondayFinancialReportTask);
+  }
+
+  @Bean
+  public GetTaskRunResultQuery getTaskRunQueryService(
+      final TaskRunResultLoadPort loadPort, final TaskRunResultResponseMapper mapper) {
+
+    return new TaskRunQueryService(loadPort, mapper);
   }
 
   @Bean

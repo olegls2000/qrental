@@ -1,0 +1,22 @@
+<div th:fragment="calculationsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/settingsTabFragment :: settingsTab('qTasksRunResults')"></ul>
+    <h2 class="py-3">Run Tasks Results</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Task name</th>
+            <th>Status</th>
+            <th>Started at</th>
+            <th>Duration</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(results)}">
+            <td colspan="5">No runs for that task yet</td>
+        </tr>
+        <tr th:each="result : ${results}">
+            <td th:text="${result.taskName}">???</td>
+            <td th:text="${result.status}">???</td>
+            <td th:text="${result.startedAt}">???</td>
+            <td th:text="${result.durationInMillis}">???</td>
+        </tr>
+    </table>
+</div>

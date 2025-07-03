@@ -8,8 +8,10 @@ import ee.qrent.common.in.mapper.ResponseMapper;
 
 public class TaskRunResultResponseMapper
     implements ResponseMapper<TaskRunResultResponse, TaskRunResult> {
+
   @Override
   public TaskRunResultResponse toResponse(final TaskRunResult domain) {
+
     return TaskRunResultResponse.builder()
         .taskName(domain.getTaskName())
         .status(domain.getStatus())
