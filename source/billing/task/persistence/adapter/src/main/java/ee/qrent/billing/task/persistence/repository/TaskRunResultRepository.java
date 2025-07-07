@@ -4,7 +4,11 @@ import ee.qrent.billing.task.persistence.entity.jakarta.TaskRunResultJakartaEnti
 import java.util.List;
 
 public interface TaskRunResultRepository {
-  List<TaskRunResultJakartaEntity> findAllByTaskTame(final String taskName);
+  List<TaskRunResultJakartaEntity> findAll();
+
+  List<TaskRunResultJakartaEntity> findAllByTaskName(final String taskName);
+
+  TaskRunResultJakartaEntity getReferenceById(final Long id);
 
   TaskRunResultJakartaEntity save(final TaskRunResultJakartaEntity entity);
 }
