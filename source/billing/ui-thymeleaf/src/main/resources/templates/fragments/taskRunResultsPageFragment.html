@@ -15,7 +15,7 @@
             <th>Duration</th>
         </tr>
         <tr th:if="${#lists.isEmpty(results)}">
-            <td colspan="5">No runs for that task yet</td>
+            <td colspan="5">Please select Task Name, or no runs for that task yet</td>
         </tr>
         <tr th:each="result : ${results}">
             <td th:text="${result.taskName}">???</td>

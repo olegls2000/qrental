@@ -1,4 +1,4 @@
-package ee.qrent.billing.task.api.in.query.filter;
+package ee.qrent.billing.ui.controller.task;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @ToString
 public class ResultFilter {
-    private Tasks state = Tasks.ALL;
+  private String taskName;
 }

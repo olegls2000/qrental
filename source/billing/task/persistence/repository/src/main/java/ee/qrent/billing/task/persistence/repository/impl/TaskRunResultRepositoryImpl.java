@@ -35,4 +35,10 @@ public class TaskRunResultRepositoryImpl implements TaskRunResultRepository {
 
     return springDataRepository.save(entity);
   }
+
+  @Override
+  public List<String> findAllTaskNames() {
+
+    return springDataRepository.findDistinctTaskNames();
+  }
 }

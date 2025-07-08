@@ -11,4 +11,6 @@ public interface TaskRunResultRepository {
   TaskRunResultJakartaEntity getReferenceById(final Long id);
 
   TaskRunResultJakartaEntity save(final TaskRunResultJakartaEntity entity);
+
+  List<String> findAllTaskNames();
 }

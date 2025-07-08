@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TaskRunResultLoadPort extends LoadPort<TaskRunResult> {
   List<TaskRunResult> loadAllByTaskName(final String taskName);
+
+  List<String> loadAllTaskNames();
 }

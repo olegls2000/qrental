@@ -34,4 +34,10 @@ public class TaskRunResultLoadAdapter implements TaskRunResultLoadPort {
         .map(mapper::mapToDomain)
         .collect(toList());
   }
+
+  @Override
+  public List<String> loadAllTaskNames() {
+
+    return repository.findAllTaskNames();
+  }
 }
