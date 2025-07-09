@@ -37,7 +37,7 @@ public class ObligationQueryService implements GetObligationQuery {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
     final var preCurrentWeek = qWeekQuery.getOneBeforeById(currentQWeek.getId());
 
-    return getByDriverIdAndQWeekId(preCurrentWeek.getId(), driverId);
+    return getByDriverIdAndQWeekId(driverId, preCurrentWeek.getId());
   }
 
   @Override
