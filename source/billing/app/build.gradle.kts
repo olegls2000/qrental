@@ -41,27 +41,17 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.postgresql:postgresql")
     testImplementation(libs.q.jakarta.persistence)
 
-    testImplementation("org.flywaydb:flyway-core")
-    testImplementation("org.springframework.boot:spring-boot-starter-jdbc")
-
-
     testImplementation(project(":source:common:api"))
-    testImplementation(project(":source:billing:domain:driver:api:in"))
-    testImplementation(project(":source:billing:domain:driver:api:out"))
-    testImplementation(project(":source:billing:domain:driver:config"))
-    testImplementation(project(":source:billing:domain:driver:persistence:adapter"))
-    testImplementation(project(":source:billing:domain:driver:persistence:entity"))
-    testImplementation(project(":source:billing:domain:driver:persistence:flyway"))
-    testImplementation(project(":source:billing:domain:driver:persistence:repository"))
-
-
+    testImplementation(project(":source:billing:domain:car:api:in"))
+}
+ext {
+    set("testcontainers.version", "1.19.8")
 }
 
 var dateTimeAppender = now().format(ofPattern("yyyy-MM-dd-HH-mm"));
@@ -76,4 +66,10 @@ tasks.withType<Jar>() {
 
 tasks.test {
     useJUnitPlatform()
+
+    maxHeapSize = "2G"
+
+    testLogging {
+        events("passed")
+    }
 }
