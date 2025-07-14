@@ -46,6 +46,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.postgresql:postgresql")
     testImplementation(libs.q.jakarta.persistence)
+    testImplementation(libs.q.jakarta.transaction)
 
     testImplementation(project(":source:common:api"))
     testImplementation(project(":source:billing:domain:car:api:in"))
