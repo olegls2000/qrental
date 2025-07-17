@@ -50,6 +50,8 @@ dependencies {
 
     testImplementation(project(":source:common:api"))
     testImplementation(project(":source:billing:domain:car:api:in"))
+    testImplementation(project(":source:billing:domain:driver:api:in"))
+    testImplementation(project(":source:billing:domain:firm:api:in"))
 }
 ext {
     set("testcontainers.version", "1.19.8")

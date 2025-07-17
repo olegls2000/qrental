@@ -57,8 +57,6 @@ public class Car {
     return getRagStatusByDuration(daysBetween);
   }
 
-
-
   public RagStatus getGasInspectionRagStatus() {
     if (gasInspectionEnd == null) {
       return RagStatus.GREEN;

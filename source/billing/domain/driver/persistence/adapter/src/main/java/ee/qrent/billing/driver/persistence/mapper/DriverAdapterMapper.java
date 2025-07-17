@@ -61,8 +61,8 @@ public class DriverAdapterMapper {
         .comment(entity.getComment())
         .createdDate(entity.getCreatedDate())
         .qFirmId(entity.getQFirmId())
-        .driverIdentifier(entity.getBoltDriverIdentifier())
-        .individualIdentifier(entity.getBoltId())
+        .boltDriverIdentifier(entity.getBoltDriverIdentifier())
+        .boltIndividualIdentifier(entity.getBoltId())
         .build();
   }
 
@@ -102,8 +102,8 @@ public class DriverAdapterMapper {
         .qFirmId(domain.getQFirmId())
         .comment(domain.getComment())
         .createdDate(domain.getCreatedDate())
-        .boltDriverIdentifier(domain.getDriverIdentifier())
-        .boltId(domain.getIndividualIdentifier())
+        .boltDriverIdentifier(domain.getBoltDriverIdentifier())
+        .boltId(domain.getBoltIndividualIdentifier())
         .build();
   }
 

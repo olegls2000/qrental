@@ -12,8 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DriverAddRequest extends AbstractAddRequest {
   private Boolean active;
-  private Long callSignId;
-  private Long recommendedByDriverId;
   private String firstName;
   private String lastName;
   private Long taxNumber;
@@ -43,8 +41,11 @@ public class DriverAddRequest extends AbstractAddRequest {
   private Boolean bySms;
   private Boolean byPhone;
   private BigDecimal deposit;
-  private Long qFirmId;
-  private String driverIdentifier;
-  private String individualIdentifier;
+  private String boltDriverIdentifier;
+  private String boltIndividualIdentifier;
   private String comment;
+
+  private Long callSignId;
+  private Long qFirmId;
+  private Long recommendedByDriverId;
 }
