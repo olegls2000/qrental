@@ -8,6 +8,8 @@ import ee.qrent.billing.driver.api.in.usecase.DriverAddUseCase;
 import ee.qrent.billing.driver.api.in.usecase.DriverDeleteUseCase;
 import ee.qrent.billing.e2e.helper.CallSignHelper;
 import ee.qrent.billing.e2e.helper.DriverHelper;
+import ee.qrent.billing.e2e.helper.FirmHelper;
+import ee.qrent.billing.firm.api.in.usecase.FirmAddUseCase;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class DriverIntegrationTest extends AbstractIntegrationTest {
   @Autowired private DriverAddUseCase driverAddUseCase;
   @Autowired private CallSignAddUseCase callSignAddUseCase;
+  @Autowired private FirmAddUseCase firmAddUseCase;
   @Autowired private DriverDeleteUseCase driverDeleteUseCase;
   @Autowired private GetDriverQuery driverQuery;
   @Autowired private GetCallSignLinkQuery callSignLinkQuery;
@@ -25,18 +28,31 @@ public class DriverIntegrationTest extends AbstractIntegrationTest {
   @Test
   void shouldAddDriver() {
     // Given
-    final var callSignAddRequest = CallSignHelper.getValidAddRequest();
-    final var savedCallSignId = callSignAddUseCase.add(callSignAddRequest);
+    final var firmAddRequest = FirmHelper.getValidAddRequest();
 
-    final var validAddRequest = DriverHelper.getValidAddRequest(null, savedCallSignId, null);
+    final var callSignAddRequestFirst = CallSignHelper.getValidAddRequest(1);
+    final var savedCallSignFirstId = callSignAddUseCase.add(callSignAddRequestFirst);
+    final var savedFirmId = firmAddUseCase.add(firmAddRequest);
+    final var validAddRequestForDriverRecommendedBy =
+        DriverHelper.getValidAddRequest(savedFirmId, savedCallSignFirstId, null);
+    final var savedDriverRecommendedById =
+        driverAddUseCase.add(validAddRequestForDriverRecommendedBy);
+
+    final var callSignAddRequestSecond = CallSignHelper.getValidAddRequest(2);
+    final var savedCallSignSecondId = callSignAddUseCase.add(callSignAddRequestSecond);
+    final var validAddRequestForDriver =
+        DriverHelper.getValidAddRequest(
+            savedFirmId, savedCallSignSecondId, savedDriverRecommendedById);
 
     // When
-    final var savedId = driverAddUseCase.add(validAddRequest);
+    final var savedId = driverAddUseCase.add(validAddRequestForDriver);
 
     // Then
-    final var saved = driverQuery.getById(savedId);
+    final var savedDriver = driverQuery.getById(savedId);
+    final var createdCallSignLink = callSignLinkQuery.getActiveCallSignLinkByDriverId(savedId);
 
-    assertNotNull(saved);
+    assertNotNull(savedDriver);
+    assertNotNull(createdCallSignLink);
   }
 
   @Test
