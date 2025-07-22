@@ -101,6 +101,9 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
   private void addWeeklyInsurancePaymentTransactionIfNecessary(
       final Long driverId, final Long qWeekId) {
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    if (contract == null) {
+      return;
+    }
     final var contractStartDate = contract.getDateStart();
 
     final var isContractNew =
