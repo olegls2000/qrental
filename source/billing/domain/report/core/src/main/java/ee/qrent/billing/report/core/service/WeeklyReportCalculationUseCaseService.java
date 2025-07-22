@@ -1,7 +1,10 @@
 package ee.qrent.billing.report.core.service;
 
+import static ee.qrent.queue.api.in.EntryType.INVOICE_EMAIL;
+import static ee.qrent.queue.api.in.EntryType.MONDAY_FINANCIAL_EMAIL;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
@@ -14,7 +17,9 @@ import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
+import ee.qrent.billing.report.api.in.request.WeeklyReportType;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportCalculationAddUseCase;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
 import ee.qrent.billing.report.core.mapper.WeeklyReportCalculationAddRequestMapper;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
@@ -27,10 +32,13 @@ import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 
 import ee.qrent.common.in.time.QDateTime;
+import ee.qrent.queue.api.in.QueueEntryPushRequest;
+import ee.qrent.queue.api.in.QueueEntryPushUseCase;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Transactional(SUPPORTS)
@@ -52,6 +60,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetTransactionQuery transactionQuery;
   private final GetContractQuery contractQuery;
   private final GetDepositQuery depositQuery;
+  private final WeeklyReportPdfUseCase weeklyReportPdfUseCase;
+  private final QueueEntryPushUseCase notificationQueuePushUseCase;
   private final QDateTime qDateTime;
 
   @Transactional
@@ -70,29 +80,48 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     driverQuery.getAll().stream()
         .forEach(
             driver -> {
-              final var weeklyReport = getWeeklyReport(driver, requestedQWeek);
+              final var weeklyReport = getWeeklyReport(driver, requestedQWeek, request.getType());
+              sendEmailNotification(weeklyReport, driver.getEmail());
               final var reportTransactions =
                   getWeeklyReportTransactions(weeklyReport, driver.getId(), requestedQWeekId);
               calculation.getReportTransactionLinks().add(reportTransactions);
             });
 
     final var addedDomain = addPort.add(calculation);
-    sendEmailNotification(addedDomain);
 
     return addedDomain.getId();
   }
 
   private WeeklyReport getWeeklyReport(
-      final DriverResponse driver, final QWeekResponse requestedQWeek) {
+      final DriverResponse driver,
+      final QWeekResponse requestedQWeek,
+      final WeeklyReportType reportType) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
     final var balanceOnSunday = balanceQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-    final var today = qDateTime.getToday();
-    final var balanceAmountAtCalculationMoment =
-        balanceQuery.getRawByDriverAndDate(driverId, today);
+
+    BigDecimal balanceAmountOnDate = null;
+    switch (reportType) {
+      case MONDAY_REPORT -> {
+        final var monday = requestedQWeek.getStart();
+        balanceAmountOnDate = balanceQuery.getRawByDriverAndDate(driverId, monday).getAmount();
+      }
+      case TUESDAY_REPORT -> {
+        final var tuesday = requestedQWeek.getStart().plusDays(1l);
+        balanceAmountOnDate = balanceQuery.getRawByDriverAndDate(driverId, tuesday).getAmount();
+      }
+      case WEDNESDAY_REPORT -> {
+        final var wednesday = requestedQWeek.getStart().plusDays(2l);
+        balanceAmountOnDate = balanceQuery.getRawByDriverAndDate(driverId, wednesday).getAmount();
+      }
+      case FRIDAY_REPORT -> {
+        final var friday = requestedQWeek.getStart().plusDays(4l);
+        balanceAmountOnDate = balanceQuery.getRawByDriverAndDate(driverId, friday).getAmount();
+      }
+    }
 
     return WeeklyReport.builder()
         .qWeekId(qWeekId)
@@ -107,7 +136,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .depositPaid(depositPaid)
         .obligationStatus(getWeeklyReportObligationStatus(driver, requestedQWeek))
         .balanceAmountSunday(balanceOnSunday.getAmount())
-        .balanceAmountAtCalculationMoment(balanceAmountAtCalculationMoment.getAmount())
+        .balanceAmountAtCalculationMoment(balanceAmountOnDate)
         .comment("Automatically generated weekly report")
         .build();
   }
@@ -186,7 +215,16 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .build();
   }
 
-  private void sendEmailNotification(WeeklyReportCalculation calculation) {
-    // TODO add mail logic here
+  private void sendEmailNotification(final WeeklyReport report, final String recepient) {
+    final var properties = new HashMap<String, Object>();
+    final var notificationQueuePushRequest =
+        QueueEntryPushRequest.builder()
+            .occurredAt(qDateTime.getNow())
+            .type(MONDAY_FINANCIAL_EMAIL)
+            .payloadRecipients(singletonList(recepient))
+            .payloadAttachment(weeklyReportPdfUseCase.getPdfInputStreamById(report.getId()))
+            .payloadProperties(properties)
+            .build();
+    notificationQueuePushUseCase.push(notificationQueuePushRequest);
   }
 }

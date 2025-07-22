@@ -17,9 +17,9 @@ public class WeeklyReportPdfUseCaseImpl implements WeeklyReportPdfUseCase {
 
   @Override
   public InputStream getPdfInputStreamById(final Long id) {
-    final var invoice = loadPort.loadById(id);
-    final var invoicePdfModel = mapper.getPdfModel(invoice);
+    final var report = loadPort.loadById(id);
+    final var reportPdfModel = mapper.getPdfModel(report);
 
-    return converter.getPdfInputStream(invoicePdfModel);
+    return converter.getPdfInputStream(reportPdfModel);
   }
 }

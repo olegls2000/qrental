@@ -6,6 +6,7 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
+import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
@@ -22,6 +23,7 @@ import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestV
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.common.in.time.QDateTime;
+import ee.qrent.queue.api.in.QueueEntryPushUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -61,6 +63,8 @@ public class WeeklyReportServiceConfig {
       final GetTransactionQuery getTransactionQuery,
       final GetContractQuery contractQuery,
       final GetDepositQuery depositQuery,
+      final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
+      final QueueEntryPushUseCase notificationQueuePushUseCase,
       final QDateTime qDateTime) {
 
     return new WeeklyReportCalculationUseCaseService(
@@ -77,6 +81,8 @@ public class WeeklyReportServiceConfig {
         getTransactionQuery,
         contractQuery,
         depositQuery,
+        weeklyReportPdfUseCase,
+        notificationQueuePushUseCase,
         qDateTime);
   }
 
@@ -88,9 +94,13 @@ public class WeeklyReportServiceConfig {
 
   @Bean
   WeeklyReportToPdfModelMapper getWeeklyReportToPdfModelMapper(
-      final WeeklyReportLoadPort loadPort, final GetQWeekQuery qWeekQuery) {
+      final WeeklyReportLoadPort weeklyReportLoadPort,
+      final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery driverQuery,
+      final GetCallSignQuery callSignQuery) {
 
-    return new WeeklyReportToPdfModelMapper(loadPort, qWeekQuery);
+    return new WeeklyReportToPdfModelMapper(
+        weeklyReportLoadPort, qWeekQuery, driverQuery, callSignQuery);
   }
 
   @Bean
