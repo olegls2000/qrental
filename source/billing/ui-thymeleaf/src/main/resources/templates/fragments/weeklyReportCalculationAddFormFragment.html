@@ -23,7 +23,7 @@
                         th:field="*{qWeekId}">
                     <option th:each="week: ${weeks}"
                             th:value="${week.id}"
-                            th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>
+                            th:text="|Year: ${week.year}, number: ${week.number}, ${week.description}|"></option>
                 </select>
             </div>
         </div>

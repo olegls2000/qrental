@@ -123,10 +123,12 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
         balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, previousWeek.getId(), true);
 
     if (previousWeekBalance == null) {
-      throw new RuntimeException(
+
+      return zeroBalance;
+     /* throw new RuntimeException(
           format(
-              "Derived Balance for previous qWeek %d and driver with id %d, must exist",
-              previousWeek.getNumber(), driverId));
+              "Derived Balance for previous qWeek.number %d and driver.id %d, must exist",
+              previousWeek.getNumber(), driverId));*/
     }
 
     return previousWeekBalance;

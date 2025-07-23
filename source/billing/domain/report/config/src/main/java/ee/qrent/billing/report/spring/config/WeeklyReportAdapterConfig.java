@@ -33,13 +33,15 @@ public class WeeklyReportAdapterConfig {
       final WeeklyReportCalculationResultRepository weeklyReportCalculationResultRepository,
       final WeeklyReportRepository weeklyReportRepository,
       final WeeklyReportTransactionRepository weeklyReportTransactionRepository,
-      final WeeklyReportAdapterMapper weeklyReportMapper) {
+      final WeeklyReportAdapterMapper weeklyReportMapper,
+      final WeeklyReportCalculationAdapterMapper weeklyReportCalculationMapper) {
 
     return new WeeklyReportCalculationPersistenceAdapter(
         calculationRepository,
         weeklyReportCalculationResultRepository,
         weeklyReportRepository,
         weeklyReportTransactionRepository,
-        weeklyReportMapper);
+        weeklyReportMapper,
+        weeklyReportCalculationMapper);
   }
 }

@@ -12,6 +12,7 @@ import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportSendByEmailUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
@@ -63,9 +64,7 @@ public class WeeklyReportServiceConfig {
       final GetTransactionQuery getTransactionQuery,
       final GetContractQuery contractQuery,
       final GetDepositQuery depositQuery,
-      final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
-      final QueueEntryPushUseCase notificationQueuePushUseCase,
-      final QDateTime qDateTime) {
+      final WeeklyReportSendByEmailUseCase sendByEmailUseCase) {
 
     return new WeeklyReportCalculationUseCaseService(
         addRequestValidator,
@@ -81,9 +80,7 @@ public class WeeklyReportServiceConfig {
         getTransactionQuery,
         contractQuery,
         depositQuery,
-        weeklyReportPdfUseCase,
-        notificationQueuePushUseCase,
-        qDateTime);
+        sendByEmailUseCase);
   }
 
   @Bean
@@ -101,6 +98,22 @@ public class WeeklyReportServiceConfig {
 
     return new WeeklyReportToPdfModelMapper(
         weeklyReportLoadPort, qWeekQuery, driverQuery, callSignQuery);
+  }
+
+  @Bean
+  WeeklyReportSendByEmailUseCase getWeeklyReportSendByEmailUseCase(
+      final QueueEntryPushUseCase notificationQueuePushUseCase,
+      final WeeklyReportLoadPort weeklyReportLoadPort,
+      final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
+      final GetDriverQuery driverQuery,
+      final QDateTime qDateTime) {
+
+    return new WeeklyReportSendByEmailService(
+        notificationQueuePushUseCase,
+        weeklyReportLoadPort,
+        weeklyReportPdfUseCase,
+        driverQuery,
+        qDateTime);
   }
 
   @Bean

@@ -12,6 +12,7 @@
                     <span class="bi bi-calculator"></span>
                 </a>
             </th>
+            <th>Requested Year</th>
             <th>Requested Week</th>
             <th>Action Date</th>
             <th>Reports Count</th>
@@ -24,9 +25,10 @@
             <td><a class="btn btn-sm btn-warning"
                    th:href="@{/reports/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span></a></td>
-            <td th:text="${calculation.requestedWeek}">???</td>
+            <td th:text="${calculation.year}">???</td>
+            <td th:text="${calculation.weekNumber}">???</td>
             <td th:text="${calculation.actionDate}">???</td>
-            <td th:text="${calculation.weeklyReportCount}">???</td>
+            <td th:text="${calculation.reportsCount}">???</td>
             <td th:text="${calculation.comment}">???</td>
         </tr>
     </table>

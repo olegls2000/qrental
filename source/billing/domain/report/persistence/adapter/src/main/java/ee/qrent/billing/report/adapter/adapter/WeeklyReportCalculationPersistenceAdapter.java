@@ -1,6 +1,7 @@
 package ee.qrent.billing.report.adapter.adapter;
 
 import ee.qrent.billing.report.adapter.mapper.WeeklyReportAdapterMapper;
+import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapper;
 import ee.qrent.billing.report.adapter.repository.WeeklyReportCalculationRepository;
 
 import ee.qrent.billing.report.adapter.repository.WeeklyReportCalculationResultRepository;
@@ -22,6 +23,7 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
   private final WeeklyReportRepository weeklyReportRepository;
   private final WeeklyReportTransactionRepository weeklyReportTransactionRepository;
   private final WeeklyReportAdapterMapper weeklyReportMapper;
+  private final WeeklyReportCalculationAdapterMapper weeklyReportCalculationMapper;
 
   @Override
   public WeeklyReportCalculation add(final WeeklyReportCalculation domain) {
@@ -59,6 +61,7 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
         weeklyReportTransactionRepository.save(weeklyReportTransactionEntity);
       }
     }
-    return null;
+
+    return weeklyReportCalculationMapper.mapToDomain(weeklyReportCalculationEntitySaved);
   }
 }

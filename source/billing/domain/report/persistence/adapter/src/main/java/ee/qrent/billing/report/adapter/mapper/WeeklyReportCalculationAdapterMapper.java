@@ -1,9 +1,9 @@
 package ee.qrent.billing.report.adapter.mapper;
 
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
-import ee.qrent.billing.report.domain.WeeklyReportTransactionsLink;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculationJakartaEntity;
-import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculationResultJakartaEntity;
+
+import java.util.Collections;
 
 public class WeeklyReportCalculationAdapterMapper {
 
@@ -15,18 +15,8 @@ public class WeeklyReportCalculationAdapterMapper {
         .id(entity.getId())
         .qWeekId(entity.getQWeekId())
         .actionDate(entity.getActionDate())
-        .reportTransactionLinks(entity.getResults().stream().map(this::mapToDomain).toList())
+        .reportTransactionLinks(Collections.emptyList())
         .comment(entity.getComment())
         .build();
-  }
-
-  private WeeklyReportTransactionsLink mapToDomain(
-      final WeeklyReportCalculationResultJakartaEntity resultEntity) {
-
-    return WeeklyReportTransactionsLink.builder()
-
-
-
-            .build();
   }
 }

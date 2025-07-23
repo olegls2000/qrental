@@ -1,14 +1,11 @@
 package ee.qrent.billing.ui.controller.report;
 
-import static ee.qrent.billing.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
 import static ee.qrent.billing.ui.controller.ControllerUtils.REPORT_ROOT_PATH;
 
-import ee.qrent.billing.invoice.api.in.request.InvoiceSendByEmailRequest;
-import ee.qrent.billing.invoice.api.in.usecase.InvoicePdfUseCase;
-import ee.qrent.billing.invoice.api.in.usecase.InvoiceSendByEmailUseCase;
-import java.io.IOException;
-
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
+import ee.qrent.billing.report.api.in.request.WeeklyReportSendByEmailRequest;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
+import ee.qrent.billing.report.api.in.usecase.WeeklyReportSendByEmailUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -23,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class WeeklyReportQueryController {
 
   private final GetWeeklyReportQuery weeklyReportQuery;
-  private final InvoiceSendByEmailUseCase invoiceSendByEmailUseCase;
-  private final InvoicePdfUseCase invoicePdfUseCase;
+  private final WeeklyReportSendByEmailUseCase weeklyReportSendByEmailUseCase;
+  private final WeeklyReportPdfUseCase reportPdfUseCase;
 
   @GetMapping("/weekly-reports")
   public String getTableView(final Model model) {
@@ -39,22 +36,22 @@ public class WeeklyReportQueryController {
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_PDF)
-        .body(new InputStreamResource(invoicePdfUseCase.getPdfInputStreamById(id)));
+        .body(new InputStreamResource(reportPdfUseCase.getPdfInputStreamById(id)));
   }
 
   @GetMapping(value = "/email/send-form/{id}")
   public String addForm(@PathVariable("id") long id, final Model model) {
-    final var emailSendRequest = new InvoiceSendByEmailRequest();
+    final var emailSendRequest = new WeeklyReportSendByEmailRequest();
     emailSendRequest.setId(id);
     model.addAttribute("emailSendRequest", emailSendRequest);
 
-    return "forms/emailSendInvoice";
+    return "forms/emailSendWeeklyReport";
   }
 
   @PostMapping("/email/send")
-  public String sendByEmail(final InvoiceSendByEmailRequest emailSendRequest) throws IOException {
-    invoiceSendByEmailUseCase.sendByEmail(emailSendRequest);
+  public String sendByEmail(final WeeklyReportSendByEmailRequest emailSendRequest) {
+    weeklyReportSendByEmailUseCase.sendByEmail(emailSendRequest);
 
-    return "redirect:" + INVOICE_ROOT_PATH;
+    return "redirect:" + REPORT_ROOT_PATH;
   }
 }

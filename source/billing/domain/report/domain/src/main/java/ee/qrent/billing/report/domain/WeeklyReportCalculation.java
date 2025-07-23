@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO make abstraction for calculation
@@ -15,6 +16,6 @@ public class WeeklyReportCalculation {
   private Long id;
   private Long qWeekId;
   private LocalDate actionDate;
-  private List<WeeklyReportTransactionsLink> reportTransactionLinks;
+  private List<WeeklyReportTransactionsLink> reportTransactionLinks =  new ArrayList<>();
   private String comment;
 }
