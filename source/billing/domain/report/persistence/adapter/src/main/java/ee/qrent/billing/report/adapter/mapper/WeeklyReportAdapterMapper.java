@@ -42,7 +42,7 @@ public class WeeklyReportAdapterMapper {
         .weeksCountTillEnd(null)
         .depositObligation(null)
         .depositPaid(null)
-        .obligationStatus(getObligationStatus(qWeekId, driverId))
+        .obligationStatus(getObligationStatus(driverId, qWeekId))
         .balanceAmountSunday(BigDecimal.valueOf(999999999999l))
         .balanceAmountAtCalculationMoment(BigDecimal.valueOf(999999999999l))
         .comment(entity.getComment())
@@ -50,8 +50,8 @@ public class WeeklyReportAdapterMapper {
   }
 
   private WeeklyReportObligationStatus getObligationStatus(
-      final long qWeekId, final long driverId) {
-    final var obligation = obligationQuery.getByDriverIdAndQWeekId(qWeekId, driverId);
+      final long driverId, final long qWeekId) {
+    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     if (obligation == null) {
       throw new RuntimeException(
           format(

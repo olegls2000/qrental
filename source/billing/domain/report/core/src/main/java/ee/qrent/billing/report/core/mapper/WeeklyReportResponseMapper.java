@@ -25,7 +25,7 @@ public class WeeklyReportResponseMapper
     final var driverId = domain.getDriverId();
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var driver = driverQuery.getById(driverId);
-    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(qWeekId, driverId);
+    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var qFirm = firmQuery.getById(domain.getQFirmId());
 
     return WeeklyReportResponse.builder()
