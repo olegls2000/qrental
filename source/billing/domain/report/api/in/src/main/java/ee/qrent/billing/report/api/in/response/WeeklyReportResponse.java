@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class WeeklyReportResponse {
   private Long id;
+  private String type;
   private String driverName;
   private Long driverTaxNumber;
   private Integer callSign;

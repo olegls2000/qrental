@@ -24,6 +24,10 @@ public class WeeklyReportCalculationJakartaEntity {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
+  @Column(name = "type")
+  @Enumerated(EnumType.STRING)
+  private WeeklyReportTypeJakarta type;
+
   @Column(name = "action_date")
   private LocalDate actionDate;
 

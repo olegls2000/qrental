@@ -2,6 +2,7 @@ package ee.qrent.billing.report.core.mapper;
 
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
+import ee.qrent.billing.report.domain.WeeklyReportType;
 import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrent.common.in.time.QDateTime;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class WeeklyReportCalculationAddRequestMapper
 
     return WeeklyReportCalculation.builder()
         .actionDate(qDateTime.getToday())
+        .reportType(WeeklyReportType.valueOf(request.getType().name()))
         .qWeekId(request.getQWeekId())
         .reportTransactionLinks(new ArrayList<>())
         .comment(request.getComment())

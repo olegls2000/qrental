@@ -5,6 +5,7 @@
     <table class="table table-striped table-bordered">
         <tr>
             <th>Actions</th>
+            <th>Report type</th>
             <th>Driver's name</th>
             <th>Driver's tax number</th>
             <th>Call-sign</th>
@@ -26,6 +27,7 @@
                     <span class="bi bi-envelope-at"></span>
                     Send</a>
             </td>
+            <td th:text="${report.type}"></td>
             <td th:text="${report.driverName}"></td>
             <td th:text="${report.driverTaxNumber}"></td>
             <td th:text="${report.callSign}"></td>

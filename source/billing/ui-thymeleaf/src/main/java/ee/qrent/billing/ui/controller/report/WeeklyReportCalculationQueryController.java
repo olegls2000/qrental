@@ -30,10 +30,10 @@ public class WeeklyReportCalculationQueryController {
   @GetMapping(value = "/calculations/{id}")
   public String getCalculationView(@PathVariable("id") long id, final Model model) {
     final var calculation =  weeklyReportCalculationQuery.getById(id);
-    model.addAttribute("weeklyReports", weeklyReportQuery.getAllByCalculationId(id));
     model.addAttribute("calculation", calculation);
+    model.addAttribute("weeklyReports", weeklyReportQuery.getAllByCalculationId(id));
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
 
-    return "detailView/invoiceCalculation";
+    return "detailView/weeklyReportCalculation";
   }
 }

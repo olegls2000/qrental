@@ -7,8 +7,10 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.report.domain.WeeklyReport;
 import ee.qrent.billing.report.domain.WeeklyReportObligationStatus;
+import ee.qrent.billing.report.domain.WeeklyReportType;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportObligationStatusJakarta;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportJakartaEntity;
+import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTypeJakarta;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -27,11 +29,11 @@ public class WeeklyReportAdapterMapper {
 
     final var driverId = entity.getDriverId();
     final var qWeekId = entity.getQWeekId();
-    final var driver = driverQuery.getById(driverId);
     final var qWeek = qWeekQuery.getById(qWeekId);
 
     return WeeklyReport.builder()
         .id(entity.getId())
+        .type(WeeklyReportType.valueOf(entity.getType().name()))
         .qWeekId(qWeekId)
         .driverId(driverId)
         .callSignId(entity.getCallSignId())
@@ -79,6 +81,7 @@ public class WeeklyReportAdapterMapper {
 
     return WeeklyReportJakartaEntity.builder()
         .id(domain.getId())
+        .type(WeeklyReportTypeJakarta.valueOf(domain.getType().name()))
         .qWeekId(domain.getQWeekId())
         .driverId(domain.getDriverId())
         .callSignId(domain.getCallSignId())

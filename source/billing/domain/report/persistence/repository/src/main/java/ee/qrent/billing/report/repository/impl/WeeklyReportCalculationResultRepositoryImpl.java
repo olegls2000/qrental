@@ -15,6 +15,6 @@ public class WeeklyReportCalculationResultRepositoryImpl
   public WeeklyReportCalculationResultJakartaEntity save(
       WeeklyReportCalculationResultJakartaEntity entity) {
 
-    return null;
+    return springDataRepository.save(entity);
   }
 }

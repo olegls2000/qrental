@@ -15,7 +15,7 @@ import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
 import ee.qrent.billing.report.api.in.request.WeeklyReportSendByEmailRequest;
-import ee.qrent.billing.report.api.in.request.WeeklyReportType;
+import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportCalculationAddUseCase;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportSendByEmailUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
@@ -24,6 +24,7 @@ import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestV
 import ee.qrent.billing.report.domain.WeeklyReport;
 import ee.qrent.billing.report.domain.WeeklyReportObligationStatus;
 import ee.qrent.billing.report.domain.WeeklyReportTransactionsLink;
+import ee.qrent.billing.report.domain.WeeklyReportType;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
@@ -101,7 +102,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private WeeklyReport getWeeklyReport(
       final DriverResponse driver,
       final QWeekResponse requestedQWeek,
-      final WeeklyReportType reportType) {
+      final WeeklyReportTypeIn reportType) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
@@ -111,6 +112,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
 
     return WeeklyReport.builder()
+        .type(WeeklyReportType.valueOf(reportType.name()))
         .qWeekId(qWeekId)
         .driverId(driverId)
         .callSignId(getCallSignId(driverId, qWeekId))
@@ -129,7 +131,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   }
 
   private BigDecimal getBalanceAmountOnDate(
-      final QWeekResponse requestedQWeek, final WeeklyReportType reportType, final Long driverId) {
+      final QWeekResponse requestedQWeek,
+      final WeeklyReportTypeIn reportType,
+      final Long driverId) {
     LocalDate reportDate = null;
     switch (reportType) {
       case MONDAY_REPORT -> reportDate = requestedQWeek.getStart();

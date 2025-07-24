@@ -1,6 +1,6 @@
 package ee.qrent.billing.report.api.in.query;
 
-import ee.qrent.billing.report.api.in.request.WeeklyReportType;
+import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
 import ee.qrent.billing.report.api.in.response.WeeklyReportCalculationResponse;
 import ee.qrent.common.in.query.BaseGetQuery;
 
@@ -11,5 +11,5 @@ public interface GetWeeklyReportCalculationQuery
     extends BaseGetQuery<Object, WeeklyReportCalculationResponse> {
   Long getLastCalculatedQWeekId();
 
-  List<WeeklyReportType> getWeeklyReportTypes();
+  List<WeeklyReportTypeIn> getWeeklyReportTypes();
 }

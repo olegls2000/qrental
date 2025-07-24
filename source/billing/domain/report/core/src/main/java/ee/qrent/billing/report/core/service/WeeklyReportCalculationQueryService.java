@@ -6,12 +6,11 @@ import static java.util.stream.Collectors.toList;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
-import ee.qrent.billing.report.api.in.request.WeeklyReportType;
+import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
 import ee.qrent.billing.report.api.in.response.WeeklyReportCalculationResponse;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.core.mapper.WeeklyReportCalculationResponseMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -52,9 +51,9 @@ public class WeeklyReportCalculationQueryService implements GetWeeklyReportCalcu
   }
 
   @Override
-  public List<WeeklyReportType> getWeeklyReportTypes() {
+  public List<WeeklyReportTypeIn> getWeeklyReportTypes() {
 
-    return asList(WeeklyReportType.values());
+    return asList(WeeklyReportTypeIn.values());
   }
 
   private QWeekResponse getLatestInsuranceCalculatedQWeek() {

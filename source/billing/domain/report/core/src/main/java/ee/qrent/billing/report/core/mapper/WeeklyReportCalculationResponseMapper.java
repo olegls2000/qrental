@@ -2,6 +2,7 @@ package ee.qrent.billing.report.core.mapper;
 
 import static java.lang.String.format;
 
+import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
 import ee.qrent.billing.report.api.in.response.WeeklyReportCalculationResponse;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
 import ee.qrent.common.in.mapper.ResponseMapper;
@@ -24,6 +25,7 @@ public class WeeklyReportCalculationResponseMapper
 
     return WeeklyReportCalculationResponse.builder()
         .id(domain.getId())
+        .type(WeeklyReportTypeIn.valueOf(domain.getReportType().name()).getLabel())
         .reportsCount(domain.getReportTransactionLinks().size())
         .year(reportQWeek.getYear())
         .weekNumber(reportQWeek.getNumber())

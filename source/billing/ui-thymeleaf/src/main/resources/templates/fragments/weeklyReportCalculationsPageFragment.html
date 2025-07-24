@@ -12,6 +12,7 @@
                     <span class="bi bi-calculator"></span>
                 </a>
             </th>
+            <th>Report Type</th>
             <th>Requested Year</th>
             <th>Requested Week</th>
             <th>Action Date</th>
@@ -25,6 +26,7 @@
             <td><a class="btn btn-sm btn-warning"
                    th:href="@{/reports/calculations/{id}(id=${calculation.id})}">
                 <span class="bi bi-card-checklist"></span></a></td>
+            <td th:text="${calculation.type}">???</td>
             <td th:text="${calculation.year}">???</td>
             <td th:text="${calculation.weekNumber}">???</td>
             <td th:text="${calculation.actionDate}">???</td>

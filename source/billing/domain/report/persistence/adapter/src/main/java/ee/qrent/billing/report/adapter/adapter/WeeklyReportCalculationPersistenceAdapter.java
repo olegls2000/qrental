@@ -28,12 +28,7 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
   @Override
   public WeeklyReportCalculation add(final WeeklyReportCalculation domain) {
     final WeeklyReportCalculationJakartaEntity weeklyReportCalculationEntity =
-        WeeklyReportCalculationJakartaEntity.builder()
-            .actionDate(domain.getActionDate())
-            .qWeekId(domain.getQWeekId())
-            .comment(domain.getComment())
-            .build();
-
+        weeklyReportCalculationMapper.mapToEntity(domain);
     final var weeklyReportCalculationEntitySaved =
         calculationRepository.save(weeklyReportCalculationEntity);
 

@@ -15,6 +15,7 @@ public class WeeklyReport {
   private Long qWeekId;
   private Long driverId;
   private Long callSignId;
+  private WeeklyReportType type;
   private Long carId;
   private Long qFirmId;
   private LocalDate startDate;
@@ -27,6 +28,7 @@ public class WeeklyReport {
   private WeeklyReportObligationStatus obligationStatus;
   private BigDecimal balanceAmountSunday;
   private BigDecimal
-      balanceAmountAtCalculationMoment; // after Monday morning Calculations, calculations MUST be completed
+      balanceAmountAtCalculationMoment; // after Monday morning Calculations, calculations MUST be
+  // completed
   private String comment;
 }

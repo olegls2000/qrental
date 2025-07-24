@@ -48,6 +48,10 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "deposit_paid")
   private BigDecimal depositPaid;
 
+  @Column(name = "type")
+  @Enumerated(EnumType.STRING)
+  private WeeklyReportTypeJakarta type;
+
   @Column(name = "obligation_status")
   @Enumerated(EnumType.STRING)
   private WeeklyReportObligationStatusJakarta obligationStatus;

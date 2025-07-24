@@ -21,7 +21,7 @@ public class WeeklyReportQueryService implements GetWeeklyReportQuery {
   public List<WeeklyReportResponse> getAll() {
     return loadPort.loadAll().stream()
         .map(mapper::toResponse)
-        .sorted(getInvoiceYearAndWeekComparator())
+        .sorted(getWeeklyReportYearAndWeekComparator())
         .collect(toList());
   }
 
@@ -45,11 +45,12 @@ public class WeeklyReportQueryService implements GetWeeklyReportQuery {
   public List<WeeklyReportResponse> getAllByCalculationId(Long calculationId) {
     return loadPort.loadAllByCalculationId(calculationId).stream()
         .map(mapper::toResponse)
-        .sorted(getInvoiceYearAndWeekComparator())
+        .sorted(getWeeklyReportYearAndWeekComparator())
         .toList();
   }
 
-  private Comparator<WeeklyReportResponse> getInvoiceYearAndWeekComparator() {
+  //TODO extract comparator based on interface WithQWeek
+  private Comparator<WeeklyReportResponse> getWeeklyReportYearAndWeekComparator() {
     return (report1, report2) -> {
       final var yearComparison = report1.getWeekYear().compareTo(report1.getWeekYear());
       if (yearComparison != 0) {

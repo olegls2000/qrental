@@ -15,6 +15,7 @@ import java.util.List;
 public class WeeklyReportCalculation {
   private Long id;
   private Long qWeekId;
+  private WeeklyReportType reportType;
   private LocalDate actionDate;
   private List<WeeklyReportTransactionsLink> reportTransactionLinks =  new ArrayList<>();
   private String comment;

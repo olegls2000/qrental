@@ -1,0 +1,72 @@
+<div th:fragment="assembledInvoiceCalculation" class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Weekly Report Calculation Results</h4>
+                <div class="row">
+                    <div class="col">
+                        <a class="btn-close position-absolute top-0 end-0 m-2"
+                           aria-label="Close"
+                           href="/reports/calculations">
+                        </a>
+                    </div>
+                </div>
+                <div class="row m-4">
+                    <div class="col-4">
+                        <small th:text="|Weekly Report Calculation Type: ${calculation.type}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                    <div class="col-4">
+                        <small th:text="|Start date: ${calculation.dateStart}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                    <div class="col-4">
+                        <small th:text="|End date: ${calculation.dateEnd}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                    <div class="col-4">
+                        <small th:text="|Action date:  ${qDateFormatter.format(calculation.actionDate)}|"
+                               class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-black bg-secondary border-secondary">???</small>
+                    </div>
+                </div>
+                <h4>Created Weekly reports:</h4>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Actions</th>
+                        <th>Driver's name</th>
+                        <th>Driver's tax number</th>
+                        <th>Call-sign</th>
+                        <th>Year</th>
+                        <th>Week</th>
+                        <th>Comment</th>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(weeklyReports)}">
+                        <td colspan="5">No Weekly Reports</td>
+                    </tr>
+                    <tr th:each="weeklyReport : ${weeklyReports}">
+                        <td>
+                            <a class="btn btn-sm btn-info"
+                               th:href="@{/reports/pdf/{id}(id=${weeklyReport.id})}">
+                                <span class="bi-file-earmark-pdf"></span>
+                                View</a>
+                            <a class="btn btn-sm btn-warning"
+                               th:href="@{/reports/email/send-form/{id}(id=${weeklyReport.id})}">
+                                <span class="bi bi-envelope-at"></span>
+                                Send</a>
+                        </td>
+                        <td th:text="${weeklyReport.driverName}"></td>
+                        <td th:text="${weeklyReport.driverTaxNumber}"></td>
+                        <td th:text="${weeklyReport.callSign}"></td>
+                        <td th:text="${weeklyReport.weekYear}"></td>
+                        <td th:text="${weeklyReport.weekNumber}"></td>
+                        <td th:text="${weeklyReport.comment}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

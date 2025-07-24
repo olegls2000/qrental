@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 public class WeeklyReportCalculationResponse {
   private Long id;
   private Integer reportsCount;
+  private String type;
   private Integer year;
   private Integer weekNumber;
   private LocalDate dateStart;
