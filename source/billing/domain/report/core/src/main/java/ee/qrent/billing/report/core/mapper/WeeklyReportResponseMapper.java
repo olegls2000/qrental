@@ -19,7 +19,6 @@ public class WeeklyReportResponseMapper
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetCarLinkQuery carLinkQuery;
-  private final GetFirmQuery firmQuery;
 
   @Override
   public WeeklyReportResponse toResponse(final WeeklyReport domain) {
@@ -28,7 +27,6 @@ public class WeeklyReportResponseMapper
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var driver = driverQuery.getById(driverId);
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    final var qFirm = firmQuery.getById(domain.getQFirmId());
 
     return WeeklyReportResponse.builder()
         .id(domain.getId())
@@ -36,12 +34,12 @@ public class WeeklyReportResponseMapper
         .driverName(driver.getFirstName() + " " + driver.getLastName())
         .driverTaxNumber(driver.getTaxNumber())
         .callSign(driver.getCallSign())
-        .carRegistrationNumber(carLink.getRegistrationNumber())
+        .carRegistrationNumber(
+            carLink == null ? "No Car during period" : carLink.getRegistrationNumber())
         .weekYear(qWeek.getYear())
         .weekNumber(qWeek.getNumber())
         .startDate(qWeek.getStart())
         .endDate(qWeek.getEnd())
-        .qFirmName(qFirm.getName())
         .weeksCountTillEnd(domain.getWeeksCountTillEnd())
         .depositObligation(domain.getDepositObligation())
         .depositPaid(domain.getDepositPaid())

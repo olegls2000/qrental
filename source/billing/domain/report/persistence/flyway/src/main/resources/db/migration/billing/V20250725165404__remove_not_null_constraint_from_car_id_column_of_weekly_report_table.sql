@@ -1,0 +1,1 @@
+alter table weekly_report alter column car_id  drop not null ;

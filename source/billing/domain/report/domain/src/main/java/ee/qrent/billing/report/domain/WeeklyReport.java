@@ -17,7 +17,7 @@ public class WeeklyReport {
   private Long callSignId;
   private WeeklyReportType type;
   private Long carId;
-  private Long qFirmId;
+  //private Long qFirmId;
   private LocalDate startDate;
   private LocalDate endDate;
   private Long weeksCountTillEnd;

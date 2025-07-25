@@ -16,7 +16,7 @@ public class WeeklyReportToPdfModelMapper {
   private final GetCallSignQuery callSignQuery;
 
   public WeeklyReportPdfModel getPdfModel(final WeeklyReport report) {
-    final var driver = driverQuery.getById(report.getId());
+    final var driver = driverQuery.getById(report.getDriverId());
     final var callSign = callSignQuery.getById(report.getCallSignId());
     final var previousWeek = qWeekQuery.getById(report.getQWeekId());
     final var currentWeek = qWeekQuery.getOneAfterById(report.getQWeekId());

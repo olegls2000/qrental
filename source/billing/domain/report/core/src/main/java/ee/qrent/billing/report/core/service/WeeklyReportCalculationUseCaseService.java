@@ -59,6 +59,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   @Transactional
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
+
     final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
@@ -69,13 +70,15 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var calculation = addRequestMapper.toDomain(request);
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
-    driverQuery.getAll().stream()
+    driverQuery.getAll().parallelStream()
         .forEach(
             driver -> {
-              final var contract =
-                  contractQuery.getActiveByDriverIdAndQWeekId(
-                      driver.getId(), requestedQWeek.getId());
-              if (contract == null) {
+              final var driverId = driver.getId();
+              final var qWeekId = request.getQWeekId();
+              final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+              final var activeCallSignLink =
+                  callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+              if (contract == null || activeCallSignLink == null) {
                 return;
               }
 
@@ -117,7 +120,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .driverId(driverId)
         .callSignId(getCallSignId(driverId, qWeekId))
         .carId(getCarId(driverId, qWeekId))
-        .qFirmId(getQFirmId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
         .weeksCountTillEnd(contract.getWeeksToEnd())
@@ -159,8 +161,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private Long getCarId(final Long driverId, final Long qWeekId) {
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (carLink == null) {
-      throw new RuntimeException(
-          format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+      /*      throw new RuntimeException(
+      format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
+      return null;
     }
     return carLink.getCarId();
   }
@@ -178,14 +181,17 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final DriverResponse driver, final QWeekResponse qWeek) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
     if (obligation == null) {
-      throw new RuntimeException(
-          format(
-              "Obligation  for the Driver: %s $s, tax number: %d and week: %d - %d does not exist. Please calculate it first.",
-              driver.getFirstName(),
-              driver.getLastName(),
-              driver.getTaxNumber(),
-              qWeek.getYear(),
-              qWeek.getNumber()));
+      System.out.println("Driver id without Obligation:" + driver.getId());
+      return WeeklyReportObligationStatus.NOT_COMPLETED;
+
+      /*      throw new RuntimeException(
+      format(
+          "Obligation  for the Driver: %s %s, tax number: %d and week: %d - %d does not exist. Please calculate it first.",
+          driver.getFirstName(),
+          driver.getLastName(),
+          driver.getTaxNumber(),
+          qWeek.getYear(),
+          qWeek.getNumber()));*/
     }
 
     final var wednesday = qWeek.getEnd().plusDays(3l);

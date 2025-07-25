@@ -38,7 +38,6 @@ public class WeeklyReportAdapterMapper {
         .driverId(driverId)
         .callSignId(entity.getCallSignId())
         .carId(entity.getCarId())
-        .qFirmId(entity.getQFirmId())
         .startDate(qWeek.getStart())
         .endDate(qWeek.getEnd())
         .weeksCountTillEnd(null)
@@ -55,13 +54,14 @@ public class WeeklyReportAdapterMapper {
       final long driverId, final long qWeekId) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     if (obligation == null) {
-      throw new RuntimeException(
+    return   WeeklyReportObligationStatus.NOT_COMPLETED;
+/*      throw new RuntimeException(
           format(
               "Obligation for Driver.id: %d eportObligationStatus getObligationStatus(\n"
                   + "      final long qWeekId, final long driverId) {\n"
                   + "    final var obligation = obligationQuery.getByQWeekIdAndDriverId(qWeekId, driverId);\n"
                   + "    if (obligation == null) {and qWeek.id: %d was not found",
-              driverId, qWeekId));
+              driverId, qWeekId));*/
     }
     if (obligation.getMatchCount() > 0) {
 
@@ -86,7 +86,6 @@ public class WeeklyReportAdapterMapper {
         .driverId(domain.getDriverId())
         .callSignId(domain.getCallSignId())
         .carId(domain.getCarId())
-        .qFirmId(domain.getQFirmId())
         .weeksCountTillEnd(domain.getWeeksCountTillEnd())
         .depositObligation(domain.getDepositObligation())
         .depositPaid(domain.getDepositPaid())

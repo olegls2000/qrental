@@ -27,10 +27,9 @@ public class WeeklyReportMapperConfig {
   WeeklyReportResponseMapper getWeeklyReportResponseMapper(
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
-      final GetCarLinkQuery carLinkQuery,
-      final GetFirmQuery firmQuery) {
+      final GetCarLinkQuery carLinkQuery) {
 
-    return new WeeklyReportResponseMapper(qWeekQuery, driverQuery, carLinkQuery, firmQuery);
+    return new WeeklyReportResponseMapper(qWeekQuery, driverQuery, carLinkQuery);
   }
 
   @Bean

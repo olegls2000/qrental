@@ -13,7 +13,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
           "SELECT cl.* FROM car_link cl "
               + "WHERE  cl.driver_id = :driverId "
               + "AND cl.date_start <= :date "
-              + "AND (cl.date_end is null or cl.date_end > :date)",
+              + "AND (cl.date_end is null or cl.date_end >= :date)",
       nativeQuery = true)
   CarLinkJakartaEntity findActiveByDriverIdAndDate(
       @Param("driverId") final Long driverId, @Param("date") final LocalDate date);
@@ -23,7 +23,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
           "SELECT cl.* FROM car_link cl "
               + "WHERE  cl.car_id = :car_id "
               + "AND cl.date_start <= :date "
-              + "AND (cl.date_end is null or cl.date_end > :date)",
+              + "AND (cl.date_end is null or cl.date_end >= :date)",
       nativeQuery = true)
   List<CarLinkJakartaEntity> findActiveByCarIdAndDate(
       @Param("car_id") final Long carId, @Param("date") final LocalDate date);
@@ -32,7 +32,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
       value =
           "SELECT cl.* FROM car_link cl "
               + "WHERE cl.date_start <= :date "
-              + "AND (cl.date_end is null or cl.date_end > :date)",
+              + "AND (cl.date_end is null or cl.date_end >= :date)",
       nativeQuery = true)
   List<CarLinkJakartaEntity> findActiveByDate(@Param("date") final LocalDate date);
 
@@ -40,7 +40,7 @@ public interface CarLinkSpringDataRepository extends JpaRepository<CarLinkJakart
       value =
           "SELECT count(*) FROM car_link cl "
               + "WHERE cl.date_start <= :date "
-              + "AND (cl.date_end is null or cl.date_end > :date)",
+              + "AND (cl.date_end is null or cl.date_end >= :date)",
       nativeQuery = true)
   Long findCountActiveByDate(@Param("date") final LocalDate date);
 

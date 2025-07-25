@@ -3,6 +3,34 @@
 delete
 from q_week;
 
+SELECT t.*
+FROM billing.invoice t where driver_id=397;
+
+
+
+Select * from billing.balance where driver_id=397;
+
+
+
+
+
+--##CLEAN ALL TABLES IN BASE
+--------------------------------------------------
+DO $$
+    DECLARE
+        tbl TEXT;
+    BEGIN
+        FOR tbl IN
+            SELECT format('%I.%I', schemaname, tablename)
+            FROM pg_tables
+            WHERE schemaname = 'billing'
+            LOOP
+                EXECUTE format('DROP TABLE IF EXISTS %s CASCADE', tbl);
+            END LOOP;
+    END$$;
+
+
+
 
 --------------------------------------------------------------------------------------------------------
 --## Obligation Calculations:
@@ -66,26 +94,26 @@ from balance_calculation_result bcr
 where bcr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 39 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 26 and qw.year = 2025));
 
 delete
 from balance_transaction btr
 where btr.balance_id in
       (select bl.id
        from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 39 and qw.year = 2024));
+       where q_week_id in (select qw.id from q_week qw where qw.number = 26 and qw.year = 2025));
 
 delete
 from balance bl
-where q_week_id in (select qw.id from q_week qw where qw.number = 39 and qw.year = 2024);
+where q_week_id in (select qw.id from q_week qw where qw.number = 26 and qw.year = 2025);
 
 delete
 from transaction tx
 where tx.transaction_type_id in (select distinct(id)
                                  from transaction_type
                                  where name in ('fee replenish', 'compensation', 'fee debt'))
-  and tx.date >= '2024-06-03'::date
-  and tx.date <= '2024-06-09'::date;
+  and tx.date >= '2025-06-23'::date
+  and tx.date <= '2025-05-29'::date;
 
 --## Remove all Balance Calculations:
 delete
@@ -104,12 +132,12 @@ from balance;
 --## Remove Invoice Calculations for week:
 delete
 from invoice inv
-where inv.q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024);
+where        inv.q_week_id in (select qw.id from q_week qw where qw.number = 27 and qw.year = 2025);
 
 delete
 from invoice_calculation invc
-where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024)
-   or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 31 and qw.year = 2024);
+where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 27 and qw.year = 2025)
+     or invc.end_q_week_id in (select qw.id from q_week qw where qw.number = 27 and qw.year = 2025);
 -- invoice items must be deleted by Cascade!
 -- invoice_calculation_result must be deleted by Cascade!
 -- invoice_transaction must be deleted by Cascade!
@@ -291,3 +319,28 @@ select  from transaction_aud ta
 LEFT JOIN revinfo ri ON ta.rev = ri.rev
 --where ta.id = 244466
 ;
+
+---- How to prepare for the Notification app:
+create table flyway_schema_history_notification
+(
+    installed_rank integer                 not null
+        constraint flyway_schema_history_notification_pk
+            primary key,
+    version        varchar(50),
+    description    varchar(200)            not null,
+    type           varchar(20)             not null,
+    script         varchar(1000)           not null,
+    checksum       integer,
+    installed_by   varchar(100)            not null,
+    installed_on   timestamp default now() not null,
+    execution_time integer                 not null,
+    success        boolean                 not null
+);
+
+alter table flyway_schema_history_notification
+    owner to postgres;
+
+create index flyway_schema_history_notification_s_idx
+    on flyway_schema_history_notification (success);
+
+alter table flyway_schema_history_billing rename to flyway_schema_history_billing;

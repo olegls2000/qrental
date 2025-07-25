@@ -1,0 +1,1 @@
+alter table weekly_report drop column q_firm_id;

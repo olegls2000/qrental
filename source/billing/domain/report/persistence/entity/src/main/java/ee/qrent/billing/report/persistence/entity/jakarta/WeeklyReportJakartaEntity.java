@@ -36,9 +36,6 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "car_id")
   private Long carId;
 
-  @Column(name = "q_firm_id")
-  private Long qFirmId;
-
   @Column(name = "weeks_count_till_end")
   private Long weeksCountTillEnd;
 
