@@ -26,10 +26,10 @@ public class WeeklyReportToPdfModelMapper {
         .lastName(driver.getLastName())
         .taxNumber(driver.getTaxNumber())
         .callSign(callSign.getCallSign())
-            .previousWeekStart(previousWeek.getStart())
-            .previousWeekEnd(previousWeek.getEnd())
-            .currentWeekStart(currentWeek.getStart())
-            .currentWeekEnd(currentWeek.getEnd())
+        .previousWeekStart(previousWeek.getStart())
+        .previousWeekEnd(previousWeek.getEnd())
+        .currentWeekStart(currentWeek.getStart())
+        .currentWeekEnd(currentWeek.getEnd())
 
         // TODO add mapping
         .build();

@@ -1,7 +1,6 @@
 package ee.qrent.notification.email.core.service.messagestrategy;
 
-import static ee.qrent.notification.email.api.in.request.EmailType.MONDAY_FINANCIAL_EMAIL;
-import static ee.qrent.notification.email.api.in.request.EmailType.RENT_CALCULATION_EMAIL;
+import static ee.qrent.notification.email.api.in.request.EmailType.MONDAY_REPORT_EMAIL;
 
 import ee.qrent.notification.email.api.in.request.EmailSendRequest;
 import ee.qrent.notification.email.core.service.LetterBuildStrategy;
@@ -14,13 +13,13 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @AllArgsConstructor
-public class MondayFinancialReportLetterBuildStrategy implements LetterBuildStrategy {
+public class MondayReportLetterBuildStrategy implements LetterBuildStrategy {
 
   private final TemplateEngine templateEngine;
 
   @Override
   public boolean canApply(final EmailSendRequest emailSendRequest) {
-    return MONDAY_FINANCIAL_EMAIL == emailSendRequest.getType();
+    return MONDAY_REPORT_EMAIL == emailSendRequest.getType();
   }
 
   @Override
@@ -41,7 +40,7 @@ public class MondayFinancialReportLetterBuildStrategy implements LetterBuildStra
   }
 
   private String getEmailText(Map<String, Object> properties) {
-    final var mondayFinancialReportTemplate = "mondayFinancialReportTemplate";
+    final var mondayFinancialReportTemplate = "mondayReportMailTemplate";
     final var context = new Context();
     context.setVariable("driverFirstName", properties.get("driverFirstName"));
     context.setVariable("driverLastName", properties.get("driverLastName"));

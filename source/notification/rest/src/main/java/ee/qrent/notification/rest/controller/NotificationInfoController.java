@@ -1,7 +1,6 @@
 package ee.qrent.notification.rest.controller;
 
-import ee.qrent.common.in.usecase.QTaskRunner;
-import ee.qrent.notification.task.core.EmailNotificationTask;
+import ee.qrent.notification.task.api.in.usecase.TaskRunUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,12 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class NotificationInfoController {
 
-  private final QTaskRunner runTaskUseCase;
-  private final EmailNotificationTask task;
+  private final TaskRunUseCase taskRunUseCase;
 
   @GetMapping("/process")
   public String process() {
-    runTaskUseCase.run(task);
+    taskRunUseCase.runEmailNotificationTask();
 
     return "Processing triggered, please check a log file";
   }

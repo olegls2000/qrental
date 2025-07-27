@@ -1,4 +1,3 @@
-
 val isGitPropertyPluginEnabledVar = System.getenv("GIT_PROPERTIES_GENERATION")
 println("GIT_PROPERTIES_GENERATION: $isGitPropertyPluginEnabledVar")
 
@@ -13,9 +12,7 @@ dependencies {
     implementation(project(":source:common:api"))
     implementation(project(":source:common:core"))
     implementation(project(":source:common:utils"))
-    implementation(project(":source:notification:domain:email:api:in"))
-    //TODO change to API:IN or Remove
-    implementation(project(":source:notification:task:core"))
+    implementation(project(":source:notification:task:api:in"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

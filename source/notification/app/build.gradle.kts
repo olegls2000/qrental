@@ -11,8 +11,9 @@ dependencies {
     implementation(project(":source:queue:config"))
 
     implementation(project(":source:notification:domain:email:config"))
-    implementation(project(":source:notification:task:config"))
     implementation(project(":source:notification:domain:email:persistence:flyway"))
+    implementation(project(":source:notification:task:config"))
+    implementation(project(":source:notification:task:persistence:flyway"))
     implementation(project(":source:notification:rest"))
 
     implementation("org.springframework.boot:spring-boot-starter")

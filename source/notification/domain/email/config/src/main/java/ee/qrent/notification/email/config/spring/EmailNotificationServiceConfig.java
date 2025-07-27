@@ -31,7 +31,8 @@ public class EmailNotificationServiceConfig {
         new RentCalculationLetterBuildStrategy(templateEngine),
         new BonusCalculationLetterBuildStrategy(templateEngine),
         new ObligationCalculationLetterBuildStrategy(templateEngine),
-        new AuthorizationLetterBuildStrategy(templateEngine));
+        new AuthorizationLetterBuildStrategy(templateEngine),
+        new MondayReportLetterBuildStrategy(templateEngine));
   }
 
   @Bean
