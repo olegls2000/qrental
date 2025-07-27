@@ -9,7 +9,6 @@ import ee.qrent.billing.report.adapter.repository.WeeklyReportRepository;
 import ee.qrent.billing.report.adapter.repository.WeeklyReportTransactionRepository;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
-import ee.qrent.billing.report.domain.WeeklyReportTransactionsLink;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculationJakartaEntity;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculationResultJakartaEntity;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTransactionJakartaEntity;
@@ -32,11 +31,14 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
     final var weeklyReportCalculationEntitySaved =
         calculationRepository.save(weeklyReportCalculationEntity);
 
+    domain.setId(weeklyReportCalculationEntitySaved.getId());
+
     final var transactionLinks = domain.getReportTransactionLinks();
-    for (WeeklyReportTransactionsLink link : transactionLinks) {
+    for (final var link : transactionLinks) {
       final var weeklyReport = link.getWeeklyReport();
       final var weeklyReportEntity = weeklyReportMapper.mapToEntity(weeklyReport);
       final var weeklyReportEntitySaved = weeklyReportRepository.save(weeklyReportEntity);
+      weeklyReport.setId(weeklyReportEntitySaved.getId());
 
       final var weeklyReportCalculationResultEntity =
           WeeklyReportCalculationResultJakartaEntity.builder()
@@ -44,7 +46,8 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
               .calculation(weeklyReportCalculationEntitySaved)
               .weeklyReport(weeklyReportEntitySaved)
               .build();
-      weeklyReportCalculationResultRepository.save(weeklyReportCalculationResultEntity);
+      final var savedResult =
+          weeklyReportCalculationResultRepository.save(weeklyReportCalculationResultEntity);
 
       final var transactionIds = link.getTransactionIds();
       for (Long transactionId : transactionIds) {
@@ -57,6 +60,6 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
       }
     }
 
-    return weeklyReportCalculationMapper.mapToDomain(weeklyReportCalculationEntitySaved);
+    return domain;
   }
 }
