@@ -46,7 +46,6 @@ public class WeeklyReportCalculationPersistenceAdapter implements WeeklyReportCa
               .calculation(weeklyReportCalculationEntitySaved)
               .weeklyReport(weeklyReportEntitySaved)
               .build();
-      final var savedResult =
           weeklyReportCalculationResultRepository.save(weeklyReportCalculationResultEntity);
 
       final var transactionIds = link.getTransactionIds();
