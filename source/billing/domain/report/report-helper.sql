@@ -6,4 +6,3 @@ delete
 from weekly_report_calculation wrc;
 delete
 from weekly_report;
-

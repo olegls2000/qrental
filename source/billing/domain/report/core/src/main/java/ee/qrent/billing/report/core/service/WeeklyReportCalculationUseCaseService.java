@@ -21,10 +21,7 @@ import ee.qrent.billing.report.api.in.usecase.WeeklyReportSendByEmailUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationAddPort;
 import ee.qrent.billing.report.core.mapper.WeeklyReportCalculationAddRequestMapper;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
-import ee.qrent.billing.report.domain.WeeklyReport;
-import ee.qrent.billing.report.domain.WeeklyReportObligationStatus;
-import ee.qrent.billing.report.domain.WeeklyReportTransactionsLink;
-import ee.qrent.billing.report.domain.WeeklyReportType;
+import ee.qrent.billing.report.domain.*;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
@@ -56,10 +53,15 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetDepositQuery depositQuery;
   private final WeeklyReportSendByEmailUseCase sendByEmailUseCase;
 
-  @Transactional
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
+    final var savedDomain = addCalculation(request);
+    sendNotifications(savedDomain);
+    return savedDomain.getId();
+  }
 
+  @Transactional
+  private WeeklyReportCalculation addCalculation(final WeeklyReportCalculationAddRequest request) {
     final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
@@ -90,16 +92,18 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     final var addedReportCalculation = addPort.add(calculation);
 
-    addedReportCalculation
-        .getReportTransactionLinks()
+    return addedReportCalculation;
+  }
+
+  @Transactional
+  private void sendNotifications(WeeklyReportCalculation savedDomain) {
+    savedDomain.getReportTransactionLinks().parallelStream()
         .forEach(
             link -> {
               final var reportId = link.getWeeklyReport().getId();
               final var emailSendRequest = new WeeklyReportSendByEmailRequest(reportId);
               sendByEmailUseCase.sendByEmail(emailSendRequest);
             });
-
-    return addedReportCalculation.getId();
   }
 
   private WeeklyReport getWeeklyReport(
@@ -108,7 +112,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final WeeklyReportTypeIn reportType) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
-    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
 
