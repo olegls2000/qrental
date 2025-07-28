@@ -106,6 +106,7 @@ public class WeeklyReportServiceConfig {
       final WeeklyReportLoadPort weeklyReportLoadPort,
       final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
       final GetDriverQuery driverQuery,
+      final GetCallSignLinkQuery callSignLinkQuery,
       final QDateTime qDateTime) {
 
     return new WeeklyReportSendByEmailService(
@@ -113,6 +114,7 @@ public class WeeklyReportServiceConfig {
         weeklyReportLoadPort,
         weeklyReportPdfUseCase,
         driverQuery,
+        callSignLinkQuery,
         qDateTime);
   }
 

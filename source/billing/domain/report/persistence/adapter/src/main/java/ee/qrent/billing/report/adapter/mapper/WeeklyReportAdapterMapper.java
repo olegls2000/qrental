@@ -1,7 +1,5 @@
 package ee.qrent.billing.report.adapter.mapper;
 
-import static java.lang.String.format;
-
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -40,12 +38,13 @@ public class WeeklyReportAdapterMapper {
         .carId(entity.getCarId())
         .startDate(qWeek.getStart())
         .endDate(qWeek.getEnd())
-        .weeksCountTillEnd(null)
-        .depositObligation(null)
-        .depositPaid(null)
+        .weeksCountTillEnd(entity.getWeeksCountTillEnd())
+        .depositObligation(entity.getDepositObligation())
+        .depositPaid(entity.getDepositPaid())
         .obligationStatus(getObligationStatus(driverId, qWeekId))
-        .balanceAmountSunday(BigDecimal.valueOf(999999999999l))
-        .balanceAmountAtCalculationMoment(BigDecimal.valueOf(999999999999l))
+        // TODO ?
+        .balanceAmountSunday(null)
+        .balanceAmountAtCalculationMoment(null)
         .comment(entity.getComment())
         .build();
   }
@@ -54,14 +53,8 @@ public class WeeklyReportAdapterMapper {
       final long driverId, final long qWeekId) {
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
     if (obligation == null) {
-    return   WeeklyReportObligationStatus.NOT_COMPLETED;
-/*      throw new RuntimeException(
-          format(
-              "Obligation for Driver.id: %d eportObligationStatus getObligationStatus(\n"
-                  + "      final long qWeekId, final long driverId) {\n"
-                  + "    final var obligation = obligationQuery.getByQWeekIdAndDriverId(qWeekId, driverId);\n"
-                  + "    if (obligation == null) {and qWeek.id: %d was not found",
-              driverId, qWeekId));*/
+
+      return WeeklyReportObligationStatus.NOT_COMPLETED;
     }
     if (obligation.getMatchCount() > 0) {
 
