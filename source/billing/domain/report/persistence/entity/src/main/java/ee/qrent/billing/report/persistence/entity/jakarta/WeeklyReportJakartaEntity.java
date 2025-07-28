@@ -53,6 +53,12 @@ public class WeeklyReportJakartaEntity {
   @Enumerated(EnumType.STRING)
   private WeeklyReportObligationStatusJakarta obligationStatus;
 
+  @Column(name = "balance_amount_sunday")
+  private BigDecimal balanceAmountSunday;
+
+  @Column(name = "balance_Amount_at_calculation_moment")
+  private BigDecimal balanceAmountAtCalculationMoment;
+
   @Column(name = "comment")
   private String comment;
 }

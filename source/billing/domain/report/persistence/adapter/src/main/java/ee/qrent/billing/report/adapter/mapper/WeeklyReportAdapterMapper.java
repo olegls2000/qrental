@@ -43,8 +43,8 @@ public class WeeklyReportAdapterMapper {
         .depositPaid(entity.getDepositPaid())
         .obligationStatus(getObligationStatus(driverId, qWeekId))
         // TODO ?
-        .balanceAmountSunday(null)
-        .balanceAmountAtCalculationMoment(null)
+        .balanceAmountSunday(entity.getBalanceAmountSunday())
+        .balanceAmountAtCalculationMoment(entity.getBalanceAmountAtCalculationMoment())
         .comment(entity.getComment())
         .build();
   }
@@ -83,6 +83,8 @@ public class WeeklyReportAdapterMapper {
         .depositObligation(domain.getDepositObligation())
         .depositPaid(domain.getDepositPaid())
         .obligationStatus(mapToWeeklyReportObligationStatusJakarta(domain.getObligationStatus()))
+        .balanceAmountSunday(domain.getBalanceAmountSunday())
+        .balanceAmountAtCalculationMoment(domain.getBalanceAmountAtCalculationMoment())
         .comment(domain.getComment())
         .build();
   }

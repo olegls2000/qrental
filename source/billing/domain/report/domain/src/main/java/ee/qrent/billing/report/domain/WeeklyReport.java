@@ -17,18 +17,13 @@ public class WeeklyReport {
   private Long callSignId;
   private WeeklyReportType type;
   private Long carId;
-  //private Long qFirmId;
   private LocalDate startDate;
   private LocalDate endDate;
   private Long weeksCountTillEnd;
-  // TODO: so far not implemented, required special operation: DepositReplenish, will be calculated
-  // ion demand by Driver
-  private BigDecimal depositObligation; // 500
-  private BigDecimal depositPaid; // if paid 200, then left over is 300
+  private BigDecimal depositObligation;
+  private BigDecimal depositPaid;
   private WeeklyReportObligationStatus obligationStatus;
   private BigDecimal balanceAmountSunday;
-  private BigDecimal
-      balanceAmountAtCalculationMoment; // after Monday morning Calculations, calculations MUST be
-  // completed
+  private BigDecimal balanceAmountAtCalculationMoment;
   private String comment;
 }
