@@ -71,6 +71,9 @@
             <td>
                 <span th:text="${driver.needFee} ? 'Yes' : 'No'"></span>
             </td>
+            <td>
+                <span th:text="${driver.needReport} ? 'Yes' : 'No'"></span>
+            </td>
             <td th:text="${driver.legalEntityTypeLabel}">??</td>
             <td th:text="${driver.deposit}">??</td>
             <td th:text="${qDateFormatter.format(driver.createdDate)}">???</td>

@@ -87,6 +87,9 @@ public class DriverJakartaEntity {
   @Column(name = "need_fee")
   private Boolean needFee;
 
+  @Column(name = "need_report")
+  private Boolean needReport;
+
   @Column(name = "by_telegram")
   private Boolean byTelegram;
 

@@ -1,12 +1,12 @@
 package ee.qrent.billing.driver.persistence.mapper;
 
-import ee.qrent.billing.driver.persistence.repository.CallSignLinkRepository;
-import ee.qrent.billing.driver.persistence.repository.FriendshipRepository;
 import ee.qrent.billing.driver.domain.CallSign;
 import ee.qrent.billing.driver.domain.Driver;
 import ee.qrent.billing.driver.domain.Friendship;
 import ee.qrent.billing.driver.domain.LegalEntityType;
 import ee.qrent.billing.driver.persistence.entity.jakarta.DriverJakartaEntity;
+import ee.qrent.billing.driver.persistence.repository.CallSignLinkRepository;
+import ee.qrent.billing.driver.persistence.repository.FriendshipRepository;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 
@@ -50,6 +50,7 @@ public class DriverAdapterMapper {
         .address(entity.getAddress())
         .needInvoicesByEmail(entity.getNeedInvoicesByEmail())
         .needFee(entity.getNeedFee())
+        .needReport(entity.getNeedReport())
         .byTelegram(entity.getByTelegram())
         .byWhatsApp(entity.getByWhatsApp())
         .byViber(entity.getByViber())
@@ -91,6 +92,7 @@ public class DriverAdapterMapper {
         .address(domain.getAddress())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .needFee(domain.getNeedFee())
+        .needReport(domain.getNeedReport())
         .byTelegram(domain.getByTelegram())
         .byWhatsApp(domain.getByWhatsApp())
         .byViber(domain.getByViber())

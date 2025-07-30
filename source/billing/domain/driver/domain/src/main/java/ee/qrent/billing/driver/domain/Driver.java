@@ -34,6 +34,7 @@ public class Driver {
   private String taxiLicense;
   private Boolean needInvoicesByEmail;
   private Boolean needFee;
+  private Boolean needReport;
   private Boolean byTelegram;
   private Boolean byWhatsApp;
   private Boolean byViber;

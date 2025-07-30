@@ -1,12 +1,11 @@
 package ee.qrent.billing.driver.core.mapper;
 
-import ee.qrent.common.in.mapper.UpdateRequestMapper;
 import ee.qrent.billing.driver.api.in.request.DriverUpdateRequest;
 import ee.qrent.billing.driver.domain.CallSign;
 import ee.qrent.billing.driver.domain.Driver;
-import java.math.BigDecimal;
-
 import ee.qrent.billing.driver.domain.LegalEntityType;
+import ee.qrent.common.in.mapper.UpdateRequestMapper;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -39,6 +38,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .needFee(request.getNeedFee())
+        .needReport(request.getNeedReport())
         .byTelegram(request.getByTelegram())
         .byWhatsApp(request.getByWhatsApp())
         .byViber(request.getByViber())
@@ -94,6 +94,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .address(domain.getAddress())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .needFee(domain.getNeedFee())
+        .needReport(domain.getNeedReport())
         .byTelegram(domain.getByTelegram())
         .byWhatsApp(domain.getByWhatsApp())
         .byViber(domain.getByViber())

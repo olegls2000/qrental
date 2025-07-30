@@ -64,6 +64,7 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
     entity.setTaxiLicense(domain.getTaxiLicense());
     entity.setNeedInvoicesByEmail(domain.getNeedInvoicesByEmail());
     entity.setNeedFee(domain.getNeedFee());
+    entity.setNeedReport(domain.getNeedReport());
     entity.setByTelegram(domain.getByTelegram());
     entity.setByWhatsApp(domain.getByWhatsApp());
     entity.setByViber(domain.getByViber());

@@ -38,6 +38,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .address(request.getAddress())
         .needInvoicesByEmail(request.getNeedInvoicesByEmail())
         .needFee(request.getNeedInvoicesByEmail())
+        .needReport(request.getNeedReport())
         .deposit(request.getDeposit())
         .byTelegram(request.getByTelegram())
         .byWhatsApp(request.getByWhatsApp())

@@ -2,13 +2,13 @@ package ee.qrent.billing.driver.core.mapper;
 
 import static java.lang.String.format;
 
-import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.driver.domain.CallSign;
 import ee.qrent.billing.driver.domain.Driver;
 import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.insurance.api.in.query.GetQKaskoQuery;
+import ee.qrent.common.in.mapper.ResponseMapper;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -52,6 +52,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .taxiLicense(domain.getTaxiLicense())
         .needInvoicesByEmail(domain.getNeedInvoicesByEmail())
         .needFee(domain.getNeedFee())
+        .needReport(domain.getNeedReport())
         .byTelegram(domain.getByTelegram())
         .byWhatsApp(domain.getByWhatsApp())
         .byViber(domain.getByViber())
