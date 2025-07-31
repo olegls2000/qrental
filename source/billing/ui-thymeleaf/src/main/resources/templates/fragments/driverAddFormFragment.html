@@ -10,7 +10,6 @@
 <div th:fragment="addForm">
     <div th:replace="fragments/driverCommonFormFragment :: onChangeRequiredObligationScript"></div>
     <div th:replace="fragments/driverCommonFormFragment :: onChangeLegalEntityScript"></div>
-
     <form method="post"
           th:action="@{/drivers/add}"
           th:object="${addRequest}">
@@ -49,6 +48,14 @@
             </div>
             <div class="col">
                 <div class="mb-3">
+                    <input class="form-check-input" id="needReportId"
+                           th:field="*{needReport}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="needReportId">Need Report</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
                     <label class="form-label text-muted"
                            for="callSignId">Select Call Sign</label>
                     <select id="callSignId"
@@ -60,17 +67,6 @@
                                 th:text="${callSign.callSign}">??
                         </option>
                     </select>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="mb-3">
-                    <input class="form-check-input" id="needReportId"
-                           th:field="*{needReport}"
-                           type="checkbox"/>
-                    <label class="form-check-label text-muted" for="needReportId">Need Report</label>
                 </div>
             </div>
         </div>
@@ -135,14 +131,14 @@
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label class="form-check-label text-muted" for="boltIndividualIdentifier">Bolt Individual Identifier</label>
+                    <label class="form-check-label text-muted" for="boltIndividualIdentifier">Bolt Individual
+                        Identifier</label>
                     <input class="form-control" id="boltIndividualIdentifier" placeholder="Enter Individual Identifier"
                            th:field="*{boltIndividualIdentifier}"
                            type="text"/>
                 </div>
             </div>
         </div>
-
 
 
         <p class="fs-5">Drivers info:</p>
