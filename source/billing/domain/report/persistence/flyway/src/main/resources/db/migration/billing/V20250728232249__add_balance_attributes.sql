@@ -3,3 +3,4 @@ alter table weekly_report
 
 alter table weekly_report
     add column balance_Amount_at_calculation_moment numeric not null default 1;
+c
