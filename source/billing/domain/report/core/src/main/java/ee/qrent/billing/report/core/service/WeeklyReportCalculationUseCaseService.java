@@ -73,6 +73,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
     driverQuery.getAll().parallelStream()
+        .filter(driverResponse -> driverResponse.getNeedReport())
         .forEach(
             driver -> {
               final var driverId = driver.getId();
