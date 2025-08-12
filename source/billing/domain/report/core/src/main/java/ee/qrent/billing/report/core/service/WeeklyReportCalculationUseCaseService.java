@@ -25,6 +25,7 @@ import ee.qrent.billing.report.domain.*;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
+import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -36,157 +37,168 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalculationAddUseCase {
 
-  private static final BigDecimal DEPOSIT_OBLIGATION = new BigDecimal(500);
+    private static final BigDecimal DEPOSIT_OBLIGATION = new BigDecimal(500);
 
-  private final WeeklyReportCalculationAddRequestValidator addRequestValidator;
-  private final WeeklyReportCalculationAddRequestMapper addRequestMapper;
-  private final WeeklyReportCalculationAddPort addPort;
-  private final GetObligationQuery obligationQuery;
-  private final GetQWeekQuery qWeekQuery;
-  private final GetDriverQuery driverQuery;
-  private final GetCallSignLinkQuery callSignLinkQuery;
-  private final GetCarLinkQuery carLinkQuery;
-  private final GetFirmLinkQuery firmLinkQuery;
-  private final GetBalanceQuery balanceQuery;
-  private final GetTransactionQuery transactionQuery;
-  private final GetContractQuery contractQuery;
-  private final GetDepositQuery depositQuery;
-  private final WeeklyReportSendByEmailUseCase sendByEmailUseCase;
+    private final WeeklyReportCalculationAddRequestValidator addRequestValidator;
+    private final WeeklyReportCalculationAddRequestMapper addRequestMapper;
+    private final WeeklyReportCalculationAddPort addPort;
+    private final GetObligationQuery obligationQuery;
+    private final GetQWeekQuery qWeekQuery;
+    private final GetDriverQuery driverQuery;
+    private final GetCallSignLinkQuery callSignLinkQuery;
+    private final GetCarLinkQuery carLinkQuery;
+    private final GetFirmLinkQuery firmLinkQuery;
+    private final GetBalanceQuery balanceQuery;
+    private final GetTransactionQuery transactionQuery;
+    private final GetContractQuery contractQuery;
+    private final GetDepositQuery depositQuery;
+    private final WeeklyReportSendByEmailUseCase sendByEmailUseCase;
 
-  @Override
-  public Long add(final WeeklyReportCalculationAddRequest request) {
-    final var savedDomain = addCalculation(request);
-    sendNotifications(savedDomain);
-    return savedDomain.getId();
-  }
-
-  @Transactional
-  private WeeklyReportCalculation addCalculation(final WeeklyReportCalculationAddRequest request) {
-    final var violationsCollector = addRequestValidator.validate(request);
-    if (violationsCollector.hasViolations()) {
-      request.setViolations(violationsCollector.getViolations());
-
-      return null;
+    @Override
+    public Long add(final WeeklyReportCalculationAddRequest request) {
+        final var savedDomain = addCalculation(request);
+        sendNotifications(savedDomain);
+        return savedDomain.getId();
     }
-    final var requestedQWeekId = request.getQWeekId();
-    final var calculation = addRequestMapper.toDomain(request);
-    final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
-    driverQuery.getAll().parallelStream()
-        .filter(driverResponse -> driverResponse.getNeedReport())
-        .forEach(
-            driver -> {
-              final var driverId = driver.getId();
-              final var qWeekId = request.getQWeekId();
-              final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-              final var activeCallSignLink =
-                  callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-              if (contract == null || activeCallSignLink == null) {
-                return;
-              }
+    @Transactional
+    private WeeklyReportCalculation addCalculation(final WeeklyReportCalculationAddRequest request) {
+        final var violationsCollector = addRequestValidator.validate(request);
+        if (violationsCollector.hasViolations()) {
+            request.setViolations(violationsCollector.getViolations());
 
-              final var weeklyReport = getWeeklyReport(driver, requestedQWeek, request.getType());
-              final var reportTransactions =
-                  getWeeklyReportTransactions(weeklyReport, driver.getId(), requestedQWeekId);
-              calculation.getReportTransactionLinks().add(reportTransactions);
-            });
+            return null;
+        }
+        final var requestedQWeekId = request.getQWeekId();
+        final var calculation = addRequestMapper.toDomain(request);
+        final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
-    final var addedReportCalculation = addPort.add(calculation);
+        driverQuery.getAll().parallelStream()
+                .filter(driverResponse -> driverResponse.getNeedReport())
+                .forEach(
+                        driver -> {
+                            final var driverId = driver.getId();
+                            final var qWeekId = request.getQWeekId();
+                            final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+                            final var activeCallSignLink =
+                                    callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+                            if (contract == null || activeCallSignLink == null) {
+                                return;
+                            }
 
-    return addedReportCalculation;
-  }
+                            final var weeklyReport = getWeeklyReport(driver, requestedQWeek, request.getType());
+                            final var reportTransactions =
+                                    getWeeklyReportTransactions(weeklyReport, driver.getId(), requestedQWeekId);
+                            calculation.getReportTransactionLinks().add(reportTransactions);
+                        });
 
-  @Transactional
-  private void sendNotifications(WeeklyReportCalculation savedDomain) {
-    savedDomain.getReportTransactionLinks().parallelStream()
-        .forEach(
-            link -> {
-              final var reportId = link.getWeeklyReport().getId();
-              final var emailSendRequest = new WeeklyReportSendByEmailRequest(reportId);
-              sendByEmailUseCase.sendByEmail(emailSendRequest);
-            });
-  }
+        final var addedReportCalculation = addPort.add(calculation);
 
-  private WeeklyReport getWeeklyReport(
-      final DriverResponse driver,
-      final QWeekResponse requestedQWeek,
-      final WeeklyReportTypeIn reportType) {
-    final var driverId = driver.getId();
-    final var qWeekId = requestedQWeek.getId();
-    final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
-
-    final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
-
-    return WeeklyReport.builder()
-        .type(WeeklyReportType.valueOf(reportType.name()))
-        .qWeekId(qWeekId)
-        .driverId(driverId)
-        .callSignId(getCallSignId(driverId, qWeekId))
-        .carId(getCarId(driverId, qWeekId))
-        .startDate(requestedQWeek.getStart())
-        .endDate(requestedQWeek.getEnd())
-        .weeksCountTillEnd(contract.getWeeksToEnd())
-        .depositObligation(DEPOSIT_OBLIGATION)
-        .depositPaid(depositPaid)
-        .obligationStatus(getWeeklyReportObligationStatus(driver, requestedQWeek))
-        .balanceAmountSunday(balanceAmountOnDate)
-        .balanceAmountAtCalculationMoment(balanceAmountOnDate)
-        .comment("Automatically generated weekly report")
-        .build();
-  }
-
-  private BigDecimal getBalanceAmountOnDate(
-      final QWeekResponse requestedQWeek,
-      final WeeklyReportTypeIn reportType,
-      final Long driverId) {
-    LocalDate reportDate = null;
-    switch (reportType) {
-      case MONDAY_REPORT -> reportDate = requestedQWeek.getStart();
-      case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1l);
-      case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2l);
-      case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4l);
+        return addedReportCalculation;
     }
-    final var rawBalanceOnReportDate = balanceQuery.getRawByDriverAndDate(driverId, reportDate);
 
-    return rawBalanceOnReportDate.getAmount();
-  }
-
-  private Long getCallSignId(final Long driverId, final Long qWeekId) {
-    final var callSignLink = callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (callSignLink == null) {
-      throw new RuntimeException(
-          format(
-              "No Call-sign-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+    @Transactional
+    private void sendNotifications(WeeklyReportCalculation savedDomain) {
+        savedDomain.getReportTransactionLinks().parallelStream()
+                .forEach(
+                        link -> {
+                            final var reportId = link.getWeeklyReport().getId();
+                            final var emailSendRequest = new WeeklyReportSendByEmailRequest(reportId);
+                            sendByEmailUseCase.sendByEmail(emailSendRequest);
+                        });
     }
-    return callSignLink.getCallSignId();
-  }
 
-  private Long getCarId(final Long driverId, final Long qWeekId) {
-    final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (carLink == null) {
+    private WeeklyReport getWeeklyReport(
+            final DriverResponse driver,
+            final QWeekResponse requestedQWeek,
+            final WeeklyReportTypeIn reportType) {
+        final var driverId = driver.getId();
+        final var qWeekId = requestedQWeek.getId();
+        final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
+        final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+        final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
+
+        final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
+        final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
+
+        return WeeklyReport.builder()
+                .type(WeeklyReportType.valueOf(reportType.name()))
+                .qWeekId(qWeekId)
+                .driverId(driverId)
+                .callSignId(getCallSignId(driverId, qWeekId))
+                .carId(getCarId(driverId, qWeekId))
+                .startDate(requestedQWeek.getStart())
+                .endDate(requestedQWeek.getEnd())
+                .weeksCountTillEnd(contract.getWeeksToEnd())
+                .depositObligation(DEPOSIT_OBLIGATION)
+                .depositPaid(depositPaid)
+                .obligationStatus(getWeeklyReportObligationStatus(driver, previousWeek))
+                .balanceAmountSunday(balanceOnSunday.getAmount())
+                .feeAmountSunday(balanceOnSunday.getFeeAmount())
+                .balanceAmountAtCalculationMoment(balanceAmountOnDate)
+                .comment("Automatically generated weekly report")
+                .build();
+    }
+
+    private BigDecimal getBalanceAmountOnDate(
+            final QWeekResponse requestedQWeek,
+            final WeeklyReportTypeIn reportType,
+            final Long driverId) {
+        LocalDate reportDate = null;
+        switch (reportType) {
+            case MONDAY_REPORT -> reportDate = requestedQWeek.getStart();
+            case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1l);
+            case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2l);
+            case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4l);
+        }
+        final var rawBalanceOnReportDate = balanceQuery.getRawByDriverAndDate(driverId, reportDate);
+
+        return rawBalanceOnReportDate.getAmount();
+    }
+
+    private BalanceResponse getBalanceOnSunday(final QWeekResponse requestedQWeek,
+                                               final Long driverId) {
+        final var sunday = requestedQWeek.getStart().minusDays(1l);
+        final var sundayBalance = balanceQuery.getRawByDriverAndDate(driverId, sunday);
+
+        return sundayBalance;
+    }
+
+    private Long getCallSignId(final Long driverId, final Long qWeekId) {
+        final var callSignLink = callSignLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+        if (callSignLink == null) {
+            throw new RuntimeException(
+                    format(
+                            "No Call-sign-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+        }
+        return callSignLink.getCallSignId();
+    }
+
+    private Long getCarId(final Long driverId, final Long qWeekId) {
+        final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+        if (carLink == null) {
       /*      throw new RuntimeException(
       format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
-      return null;
+            return null;
+        }
+        return carLink.getCarId();
     }
-    return carLink.getCarId();
-  }
 
-  private Long getQFirmId(final Long driverId, final Long qWeekId) {
-    final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (firmLink == null) {
-      throw new RuntimeException(
-          format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+    private Long getQFirmId(final Long driverId, final Long qWeekId) {
+        final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+        if (firmLink == null) {
+            throw new RuntimeException(
+                    format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
+        }
+        return firmLink.getFirmId();
     }
-    return firmLink.getFirmId();
-  }
 
-  private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
-      final DriverResponse driver, final QWeekResponse qWeek) {
-    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
-    if (obligation == null) {
-      System.out.println("Driver id without Obligation:" + driver.getId());
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
+    private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
+            final DriverResponse driver, final QWeekResponse qWeek) {
+        final var obligation = obligationQuery.getByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
+        if (obligation == null) {
+            System.out.println("Driver id without Obligation:" + driver.getId());
+            return WeeklyReportObligationStatus.NOT_COMPLETED;
 
       /*      throw new RuntimeException(
       format(
@@ -196,34 +208,34 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
           driver.getTaxNumber(),
           qWeek.getYear(),
           qWeek.getNumber()));*/
+        }
+
+        final var wednesday = qWeek.getEnd().plusDays(3l);
+        final var balanceOnWednesday = balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
+
+        if (obligation.getMatchCount() == 0
+                && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
+            return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
+        }
+
+        if (obligation.getMatchCount() == 0
+                && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            return WeeklyReportObligationStatus.NOT_COMPLETED;
+        }
+        // in case of match count >0
+        return WeeklyReportObligationStatus.COMPLETED;
     }
 
-    final var wednesday = qWeek.getEnd().plusDays(3l);
-    final var balanceOnWednesday = balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
+    private WeeklyReportTransactionsLink getWeeklyReportTransactions(
+            final WeeklyReport weeklyReport, final Long driverId, final Long qWeekId) {
+        final var transactionIds =
+                transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
+                        .map(TransactionResponse::getId)
+                        .collect(Collectors.toSet());
 
-    if (obligation.getMatchCount() == 0
-        && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
-      return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
+        return WeeklyReportTransactionsLink.builder()
+                .weeklyReport(weeklyReport)
+                .transactionIds(transactionIds)
+                .build();
     }
-
-    if (obligation.getMatchCount() == 0
-        && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) < 0) {
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
-    // in case of match count >0
-    return WeeklyReportObligationStatus.COMPLETED;
-  }
-
-  private WeeklyReportTransactionsLink getWeeklyReportTransactions(
-      final WeeklyReport weeklyReport, final Long driverId, final Long qWeekId) {
-    final var transactionIds =
-        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-            .map(TransactionResponse::getId)
-            .collect(Collectors.toSet());
-
-    return WeeklyReportTransactionsLink.builder()
-        .weeklyReport(weeklyReport)
-        .transactionIds(transactionIds)
-        .build();
-  }
 }

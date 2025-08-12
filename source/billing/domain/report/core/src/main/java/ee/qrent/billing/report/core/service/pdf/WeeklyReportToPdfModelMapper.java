@@ -10,28 +10,28 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WeeklyReportToPdfModelMapper {
 
-  private final WeeklyReportLoadPort weeklyReportLoadPort;
-  private final GetQWeekQuery qWeekQuery;
-  private final GetDriverQuery driverQuery;
-  private final GetCallSignQuery callSignQuery;
+    private final GetQWeekQuery qWeekQuery;
+    private final GetDriverQuery driverQuery;
+    private final GetCallSignQuery callSignQuery;
 
-  public WeeklyReportPdfModel getPdfModel(final WeeklyReport report) {
-    final var driver = driverQuery.getById(report.getDriverId());
-    final var callSign = callSignQuery.getById(report.getCallSignId());
-    final var previousWeek = qWeekQuery.getById(report.getQWeekId());
-    final var currentWeek = qWeekQuery.getOneAfterById(report.getQWeekId());
+    public WeeklyReportPdfModel getPdfModel(final WeeklyReport report) {
+        final var driver = driverQuery.getById(report.getDriverId());
+        final var callSign = callSignQuery.getById(report.getCallSignId());
+        final var previousWeek = qWeekQuery.getById(report.getQWeekId());
+        final var currentWeek = qWeekQuery.getOneAfterById(report.getQWeekId());
 
-    return WeeklyReportPdfModel.builder()
-        .firstName(driver.getFirstName())
-        .lastName(driver.getLastName())
-        .taxNumber(driver.getTaxNumber())
-        .callSign(callSign.getCallSign())
-        .previousWeekStart(previousWeek.getStart())
-        .previousWeekEnd(previousWeek.getEnd())
-        .currentWeekStart(currentWeek.getStart())
-        .currentWeekEnd(currentWeek.getEnd())
+        return WeeklyReportPdfModel.builder()
+                .firstName(driver.getFirstName())
+                .lastName(driver.getLastName())
+                .taxNumber(driver.getTaxNumber())
+                .callSign(callSign.getCallSign())
+                .previousWeekStart(previousWeek.getStart())
+                .previousWeekEnd(previousWeek.getEnd())
+                .currentWeekStart(currentWeek.getStart())
+                .currentWeekEnd(currentWeek.getEnd())
+                .feeAmountSunday(report.getFeeAmountSunday())
 
-        // TODO add mapping
-        .build();
-  }
+                // TODO add mapping
+                .build();
+    }
 }

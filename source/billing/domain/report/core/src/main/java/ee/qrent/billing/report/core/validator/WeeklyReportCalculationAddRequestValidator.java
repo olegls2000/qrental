@@ -24,7 +24,7 @@ public class WeeklyReportCalculationAddRequestValidator
   public ViolationsCollector validate(final WeeklyReportCalculationAddRequest request) {
     final var violationsCollector = new ViolationsCollector();
 
-    final var duplicate =
+   /* final var duplicate =
         loadPort.loadByQWeekIdAndReportType(
             request.getQWeekId(), WeeklyReportType.valueOf(request.getType().name()));
 
@@ -33,22 +33,22 @@ public class WeeklyReportCalculationAddRequestValidator
           format(
               "Weekly Report for the week.id: %d  and type: %s already exists.",
               request.getQWeekId(), request.getType().name()));
-    }
-
+    }*/
+    final var previousWeek = qWeekQuery.getOneBeforeById(request.getQWeekId());
     final var latestCalculatedQWeekId = obligationCalculationQuery.getLastCalculatedQWeekId();
-    if (request.getQWeekId() == latestCalculatedQWeekId) {
+    if (previousWeek.getId() == latestCalculatedQWeekId) {
 
       return violationsCollector;
     }
 
-    final var requestedQWeek = qWeekQuery.getById(request.getQWeekId());
+
     final var latestCalculatedQWeek = qWeekQuery.getById(latestCalculatedQWeekId);
 
-    if (requestedQWeek.compareTo(latestCalculatedQWeek) > 0) {
+    if (previousWeek.compareTo(latestCalculatedQWeek) > 0) {
       violationsCollector.collect(
           format(
               "Impossible to create Weekly Report for the week: %d - %d. Obligation calculation is missing.",
-              requestedQWeek.getYear(), requestedQWeek.getNumber()));
+                  previousWeek.getYear(), previousWeek.getNumber()));
     }
 
     return violationsCollector;

@@ -25,5 +25,6 @@ public class WeeklyReport {
   private WeeklyReportObligationStatus obligationStatus;
   private BigDecimal balanceAmountSunday;
   private BigDecimal balanceAmountAtCalculationMoment;
+  private BigDecimal feeAmountSunday;
   private String comment;
 }

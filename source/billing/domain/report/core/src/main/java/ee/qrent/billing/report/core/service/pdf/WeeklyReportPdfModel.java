@@ -15,6 +15,8 @@ public class WeeklyReportPdfModel {
 
     private final Integer callSign;
     private final BigDecimal amount;
+    private final BigDecimal feeAmountSunday;
+
     private final LocalDate currentWeekStart;
     private final LocalDate currentWeekEnd;
     private final LocalDate previousWeekStart;

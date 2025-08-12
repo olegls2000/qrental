@@ -56,6 +56,9 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "balance_amount_sunday")
   private BigDecimal balanceAmountSunday;
 
+  @Column(name = "fee_amount_sunday")
+  private BigDecimal feeAmountSunday;
+
   @Column(name = "balance_Amount_at_calculation_moment")
   private BigDecimal balanceAmountAtCalculationMoment;
 

@@ -4,6 +4,7 @@ import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculatio
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTypeJakarta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface WeeklyReportCalculationSpringDataRepository
     extends JpaRepository<WeeklyReportCalculationJakartaEntity, Long> {
@@ -20,5 +21,5 @@ public interface WeeklyReportCalculationSpringDataRepository
             nativeQuery = true)
 
   WeeklyReportCalculationJakartaEntity getByQWeekIdAndType(
-     final Long qWeekId, final String type);
+            final @Param("qWeekId") Long qWeekId, final @Param("type") String type);
 }
