@@ -2,6 +2,7 @@ package ee.qrent.billing.report.repository.impl;
 
 import ee.qrent.billing.report.adapter.repository.WeeklyReportCalculationRepository;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportCalculationJakartaEntity;
+import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTypeJakarta;
 import ee.qrent.billing.report.repository.spring.WeeklyReportCalculationSpringDataRepository;
 import lombok.AllArgsConstructor;
 
@@ -34,5 +35,12 @@ public class WeeklyReportCalculationRepositoryImpl implements WeeklyReportCalcul
   @Override
   public Long getLastCalculatedQWeekId() {
     return springDataRepository.getLastCalculationQWeekId();
+  }
+
+  @Override
+  public WeeklyReportCalculationJakartaEntity getCalculationByQWeekIdAndReportType(
+      final Long qWeekId, final WeeklyReportTypeJakarta reportType) {
+
+    return springDataRepository.getByQWeekIdAndType(qWeekId, reportType.name());
   }
 }

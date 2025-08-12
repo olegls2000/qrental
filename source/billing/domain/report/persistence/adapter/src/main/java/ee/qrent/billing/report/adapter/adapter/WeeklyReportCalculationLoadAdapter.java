@@ -8,6 +8,8 @@ import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapp
 import ee.qrent.billing.report.adapter.repository.WeeklyReportCalculationRepository;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
+import ee.qrent.billing.report.domain.WeeklyReportType;
+import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTypeJakarta;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -30,5 +32,15 @@ public class WeeklyReportCalculationLoadAdapter implements WeeklyReportCalculati
   @Override
   public Long loadLastCalculatedQWeekId() {
     return repository.getLastCalculatedQWeekId();
+  }
+
+  @Override
+  public WeeklyReportCalculation loadByQWeekIdAndReportType(
+      final Long qWeekId, final WeeklyReportType reportType) {
+    final var entity =
+        repository.getCalculationByQWeekIdAndReportType(
+            qWeekId, WeeklyReportTypeJakarta.valueOf(reportType.name()));
+
+    return mapper.mapToDomain(entity);
   }
 }

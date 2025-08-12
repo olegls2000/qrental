@@ -2,6 +2,7 @@ package ee.qrent.billing.report.spring.config;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationCalculationQuery;
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
+import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
@@ -14,8 +15,10 @@ public class WeeklyReportValidatorConfig {
   @Bean
   WeeklyReportCalculationAddRequestValidator getWeeklyReportAddRequestValidator(
       final GetObligationCalculationQuery obligationCalculationQuery,
-      final GetQWeekQuery qWeekQuery) {
+      final GetQWeekQuery qWeekQuery,
+      final WeeklyReportCalculationLoadPort loadPort) {
 
-    return new WeeklyReportCalculationAddRequestValidator(obligationCalculationQuery, qWeekQuery);
+    return new WeeklyReportCalculationAddRequestValidator(
+        obligationCalculationQuery, qWeekQuery, loadPort);
   }
 }
