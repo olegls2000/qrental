@@ -57,8 +57,9 @@ public class WeeklyReportCalculationUseCaseController {
     if (lastCalculatedWeekId == null) {
       return qWeekQuery.getAll();
     }
+    final var beforeCalculationQWeek = qWeekQuery.getOneBeforeById(lastCalculatedWeekId);
 
-    return qWeekQuery.getAllAfterById(lastCalculatedWeekId);
+    return qWeekQuery.getAllAfterById(beforeCalculationQWeek.getId());
   }
 
   private void addAddRequestToModel(
