@@ -23,34 +23,41 @@ public class WeeklyReportCalculationAddRequestValidator
   @Override
   public ViolationsCollector validate(final WeeklyReportCalculationAddRequest request) {
     final var violationsCollector = new ViolationsCollector();
+    checkDuplicate(request, violationsCollector);
+    checkObligationCalculation(request, violationsCollector);
 
-   /* final var duplicate =
+    return violationsCollector;
+  }
+
+  private void checkObligationCalculation(
+      final WeeklyReportCalculationAddRequest request,
+      final ViolationsCollector violationsCollector) {
+    final var previousWeek = qWeekQuery.getOneBeforeById(request.getQWeekId());
+    final var latestCalculatedQWeekId = obligationCalculationQuery.getLastCalculatedQWeekId();
+    if (previousWeek.getId() == latestCalculatedQWeekId) {
+
+      return;
+    }
+    final var latestCalculatedQWeek = qWeekQuery.getById(latestCalculatedQWeekId);
+    if (previousWeek.compareTo(latestCalculatedQWeek) > 0) {
+      violationsCollector.collect(
+          format(
+              "Impossible to create Weekly Report for the week: %d - %d. Obligation calculation is missing.",
+              previousWeek.getYear(), previousWeek.getNumber()));
+    }
+  }
+
+  private void checkDuplicate(
+      final WeeklyReportCalculationAddRequest request,
+      final ViolationsCollector violationsCollector) {
+    final var duplicate =
         loadPort.loadByQWeekIdAndReportType(
             request.getQWeekId(), WeeklyReportType.valueOf(request.getType().name()));
-
     if (duplicate != null) {
       violationsCollector.collect(
           format(
               "Weekly Report for the week.id: %d  and type: %s already exists.",
               request.getQWeekId(), request.getType().name()));
-    }*/
-    final var previousWeek = qWeekQuery.getOneBeforeById(request.getQWeekId());
-    final var latestCalculatedQWeekId = obligationCalculationQuery.getLastCalculatedQWeekId();
-    if (previousWeek.getId() == latestCalculatedQWeekId) {
-
-      return violationsCollector;
     }
-
-
-    final var latestCalculatedQWeek = qWeekQuery.getById(latestCalculatedQWeekId);
-
-    if (previousWeek.compareTo(latestCalculatedQWeek) > 0) {
-      violationsCollector.collect(
-          format(
-              "Impossible to create Weekly Report for the week: %d - %d. Obligation calculation is missing.",
-                  previousWeek.getYear(), previousWeek.getNumber()));
-    }
-
-    return violationsCollector;
   }
 }
