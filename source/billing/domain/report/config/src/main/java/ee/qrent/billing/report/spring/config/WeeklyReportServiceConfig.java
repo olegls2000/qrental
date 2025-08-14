@@ -18,7 +18,7 @@ import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
 import ee.qrent.billing.report.core.mapper.*;
 import ee.qrent.billing.report.core.service.*;
-import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfConverter;
+import ee.qrent.billing.report.core.service.pdf.converter.*;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfModelMapper;
 import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestValidator;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
@@ -29,100 +29,107 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 @Configuration
 @EnableTransactionManagement
 public class WeeklyReportServiceConfig {
 
-    @Bean
-    GetWeeklyReportCalculationQuery getWeeklyReportCalculationQueryService(
-            final WeeklyReportCalculationLoadPort loadPort,
-            final WeeklyReportCalculationResponseMapper mapper,
-            final GetQWeekQuery qWeekQuery) {
+  @Bean
+  GetWeeklyReportCalculationQuery getWeeklyReportCalculationQueryService(
+      final WeeklyReportCalculationLoadPort loadPort,
+      final WeeklyReportCalculationResponseMapper mapper,
+      final GetQWeekQuery qWeekQuery) {
 
-        return new WeeklyReportCalculationQueryService(loadPort, mapper, qWeekQuery);
-    }
+    return new WeeklyReportCalculationQueryService(loadPort, mapper, qWeekQuery);
+  }
 
-    @Bean
-    GetWeeklyReportQuery getWeeklyReportQueryService(
-            final WeeklyReportLoadPort loadPort, final WeeklyReportResponseMapper mapper) {
+  @Bean
+  GetWeeklyReportQuery getWeeklyReportQueryService(
+      final WeeklyReportLoadPort loadPort, final WeeklyReportResponseMapper mapper) {
 
-        return new WeeklyReportQueryService(loadPort, mapper);
-    }
+    return new WeeklyReportQueryService(loadPort, mapper);
+  }
 
-    @Bean
-    WeeklyReportCalculationUseCaseService getWeeklyReportCalculationUseCaseService(
-            final WeeklyReportCalculationAddRequestValidator addRequestValidator,
-            final WeeklyReportCalculationAddRequestMapper addRequestMapper,
-            final WeeklyReportCalculationAddPort addPort,
-            final GetObligationQuery obligationQuery,
-            final GetQWeekQuery qWeekQuery,
-            final GetDriverQuery driverQuery,
-            final GetCallSignLinkQuery callSignLinkQuery,
-            final GetCarLinkQuery carLinkQuery,
-            final GetFirmLinkQuery firmLinkQuery,
-            final GetBalanceQuery balanceQuery,
-            final GetTransactionQuery getTransactionQuery,
-            final GetContractQuery contractQuery,
-            final GetDepositQuery depositQuery,
-            final WeeklyReportSendByEmailUseCase sendByEmailUseCase) {
+  @Bean
+  WeeklyReportCalculationUseCaseService getWeeklyReportCalculationUseCaseService(
+      final WeeklyReportCalculationAddRequestValidator addRequestValidator,
+      final WeeklyReportCalculationAddRequestMapper addRequestMapper,
+      final WeeklyReportCalculationAddPort addPort,
+      final GetObligationQuery obligationQuery,
+      final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery driverQuery,
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetCarLinkQuery carLinkQuery,
+      final GetFirmLinkQuery firmLinkQuery,
+      final GetBalanceQuery balanceQuery,
+      final GetTransactionQuery getTransactionQuery,
+      final GetContractQuery contractQuery,
+      final GetDepositQuery depositQuery,
+      final WeeklyReportSendByEmailUseCase sendByEmailUseCase) {
 
-        return new WeeklyReportCalculationUseCaseService(
-                addRequestValidator,
-                addRequestMapper,
-                addPort,
-                obligationQuery,
-                qWeekQuery,
-                driverQuery,
-                callSignLinkQuery,
-                carLinkQuery,
-                firmLinkQuery,
-                balanceQuery,
-                getTransactionQuery,
-                contractQuery,
-                depositQuery,
-                sendByEmailUseCase);
-    }
+    return new WeeklyReportCalculationUseCaseService(
+        addRequestValidator,
+        addRequestMapper,
+        addPort,
+        obligationQuery,
+        qWeekQuery,
+        driverQuery,
+        callSignLinkQuery,
+        carLinkQuery,
+        firmLinkQuery,
+        balanceQuery,
+        getTransactionQuery,
+        contractQuery,
+        depositQuery,
+        sendByEmailUseCase);
+  }
 
-    @Bean
-    WeeklyReportToPdfConverter getWeeklyReportToPdfConverter() {
+  @Bean
+  List<WeeklyReportPdfConversionStrategy> getWeeklyReportPdfConversionStrategies() {
 
-        return new WeeklyReportToPdfConverter();
-    }
+    return asList(
+        new WeeklyReportMondayPdfConverter(),
+        new WeeklyReportTuesdayPdfConverter(),
+        new WeeklyReportWednesdayPdfConverter(),
+        new WeeklyReportFridayPdfConverter());
+  }
 
-    @Bean
-    WeeklyReportToPdfModelMapper getWeeklyReportToPdfModelMapper(
-            final GetQWeekQuery qWeekQuery,
-            final GetDriverQuery driverQuery,
-            final GetCallSignQuery callSignQuery) {
+  @Bean
+  WeeklyReportToPdfModelMapper getWeeklyReportToPdfModelMapper(
+      final GetQWeekQuery qWeekQuery,
+      final GetDriverQuery driverQuery,
+      final GetCallSignQuery callSignQuery) {
 
-        return new WeeklyReportToPdfModelMapper(
-                qWeekQuery, driverQuery, callSignQuery);
-    }
+    return new WeeklyReportToPdfModelMapper(qWeekQuery, driverQuery, callSignQuery);
+  }
 
-    @Bean
-    WeeklyReportSendByEmailUseCase getWeeklyReportSendByEmailUseCase(
-            final QueueEntryPushUseCase notificationQueuePushUseCase,
-            final WeeklyReportLoadPort weeklyReportLoadPort,
-            final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
-            final GetDriverQuery driverQuery,
-            final GetCallSignLinkQuery callSignLinkQuery,
-            final QDateTime qDateTime) {
+  @Bean
+  WeeklyReportSendByEmailUseCase getWeeklyReportSendByEmailUseCase(
+      final QueueEntryPushUseCase notificationQueuePushUseCase,
+      final WeeklyReportLoadPort weeklyReportLoadPort,
+      final WeeklyReportPdfUseCase weeklyReportPdfUseCase,
+      final GetDriverQuery driverQuery,
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final QDateTime qDateTime) {
 
-        return new WeeklyReportSendByEmailService(
-                notificationQueuePushUseCase,
-                weeklyReportLoadPort,
-                weeklyReportPdfUseCase,
-                driverQuery,
-                callSignLinkQuery,
-                qDateTime);
-    }
+    return new WeeklyReportSendByEmailService(
+        notificationQueuePushUseCase,
+        weeklyReportLoadPort,
+        weeklyReportPdfUseCase,
+        driverQuery,
+        callSignLinkQuery,
+        qDateTime);
+  }
 
-    @Bean
-    WeeklyReportPdfUseCase getWeeklyReportPdfUseCase(
-            final WeeklyReportLoadPort loadPort,
-            final WeeklyReportToPdfModelMapper mapper,
-            final WeeklyReportToPdfConverter converter) {
+  @Bean
+  WeeklyReportPdfUseCase getWeeklyReportPdfUseCase(
+      final WeeklyReportLoadPort loadPort,
+      final WeeklyReportToPdfModelMapper mapper,
+      List<WeeklyReportPdfConversionStrategy> conversionStrategies) {
 
-        return new WeeklyReportPdfUseCaseImpl(loadPort, mapper, converter);
-    }
+    return new WeeklyReportPdfUseCaseImpl(loadPort, mapper, conversionStrategies);
+  }
 }
