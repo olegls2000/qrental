@@ -1,5 +1,6 @@
 package ee.qrent.billing.driver.persistence.adapter;
 
+import ee.qrent.billing.driver.persistence.entity.jakarta.CommunicationLanguageJakarta;
 import ee.qrent.billing.driver.persistence.mapper.DriverAdapterMapper;
 import ee.qrent.billing.driver.persistence.repository.DriverRepository;
 import ee.qrent.billing.driver.api.out.DriverAddPort;
@@ -46,6 +47,8 @@ public class DriverPersistenceAdapter implements DriverAddPort, DriverUpdatePort
     entity.setActive(domain.getActive());
     entity.setFirstName(domain.getFirstName());
     entity.setLastName(domain.getLastName());
+    entity.setCommunicationLanguage(
+        CommunicationLanguageJakarta.valueOf(domain.getCommunicationLanguage().name()));
     entity.setTaxNumber(domain.getTaxNumber());
     entity.setPhone(domain.getPhone());
     entity.setEmail(domain.getEmail());

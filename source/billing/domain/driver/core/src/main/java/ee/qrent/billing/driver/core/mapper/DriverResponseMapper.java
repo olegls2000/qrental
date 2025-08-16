@@ -3,6 +3,7 @@ package ee.qrent.billing.driver.core.mapper;
 import static java.lang.String.format;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.driver.domain.CallSign;
 import ee.qrent.billing.driver.domain.Driver;
@@ -31,6 +32,9 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .id(domain.getId())
         .active(domain.getActive())
         .callSign(callSign)
+        .communicationLanguage(
+            CommunicationLanguageIn.valueOf(domain.getCommunicationLanguage().name())
+                .getLabel())
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
         .taxNumber(domain.getTaxNumber())

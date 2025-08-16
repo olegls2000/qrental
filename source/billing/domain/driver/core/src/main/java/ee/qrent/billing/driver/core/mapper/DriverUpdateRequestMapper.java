@@ -1,7 +1,9 @@
 package ee.qrent.billing.driver.core.mapper;
 
+import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
 import ee.qrent.billing.driver.api.in.request.DriverUpdateRequest;
 import ee.qrent.billing.driver.domain.CallSign;
+import ee.qrent.billing.driver.domain.CommunicationLanguage;
 import ee.qrent.billing.driver.domain.Driver;
 import ee.qrent.billing.driver.domain.LegalEntityType;
 import ee.qrent.common.in.mapper.UpdateRequestMapper;
@@ -20,6 +22,8 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .active(request.getActive())
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
+        .communicationLanguage(
+            CommunicationLanguage.valueOf(request.getCommunicationLanguage().name()))
         .taxNumber(request.getTaxNumber())
         .phone(request.getPhone())
         .email(request.getEmail())
@@ -76,6 +80,8 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .callSign(domain.getCallSignValue())
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
+        .communicationLanguage(
+            CommunicationLanguageIn.valueOf(domain.getCommunicationLanguage().name()))
         .taxNumber(domain.getTaxNumber())
         .phone(domain.getPhone())
         .email(domain.getEmail())

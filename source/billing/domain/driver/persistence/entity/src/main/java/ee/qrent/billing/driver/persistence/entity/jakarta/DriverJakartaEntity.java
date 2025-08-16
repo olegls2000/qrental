@@ -27,6 +27,10 @@ public class DriverJakartaEntity {
   @Column(name = "active")
   private Boolean active;
 
+  @Column(name = "communication_language")
+  @Enumerated(EnumType.STRING)
+  private CommunicationLanguageJakarta communicationLanguage;
+
   @Column(name = "first_name")
   private String firstName;
 

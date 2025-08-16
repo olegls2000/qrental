@@ -1,11 +1,9 @@
 package ee.qrent.billing.driver.core.mapper;
 
+import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
+import ee.qrent.billing.driver.domain.*;
 import ee.qrent.common.in.mapper.AddRequestMapper;
 import ee.qrent.billing.driver.api.in.request.DriverAddRequest;
-import ee.qrent.billing.driver.domain.CallSign;
-import ee.qrent.billing.driver.domain.Driver;
-import ee.qrent.billing.driver.domain.Friendship;
-import ee.qrent.billing.driver.domain.LegalEntityType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +18,8 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .active(request.getActive())
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
+        .communicationLanguage(
+            CommunicationLanguage.valueOf(request.getCommunicationLanguage().name()))
         .taxNumber(request.getTaxNumber())
         .phone(request.getPhone())
         .email(request.getEmail())

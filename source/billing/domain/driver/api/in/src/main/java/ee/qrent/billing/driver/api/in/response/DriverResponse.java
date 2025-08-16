@@ -12,6 +12,9 @@ public class DriverResponse {
   private Boolean active;
   private String firstName;
   private String lastName;
+  private String communicationLanguage;
+  private LocalDate dateOfBirth;
+  private LocalDate dateOfDeath;
   private Long taxNumber;
   private Integer callSign;
   private String phone;

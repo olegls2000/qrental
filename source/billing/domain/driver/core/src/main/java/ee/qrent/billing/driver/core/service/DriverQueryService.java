@@ -1,9 +1,11 @@
 package ee.qrent.billing.driver.core.service;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationCalculationQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
 import ee.qrent.billing.driver.api.in.request.DriverUpdateRequest;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.driver.api.in.response.FriendshipResponse;
@@ -69,7 +71,8 @@ public class DriverQueryService implements GetDriverQuery {
 
   @Override
   public List<FriendshipResponse> getFriendships(final Long driverId) {
-    return friendshipLoadPort.loadByDriverId(driverId).stream()
+
+      return friendshipLoadPort.loadByDriverId(driverId).stream()
         .map(friendshipResponseMapper::toResponse)
         .collect(toList());
   }
@@ -79,14 +82,21 @@ public class DriverQueryService implements GetDriverQuery {
     final var matchCount = Integer.valueOf(0);
     final var latestCalculatedQWeekId = obligationCalculationQuery.getLastCalculatedQWeekId();
 
-   return loadPort.loadByMatchCountAndQWeekId(matchCount, latestCalculatedQWeekId).stream()
-            .map(mapper::toResponse)
-            .sorted(getCallSignOrLastNameComparator())
-            .collect(toList());
+    return loadPort.loadByMatchCountAndQWeekId(matchCount, latestCalculatedQWeekId).stream()
+        .map(mapper::toResponse)
+        .sorted(getCallSignOrLastNameComparator())
+        .collect(toList());
   }
 
   @Override
   public DriverResponse getDriverByBoltId(final String boltId) {
-    return mapper.toResponse(loadPort.loadByBoltId(boltId));
+
+      return mapper.toResponse(loadPort.loadByBoltId(boltId));
+  }
+
+  @Override
+  public List<CommunicationLanguageIn> getCommunicationLanguages() {
+
+      return asList(CommunicationLanguageIn.values());
   }
 }

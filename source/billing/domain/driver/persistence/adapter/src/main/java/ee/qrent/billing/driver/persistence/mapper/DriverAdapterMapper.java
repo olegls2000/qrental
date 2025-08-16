@@ -1,9 +1,7 @@
 package ee.qrent.billing.driver.persistence.mapper;
 
-import ee.qrent.billing.driver.domain.CallSign;
-import ee.qrent.billing.driver.domain.Driver;
-import ee.qrent.billing.driver.domain.Friendship;
-import ee.qrent.billing.driver.domain.LegalEntityType;
+import ee.qrent.billing.driver.domain.*;
+import ee.qrent.billing.driver.persistence.entity.jakarta.CommunicationLanguageJakarta;
 import ee.qrent.billing.driver.persistence.entity.jakarta.DriverJakartaEntity;
 import ee.qrent.billing.driver.persistence.repository.CallSignLinkRepository;
 import ee.qrent.billing.driver.persistence.repository.FriendshipRepository;
@@ -28,6 +26,8 @@ public class DriverAdapterMapper {
     return Driver.builder()
         .id(entity.getId())
         .active(entity.getActive())
+        .communicationLanguage(
+            CommunicationLanguage.valueOf(entity.getCommunicationLanguage().name()))
         .callSign(callSign)
         .friendship(friendship)
         .firstName(entity.getFirstName())
@@ -72,6 +72,8 @@ public class DriverAdapterMapper {
     return DriverJakartaEntity.builder()
         .id(domain.getId())
         .active(domain.getActive())
+        .communicationLanguage(
+            CommunicationLanguageJakarta.valueOf(domain.getCommunicationLanguage().name()))
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
         .taxNumber(domain.getTaxNumber())

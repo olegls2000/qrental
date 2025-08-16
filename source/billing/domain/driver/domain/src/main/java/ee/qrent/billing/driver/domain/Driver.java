@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 public class Driver {
   private Long id;
   private Boolean active;
+  private CommunicationLanguage communicationLanguage;
   private String firstName;
   private String lastName;
   private Long taxNumber;

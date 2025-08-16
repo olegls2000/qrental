@@ -226,12 +226,27 @@
                 </div>
             </div>
         </div>
-        <div class="mb-3">
-            <input class="form-check-input" id="needInvoicesByEmailId"
-                   th:field="*{needInvoicesByEmail}"
-                   type="checkbox"/>
-            <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
-                email</label>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="weekId">Select communication language</label>
+                    <select id="weekId" class="form-select"
+                            th:field="*{communicationLanguage}">
+                        <option th:each="communicationLanguage: ${communicationLanguages}"
+                                th:value="${communicationLanguage}"
+                                th:text="${communicationLanguage.label}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="needInvoicesByEmailId"
+                           th:field="*{needInvoicesByEmail}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
+                        email</label>
+                </div>
+            </div>
         </div>
         <p class="fs-5">Drivers communication type:</p>
         <div class="row">

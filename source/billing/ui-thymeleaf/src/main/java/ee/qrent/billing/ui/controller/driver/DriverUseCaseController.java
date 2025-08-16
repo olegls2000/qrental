@@ -43,6 +43,7 @@ public class DriverUseCaseController {
     addQFirmsToModel(model);
     addCallSignOptionsToModel(model);
     addRecommendedByOptionsToModel(model);
+    addCommunicationLanguagesToModel(model);
 
     return "forms/addDriver";
   }
@@ -67,6 +68,7 @@ public class DriverUseCaseController {
       model.addAttribute(ADD_REQUEST_ATTRIBUTE, addRequest);
       addQFirmsToModel(model);
       addCallSignOptionsToModel(model);
+      addCommunicationLanguagesToModel(model);
 
       return "forms/addDriver";
     }
@@ -81,6 +83,7 @@ public class DriverUseCaseController {
     addQFirmsToModel(model);
     addCallSignOptionsToModel(model, updateRequest);
     addRecommendedByOptionsToModel(model);
+    addCommunicationLanguagesToModel(model);
 
     return "forms/updateDriver";
   }
@@ -109,6 +112,7 @@ public class DriverUseCaseController {
       addCallSignOptionsToModel(model, updateRequest);
       addRecommendedByOptionsToModel(model);
       addQFirmsToModel(model);
+      addCommunicationLanguagesToModel(model);
 
       return "forms/updateDriver";
     }
@@ -128,5 +132,9 @@ public class DriverUseCaseController {
     deleteUseCase.delete(deleteRequest);
 
     return "redirect:" + DRIVER_ROOT_PATH;
+  }
+
+  private void addCommunicationLanguagesToModel(final Model model) {
+    model.addAttribute("communicationLanguages", driverQuery.getCommunicationLanguages());
   }
 }

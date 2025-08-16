@@ -20,6 +20,7 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private Integer callSign;
   private String firstName;
   private String lastName;
+  private CommunicationLanguageIn communicationLanguage;
   private Long taxNumber;
   private String phone;
   private String email;

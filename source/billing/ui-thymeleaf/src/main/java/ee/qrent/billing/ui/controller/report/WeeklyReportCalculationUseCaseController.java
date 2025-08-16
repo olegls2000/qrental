@@ -1,6 +1,5 @@
 package ee.qrent.billing.ui.controller.report;
 
-import static ee.qrent.billing.ui.controller.ControllerUtils.INVOICE_ROOT_PATH;
 import static ee.qrent.billing.ui.controller.ControllerUtils.REPORT_ROOT_PATH;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
@@ -32,7 +31,7 @@ public class WeeklyReportCalculationUseCaseController {
   public String addForm(final Model model) {
     addAddRequestToModel(new WeeklyReportCalculationAddRequest(), model);
     addWeeksToModel(model);
-    addAddTypesToModel(model);
+    addTypesToModel(model);
 
     return "forms/addWeeklyReportCalculation";
   }
@@ -44,7 +43,7 @@ public class WeeklyReportCalculationUseCaseController {
     if (addRequest.hasViolations()) {
       addAddRequestToModel(addRequest, model);
       addWeeksToModel(model);
-      addAddTypesToModel(model);
+      addTypesToModel(model);
 
       return "forms/addWeeklyReportCalculation";
     }
@@ -71,7 +70,7 @@ public class WeeklyReportCalculationUseCaseController {
     model.addAttribute("weeks", getWeeks());
   }
 
-  private void addAddTypesToModel(final Model model) {
+  private void addTypesToModel(final Model model) {
     model.addAttribute("types", weeklyReportCalculationQuery.getWeeklyReportTypes());
   }
 }

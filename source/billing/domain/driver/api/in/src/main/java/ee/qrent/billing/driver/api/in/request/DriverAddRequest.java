@@ -14,6 +14,7 @@ public class DriverAddRequest extends AbstractAddRequest {
   private Boolean active;
   private String firstName;
   private String lastName;
+  private CommunicationLanguageIn communicationLanguage;
   private Long taxNumber;
   private String phone;
   private String email;
