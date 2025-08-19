@@ -101,9 +101,10 @@ public class WeeklyReportServiceConfig {
   WeeklyReportToPdfModelMapper getWeeklyReportToPdfModelMapper(
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
-      final GetCallSignQuery callSignQuery) {
+      final GetCallSignQuery callSignQuery,
+      final ee.qrent.billing.car.api.in.query.GetCarQuery carQuery) {
 
-    return new WeeklyReportToPdfModelMapper(qWeekQuery, driverQuery, callSignQuery);
+    return new WeeklyReportToPdfModelMapper(qWeekQuery, driverQuery, callSignQuery, carQuery);
   }
 
   @Bean

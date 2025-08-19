@@ -64,4 +64,6 @@ public class WeeklyReportJakartaEntity {
 
   @Column(name = "comment")
   private String comment;
+
+
 }
