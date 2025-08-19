@@ -2,6 +2,8 @@ package ee.qrent.billing.report.core.service;
 
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.reducing;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
@@ -31,6 +33,9 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Transactional(SUPPORTS)
@@ -141,8 +146,17 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
+        .transactionTypesVsAmount(getAmountsMap(driverId, previousWeek.getId()))
         .comment("Automatically generated weekly report")
         .build();
+  }
+
+  private Map<String, BigDecimal> getAmountsMap(final Long driverId, final Long qWeekId) {
+    return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
+        .collect(
+            groupingBy(
+                TransactionResponse::getType,
+                reducing(BigDecimal.ZERO, TransactionResponse::getRealAmount, BigDecimal::add)));
   }
 
   private BigDecimal getBalanceAmountOnDate(

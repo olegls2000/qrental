@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @SuperBuilder
 @Getter
@@ -26,6 +27,6 @@ public class WeeklyReport {
   private BigDecimal balanceAmountSunday;
   private BigDecimal balanceAmountAtCalculationMoment;
   private BigDecimal feeAmountSunday;
-
+  private Map<String, BigDecimal> transactionTypesVsAmount;
   private String comment;
 }

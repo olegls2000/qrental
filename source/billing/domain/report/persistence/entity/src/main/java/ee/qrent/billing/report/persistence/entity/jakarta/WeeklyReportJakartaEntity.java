@@ -2,14 +2,20 @@ package ee.qrent.billing.report.persistence.entity.jakarta;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "weekly_report")
@@ -62,8 +68,11 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "balance_Amount_at_calculation_moment")
   private BigDecimal balanceAmountAtCalculationMoment;
 
+  @Type(JsonBinaryType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(name = "transaction_types_vs_amount", columnDefinition = "jsonb")
+  private Map<String, BigDecimal> transactionTypesVsAmount;
+
   @Column(name = "comment")
   private String comment;
-
-
 }

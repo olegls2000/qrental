@@ -4,6 +4,7 @@ dependencies{
     implementation(libs.q.hibernate.envers)
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)
+
 }
 tasks.jar {
     archiveFileName.set("queue-persistence-entity.jar")
