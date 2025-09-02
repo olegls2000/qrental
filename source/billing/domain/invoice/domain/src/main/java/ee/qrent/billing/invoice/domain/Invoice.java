@@ -37,6 +37,8 @@ public class Invoice {
   private BigDecimal currentWeekFee;
   private BigDecimal previousWeekBalanceFee;
   private BigDecimal previousWeekPositiveTxSum;
+  private BigDecimal previousWeekAllPositiveTxSum;
+  private BigDecimal previousWeekAllNegativeTxSum;
   private String comment;
   private List<InvoiceItem> items;
 

@@ -41,4 +41,5 @@ public class InvoicePdfModel {
   private BigDecimal totalWithFee;
   private BigDecimal block2A;
   private BigDecimal block2B;
+  private BigDecimal block2C;
 }

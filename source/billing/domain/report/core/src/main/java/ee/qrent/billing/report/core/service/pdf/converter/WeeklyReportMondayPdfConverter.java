@@ -4,6 +4,7 @@ import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static com.lowagie.text.alignment.HorizontalAlignment.*;
 import static com.lowagie.text.alignment.HorizontalAlignment.LEFT;
+import static java.awt.Color.BLACK;
 import static java.awt.Color.white;
 import static java.lang.String.format;
 
@@ -54,19 +55,21 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         getHeader(
             model.getFirstName(), model.getLastName(), model.getTaxNumber(), model.getCallSign());
         final var block1 = getBlock1(model);
-        final var conditionalBlock = getConditionalBlock(model);
-        final var block20 = getBlock20(model);
+//        final var conditionalBlock = getConditionalBlock(model);
+//        final var block20 = getBlock20(model);
         final var block22 = getBlock22(model);
         final var block25 = getBlock25(model);
-
+        final var txTypesBlock = getTransactionTypesBlock(model);
+ 
 
     weeklyReportPdfDoc.open();
     weeklyReportPdfDoc.add(header);
     weeklyReportPdfDoc.add(block1);
-        weeklyReportPdfDoc.add(conditionalBlock);
-        weeklyReportPdfDoc.add(block20);
+//        weeklyReportPdfDoc.add(conditionalBlock);
+//        weeklyReportPdfDoc.add(block20);
         weeklyReportPdfDoc.add(block22);
         weeklyReportPdfDoc.add(block25);
+        weeklyReportPdfDoc.add(txTypesBlock);
     weeklyReportPdfDoc.close();
     writer.close();
 
@@ -130,7 +133,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         block1.addCell(getChapterNumber("-"));
         block1.addCell(
                 getChapterSummary(
-                        "Согласно последним данным, внесенным в нашу программу, твои обязательства перед Q Takso Veod OÜ: "
+                        "Согласно последним данным, внесенным в нашу программу, твой баланс составляет: "
                                 + formatAmount(model.getAmount())
                                 + " за прошлую неделю "
                                 + weekNumber
@@ -141,147 +144,147 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         return block1;
     }
 
-    private Table getConditionalBlock(final WeeklyReportPdfModel model) {
-        final var balanceAmountSunday = model.getBalanceAmountSunday();
+//    private Table getConditionalBlock(final WeeklyReportPdfModel model) {
+//        final var balanceAmountSunday = model.getBalanceAmountSunday();
+//
+//        if (balanceAmountSunday == null) {
+//            return getBlock12(model); // default case
+//        }
+//
+//        final int comparison = balanceAmountSunday.compareTo(BigDecimal.ZERO);
+//
+//        if (comparison > 0) {
+//            return getBlock8(model); // Amount Sunday > 0
+//        } else if (comparison == 0) {
+//            return getBlock12(model); // Amount Sunday = 0
+//        } else {
+//            return getBlock16(model); // Amount Sunday < 0
+//        }
+//    }
 
-        if (balanceAmountSunday == null) {
-            return getBlock12(model); // default case
-        }
+//    private Table getBlock8(final WeeklyReportPdfModel model) {
+//        final var block = getChapterTable();
+//
+//        block.addCell(getChapterNumber("1"));
+//        block.addCell(
+//                getChapterSummary(
+//                        " – «были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твое сальдо на конец прошлой недели "
+//                                + formatDate(model.getPreviousWeekStart())
+//                                + "-"
+//                                + formatDate(model.getPreviousWeekEnd())
+//                                + " составило: "
+//                                + formatAmount(model.getBalanceAmountSunday())
+//                                + "."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "В результате на конец прошлой недели "
+//                                + formatDate(model.getPreviousWeekStart())
+//                                + "-"
+//                                + formatDate(model.getPreviousWeekEnd())
+//                                + " твое сальдо перед нами составило: «"
+//                                + formatAmount(model.getBalanceAmountSunday())
+//                                + " в виде предоплаты. Образовавшаяся на конец недели предоплата, будет учтена при рассчете суммы твоих общих обязательств следующей недели» / «0,00 € в виде отсутствия обоюдных, востребованных обязательств»."
+//                                + "\n"
+//                                + "В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте на текущую неделю "
+//                                + formatDate(model.getCurrentWeekStart())
+//                                + "-"
+//                                + formatDate(model.getCurrentWeekEnd())
+//                                + ". Соответствующие бонусные корректировки будут начислены в твой баланс в случае соблюдения тобой прочих условий.»"));
+//
+//        return block;
+//    }
+//
+//    private Table getBlock12(final WeeklyReportPdfModel model) {
+//        final var block = getChapterTable();
+//
+//        block.addCell(getChapterNumber("1"));
+//        block.addCell(
+//        getChapterSummary(
+//                        " – «были выполнены в полном объеме, но с опозданием. Твое сальдо на конец прошлой недели "
+//                                + formatDate(model.getPreviousWeekStart())
+//                                + "-"
+//                                + formatDate(model.getPreviousWeekEnd())
+//                                + " составило: "
+//                                + formatAmount(model.getBalanceAmountSunday())
+//                                + "."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "Это означает, что несмотря на то, что твои платежные обязательства перед Q Takso Veod OÜ были выполнены в полном объеме до конца прошлой недели "
+//                                + formatDate(model.getPreviousWeekStart())
+//                                + "-"
+//                                + formatDate(model.getPreviousWeekEnd())
+//                                + ", и тебе не будут начислены дополнительные виивисы / пени, наши еженедельные бонусные кампании не будут для дебя доступны."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "Это так, поскольку первичным условием для участия в наших еженедельных бонусных кампаниях является своевременное, а именно – до вторника текущей недели включительно, выполнение тобой твоих договрных обязательств. Согласно подписанному тобой договору, под выполнением тобой твои договорных обязательств подразумевается оплата твоих текущих арендных обязательств в полном объеме, а также покрытие твоих задолженностей и прочих обязательств перед Q Takso Veod OÜ (если такие задолженности или обязательства имеются) в размере не меньшем, чем 25% от твоей текущей арендной платы еженедельно."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "Мы будем благодарны, если ты закроешь свои обязательства по текущей неделе "
+//                                + formatDate(model.getCurrentWeekStart())
+//                                + "-"
+//                                + formatDate(model.getCurrentWeekEnd())
+//                                + " без долгов и всрок. В таком случае бонусные кампании для тебя вновь будут активиованы, а виивисы / пени не будут начислены, даже несмотря на имеющуюся задолженность (если она будет иметься на тот момент).»"));
+//
+//        return block;
+//    }
+//
+//    private Table getBlock16(final WeeklyReportPdfModel model) {
+//        final var block = getChapterTable();
+//
+//        block.addCell(getChapterNumber("1"));
+//        block.addCell(
+//                getChapterSummary(
+//                        " – «не были выполнены своевременно и в полном объеме. Твое сальдо на конец прошлой недели "
+//                                + formatDate(model.getPreviousWeekStart())
+//                                + "-"
+//                                + formatDate(model.getPreviousWeekEnd())
+//                                + " составило: "
+//                                + formatAmount(model.getBalanceAmountSunday())
+//                                + "."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "В результате и у тебя образовалась новая задолженность в размере: "
+//                                + formatAmount(model.getBalanceAmountSunday())
+//                                + ", которая прибавилась к уже существующей на тот момент задолженности в размере 0,00 €. Как следствие, тебе будут начислены дополнительные виивисы / пени за просрочку твоих платежей в соответствии с условиями твоего договора, а наши еженедельные бонусных кампании не будут для дебя доступны."));
+//
+//        block.addCell(getSubChapterNumber("-"));
+//        block.addCell(
+//                getSubChapterText(
+//                        "Мы будем длагодарны, если ты закроешь свои обязательства по текущей неделе "
+//                                + formatDate(model.getCurrentWeekStart())
+//                                + "-"
+//                                + formatDate(model.getCurrentWeekEnd())
+//                                + " без долгов и всрок. В таком случае еженедельные бонусные кампании для тебя вновь будут активиованы, а виивисы / пени не будут начислены, даже несмотря на имеющуюся задолженность (если она будет иметься на тот момент).»"));
+//
+//        return block;
+//    }
 
-        final int comparison = balanceAmountSunday.compareTo(BigDecimal.ZERO);
-
-        if (comparison > 0) {
-            return getBlock8(model); // Amount Sunday > 0
-        } else if (comparison == 0) {
-            return getBlock12(model); // Amount Sunday = 0
-        } else {
-            return getBlock16(model); // Amount Sunday < 0
-        }
-    }
-
-    private Table getBlock8(final WeeklyReportPdfModel model) {
-        final var block = getChapterTable();
-
-        block.addCell(getChapterNumber("1"));
-        block.addCell(
-                getChapterSummary(
-                        " – «были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твое сальдо на конец прошлой недели "
-                                + formatDate(model.getPreviousWeekStart())
-                                + "-"
-                                + formatDate(model.getPreviousWeekEnd())
-                                + " составило: "
-                                + formatAmount(model.getBalanceAmountSunday())
-                                + "."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "В результате на конец прошлой недели "
-                                + formatDate(model.getPreviousWeekStart())
-                                + "-"
-                                + formatDate(model.getPreviousWeekEnd())
-                                + " твое сальдо перед нами составило: «"
-                                + formatAmount(model.getBalanceAmountSunday())
-                                + " в виде предоплаты. Образовавшаяся на конец недели предоплата, будет учтена при рассчете суммы твоих общих обязательств следующей недели» / «0,00 € в виде отсутствия обоюдных, востребованных обязательств»."
-                                + "\n"
-                                + "В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте на текущую неделю "
-                                + formatDate(model.getCurrentWeekStart())
-                                + "-"
-                                + formatDate(model.getCurrentWeekEnd())
-                                + ". Соответствующие бонусные корректировки будут начислены в твой баланс в случае соблюдения тобой прочих условий.»"));
-
-        return block;
-    }
-
-    private Table getBlock12(final WeeklyReportPdfModel model) {
-        final var block = getChapterTable();
-
-        block.addCell(getChapterNumber("1"));
-        block.addCell(
-        getChapterSummary(
-                        " – «были выполнены в полном объеме, но с опозданием. Твое сальдо на конец прошлой недели "
-                                + formatDate(model.getPreviousWeekStart())
-                                + "-"
-                                + formatDate(model.getPreviousWeekEnd())
-                                + " составило: "
-                                + formatAmount(model.getBalanceAmountSunday())
-                                + "."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "Это означает, что несмотря на то, что твои платежные обязательства перед Q Takso Veod OÜ были выполнены в полном объеме до конца прошлой недели "
-                                + formatDate(model.getPreviousWeekStart())
-                                + "-"
-                                + formatDate(model.getPreviousWeekEnd())
-                                + ", и тебе не будут начислены дополнительные виивисы / пени, наши еженедельные бонусные кампании не будут для дебя доступны."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "Это так, поскольку первичным условием для участия в наших еженедельных бонусных кампаниях является своевременное, а именно – до вторника текущей недели включительно, выполнение тобой твоих договрных обязательств. Согласно подписанному тобой договору, под выполнением тобой твои договорных обязательств подразумевается оплата твоих текущих арендных обязательств в полном объеме, а также покрытие твоих задолженностей и прочих обязательств перед Q Takso Veod OÜ (если такие задолженности или обязательства имеются) в размере не меньшем, чем 25% от твоей текущей арендной платы еженедельно."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "Мы будем благодарны, если ты закроешь свои обязательства по текущей неделе "
-                                + formatDate(model.getCurrentWeekStart())
-                                + "-"
-                                + formatDate(model.getCurrentWeekEnd())
-                                + " без долгов и всрок. В таком случае бонусные кампании для тебя вновь будут активиованы, а виивисы / пени не будут начислены, даже несмотря на имеющуюся задолженность (если она будет иметься на тот момент).»"));
-
-        return block;
-    }
-
-    private Table getBlock16(final WeeklyReportPdfModel model) {
-        final var block = getChapterTable();
-
-        block.addCell(getChapterNumber("1"));
-        block.addCell(
-                getChapterSummary(
-                        " – «не были выполнены своевременно и в полном объеме. Твое сальдо на конец прошлой недели "
-                                + formatDate(model.getPreviousWeekStart())
-                                + "-"
-                                + formatDate(model.getPreviousWeekEnd())
-                                + " составило: "
-                                + formatAmount(model.getBalanceAmountSunday())
-                                + "."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "В результате и у тебя образовалась новая задолженность в размере: "
-                                + formatAmount(model.getBalanceAmountSunday())
-                                + ", которая прибавилась к уже существующей на тот момент задолженности в размере 0,00 €. Как следствие, тебе будут начислены дополнительные виивисы / пени за просрочку твоих платежей в соответствии с условиями твоего договора, а наши еженедельные бонусных кампании не будут для дебя доступны."));
-
-        block.addCell(getSubChapterNumber("-"));
-        block.addCell(
-                getSubChapterText(
-                        "Мы будем длагодарны, если ты закроешь свои обязательства по текущей неделе "
-                                + formatDate(model.getCurrentWeekStart())
-                                + "-"
-                                + formatDate(model.getCurrentWeekEnd())
-                                + " без долгов и всрок. В таком случае еженедельные бонусные кампании для тебя вновь будут активиованы, а виивисы / пени не будут начислены, даже несмотря на имеющуюся задолженность (если она будет иметься на тот момент).»"));
-
-        return block;
-    }
-
-    private Table getBlock20(final WeeklyReportPdfModel model) {
-        final var block = getChapterTable();
-        
-        block.addCell(getChapterNumber("-"));
-        block.addCell(
-                getChapterSummary(
-                        "В соответствии с этим твое сальдо перед Q Takso Veod OÜ по состоянию на утро понедельника текущей недели "
-                                + formatDate(model.getCurrentWeekStart())
-                                + "-"
-                                + formatDate(model.getCurrentWeekEnd())
-                                + " составляют: "
-                                + formatAmount(model.getBalanceAmountAtCalculationMoment())
-                                + ". Оплаты этой суммы мы ждем до вторника текущей недели включительно."));
-        
-        return block;
-    }
+//    private Table getBlock20(final WeeklyReportPdfModel model) {
+//        final var block = getChapterTable();
+//
+//        block.addCell(getChapterNumber("-"));
+//        block.addCell(
+//                getChapterSummary(
+//                        "В соответствии с этим твое сальдо перед Q Takso Veod OÜ по состоянию на утро понедельника текущей недели "
+//                                + formatDate(model.getCurrentWeekStart())
+//                                + "-"
+//                                + formatDate(model.getCurrentWeekEnd())
+//                                + " составляют: "
+//                                + formatAmount(model.getBalanceAmountAtCalculationMoment())
+//                                + ". Оплаты этой суммы мы ждем до вторника текущей недели включительно."));
+//
+//        return block;
+//    }
 
     private Table getBlock22(final WeeklyReportPdfModel model) {
         final var block = getChapterTable();
@@ -315,9 +318,9 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         block.addCell(getSubChapterNumber("-"));
         block.addCell(
                 getSubChapterText(
-                        "Car: " + getTextOrEmpty(model.getCarRegistrationNumber())
-                                + "\nDeposit obligation: " + formatAmount(model.getDepositObligation())
-                                + "\nDeposit paid: " + formatAmount(model.getDepositPaid())
+                        "Машина : " + getTextOrEmpty(model.getCarRegistrationNumber())
+                                + "\nДепозит : " + formatAmount(model.getDepositObligation())
+                                + "\nОплаченный депозит : " + formatAmount(model.getDepositPaid())
                                 + "\nОбязательства за прошлую неделю ("
                                 + formatDate(model.getPreviousWeekStart())
                                 + "-"
@@ -328,18 +331,17 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
                                 + formatAmount(model.getBalanceAmountSunday())
                                 + "\nВивисы на конец прошлой недели: ---"
                                 + "\nБаланс на текущий момент ("
-                                + formatDate(model.getCurrentWeekStart())
+                                + formatAmount(model.getBalanceAmountSunday())
                                 + "-"
                                 + formatDate(model.getCurrentWeekEnd())
                                 + "): "
                                 + formatAmount(model.getBalanceAmountAtCalculationMoment())
-                                + "\nВивисы на текущий момент: ---"
-                                + "\nБазовая стоимость аренды: ---"
-                                + "\nДВС: ---"));
-        
+                                + "\nВивисы на текущий момент: ---"));
+    //                            + "\nБазовая стоимость аренды: ---"
+    //                            + "\nДВС: ---"));
+
         return block;
     }
-
 
   protected static Table getChapterTable() {
     final var chapter = new Table(2);
@@ -353,6 +355,20 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
     return chapter;
   }
+
+    protected static Table getDataTable() {
+        final var chapter = new Table(3);
+        chapter.setWidths(new float[]{7, 100, 10});
+        chapter.setPadding(0f);
+        chapter.setSpacing(0f);
+        chapter.setWidth(100f);
+        chapter.setBorderColor(white);
+        chapter.setHorizontalAlignment(CENTER);
+        chapter.setBorder(NO_BORDER);
+
+        return chapter;
+    }
+
 
   protected static Cell getChapterNumber(final String chapterNumber) {
     final var chapterCell =
@@ -411,6 +427,30 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         subChapterTextCell.setHorizontalAlignment(LEFT);
 
         return subChapterTextCell;
+    }
+
+    private Table getTransactionTypesBlock(final WeeklyReportPdfModel model) {
+        final var block = getDataTable();
+        block.addCell(getChapterNumber(""));
+        block.addCell(getChapterSummary("Детализация транзакций за прошлую неделю"));
+        block.addCell(getChapterSummary(" "));
+
+        final var map = model.getTransactionTypesVsAmount();
+        if (map == null || map.isEmpty()) {
+            block.addCell(getSubChapterNumber(""));
+            block.addCell(getSubChapterText("Нет данных по типам транзакций"));
+            return block;
+        }
+
+        for (final var entry : map.entrySet()) {
+            final var type = entry.getKey();
+            final var amount = entry.getValue();
+            block.addCell(getSubChapterNumber(""));
+            block.addCell(getSubChapterNumber(type));
+            block.addCell(getSubChapterText(formatAmount(amount)));
+        }
+
+        return block;
     }
 }
 

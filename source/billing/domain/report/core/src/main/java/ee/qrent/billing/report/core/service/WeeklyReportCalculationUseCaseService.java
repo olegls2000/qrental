@@ -34,7 +34,9 @@ import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -155,6 +157,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
         .collect(
             groupingBy(
+
                 TransactionResponse::getType,
                 reducing(BigDecimal.ZERO, TransactionResponse::getRealAmount, BigDecimal::add)));
   }

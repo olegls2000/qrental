@@ -29,6 +29,57 @@ DO $$
             END LOOP;
     END$$;
 
+-------------------------------------------------------------------------------------
+    --## Driver  - rewrite NULL into not NULL
+
+DO $$
+    DECLARE
+        r RECORD;
+        sql TEXT := 'UPDATE billing.driver SET ';
+        first BOOLEAN := TRUE;
+    BEGIN
+        FOR r IN
+            SELECT column_name, data_type
+            FROM information_schema.columns
+            WHERE table_schema = 'billing'
+              AND table_name   = 'driver'
+            LOOP
+                IF NOT first THEN
+                    sql := sql || ', ';
+                END IF;
+
+                -- текстовые поля → ''
+                IF r.data_type IN ('character varying', 'text', 'char') THEN
+                    sql := sql || r.column_name || ' = COALESCE(' || r.column_name || ', '''')';
+
+                    -- числовые поля → 0
+                ELSIF r.data_type IN ('integer', 'bigint', 'smallint', 'numeric', 'real', 'double precision') THEN
+                    sql := sql || r.column_name || ' = COALESCE(' || r.column_name || ', 0)';
+
+                    -- даты → 1970-01-01
+                ELSIF r.data_type IN ('date') THEN
+                    sql := sql || r.column_name || ' = COALESCE(' || r.column_name || ', ''1970-01-01''::date)';
+
+                    -- timestamp → 1970-01-01 00:00:00
+                ELSIF r.data_type IN ('timestamp without time zone','timestamp with time zone') THEN
+                    sql := sql || r.column_name || ' = COALESCE(' || r.column_name || ', ''1970-01-01 00:00:00''::timestamp)';
+
+                    -- boolean → false
+                ELSIF r.data_type = 'boolean' THEN
+                    sql := sql || r.column_name || ' = COALESCE(' || r.column_name || ', false)';
+
+                ELSE
+                    -- другие типы (json, bytea и т.п.) оставляем без изменений
+                    CONTINUE;
+                END IF;
+
+                first := FALSE;
+            END LOOP;
+
+        sql := sql || ';';
+        RAISE NOTICE 'Executing: %', sql;
+        EXECUTE sql;
+    END $$;
 
 
 
@@ -107,13 +158,62 @@ delete
 from balance bl
 where q_week_id in (select qw.id from q_week qw where qw.number = 26 and qw.year = 2025);
 
+
+----------------------------
+---------------------
+
 delete
-from transaction tx
+from billing.transaction tx
 where tx.transaction_type_id in (select distinct(id)
-                                 from transaction_type
+                                 from billing.transaction_type
                                  where name in ('fee replenish', 'compensation', 'fee debt'))
   and tx.date >= '2025-06-23'::date
   and tx.date <= '2025-05-29'::date;
+
+------------------------
+    ---------------------
+
+DELETE
+FROM billing.balance_calculation_result bcr
+WHERE bcr.balance_id IN (
+    SELECT bl.id
+    FROM billing.balance bl
+    WHERE q_week_id IN (
+        SELECT qw.id
+        FROM billing.q_week qw
+        WHERE qw.year = 2025
+          AND qw.number BETWEEN 1 AND 34
+    )
+);
+
+DELETE
+FROM billing.balance_transaction btr
+WHERE btr.balance_id IN (
+    SELECT bl.id
+    FROM billing.balance bl
+    WHERE q_week_id IN (
+        SELECT qw.id
+        FROM billing.q_week qw
+        WHERE qw.year = 2025
+          AND qw.number BETWEEN 1 AND 34
+    )
+);
+
+DELETE
+FROM billing.balance bl
+WHERE q_week_id IN (
+    SELECT qw.id
+    FROM billing.q_week qw
+    WHERE qw.year = 2025
+      AND qw.number BETWEEN 1 AND 34
+);
+
+
+-------------------------
+    ------------------------
+
+
+
 
 --## Remove all Balance Calculations:
 delete
@@ -141,6 +241,33 @@ where invc.start_q_week_id in (select qw.id from q_week qw where qw.number = 27 
 -- invoice items must be deleted by Cascade!
 -- invoice_calculation_result must be deleted by Cascade!
 -- invoice_transaction must be deleted by Cascade!
+
+
+
+DELETE
+FROM billing.invoice inv
+WHERE inv.q_week_id IN (
+    SELECT qw.id
+    FROM billing.q_week qw
+    WHERE qw.year = 2025
+      AND qw.number BETWEEN 29 AND 31
+);
+
+DELETE
+FROM billing.invoice_calculation invc
+WHERE invc.start_q_week_id IN (
+    SELECT qw.id
+    FROM billing.q_week qw
+    WHERE qw.year = 2025
+      AND qw.number BETWEEN 29 AND 31
+)
+   OR invc.end_q_week_id IN (
+    SELECT qw.id
+    FROM billing.q_week qw
+    WHERE qw.year = 2025
+      AND qw.number BETWEEN 29 AND 31
+);
+
 
 
 --## Remove all Invoice Calculations:
