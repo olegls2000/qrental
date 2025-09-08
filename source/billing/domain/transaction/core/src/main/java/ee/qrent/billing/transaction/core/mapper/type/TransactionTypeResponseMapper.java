@@ -7,28 +7,29 @@ import ee.qrent.billing.transaction.api.in.response.type.TransactionTypeResponse
 import ee.qrent.billing.transaction.domain.type.TransactionType;
 
 public class TransactionTypeResponseMapper
-    implements ResponseMapper<TransactionTypeResponse, TransactionType> {
+        implements ResponseMapper<TransactionTypeResponse, TransactionType> {
 
-  @Override
-  public TransactionTypeResponse toResponse(final TransactionType domain) {
-    final var kind = domain.getKind();
-    final var kindCode = kind == null ? "n/a" : kind.getCode();
+    @Override
+    public TransactionTypeResponse toResponse(final TransactionType domain) {
+        final var kind = domain.getKind();
+        final var kindCode = kind == null ? "n/a" : kind.getCode();
 
-    return TransactionTypeResponse.builder()
-        .id(domain.getId())
-        .name(domain.getName())
-        .negative(domain.isNegative())
-        .feeAble(domain.isFeeAble())
-        .kind(kindCode)
-        .description(domain.getDescription())
-        .invoiceName(domain.getInvoiceName())
-        .invoiceIncluded(domain.getInvoiceIncluded())
-        .comment(domain.getComment())
-        .build();
-  }
+        return TransactionTypeResponse.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .negative(domain.isNegative())
+                .feeAble(domain.isFeeAble())
+                .kind(kindCode)
+                .description(domain.getDescription())
+                .invoiceName(domain.getInvoiceName())
+                .invoiceIncluded(domain.getInvoiceIncluded())
+                .visibleForUi(domain.getVisibleForUi())
+                .comment(domain.getComment())
+                .build();
+    }
 
-  @Override
-  public String toObjectInfo(TransactionType domain) {
-    return format("Transaction type : %s ", domain.getName());
-  }
+    @Override
+    public String toObjectInfo(TransactionType domain) {
+        return format("Transaction type : %s ", domain.getName());
+    }
 }

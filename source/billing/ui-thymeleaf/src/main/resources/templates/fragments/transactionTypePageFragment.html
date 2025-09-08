@@ -20,6 +20,7 @@
             <th>Nimi (estonian language)</th>
             <th>Invoice Name</th>
             <th>Invoice Included</th>
+            <th>visibleForUi</th>
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactionTypes)}">
@@ -53,6 +54,7 @@
             <td th:text="${transactionType.description}">???</td>
             <td th:text="${transactionType.invoiceName}">???</td>
             <td th:text="${transactionType.invoiceIncluded}">???</td>
+            <td th:text="${transactionType.visibleForUi}">???</td>
             <td th:text="${transactionType.comment}">???</td>
         </tr>
     </table>

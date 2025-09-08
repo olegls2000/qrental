@@ -37,6 +37,9 @@ public class TransactionTypeJakartaEntity {
   @Column(name = "invoice_included")
   private Boolean invoiceIncluded;
 
+  @Column(name = "visible_For_Ui")
+  private Boolean visibleForUi;
+
   @Column(name = "comment")
   private String comment;
 

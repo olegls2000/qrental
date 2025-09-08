@@ -7,6 +7,7 @@ import ee.qrent.billing.transaction.api.out.type.TransactionTypeLoadPort;
 import ee.qrent.billing.transaction.core.mapper.type.TransactionTypeResponseMapper;
 import ee.qrent.billing.transaction.core.mapper.type.TransactionTypeUpdateRequestMapper;
 import ee.qrent.billing.transaction.domain.kind.TransactionKindsCode;
+import ee.qrent.billing.transaction.domain.type.TransactionType;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -68,7 +69,9 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
                 TransactionKindsCode.NFA.name(),
                 TransactionKindsCode.SR.name(),
                 TransactionKindsCode.R.name()))
+
         .stream()
+            .filter(TransactionType::isVisibleFoUi)
         .map(mapper::toResponse)
         .collect(toList());
   }
@@ -76,6 +79,7 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
   @Override
   public List<TransactionTypeResponse> getPositive() {
     return loadPort.loadByKindCodesIn(List.of(TransactionKindsCode.P.name())).stream()
+            .filter(TransactionType::isVisibleFoUi)
         .map(mapper::toResponse)
         .toList();
   }

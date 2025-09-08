@@ -6,18 +6,19 @@ import ee.qrent.billing.transaction.domain.kind.TransactionKind;
 import ee.qrent.billing.transaction.domain.type.TransactionType;
 
 public class TransactionTypeAddRequestMapper
-    implements AddRequestMapper<TransactionTypeAddRequest, TransactionType> {
+        implements AddRequestMapper<TransactionTypeAddRequest, TransactionType> {
 
-  @Override
-  public TransactionType toDomain(final TransactionTypeAddRequest request) {
-    return TransactionType.builder()
-        .id(null)
-        .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
-        .name(request.getName())
-        .description(request.getDescription())
-        .invoiceName(request.getInvoiceName())
-        .invoiceIncluded(request.getInvoiceIncluded())
-        .comment(request.getComment())
-        .build();
-  }
+    @Override
+    public TransactionType toDomain(final TransactionTypeAddRequest request) {
+        return TransactionType.builder()
+                .id(null)
+                .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
+                .name(request.getName())
+                .description(request.getDescription())
+                .invoiceName(request.getInvoiceName())
+                .invoiceIncluded(request.getInvoiceIncluded())
+                .visibleForUi(request.getVisibleForUi())
+                .comment(request.getComment())
+                .build();
+    }
 }

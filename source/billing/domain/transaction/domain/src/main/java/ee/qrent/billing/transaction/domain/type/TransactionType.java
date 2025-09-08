@@ -14,6 +14,7 @@ public class TransactionType {
   private String description;
   private String invoiceName;
   private Boolean invoiceIncluded;
+  private Boolean visibleForUi;
   private String comment;
 
   public boolean isNegative() {
@@ -28,6 +29,16 @@ public class TransactionType {
     }
     return true;
   }
+
+  public boolean isVisibleFoUi() {
+
+    if (visibleForUi.equals(false)) {
+
+      return false;
+    }
+    return true;
+  }
+
 
   public boolean isFeeAble() {
     // TODO remove after Kind is set for all types

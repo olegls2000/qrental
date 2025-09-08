@@ -8,31 +8,33 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TransactionTypeAdapterMapper {
 
-  private TransactionKindAdapterMapper transactionKindAdapterMapper;
+    private TransactionKindAdapterMapper transactionKindAdapterMapper;
 
-  public TransactionType mapToDomain(final TransactionTypeJakartaEntity entity) {
+    public TransactionType mapToDomain(final TransactionTypeJakartaEntity entity) {
 
-    return TransactionType.builder()
-        .id(entity.getId())
-        .name(entity.getName())
-        .description(entity.getDescription())
-        .invoiceName(entity.getInvoiceName())
-        .invoiceIncluded(entity.getInvoiceIncluded())
-        .kind(transactionKindAdapterMapper.mapToDomain(entity.getKind()))
-        .comment(entity.getComment())
-        .build();
-  }
+        return TransactionType.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .invoiceName(entity.getInvoiceName())
+                .invoiceIncluded(entity.getInvoiceIncluded())
+                .visibleForUi(entity.getVisibleForUi())
+                .kind(transactionKindAdapterMapper.mapToDomain(entity.getKind()))
+                .comment(entity.getComment())
+                .build();
+    }
 
-  public TransactionTypeJakartaEntity mapToEntity(final TransactionType domain) {
+    public TransactionTypeJakartaEntity mapToEntity(final TransactionType domain) {
 
-    return TransactionTypeJakartaEntity.builder()
-        .id(domain.getId())
-        .name(domain.getName())
-        .description(domain.getDescription())
-        .invoiceName(domain.getInvoiceName())
-        .invoiceIncluded(domain.getInvoiceIncluded())
-        .comment(domain.getComment())
-        .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
-        .build();
-  }
+        return TransactionTypeJakartaEntity.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .description(domain.getDescription())
+                .invoiceName(domain.getInvoiceName())
+                .invoiceIncluded(domain.getInvoiceIncluded())
+                .visibleForUi((domain.getVisibleForUi()))
+                .comment(domain.getComment())
+                .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
+                .build();
+    }
 }
