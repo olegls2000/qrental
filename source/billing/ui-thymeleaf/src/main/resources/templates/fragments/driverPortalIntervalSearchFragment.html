@@ -17,7 +17,7 @@
                         <form th:replace="fragments/driverPortalIntervalSearchFormFragment.html :: searchForm"></form>
                     </div>
                 </div>
-                <div th:if="${transactionFilterRequest.qWeekId != null}">
+                <div th:if="${transactionFilterRequest.startQWeekId != null && transactionFilterRequest.endQWeekId != null}">
                     <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
                         <div class="col-md-auto">
                             <small th:text="|Period Balance data, EURO:|"
@@ -76,32 +76,6 @@
                                    th:classappend="${feePeriodEndAmount<0} ?
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
-                        </div>
-                    </div>
-                    <div id="periodFeeDataId" class="row justify-content-md-center mb-3">
-                        <div class="col-md-auto">
-                            <small th:text="|Period Obligation data, EURO:|"
-                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold text-dark ">???</small>
-                        </div>
-                        <div class="col-md-auto">
-                            <small th:text="|Beginning of period: ${periodObligationAmount}|"
-                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
-                        </div>
-                        <div class="col-md-auto">
-                            <small th:text="|Paid: ${periodObligationAmountPaid}|"
-                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
-                        </div>
-                        <div class="col-md-auto">
-                            <small th:text="|Left to pay: ${periodObligationAmountLeftToPay}|"
-                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
-                        </div>
-                        <div class="col-md-auto">
-                            <small th:text="|Obligation match count: ${periodObligationMatchCount}|"
-                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
-                               border-opacity-10 rounded-2 text-success bg-success border-success">???</small>
                         </div>
                     </div>
                 </div>

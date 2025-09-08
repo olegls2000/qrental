@@ -16,6 +16,8 @@ import ee.qrent.billing.transaction.core.mapper.TransactionResponseMapper;
 import ee.qrent.billing.transaction.core.mapper.TransactionUpdateRequestMapper;
 import ee.qrent.billing.transaction.core.service.strategy.TransactionLoadStrategy;
 import ee.qrent.billing.transaction.domain.Transaction;
+
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -54,8 +56,8 @@ public class TransactionQueryService implements GetTransactionQuery {
     final var qWeek = qWeekQuery.getById(qWeekId);
 
     return mapToTransactionResponseList(
-            transactionLoadPort.loadAllByDriverIdAndBetweenDays(
-                    driverId,qWeek.getStart(), qWeek.getEnd()));
+        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+            driverId, qWeek.getStart(), qWeek.getEnd()));
   }
 
   @Override
@@ -85,7 +87,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   @Override
   public List<TransactionResponse> getAllByInsuranceCaseId(final Long insuranceCaseId) {
     return mapToTransactionResponseList(
-            transactionLoadPort.loadAllByInsuranceCaseId(insuranceCaseId));
+        transactionLoadPort.loadAllByInsuranceCaseId(insuranceCaseId));
   }
 
   @Override
@@ -116,12 +118,34 @@ public class TransactionQueryService implements GetTransactionQuery {
         transactionLoadPort.loadAllBetweenDays(filter.getDateStart(), filter.getDatEnd()));
   }
 
-    @Override
-    public List<TransactionResponse> getAllByFilter(DriverAndQWeekIntervalFilter filter) {
-        return List.of();
+  @Override
+  public List<TransactionResponse> getAllByFilter(final DriverAndQWeekIntervalFilter filter) {
+    final var intervalStartDate = getStartDate(filter.getStartQWeekId());
+    final var intervalEndDate = getEndDate(filter.getEndQWeekId());
+
+    return mapToTransactionResponseList(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+            filter.getDriverId(), intervalStartDate, intervalEndDate));
+  }
+
+  private LocalDate getStartDate(final Long startQWeekId) {
+    if (startQWeekId == null) {
+
+      return qWeekQuery.getFirstWeek().getStart();
     }
 
-    @Override
+    return qWeekQuery.getById(startQWeekId).getStart();
+  }
+
+  private LocalDate getEndDate(final Long endQWeekId) {
+    if (endQWeekId == null) {
+
+      return qWeekQuery.getCurrentWeek().getEnd();
+    }
+    return qWeekQuery.getById(endQWeekId).getEnd();
+  }
+
+  @Override
   public List<TransactionResponse> getAllByQWeekId(final Long qWeekId) {
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var periodFilter =

@@ -35,6 +35,9 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class DriverPortalController {
 
+  private static final String MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST =
+      "transactionFilterRequest";
+
   private final QDateFormatter qDateFormatter;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
@@ -61,9 +64,6 @@ public class DriverPortalController {
 
   private void populateModelForDefaultView(final long driverId, final Model model) {
     model.addAttribute("weeks", qWeekQuery.getAll());
-    final var transactionFilterRequest = new DriverAndQWeekFilter();
-    transactionFilterRequest.setDriverId(driverId);
-    model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     final var transactions = transactionQuery.getAllByDriverId(driverId);
     addTransactionDataToModel(transactions, model);
@@ -80,47 +80,21 @@ public class DriverPortalController {
 
   @GetMapping(value = "/week/driver/{id}")
   public String getDriverPortalWeekView(@PathVariable("id") long driverId, final Model model) {
-      populateModelForDefaultView(driverId, model);
+    final var transactionFilterRequest = new DriverAndQWeekFilter();
+    transactionFilterRequest.setDriverId(driverId);
+    model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
+    populateModelForDefaultView(driverId, model);
 
     return "detailView/driverPortalWeekSearch";
   }
 
   @GetMapping(value = "/interval/driver/{id}")
   public String getDriverPortalIntervalView(@PathVariable("id") long driverId, final Model model) {
-      populateModelForDefaultView(driverId, model);
+    final var transactionFilterRequest = new DriverAndQWeekIntervalFilter();
+    transactionFilterRequest.setDriverId(driverId);
+    model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
 
-    return "detailView/driverPortalIntervalSearch";
-  }
-
-  @PostMapping(value = "/interval/driver")
-  public String getFilteredByIntervalDriverPortalView(
-      @ModelAttribute final DriverAndQWeekIntervalFilter driverAndQWeekIntervalFilterRequest,
-      final Model model) {
-    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    model.addAttribute("weeks", qWeekQuery.getAll());
-    final var driverId = driverAndQWeekIntervalFilterRequest.getDriverId();
-    addDriverDataToModel(driverId, model);
-    addCallSignDataToModel(driverId, model);
-    addContractDataToModel(driverId, model);
-    addCarDataToModel(driverId, model);
-    addTotalFinancialDataToModel(driverId, model);
-    addInsuranceDataToModel(driverId, model);
-    addObligationDataToModel(driverId, model);
-    addAuthorisationDataToModel(driverId, model);
-    addAbsencesDataToModel(driverId, model);
-    model.addAttribute("driverAndQWeekIntervalFilterRequest", driverAndQWeekIntervalFilterRequest);
-
-    final var startQWeekId = driverAndQWeekIntervalFilterRequest.getStartQWeekId();
-    final var endQWeekId = driverAndQWeekIntervalFilterRequest.getEndQWeekId();
-    final var intervalStartDate = qWeekQuery.getById(startQWeekId).getStart();
-    final var intervalEndDate = qWeekQuery.getById(endQWeekId).getEnd();
-
-    final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
-    final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
-
-    final var transactions = transactionQuery.getAllByFilter(driverAndQWeekIntervalFilterRequest);
-    addTransactionDataToModel(transactions, model);
-    addBalancePeriodDataToModel(model, startBalance, endBalance);
+    populateModelForDefaultView(driverId, model);
 
     return "detailView/driverPortalIntervalSearch";
   }
@@ -140,7 +114,7 @@ public class DriverPortalController {
     addObligationDataToModel(driverId, model);
     addAuthorisationDataToModel(driverId, model);
     addAbsencesDataToModel(driverId, model);
-    model.addAttribute("transactionFilterRequest", transactionFilterRequest);
+    model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
     List<TransactionResponse> transactions;
 
     final var requestedQWeekId = transactionFilterRequest.getQWeekId();
@@ -167,9 +141,41 @@ public class DriverPortalController {
     return "detailView/driverPortalWeekSearch";
   }
 
+  @PostMapping(value = "/interval/driver")
+  public String getFilteredByIntervalDriverPortalView(
+      @ModelAttribute final DriverAndQWeekIntervalFilter transactionFilterRequest,
+      final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    model.addAttribute("weeks", qWeekQuery.getAll());
+    final var driverId = transactionFilterRequest.getDriverId();
+    addDriverDataToModel(driverId, model);
+    addCallSignDataToModel(driverId, model);
+    addContractDataToModel(driverId, model);
+    addCarDataToModel(driverId, model);
+    addTotalFinancialDataToModel(driverId, model);
+    addInsuranceDataToModel(driverId, model);
+    addObligationDataToModel(driverId, model);
+    addAuthorisationDataToModel(driverId, model);
+    addAbsencesDataToModel(driverId, model);
+
+    final var startQWeekId = transactionFilterRequest.getStartQWeekId();
+    final var endQWeekId = transactionFilterRequest.getEndQWeekId();
+    final var intervalStartDate = qWeekQuery.getById(startQWeekId).getStart();
+    final var intervalEndDate = qWeekQuery.getById(endQWeekId).getEnd();
+
+    final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
+    final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
+
+    final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
+    addTransactionDataToModel(transactions, model);
+    addBalancePeriodDataToModel(model, startBalance, endBalance);
+
+    return "detailView/driverPortalIntervalSearch";
+  }
+
   private void addBalancePeriodDataToModel(
       final Model model, final BalanceResponse startBalance, final BalanceResponse endBalance) {
-
     final var startWeekFeeAbleAmount = startBalance.getFeeAbleAmount();
     final var startWeekNonFeeAbleAmount = startBalance.getNonFeeAbleAmount();
     final var startWeekPositiveAmount = startBalance.getPositiveAmount();
@@ -178,9 +184,7 @@ public class DriverPortalController {
     model.addAttribute("balancePeriodStartAmount", startWeekTotalAmount);
     final var startWeekFeeAmount = startBalance.getFeeAmount();
     model.addAttribute("feePeriodStartAmount", startWeekFeeAmount);
-
     final var requestedWeekBalance = endBalance;
-
     final var requestedWeekFeeAbleAmount = requestedWeekBalance.getFeeAbleAmount();
     final var requestedWeekNonFeeAbleAmount = requestedWeekBalance.getNonFeeAbleAmount();
     final var requestedWeekPositiveAmount = requestedWeekBalance.getPositiveAmount();
@@ -189,7 +193,6 @@ public class DriverPortalController {
             .add(requestedWeekNonFeeAbleAmount)
             .add(requestedWeekPositiveAmount);
     final var requestedWeekFeeAmount = requestedWeekBalance.getFeeAmount();
-
     model.addAttribute("balancePeriodEndAmount", requestedWeekTotalAmount);
     model.addAttribute("feePeriodEndAmount", requestedWeekFeeAmount);
     model.addAttribute(
@@ -210,14 +213,11 @@ public class DriverPortalController {
 
       return;
     }
-
     final var periodObligationAmount = periodObligation.getAmount();
     final var periodObligationAmountAbs = periodObligationAmount.abs();
-
     model.addAttribute("periodObligationAmount", periodObligationAmountAbs);
     final var periodObligationAmountPaid = periodObligation.getPositiveAmount();
     model.addAttribute("periodObligationAmountPaid", periodObligationAmountPaid);
-
     final var periodObligationDiff = periodObligationAmountAbs.subtract(periodObligationAmountPaid);
     final var periodObligationAmountLeftToPay =
         periodObligationDiff.compareTo(BigDecimal.ZERO) < 0

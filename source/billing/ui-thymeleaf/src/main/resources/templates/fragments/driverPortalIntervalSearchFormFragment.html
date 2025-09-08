@@ -10,7 +10,7 @@
         <div class="col-6">
             <label class="form-label text-muted" for="weekId">Select start week (included)</label>
             <select id="weekId" class="form-select"
-                    th:field="*{qWeekId}">
+                    th:field="*{startQWeekId}">
                 <option th:value="null">From the beginning</option>
                 <option th:each="week: ${weeks}"
                         th:value="${week.id}"
@@ -20,7 +20,7 @@
         <div class="col-6">
             <label class="form-label text-muted" for="weekId">Select end week (included)</label>
             <select id="weekId" class="form-select"
-                    th:field="*{qWeekId}">
+                    th:field="*{endQWeekId}">
                 <option th:value="null">Till the current week</option>
                 <option th:each="week: ${weeks}"
                         th:value="${week.id}"
@@ -35,7 +35,7 @@
             <i class="fa fa-home"></i>
             </input></div>
         <div class="col-2"><a class="btn btn-sm btn-danger"
-                              th:href="@{/balances/week/driver}">
+                              th:href="@{/balances/interval/driver/{id}(id=${driverId})}">
             <span class="bi bi-x-circle"></span>
             Clean</a></div>
     </div>
