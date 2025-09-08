@@ -1,7 +1,7 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Update a Transaction',
-            closeRef='/balances/driver/'+ ${driverId},
+            closeRef='/balances/week/driver/'+ ${driverId},
             content=~{fragments/transactionWithDriverUpdateFormFragment.html :: updateForm},
             request=${updateRequest}
         )">
@@ -97,7 +97,7 @@
     </div>
     <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
             submitValue='Update',
-            cancelHref='/balances/driver/'+ ${driverId}
+            cancelHref='/balances/week/driver/'+ ${driverId}
         )">
     </div>
 </form>

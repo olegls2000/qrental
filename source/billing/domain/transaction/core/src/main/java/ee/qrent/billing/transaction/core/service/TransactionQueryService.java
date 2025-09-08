@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekIntervalFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
@@ -115,7 +116,12 @@ public class TransactionQueryService implements GetTransactionQuery {
         transactionLoadPort.loadAllBetweenDays(filter.getDateStart(), filter.getDatEnd()));
   }
 
-  @Override
+    @Override
+    public List<TransactionResponse> getAllByFilter(DriverAndQWeekIntervalFilter filter) {
+        return List.of();
+    }
+
+    @Override
   public List<TransactionResponse> getAllByQWeekId(final Long qWeekId) {
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var periodFilter =

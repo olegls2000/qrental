@@ -78,7 +78,7 @@ public class TransactionUseCaseController {
     }
     final var driverId = addRequest.getDriverId();
 
-    return "redirect:/balances/driver/" + driverId;
+    return "redirect:/balances/week/driver/" + driverId;
   }
 
   @GetMapping(value = "/update-form/{id}")
@@ -126,7 +126,7 @@ public class TransactionUseCaseController {
     }
     final var driverId = updateRequest.getDriverId();
 
-    return "redirect:/balances/driver/" + driverId;
+    return "redirect:/balances/week/driver/" + driverId;
   }
 
   @GetMapping(value = "/delete-form/{id}")
@@ -171,7 +171,7 @@ public class TransactionUseCaseController {
       return "forms/deleteTransactionWithDriver";
     }
 
-    return "redirect:/balances/driver/" + driverId;
+    return "redirect:/balances/week/driver/" + driverId;
   }
 
   private void addAddRequestToModel(final TransactionAddRequest addRequest, final Model model) {

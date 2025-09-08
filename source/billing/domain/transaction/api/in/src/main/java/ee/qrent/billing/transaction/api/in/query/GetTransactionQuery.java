@@ -1,5 +1,6 @@
 package ee.qrent.billing.transaction.api.in.query;
 
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekIntervalFilter;
 import ee.qrent.common.in.query.BaseGetQuery;
 import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.PeriodFilter;
@@ -30,6 +31,8 @@ public interface GetTransactionQuery
   List<TransactionResponse> getAllByFilter(final PeriodAndKindAndDriverTransactionFilter filter);
 
   List<TransactionResponse> getAllByFilter(final PeriodFilter filter);
+
+  List<TransactionResponse> getAllByFilter(final DriverAndQWeekIntervalFilter filter);
 
   List<TransactionResponse> getAllByQWeekId(final Long qWeekId);
 }

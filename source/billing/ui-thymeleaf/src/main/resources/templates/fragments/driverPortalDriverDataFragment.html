@@ -1,0 +1,263 @@
+<div th:fragment="driverData">
+    <div class="row">
+        <div class="col">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div id="driverInfoCardId" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Driver info</h5>
+                            <div class="row">
+                                <div class="col-1">
+                                    <a class="btn btn-sm btn-warning "
+                                       th:href="@{/drivers/update-form/{id}(id=${driverId})}">
+                                        <span class="bi-pencil-square"></span>
+                                    </a>
+                                </div>
+                                <div class="col-11"><p class="card-text"
+                                                       th:text="|${driverFirstName} ${driverLastName}, ${driverPhone}, Paid deposit: ${paidAmountOfDeposit} EURO|">
+                                    ????</p></div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-4">
+            <div id="callSignCardId" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Call Sign</h5>
+                    <div class="row">
+                        <div class="col-2">
+                            <a th:if="${callSignLinkId == null}" class="btn btn-sm btn-success"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               title="Start a new Call Sign Link from today"
+                               th:href="@{/call-sign-links/add-form/{id}(id=${driverId})}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span>
+                            </a>
+                            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+                               th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                                <span class="bi-pencil-square"></span>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-danger"
+                               th:href="@{/call-sign-links/close-form/{id}/driver/{driverId}(id=${callSignLinkId}, driverId=${driverId})}">
+                                <span class="bi bi-x-circle"></span>
+                            </a>
+                        </div>
+                        <div class="col-8">
+                            <p class="card-text" th:text="${callSign}">????</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div id="carLinkCardId" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Car</h5>
+                    <div class="row">
+                        <div class="col-2">
+                            <a th:if="${carLinkId != null}" class="btn btn-sm btn-warning "
+                               th:href="@{/car-links/update-form/{id}(id=${carLinkId})}">
+                                <span class="bi-pencil-square"></span>
+                            </a>
+                            <a th:if="${carLinkId == null}" class="btn btn-sm btn-success"
+                               th:href="@{/car-links/add-form/{id}(id=${driverId})}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a th:if="${carLinkId != null}" class="btn btn-sm btn-danger"
+                               th:href="@{/car-links/close-form/{id}/driver/{driverId}(id=${carLinkId}, driverId=${driverId})}">
+                                <span class="bi bi-x-circle"></span>
+                            </a>
+                        </div>
+
+                        <div class="col-8">
+                            <p class="card-text" th:text="${carRegistrationNumber}">????</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div id="boltCardId" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Bolt</h5>
+                    <div class="row">
+                        <div class="col-2">
+                            <a class="btn btn-sm btn-success"
+                               th:href="@{/authorizations/add-form/{driverId}(driverId=${driverId})}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                                        <span th:if="${authorizationId == null}"
+                                                              class="bi-plus-circle"></span>
+                                <span th:if="${authorizationId != null}"
+                                      class="bi-arrow-clockwise"></span>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a th:if="${authorizationId != null}" class="btn btn-sm btn-info"
+                               th:href="@{/authorizations/pdf/{id}(id=${authorizationId})}">
+                                <span class="bi-file-earmark-pdf"></span>
+                            </a>
+                        </div>
+
+                        <div class="col-8">
+                            <p class="card-text"
+                               th:text="|From: ${qDateFormatter.format(authorizationCreateDate)}|">
+                                ????</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div id="contractInfoCardId" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contract info</h5>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-sm table-borderless align-middle">
+                                <tr>
+                                    <th scope="col">Actions:</th>
+                                    <th scope="col">Number:</th>
+                                    <th scope="col">Start date:</th>
+                                    <th scope="col">End date:</th>
+                                    <th scope="col">Duration (weeks):</th>
+                                    <th scope="col">Weeks left:</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a th:if="${activeContractId == null}"
+                                           class="btn btn-sm btn-success"
+                                           th:href="${'/contracts/add-form/'+ {driverId} + '/' + {qFirmId}}"
+                                           role="button"
+                                           aria-controls="offcanvasExample">
+                                            <span class="bi-plus-circle"></span></a>
+                                        <a th:if="${activeContractId != null}"
+                                           class="btn btn-sm btn-danger"
+                                           th:href="@{/contracts/close-form/{id}(id=${activeContractId})}">
+                                            <span class="bi bi-x-circle"></span>
+                                        </a>
+                                        <a th:if="${activeContractId != null}"
+                                           class="btn btn-sm btn-info"
+                                           th:href="@{/contracts/pdf/{id}(id=${activeContractId})}">
+                                            <span class="bi-file-earmark-pdf"></span>
+                                        </a>
+                                    <td>
+                                        <span th:text="${activeContract}">???</span>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <span th:text="${activeContractStartDate}">???</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <span th:text="${activeContractEndDate}">???</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <span th:text="${activeContractDuration}">???</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <span th:text="${activeContractWeeksToEnd}">???</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div id="absenceInfoCardId" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Absence info</h5>
+                    <div class="row">
+                        <div class="col-1 mt-4">
+                            <a class="btn btn-sm btn-success"
+                               th:href="${'/absences/add-form/'+ {driverId}}"
+                               role="button"
+                               aria-controls="offcanvasExample">
+                                <span class="bi-plus-circle"></span></a>
+                        </div>
+
+                        <div class="col-11">
+                            <table class="table table-sm table-borderless align-middle">
+                                <tr>
+                                    <th scope="col">Actions:</th>
+                                    <th scope="col">Start date:</th>
+                                    <th scope="col">End date:</th>
+                                    <th scope="col">With car:</th>
+                                    <th scope="col">Reason:</th>
+                                    <th scope="col">Comment:</th>
+                                </tr>
+
+                                <tr th:if="${#lists.isEmpty(actualAbsences)}">
+                                    <td colspan="9">No actual Absences</td>
+                                </tr>
+                                <tr th:each="absence : ${actualAbsences}">
+                                    <td>
+                                        <a class="btn btn-sm btn-warning "
+                                           th:href="${'/absences/update-form/'+ {absence.id}}"
+                                           role="button"
+                                           aria-controls="offcanvasExample">
+                                            <span class="bi-pencil-square"></span>
+                                        </a>
+                                        <a class="btn btn-sm btn-danger"
+                                           th:href="${'/absences/delete-form/'+ {absence.id}}"
+                                           role="button"
+                                           aria-controls="offcanvasExample">
+                                            <span class="bi bi-x-circle"></span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <span th:text="${qDateFormatter.format(absence.dateStart)}">???</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <a>
+                                                <span th:text="${qDateFormatter.format(absence.dateEnd)}">???</span>
+                                            </a>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span th:text="${absence.withCar}">???</span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${absence.reason}">???</span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${absence.comment}">???</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

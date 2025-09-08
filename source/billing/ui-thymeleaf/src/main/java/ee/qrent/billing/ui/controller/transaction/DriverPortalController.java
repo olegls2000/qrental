@@ -16,9 +16,10 @@ import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.QWeekAndDriverFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekIntervalFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
-import ee.qrent.billing.transaction.api.in.response.balance.BalanceRawContextResponse;
+import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
 import ee.qrent.billing.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
@@ -58,10 +59,9 @@ public class DriverPortalController {
     return "balances";
   }
 
-  @GetMapping(value = "/driver/{id}")
-  public String getDriverPortalView(@PathVariable("id") long driverId, final Model model) {
+  private void populateModelForDefaultView(final long driverId, final Model model) {
     model.addAttribute("weeks", qWeekQuery.getAll());
-    final var transactionFilterRequest = new QWeekAndDriverFilter();
+    final var transactionFilterRequest = new DriverAndQWeekFilter();
     transactionFilterRequest.setDriverId(driverId);
     model.addAttribute("transactionFilterRequest", transactionFilterRequest);
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
@@ -76,13 +76,58 @@ public class DriverPortalController {
     addObligationDataToModel(driverId, model);
     addAuthorisationDataToModel(driverId, model);
     addAbsencesDataToModel(driverId, model);
-
-    return "detailView/balanceDriver";
   }
 
-  @PostMapping(value = "/driver/{id}")
+  @GetMapping(value = "/week/driver/{id}")
+  public String getDriverPortalWeekView(@PathVariable("id") long driverId, final Model model) {
+      populateModelForDefaultView(driverId, model);
+
+    return "detailView/driverPortalWeekSearch";
+  }
+
+  @GetMapping(value = "/interval/driver/{id}")
+  public String getDriverPortalIntervalView(@PathVariable("id") long driverId, final Model model) {
+      populateModelForDefaultView(driverId, model);
+
+    return "detailView/driverPortalIntervalSearch";
+  }
+
+  @PostMapping(value = "/interval/driver")
+  public String getFilteredByIntervalDriverPortalView(
+      @ModelAttribute final DriverAndQWeekIntervalFilter driverAndQWeekIntervalFilterRequest,
+      final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    model.addAttribute("weeks", qWeekQuery.getAll());
+    final var driverId = driverAndQWeekIntervalFilterRequest.getDriverId();
+    addDriverDataToModel(driverId, model);
+    addCallSignDataToModel(driverId, model);
+    addContractDataToModel(driverId, model);
+    addCarDataToModel(driverId, model);
+    addTotalFinancialDataToModel(driverId, model);
+    addInsuranceDataToModel(driverId, model);
+    addObligationDataToModel(driverId, model);
+    addAuthorisationDataToModel(driverId, model);
+    addAbsencesDataToModel(driverId, model);
+    model.addAttribute("driverAndQWeekIntervalFilterRequest", driverAndQWeekIntervalFilterRequest);
+
+    final var startQWeekId = driverAndQWeekIntervalFilterRequest.getStartQWeekId();
+    final var endQWeekId = driverAndQWeekIntervalFilterRequest.getEndQWeekId();
+    final var intervalStartDate = qWeekQuery.getById(startQWeekId).getStart();
+    final var intervalEndDate = qWeekQuery.getById(endQWeekId).getEnd();
+
+    final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
+    final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
+
+    final var transactions = transactionQuery.getAllByFilter(driverAndQWeekIntervalFilterRequest);
+    addTransactionDataToModel(transactions, model);
+    addBalancePeriodDataToModel(model, startBalance, endBalance);
+
+    return "detailView/driverPortalIntervalSearch";
+  }
+
+  @PostMapping(value = "/week/driver")
   public String getFilteredDriverPortalView(
-      @ModelAttribute final QWeekAndDriverFilter transactionFilterRequest, final Model model) {
+      @ModelAttribute final DriverAndQWeekFilter transactionFilterRequest, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("weeks", qWeekQuery.getAll());
     final var driverId = transactionFilterRequest.getDriverId();
@@ -108,7 +153,10 @@ public class DriverPortalController {
               .flatMap(Collection::stream)
               .filter(transactionResponse -> transactionResponse.getId() != null)
               .toList();
-      addBalancePeriodDataToModel(model, rawBalanceContext);
+      addBalancePeriodDataToModel(
+          model,
+          rawBalanceContext.getPreviousWeekBalance(),
+          rawBalanceContext.getRequestedWeekBalance());
       addObligationPeriodDataToModel(model, driverId, requestedQWeekId);
       addInsuranceRequestedWeekBalance(model, driverId, requestedQWeekId);
     } else {
@@ -116,24 +164,22 @@ public class DriverPortalController {
     }
     addTransactionDataToModel(transactions, model);
 
-    return "detailView/balanceDriver";
+    return "detailView/driverPortalWeekSearch";
   }
 
   private void addBalancePeriodDataToModel(
-      final Model model, BalanceRawContextResponse rawBalanceContext) {
+      final Model model, final BalanceResponse startBalance, final BalanceResponse endBalance) {
 
-    final var previousWeekBalance = rawBalanceContext.getPreviousWeekBalance();
+    final var startWeekFeeAbleAmount = startBalance.getFeeAbleAmount();
+    final var startWeekNonFeeAbleAmount = startBalance.getNonFeeAbleAmount();
+    final var startWeekPositiveAmount = startBalance.getPositiveAmount();
+    final var startWeekTotalAmount =
+        startWeekFeeAbleAmount.add(startWeekNonFeeAbleAmount).add(startWeekPositiveAmount);
+    model.addAttribute("balancePeriodStartAmount", startWeekTotalAmount);
+    final var startWeekFeeAmount = startBalance.getFeeAmount();
+    model.addAttribute("feePeriodStartAmount", startWeekFeeAmount);
 
-    final var previousWeekFeeAbleAmount = previousWeekBalance.getFeeAbleAmount();
-    final var previousWeekNonFeeAbleAmount = previousWeekBalance.getNonFeeAbleAmount();
-    final var previousWeekPositiveAmount = previousWeekBalance.getPositiveAmount();
-    final var previousWeekTotalAmount =
-        previousWeekFeeAbleAmount.add(previousWeekNonFeeAbleAmount).add(previousWeekPositiveAmount);
-    model.addAttribute("balancePeriodStartAmount", previousWeekTotalAmount);
-    final var previousWeekFeeAmount = previousWeekBalance.getFeeAmount();
-    model.addAttribute("feePeriodStartAmount", previousWeekFeeAmount);
-
-    final var requestedWeekBalance = rawBalanceContext.getRequestedWeekBalance();
+    final var requestedWeekBalance = endBalance;
 
     final var requestedWeekFeeAbleAmount = requestedWeekBalance.getFeeAbleAmount();
     final var requestedWeekNonFeeAbleAmount = requestedWeekBalance.getNonFeeAbleAmount();
@@ -146,19 +192,10 @@ public class DriverPortalController {
 
     model.addAttribute("balancePeriodEndAmount", requestedWeekTotalAmount);
     model.addAttribute("feePeriodEndAmount", requestedWeekFeeAmount);
-
     model.addAttribute(
-        "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(previousWeekTotalAmount));
-
-    final var feeTransactions = rawBalanceContext.getTransactionsByKind().get("F");
-    var feePeriodTotalAmount = BigDecimal.ZERO;
-    if (feeTransactions != null) {
-      feePeriodTotalAmount =
-          rawBalanceContext.getTransactionsByKind().get("F").stream()
-              .map(TransactionResponse::getRealAmount)
-              .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    model.addAttribute("feePeriodTotalAmount", feePeriodTotalAmount);
+        "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(startWeekTotalAmount));
+    model.addAttribute(
+        "feePeriodTotalAmount", startBalance.getFeeAmount().add(endBalance.getFeeAmount()));
   }
 
   private void addObligationPeriodDataToModel(

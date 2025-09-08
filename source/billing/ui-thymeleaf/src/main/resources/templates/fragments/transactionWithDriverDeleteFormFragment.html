@@ -1,7 +1,7 @@
 <div th:fragment="assembledForm">
     <div th:replace="fragments/commonFormFragment.html :: commonForm(
             title='Delete a Transaction',
-            closeRef='/balances/driver/'+${driverId},
+            closeRef='/balances/week/driver/'+${driverId},
             content=~{fragments/transactionWithDriverDeleteFormFragment.html :: deleteForm},
             request=${deleteRequest}
         )">
@@ -23,7 +23,7 @@
     </div>
     <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
             submitValue='Delete',
-            cancelHref='/balances/driver/'+${driverId}
+            cancelHref='/balances/week/driver/'+${driverId}
         )">
     </div>
 </form>

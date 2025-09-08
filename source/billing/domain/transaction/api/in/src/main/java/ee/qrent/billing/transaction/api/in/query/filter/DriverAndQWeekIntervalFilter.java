@@ -11,7 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString
-public class QWeekAndDriverFilter {
-    private Long qWeekId;
+public class DriverAndQWeekIntervalFilter {
+    private Long startQWeekId;
+    private Long endQWeekId;
     private Long driverId;
 }

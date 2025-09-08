@@ -1,0 +1,34 @@
+<form th:fragment="searchForm"
+      th:action="@{/balances/week/driver}"
+      th:object="${transactionFilterRequest}"
+      method="post">
+
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="text"
+           hidden/>
+
+    <div class="row row justify-content-center">
+        <div class="col-12">
+            <label class="form-label text-muted" for="weekId">Select week:</label>
+            <select id="weekId" class="form-select"
+                    th:field="*{qWeekId}">
+                <option th:value="null">All weeks</option>
+                <option th:each="week: ${weeks}"
+                        th:value="${week.id}"
+                        th:text="|Year: ${week.year}, number: ${week.number} - ${week.description}|"></option>
+            </select>
+        </div>
+    </div>
+    <div class="row justify-content-center m-3">
+        <div class="col-4"><input id="periodFilterSubmitId" class="btn btn-sm btn-success"
+                                  type="submit"
+                                  value="Apply Filter">
+            <i class="fa fa-home"></i>
+            </input></div>
+        <div class="col-4"><a class="btn btn-sm btn-danger"
+                              th:href="@{/balances/week/driver}">
+            <span class="bi bi-x-circle"></span>
+            Clean</a></div>
+    </div>
+</form>

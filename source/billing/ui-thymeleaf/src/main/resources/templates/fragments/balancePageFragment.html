@@ -22,7 +22,7 @@
         <tr th:each="balance : ${balances}">
             <td class="text-center">
                 <a class="btn btn-sm btn-info"
-                   th:href="@{/balances/driver/{id}(id=${balance.driverId})}">
+                   th:href="@{/balances/week/driver/{id}(id=${balance.driverId})}">
                     <span class="bi bi-card-checklist"></span></a>
             </td>
             <td th:text="${balance.callSign}">???</td>
