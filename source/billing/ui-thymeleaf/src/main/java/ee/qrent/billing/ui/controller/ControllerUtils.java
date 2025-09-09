@@ -33,6 +33,7 @@ public class ControllerUtils {
   public static final String BONUS_ROOT_PATH = "/bonuses";
   public static final String TRANSACTION_TYPE_ROOT_PATH = "/transaction-types";
   public static final String TRANSACTION_KIND_ROOT_PATH = "/transaction-kinds";
+  public static final String DRIVER_PORTAL_PATH = "/driver-portal";
 
   public static final String ADD_REQUEST_ATTRIBUTE = "addRequest";
   public static final String UPDATE_REQUEST_ATTRIBUTE = "updateRequest";

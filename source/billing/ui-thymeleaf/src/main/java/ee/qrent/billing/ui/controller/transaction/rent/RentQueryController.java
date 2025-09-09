@@ -1,10 +1,12 @@
-package ee.qrent.billing.ui.controller.transaction.calculation.balance;
+package ee.qrent.billing.ui.controller.transaction.rent;
 
 import static ee.qrent.billing.ui.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
 import static ee.qrent.billing.ui.controller.ControllerUtils.*;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceCalculationQuery;
+import ee.qrent.billing.transaction.api.in.query.rent.GetRentCalculationQuery;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,34 +14,36 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(BALANCE_ROOT_PATH)
+@RequestMapping(RENTS_ROOT_PATH)
 @AllArgsConstructor
-public class BalanceCalculationQueryController {
+public class RentQueryController {
   private final QDateFormatter qDateFormatter;
+  private final GetRentCalculationQuery rentCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
 
+  private final GetTransactionQuery transactionQuery;
+
   @GetMapping("/calculations")
-  public String getCalculationView(final Model model) {
+  public String getRentCalculationView(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     addLatestDataToModel(model);
-    model.addAttribute("calculations", balanceCalculationQuery.getAll());
+    model.addAttribute("calculations", rentCalculationQuery.getAll());
 
-    return "balanceCalculations";
+    return "rentCalculations";
   }
 
   @GetMapping(value = "/calculations/{id}")
-  public String getBalanceCalculationView(@PathVariable("id") long id, final Model model) {
+  public String getRentCalculationView(@PathVariable("id") long id, final Model model) {
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    final var rentCalculation = rentCalculationQuery.getById(id);
+    final var rentTransactions = transactionQuery.getAllByRentCalculationId(id);
 
-   final var calculation =  balanceCalculationQuery.getById(id);
-    model.addAttribute("balances", calculation.getBalances());
-    model.addAttribute("startDate", calculation.getStartDate());
-    model.addAttribute("endDate", calculation.getEndDate());
-    model.addAttribute("actionDate", calculation.getActionDate());
+    model.addAttribute("rentCalculation", rentCalculation);
+    model.addAttribute("rentTransactions", rentTransactions);
 
-    return "detailView/balanceCalculation";
+    return "detailView/rentCalculation";
   }
-
   private void addLatestDataToModel(final Model model) {
     final var latestCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
     if (latestCalculatedWeekId == null) {

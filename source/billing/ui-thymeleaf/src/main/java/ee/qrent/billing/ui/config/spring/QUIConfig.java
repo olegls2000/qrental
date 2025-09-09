@@ -7,7 +7,7 @@ import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
-import ee.qrent.billing.ui.controller.transaction.assembler.DriverBalanceAssembler;
+import ee.qrent.billing.ui.controller.transaction.balance.DriverBalanceAssembler;
 import ee.qrent.billing.ui.service.driver.DriverCounterService;
 import ee.qrent.billing.ui.service.driver.impl.DriverCounterServiceImpl;
 import ee.qrent.billing.ui.service.insurance.InsuranceCounterService;

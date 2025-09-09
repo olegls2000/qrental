@@ -1,7 +1,7 @@
-package ee.qrent.billing.ui.controller.transaction;
+package ee.qrent.billing.ui.controller.driverportal;
 
+import static ee.qrent.billing.ui.controller.ControllerUtils.DRIVER_PORTAL_PATH;
 import static ee.qrent.billing.ui.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
-import static ee.qrent.billing.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
@@ -14,14 +14,12 @@ import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseBalanceQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceCalculationQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekIntervalFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
-import ee.qrent.billing.ui.controller.transaction.assembler.DriverBalanceAssembler;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(BALANCE_ROOT_PATH)
+@RequestMapping(DRIVER_PORTAL_PATH)
 @AllArgsConstructor
 public class DriverPortalController {
 
@@ -39,7 +37,6 @@ public class DriverPortalController {
       "transactionFilterRequest";
 
   private final QDateFormatter qDateFormatter;
-  private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceQuery balanceQuery;
   private final GetInsuranceCaseBalanceQuery insuranceCaseBalanceQuery;
@@ -49,18 +46,9 @@ public class DriverPortalController {
   private final GetContractQuery contractQuery;
   private final GetCarLinkQuery linkQuery;
   private final GetObligationQuery obligationQuery;
-  private final DriverBalanceAssembler driverBalanceAssembler;
   private final GetAuthorizationQuery authorizationQuery;
   private final GetAbsenceQuery absenceQuery;
   private final GetDepositQuery depositQuery;
-
-  @GetMapping
-  public String getBalanceView(final Model model) {
-    model.addAttribute("balances", driverBalanceAssembler.getDriversBalanceModels());
-    addLatestDataToModel(model);
-
-    return "balances";
-  }
 
   private void populateModelForDefaultView(final long driverId, final Model model) {
     model.addAttribute("weeks", qWeekQuery.getAll());
@@ -78,7 +66,7 @@ public class DriverPortalController {
     addAbsencesDataToModel(driverId, model);
   }
 
-  @GetMapping(value = "/week/driver/{id}")
+  @GetMapping(value = {"/week/{id}","/{id}" })
   public String getDriverPortalWeekView(@PathVariable("id") long driverId, final Model model) {
     final var transactionFilterRequest = new DriverAndQWeekFilter();
     transactionFilterRequest.setDriverId(driverId);
@@ -88,7 +76,7 @@ public class DriverPortalController {
     return "detailView/driverPortalWeekSearch";
   }
 
-  @GetMapping(value = "/interval/driver/{id}")
+  @GetMapping(value = "/interval/{id}")
   public String getDriverPortalIntervalView(@PathVariable("id") long driverId, final Model model) {
     final var transactionFilterRequest = new DriverAndQWeekIntervalFilter();
     transactionFilterRequest.setDriverId(driverId);
@@ -99,7 +87,7 @@ public class DriverPortalController {
     return "detailView/driverPortalIntervalSearch";
   }
 
-  @PostMapping(value = "/week/driver")
+  @PostMapping(value = "/week")
   public String getFilteredDriverPortalView(
       @ModelAttribute final DriverAndQWeekFilter transactionFilterRequest, final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
@@ -141,7 +129,7 @@ public class DriverPortalController {
     return "detailView/driverPortalWeekSearch";
   }
 
-  @PostMapping(value = "/interval/driver")
+  @PostMapping(value = "/interval")
   public String getFilteredByIntervalDriverPortalView(
       @ModelAttribute final DriverAndQWeekIntervalFilter transactionFilterRequest,
       final Model model) {
@@ -175,7 +163,9 @@ public class DriverPortalController {
   }
 
   private void addBalancePeriodDataToModel(
-      final Model model, final BalanceResponse startBalance, final BalanceResponse endBalance) {
+      final Model model,
+      final BalanceResponse startBalance,
+      final BalanceResponse requestedWeekBalance) {
     final var startWeekFeeAbleAmount = startBalance.getFeeAbleAmount();
     final var startWeekNonFeeAbleAmount = startBalance.getNonFeeAbleAmount();
     final var startWeekPositiveAmount = startBalance.getPositiveAmount();
@@ -184,7 +174,6 @@ public class DriverPortalController {
     model.addAttribute("balancePeriodStartAmount", startWeekTotalAmount);
     final var startWeekFeeAmount = startBalance.getFeeAmount();
     model.addAttribute("feePeriodStartAmount", startWeekFeeAmount);
-    final var requestedWeekBalance = endBalance;
     final var requestedWeekFeeAbleAmount = requestedWeekBalance.getFeeAbleAmount();
     final var requestedWeekNonFeeAbleAmount = requestedWeekBalance.getNonFeeAbleAmount();
     final var requestedWeekPositiveAmount = requestedWeekBalance.getPositiveAmount();
@@ -198,7 +187,8 @@ public class DriverPortalController {
     model.addAttribute(
         "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(startWeekTotalAmount));
     model.addAttribute(
-        "feePeriodTotalAmount", startBalance.getFeeAmount().add(endBalance.getFeeAmount()));
+        "feePeriodTotalAmount",
+        startBalance.getFeeAmount().add(requestedWeekBalance.getFeeAmount()));
   }
 
   private void addObligationPeriodDataToModel(
@@ -328,28 +318,15 @@ public class DriverPortalController {
 
   private void addCarDataToModel(final Long driverId, final Model model) {
     final var link = linkQuery.getActiveLinkByDriverId(driverId);
-    if (link == null) {
-      model.addAttribute("carRegistrationNumber", "no car in renting");
-      model.addAttribute("carLinkId", null);
+    String carRegistrationNumber = null;
+    Long carLinkId = null;
 
-      return;
+    if (link != null) {
+      carRegistrationNumber = link.getRegistrationNumber();
+      carLinkId = link.getId();
     }
-    model.addAttribute("carRegistrationNumber", link.getRegistrationNumber());
-    model.addAttribute("carLinkId", link.getId());
-  }
-
-  private void addLatestDataToModel(final Model model) {
-    final var latestCalculatedWeekId = balanceCalculationQuery.getLastCalculatedQWeekId();
-    if (latestCalculatedWeekId == null) {
-      model.addAttribute("latestBalanceWeek", "Balance was not calculated");
-
-      return;
-    }
-
-    final var latestCalculatedWeek = qWeekQuery.getById(latestCalculatedWeekId);
-    final var latestBalanceWeekLabel =
-        String.format("%d (%s)", latestCalculatedWeek.getNumber(), latestCalculatedWeek.getEnd());
-    model.addAttribute("latestBalanceWeek", latestBalanceWeekLabel);
+    model.addAttribute("carRegistrationNumber", carRegistrationNumber);
+    model.addAttribute("carLinkId", carLinkId);
   }
 
   private void addAuthorisationDataToModel(final Long driverId, final Model model) {

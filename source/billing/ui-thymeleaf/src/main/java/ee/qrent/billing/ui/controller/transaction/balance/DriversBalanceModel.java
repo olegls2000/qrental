@@ -1,4 +1,4 @@
-package ee.qrent.billing.ui.controller.transaction.model;
+package ee.qrent.billing.ui.controller.transaction.balance;
 
 import java.math.BigDecimal;
 import lombok.Getter;

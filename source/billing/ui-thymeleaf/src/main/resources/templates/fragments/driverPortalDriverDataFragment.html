@@ -82,9 +82,10 @@
                                 <span class="bi bi-x-circle"></span>
                             </a>
                         </div>
-
                         <div class="col-8">
-                            <p class="card-text" th:text="${carRegistrationNumber}">????</p>
+                            <p th:if="${carRegistrationNumber != null}" class="card-text"
+                               th:text="${carRegistrationNumber}">????</p>
+                            <p th:if="${carRegistrationNumber == null}" class="card-text">no car in renting</p>
                         </div>
                     </div>
                 </div>

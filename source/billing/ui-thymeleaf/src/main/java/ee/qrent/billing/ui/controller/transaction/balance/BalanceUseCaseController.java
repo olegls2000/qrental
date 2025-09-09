@@ -1,4 +1,4 @@
-package ee.qrent.billing.ui.controller.transaction.calculation.balance;
+package ee.qrent.billing.ui.controller.transaction.balance;
 
 import static ee.qrent.billing.ui.controller.ControllerUtils.BALANCE_ROOT_PATH;
 
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(BALANCE_ROOT_PATH)
 @AllArgsConstructor
-public class BalanceCalculationUseCaseController {
+public class BalanceUseCaseController {
 
   private final GetQWeekQuery qWeekQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;

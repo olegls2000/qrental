@@ -17,7 +17,6 @@ import ee.qrent.billing.transaction.core.mapper.TransactionUpdateRequestMapper;
 import ee.qrent.billing.transaction.core.service.strategy.TransactionLoadStrategy;
 import ee.qrent.billing.transaction.domain.Transaction;
 
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 

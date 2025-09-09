@@ -1,4 +1,4 @@
-package ee.qrent.billing.ui.controller.transaction.assembler;
+package ee.qrent.billing.ui.controller.transaction.balance;
 
 import static java.util.stream.Collectors.toList;
 
@@ -6,7 +6,6 @@ import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.ui.controller.transaction.model.DriversBalanceModel;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,5 @@
 <form th:fragment="searchForm"
-      th:action="@{/balances/week/driver}"
+      th:action="@{/driver-portal/week}"
       th:object="${transactionFilterRequest}"
       method="post">
 
@@ -27,7 +27,7 @@
             <i class="fa fa-home"></i>
             </input></div>
         <div class="col-4"><a class="btn btn-sm btn-danger"
-                              th:href="@{/balances/week/driver/{id}(id=${driverId})}">
+                              th:href="@{/driver-portal/week/{id}(id=${driverId})}">
             <span class="bi bi-x-circle"></span>
             Clean</a></div>
     </div>
