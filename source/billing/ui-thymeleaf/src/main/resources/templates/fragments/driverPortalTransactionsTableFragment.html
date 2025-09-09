@@ -9,7 +9,7 @@
             </a>
         </th>
         <th style="width: 1% !important;">Delete</th>
-        <th>Transaction Type</th>
+        <th>Transaction Type (Est)</th>
         <th>Amount</th>
         <th>Kind</th>
         <th>Week</th>
@@ -34,7 +34,7 @@
                th:href="@{/transactions/delete-form/driver/{id}(id=${transaction.id})}">
                 <span class="bi-trash"></span></a>
         </td>
-        <td th:text="${transaction.type}"
+        <td th:text="${transaction.typeDescription}"
             th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
         </td>
         <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
