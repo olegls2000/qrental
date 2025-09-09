@@ -120,29 +120,12 @@ public class TransactionQueryService implements GetTransactionQuery {
 
   @Override
   public List<TransactionResponse> getAllByFilter(final DriverAndQWeekIntervalFilter filter) {
-    final var intervalStartDate = getStartDate(filter.getStartQWeekId());
-    final var intervalEndDate = getEndDate(filter.getEndQWeekId());
+    final var intervalStartDate = qWeekQuery.getStartDateOrFirstDate(filter.getStartQWeekId());
+    final var intervalEndDate = qWeekQuery.getEndDateOrCurrent(filter.getEndQWeekId());
 
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByDriverIdAndBetweenDays(
             filter.getDriverId(), intervalStartDate, intervalEndDate));
-  }
-
-  private LocalDate getStartDate(final Long startQWeekId) {
-    if (startQWeekId == null) {
-
-      return qWeekQuery.getFirstWeek().getStart();
-    }
-
-    return qWeekQuery.getById(startQWeekId).getStart();
-  }
-
-  private LocalDate getEndDate(final Long endQWeekId) {
-    if (endQWeekId == null) {
-
-      return qWeekQuery.getCurrentWeek().getEnd();
-    }
-    return qWeekQuery.getById(endQWeekId).getEnd();
   }
 
   @Override

@@ -247,4 +247,23 @@ public class QWeekQueryService implements GetQWeekQuery {
         .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
+
+  @Override
+  public LocalDate getStartDateOrFirstDate(final Long startQWeekId) {
+    if (startQWeekId == null) {
+
+      return getFirstWeek().getStart();
+    }
+
+    return getById(startQWeekId).getStart();
+  }
+
+  @Override
+  public LocalDate getEndDateOrCurrent(final Long endQWeekId) {
+    if (endQWeekId == null) {
+
+      return qDateTime.getToday();
+    }
+    return getById(endQWeekId).getEnd();
+  }
 }

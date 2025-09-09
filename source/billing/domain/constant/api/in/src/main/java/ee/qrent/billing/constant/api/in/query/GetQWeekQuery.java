@@ -53,4 +53,8 @@ public interface GetQWeekQuery extends BaseGetQuery<QWeekUpdateRequest, QWeekRes
    * @return return a QWeeks without a Week, which ID is present in parameter
    */
   List<QWeekResponse> getAllAfterById(final Long qWeekId);
+
+  LocalDate getStartDateOrFirstDate(final Long qWeekId);
+
+  LocalDate getEndDateOrCurrent(final Long qWeekId);
 }

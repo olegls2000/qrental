@@ -159,10 +159,10 @@ public class DriverPortalController {
     addAuthorisationDataToModel(driverId, model);
     addAbsencesDataToModel(driverId, model);
 
-    final var startQWeekId = transactionFilterRequest.getStartQWeekId();
-    final var endQWeekId = transactionFilterRequest.getEndQWeekId();
-    final var intervalStartDate = qWeekQuery.getById(startQWeekId).getStart();
-    final var intervalEndDate = qWeekQuery.getById(endQWeekId).getEnd();
+    final var intervalStartDate =
+        qWeekQuery.getStartDateOrFirstDate(transactionFilterRequest.getStartQWeekId());
+    final var intervalEndDate =
+        qWeekQuery.getEndDateOrCurrent(transactionFilterRequest.getEndQWeekId());
 
     final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
     final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
