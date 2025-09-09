@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-6">
             <label class="form-label text-muted" for="weekId">Select start week (included)</label>
-            <select id="weekId" class="form-select"
+            <select id="weekId" size="5" class="form-select"
                     th:field="*{startQWeekId}">
                 <option th:value="null">From the beginning</option>
                 <option th:each="week: ${weeks}"
@@ -19,7 +19,7 @@
         </div>
         <div class="col-6">
             <label class="form-label text-muted" for="weekId">Select end week (included)</label>
-            <select id="weekId" class="form-select"
+            <select id="weekId" size="5" class="form-select"
                     th:field="*{endQWeekId}">
                 <option th:value="null">Till the current week</option>
                 <option th:each="week: ${weeks}"
