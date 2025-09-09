@@ -21,6 +21,7 @@ import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -50,39 +51,24 @@ public class DriverPortalController {
   private final GetAbsenceQuery absenceQuery;
   private final GetDepositQuery depositQuery;
 
-  private void populateModelForDefaultView(final long driverId, final Model model) {
-    model.addAttribute("weeks", qWeekQuery.getAll());
-    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    final var transactions = transactionQuery.getAllByDriverId(driverId);
-    addTransactionDataToModel(transactions, model);
-    addDriverDataToModel(driverId, model);
-    addCallSignDataToModel(driverId, model);
-    addContractDataToModel(driverId, model);
-    addCarDataToModel(driverId, model);
-    addTotalFinancialDataToModel(driverId, model);
-    addInsuranceDataToModel(driverId, model);
-    addObligationDataToModel(driverId, model);
-    addAuthorisationDataToModel(driverId, model);
-    addAbsencesDataToModel(driverId, model);
-  }
-
-  @GetMapping(value = {"/week/{id}","/{id}" })
+  @GetMapping(value = {"/week/{id}", "/{id}"})
   public String getDriverPortalWeekView(@PathVariable("id") long driverId, final Model model) {
+    populateModelByStaticData(model, driverId);
     final var transactionFilterRequest = new DriverAndQWeekFilter();
     transactionFilterRequest.setDriverId(driverId);
     model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
-    populateModelForDefaultView(driverId, model);
+    addTransactionDataToModel(transactionQuery.getAllByDriverId(driverId), model);
 
     return "detailView/driverPortalWeekSearch";
   }
 
   @GetMapping(value = "/interval/{id}")
   public String getDriverPortalIntervalView(@PathVariable("id") long driverId, final Model model) {
+    populateModelByStaticData(model, driverId);
     final var transactionFilterRequest = new DriverAndQWeekIntervalFilter();
     transactionFilterRequest.setDriverId(driverId);
     model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
-
-    populateModelForDefaultView(driverId, model);
+    addTransactionDataToModel(transactionQuery.getAllByDriverId(driverId), model);
 
     return "detailView/driverPortalIntervalSearch";
   }
@@ -90,23 +76,11 @@ public class DriverPortalController {
   @PostMapping(value = "/week")
   public String getFilteredDriverPortalView(
       @ModelAttribute final DriverAndQWeekFilter transactionFilterRequest, final Model model) {
-    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
-    model.addAttribute("weeks", qWeekQuery.getAll());
     final var driverId = transactionFilterRequest.getDriverId();
-    addDriverDataToModel(driverId, model);
-    addCallSignDataToModel(driverId, model);
-    addContractDataToModel(driverId, model);
-    addCarDataToModel(driverId, model);
-    addTotalFinancialDataToModel(driverId, model);
-    addInsuranceDataToModel(driverId, model);
-    addObligationDataToModel(driverId, model);
-    addAuthorisationDataToModel(driverId, model);
-    addAbsencesDataToModel(driverId, model);
+    populateModelByStaticData(model, driverId);
     model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
     List<TransactionResponse> transactions;
-
     final var requestedQWeekId = transactionFilterRequest.getQWeekId();
-
     if (requestedQWeekId != null) {
       final var rawBalanceContext =
           balanceQuery.getRawContextByDriverIdAndQWeekId(driverId, requestedQWeekId);
@@ -133,10 +107,25 @@ public class DriverPortalController {
   public String getFilteredByIntervalDriverPortalView(
       @ModelAttribute final DriverAndQWeekIntervalFilter transactionFilterRequest,
       final Model model) {
+    final var driverId = transactionFilterRequest.getDriverId();
+    populateModelByStaticData(model, driverId);
     model.addAttribute(MODEL_ATTRIBUTE_TRANSACTION_FILTER_REQUEST, transactionFilterRequest);
+    final var intervalStartDate =
+        qWeekQuery.getStartDateOrFirstDate(transactionFilterRequest.getStartQWeekId());
+    final var intervalEndDate =
+        qWeekQuery.getEndDateOrCurrent(transactionFilterRequest.getEndQWeekId());
+    final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
+    final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
+    final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
+    addTransactionDataToModel(transactions, model);
+    addBalancePeriodDataToModel(model, startBalance, endBalance);
+
+    return "detailView/driverPortalIntervalSearch";
+  }
+
+  void populateModelByStaticData(final Model model, final Long driverId) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("weeks", qWeekQuery.getAll());
-    final var driverId = transactionFilterRequest.getDriverId();
     addDriverDataToModel(driverId, model);
     addCallSignDataToModel(driverId, model);
     addContractDataToModel(driverId, model);
@@ -146,20 +135,6 @@ public class DriverPortalController {
     addObligationDataToModel(driverId, model);
     addAuthorisationDataToModel(driverId, model);
     addAbsencesDataToModel(driverId, model);
-
-    final var intervalStartDate =
-        qWeekQuery.getStartDateOrFirstDate(transactionFilterRequest.getStartQWeekId());
-    final var intervalEndDate =
-        qWeekQuery.getEndDateOrCurrent(transactionFilterRequest.getEndQWeekId());
-
-    final var startBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalStartDate);
-    final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
-
-    final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
-    addTransactionDataToModel(transactions, model);
-    addBalancePeriodDataToModel(model, startBalance, endBalance);
-
-    return "detailView/driverPortalIntervalSearch";
   }
 
   private void addBalancePeriodDataToModel(
@@ -330,14 +305,15 @@ public class DriverPortalController {
   }
 
   private void addAuthorisationDataToModel(final Long driverId, final Model model) {
+    Long authorizationId = null;
+    LocalDate authorizationCreateDate = null;
     final var latestAuthorisation = authorizationQuery.getLatestByDriverId(driverId);
-    if (latestAuthorisation == null) {
-      model.addAttribute("authorizationId", null);
-      model.addAttribute("authorizationCreateDate", null);
-      return;
+    if (latestAuthorisation != null) {
+      authorizationId = latestAuthorisation.getId();
+      authorizationCreateDate = latestAuthorisation.getCreated();
     }
-    model.addAttribute("authorizationId", latestAuthorisation.getId());
-    model.addAttribute("authorizationCreateDate", latestAuthorisation.getCreated());
+    model.addAttribute("authorizationId", authorizationId);
+    model.addAttribute("authorizationCreateDate", authorizationCreateDate);
   }
 
   private void addAbsencesDataToModel(final Long driverId, final Model model) {
