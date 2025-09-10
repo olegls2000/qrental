@@ -11,10 +11,8 @@
         <th style="width: 1% !important;">Delete</th>
         <th>Transaction Type (Est)</th>
         <th>Amount</th>
-        <th>Kind</th>
         <th>Week</th>
         <th>Date</th>
-        <th>In Invoice</th>
         <th>Comment</th>
     </tr>
     <tr th:if="${#lists.isEmpty(transactions)}">
@@ -43,19 +41,13 @@
                                  : 'text-success bg-success border-success'"
             th:text="${transaction.realAmount}">???
         </td>
-        <td th:text="${transaction.kind}"
-            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
-        </td>
         <td th:text="${transaction.weekNumber}"
             th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
         </td>
         <td th:text="${qDateFormatter.format(transaction.date)}"
             th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
         </td>
-        <td th:text="${transaction.invoiceIncluded}"
-            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
-        </td>
-        <td th:text="${transaction.commentShorten}"
+        <td th:text="${transaction.comment}"
             th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
         </td>
     </tr>
