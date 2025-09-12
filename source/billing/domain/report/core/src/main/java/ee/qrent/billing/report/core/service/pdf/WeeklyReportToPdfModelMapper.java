@@ -26,7 +26,7 @@ public class WeeklyReportToPdfModelMapper {
     return WeeklyReportPdfModel.builder()
         .firstName(driver.getFirstName())
         .lastName(driver.getLastName())
-        .taxNumber(driver.getTaxNumber())
+        .idNumber(driver.getTaxNumber())
         .callSign(callSign.getCallSign())
         .previousWeekStart(previousWeek.getStart())
         .previousWeekEnd(previousWeek.getEnd())

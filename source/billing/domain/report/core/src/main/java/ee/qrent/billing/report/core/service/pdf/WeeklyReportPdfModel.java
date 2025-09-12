@@ -12,11 +12,10 @@ import lombok.experimental.SuperBuilder;
 public class WeeklyReportPdfModel {
   private final String firstName;
   private final String lastName;
-  private final Long taxNumber;
-    private final String language = "RUS";
-
+  private final Long idNumber;
+  private final String language = "RUS";
   private final Integer callSign;
-  private final BigDecimal amount; // total or main amount shown in header; fallback to balance at calculation moment
+  private final BigDecimal amount;
   private final BigDecimal feeAmountSunday;
   private final String carRegistrationNumber;
   private final BigDecimal depositObligation;

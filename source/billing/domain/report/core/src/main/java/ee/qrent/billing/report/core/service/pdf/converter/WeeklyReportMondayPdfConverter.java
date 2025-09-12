@@ -153,8 +153,8 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
     table.addCell(getDriverMainDataValueCell(driverName));
 
-    final var taxNumber = model.getTaxNumber().toString();
-    table.addCell(getDriverMainDataLabelCell("Tax number"));
+    final var taxNumber = model.getIdNumber().toString();
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, ID_NUMBER_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(taxNumber));
 
     final var reportedWeek =
@@ -163,15 +163,15 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
                 99,
                 formatDate(model.getPreviousWeekStart()),
                 formatDate(model.getPreviousWeekEnd()));
-    table.addCell(getDriverMainDataLabelCell("Reported Week"));
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, REPORTED_WEEK_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(reportedWeek));
 
-    table.addCell(getDriverMainDataLabelCell("Call sign"));
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, CALL_SIGN_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
 
-    table.addCell(getDriverMainDataLabelCell("Rented Cars"));
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
-    table.addCell(getDriverMainDataLabelCell("Created on"));
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, CREATED_ON_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(formatDate(model.getCurrentWeekStart())));
 
     return table;
