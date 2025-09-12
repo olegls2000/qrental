@@ -13,6 +13,7 @@ public class WeeklyReportPdfModel {
   private final String firstName;
   private final String lastName;
   private final Long taxNumber;
+    private final String language = "RUS";
 
   private final Integer callSign;
   private final BigDecimal amount; // total or main amount shown in header; fallback to balance at calculation moment

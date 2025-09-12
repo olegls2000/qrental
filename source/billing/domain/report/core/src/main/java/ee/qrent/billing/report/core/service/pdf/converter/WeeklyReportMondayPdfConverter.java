@@ -4,6 +4,7 @@ import static com.lowagie.text.Element.*;
 import static com.lowagie.text.Font.*;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.*;
 import static java.awt.Color.*;
 
 import java.awt.*;
@@ -42,6 +43,30 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return reportType == WeeklyReportType.MONDAY_REPORT;
   }
 
+  @Override
+  @SneakyThrows
+  public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
+    final var weeklyReportPdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
+    final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
+    final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
+    weeklyReportPdfDoc.open();
+    weeklyReportPdfDoc.add(getHeader(model.getLanguage()));
+    weeklyReportPdfDoc.add(getEmptyRow());
+    weeklyReportPdfDoc.add(getDriverMainData(model));
+    weeklyReportPdfDoc.add(getFinancialCommentRow());
+    weeklyReportPdfDoc.add(getDepositData());
+    weeklyReportPdfDoc.add(getLineSeparator());
+    weeklyReportPdfDoc.add(getBalanceData());
+    weeklyReportPdfDoc.add(getLineSeparator());
+    weeklyReportPdfDoc.add(getDebtAndObligationData());
+    weeklyReportPdfDoc.add(getTransactionTableTitleRow());
+    weeklyReportPdfDoc.add(getTransactionTable(model));
+    weeklyReportPdfDoc.close();
+    writer.close();
+
+    return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
+  }
+
   private PdfPCell getQpdfPCell(final Paragraph paragraph) {
     final var qCell = new PdfPCell(paragraph);
     qCell.setBorder(NO_BORDER);
@@ -59,30 +84,6 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return row;
   }
 
-  @Override
-  @SneakyThrows
-  public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
-    final var weeklyReportPdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
-    final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
-    final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
-    weeklyReportPdfDoc.open();
-    weeklyReportPdfDoc.add(getHeader());
-    weeklyReportPdfDoc.add(getEmptyRow());
-    weeklyReportPdfDoc.add(getDriverMainData(model));
-    weeklyReportPdfDoc.add(getFinancialCommentRow());
-    weeklyReportPdfDoc.add(getDepositData());
-    weeklyReportPdfDoc.add(getLineSeparator());
-    weeklyReportPdfDoc.add(getBalanceData());
-    weeklyReportPdfDoc.add(getLineSeparator());
-    weeklyReportPdfDoc.add(getDebtAndObligationData());
-    weeklyReportPdfDoc.add(getTransactionTableTitleRow());
-    weeklyReportPdfDoc.add(getTransactionTable(model));
-    weeklyReportPdfDoc.close();
-    writer.close();
-
-    return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
-  }
-
   private Chunk getLineSeparator() {
     final var ls = new LineSeparator();
     ls.setLineColor(GRAY_BACKGROUND_COLOR);
@@ -92,7 +93,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   @SneakyThrows
-  private PdfPTable getHeader() {
+  private PdfPTable getHeader(final String language) {
     final var header = new PdfPTable(4);
     header.setWidthPercentage(100f);
 
@@ -107,7 +108,9 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     header.addCell(imageCell);
 
     final var reportNameCell =
-        getQpdfPCell(new Paragraph("MONDAY REPORT", new Font(REPORT_FONT, 14, Font.BOLD)));
+        getQpdfPCell(
+            new Paragraph(
+                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 14, Font.BOLD)));
 
     reportNameCell.setColspan(3);
     reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
@@ -141,9 +144,11 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   private PdfPTable getDriverMainData(final WeeklyReportPdfModel model) {
+
+    final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
-    table.addCell(getDriverMainDataLabelCell("Driver"));
+    table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
 
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
     table.addCell(getDriverMainDataValueCell(driverName));
