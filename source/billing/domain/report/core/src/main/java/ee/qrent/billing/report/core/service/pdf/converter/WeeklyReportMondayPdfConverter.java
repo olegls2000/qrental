@@ -46,20 +46,22 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   @Override
   @SneakyThrows
   public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+
     final var weeklyReportPdfDoc = new Document(A4, 40f, 40f, 50f, 50f);
     final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
     weeklyReportPdfDoc.open();
-    weeklyReportPdfDoc.add(getHeader(model.getLanguage()));
+    weeklyReportPdfDoc.add(getHeader(language));
     weeklyReportPdfDoc.add(getEmptyRow());
     weeklyReportPdfDoc.add(getDriverMainData(model));
-    weeklyReportPdfDoc.add(getFinancialCommentRow());
-    weeklyReportPdfDoc.add(getDepositData());
+    weeklyReportPdfDoc.add(getFinancialCommentRow(language));
+    weeklyReportPdfDoc.add(getDepositData(language));
     weeklyReportPdfDoc.add(getLineSeparator());
-    weeklyReportPdfDoc.add(getBalanceData());
+    weeklyReportPdfDoc.add(getBalanceData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
-    weeklyReportPdfDoc.add(getDebtAndObligationData());
-    weeklyReportPdfDoc.add(getTransactionTableTitleRow());
+    weeklyReportPdfDoc.add(getDebtAndObligationData(model));
+    weeklyReportPdfDoc.add(getTransactionTableTitleRow(language));
     weeklyReportPdfDoc.add(getTransactionTable(model));
     weeklyReportPdfDoc.close();
     writer.close();
@@ -106,11 +108,10 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     imageCell.setFixedHeight(30f);
     imageCell.setBorder(NO_BORDER);
     header.addCell(imageCell);
-
     final var reportNameCell =
         getQpdfPCell(
             new Paragraph(
-                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 14, Font.BOLD)));
+                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 16, BOLD)));
 
     reportNameCell.setColspan(3);
     reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
@@ -177,13 +178,13 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return table;
   }
 
-  private PdfPTable getFinancialCommentRow() {
+  private PdfPTable getFinancialCommentRow(final String language) {
     final var row = new PdfPTable(1);
     row.setWidthPercentage(100f);
     final var cell =
         getQpdfPCell(
             new Paragraph(
-                "According to our data your financial state is:", new Font(REPORT_FONT, 12)));
+                getLabel(language, FINANCIAL_COMMENT_KEY) + ":", new Font(REPORT_FONT, 12)));
     cell.setHorizontalAlignment(ALIGN_LEFT);
     cell.setVerticalAlignment(ALIGN_BOTTOM);
     cell.setFixedHeight(35f);
@@ -192,7 +193,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return row;
   }
 
-  private PdfPTable getTransactionTableTitleRow() {
+  private PdfPTable getTransactionTableTitleRow(final String language) {
     final var row = new PdfPTable(1);
     row.setWidthPercentage(100f);
 
@@ -202,7 +203,9 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     row.addCell(paddingTopCell);
 
     final var cell =
-        getQpdfPCell(new Paragraph("Reported Week Transactions", new Font(REPORT_FONT, 14, BOLD)));
+        getQpdfPCell(
+            new Paragraph(
+                getLabel(language, TRANSACTION_TABLE_NAME_KEY), new Font(REPORT_FONT, 14, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
     cell.setFixedHeight(40f);
@@ -232,14 +235,14 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return valueCell;
   }
 
-  private PdfPTable getDepositData() {
+  private PdfPTable getDepositData(final String language) {
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
-    table.addCell(getFinancialDataLabelCell("Deposit"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, DEPOSIT_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(500)));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataExplanationRow(null));
-    table.addCell(getFinancialDataLabelCell("Paid Deposit"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, PAID_DEPOSIT_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataExplanationRow(null));
@@ -247,16 +250,19 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return table;
   }
 
-  private PdfPTable getBalanceData() {
+  private PdfPTable getBalanceData(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
-    table.addCell(getFinancialDataLabelCell("Balance"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, BALANCE_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
-    table.addCell(getFinancialDataExplanationRow("on the end of Reported Week"));
+    table.addCell(
+        getFinancialDataExplanationRow(getLabel(language, BALANCE_END_WEEK_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
-    table.addCell(getFinancialDataLabelCell("Balance"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, BALANCE_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
-    table.addCell(getFinancialDataExplanationRow("on Monday after Reported Week"));
+    table.addCell(
+        getFinancialDataExplanationRow(getLabel(language, BALANCE_MONDAY_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
 
     return table;
@@ -272,27 +278,32 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return cell;
   }
 
-  private PdfPTable getDebtAndObligationData() {
+  private PdfPTable getDebtAndObligationData(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
-    table.addCell(getFinancialDataLabelCell("Debt"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, DEBT_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataExplanationRow(getLabel(language, DEBT_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
-    table.addCell(getFinancialDataExplanationRow(null));
-    table.addCell(getFinancialDataLabelCell("Obligation"));
+    table.addCell(getFinancialDataLabelCell(getLabel(language, OBLIGATION_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
-    table.addCell(getFinancialDataExplanationRow(null));
+    table.addCell(getFinancialDataExplanationRow(getLabel(language, OBLIGATION_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
 
     return table;
   }
 
   private PdfPTable getTransactionTable(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
     table.setWidths(new float[] {8f, 2f});
-    table.addCell(getTransactionTableHeaderCell("Type"));
-    table.addCell(getTransactionTableHeaderCell("Amount, EUR"));
+    table.addCell(
+        getTransactionTableHeaderCell(getLabel(language, TRANSACTION_TABLE_TYPE_COLUMN_KEY)));
+    table.addCell(
+        getTransactionTableHeaderCell(
+            getLabel(language, TRANSACTION_TABLE_AMOUNT_COLUMN_KEY) + ", EUR"));
 
     int i = 0;
     for (final var entry : model.getTransactionTypesVsAmount().entrySet()) {

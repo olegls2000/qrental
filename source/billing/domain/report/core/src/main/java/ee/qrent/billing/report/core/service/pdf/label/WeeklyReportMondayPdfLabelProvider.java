@@ -22,6 +22,20 @@ public class WeeklyReportMondayPdfLabelProvider {
   public static String CALL_SIGN_LABEL_KEY = "CALL_SIGN_LABEL_KEY";
   public static String RENTED_CAR_LABEL_KEY = "RENTED_CAR_LABEL_KEY";
   public static String CREATED_ON_LABEL_KEY = "CREATED_ON_LABEL_KEY";
+  public static String FINANCIAL_COMMENT_KEY = "FINANCIAL_COMMENT_KEY";
+  public static String DEPOSIT_KEY = "DEPOSIT_KEY";
+  public static String PAID_DEPOSIT_KEY = "PAID_DEPOSIT_KEY";
+  public static String BALANCE_KEY = "BALANCE_KEY";
+  public static String BALANCE_END_WEEK_EXPLANATION_KEY = "BALANCE_END_WEEK_EXPLANATION_KEY";
+  public static String BALANCE_MONDAY_EXPLANATION_KEY = "BALANCE_MONDAY_EXPLANATION_KEY";
+  public static String DEBT_KEY = "DEBT_KEY";
+  public static String DEBT_EXPLANATION_KEY = "DEBT_EXPLANATION_KEY";
+  public static String OBLIGATION_KEY = "OBLIGATION_KEY";
+  public static String OBLIGATION_EXPLANATION_KEY = "OBLIGATION_EXPLANATION_KEY";
+  public static String TRANSACTION_TABLE_NAME_KEY = "TRANSACTION_TABLE_NAME_KEY";
+  public static String TRANSACTION_TABLE_TYPE_COLUMN_KEY = "TRANSACTION_TABLE_TYPE_COLUMN_KEY";
+  public static String TRANSACTION_TABLE_AMOUNT_COLUMN_KEY = "TRANSACTION_TABLE_AMOUNT_COLUMN_KEY";
+  public static String REPORT_COMMENT_KEY = "REPORT_COMMENT_KEY";
 
   static {
     mapRus =
@@ -33,7 +47,27 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Отчетная неделя"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной"),
             new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Арендованный автомобиль"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Создано на"));
+            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Создано на"),
+            new AbstractMap.SimpleEntry<>(
+                FINANCIAL_COMMENT_KEY, "По нашим данным Ваше финансовое состояние"),
+            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Депозит"),
+            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Оплаченный депозит"),
+            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Баланс"),
+            new AbstractMap.SimpleEntry<>(
+                BALANCE_END_WEEK_EXPLANATION_KEY, "в конце отчетной недели"),
+            new AbstractMap.SimpleEntry<>(
+                BALANCE_MONDAY_EXPLANATION_KEY, "в понедельник после отчетной недели"),
+            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Долг"),
+            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "в конце отчетной недели"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Обязательство"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "за отчетную неделю"),
+            new AbstractMap.SimpleEntry<>(
+                TRANSACTION_TABLE_NAME_KEY, "Отчетные недельные транзакции"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Тип"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Сумма"),
+            new AbstractMap.SimpleEntry<>(
+                REPORT_COMMENT_KEY,
+                "Данные о корректировках с заработков или обязательств из приложений (Bolt, Forus) будут внесены в твой баланс до 12:00 вторника этой недели. Свой обновленный отчет и сальдо ты получишь вскоре после этого."));
 
     mapEng =
         Map.ofEntries(
@@ -43,7 +77,26 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Call Sign"),
             new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Rented Car"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Created on"));
+            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Created on"),
+            new AbstractMap.SimpleEntry<>(
+                FINANCIAL_COMMENT_KEY, "According to our data, your financial state is"),
+            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Deposit"),
+            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Paid Deposit"),
+            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Balance"),
+            new AbstractMap.SimpleEntry<>(
+                BALANCE_END_WEEK_EXPLANATION_KEY, "on the end of Reported Week"),
+            new AbstractMap.SimpleEntry<>(
+                BALANCE_MONDAY_EXPLANATION_KEY, "on Monday after Reported Week"),
+            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Debt"),
+            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "on the end of Reported Week"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Obligation"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "for the Reported Week"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Reported Week Transactions"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Type"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Amount"),
+            new AbstractMap.SimpleEntry<>(
+                REPORT_COMMENT_KEY,
+                "Adjustments to earnings or liabilities from applications (Bolt, Forus) will be entered into your balance by 12:00 Tuesday of this week. You will receive your updated report and balance shortly thereafter."));
 
     mapEst =
         Map.ofEntries(
@@ -53,7 +106,25 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Kutsung"),
             new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Renditud auto"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Loodud"));
+            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Loodud"),
+            new AbstractMap.SimpleEntry<>(
+                FINANCIAL_COMMENT_KEY, "Meie andmetel on teie finantsseisund"),
+            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Deposiit"),
+            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Tasutud tagatisraha"),
+            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Tasakaal"),
+            new AbstractMap.SimpleEntry<>(BALANCE_END_WEEK_EXPLANATION_KEY, "aruandenädala lõpus"),
+            new AbstractMap.SimpleEntry<>(
+                BALANCE_MONDAY_EXPLANATION_KEY, "esmaspäeval pärast aruandenädalat"),
+            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Võlg"),
+            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "aruandenädala lõpus"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Kohustus"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "aruandenädala kohta"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Aruandenädala tehingud"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Tüüp"),
+            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Summa"),
+            new AbstractMap.SimpleEntry<>(
+                REPORT_COMMENT_KEY,
+                "Rakenduste (Bolt, Forus) tulude või kohustuste korrigeerimised kantakse teie saldole selle nädala teisipäevaks kell 12.00. Saate oma uuendatud aruande ja saldo varsti pärast seda."));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
