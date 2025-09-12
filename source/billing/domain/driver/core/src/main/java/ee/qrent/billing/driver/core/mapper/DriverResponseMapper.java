@@ -32,9 +32,7 @@ public class DriverResponseMapper implements ResponseMapper<DriverResponse, Driv
         .id(domain.getId())
         .active(domain.getActive())
         .callSign(callSign)
-        .communicationLanguage(
-            CommunicationLanguageIn.valueOf(domain.getCommunicationLanguage().name())
-                .getLabel())
+        .communicationLanguage(domain.getCommunicationLanguage().name())
         .firstName(domain.getFirstName())
         .lastName(domain.getLastName())
         .taxNumber(domain.getTaxNumber())

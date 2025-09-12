@@ -56,7 +56,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     weeklyReportPdfDoc.add(getEmptyRow());
     weeklyReportPdfDoc.add(getDriverMainData(model));
     weeklyReportPdfDoc.add(getFinancialCommentRow(language));
-    weeklyReportPdfDoc.add(getDepositData(language));
+    weeklyReportPdfDoc.add(getDepositData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getBalanceData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
@@ -110,8 +110,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     header.addCell(imageCell);
     final var reportNameCell =
         getQpdfPCell(
-            new Paragraph(
-                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 16, BOLD)));
+            new Paragraph(getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 16, BOLD)));
 
     reportNameCell.setColspan(3);
     reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
@@ -145,7 +144,6 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   private PdfPTable getDriverMainData(final WeeklyReportPdfModel model) {
-
     final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
@@ -161,7 +159,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var reportedWeek =
         "%d (%s - %s)"
             .formatted(
-                99,
+                model.getReportedWeekNumber(),
                 formatDate(model.getPreviousWeekStart()),
                 formatDate(model.getPreviousWeekEnd()));
     table.addCell(getDriverMainDataLabelCell(getLabel(language, REPORTED_WEEK_LABEL_KEY)));
@@ -235,15 +233,16 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return valueCell;
   }
 
-  private PdfPTable getDepositData(final String language) {
+  private PdfPTable getDepositData(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
     table.addCell(getFinancialDataLabelCell(getLabel(language, DEPOSIT_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(500)));
+    table.addCell(getFinancialDataValueCell(model.getDepositObligation()));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataLabelCell(getLabel(language, PAID_DEPOSIT_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataValueCell(model.getDepositPaid()));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataExplanationRow(null));
 
@@ -255,12 +254,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
     table.addCell(getFinancialDataLabelCell(getLabel(language, BALANCE_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataValueCell(model.getBalanceAmountSunday()));
     table.addCell(
         getFinancialDataExplanationRow(getLabel(language, BALANCE_END_WEEK_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataLabelCell(getLabel(language, BALANCE_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataValueCell(model.getBalanceAmountAtCalculationMoment()));
     table.addCell(
         getFinancialDataExplanationRow(getLabel(language, BALANCE_MONDAY_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
@@ -283,11 +282,11 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var table = new PdfPTable(2);
     table.setWidthPercentage(100f);
     table.addCell(getFinancialDataLabelCell(getLabel(language, DEBT_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(999999)));
     table.addCell(getFinancialDataExplanationRow(getLabel(language, DEBT_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataLabelCell(getLabel(language, OBLIGATION_KEY)));
-    table.addCell(getFinancialDataValueCell(BigDecimal.ZERO));
+    table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(999999)));
     table.addCell(getFinancialDataExplanationRow(getLabel(language, OBLIGATION_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
 

@@ -13,7 +13,8 @@ public class WeeklyReportPdfModel {
   private final String firstName;
   private final String lastName;
   private final Long idNumber;
-  private final String language = "RUS";
+  private final String language;
+  private final Integer reportedWeekNumber;
   private final Integer callSign;
   private final BigDecimal amount;
   private final BigDecimal feeAmountSunday;
