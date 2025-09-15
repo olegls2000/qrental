@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
 import ee.qrent.billing.report.api.in.response.WeeklyReportCalculationResponse;
+import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
 import ee.qrent.billing.report.domain.WeeklyReportCalculation;
 import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
@@ -14,6 +15,7 @@ public class WeeklyReportCalculationResponseMapper
     implements ResponseMapper<WeeklyReportCalculationResponse, WeeklyReportCalculation> {
 
   private final GetQWeekQuery qWeekQuery;
+  private final WeeklyReportLoadPort weeklyReportLoadPort;
 
   @Override
   public WeeklyReportCalculationResponse toResponse(final WeeklyReportCalculation domain) {
@@ -22,11 +24,12 @@ public class WeeklyReportCalculationResponseMapper
       return null;
     }
     final var reportQWeek = qWeekQuery.getById(domain.getQWeekId());
+    final var reportsCount = weeklyReportLoadPort.loadAllByCalculationId(domain.getId()).size();
 
     return WeeklyReportCalculationResponse.builder()
         .id(domain.getId())
         .type(WeeklyReportTypeIn.valueOf(domain.getReportType().name()).getLabel())
-        .reportsCount(domain.getReportTransactionLinks().size())
+        .reportsCount(reportsCount)
         .year(reportQWeek.getYear())
         .weekNumber(reportQWeek.getNumber())
         .dateStart(reportQWeek.getStart())

@@ -2,13 +2,11 @@ package ee.qrent.billing.report.spring.config;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
-import ee.qrent.billing.car.api.in.query.GetCarQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
-import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.report.adapter.mapper.WeeklyReportAdapterMapper;
 import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapper;
+import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
 import ee.qrent.billing.report.core.mapper.*;
 import ee.qrent.common.in.time.QDateTime;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +32,9 @@ public class WeeklyReportMapperConfig {
 
   @Bean
   WeeklyReportCalculationResponseMapper getWeeklyReportCalculationResponseMapper(
-      final GetQWeekQuery qWeekQuery) {
+      final GetQWeekQuery qWeekQuery, final WeeklyReportLoadPort weeklyReportLoadPort) {
 
-    return new WeeklyReportCalculationResponseMapper(qWeekQuery);
+    return new WeeklyReportCalculationResponseMapper(qWeekQuery, weeklyReportLoadPort);
   }
 
   @Bean
