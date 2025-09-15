@@ -25,14 +25,31 @@ public class TransactionTypeJakartaEntity {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
+  @Deprecated
   @Column(name = "name")
   private String name;
 
+  @Deprecated
   @Column(name = "description")
   private String description;
 
+  @Deprecated
   @Column(name = "invoice_name")
   private String invoiceName;
+
+  @Column(name = "code")
+  private String code;
+
+  @Column(name = "name_eng")
+  private String nameEng;
+
+  @Column(name = "name_rus")
+  private String nameRus;
+
+  @Column(name = "name_est")
+  private String nameEst;
+
+
 
   @Column(name = "invoice_included")
   private Boolean invoiceIncluded;

@@ -30,22 +30,54 @@
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label text-muted" for="transactionTypeId">Transaction type name</label>
+            <label class="form-label text-muted" for="transactionTypeId">(Deprecated)Transaction type name</label>
             <input class="form-control" id="transactionTypeId" placeholder="Enter Transaction type "
                    required
                    th:field="*{name}"
                    type="text"/>
         </div>
         <div class="mb-3">
-            <label class="form-label text-muted" for="descriptionId">Transaction Type On Estonian Language</label>
+            <label class="form-label text-muted" for="descriptionId">(Deprecated)Transaction Type On Estonian Language</label>
             <input class="form-control" id="descriptionId" placeholder="Enter Tr.Type On Estonian Language"
                    th:field="*{description}"
                    type="text"/>
         </div>
         <div class="mb-3">
-            <label class="form-label text-muted" for="descriptionRusID">Name for invoice</label>
+            <label class="form-label text-muted" for="descriptionRusID">(Deprecated)Name for invoice</label>
             <input class="form-control" id="descriptionRusID" placeholder="Enter Tr.Type name for invoice"
                    th:field="*{invoiceName}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="codeId">Code</label>
+            <input class="form-control" id="codeId"
+                   placeholder="Enter Transaction Type code"
+                   required
+                   th:field="*{code}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEngId">Transaction type name (Eng)</label>
+            <input class="form-control" id="nameEngId"
+                   placeholder="Enter Transaction Type English name"
+                   required
+                   th:field="*{nameEng}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEstId">Transaction type name (Est)</label>
+            <input class="form-control" id="nameEstId"
+                   placeholder="Sisestage tehingutüübi nimi"
+                   required
+                   th:field="*{nameEst}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameRusId">Transaction type name (Rus)</label>
+            <input class="form-control" id="nameRusId"
+                   placeholder="Введите название типа транзакции"
+                   required
+                   th:field="*{nameRus}"
                    type="text"/>
         </div>
         <div class="mb-3">

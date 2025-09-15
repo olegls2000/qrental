@@ -13,12 +13,16 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
-            <th>Name</th>
+            <th>Depr. Name</th>
             <th>Negative</th>
             <th>Fee able</th>
             <th>Kind</th>
-            <th>Nimi (estonian language)</th>
-            <th>Invoice Name</th>
+            <th>Depr. Nimi (estonian language)</th>
+            <th>Depr. Invoice Name</th>
+            <th>Code</th>
+            <th>Name (Eng)</th>
+            <th>Name (Est)</th>
+            <th>Name (Rus)</th>
             <th>Invoice Included</th>
             <th>visibleForUi</th>
             <th>Comment</th>
@@ -53,6 +57,10 @@
             <td th:text="${transactionType.kind}">???</td>
             <td th:text="${transactionType.description}">???</td>
             <td th:text="${transactionType.invoiceName}">???</td>
+            <td th:text="${transactionType.code}">???</td>
+            <td th:text="${transactionType.nameEng}">???</td>
+            <td th:text="${transactionType.nameEst}">???</td>
+            <td th:text="${transactionType.nameRus}">???</td>
             <td th:text="${transactionType.invoiceIncluded}">???</td>
             <td th:text="${transactionType.visibleForUi}">???</td>
             <td th:text="${transactionType.comment}">???</td>

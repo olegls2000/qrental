@@ -10,9 +10,13 @@ import lombok.experimental.SuperBuilder;
 public class TransactionType {
   private Long id;
   private TransactionKind kind;
-  private String name;
-  private String description;
-  private String invoiceName;
+  @Deprecated private String name;
+  @Deprecated private String description;
+  @Deprecated private String invoiceName;
+  private String code;
+  private String nameEng;
+  private String nameRus;
+  private String nameEst;
   private Boolean invoiceIncluded;
   private Boolean visibleForUi;
   private String comment;
@@ -38,7 +42,6 @@ public class TransactionType {
     }
     return true;
   }
-
 
   public boolean isFeeAble() {
     // TODO remove after Kind is set for all types

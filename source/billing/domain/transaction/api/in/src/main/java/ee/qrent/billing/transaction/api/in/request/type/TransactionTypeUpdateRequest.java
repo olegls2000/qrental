@@ -15,6 +15,10 @@ public class TransactionTypeUpdateRequest extends AbstractUpdateRequest {
   private String name;
   private String description;
   private String invoiceName;
+  private String code;
+  private String nameEng;
+  private String nameRus;
+  private String nameEst;
   private Boolean invoiceIncluded;
   private Boolean visibleForUi;
   private String comment;

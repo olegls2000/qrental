@@ -7,9 +7,13 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class TransactionTypeResponse {
   private Long id;
-  private String name;
-  private String description;
-  private String invoiceName;
+  private String code;
+  private String nameEng;
+  private String nameRus;
+  private String nameEst;
+  @Deprecated private String name;
+  @Deprecated private String description;
+  @Deprecated private String invoiceName;
   private Boolean invoiceIncluded;
   private Boolean visibleForUi;
   private String kind;

@@ -19,6 +19,7 @@ public class TransactionTypeQueryController {
   @GetMapping()
   public String getTransactionTypeView(final Model model) {
     model.addAttribute("transactionTypes", transactionTypeQuery.getAll());
+
     return "transactionTypes";
   }
 }
