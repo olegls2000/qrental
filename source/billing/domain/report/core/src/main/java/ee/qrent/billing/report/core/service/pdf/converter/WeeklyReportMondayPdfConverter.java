@@ -56,7 +56,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     weeklyReportPdfDoc.add(getEmptyRow());
     weeklyReportPdfDoc.add(getDriverMainData(model));
     weeklyReportPdfDoc.add(getFinancialCommentRow(language));
-    weeklyReportPdfDoc.add(getDepositData(model));
+    // weeklyReportPdfDoc.add(getDepositData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getBalanceData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
