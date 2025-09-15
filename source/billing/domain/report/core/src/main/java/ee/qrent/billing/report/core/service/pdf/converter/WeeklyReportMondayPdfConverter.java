@@ -23,6 +23,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 import com.lowagie.text.pdf.draw.LineSeparator;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportPdfModel;
@@ -304,8 +305,13 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         getTransactionTableHeaderCell(
             getLabel(language, TRANSACTION_TABLE_AMOUNT_COLUMN_KEY) + ", EUR"));
 
+    final var orderedAmounts =
+        model.getTransactionTypesVsAmount().entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .toList();
+
     int i = 0;
-    for (final var entry : model.getTransactionTypesVsAmount().entrySet()) {
+    for (final var entry : orderedAmounts) {
       final var rowBackground = i++ % 2 == 0 ? WHITE : GRAY_BACKGROUND_COLOR;
       final var typeCell =
           getQpdfPCell(new Paragraph(entry.getKey(), new Font(REPORT_FONT, 12, NORMAL)));
