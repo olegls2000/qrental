@@ -14,6 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static java.lang.String.format;
+import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
 
@@ -24,7 +25,8 @@ public class RentTransactionGenerator {
   private static final Long NEW_CAR_AGE = 4L;
   private static final BigDecimal OLD_CAR_RATE = valueOf(150L);
   private static final BigDecimal NEW_CAR_RATE = valueOf(240L);
-  private static final BigDecimal RATE_DECREASE_STEP = valueOf(10L);
+  //private static final BigDecimal RATE_DECREASE_STEP = valueOf(10L);
+  private static final BigDecimal RATE_DECREASE_STEP = ZERO;
   private static final BigDecimal NO_LABEL_RATE = valueOf(20L);
   private static final BigDecimal DEFAULT_WEEKLY_WORKING_DAYS_COUNT = valueOf(6L);
 
