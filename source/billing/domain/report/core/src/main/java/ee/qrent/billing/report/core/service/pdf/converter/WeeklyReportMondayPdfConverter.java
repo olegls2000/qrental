@@ -62,6 +62,8 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     weeklyReportPdfDoc.add(getBalanceData(model));
     weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getDebtAndObligationData(model));
+    weeklyReportPdfDoc.add(getEmptyRow());
+    weeklyReportPdfDoc.add(getObligationStatusDetails(model));
     weeklyReportPdfDoc.add(getTransactionTableTitleRow(language));
     weeklyReportPdfDoc.add(getTransactionTable(model));
     weeklyReportPdfDoc.close();
@@ -77,9 +79,15 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return qCell;
   }
 
+  private PdfPTable getQpdfTable(int numColumns) {
+    final var table = new PdfPTable(numColumns);
+    table.setWidthPercentage(100f);
+
+    return table;
+  }
+
   private PdfPTable getEmptyRow() {
-    final var row = new PdfPTable(1);
-    row.setWidthPercentage(100f);
+    final var row = getQpdfTable(1);
     final var cell = getQpdfPCell(new Paragraph(" ", new Font(REPORT_FONT, 14, Font.BOLD)));
     cell.setFixedHeight((float) 18.0);
     row.addCell(cell);
@@ -97,8 +105,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   @SneakyThrows
   private PdfPTable getHeader(final String language) {
-    final var header = new PdfPTable(4);
-    header.setWidthPercentage(100f);
+    final var header = getQpdfTable(4);
 
     Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
     img.scaleToFit(33, 14);
@@ -146,8 +153,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getDriverMainData(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = new PdfPTable(2);
-    table.setWidthPercentage(100f);
+    final var table = getQpdfTable(2);
     table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
 
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
@@ -178,8 +184,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   private PdfPTable getFinancialCommentRow(final String language) {
-    final var row = new PdfPTable(1);
-    row.setWidthPercentage(100f);
+    final var row = getQpdfTable(1);
     final var cell =
         getQpdfPCell(
             new Paragraph(
@@ -193,14 +198,10 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   private PdfPTable getTransactionTableTitleRow(final String language) {
-    final var row = new PdfPTable(1);
-    row.setWidthPercentage(100f);
-
+    final var row = getQpdfTable(1);
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 14, BOLD)));
-
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
-
     final var cell =
         getQpdfPCell(
             new Paragraph(
@@ -236,8 +237,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getDepositData(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = new PdfPTable(2);
-    table.setWidthPercentage(100f);
+    final var table = getQpdfTable(2);
     table.addCell(getFinancialDataLabelCell(getLabel(language, DEPOSIT_KEY)));
     table.addCell(getFinancialDataValueCell(model.getDepositObligation()));
     table.addCell(getFinancialDataExplanationRow(null));
@@ -252,8 +252,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getBalanceData(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = new PdfPTable(2);
-    table.setWidthPercentage(100f);
+    final var table = getQpdfTable(2);
     table.addCell(getFinancialDataLabelCell(getLabel(language, BALANCE_KEY)));
     table.addCell(getFinancialDataValueCell(model.getBalanceAmountSunday()));
     table.addCell(
@@ -280,24 +279,49 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getDebtAndObligationData(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = new PdfPTable(2);
-    table.setWidthPercentage(100f);
+    final var table = getQpdfTable(2);
     table.addCell(getFinancialDataLabelCell(getLabel(language, DEBT_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(999999)));
     table.addCell(getFinancialDataExplanationRow(getLabel(language, DEBT_EXPLANATION_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
     table.addCell(getFinancialDataLabelCell(getLabel(language, OBLIGATION_KEY)));
     table.addCell(getFinancialDataValueCell(BigDecimal.valueOf(999999)));
-    table.addCell(getFinancialDataExplanationRow(getLabel(language, OBLIGATION_EXPLANATION_KEY)));
+    table.addCell(getFinancialDataExplanationRow(getLabel(language, REPORT_COMMENT_KEY)));
     table.addCell(getFinancialDataExplanationRow(null));
+
+    return table;
+  }
+
+  private PdfPTable getObligationStatusDetails(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+    final var table = getQpdfTable(1);
+
+    final var status = model.getObligationStatus();
+    String label;
+    switch (status) {
+      case "COMPLETED" -> label = getLabel(language, OBLIGATION_COMPLETED_EXPLANATION_KEY);
+      case "COMPLETED_WITH_DELAY" ->
+          label = getLabel(language, OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY);
+      case "NOT_COMPLETED" -> label = getLabel(language, OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY);
+      default ->
+          throw new IllegalStateException(
+              "Unexpected value for the WeeklyReportObligationStatus: " + status);
+    }
+    final var obligationStatusCell = getQpdfPCell(new Paragraph(label, new Font(REPORT_FONT, 12)));
+    obligationStatusCell.setHorizontalAlignment(ALIGN_LEFT);
+    obligationStatusCell.setVerticalAlignment(ALIGN_MIDDLE);
+    obligationStatusCell.setBackgroundColor(GRAY_BACKGROUND_COLOR);
+    obligationStatusCell.setFixedHeight(40f);
+    obligationStatusCell.setPaddingLeft(10f);
+
+    table.addCell(obligationStatusCell);
 
     return table;
   }
 
   private PdfPTable getTransactionTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = new PdfPTable(2);
-    table.setWidthPercentage(100f);
+    final var table = getQpdfTable(2);
     table.setWidths(new float[] {8f, 2f});
     table.addCell(
         getTransactionTableHeaderCell(getLabel(language, TRANSACTION_TABLE_TYPE_COLUMN_KEY)));

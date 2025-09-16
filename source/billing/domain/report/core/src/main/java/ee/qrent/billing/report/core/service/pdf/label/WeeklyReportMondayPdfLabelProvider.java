@@ -31,7 +31,12 @@ public class WeeklyReportMondayPdfLabelProvider {
   public static String DEBT_KEY = "DEBT_KEY";
   public static String DEBT_EXPLANATION_KEY = "DEBT_EXPLANATION_KEY";
   public static String OBLIGATION_KEY = "OBLIGATION_KEY";
-  public static String OBLIGATION_EXPLANATION_KEY = "OBLIGATION_EXPLANATION_KEY";
+  public static String OBLIGATION_COMPLETED_EXPLANATION_KEY =
+      "OBLIGATION_COMPLETED_EXPLANATION_KEY";
+  public static String OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY =
+      "OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY";
+  public static String OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY =
+      "OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY";
   public static String TRANSACTION_TABLE_NAME_KEY = "TRANSACTION_TABLE_NAME_KEY";
   public static String TRANSACTION_TABLE_TYPE_COLUMN_KEY = "TRANSACTION_TABLE_TYPE_COLUMN_KEY";
   public static String TRANSACTION_TABLE_AMOUNT_COLUMN_KEY = "TRANSACTION_TABLE_AMOUNT_COLUMN_KEY";
@@ -60,7 +65,15 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(DEBT_KEY, "Долг"),
             new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "в конце отчетной недели"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Обязательство"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "за отчетную неделю"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_EXPLANATION_KEY,
+                "Твои обязательства были выполнены своевременно и в полном объеме – согласно условиям твоего договора"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
+                "Твои обязательства были выполнены в полном объеме, но с опозданием"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
+                "Твои обязательства не были выполнены своевременно и в полном объеме"),
             new AbstractMap.SimpleEntry<>(
                 TRANSACTION_TABLE_NAME_KEY, "Отчетные недельные транзакции"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Тип"),
@@ -90,7 +103,15 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(DEBT_KEY, "Debt"),
             new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "on the end of Reported Week"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Obligation"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "for the Reported Week"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_EXPLANATION_KEY,
+                "Your obligations were fulfilled on time and in full – according to the terms of your contract"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
+                "Your obligations were fulfilled in full, but late."),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
+                "Your obligations were not fulfilled in a timely manner and in full"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Reported Week Transactions"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Type"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Amount"),
@@ -118,7 +139,15 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(DEBT_KEY, "Võlg"),
             new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "aruandenädala lõpus"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Kohustus"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_EXPLANATION_KEY, "aruandenädala kohta"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_EXPLANATION_KEY,
+                "Teie kohustused täideti õigeaegselt ja täielikult – vastavalt teie lepingu tingimustele"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
+                "Teie kohustused täideti täielikult, kuid hilinenult"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
+                "Teie kohustusi ei täidetud õigeaegselt ja täielikult"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Aruandenädala tehingud"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Tüüp"),
             new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Summa"),
