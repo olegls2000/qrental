@@ -45,20 +45,8 @@ public class WeeklyReportQueryService implements GetWeeklyReportQuery {
   public List<WeeklyReportResponse> getAllByCalculationId(Long calculationId) {
     return loadPort.loadAllByCalculationId(calculationId).stream()
         .map(mapper::toResponse)
-        .sorted(getWeeklyReportYearAndWeekComparator())
+        .sorted(getCallSignComparator())
         .toList();
-  }
-
-  // TODO extract comparator based on interface WithQWeek
-  private Comparator<WeeklyReportResponse> getWeeklyReportYearAndWeekComparator() {
-    return (report1, report2) -> {
-      final var yearComparison = report1.getWeekYear().compareTo(report1.getWeekYear());
-      if (yearComparison != 0) {
-        return yearComparison;
-      }
-
-      return report2.getWeekNumber().compareTo(report1.getWeekNumber());
-    };
   }
 
   private Comparator<WeeklyReportResponse> getCallSignComparator() {
