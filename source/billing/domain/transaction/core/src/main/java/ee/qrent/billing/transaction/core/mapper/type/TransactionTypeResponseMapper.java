@@ -16,10 +16,10 @@ public class TransactionTypeResponseMapper
 
     return TransactionTypeResponse.builder()
         .id(domain.getId())
-        .name(domain.getName())
         .negative(domain.isNegative())
         .feeAble(domain.isFeeAble())
         .kind(kindCode)
+        .name(domain.getName())
         .description(domain.getDescription())
         .invoiceName(domain.getInvoiceName())
         .code(domain.getCode())

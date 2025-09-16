@@ -3,7 +3,6 @@ package ee.qrent.billing.transaction.core.mapper;
 import static ee.qrent.common.utils.QStringUtils.contract;
 import static java.lang.String.format;
 
-
 import ee.qrent.common.in.mapper.ResponseMapper;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
@@ -22,13 +21,16 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
     final var driver = driverQuery.getById(driverId);
     final var callSign = driver.getCallSign();
     final var driverInfo = format("%s %s ", driver.getFirstName(), driver.getLastName());
-
     final var kind = domain.getType().getKind();
     final var transactionKindCode = kind == null ? null : kind.getCode();
 
     return TransactionResponse.builder()
         .id(domain.getId())
         .realAmount(domain.getRealAmount())
+        .typeCode(domain.getType().getCode())
+        .typeNameEng(domain.getType().getNameEng())
+        .typeNameRus(domain.getType().getNameRus())
+        .typeNameEst(domain.getType().getNameEst())
         .type(domain.getType().getName())
         .typeDescription(domain.getType().getDescription())
         .kind(transactionKindCode)

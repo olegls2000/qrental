@@ -9,9 +9,13 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class TransactionResponse {
   private Long id;
-  private String type;
+  private String typeCode;
+  private String typeNameEst;
+  private String typeNameEng;
+  private String typeNameRus;
+  @Deprecated private String type;
+  @Deprecated private String typeDescription;
   private Boolean invoiceIncluded;
-  private String typeDescription;
   private String kind;
   private String driverInfo;
   private Long driverId;

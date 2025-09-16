@@ -157,8 +157,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
         .collect(
             groupingBy(
-
-                TransactionResponse::getType,
+                TransactionResponse::getTypeNameEst,
                 reducing(BigDecimal.ZERO, TransactionResponse::getRealAmount, BigDecimal::add)));
   }
 
