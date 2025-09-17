@@ -1,7 +1,7 @@
 package ee.qrent.billing.transaction.core.service.rent;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_ABSENCE_ADJUSTMENT;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -47,7 +47,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -82,7 +82,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -117,7 +117,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -152,7 +152,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -187,7 +187,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -222,7 +222,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -257,7 +257,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -292,7 +292,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -330,7 +330,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -364,7 +364,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(
@@ -404,7 +404,7 @@ class RentTransactionGeneratorTest {
 
     final var carId = 20L;
     final var activeCarLink = CarLinkResponse.builder().carId(carId).driverId(21L).build();
-    when(transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT))
+    when(transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE))
         .thenReturn(TransactionType.builder().id(30L).build());
     when(carQuery.getById(carId))
         .thenReturn(

@@ -10,9 +10,7 @@ import ee.qrent.billing.insurance.api.out.InsuranceCaseLoadPort;
 import ee.qrent.billing.insurance.api.out.InsuranceCaseUpdatePort;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.CloseRequestValidator;
-import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.insurance.api.in.query.GetQKaskoQuery;
 import ee.qrent.billing.insurance.api.in.usecase.InsuranceCaseCloseUseCase;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
@@ -119,7 +117,7 @@ public class InsuranceCaseCloseUseCaseService implements InsuranceCaseCloseUseCa
   }
 
   private Long getTransactionTypeIdByName(final String transactionTypeName) {
-    final var transactionType = transactionTypeQuery.getByName(transactionTypeName);
+    final var transactionType = transactionTypeQuery.getByCode(transactionTypeName);
     if (transactionType == null) {
       throw new RuntimeException(
           format(

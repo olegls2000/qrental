@@ -31,8 +31,6 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
         .typeNameEng(domain.getType().getNameEng())
         .typeNameRus(domain.getType().getNameRus())
         .typeNameEst(domain.getType().getNameEst())
-        .type(domain.getType().getName())
-        .typeDescription(domain.getType().getDescription())
         .kind(transactionKindCode)
         .driverId(domain.getDriverId())
         .driverInfo(driverInfo)
@@ -49,7 +47,7 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
   @Override
   public String toObjectInfo(final Transaction domain) {
     final var driverId = domain.getDriverId();
-    final var type = domain.getType().getName();
+    final var code = domain.getType().getCode();
     final var realAmount = domain.getRealAmount();
     final var date = domain.getDate().toString();
     final var weekNumber = domain.getWeekNumber();
@@ -62,6 +60,6 @@ public class TransactionResponseMapper implements ResponseMapper<TransactionResp
             + "week number: %d (%s), "
             + "for driver: %s "
             + "with call sign: %d",
-        type, realAmount, weekNumber, date, driverInfo, callSign);
+        code, realAmount, weekNumber, date, driverInfo, callSign);
   }
 }

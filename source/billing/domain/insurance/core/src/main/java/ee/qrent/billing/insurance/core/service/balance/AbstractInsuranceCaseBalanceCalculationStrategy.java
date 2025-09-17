@@ -49,14 +49,14 @@ public abstract class AbstractInsuranceCaseBalanceCalculationStrategy
     }
   }
 
-  protected Long getTransactionTypeIdByName(final String transactionTypeName) {
-    final var transactionType = transactionTypeQuery.getByName(transactionTypeName);
+  protected Long getTransactionTypeIdByCode(final String transactionTypeCode) {
+    final var transactionType = transactionTypeQuery.getByCode(transactionTypeCode);
     if (transactionType == null) {
       throw new RuntimeException(
           format(
-              "Transaction Type with name: %s, does not exist. "
+              "Transaction Type with code: %s, does not exist. "
                   + "Please create it, before Insurance Case Damage calculation",
-              transactionTypeName));
+                  transactionTypeCode));
     }
     return transactionType.getId();
   }

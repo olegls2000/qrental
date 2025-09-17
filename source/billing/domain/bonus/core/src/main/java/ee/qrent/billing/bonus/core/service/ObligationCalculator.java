@@ -1,6 +1,6 @@
 package ee.qrent.billing.bonus.core.service;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.math.BigDecimal.ZERO;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
@@ -74,10 +74,10 @@ public class ObligationCalculator {
         .filter(
             transaction ->
                 List.of(
-                        TRANSACTION_TYPE_NAME_WEEKLY_RENT,
-                        TRANSACTION_TYPE_NO_LABEL_FINE,
-                        TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
-                    .contains(transaction.getType()))
+                        TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
+                        TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
+                        TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
+                    .contains(transaction.getTypeCode()))
         .map(TransactionResponse::getRealAmount)
         .reduce(ZERO, BigDecimal::add);
   }

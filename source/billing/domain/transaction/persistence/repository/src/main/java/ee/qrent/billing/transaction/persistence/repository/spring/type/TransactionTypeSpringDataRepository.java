@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface TransactionTypeSpringDataRepository
     extends JpaRepository<TransactionTypeJakartaEntity, Long> {
 
-  TransactionTypeJakartaEntity findByName(final String name);
+  TransactionTypeJakartaEntity findByCode(final String code);
 
   @Query(
       value =
@@ -19,7 +19,7 @@ public interface TransactionTypeSpringDataRepository
       @Param("kindCodes") final List<String> kindCodes);
 
   @Query(
-      value = "SELECT * FROM transaction_type txt WHERE txt.name in (:names)",
+      value = "SELECT * FROM transaction_type txt WHERE txt.code in (:codes)",
       nativeQuery = true)
-  List<TransactionTypeJakartaEntity> findAllByNameIn(@Param("names") final List<String> names);
+  List<TransactionTypeJakartaEntity> findAllByNameIn(@Param("codes") final List<String> codes);
 }

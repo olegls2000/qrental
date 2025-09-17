@@ -29,33 +29,38 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
         .map(mapper::toResponse)
         .sorted(
             comparing(TransactionTypeResponse::getKind)
-                .thenComparing(TransactionTypeResponse::getName))
+                .thenComparing(TransactionTypeResponse::getCode))
         .collect(toList());
   }
 
   @Override
   public TransactionTypeResponse getById(final Long id) {
-    return mapper.toResponse(loadPort.loadById(id));
+
+      return mapper.toResponse(loadPort.loadById(id));
   }
 
   @Override
   public String getObjectInfo(Long id) {
-    return mapper.toObjectInfo(loadPort.loadById(id));
+
+      return mapper.toObjectInfo(loadPort.loadById(id));
   }
 
   @Override
   public TransactionTypeUpdateRequest getUpdateRequestById(Long id) {
-    return updateRequestMapper.toRequest(loadPort.loadById(id));
+
+      return updateRequestMapper.toRequest(loadPort.loadById(id));
   }
 
   @Override
-  public TransactionTypeResponse getByName(final String name) {
-    return mapper.toResponse(loadPort.loadByName(name));
+  public TransactionTypeResponse getByCode(final String name) {
+
+      return mapper.toResponse(loadPort.loadByCode(name));
   }
 
   @Override
-  public List<TransactionTypeResponse> getByNameIn(final List<String> names) {
-    return loadPort.loadByNameIn(names).stream().map(mapper::toResponse).toList();
+  public List<TransactionTypeResponse> getByCodeIn(final List<String> names) {
+
+      return loadPort.loadByCodeIn(names).stream().map(mapper::toResponse).toList();
   }
 
   @Override
@@ -78,7 +83,8 @@ public class TransactionTypeQueryService implements GetTransactionTypeQuery {
 
   @Override
   public List<TransactionTypeResponse> getPositive() {
-    return loadPort.loadByKindCodesIn(List.of(TransactionKindsCode.P.name())).stream()
+
+      return loadPort.loadByKindCodesIn(List.of(TransactionKindsCode.P.name())).stream()
             .filter(TransactionType::isVisibleFoUi)
         .map(mapper::toResponse)
         .toList();

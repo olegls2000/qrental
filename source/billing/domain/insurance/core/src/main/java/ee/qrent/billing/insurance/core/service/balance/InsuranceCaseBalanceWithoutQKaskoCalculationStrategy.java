@@ -14,6 +14,7 @@ import ee.qrent.billing.transaction.api.in.usecase.TransactionAddUseCase;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 
@@ -89,8 +90,8 @@ public class InsuranceCaseBalanceWithoutQKaskoCalculationStrategy
         "No Kasko. Leak amount from Insurance Case or Previous Balance. Automatically created transaction.");
     addRequest.setDriverId(driverId);
     addRequest.setAmount(damageRemaining);
-    final var transactionTypeNameForDamage = "damage payment";
-    addRequest.setTransactionTypeId(getTransactionTypeIdByName(transactionTypeNameForDamage));
+    addRequest.setTransactionTypeId(
+        getTransactionTypeIdByCode(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE));
     addRequest.setDate(qWeek.getStart());
 
     return addRequest;

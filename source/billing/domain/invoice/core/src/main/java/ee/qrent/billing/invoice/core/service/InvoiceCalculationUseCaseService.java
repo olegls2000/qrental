@@ -388,7 +388,7 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
             final List<TransactionResponse> transactions, final FirmResponse firm) {
         final var withoutVat = isFirmWithoutVAT(firm);
         final var typeVsTransactions =
-                transactions.stream().collect(groupingBy(TransactionResponse::getType));
+                transactions.stream().collect(groupingBy(TransactionResponse::getTypeCode));
 
         return typeVsTransactions.entrySet().stream()
                 .map(entry -> getInvoiceItem(entry.getKey(), entry.getValue(), withoutVat))
@@ -404,9 +404,9 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
                         .reduce(BigDecimal::add)
                         .orElse(ZERO)
                         .multiply(vatRate);
-        final var transactionTypeName = transactions.get(0).getType();
-        final var transactionType = transactionTypeQuery.getByName(transactionTypeName);
-        final var invoiceItemName = transactionType.getInvoiceName();
+        final var transactionTypeCode = transactions.get(0).getTypeCode();
+        final var transactionType = transactionTypeQuery.getByCode(transactionTypeCode);
+        final var invoiceItemName = transactionType.getNameEst();
 
         return InvoiceItem.builder().type(type).description(invoiceItemName).amount(amount).build();
     }

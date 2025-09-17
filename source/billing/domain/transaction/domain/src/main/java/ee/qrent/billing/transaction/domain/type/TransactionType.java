@@ -10,9 +10,6 @@ import lombok.experimental.SuperBuilder;
 public class TransactionType {
   private Long id;
   private TransactionKind kind;
-  @Deprecated private String name;
-  @Deprecated private String description;
-  @Deprecated private String invoiceName;
   private String code;
   private String nameEng;
   private String nameRus;

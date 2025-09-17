@@ -19,9 +19,6 @@ public class TransactionTypeResponseMapper
         .negative(domain.isNegative())
         .feeAble(domain.isFeeAble())
         .kind(kindCode)
-        .name(domain.getName())
-        .description(domain.getDescription())
-        .invoiceName(domain.getInvoiceName())
         .code(domain.getCode())
         .nameEng(domain.getNameEng())
         .nameRus(domain.getNameRus())
@@ -34,6 +31,6 @@ public class TransactionTypeResponseMapper
 
   @Override
   public String toObjectInfo(TransactionType domain) {
-    return format("Transaction type : %s ", domain.getName());
+    return format("Transaction type : %s ", domain.getCode());
   }
 }

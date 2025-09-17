@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TransactionTypeLoadPort extends LoadPort<TransactionType> {
 
-  TransactionType loadByName(final String name);
+  TransactionType loadByCode(final String code);
 
   List<TransactionType> loadByKindCodesIn(final List<String> kindCodes);
 
-  List<TransactionType> loadByNameIn(final List<String> names);
+  List<TransactionType> loadByCodeIn(final List<String> codes);
 }

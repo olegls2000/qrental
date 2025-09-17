@@ -12,9 +12,9 @@ public interface TransactionTypeRepository {
 
   TransactionTypeJakartaEntity getReferenceById(final Long id);
 
-  TransactionTypeJakartaEntity findByName(final String name);
+  TransactionTypeJakartaEntity findByCode(final String code);
 
-  List<TransactionTypeJakartaEntity> findAllByNameIn(final List<String> names);
+  List<TransactionTypeJakartaEntity> findAllByCodeIn(final List<String> codes);
 
   List<TransactionTypeJakartaEntity> findAllByKindCodesIn(final List<String> kindCodes);
 }

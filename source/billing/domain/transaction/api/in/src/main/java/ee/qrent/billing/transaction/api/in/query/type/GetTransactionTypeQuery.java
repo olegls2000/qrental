@@ -8,8 +8,9 @@ import java.util.List;
 public interface GetTransactionTypeQuery
     extends BaseGetQuery<TransactionTypeUpdateRequest, TransactionTypeResponse> {
 
-  TransactionTypeResponse getByName(final String name);
-  List<TransactionTypeResponse> getByNameIn(final List<String> names);
+  TransactionTypeResponse getByCode(final String code);
+
+  List<TransactionTypeResponse> getByCodeIn(final List<String> codes);
 
   List<TransactionTypeResponse> getNegative();
 

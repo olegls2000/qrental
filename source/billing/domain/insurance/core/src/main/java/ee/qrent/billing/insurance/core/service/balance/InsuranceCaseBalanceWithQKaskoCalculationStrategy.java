@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ee.qrent.billing.insurance.core.service.balance.InsuranceCaseBalanceDeriveUtils.derive;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ZERO;
 
@@ -90,9 +90,8 @@ public class InsuranceCaseBalanceWithQKaskoCalculationStrategy
         "Self Responsibility Requested Payment. Automatically created transaction.");
     selfResponsibilityTransaction.setDriverId(driverId);
     selfResponsibilityTransaction.setAmount(selfResponsibilityRequestedAmount);
-    final var transactionTypeNameForSelfResponsibility = "self responsibility payment";
     selfResponsibilityTransaction.setTransactionTypeId(
-        getTransactionTypeIdByName(transactionTypeNameForSelfResponsibility));
+        getTransactionTypeIdByCode(TRANSACTION_TYPE_SELF_RESPONSIBILITY_PAYMENT_CODE));
     selfResponsibilityTransaction.setDate(qWeek.getStart());
 
     return selfResponsibilityTransaction;
@@ -101,7 +100,9 @@ public class InsuranceCaseBalanceWithQKaskoCalculationStrategy
   private BigDecimal getRequestedSelfResponsibilityAmountAbs(
       final Long driverId, final Long qWeekId) {
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-        .filter(transaction -> TRANSACTION_TYPE_SELF_RESPONSIBILITY.equals(transaction.getType()))
+        .filter(
+            transaction ->
+                TRANSACTION_TYPE_SELF_RESPONSIBILITY_REQUEST_CODE.equals(transaction.getTypeCode()))
         .map(TransactionResponse::getRealAmount)
         .reduce(ZERO, BigDecimal::add)
         .abs();
@@ -115,9 +116,8 @@ public class InsuranceCaseBalanceWithQKaskoCalculationStrategy
         "Write off based on Rent. Automatically created transaction for the damage compensation.");
     damageWriteOffTransaction.setDriverId(driverId);
     damageWriteOffTransaction.setAmount(writeOffAmount);
-    final var transactionTypeNameForDamage = "damage payment";
     damageWriteOffTransaction.setTransactionTypeId(
-        getTransactionTypeIdByName(transactionTypeNameForDamage));
+        getTransactionTypeIdByCode(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE));
     damageWriteOffTransaction.setDate(qWeek.getStart());
 
     return damageWriteOffTransaction;
@@ -135,8 +135,8 @@ public class InsuranceCaseBalanceWithQKaskoCalculationStrategy
     return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
         .filter(
             transaction ->
-                List.of(TRANSACTION_TYPE_NAME_WEEKLY_RENT, TRANSACTION_TYPE_NO_LABEL_FINE)
-                    .contains(transaction.getType()))
+                List.of(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE, TRANSACTION_TYPE_NO_LABEL_FINE_CODE)
+                    .contains(transaction.getTypeCode()))
         .map(TransactionResponse::getRealAmount)
         .reduce(ZERO, BigDecimal::add)
         .abs();

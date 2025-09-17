@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.domain.kind.TransactionKindsCode.F;
+import static java.math.BigDecimal.ZERO;
 
 public class BalanceCalculatorStrategySaving extends AbstractBalanceCalculator {
   private final TransactionAddUseCase transactionAddUseCase;
   private final GetTransactionQuery transactionQuery;
   private final TransactionTypeLoadPort transactionTypeLoadPort;
   private final BalanceAddPort balanceAddPort;
-  private static final String TRANSACTION_TYPE_NAME_FEE_DEBT = "fee debt";
 
   public BalanceCalculatorStrategySaving(
       final TransactionAddUseCase transactionAddUseCase,
@@ -44,9 +45,9 @@ public class BalanceCalculatorStrategySaving extends AbstractBalanceCalculator {
       final QWeekResponse qWeek,
       final Long driverId,
       final Map<String, List<TransactionResponse>> transactionsByKind) {
-    if (feeAmountForPreviousWeek.compareTo(BigDecimal.ZERO) > 0) {
+    if (feeAmountForPreviousWeek.compareTo(ZERO) > 0) {
       final var transactionType =
-          transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_FEE_DEBT);
+          transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_FEE_DEBT_CODE);
       final var feeTransactionAddRequest = new TransactionAddRequest();
       feeTransactionAddRequest.setAmount(feeAmountForPreviousWeek);
       feeTransactionAddRequest.setDate(qWeek.getEnd());

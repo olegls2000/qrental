@@ -1,7 +1,7 @@
 package ee.qrent.billing.bonus.core.service;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NO_LABEL_FINE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NO_LABEL_FINE_CODE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
@@ -104,8 +104,10 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
         transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
             .filter(
                 transaction ->
-                    List.of(TRANSACTION_TYPE_NAME_WEEKLY_RENT, TRANSACTION_TYPE_NO_LABEL_FINE)
-                        .contains(transaction.getType()))
+                    List.of(
+                            TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
+                            TRANSACTION_TYPE_NO_LABEL_FINE_CODE)
+                        .contains(transaction.getTypeCode()))
             .count();
     if (rentTransactionCount == 0) {
       System.out.println("No Rent transactions. Match count is O");

@@ -12,9 +12,6 @@ public class TransactionTypeUpdateRequestMapper
   public TransactionType toDomain(final TransactionTypeUpdateRequest request) {
     return TransactionType.builder()
         .id(request.getId())
-        .name(request.getName())
-        .description(request.getDescription())
-        .invoiceName(request.getInvoiceName())
         .code(request.getCode())
         .nameEng(request.getNameEng())
         .nameRus(request.getNameRus())
@@ -33,9 +30,6 @@ public class TransactionTypeUpdateRequestMapper
 
     return TransactionTypeUpdateRequest.builder()
         .id(domain.getId())
-        .name(domain.getName())
-        .description(domain.getDescription())
-        .invoiceName(domain.getInvoiceName())
         .code(domain.getCode())
         .nameEng(domain.getNameEng())
         .nameRus(domain.getNameRus())

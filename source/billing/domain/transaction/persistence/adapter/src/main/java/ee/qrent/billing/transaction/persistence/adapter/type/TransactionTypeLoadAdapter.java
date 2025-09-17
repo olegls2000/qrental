@@ -26,8 +26,8 @@ public class TransactionTypeLoadAdapter implements TransactionTypeLoadPort {
   }
 
   @Override
-  public TransactionType loadByName(String name) {
-    return mapper.mapToDomain(repository.findByName(name));
+  public TransactionType loadByCode(String name) {
+    return mapper.mapToDomain(repository.findByCode(name));
   }
 
   @Override
@@ -36,7 +36,7 @@ public class TransactionTypeLoadAdapter implements TransactionTypeLoadPort {
   }
 
   @Override
-  public List<TransactionType> loadByNameIn(List<String> names) {
-    return repository.findAllByNameIn(names).stream().map(mapper::mapToDomain).toList();
+  public List<TransactionType> loadByCodeIn(List<String> names) {
+    return repository.findAllByCodeIn(names).stream().map(mapper::mapToDomain).toList();
   }
 }

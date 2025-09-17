@@ -13,12 +13,9 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
-            <th>Depr. Name</th>
             <th>Negative</th>
             <th>Fee able</th>
             <th>Kind</th>
-            <th>Depr. Nimi (estonian language)</th>
-            <th>Depr. Invoice Name</th>
             <th>Code</th>
             <th>Name (Eng)</th>
             <th>Name (Est)</th>
@@ -44,7 +41,6 @@
                     <span class="bi-trash"></span>
                 </a>
             </td>
-            <td th:text="${transactionType.name}"></td>
             <td th:if="${transactionType.negative}"
                 class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
                 Negative
@@ -55,8 +51,6 @@
             </td>
             <td th:text="${transactionType.feeAble}">???</td>
             <td th:text="${transactionType.kind}">???</td>
-            <td th:text="${transactionType.description}">???</td>
-            <td th:text="${transactionType.invoiceName}">???</td>
             <td th:text="${transactionType.code}">???</td>
             <td th:text="${transactionType.nameEng}">???</td>
             <td th:text="${transactionType.nameEst}">???</td>

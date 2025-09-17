@@ -1,7 +1,7 @@
 package ee.qrent.billing.insurance.core.service;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -141,7 +141,7 @@ class InsuranceCalculationUseCaseServiceTest {
     final var transactionTypeResponse =
         TransactionTypeResponse.builder()
             .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .code(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
             .build();
 
     final var driver =
@@ -172,11 +172,11 @@ class InsuranceCalculationUseCaseServiceTest {
         .thenReturn(
             singletonList(
                 TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
                     .realAmount(BigDecimal.valueOf(100))
                     .build()));
     when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(379);
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE))
         .thenReturn(transactionTypeResponse);
     when(calculationAddPort.add(any())).thenReturn(InsuranceCalculation.builder().id(99L).build());
 
@@ -201,7 +201,7 @@ class InsuranceCalculationUseCaseServiceTest {
     final var transactionTypeResponse =
         TransactionTypeResponse.builder()
             .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .code(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
             .build();
 
     final var driver =
@@ -232,11 +232,11 @@ class InsuranceCalculationUseCaseServiceTest {
         .thenReturn(
             singletonList(
                 TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
                     .realAmount(BigDecimal.valueOf(100))
                     .build()));
     when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(380);
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE))
         .thenReturn(transactionTypeResponse);
     when(calculationAddPort.add(any())).thenReturn(InsuranceCalculation.builder().id(99L).build());
 
@@ -261,7 +261,7 @@ class InsuranceCalculationUseCaseServiceTest {
     final var transactionTypeResponse =
         TransactionTypeResponse.builder()
             .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .code(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
             .build();
 
     final var driver =
@@ -292,11 +292,11 @@ class InsuranceCalculationUseCaseServiceTest {
         .thenReturn(
             singletonList(
                 TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
                     .realAmount(BigDecimal.valueOf(100))
                     .build()));
     when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(515);
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE))
         .thenReturn(transactionTypeResponse);
     when(calculationAddPort.add(any())).thenReturn(InsuranceCalculation.builder().id(99L).build());
 
@@ -321,7 +321,7 @@ class InsuranceCalculationUseCaseServiceTest {
     final var transactionTypeResponse =
         TransactionTypeResponse.builder()
             .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .code(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
             .build();
 
     final var driver =
@@ -352,11 +352,11 @@ class InsuranceCalculationUseCaseServiceTest {
         .thenReturn(
             singletonList(
                 TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
                     .realAmount(BigDecimal.valueOf(100))
                     .build()));
     when(boltRidesCountQuery.getRidesCountByDriverIdAndQWeekId(driverId, qWeekId)).thenReturn(515);
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE))
         .thenReturn(transactionTypeResponse);
     when(calculationAddPort.add(any())).thenReturn(InsuranceCalculation.builder().id(99L).build());
 
@@ -378,7 +378,7 @@ class InsuranceCalculationUseCaseServiceTest {
     final var transactionTypeResponse =
         TransactionTypeResponse.builder()
             .id(10L)
-            .name(TRANSACTION_TYPE_INNER_ROAD_INSURANCE)
+            .code(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
             .build();
 
     final var driver =
@@ -409,10 +409,10 @@ class InsuranceCalculationUseCaseServiceTest {
         .thenReturn(
             singletonList(
                 TransactionResponse.builder()
-                    .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+                    .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
                     .realAmount(BigDecimal.valueOf(100))
                     .build()));
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE))
         .thenReturn(transactionTypeResponse);
     when(calculationAddPort.add(any())).thenReturn(InsuranceCalculation.builder().id(99L).build());
     when(caseLoadPort.loadActiveByDriverIdAndQWeekId(driverId, qWeekId))

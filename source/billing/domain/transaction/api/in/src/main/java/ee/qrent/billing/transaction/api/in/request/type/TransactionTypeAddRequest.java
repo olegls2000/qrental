@@ -10,9 +10,6 @@ import lombok.Setter;
 @Setter
 public class TransactionTypeAddRequest extends AbstractAddRequest {
   private Long transactionKindId;
-  @Deprecated private String name;
-  @Deprecated private String description;
-  @Deprecated private String invoiceName;
   private String code;
   private String nameEng;
   private String nameEst;

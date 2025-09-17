@@ -21,7 +21,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -262,13 +262,13 @@ class NewDriverBonusStrategyTest {
         .thenReturn(ContractResponse.builder().active(true).duration(12).build());
     final var rentTransaction =
         TransactionResponse.builder()
-            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(55L, 9L)).thenReturn(rentTransactions);
-    when(transactionTypeQuery.getByName("bonus"))
+    when(transactionTypeQuery.getByCode("bonus"))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
     when(qWeekQuery.getOneAfterById(9L))
         .thenReturn(QWeekResponse.builder().start(LocalDate.of(2023, Month.FEBRUARY, 13)).build());

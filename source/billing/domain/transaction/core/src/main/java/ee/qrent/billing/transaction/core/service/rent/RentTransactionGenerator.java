@@ -13,10 +13,10 @@ import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
 
 @AllArgsConstructor
 public class RentTransactionGenerator {
@@ -25,7 +25,7 @@ public class RentTransactionGenerator {
   private static final Long NEW_CAR_AGE = 4L;
   private static final BigDecimal OLD_CAR_RATE = valueOf(150L);
   private static final BigDecimal NEW_CAR_RATE = valueOf(240L);
-  //private static final BigDecimal RATE_DECREASE_STEP = valueOf(10L);
+  // private static final BigDecimal RATE_DECREASE_STEP = valueOf(10L);
   private static final BigDecimal RATE_DECREASE_STEP = ZERO;
   private static final BigDecimal NO_LABEL_RATE = valueOf(20L);
   private static final BigDecimal DEFAULT_WEEKLY_WORKING_DAYS_COUNT = valueOf(6L);
@@ -39,11 +39,11 @@ public class RentTransactionGenerator {
     final var addRequest = new TransactionAddRequest();
     addRequest.setDate(week.getStart());
     final var transactionTpe =
-        transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NAME_WEEKLY_RENT);
+        transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE);
     if (transactionTpe == null) {
       throw new RuntimeException(
           "Transaction type for weekly Rent Calculation is missing. Create a Transaction Type with name: "
-              + TRANSACTION_TYPE_NAME_WEEKLY_RENT);
+              + TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE);
     }
     addRequest.setTransactionTypeId(transactionTpe.getId());
     addRequest.setWeekNumber(week.getNumber());
@@ -60,11 +60,12 @@ public class RentTransactionGenerator {
   Optional<TransactionAddRequest> getNoLabelFineTransactionAddRequest(
       final QWeekResponse week, final CarLinkResponse activeCarLink) {
     if (isNoLabelFineRequired(activeCarLink.getCarId())) {
-      final var transactionTpe = transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_NO_LABEL_FINE);
+      final var transactionTpe =
+          transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_NO_LABEL_FINE_CODE);
       if (transactionTpe == null) {
         throw new RuntimeException(
             "Transaction type for No Label Fine is missing. Create a Transaction Type with name: "
-                + TRANSACTION_TYPE_NO_LABEL_FINE);
+                + TRANSACTION_TYPE_NO_LABEL_FINE_CODE);
       }
       final var addRequest = new TransactionAddRequest();
       addRequest.setDate(week.getStart());
@@ -101,11 +102,11 @@ public class RentTransactionGenerator {
       final var addRequest = new TransactionAddRequest();
       addRequest.setDate(week.getStart());
       final var transactionTpe =
-          transactionTypeLoadPort.loadByName(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT);
+          transactionTypeLoadPort.loadByCode(TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE);
       if (transactionTpe == null) {
         throw new RuntimeException(
             "Transaction type for Absence Adjustment is missing. Create a Transaction Type with name: "
-                + TRANSACTION_TYPE_ABSENCE_ADJUSTMENT);
+                + TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE);
       }
       final var absenceAdjustmentAmount =
           calculateAbsenceAdjustmentTransactionAmount(activeCarLink, absenceDaysCount);
@@ -137,28 +138,26 @@ public class RentTransactionGenerator {
     final var carAge = getCarAge(car);
     // new car age = 4
     if (carAge < NEW_CAR_AGE) {
-      //240
+      // 240
       return NEW_CAR_RATE;
     }
 
     if (carAge == 4) {
-      //240 - 10
+      // 240 - 10
       return NEW_CAR_RATE.subtract(RATE_DECREASE_STEP);
     }
     if (carAge == 5) {
-      //240 - 10 - 10
-      return NEW_CAR_RATE
-          .subtract(RATE_DECREASE_STEP)
-          .subtract(RATE_DECREASE_STEP);
+      // 240 - 10 - 10
+      return NEW_CAR_RATE.subtract(RATE_DECREASE_STEP).subtract(RATE_DECREASE_STEP);
     }
     if (carAge == 6) {
-      //240 - 10 - 10 - 10
+      // 240 - 10 - 10 - 10
       return NEW_CAR_RATE
           .subtract(RATE_DECREASE_STEP)
           .subtract(RATE_DECREASE_STEP)
           .subtract(RATE_DECREASE_STEP);
     }
-    //150
+    // 150
     return OLD_CAR_RATE;
   }
 

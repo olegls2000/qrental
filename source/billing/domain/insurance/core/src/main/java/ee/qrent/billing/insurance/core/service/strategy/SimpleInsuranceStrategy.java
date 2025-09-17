@@ -14,7 +14,7 @@ import ee.qrent.common.in.time.QDateTime;
 
 import java.math.BigDecimal;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.*;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE;
 import static java.lang.Boolean.FALSE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.Arrays.asList;
@@ -27,7 +27,6 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
   private final TransactionAddUseCase transactionAddUseCase;
   private final QDateTime qDateTime;
 
-
   public SimpleInsuranceStrategy(
       final GetContractQuery contractQuery,
       final InsuranceCaseUpdatePort caseUpdatePort,
@@ -39,7 +38,6 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     this.transactionTypeQuery = transactionTypeQuery;
     this.transactionAddUseCase = transactionAddUseCase;
     this.qDateTime = qDateTime;
-
   }
 
   @Override
@@ -102,7 +100,7 @@ public class SimpleInsuranceStrategy extends AbstractInsuranceCalculationStrateg
     damageWriteOffTransaction.setDriverId(insuranceCase.getDriverId());
     damageWriteOffTransaction.setAmount(writeOffAmount);
     final var transactionTypeId =
-        transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).getId();
+        transactionTypeQuery.getByCode(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE).getId();
     damageWriteOffTransaction.setTransactionTypeId(transactionTypeId);
     damageWriteOffTransaction.setDate(qDateTime.getToday());
 

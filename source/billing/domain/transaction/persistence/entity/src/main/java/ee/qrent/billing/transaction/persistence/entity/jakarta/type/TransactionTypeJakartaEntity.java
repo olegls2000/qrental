@@ -25,18 +25,6 @@ public class TransactionTypeJakartaEntity {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @Deprecated
-  @Column(name = "name")
-  private String name;
-
-  @Deprecated
-  @Column(name = "description")
-  private String description;
-
-  @Deprecated
-  @Column(name = "invoice_name")
-  private String invoiceName;
-
   @Column(name = "code")
   private String code;
 
@@ -48,8 +36,6 @@ public class TransactionTypeJakartaEntity {
 
   @Column(name = "name_est")
   private String nameEst;
-
-
 
   @Column(name = "invoice_included")
   private Boolean invoiceIncluded;

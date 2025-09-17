@@ -1,11 +1,11 @@
 package ee.qrent.billing.insurance.core.service;
 
 import static ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy.NEW_CONTRACTS_START_DATE;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
-import static java.util.stream.Collectors.groupingBy;
+
 
 import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
@@ -122,7 +122,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
             .filter(
                 transactionResponse ->
-                    TRANSACTION_TYPE_NAME_WEEKLY_RENT.equals(transactionResponse.getType()))
+                    TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE.equals(transactionResponse.getTypeCode()))
             .map(tr -> tr.getRealAmount())
             .reduce(BigDecimal::add)
             .orElse(ZERO);
@@ -135,7 +135,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     insurancePaymentTransaction.setDriverId(driverId);
     insurancePaymentTransaction.setAmount(transactionAmount);
     final var transactionTypeId =
-        transactionTypeQuery.getByName(TRANSACTION_TYPE_INNER_ROAD_INSURANCE).getId();
+        transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE).getId();
     insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
     insurancePaymentTransaction.setDate(qDateTime.getToday());
 

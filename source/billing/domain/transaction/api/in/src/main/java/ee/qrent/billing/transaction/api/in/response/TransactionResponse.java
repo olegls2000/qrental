@@ -13,8 +13,6 @@ public class TransactionResponse {
   private String typeNameEst;
   private String typeNameEng;
   private String typeNameRus;
-  @Deprecated private String type;
-  @Deprecated private String typeDescription;
   private Boolean invoiceIncluded;
   private String kind;
   private String driverInfo;

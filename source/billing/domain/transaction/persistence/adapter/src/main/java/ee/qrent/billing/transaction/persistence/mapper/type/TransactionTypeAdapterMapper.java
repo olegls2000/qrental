@@ -14,9 +14,6 @@ public class TransactionTypeAdapterMapper {
 
     return TransactionType.builder()
         .id(entity.getId())
-        .name(entity.getName())
-        .description(entity.getDescription())
-        .invoiceName(entity.getInvoiceName())
         .code(entity.getCode())
         .nameEng(entity.getNameEng())
         .nameRus(entity.getNameRus())
@@ -32,9 +29,6 @@ public class TransactionTypeAdapterMapper {
 
     return TransactionTypeJakartaEntity.builder()
         .id(domain.getId())
-        .name(domain.getName())
-        .description(domain.getDescription())
-        .invoiceName(domain.getInvoiceName())
         .code(domain.getCode())
         .nameEng(domain.getNameEng())
         .nameRus(domain.getNameRus())

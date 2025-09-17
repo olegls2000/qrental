@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_BONUS_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -98,7 +99,7 @@ class FourWeeksPrepaymentBonusStrategyTest {
     final var weekPositiveAmount = BigDecimal.valueOf(399d);
     final var rentTransaction =
         TransactionResponse.builder()
-            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
@@ -120,13 +121,13 @@ class FourWeeksPrepaymentBonusStrategyTest {
     final var weekPositiveAmount = BigDecimal.valueOf(400d);
     final var rentTransaction =
         TransactionResponse.builder()
-            .type(TRANSACTION_TYPE_NAME_WEEKLY_RENT)
+            .typeCode(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE)
             .realAmount(BigDecimal.valueOf(-100d))
             .build();
     final var rentTransactions = singletonList(rentTransaction);
 
     when(transactionQuery.getAllByDriverIdAndQWeekId(2L, 9L)).thenReturn(rentTransactions);
-    when(transactionTypeQuery.getByName("bonus"))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_BONUS_CODE))
         .thenReturn(TransactionTypeResponse.builder().id(33L).build());
 
     // when

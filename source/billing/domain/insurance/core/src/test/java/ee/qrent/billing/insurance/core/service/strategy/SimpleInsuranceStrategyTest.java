@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeConstant.TRANSACTION_TYPE_DAMAGE_WRITE_OFF;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -156,9 +156,12 @@ public class SimpleInsuranceStrategyTest {
         InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(600)).build();
 
     final var transactionTypeResponse =
-        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
+        TransactionTypeResponse.builder()
+            .id(15L)
+            .code(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE)
+            .build();
 
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE))
         .thenReturn(transactionTypeResponse);
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
 
@@ -193,9 +196,12 @@ public class SimpleInsuranceStrategyTest {
         InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(599)).build();
 
     final var transactionTypeResponse =
-        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
+        TransactionTypeResponse.builder()
+            .id(15L)
+            .code(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE)
+            .build();
 
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE))
         .thenReturn(transactionTypeResponse);
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
 
@@ -225,9 +231,12 @@ public class SimpleInsuranceStrategyTest {
         InsuranceCase.builder().driverId(driverId).damageAmount(BigDecimal.valueOf(600)).build();
 
     final var transactionTypeResponse =
-        TransactionTypeResponse.builder().id(15L).name(TRANSACTION_TYPE_DAMAGE_WRITE_OFF).build();
+        TransactionTypeResponse.builder()
+            .id(15L)
+            .code(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE)
+            .build();
 
-    when(transactionTypeQuery.getByName(TRANSACTION_TYPE_DAMAGE_WRITE_OFF))
+    when(transactionTypeQuery.getByCode(TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE))
         .thenReturn(transactionTypeResponse);
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.APRIL, 3));
 

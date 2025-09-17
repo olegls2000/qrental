@@ -51,6 +51,7 @@ public class TransactionTypeUseCaseController {
   public String updateForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("updateRequest", transactionTypeQuery.getUpdateRequestById(id));
     model.addAttribute("transactionKinds", transactionKindQuery.getAll());
+
     return "forms/updateTransactionType";
   }
 
@@ -61,6 +62,7 @@ public class TransactionTypeUseCaseController {
     if (updateRequest.hasViolations()) {
       model.addAttribute("updateRequest", updateRequest);
       model.addAttribute("transactionKinds", transactionKindQuery.getAll());
+
       return "forms/updateTransactionType";
     }
 

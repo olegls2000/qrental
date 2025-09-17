@@ -33,11 +33,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Transactional(SUPPORTS)
@@ -219,16 +215,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var obligation = obligationQuery.getByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
     if (obligation == null) {
       System.out.println("Driver id without Obligation:" + driver.getId());
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
 
-      /*      throw new RuntimeException(
-      format(
-          "Obligation  for the Driver: %s %s, tax number: %d and week: %d - %d does not exist. Please calculate it first.",
-          driver.getFirstName(),
-          driver.getLastName(),
-          driver.getTaxNumber(),
-          qWeek.getYear(),
-          qWeek.getNumber()));*/
+      return WeeklyReportObligationStatus.NOT_COMPLETED;
     }
 
     final var wednesday = qWeek.getEnd().plusDays(3l);
@@ -236,11 +224,13 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     if (obligation.getMatchCount() == 0
         && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
+
       return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
     }
 
     if (obligation.getMatchCount() == 0
         && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+
       return WeeklyReportObligationStatus.NOT_COMPLETED;
     }
     // in case of match count >0

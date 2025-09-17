@@ -35,7 +35,7 @@
             <td colspan="5">No Transactions</td>
         </tr>
         <tr th:each="transaction : ${transactions}">
-            <td th:text="${transaction.type}">???</td>
+            <td th:text="${transaction.typeNameEng}">???</td>
             <td th:text="${transaction.driverInfo}">???</td>
             <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
                 th:classappend="${transaction.realAmount<0} ?

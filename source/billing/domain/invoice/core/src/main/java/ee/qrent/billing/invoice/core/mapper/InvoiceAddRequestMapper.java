@@ -76,7 +76,8 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
   private Map<String, List<TransactionResponse>> getTransactionsGroupedByType(
       final YearAndWeekAndDriverAndFeeFilter filter) {
     return transactionQuery.getAllByFilter(filter).stream()
-        .collect(groupingBy(TransactionResponse::getType));
+        .collect(groupingBy(
+                TransactionResponse::getTypeCode));
   }
 
   private InvoiceItem getInvoiceItem(
