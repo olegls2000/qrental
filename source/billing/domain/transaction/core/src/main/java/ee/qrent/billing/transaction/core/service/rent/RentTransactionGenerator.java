@@ -49,12 +49,24 @@ public class RentTransactionGenerator {
     addRequest.setWeekNumber(week.getNumber());
     addRequest.setDriverId(carLink.getDriverId());
     addRequest.setAmount(calculateRentTransactionAmount(carLink));
-    addRequest.setComment(
-        format(
-            "Automatically crated 'Rent' Transaction for active Car Link %d. Week %d",
-            carLink.getId(), week.getNumber()));
+    addRequest.setComment(getRentTransactionComment(week, carLink));
 
     return addRequest;
+  }
+
+  private String getRentTransactionComment(
+      final QWeekResponse week, final CarLinkResponse carLink) {
+    final var car = getCar(carLink);
+    if (car.getCustomRentActive()) {
+
+      return format(
+          "Automatically crated 'Rent' Transaction for active Car Link %d. Week %d, based on Car's custom rent amount",
+          carLink.getId(), week.getNumber());
+    }
+
+    return format(
+        "Automatically crated 'Rent' Transaction for active Car Link %d. Week %d",
+        carLink.getId(), week.getNumber());
   }
 
   Optional<TransactionAddRequest> getNoLabelFineTransactionAddRequest(
@@ -108,6 +120,7 @@ public class RentTransactionGenerator {
             "Transaction type for Absence Adjustment is missing. Create a Transaction Type with name: "
                 + TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE);
       }
+
       final var absenceAdjustmentAmount =
           calculateAbsenceAdjustmentTransactionAmount(activeCarLink, absenceDaysCount);
       addRequest.setTransactionTypeId(transactionTpe.getId());
@@ -133,8 +146,12 @@ public class RentTransactionGenerator {
   }
 
   private BigDecimal calculateRentTransactionAmount(final CarLinkResponse carLink) {
-    final var carId = carLink.getCarId();
-    final var car = carQuery.getById(carId);
+    final var car = getCar(carLink);
+    if (car.getCustomRentActive()) {
+
+      return car.getCustomRentAmount();
+    }
+
     final var carAge = getCarAge(car);
     // new car age = 4
     if (carAge < NEW_CAR_AGE) {
@@ -159,6 +176,12 @@ public class RentTransactionGenerator {
     }
     // 150
     return OLD_CAR_RATE;
+  }
+
+  private CarResponse getCar(final CarLinkResponse carLink) {
+    final var carId = carLink.getCarId();
+
+    return carQuery.getById(carId);
   }
 
   private Long getCarAge(final CarResponse car) {
