@@ -55,6 +55,7 @@ class CarAddRequestValidatorTest {
     addRequest.setGps(TRUE);
     addRequest.setTechnicalInspectionEnd(LocalDate.of(2024, Month.JANUARY, 15).plusYears(2));
     addRequest.setGasInspectionEnd(LocalDate.of(2024, Month.JANUARY, 15).plusYears(2));
+    addRequest.setBoltIdentifier("Bolt_Identifier");
     addRequest.setDateEndLpg(LocalDate.of(2024, Month.JANUARY, 15).plusYears(2));
     addRequest.setBrandingQrent(TRUE);
     addRequest.setBrandingBolt(TRUE);
@@ -206,5 +207,25 @@ class CarAddRequestValidatorTest {
             .anyMatch(
                 violation ->
                     violation.equals("Car with mentioned VIN 12345678901234567 already exist")));
+  }
+
+  @Test
+  void testIfBoltIdentifierIsNotUnique() {
+    // given
+    final var addRequest = getValidAddRequest();
+    when(loadPort.loadByBoltIdentifier(addRequest.getBoltIdentifier()))
+        .thenReturn(Car.builder().boltIdentifier(addRequest.getBoltIdentifier()).build());
+
+    // when
+    final var violationCollector = instanceUnderTest.validate(addRequest);
+
+    // then
+    assertTrue(violationCollector.hasViolations());
+    assertEquals(1, violationCollector.getViolations().size());
+    assertTrue(
+        violationCollector.getViolations().stream()
+            .anyMatch(
+                violation ->
+                    violation.equals("Car with mentioned Bolt Identifier Bolt_Identifier already exist")));
   }
 }

@@ -10,8 +10,7 @@ public class CarUpdateRequestValidator extends AbstractCarRequestValidator
     implements UpdateRequestValidator<CarUpdateRequest> {
 
   public CarUpdateRequestValidator(
-      final AttributeChecker attributeChecker,
-      final CarLoadPort loadPort) {
+      final AttributeChecker attributeChecker, final CarLoadPort loadPort) {
     super(loadPort, attributeChecker);
   }
 
@@ -20,11 +19,23 @@ public class CarUpdateRequestValidator extends AbstractCarRequestValidator
     final var violationsCollector = getViolationCollector();
     final var carFromDB = getLoadPort().loadById(request.getId());
     validateRegNumber(carFromDB.getRegNumber(), request.getRegNumber(), violationsCollector);
-    checkCustomRentAmount(
+    validateCustomRentAmount(
         request.getCustomRentActive(), request.getCustomRentAmount(), violationsCollector);
     validateVin(carFromDB.getVin(), request.getVin(), violationsCollector);
+    validateBoltIdentifier(carFromDB.getVin(), request.getVin(), violationsCollector);
 
     return violationsCollector;
+  }
+
+  private void validateBoltIdentifier(
+      final String boltIdentifierFromDb,
+      final String boltIdentifierFromRequest,
+      ViolationsCollector violationsCollector) {
+    if (boltIdentifierFromDb.equals(boltIdentifierFromRequest)) {
+
+      return;
+    }
+    checkBoltIdentifierUniqueness(boltIdentifierFromRequest, violationsCollector);
   }
 
   private void validateRegNumber(
@@ -34,6 +45,7 @@ public class CarUpdateRequestValidator extends AbstractCarRequestValidator
     checkRegNumber(regNumberFromRequest, violationsCollector);
 
     if (regNumberFromDb.equals(regNumberFromRequest)) {
+
       return;
     }
     checkRegNumberUniqueness(regNumberFromRequest, violationsCollector);
@@ -46,7 +58,7 @@ public class CarUpdateRequestValidator extends AbstractCarRequestValidator
     checkVin(vinFromRequest, violationsCollector);
     if (vinFromDb.equals(vinFromRequest)) {
 
-        return;
+      return;
     }
     checkVinUniqueness(vinFromRequest, violationsCollector);
   }

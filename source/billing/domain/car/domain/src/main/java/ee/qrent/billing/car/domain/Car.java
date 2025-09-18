@@ -34,6 +34,7 @@ public class Car {
   private Boolean gps;
   private LocalDate technicalInspectionEnd;
   private LocalDate gasInspectionEnd;
+  private String boltIdentifier;
   private LocalDate dateEndLpg;
   private RagStatus insuranceRagStatus;
   private RagStatus technicalInspectionRagStatus;

@@ -10,8 +10,7 @@ public class CarAddRequestValidator extends AbstractCarRequestValidator
     implements AddRequestValidator<CarAddRequest> {
 
   public CarAddRequestValidator(
-      final AttributeChecker attributeChecker,
-      final CarLoadPort loadPort) {
+      final AttributeChecker attributeChecker, final CarLoadPort loadPort) {
     super(loadPort, attributeChecker);
   }
 
@@ -22,8 +21,9 @@ public class CarAddRequestValidator extends AbstractCarRequestValidator
     checkVin(request.getVin(), violationsCollector);
     checkVinUniqueness(request.getVin(), violationsCollector);
     checkRegNumberUniqueness(request.getRegNumber(), violationsCollector);
-    checkCustomRentAmount(
+    validateCustomRentAmount(
         request.getCustomRentActive(), request.getCustomRentAmount(), violationsCollector);
+    checkBoltIdentifierUniqueness(request.getBoltIdentifier(), violationsCollector);
 
     return violationsCollector;
   }

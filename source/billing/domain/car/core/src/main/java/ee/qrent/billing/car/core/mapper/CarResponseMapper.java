@@ -41,6 +41,7 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
         .gps(domain.getGps())
         .technicalInspectionEnd(domain.getTechnicalInspectionEnd())
         .gasInspectionEnd(domain.getGasInspectionEnd())
+        .boltIdentifier(domain.getBoltIdentifier())
         .dateEndLpg(domain.getDateEndLpg())
         .insuranceRagStatus(domain.getInsuranceRagStatus().name())
         .technicalInspectionRagStatus(domain.getTechnicalInspectionRagStatus().name())

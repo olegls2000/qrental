@@ -52,4 +52,9 @@ public class CarLoadAdapter implements CarLoadPort {
 
       return mapper.mapToDomain(repository.findByVin(vin));
     }
+
+    @Override
+    public Car loadByBoltIdentifier(final String boltIdentifier) {
+        return mapper.mapToDomain(repository.findByBoltIdentifier(boltIdentifier));
+    }
 }

@@ -36,6 +36,7 @@ public class CarResponse {
   private String insuranceRagStatus;
   private String technicalInspectionRagStatus;
   private String gasInspectionRagStatus;
+  private String boltIdentifier;
   private String comment;
   private Boolean brandingQrent;
   private Boolean brandingBolt;

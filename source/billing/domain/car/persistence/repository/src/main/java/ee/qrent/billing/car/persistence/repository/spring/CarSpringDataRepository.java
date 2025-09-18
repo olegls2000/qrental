@@ -24,4 +24,6 @@ public interface CarSpringDataRepository extends JpaRepository<CarJakartaEntity,
   CarJakartaEntity findByRegNumber(final String regNumber);
 
   CarJakartaEntity findByVin(final String vin);
+
+  CarJakartaEntity findByBoltIdentifier(final String boltIdentifier);
 }

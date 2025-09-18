@@ -57,6 +57,12 @@ public class CarRepositoryImpl implements CarRepository {
   @Override
   public CarJakartaEntity findByVin(final String vin) {
 
-      return springDataRepository.findByVin(vin);
+    return springDataRepository.findByVin(vin);
+  }
+
+  @Override
+  public CarJakartaEntity findByBoltIdentifier(final String boltIdentifier) {
+
+      return springDataRepository.findByBoltIdentifier(boltIdentifier);
   }
 }

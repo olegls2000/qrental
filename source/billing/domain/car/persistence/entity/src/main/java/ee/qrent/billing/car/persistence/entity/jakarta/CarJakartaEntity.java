@@ -90,6 +90,9 @@ public class CarJakartaEntity {
   @Column(name = "gas_inspection_end")
   private LocalDate gasInspectionEnd;
 
+  @Column(name = "bolt_identifier")
+  private String boltIdentifier;
+
   @Column(name = "comment")
   private String comment;
 

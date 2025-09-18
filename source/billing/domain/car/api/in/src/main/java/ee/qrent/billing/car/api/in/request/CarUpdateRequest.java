@@ -36,6 +36,7 @@ public class CarUpdateRequest extends AbstractUpdateRequest {
   private Boolean gps;
   private LocalDate technicalInspectionEnd;
   private LocalDate gasInspectionEnd;
+  private String boltIdentifier;
   private String comment;
   private LocalDate dateEndLpg;
   private Boolean brandingQrent;

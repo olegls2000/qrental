@@ -9,7 +9,7 @@ public class CarAdapterMapper {
   public Car mapToDomain(final CarJakartaEntity entity) {
     if (entity == null) {
 
-        return null;
+      return null;
     }
 
     return Car.builder()
@@ -36,6 +36,7 @@ public class CarAdapterMapper {
         .gps(entity.getGps())
         .technicalInspectionEnd(entity.getTechnicalInspectionEnd())
         .gasInspectionEnd(entity.getGasInspectionEnd())
+        .boltIdentifier(entity.getBoltIdentifier())
         .comment(entity.getComment())
         .dateEndLpg(entity.getDateEndLpg())
         .brandingQrent(entity.getBrandingQrent())
@@ -73,6 +74,7 @@ public class CarAdapterMapper {
         .gps(domain.getGps())
         .technicalInspectionEnd(domain.getTechnicalInspectionEnd())
         .gasInspectionEnd(domain.getGasInspectionEnd())
+        .boltIdentifier(domain.getBoltIdentifier())
         .comment(domain.getComment())
         .dateEndLpg(domain.getDateEndLpg())
         .brandingQrent(domain.getBrandingQrent())

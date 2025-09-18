@@ -73,7 +73,17 @@ public abstract class AbstractCarRequestValidator {
     violationsCollector.collect(format("Car with mentioned VIN %s already exist", vin));
   }
 
-  protected void checkCustomRentAmount(
+    protected void checkBoltIdentifierUniqueness(
+            final String boltIdentifier, final ViolationsCollector violationsCollector) {
+        final var fromDb = loadPort.loadByBoltIdentifier(boltIdentifier);
+        if (fromDb == null) {
+
+            return;
+        }
+        violationsCollector.collect(format("Car with mentioned Bolt Identifier %s already exist", boltIdentifier));
+    }
+
+  protected void validateCustomRentAmount(
       final Boolean customRentActive,
       final BigDecimal customRentAmount,
       final ViolationsCollector violationsCollector) {

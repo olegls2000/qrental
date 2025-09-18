@@ -14,4 +14,6 @@ public interface CarLoadPort extends LoadPort<Car> {
   Car loadByRegNumber(final String regNumber);
 
   Car loadByVin(final String vin);
+
+  Car loadByBoltIdentifier(final String boltIdentifier);
 }
