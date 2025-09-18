@@ -17,4 +17,8 @@ public interface CarRepository {
   CarJakartaEntity getReferenceById(final Long id);
 
   void deleteById(final Long id);
+
+  CarJakartaEntity findByRegNumber(final String regNumber);
+
+  CarJakartaEntity findByVin(final String vin);
 }

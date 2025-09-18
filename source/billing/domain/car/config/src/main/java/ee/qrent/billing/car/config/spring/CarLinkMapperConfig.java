@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LinkMapperConfig {
+public class CarLinkMapperConfig {
   @Bean
   CarLinkAddRequestMapper getCarLinkAddRequestMapper() {
     return new CarLinkAddRequestMapper();

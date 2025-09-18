@@ -14,12 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LinkValidatorConfig {
+public class CarLinkValidatorConfig {
 
   @Bean
   AddRequestValidator<CarLinkAddRequest> getCarLinkAddRequestValidator(
       final CarLinkLoadPort loadPort) {
-    return new CarLinkAddRequestValidator(loadPort);
+
+      return new CarLinkAddRequestValidator(loadPort);
   }
 
   @Bean
@@ -32,6 +33,7 @@ public class LinkValidatorConfig {
   @Bean
   DeleteRequestValidator<CarLinkDeleteRequest> getCarLinkDeleteRequestValidator(
       final CarLinkLoadPort loadPort) {
-    return new CarLinkDeleteRequestValidator(loadPort);
+
+      return new CarLinkDeleteRequestValidator(loadPort);
   }
 }

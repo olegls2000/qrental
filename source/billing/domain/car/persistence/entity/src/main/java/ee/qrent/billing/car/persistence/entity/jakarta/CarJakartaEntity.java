@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -109,4 +110,10 @@ public class CarJakartaEntity {
 
   @Column(name = "by_tallink")
   private Boolean brandingTallink;
+
+  @Column(name = "custom_rent_active")
+  private Boolean customRentActive;
+
+  @Column(name = "custom_rent_amount")
+  private BigDecimal customRentAmount;
 }

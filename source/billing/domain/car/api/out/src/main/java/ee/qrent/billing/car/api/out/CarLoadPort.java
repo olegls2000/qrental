@@ -1,6 +1,5 @@
 package ee.qrent.billing.car.api.out;
 
-
 import ee.qrent.common.out.port.LoadPort;
 import ee.qrent.billing.car.domain.Car;
 
@@ -12,4 +11,7 @@ public interface CarLoadPort extends LoadPort<Car> {
 
   List<Car> loadByActive(final boolean active);
 
+  Car loadByRegNumber(final String regNumber);
+
+  Car loadByVin(final String vin);
 }

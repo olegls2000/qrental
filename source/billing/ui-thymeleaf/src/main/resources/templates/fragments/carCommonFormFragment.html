@@ -1,0 +1,49 @@
+<div th:fragment="customRentFragment">
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <input class="form-check-input" id="customRentActiveId"
+                       th:field="*{customRentActive}"
+                       onchange="onChangeCustomRentActive()"
+                       type="checkbox"/>
+                <label class="form-check-label text-muted" for="customRentActiveId">Activate Custom Rent</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="customRentAmountId">Custom Rent Amount</label>
+                <input class="form-control" id="customRentAmountId" placeholder="Enter custom weekly rent amount"
+                       th:field="*{customRentAmount}"
+                       disabled
+                       type="number" step="0.01"/>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function onChangeCustomRentActive() {
+            const customRentActive = document.getElementById("customRentActiveId");
+            updateCustomRentInputs(customRentActive.checked);
+        }
+
+        function updateCustomRentInputs(customRentActiveState) {
+            const customRentAmount = document.getElementById("customRentAmountId");
+            if (customRentActiveState) {
+                customRentAmount.disabled = false;
+            } else {
+                customRentAmount.disabled = true;
+            }
+        }
+    </script>
+</div>
+
+<div th:fragment="setForUpdateScript">
+    <script th:inline="javascript">
+        setCustomRentInputs();
+        function setCustomRentInputs() {
+            const customRentActiveState = [[${updateRequest.customRentActive}]];
+            updateCustomRentInputs(customRentActiveState);
+        }
+    </script>
+</div>

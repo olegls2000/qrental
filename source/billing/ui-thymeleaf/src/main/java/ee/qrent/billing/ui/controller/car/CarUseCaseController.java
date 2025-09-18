@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import static ee.qrent.billing.ui.controller.ControllerUtils.CAR_ROOT_PATH;
+import static ee.qrent.billing.ui.controller.ControllerUtils.*;
 
 @Controller
 @RequestMapping(CAR_ROOT_PATH)
@@ -45,14 +45,6 @@ public class CarUseCaseController {
     return "redirect:" + CAR_ROOT_PATH;
   }
 
-  private void addAddRequestToModel(final Model model, final CarAddRequest addRequest) {
-    model.addAttribute("addRequest", addRequest);
-  }
-
-  private void addAStatusesToModel(final Model model) {
-    model.addAttribute("statuses", carQuery.getAllStatuses());
-  }
-
   @GetMapping(value = "/update-form/{id}")
   public String updateForm(@PathVariable("id") long id, final Model model) {
     addUpdateRequestToModel(model, carQuery.getUpdateRequestById(id));
@@ -74,10 +66,6 @@ public class CarUseCaseController {
     return "redirect:" + CAR_ROOT_PATH;
   }
 
-  private void addUpdateRequestToModel(final Model model, final CarUpdateRequest updateRequest) {
-    model.addAttribute("updateRequest", updateRequest);
-  }
-
   @GetMapping(value = "/delete-form/{id}")
   public String deleteForm(@PathVariable("id") long id, final Model model) {
     model.addAttribute("deleteRequest", new CarDeleteRequest(id));
@@ -94,6 +82,19 @@ public class CarUseCaseController {
 
       return "forms/deleteCar";
     }
+
     return "redirect:" + CAR_ROOT_PATH;
+  }
+
+  private void addAddRequestToModel(final Model model, final CarAddRequest addRequest) {
+    model.addAttribute(ADD_REQUEST_ATTRIBUTE, addRequest);
+  }
+
+  private void addUpdateRequestToModel(final Model model, final CarUpdateRequest updateRequest) {
+    model.addAttribute(UPDATE_REQUEST_ATTRIBUTE, updateRequest);
+  }
+
+  private void addAStatusesToModel(final Model model) {
+    model.addAttribute("statuses", carQuery.getAllStatuses());
   }
 }

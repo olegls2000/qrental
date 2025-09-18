@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LinkServiceConfig {
+public class CarLinkServiceConfig {
 
   @Bean
   public GetCarLinkQuery getLinkQueryService(

@@ -3,6 +3,7 @@ package ee.qrent.billing.car.api.in.response;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @SuperBuilder
@@ -45,4 +46,6 @@ public class CarResponse {
   private String warrantyRagStatus;
   private LocalDate warrantyEndDate;
   private Long warrantyMonths;
+  private Boolean customRentActive;
+  private BigDecimal customRentAmount;
 }

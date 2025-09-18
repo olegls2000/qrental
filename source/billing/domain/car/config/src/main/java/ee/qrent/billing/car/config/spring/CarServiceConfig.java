@@ -1,6 +1,8 @@
 package ee.qrent.billing.car.config.spring;
 
 import ee.qrent.billing.car.api.out.*;
+import ee.qrent.billing.car.core.validator.CarAddRequestValidator;
+import ee.qrent.billing.car.core.validator.CarUpdateRequestValidator;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.billing.car.api.in.query.GetCarQuery;
 import ee.qrent.billing.car.core.mapper.CarAddRequestMapper;
@@ -30,12 +32,19 @@ public class CarServiceConfig {
       final CarAddPort addPort,
       final CarUpdatePort updatePort,
       final CarDeletePort deletePort,
-      final CarLoadPort loadPort,
       final CarAddRequestMapper addRequestMapper,
-      final CarUpdateRequestMapper updateRequestMapper) {
+      final CarUpdateRequestMapper updateRequestMapper,
+      final CarAddRequestValidator addRequestValidator,
+      final CarUpdateRequestValidator updateRequestValidator) {
 
     return new CarUseCaseService(
-        addPort, updatePort, deletePort, loadPort, addRequestMapper, updateRequestMapper);
+        addPort,
+        updatePort,
+        deletePort,
+        addRequestMapper,
+        updateRequestMapper,
+        addRequestValidator,
+        updateRequestValidator);
   }
 
   @Bean

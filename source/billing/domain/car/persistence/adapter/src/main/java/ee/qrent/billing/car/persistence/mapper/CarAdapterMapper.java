@@ -7,6 +7,11 @@ import ee.qrent.billing.car.persistence.entity.jakarta.CarJakartaEntity;
 public class CarAdapterMapper {
 
   public Car mapToDomain(final CarJakartaEntity entity) {
+    if (entity == null) {
+
+        return null;
+    }
+
     return Car.builder()
         .id(entity.getId())
         .active(entity.getActive())
@@ -38,6 +43,8 @@ public class CarAdapterMapper {
         .brandingForus(entity.getBrandingForus())
         .brandingUber(entity.getBrandingUber())
         .brandingTallink(entity.getBrandingTallink())
+        .customRentActive(entity.getCustomRentActive())
+        .customRentAmount(entity.getCustomRentAmount())
         .build();
   }
 
@@ -73,6 +80,8 @@ public class CarAdapterMapper {
         .brandingForus(domain.getBrandingForus())
         .brandingUber(domain.getBrandingUber())
         .brandingTallink(domain.getBrandingTallink())
+        .customRentActive(domain.getCustomRentActive())
+        .customRentAmount(domain.getCustomRentAmount())
         .build();
   }
 }

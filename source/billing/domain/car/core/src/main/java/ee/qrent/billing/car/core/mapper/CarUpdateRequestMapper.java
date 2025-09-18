@@ -40,6 +40,8 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
         .brandingForus(request.getBrandingForus())
         .brandingUber(request.getBrandingUber())
         .brandingTallink(request.getBrandingTallink())
+        .customRentActive(request.getCustomRentActive())
+        .customRentAmount(request.getCustomRentAmount())
         .build();
   }
 
@@ -76,6 +78,8 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
         .brandingForus(domain.getBrandingForus())
         .brandingUber(domain.getBrandingUber())
         .brandingTallink(domain.getBrandingTallink())
+        .customRentActive(domain.getCustomRentActive())
+        .customRentAmount(domain.getCustomRentAmount())
         .build();
   }
 }

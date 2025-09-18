@@ -1,12 +1,12 @@
 package ee.qrent.billing.driver.core.validator;
 
-import ee.qrent.billing.driver.core.validator.DriverAddRequestValidator;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AttributeChecker;
 import ee.qrent.common.core.validation.AttributeCheckerImpl;
 import ee.qrent.billing.driver.api.in.request.DriverAddRequest;
 import ee.qrent.billing.driver.api.out.DriverLoadPort;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public class DriverAddRequestValidatorTest {
     when(qDateTime.getToday()).thenReturn(LocalDate.of(2025, Month.JANUARY, 15));
   }
 
-  private DriverAddRequest getValidDriverAddRequest() {
+  private DriverAddRequest getValidAddRequest() {
     final var addRequest = new DriverAddRequest();
     addRequest.setActive(true);
     addRequest.setHasRequiredObligation(Boolean.FALSE);
@@ -62,7 +62,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testObligationNumberIfObligationRequiredButNotSet() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setHasRequiredObligation(true);
     addRequest.setRequiredObligation(null);
 
@@ -82,7 +82,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testObligationNumberIfObligationRequiredAndNotInRange() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setHasRequiredObligation(true);
     addRequest.setRequiredObligation(BigDecimal.valueOf(1001));
 
@@ -103,7 +103,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfFirstNameNotSet() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setFirstName(null);
 
     // when
@@ -121,7 +121,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfFirstNameTooLong() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setFirstName("51_character_123456789_123456789_123456789_12345678");
 
     // when
@@ -141,7 +141,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfLastNameNotSet() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setLastName(null);
 
     // when
@@ -159,7 +159,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfLastNameTooLong() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setLastName("51_character_123456789_123456789_123456789_12345678");
 
     // when
@@ -179,7 +179,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfTaxNumberNotSet() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setTaxNumber(null);
 
     // when
@@ -197,7 +197,7 @@ public class DriverAddRequestValidatorTest {
   //@Test
   void testIfTaxNumberTooLong() {
     // given
-    final var addRequest = getValidDriverAddRequest();
+    final var addRequest = getValidAddRequest();
     addRequest.setTaxNumber(123456789123L);
 
     // when

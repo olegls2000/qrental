@@ -65,6 +65,6 @@ public class DriverServiceConfig {
         updateRequestMapper,
         addRequestValidator,
         updateRequestValidator,
-            deleteRequestValidator);
+        deleteRequestValidator);
   }
 }

@@ -8,7 +8,7 @@ import ee.qrent.billing.car.api.out.CarLinkLoadPort;
 import ee.qrent.common.in.validation.ViolationsCollector;
 import lombok.AllArgsConstructor;
 
-//TODO: rename file
+// TODO: rename file
 
 @AllArgsConstructor
 public class CarLinkAddRequestValidator implements AddRequestValidator<CarLinkAddRequest> {
@@ -25,14 +25,10 @@ public class CarLinkAddRequestValidator implements AddRequestValidator<CarLinkAd
   }
 
   private void checkIfLinkStartDateAfterLatestLink(
-      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {
-
-  }
+      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {}
 
   private void checkIfLinkStartDateAfterLatestRentCalculationDate(
-      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {
-
-  }
+      final CarLinkAddRequest addRequest, final ViolationsCollector violationsCollector) {}
 
   private void checkIfCarAvailable(
       final CarLinkAddRequest addRequest, final ViolationsCollector violationCollector) {

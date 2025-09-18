@@ -18,23 +18,38 @@ public class CarLoadAdapter implements CarLoadPort {
 
   @Override
   public List<Car> loadAll() {
-    return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
+
+      return repository.findAll().stream().map(mapper::mapToDomain).collect(toList());
   }
 
   @Override
-  public Car loadById(Long id) {
+  public Car loadById(final Long id) {
     return mapper.mapToDomain(repository.getReferenceById(id));
   }
 
   @Override
   public List<Car> loadNotAvailableByDate(final LocalDate date) {
-    return repository.findNotAvailableByDate(date).stream()
+
+      return repository.findNotAvailableByDate(date).stream()
         .map(mapper::mapToDomain)
         .collect(toList());
   }
 
   @Override
   public List<Car> loadByActive(boolean active) {
-    return repository.findByActive(active).stream().map(mapper::mapToDomain).collect(toList());
+
+      return repository.findByActive(active).stream().map(mapper::mapToDomain).collect(toList());
   }
+
+    @Override
+    public Car loadByRegNumber(final String regNumber) {
+
+      return mapper.mapToDomain(repository.findByRegNumber(regNumber));
+    }
+
+    @Override
+    public Car loadByVin(final String vin) {
+
+      return mapper.mapToDomain(repository.findByVin(vin));
+    }
 }

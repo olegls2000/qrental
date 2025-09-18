@@ -3,6 +3,7 @@ package ee.qrent.billing.car.domain;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -44,6 +45,8 @@ public class Car {
   private Boolean brandingForus;
   private Boolean brandingUber;
   private Boolean brandingTallink;
+  private Boolean customRentActive;
+  private BigDecimal customRentAmount;
 
   public RagStatus getInsuranceRagStatus() {
     final var daysBetween = DAYS.between(LocalDate.now(), insuranceDateEnd);

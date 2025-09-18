@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -42,4 +43,6 @@ public class CarUpdateRequest extends AbstractUpdateRequest {
   private Boolean brandingForus;
   private Boolean brandingUber;
   private Boolean brandingTallink;
+  private Boolean customRentActive;
+  private BigDecimal customRentAmount;
 }

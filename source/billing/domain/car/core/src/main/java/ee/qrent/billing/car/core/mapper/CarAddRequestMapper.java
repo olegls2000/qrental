@@ -40,6 +40,8 @@ public class CarAddRequestMapper implements AddRequestMapper<CarAddRequest, Car>
         .brandingForus(request.getBrandingForus())
         .brandingUber(request.getBrandingUber())
         .brandingTallink(request.getBrandingTallink())
+        .customRentActive(request.getCustomRentActive())
+        .customRentAmount(request.getCustomRentAmount())
         .build();
   }
 }

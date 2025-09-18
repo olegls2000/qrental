@@ -15,31 +15,48 @@ public class CarRepositoryImpl implements CarRepository {
 
   @Override
   public List<CarJakartaEntity> findAll() {
+
     return springDataRepository.findAll();
   }
 
   @Override
   public List<CarJakartaEntity> findNotAvailableByDate(final LocalDate date) {
+
     return springDataRepository.findNotAvailableByDate(date);
   }
 
   @Override
   public List<CarJakartaEntity> findByActive(final boolean active) {
+
     return springDataRepository.findByActive(active);
   }
 
   @Override
   public CarJakartaEntity save(final CarJakartaEntity entity) {
+
     return springDataRepository.save(entity);
   }
 
   @Override
   public CarJakartaEntity getReferenceById(final Long id) {
+
     return springDataRepository.getReferenceById(id);
   }
 
   @Override
   public void deleteById(final Long id) {
     springDataRepository.deleteById(id);
+  }
+
+  @Override
+  public CarJakartaEntity findByRegNumber(final String regNumber) {
+
+    return springDataRepository.findByRegNumber(regNumber);
+  }
+
+  @Override
+  public CarJakartaEntity findByVin(final String vin) {
+
+      return springDataRepository.findByVin(vin);
   }
 }

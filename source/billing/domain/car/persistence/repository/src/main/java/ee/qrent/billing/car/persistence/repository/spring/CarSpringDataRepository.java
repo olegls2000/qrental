@@ -20,4 +20,8 @@ public interface CarSpringDataRepository extends JpaRepository<CarJakartaEntity,
   List<CarJakartaEntity> findNotAvailableByDate(@Param("date") final LocalDate date);
 
   List<CarJakartaEntity> findByActive(final boolean active);
+
+  CarJakartaEntity findByRegNumber(final String regNumber);
+
+  CarJakartaEntity findByVin(final String vin);
 }
