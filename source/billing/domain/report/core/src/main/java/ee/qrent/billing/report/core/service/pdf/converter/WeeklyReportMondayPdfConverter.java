@@ -171,10 +171,10 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     table.addCell(getDriverMainDataValueCell(model.getWeeksCountTillEnd().toString()));
 
     table.addCell(getDriverMainDataLabelCell("Deposit"));
-    table.addCell(getDriverMainDataValueCell("99999"));
+    table.addCell(getDriverMainDataValueCell("N/A"));
 
     table.addCell(getDriverMainDataLabelCell("Charged Deposit"));
-    table.addCell(getDriverMainDataValueCell("99999"));
+    table.addCell(getDriverMainDataValueCell("N/A"));
 
     return table;
   }
