@@ -32,4 +32,6 @@ public class WeeklyReportPdfModel {
   private final LocalDate currentWeekEnd;
   private final LocalDate previousWeekStart;
   private final LocalDate previousWeekEnd;
+  private final LocalDate nextWeekStart;
+  private final LocalDate nextWeekEnd;
 }

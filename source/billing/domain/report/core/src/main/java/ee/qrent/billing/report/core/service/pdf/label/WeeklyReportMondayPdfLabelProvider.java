@@ -15,6 +15,7 @@ public class WeeklyReportMondayPdfLabelProvider {
   private static Map<String, String> mapRus;
   private static Map<String, String> mapEng;
 
+  public static String CURRENCY_NAME_KEY = "CURRENCY_NAME_KEY";
   public static String REPORT_NAME_KEY = "REPORT_NAME_KEY";
   public static String DRIVER_LABEL_KEY = "DRIVER_LABEL_KEY";
   public static String ID_NUMBER_LABEL_KEY = "ID_NUMBER_LABEL_KEY";
@@ -45,6 +46,7 @@ public class WeeklyReportMondayPdfLabelProvider {
   static {
     mapRus =
         Map.ofEntries(
+            new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ОТЧЕТ ЗА ПОНЕДЕЛЬНИК"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Водитель"),
             new AbstractMap.SimpleEntry<>(
@@ -84,6 +86,7 @@ public class WeeklyReportMondayPdfLabelProvider {
 
     mapEng =
         Map.ofEntries(
+            new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "MONDAY REPORT"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Driver"),
             new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Personal identification number"),
@@ -121,6 +124,7 @@ public class WeeklyReportMondayPdfLabelProvider {
 
     mapEst =
         Map.ofEntries(
+                new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ESMASPÄEVANE ARUANNE"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Juht"),
             new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Isikukood"),

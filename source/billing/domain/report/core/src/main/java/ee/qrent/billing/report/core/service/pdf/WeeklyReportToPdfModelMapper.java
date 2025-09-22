@@ -20,6 +20,8 @@ public class WeeklyReportToPdfModelMapper {
     final var callSign = callSignQuery.getById(report.getCallSignId());
     final var previousWeek = qWeekQuery.getById(report.getQWeekId());
     final var currentWeek = qWeekQuery.getOneAfterById(report.getQWeekId());
+    final var currentWeekId = currentWeek.getId();
+    final var nextWeek = qWeekQuery.getOneAfterById(currentWeekId);
     final var carReg =
         report.getCarId() != null ? carQuery.getById(report.getCarId()).getRegNumber() : null;
 
@@ -34,6 +36,8 @@ public class WeeklyReportToPdfModelMapper {
         .previousWeekEnd(previousWeek.getEnd())
         .currentWeekStart(currentWeek.getStart())
         .currentWeekEnd(currentWeek.getEnd())
+        .nextWeekStart(nextWeek.getStart())
+        .nextWeekEnd(nextWeek.getEnd())
         .feeAmountSunday(report.getFeeAmountSunday())
         .carRegistrationNumber(carReg)
         .depositObligation(report.getDepositObligation())
