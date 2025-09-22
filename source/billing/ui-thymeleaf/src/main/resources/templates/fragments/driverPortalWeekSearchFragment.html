@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                <div th:replace="fragments/driverPortalTransactionsTableFragment.html :: transactionsTable(transactions = ${transactions}, driverId = ${driverId})"></div>
+                <div th:replace="fragments/driverPortalTransactionsTableFragment.html :: transactionsTable(${transactions}, ${driverId})"></div>
             </div>
         </div>
     </div>

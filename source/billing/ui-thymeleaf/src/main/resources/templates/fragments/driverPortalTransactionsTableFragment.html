@@ -32,7 +32,7 @@
                th:href="@{/transactions/delete-form/driver/{id}(id=${transaction.id})}">
                 <span class="bi-trash"></span></a>
         </td>
-        <td th:text="${transaction.typeDescription}"
+        <td th:text="${transaction.typeNameEst}"
             th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
         </td>
         <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
