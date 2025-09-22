@@ -325,11 +325,11 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   private PdfPTable getClarificationBlock2(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(2);
-    final var correctionOfRent = BigDecimal.valueOf(999L);
+    final var correctionOfRent = formatAmount(BigDecimal.valueOf(999L));
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
         format(
-            "Сумма коррекции аренды с твоего заработка в приложениях на текущей неделе составила: %d %s",
+            "Сумма коррекции аренды с твоего заработка в приложениях на текущей неделе составила: %s %s",
             correctionOfRent, euroCurrency);
     table.addCell(getClarificationTableHeaderCell(headerText));
     table.addCell(getClarificationTableLabelCell("Заработок Bolt"));
@@ -341,10 +341,10 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getClarificationBlock3(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var otherObligations = BigDecimal.valueOf(999L);
+    final var otherObligations = formatAmount(BigDecimal.valueOf(999L));
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var otherObligationsText =
-        format("Прочие обязательства: %d %s", otherObligations, euroCurrency);
+        format("Прочие обязательства: %s %s", otherObligations, euroCurrency);
     final var table = getQpdfTable(2);
     table.addCell(getClarificationTableHeaderCell(otherObligationsText));
     table.addCell(getClarificationTableLabelCell("Залог"));
