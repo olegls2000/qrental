@@ -51,18 +51,19 @@ public class ObligationServiceConfig {
 
   @Bean
   ObligationCalculator getObligationCalculator(
+      final ObligationLoadPort loadPort,
       final GetQWeekQuery qWeekQuery,
       final GetBalanceQuery balanceQuery,
       final GetDriverQuery driverQuery,
       final GetTransactionQuery transactionQuery) {
 
-    return new ObligationCalculator(qWeekQuery, balanceQuery, driverQuery, transactionQuery);
+    return new ObligationCalculator(
+        loadPort, qWeekQuery, balanceQuery, driverQuery, transactionQuery);
   }
 
   @Bean
   public ObligationCalculationAddUseCase getObligationCalculationAddUseCase(
       final GetQWeekQuery qWeekQuery,
-      final GetTransactionQuery transactionQuery,
       final GetCarLinkQuery carLinkQuery,
       final GetUserAccountQuery userAccountQuery,
       final QueueEntryPushUseCase queueEntryPushUseCase,
@@ -76,7 +77,6 @@ public class ObligationServiceConfig {
 
     return new ObligationCalculationService(
         qWeekQuery,
-        transactionQuery,
         carLinkQuery,
         userAccountQuery,
         queueEntryPushUseCase,

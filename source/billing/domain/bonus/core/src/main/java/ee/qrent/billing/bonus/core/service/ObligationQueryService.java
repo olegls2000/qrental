@@ -27,7 +27,9 @@ public class ObligationQueryService implements GetObligationQuery {
   @Override
   public BigDecimal getRawObligationAmountForCurrentWeekByDriverId(final Long driverId) {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
-    final var rawObligationAmount = obligationCalculator.calculate(driverId, currentQWeek.getId());
+    final var rawObligationAmount =
+        obligationCalculator.getObligationAmount(
+            driverId, currentQWeek.getId(), currentQWeek.getStart(), currentQWeek.getEnd());
 
     return rawObligationAmount;
   }
@@ -43,6 +45,15 @@ public class ObligationQueryService implements GetObligationQuery {
   @Override
   public ObligationResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId) {
     final var obligation = loadPort.loadByDriverIdAndByQWeekId(driverId, qWeekId);
+
+    return responseMapper.toResponse(obligation);
+  }
+
+  @Override
+  public ObligationResponse getByDriverIdAndQWeekIdOnThursday(
+      final Long driverId, final Long qWeekId) {
+    final var qWeek = qWeekQuery.getById(qWeekId);
+    final var obligation = obligationCalculator.getObligationOnThursday(driverId, qWeek);
 
     return responseMapper.toResponse(obligation);
   }

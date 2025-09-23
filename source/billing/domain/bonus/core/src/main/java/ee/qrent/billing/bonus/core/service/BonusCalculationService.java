@@ -1,11 +1,13 @@
 package ee.qrent.billing.bonus.core.service;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionKindCodesConstant.TRANSACTION_KIND_POSITIVE_CODE;
 import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrent.billing.bonus.api.out.BonusCalculationAddPort;
 import ee.qrent.billing.bonus.api.out.BonusProgramLoadPort;
 import ee.qrent.billing.bonus.api.out.ObligationLoadPort;
+import ee.qrent.billing.transaction.api.in.utils.TransactionKindCodesConstant;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.billing.bonus.api.in.request.BonusCalculationAddRequest;
@@ -74,7 +76,7 @@ public class BonusCalculationService implements BonusCalculationAddUseCase {
 
               final var weekPositiveAmount =
                   transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-                      .filter(transaction -> "P".equals(transaction.getKind()))
+                      .filter(transaction -> TRANSACTION_KIND_POSITIVE_CODE.equals(transaction.getKind()))
                       .map(TransactionResponse::getRealAmount)
                       .reduce(ZERO, BigDecimal::add);
               final var strategiesForCalculation = new ArrayList<BonusStrategy>();

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import ee.qrent.billing.bonus.api.out.ObligationLoadPort;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -23,7 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ObligationCalculatorTest {
-
+  private ObligationLoadPort loadPort;
   private ObligationCalculator instanceUnderTest;
   private GetQWeekQuery qWeekQuery;
   private GetBalanceQuery balanceQuery;
@@ -32,12 +33,13 @@ class ObligationCalculatorTest {
 
   @BeforeEach
   void init() {
+    loadPort = mock(ObligationLoadPort.class);
     qWeekQuery = mock(GetQWeekQuery.class);
     balanceQuery = mock(GetBalanceQuery.class);
     driverQuery = mock(GetDriverQuery.class);
     transactionQuery = mock(GetTransactionQuery.class);
     instanceUnderTest =
-        new ObligationCalculator(qWeekQuery, balanceQuery, driverQuery, transactionQuery);
+        new ObligationCalculator(loadPort, qWeekQuery, balanceQuery, driverQuery, transactionQuery);
 
     when(qWeekQuery.getOneBeforeById(9L)).thenReturn(QWeekResponse.builder().id(8L).build());
   }
@@ -79,7 +81,8 @@ class ObligationCalculatorTest {
         .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(124d).compareTo(obligationAmount));
@@ -109,7 +112,8 @@ class ObligationCalculatorTest {
         .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(125d).compareTo(obligationAmount));
@@ -138,7 +142,8 @@ class ObligationCalculatorTest {
         .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(100d).compareTo(obligationAmount));
@@ -168,7 +173,8 @@ class ObligationCalculatorTest {
         .thenReturn(DriverResponse.builder().id(2L).hasRequiredObligation(false).build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(50d).compareTo(obligationAmount));
@@ -202,7 +208,8 @@ class ObligationCalculatorTest {
                 .build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(200d).compareTo(obligationAmount));
@@ -236,7 +243,8 @@ class ObligationCalculatorTest {
                 .build());
 
     // when
-    final var obligationAmount = instanceUnderTest.calculate(driverId, qWekId);
+    final var obligationAmount =
+        instanceUnderTest.getObligationAmount(driverId, qWekId, null, null);
 
     // then
     assertEquals(0, BigDecimal.valueOf(100d).compareTo(obligationAmount));

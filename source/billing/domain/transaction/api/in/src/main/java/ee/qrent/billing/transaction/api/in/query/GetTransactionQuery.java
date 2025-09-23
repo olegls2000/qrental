@@ -19,9 +19,11 @@ public interface GetTransactionQuery
 
   List<TransactionResponse> getAllByFilter(final PeriodFilter filter);
 
+  List<TransactionResponse> getAllByFilter(final DriverAndPeriodFilter filter);
+
   List<TransactionResponse> getAllByFilter(final DriverAndYearAndWeekAndFeeFilter filter);
 
-  List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndKindFilter filter);
+  List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndKindCodesFilter filter);
 
   List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndTypeCodesFilter filter);
 

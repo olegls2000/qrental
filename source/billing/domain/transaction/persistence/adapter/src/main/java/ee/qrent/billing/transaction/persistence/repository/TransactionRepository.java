@@ -26,11 +26,11 @@ public interface TransactionRepository {
   List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndFee(
       final Long driverId, final LocalDate dateStart, final LocalDate dateEnd);
 
-  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndKindIds(
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndKindCodes(
       final Long driverId,
       final LocalDate dateStart,
       final LocalDate dateEnd,
-      final List<Long> kindIds);
+      final Set<String> kindCodes);
 
   List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndTypeCodes(
       final Long driverId,

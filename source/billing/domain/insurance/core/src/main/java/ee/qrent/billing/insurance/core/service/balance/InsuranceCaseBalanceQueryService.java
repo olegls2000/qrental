@@ -1,5 +1,8 @@
 package ee.qrent.billing.insurance.core.service.balance;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionKindCodesConstant.TRANSACTION_KIND_SELF_RESPONSIBILITY_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NO_LABEL_FINE_CODE;
 import static ee.qrent.common.utils.QNumberUtils.qRound;
 import static java.math.BigDecimal.ZERO;
 
@@ -13,12 +16,15 @@ import ee.qrent.billing.insurance.core.service.InsuranceCaseBalanceCalculator;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindCodesFilter;
 import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.kind.TransactionKindResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -122,19 +128,16 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
   }
 
   private BigDecimal getPaidSelfResponsibilityTotal(final Long driverId, final Long qWeekEndId) {
-    final var transactionKindIds =
-        transactionKindQuery.getAllSelfResponsibility().stream()
-            .map(TransactionKindResponse::getId)
-            .toList();
     final var startQWeekId = insuranceCalculationQuery.getStartQWeekId();
     final var startQWeek = qWeekQuery.getById(startQWeekId);
     final var endQWeek = qWeekQuery.getById(qWeekEndId);
     final var filter =
-        DriverAndPeriodAndKindFilter.builder()
+        DriverAndPeriodAndKindCodesFilter.builder()
             .dateStart(startQWeek.getStart())
             .dateEnd(endQWeek.getEnd())
             .driverId(driverId)
-            .transactionKindIds(transactionKindIds)
+            .kindCodes(
+                Stream.of(TRANSACTION_KIND_SELF_RESPONSIBILITY_CODE).collect(Collectors.toSet()))
             .build();
 
     return transactionQuery.getAllByFilter(filter).stream()

@@ -1,7 +1,10 @@
 package ee.qrent.billing.report.core.service;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionKindCodesConstant.TRANSACTION_KIND_POSITIVE_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 import static java.lang.String.format;
+import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.reducing;
 
@@ -26,6 +29,8 @@ import ee.qrent.billing.report.core.validator.WeeklyReportCalculationAddRequestV
 import ee.qrent.billing.report.domain.*;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindCodesFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndTypeCodesFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
@@ -35,6 +40,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional(SUPPORTS)
 @AllArgsConstructor
@@ -128,6 +134,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
+    final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
 
     return WeeklyReport.builder()
         .type(WeeklyReportType.valueOf(reportType.name()))
@@ -140,13 +147,51 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .weeksCountTillEnd(contract.getWeeksToEnd())
         .depositObligation(DEPOSIT_OBLIGATION)
         .depositPaid(depositPaid)
-        .obligationStatus(getWeeklyReportObligationStatus(driver, previousWeek))
+        .obligationStatus(getWeeklyReportObligationStatusForMondayReport(driver, requestedQWeek))
+        .currentObligationAmount(currentObligationAmount)
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
         .transactionTypesVsAmount(getAmountsMap(driverId, previousWeek.getId()))
         .comment("Automatically generated weekly report")
         .build();
+  }
+
+  private BigDecimal getCurrentObligationAmount(Long driverId, QWeekResponse requestedQWeek) {
+    final var monday = requestedQWeek.getStart();
+    final var mondayNextWeek = requestedQWeek.getEnd().plusDays(1l);
+    final var obligationTransactionFilter =
+        DriverAndPeriodAndTypeCodesFilter.builder()
+            .driverId(driverId)
+            .dateStart(monday)
+            .dateEnd(mondayNextWeek)
+            .typeCodes(
+                Stream.of(
+                        TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
+                        TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
+                        TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
+                    .collect(Collectors.toSet()))
+            .build();
+
+    final var obligationSum =
+        transactionQuery.getAllByFilter(obligationTransactionFilter).stream()
+            .map(TransactionResponse::getRealAmount)
+            .reduce(ZERO, BigDecimal::add);
+
+    final var positiveTransactionFilter =
+        DriverAndPeriodAndKindCodesFilter.builder()
+            .driverId(driverId)
+            .dateStart(monday)
+            .dateEnd(mondayNextWeek)
+            .kindCodes(Stream.of(TRANSACTION_KIND_POSITIVE_CODE).collect(Collectors.toSet()))
+            .build();
+
+    final var positiveSum =
+        transactionQuery.getAllByFilter(positiveTransactionFilter).stream()
+            .map(TransactionResponse::getRealAmount)
+            .reduce(ZERO, BigDecimal::add);
+
+    return obligationSum.subtract(positiveSum);
   }
 
   private Map<String, BigDecimal> getAmountsMap(final Long driverId, final Long qWeekId) {
@@ -210,31 +255,16 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     return firmLink.getFirmId();
   }
 
-  private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
+  private WeeklyReportObligationStatus getWeeklyReportObligationStatusForMondayReport(
       final DriverResponse driver, final QWeekResponse qWeek) {
-    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driver.getId(), qWeek.getId());
-    if (obligation == null) {
-      System.out.println("Driver id without Obligation:" + driver.getId());
+    final var obligation =
+        obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), qWeek.getId());
+    if (obligation.getMatchCount() > 0) {
 
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
+      return WeeklyReportObligationStatus.COMPLETED;
     }
 
-    final var wednesday = qWeek.getEnd().plusDays(3l);
-    final var balanceOnWednesday = balanceQuery.getRawByDriverAndDate(driver.getId(), wednesday);
-
-    if (obligation.getMatchCount() == 0
-        && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
-
-      return WeeklyReportObligationStatus.COMPLETED_WITH_DELAY;
-    }
-
-    if (obligation.getMatchCount() == 0
-        && balanceOnWednesday.getAmount().compareTo(BigDecimal.ZERO) < 0) {
-
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
-    // in case of match count >0
-    return WeeklyReportObligationStatus.COMPLETED;
+    return WeeklyReportObligationStatus.NOT_COMPLETED;
   }
 
   private WeeklyReportTransactionsLink getWeeklyReportTransactions(

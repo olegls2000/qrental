@@ -104,14 +104,14 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndKindFilter filter) {
+  public List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndKindCodesFilter filter) {
 
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndKindIds(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndKindCodes(
             filter.getDriverId(),
             filter.getDateStart(),
             filter.getDateEnd(),
-            filter.getTransactionKindIds()));
+            filter.getKindCodes()));
   }
 
   @Override
@@ -121,14 +121,21 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
+  public List<TransactionResponse> getAllByFilter(final DriverAndPeriodFilter filter) {
+    return mapToTransactionResponseList(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDates(
+            filter.getDriverId(), filter.getDateStart(), filter.getDateEnd()));
+  }
+
+  @Override
   public List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndTypeCodesFilter filter) {
 
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndTypeCodes(
             filter.getDriverId(),
             filter.getDateStart(),
-            filter.getDatEnd(),
-            filter.getTransactionTypeCodes()));
+            filter.getDateEnd(),
+            filter.getTypeCodes()));
   }
 
   @Override

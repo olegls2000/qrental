@@ -1,8 +1,5 @@
 package ee.qrent.billing.bonus.core.service;
 
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NO_LABEL_FINE_CODE;
-import static java.math.BigDecimal.ZERO;
 import static java.util.stream.Collectors.toList;
 
 import ee.qrent.common.in.time.QDateTime;
@@ -13,21 +10,16 @@ import ee.qrent.billing.bonus.api.out.ObligationAddPort;
 import ee.qrent.billing.bonus.api.out.ObligationCalculationAddPort;
 import ee.qrent.billing.bonus.api.out.ObligationLoadPort;
 import ee.qrent.billing.bonus.core.mapper.ObligationCalculationAddRequestMapper;
-import ee.qrent.billing.bonus.domain.Obligation;
 import ee.qrent.billing.bonus.domain.ObligationCalculationResult;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.car.api.in.response.CarLinkResponse;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
-import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.user.api.in.query.GetUserAccountQuery;
 import ee.qrent.billing.user.api.in.response.UserAccountResponse;
 import ee.qrent.queue.api.in.EntryType;
 import ee.qrent.queue.api.in.QueueEntryPushRequest;
 import ee.qrent.queue.api.in.QueueEntryPushUseCase;
 import jakarta.transaction.Transactional;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -36,7 +28,6 @@ import lombok.AllArgsConstructor;
 public class ObligationCalculationService implements ObligationCalculationAddUseCase {
 
   private final GetQWeekQuery qWeekQuery;
-  private final GetTransactionQuery transactionQuery;
   private final GetCarLinkQuery carLinkQuery;
   private final GetUserAccountQuery userAccountQuery;
   private final QueueEntryPushUseCase queueEntryPushUseCase;
@@ -59,28 +50,14 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
       return null;
     }
     final var domain = addRequestMapper.toDomain(addRequest);
-    final var qWeek = qWeekQuery.getById(addRequest.getQWeekId());
-    final var qWeekId = qWeek.getId();
-    final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
-    final var previousWeekId = previousWeek.getId();
+    final var qWeekId = addRequest.getQWeekId();
+    final var qWeek = qWeekQuery.getById(qWeekId);
 
     carLinkQuery.getAllActiveByQWeekId(qWeekId).stream()
         .map(CarLinkResponse::getDriverId)
         .forEach(
             driverId -> {
-              final var weekObligation = obligationCalculator.calculate(driverId, qWeekId);
-              final var positiveAmount = getPositiveAmount(driverId, qWeekId);
-              final var matchCount =
-                  getMatchCount(driverId, qWeekId, previousWeekId, weekObligation, positiveAmount);
-              final var obligation =
-                  Obligation.builder()
-                      .id(null)
-                      .qWeekId(qWeekId)
-                      .driverId(driverId)
-                      .obligationAmount(weekObligation)
-                      .positiveAmount(positiveAmount)
-                      .matchCount(matchCount)
-                      .build();
+              final var obligation = obligationCalculator.getObligation(driverId, qWeek);
               final var savedObligation = obligationAddPort.add(obligation);
               final var result = getResult(savedObligation.getId());
               domain.getResults().add(result);
@@ -92,53 +69,6 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     System.out.printf(
         "----> Time: Obligation Calculation took %d milli seconds \n", calculationDuration);
     return savedCalculation.getId();
-  }
-
-  private Integer getMatchCount(
-      final Long driverId,
-      final Long qWeekId,
-      final Long previousQWeekId,
-      final BigDecimal obligationAmount,
-      final BigDecimal positiveAmount) {
-    final var rentTransactionCount =
-        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-            .filter(
-                transaction ->
-                    List.of(
-                            TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
-                            TRANSACTION_TYPE_NO_LABEL_FINE_CODE)
-                        .contains(transaction.getTypeCode()))
-            .count();
-    if (rentTransactionCount == 0) {
-      System.out.println("No Rent transactions. Match count is O");
-
-      return 0;
-    }
-    if (positiveAmount.compareTo(obligationAmount) >= 0) {
-      final var previousWeekObligation =
-          loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
-
-      if (previousWeekObligation == null) {
-
-        return 0;
-      }
-
-      var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
-
-      return ++previousWeekObligationMatchCount;
-    }
-
-    return 0;
-  }
-
-  private BigDecimal getPositiveAmount(final Long driverId, final Long qWeekId) {
-    final var positiveAmount =
-        transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
-            .filter(tr -> "P".equals(tr.getKind()))
-            .map(TransactionResponse::getRealAmount)
-            .reduce(ZERO, BigDecimal::add);
-
-    return positiveAmount;
   }
 
   private ObligationCalculationResult getResult(final Long obligationId) {
@@ -155,7 +85,7 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
     final var recipients = operators.stream().map(UserAccountResponse::getEmail).collect(toList());
     final var emailProperties = new HashMap<String, Object>();
     emailProperties.put("calculationType", "Weekly Obligation");
-    emailProperties.put("calculationDate", LocalDate.now());
+    emailProperties.put("calculationDate", qDateTime.getToday());
     emailProperties.put("weekNumber", weekNumber);
     emailProperties.put(
         "obligations",

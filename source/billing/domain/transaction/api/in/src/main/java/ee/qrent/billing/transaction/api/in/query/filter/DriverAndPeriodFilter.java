@@ -2,7 +2,6 @@ package ee.qrent.billing.transaction.api.in.query.filter;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +13,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString
-public class DriverAndPeriodAndTypeCodesFilter {
-  private Long driverId;
+public class DriverAndPeriodFilter {
   private LocalDate dateStart;
   private LocalDate dateEnd;
-  private Set<String> typeCodes;
+  private Long driverId;
 }

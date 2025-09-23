@@ -12,4 +12,6 @@ public interface GetObligationQuery {
   ObligationResponse getObligationAmountForPreCurrentWeekByDriverId(final Long driverId);
 
   ObligationResponse getByDriverIdAndQWeekId(final Long driverId, final Long qWeekId);
+
+  ObligationResponse getByDriverIdAndQWeekIdOnThursday(final Long driverId, final Long qWeekId);
 }

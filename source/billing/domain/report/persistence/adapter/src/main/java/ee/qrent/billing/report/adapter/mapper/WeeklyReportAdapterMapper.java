@@ -42,6 +42,7 @@ public class WeeklyReportAdapterMapper {
         .depositObligation(entity.getDepositObligation())
         .depositPaid(entity.getDepositPaid())
         .obligationStatus(getObligationStatus(driverId, qWeekId))
+        .currentObligationAmount(entity.getCurrentObligationAmount())
         .feeAmountSunday(entity.getFeeAmountSunday())
         .balanceAmountSunday(entity.getBalanceAmountSunday())
         .balanceAmountAtCalculationMoment(entity.getBalanceAmountAtCalculationMoment())
@@ -61,14 +62,8 @@ public class WeeklyReportAdapterMapper {
 
       return WeeklyReportObligationStatus.COMPLETED;
     }
-    if (obligation.getMatchCount() == 0) {
 
-      return obligation.getAmount().compareTo(BigDecimal.ZERO) > 0
-          ? WeeklyReportObligationStatus.COMPLETED_WITH_DELAY
-          : WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
-    throw new RuntimeException(
-        "Obligation match count has unexpected negative value: " + obligation.getMatchCount());
+    return WeeklyReportObligationStatus.NOT_COMPLETED;
   }
 
   public WeeklyReportJakartaEntity mapToEntity(final WeeklyReport domain) {
@@ -97,8 +92,6 @@ public class WeeklyReportAdapterMapper {
     switch (status) {
       case COMPLETED:
         return WeeklyReportObligationStatusJakarta.COMPLETED;
-      case COMPLETED_WITH_DELAY:
-        return WeeklyReportObligationStatusJakarta.COMPLETED_WITH_DELAY;
       case NOT_COMPLETED:
         return WeeklyReportObligationStatusJakarta.NOT_COMPLETED;
     }

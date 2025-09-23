@@ -25,6 +25,7 @@ public class WeeklyReportPdfModel {
   private final BigDecimal balanceAmountAtCalculationMoment;
   private final Long weeksCountTillEnd;
   private final String obligationStatus;
+  private final BigDecimal currentObligationAmount;
   private Map<String, BigDecimal> transactionTypesVsAmount;
   private final String comment;
 

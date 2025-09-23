@@ -225,8 +225,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var nextWeekDaysFormatted =
         "(%s - %s)"
             .formatted(formatDate(model.getNextWeekStart()), formatDate(model.getNextWeekEnd()));
+
+    final var currentObligationAmountFormatted = formatAmount(model.getCurrentObligationAmount());
     final var label =
-        "В соответствии с этим твои обязательства перед Q Takso Veod OÜ за текущую неделю на текущий момент составляют: {???} евро. Пожалуйста, оплати эту сумму до 16:00 следующего дня {???}, и твои бонусные кампании на следующую неделю "
+        "В соответствии с этим твои обязательства перед Q Takso Veod OÜ за текущую неделю на текущий момент составляют: "
+            + currentObligationAmountFormatted
+            + " евро. Пожалуйста, оплати эту сумму до 16:00 следующего дня {???}, и твои бонусные кампании на следующую неделю "
             + nextWeekDaysFormatted
             + " будут активированы";
 

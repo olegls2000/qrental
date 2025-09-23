@@ -9,7 +9,8 @@ import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindCodesFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodFilter;
 import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceRawContextResponse;
@@ -67,19 +68,21 @@ public class BalanceQueryService implements GetBalanceQuery {
   }
 
   private Balance getDefault(final Long qWeekId, final Long driverId) {
-    final var requestedBalance = balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
+    final var requestedBalance =
+        balanceLoadPort.loadByDriverIdAndQWeekIdAndDerived(driverId, qWeekId, true);
 
-
-    return requestedBalance != null ? requestedBalance : Balance.builder()
-        .qWeekId(qWeekId)
-        .feeAbleAmount(BigDecimal.ZERO)
-        .feeAmount(BigDecimal.ZERO)
-        .nonFeeAbleAmount(BigDecimal.ZERO)
-        .positiveAmount(BigDecimal.ZERO)
-        .repairmentAmount(BigDecimal.ZERO)
-        .derived(Boolean.TRUE)
-        .driverId(driverId)
-        .build();
+    return requestedBalance != null
+        ? requestedBalance
+        : Balance.builder()
+            .qWeekId(qWeekId)
+            .feeAbleAmount(BigDecimal.ZERO)
+            .feeAmount(BigDecimal.ZERO)
+            .nonFeeAbleAmount(BigDecimal.ZERO)
+            .positiveAmount(BigDecimal.ZERO)
+            .repairmentAmount(BigDecimal.ZERO)
+            .derived(Boolean.TRUE)
+            .driverId(driverId)
+            .build();
   }
 
   @Override
@@ -171,30 +174,18 @@ public class BalanceQueryService implements GetBalanceQuery {
   @Override
   public BalanceResponse getRawByDriverAndDate(final Long driverId, final LocalDate date) {
     final var driver = driverQuery.getById(driverId);
-
     final var requestedWeek = qWeekQuery.getByDate(date);
     final var previousWeek = qWeekQuery.getOneBeforeById(requestedWeek.getId());
-
     final var previousWeekRawContext = getRawContext(driverId, previousWeek.getId());
-
     final var monday = requestedWeek.getStart();
-
-    final var transactionKindIds =
-        transactionKindQuery.getAll().stream().map(TransactionKindResponse::getId).toList();
-
     final var transactionFilter =
-        DriverAndPeriodAndKindFilter.builder()
-            .driverId(driverId)
-            .dateStart(monday)
-            .dateEnd(date)
-            .transactionKindIds(transactionKindIds)
-            .build();
+        DriverAndPeriodFilter.builder().driverId(driverId).dateStart(monday).dateEnd(date).build();
 
     final var transactionMapByKind =
         transactionQuery.getAllByFilter(transactionFilter).stream()
             .collect(groupingBy(TransactionResponse::getKind));
 
-      final var calculator = getDryRunStrategy();
+    final var calculator = getDryRunStrategy();
     final var balanceRawContext =
         calculator.calculateBalance(
             driver,
