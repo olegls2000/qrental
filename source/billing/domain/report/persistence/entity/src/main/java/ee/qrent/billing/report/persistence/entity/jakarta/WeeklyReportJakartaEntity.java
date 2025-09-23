@@ -62,6 +62,10 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "current_obligation_amount")
   private BigDecimal currentObligationAmount;
 
+  @Column(name = "net_amount_on_thursday")
+  private BigDecimal netAmountOnThursday;
+
+
   @Column(name = "balance_amount_sunday")
   private BigDecimal balanceAmountSunday;
 

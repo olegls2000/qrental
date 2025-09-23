@@ -181,6 +181,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getFinancialCommentRow(WeeklyReportPdfModel model) {
     final var row = getQpdfTable(1);
+final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
 
     final var weekDaysFormatted =
         "(%s - %s)"
@@ -191,9 +192,9 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
             + weekDaysFormatted;
 
     final var good =
-        " «были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твоё сальдо за прошлую неделю на конец четверга  "
+        " «были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твоё сальдо на конец четверга прошлой недели "
             + weekDaysFormatted
-            + " составила: 999 евро в виде предоплаты. Эта предоплата учтена при рассчете твоих последующих обязательств";
+            + " составило: "+thursdayNet+" евро в виде предоплаты. Эта предоплата учтена при рассчете твоих последующих обязательств";
     final var bonusActivated =
         "В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте";
 

@@ -45,7 +45,7 @@ public class WeeklyReportQueryService implements GetWeeklyReportQuery {
   public List<WeeklyReportResponse> getAllByCalculationId(Long calculationId) {
     return loadPort.loadAllByCalculationId(calculationId).stream()
         .map(mapper::toResponse)
-        .sorted(getCallSignComparator())
+        .sorted(getCallSignComparator().reversed())
         .toList();
   }
 

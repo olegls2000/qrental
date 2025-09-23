@@ -135,6 +135,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
+    final var netAmountOnThursday = getNetAmountOnThursday(driverId, requestedQWeek);
 
     return WeeklyReport.builder()
         .type(WeeklyReportType.valueOf(reportType.name()))
@@ -152,9 +153,49 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
+            .netAmountOnThursday(netAmountOnThursday)
         .transactionTypesVsAmount(getAmountsMap(driverId, previousWeek.getId()))
         .comment("Automatically generated weekly report")
         .build();
+  }
+
+  private BigDecimal getNetAmountOnThursday(Long driverId, QWeekResponse requestedQWeek) {
+    final var monday = requestedQWeek.getStart();
+    final var thursday = requestedQWeek.getEnd().minusDays(3l);
+    final var obligationTransactionFilter =
+            DriverAndPeriodAndTypeCodesFilter.builder()
+                    .driverId(driverId)
+                    .dateStart(monday)
+                    .dateEnd(thursday)
+                    .typeCodes(
+                            Stream.of(
+                                            TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
+                                            TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
+                                            TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
+                                    .collect(Collectors.toSet()))
+                    .build();
+
+    final var obligationSum =
+            transactionQuery.getAllByFilter(obligationTransactionFilter).stream()
+                    .map(TransactionResponse::getRealAmount)
+                    .reduce(ZERO, BigDecimal::add);
+
+    final var positiveTransactionFilter =
+            DriverAndPeriodAndKindCodesFilter.builder()
+                    .driverId(driverId)
+                    .dateStart(monday)
+                    .dateEnd(thursday)
+                    .kindCodes(Stream.of(TRANSACTION_KIND_POSITIVE_CODE).collect(Collectors.toSet()))
+                    .build();
+
+    final var positiveSum =
+            transactionQuery.getAllByFilter(positiveTransactionFilter).stream()
+                    .map(TransactionResponse::getRealAmount)
+                    .reduce(ZERO, BigDecimal::add);
+
+    return obligationSum.add(positiveSum);
+
+
   }
 
   private BigDecimal getCurrentObligationAmount(Long driverId, QWeekResponse requestedQWeek) {
@@ -191,7 +232,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
             .map(TransactionResponse::getRealAmount)
             .reduce(ZERO, BigDecimal::add);
 
-    return obligationSum.subtract(positiveSum);
+    return obligationSum.add(positiveSum);
   }
 
   private Map<String, BigDecimal> getAmountsMap(final Long driverId, final Long qWeekId) {

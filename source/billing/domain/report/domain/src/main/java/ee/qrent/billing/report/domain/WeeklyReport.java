@@ -26,6 +26,7 @@ public class WeeklyReport {
   private WeeklyReportObligationStatus obligationStatus;
   private BigDecimal balanceAmountSunday;
   private BigDecimal currentObligationAmount;
+  private BigDecimal netAmountOnThursday;
   private BigDecimal balanceAmountAtCalculationMoment;
   private BigDecimal feeAmountSunday;
   private Map<String, BigDecimal> transactionTypesVsAmount;

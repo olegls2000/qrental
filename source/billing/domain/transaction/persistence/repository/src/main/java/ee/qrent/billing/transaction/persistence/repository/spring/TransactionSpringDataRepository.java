@@ -62,7 +62,7 @@ public interface TransactionSpringDataRepository
           "SELECT * FROM transaction tx "
               + "WHERE tx.transaction_type_id in ("
               + "select txt.id from transaction_type txt where txt.transaction_kind_id in ("
-              + "select txl.id from transaction_kind txk where txl.code in (:kindCodes))) "
+              + "select txk.id from transaction_kind txk where txk.code in (:kindCodes))) "
               + "and tx.driver_id = :driverId "
               + "and tx.date >= :dateStart and tx.date <= :dateEnd",
       nativeQuery = true)

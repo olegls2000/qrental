@@ -48,6 +48,7 @@ public class WeeklyReportToPdfModelMapper {
         .obligationStatus(
             report.getObligationStatus() != null ? report.getObligationStatus().name() : null)
         .currentObligationAmount(report.getCurrentObligationAmount())
+            .netAmountOnThursday(report.getNetAmountOnThursday())
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .comment(report.getComment())
         // amount: prefer balance at calculation moment, fallback to balance on Sunday
