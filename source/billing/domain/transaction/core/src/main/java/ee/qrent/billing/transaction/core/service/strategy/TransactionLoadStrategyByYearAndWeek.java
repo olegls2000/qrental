@@ -2,7 +2,7 @@ package ee.qrent.billing.transaction.core.service.strategy;
 
 
 import ee.qrent.common.utils.QWeek;
-import ee.qrent.billing.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndYearAndWeekAndFeeFilter;
 import ee.qrent.billing.transaction.api.out.TransactionLoadPort;
 import ee.qrent.billing.transaction.domain.Transaction;
 import java.util.List;
@@ -17,16 +17,16 @@ public class TransactionLoadStrategyByYearAndWeek implements TransactionLoadStra
   private final TransactionLoadPort transactionLoadPort;
 
   @Override
-  public boolean canApply(final YearAndWeekAndDriverAndFeeFilter request) {
+  public boolean canApply(final DriverAndYearAndWeekAndFeeFilter request) {
     return request.getDriverId() == null && request.getWeek() != QWeek.ALL;
   }
 
   @Override
-  public List<Transaction> load(final YearAndWeekAndDriverAndFeeFilter request) {
+  public List<Transaction> load(final DriverAndYearAndWeekAndFeeFilter request) {
     final var year = request.getYear();
     final var weekNumber = request.getWeek().getNumber();
 
-    return transactionLoadPort.loadAllBetweenDays(
+    return transactionLoadPort.loadAllBetweenDates(
         getFirstDayOfWeekInYear(year, weekNumber),
         getLastDayOfWeekInYear(year, weekNumber));
   }

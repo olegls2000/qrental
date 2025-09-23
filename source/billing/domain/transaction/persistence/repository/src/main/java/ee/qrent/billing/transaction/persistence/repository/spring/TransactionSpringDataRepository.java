@@ -3,6 +3,8 @@ package ee.qrent.billing.transaction.persistence.repository.spring;
 import ee.qrent.billing.transaction.persistence.entity.jakarta.TransactionJakartaEntity;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,10 +22,67 @@ public interface TransactionSpringDataRepository
               + "WHERE tx.driver_id = :driverId "
               + "and tx.date >= :dateStart and tx.date <= :dateEnd",
       nativeQuery = true)
-  List<TransactionJakartaEntity> findAllByDateBetweenAndDriverId(
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDates(
+      @Param("driverId") Long driverId,
+      @Param("dateStart") LocalDate dateStart,
+      @Param("dateEnd") LocalDate dateEnd);
+
+  @Query(
+      value =
+          "SELECT * FROM transaction tx "
+              + "WHERE tx.transaction_type_id  in ("
+              + "select txt.id from transaction_type txt "
+              + "where txt.name <> 'fee debt' and txt.name <> 'fee replenish') "
+              + "and tx.driver_id = :driverId "
+              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+      nativeQuery = true)
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndNonFee(
+      @Param("driverId") Long driverId,
+      @Param("dateStart") LocalDate dateStart,
+      @Param("dateEnd") LocalDate dateEnd);
+
+  @Query(
+      value =
+          "SELECT * FROM transaction tx "
+              + "WHERE tx.transaction_type_id  in ("
+              + "select txt.id from transaction_type txt "
+              + "where txt.name in ('fee debt', 'fee replenish')) "
+              + "and tx.driver_id = :driverId "
+              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+      nativeQuery = true)
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndFee(
+      @Param("driverId") Long driverId,
+      @Param("dateStart") LocalDate dateStart,
+      @Param("dateEnd") LocalDate dateEnd);
+
+  List<TransactionJakartaEntity> findAllByIdIn(List<Long> ids);
+
+  @Query(
+      value =
+          "SELECT * FROM transaction tx "
+              + "WHERE tx.transaction_type_id in ("
+              + "select txt.id from transaction_type txt where txt.transaction_kind_id in (:kindIds)) "
+              + "and tx.driver_id = :driverId "
+              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
+      nativeQuery = true)
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndKindIds(
+      @Param("driverId") Long driverId,
       @Param("dateStart") LocalDate dateStart,
       @Param("dateEnd") LocalDate dateEnd,
-      @Param("driverId") Long driverId);
+      @Param("kindIds") List<Long> kindIds);
+
+  @Query(
+      value =
+          "SELECT * FROM transaction tx "
+              + "WHERE tx.driver_id = :driverId "
+              + "and tx.date >= :dateStart and tx.date <= :dateEnd "
+              + "and tx.transaction_type_id in (select txt.id from transaction_type txt where txt.code in (:typeCodes))",
+      nativeQuery = true)
+  List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndTypeCodes(
+      @Param("driverId") Long driverId,
+      @Param("dateStart") LocalDate dateStart,
+      @Param("dateEnd") LocalDate dateEnd,
+      @Param("typeCodes") Set<String> typeCodes);
 
   @Query(
       value =
@@ -68,48 +127,4 @@ public interface TransactionSpringDataRepository
       nativeQuery = true)
   List<TransactionJakartaEntity> findAllByBonusCalculationId(
       @Param("bonusCalculationId") final Long bonusCalculationId);
-
-  @Query(
-      value =
-          "SELECT * FROM transaction tx "
-              + "WHERE tx.transaction_type_id  in ("
-              + "select txt.id from transaction_type txt "
-              + "where txt.name <> 'fee debt' and txt.name <> 'fee replenish') "
-              + "and tx.driver_id = :driverId "
-              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
-      nativeQuery = true)
-  List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
-      @Param("dateStart") LocalDate dateStart,
-      @Param("dateEnd") LocalDate dateEnd,
-      @Param("driverId") Long driverId);
-
-  @Query(
-      value =
-          "SELECT * FROM transaction tx "
-              + "WHERE tx.transaction_type_id  in ("
-              + "select txt.id from transaction_type txt "
-              + "where txt.name in ('fee debt', 'fee replenish')) "
-              + "and tx.driver_id = :driverId "
-              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
-      nativeQuery = true)
-  List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(
-      @Param("dateStart") LocalDate dateStart,
-      @Param("dateEnd") LocalDate dateEnd,
-      @Param("driverId") Long driverId);
-
-  List<TransactionJakartaEntity> findAllByIdIn(List<Long> ids);
-
-  @Query(
-      value =
-          "SELECT * FROM transaction tx "
-              + "WHERE tx.transaction_type_id in ("
-              + "select txt.id from transaction_type txt where txt.transaction_kind_id in (:kindIds)) "
-              + "and tx.driver_id = :driverId "
-              + "and tx.date >= :dateStart and tx.date <= :dateEnd",
-      nativeQuery = true)
-  List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
-      @Param("driverId") Long driverId,
-      @Param("kindIds") List<Long> kindIds,
-      @Param("dateStart") LocalDate dateStart,
-      @Param("dateEnd") LocalDate dateEnd);
 }

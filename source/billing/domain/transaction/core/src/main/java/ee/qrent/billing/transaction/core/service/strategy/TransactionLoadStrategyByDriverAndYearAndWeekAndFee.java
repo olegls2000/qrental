@@ -2,7 +2,7 @@ package ee.qrent.billing.transaction.core.service.strategy;
 
 
 import ee.qrent.common.utils.QWeek;
-import ee.qrent.billing.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndYearAndWeekAndFeeFilter;
 import ee.qrent.billing.transaction.api.out.TransactionLoadPort;
 import ee.qrent.billing.transaction.domain.Transaction;
 import java.util.List;
@@ -18,23 +18,23 @@ public class TransactionLoadStrategyByDriverAndYearAndWeekAndFee
   private final TransactionLoadPort transactionLoadPort;
 
   @Override
-  public boolean canApply(final YearAndWeekAndDriverAndFeeFilter request) {
+  public boolean canApply(final DriverAndYearAndWeekAndFeeFilter request) {
     return request.getDriverId() != null && request.getWeek() != QWeek.ALL;
   }
 
   @Override
-  public List<Transaction> load(final YearAndWeekAndDriverAndFeeFilter request) {
+  public List<Transaction> load(final DriverAndYearAndWeekAndFeeFilter request) {
     final var year = request.getYear();
     final var weekNumber = request.getWeek().getNumber();
     final var driverId = request.getDriverId();
     final var startDate = getFirstDayOfWeekInYear(year, weekNumber);
     final var endDate = getLastDayOfWeekInYear(year, weekNumber);
       return switch (request.getFeeOption()) {
-          case WITH_FEE -> transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+          case WITH_FEE -> transactionLoadPort.loadAllByDriverIdAndBetweenDates(
                   driverId, startDate, endDate);
-          case WITHOUT_FEE -> transactionLoadPort.loadAllNonFeeByDriverIdAndBetweenDays(
+          case WITHOUT_FEE -> transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndNonFee(
                   request.getDriverId(), startDate, endDate);
-          case ONLY_FEE -> transactionLoadPort.loadAllFeeByDriverIdAndBetweenDays(
+          case ONLY_FEE -> transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndFee(
                   request.getDriverId(), startDate, endDate);
       };
   }

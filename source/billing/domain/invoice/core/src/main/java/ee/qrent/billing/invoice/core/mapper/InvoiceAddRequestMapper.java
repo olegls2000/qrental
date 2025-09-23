@@ -11,7 +11,7 @@ import ee.qrent.billing.invoice.api.in.request.InvoiceAddRequest;
 import ee.qrent.billing.invoice.domain.Invoice;
 import ee.qrent.billing.invoice.domain.InvoiceItem;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndYearAndWeekAndFeeFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,7 +37,7 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
     final var qFirm = firmQuery.getById(qFirmId);
 
     final var filter =
-        YearAndWeekAndDriverAndFeeFilter.builder().driverId(driverId).year(year).week(week).build();
+        DriverAndYearAndWeekAndFeeFilter.builder().driverId(driverId).year(year).week(week).build();
 
     return Invoice.builder()
         .id(null)
@@ -64,7 +64,7 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
     return String.format("%d%d%d", year, weekNumber, driverId);
   }
 
-  private List<InvoiceItem> getInvoiceItems(final YearAndWeekAndDriverAndFeeFilter filter) {
+  private List<InvoiceItem> getInvoiceItems(final DriverAndYearAndWeekAndFeeFilter filter) {
     final Map<String, List<TransactionResponse>> transactionsGroupedByType =
         getTransactionsGroupedByType(filter);
 
@@ -74,7 +74,7 @@ public class InvoiceAddRequestMapper implements AddRequestMapper<InvoiceAddReque
   }
 
   private Map<String, List<TransactionResponse>> getTransactionsGroupedByType(
-      final YearAndWeekAndDriverAndFeeFilter filter) {
+      final DriverAndYearAndWeekAndFeeFilter filter) {
     return transactionQuery.getAllByFilter(filter).stream()
         .collect(groupingBy(
                 TransactionResponse::getTypeCode));

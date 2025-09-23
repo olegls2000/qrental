@@ -138,7 +138,7 @@ public class BalanceCalculationService implements BalanceCalculationAddUseCase {
       final Balance savedBalance, final QWeekResponse week) {
     final var transactionIds =
         transactionLoadPort
-            .loadAllByDriverIdAndBetweenDays(
+            .loadAllByDriverIdAndBetweenDates(
                 savedBalance.getDriverId(), week.getStart(), week.getEnd())
             .stream()
             .map(Transaction::getId)

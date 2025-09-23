@@ -5,10 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.DriverAndQWeekIntervalFilter;
-import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
-import ee.qrent.billing.transaction.api.in.query.filter.PeriodFilter;
-import ee.qrent.billing.transaction.api.in.query.filter.YearAndWeekAndDriverAndFeeFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.*;
 import ee.qrent.billing.transaction.api.in.request.TransactionUpdateRequest;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.out.TransactionLoadPort;
@@ -36,16 +33,19 @@ public class TransactionQueryService implements GetTransactionQuery {
 
   @Override
   public TransactionResponse getById(final Long id) {
+
     return responseMapper.toResponse(transactionLoadPort.loadById(id));
   }
 
   @Override
   public String getObjectInfo(final Long id) {
+
     return responseMapper.toObjectInfo(transactionLoadPort.loadById(id));
   }
 
   @Override
   public List<TransactionResponse> getAllByDriverId(final Long driverId) {
+
     return mapToTransactionResponseList(transactionLoadPort.loadAllByDriverId(driverId));
   }
 
@@ -55,7 +55,7 @@ public class TransactionQueryService implements GetTransactionQuery {
     final var qWeek = qWeekQuery.getById(qWeekId);
 
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDates(
             driverId, qWeek.getStart(), qWeek.getEnd()));
   }
 
@@ -66,12 +66,14 @@ public class TransactionQueryService implements GetTransactionQuery {
 
   @Override
   public List<TransactionResponse> getAllByRentCalculationId(final Long rentCalculationId) {
+
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByRentCalculationId(rentCalculationId));
   }
 
   @Override
   public List<TransactionResponse> getAllByBonusCalculationId(final Long bonusCalculationId) {
+
     return mapToTransactionResponseList(
         transactionLoadPort.loadAllByBonusCalculationId(bonusCalculationId));
   }
@@ -90,7 +92,8 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(final YearAndWeekAndDriverAndFeeFilter filter) {
+  public List<TransactionResponse> getAllByFilter(final DriverAndYearAndWeekAndFeeFilter filter) {
+
     return mapToTransactionResponseList(
         loadStrategies.stream()
             .filter(strategy -> strategy.canApply(filter))
@@ -101,20 +104,31 @@ public class TransactionQueryService implements GetTransactionQuery {
   }
 
   @Override
-  public List<TransactionResponse> getAllByFilter(
-      final PeriodAndKindAndDriverTransactionFilter filter) {
+  public List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndKindFilter filter) {
+
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllByDriverIdAndKindIdAndBetweenDays(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndKindIds(
             filter.getDriverId(),
-            filter.getTransactionKindIds(),
             filter.getDateStart(),
-            filter.getDateEnd()));
+            filter.getDateEnd(),
+            filter.getTransactionKindIds()));
   }
 
   @Override
   public List<TransactionResponse> getAllByFilter(final PeriodFilter filter) {
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllBetweenDays(filter.getDateStart(), filter.getDatEnd()));
+        transactionLoadPort.loadAllBetweenDates(filter.getDateStart(), filter.getDatEnd()));
+  }
+
+  @Override
+  public List<TransactionResponse> getAllByFilter(final DriverAndPeriodAndTypeCodesFilter filter) {
+
+    return mapToTransactionResponseList(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDatesAndTypeCodes(
+            filter.getDriverId(),
+            filter.getDateStart(),
+            filter.getDatEnd(),
+            filter.getTransactionTypeCodes()));
   }
 
   @Override
@@ -123,7 +137,7 @@ public class TransactionQueryService implements GetTransactionQuery {
     final var intervalEndDate = qWeekQuery.getEndDateOrCurrent(filter.getEndQWeekId());
 
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllByDriverIdAndBetweenDays(
+        transactionLoadPort.loadAllByDriverIdAndBetweenDates(
             filter.getDriverId(), intervalStartDate, intervalEndDate));
   }
 

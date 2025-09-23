@@ -5,6 +5,8 @@ import ee.qrent.billing.transaction.persistence.entity.jakarta.TransactionJakart
 import ee.qrent.billing.transaction.persistence.repository.spring.TransactionSpringDataRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -24,45 +26,76 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
   @Override
   public List<TransactionJakartaEntity> findByDriverId(final Long driverId) {
+
     return springDataRepository.findByDriverId(driverId);
   }
 
   @Override
-  public List<TransactionJakartaEntity> findAllByDateBetween(
+  public List<TransactionJakartaEntity> findAllByBetweenDates(
       final LocalDate dateStart, final LocalDate dateEnd) {
+
     return springDataRepository.findAllByDateBetween(dateStart, dateEnd);
   }
 
   @Override
-  public List<TransactionJakartaEntity> findAllByDateBetweenAndDriverId(
-      final LocalDate dateStart, final LocalDate dateEnd, Long driverId) {
-    return springDataRepository.findAllByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
+  public List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDates(
+      final Long driverId, final LocalDate dateStart, final LocalDate dateEnd) {
+
+    return springDataRepository.findAllByDriverIdAndBetweenDates(driverId, dateStart, dateEnd);
   }
 
   @Override
-  public List<TransactionJakartaEntity> findAllNonFeeByDateBetweenAndDriverId(
-      final LocalDate dateStart, final LocalDate dateEnd, final Long driverId) {
-    return springDataRepository.findAllNonFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
+  public List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndNonFee(
+      final Long driverId, final LocalDate dateStart, final LocalDate dateEnd) {
+
+    return springDataRepository.findAllByDriverIdAndBetweenDatesAndNonFee(
+        driverId, dateStart, dateEnd);
+  }
+
+  @Override
+  public List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndKindIds(
+      final Long driverId,
+      final LocalDate dateStart,
+      final LocalDate dateEnd,
+      final List<Long> kindIds) {
+
+    return springDataRepository.findAllByDriverIdAndBetweenDatesAndKindIds(
+        driverId, dateStart, dateEnd, kindIds);
+  }
+
+  @Override
+  public List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndTypeCodes(
+      final Long driverId,
+      final LocalDate dateStart,
+      final LocalDate dateEnd,
+      final Set<String> typeCodes) {
+
+    return springDataRepository.findAllByDriverIdAndBetweenDatesAndTypeCodes(
+        driverId, dateStart, dateEnd, typeCodes);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllByRentCalculationId(final Long rentCalculationId) {
+
     return springDataRepository.findAllByRentCalculationId(rentCalculationId);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllByInsuranceCalculationId(
       final Long insuranceCalculationId) {
+
     return springDataRepository.findAllByInsuranceCalculationId(insuranceCalculationId);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllByInsuranceCaseId(final Long insuranceCaseId) {
+
     return springDataRepository.findAllByInsuranceCaseId(insuranceCaseId);
   }
 
   @Override
   public List<TransactionJakartaEntity> findAllByBonusCalculationId(final Long bonusCalculationId) {
+
     return springDataRepository.findAllByBonusCalculationId(bonusCalculationId);
   }
 
@@ -77,24 +110,15 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
-  public List<TransactionJakartaEntity> findAllFeeByDateBetweenAndDriverId(
-      LocalDate dateStart, LocalDate dateEnd, Long driverId) {
-    return springDataRepository.findAllFeeByDateBetweenAndDriverId(dateStart, dateEnd, driverId);
+  public List<TransactionJakartaEntity> findAllByDriverIdAndBetweenDatesAndFee(
+      final Long driverId, final LocalDate dateStart, final LocalDate dateEnd) {
+
+    return springDataRepository.findAllByDriverIdAndBetweenDatesAndFee(driverId, dateStart, dateEnd);
   }
 
   @Override
   public List<TransactionJakartaEntity> findByIds(List<Long> ids) {
+
     return springDataRepository.findAllByIdIn(ids);
-  }
-
-  @Override
-  public List<TransactionJakartaEntity> findAllByDriverIdAndKindIdAndBetweenDays(
-      final Long driverId,
-      final List<Long> kindIds,
-      final LocalDate dateStart,
-      final LocalDate dateEnd) {
-
-    return springDataRepository.findAllByDriverIdAndKindIdAndBetweenDays(
-        driverId, kindIds, dateStart, dateEnd);
   }
 }

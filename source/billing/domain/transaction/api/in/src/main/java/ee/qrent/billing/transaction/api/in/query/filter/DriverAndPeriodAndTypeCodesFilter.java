@@ -1,6 +1,8 @@
 package ee.qrent.billing.transaction.api.in.query.filter;
 
-import ee.qrent.common.utils.QWeek;
+import java.time.LocalDate;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +14,9 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @ToString
-public class YearAndWeekAndDriverAndFeeFilter {
-  private Integer year;
-  private QWeek week;
+public class DriverAndPeriodAndTypeCodesFilter {
   private Long driverId;
-  private FeeOption feeOption = FeeOption.WITH_FEE;
+  private LocalDate dateStart;
+  private LocalDate datEnd;
+  private Set<String> transactionTypeCodes;
 }

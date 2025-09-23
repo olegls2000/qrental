@@ -13,7 +13,7 @@ import ee.qrent.billing.insurance.core.service.InsuranceCaseBalanceCalculator;
 import ee.qrent.billing.insurance.domain.InsuranceCase;
 import ee.qrent.billing.insurance.domain.InsuranceCaseBalance;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindFilter;
 import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.kind.TransactionKindResponse;
@@ -130,7 +130,7 @@ public class InsuranceCaseBalanceQueryService implements GetInsuranceCaseBalance
     final var startQWeek = qWeekQuery.getById(startQWeekId);
     final var endQWeek = qWeekQuery.getById(qWeekEndId);
     final var filter =
-        PeriodAndKindAndDriverTransactionFilter.builder()
+        DriverAndPeriodAndKindFilter.builder()
             .dateStart(startQWeek.getStart())
             .dateEnd(endQWeek.getEnd())
             .driverId(driverId)

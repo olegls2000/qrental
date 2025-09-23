@@ -32,7 +32,7 @@ import ee.qrent.billing.invoice.domain.InvoiceTransactionsLink;
 import ee.qrent.billing.invoice.domain.InvoiceItem;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindFilter;
 import ee.qrent.billing.transaction.api.in.query.type.GetTransactionTypeQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
@@ -122,7 +122,7 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
 
                                 checkIfBalanceForCurrentWeekExists(driver, week);
                                 final var filter =
-                                        PeriodAndKindAndDriverTransactionFilter.builder()
+                                        DriverAndPeriodAndKindFilter.builder()
                                                 .driverId(driverId)
                                                 .dateStart(weekStartDay)
                                                 .dateEnd(weekEndDay)
@@ -165,7 +165,7 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
                                         transactionKindQuery.getAll().stream().map(TransactionKindResponse::getId).toList();
 
                                 final var filterForPreviousWeek =
-                                        PeriodAndKindAndDriverTransactionFilter.builder()
+                                        DriverAndPeriodAndKindFilter.builder()
                                                 .driverId(driverId)
                                                 .dateStart(previousQWeekStartDay)
                                                 .dateEnd(previousQWeekEndDay)

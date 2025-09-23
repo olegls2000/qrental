@@ -9,7 +9,7 @@ import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
-import ee.qrent.billing.transaction.api.in.query.filter.PeriodAndKindAndDriverTransactionFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindFilter;
 import ee.qrent.billing.transaction.api.in.query.kind.GetTransactionKindQuery;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceRawContextResponse;
@@ -183,7 +183,7 @@ public class BalanceQueryService implements GetBalanceQuery {
         transactionKindQuery.getAll().stream().map(TransactionKindResponse::getId).toList();
 
     final var transactionFilter =
-        PeriodAndKindAndDriverTransactionFilter.builder()
+        DriverAndPeriodAndKindFilter.builder()
             .driverId(driverId)
             .dateStart(monday)
             .dateEnd(date)
