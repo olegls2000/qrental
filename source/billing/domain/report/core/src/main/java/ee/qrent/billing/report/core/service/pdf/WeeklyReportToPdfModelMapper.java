@@ -58,6 +58,7 @@ public class WeeklyReportToPdfModelMapper {
         .totalRentAmount(getTotalRentAmount(report.getTransactionTypesVsAmount()))
         .totalExternalSystemsIncomeAmount(
             getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount()))
+        .totalOtherPaymentAmount(getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount()))
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .comment(report.getComment())
         .amount(
@@ -88,5 +89,26 @@ public class WeeklyReportToPdfModelMapper {
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
 
     return boltPlusAmount;
+  }
+
+  private BigDecimal getTotalOtherPaymentAmount(
+      final Map<String, BigDecimal> transactionTypesVsAmount) {
+    final var depositAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
+    final var innerInsuranceAmount =
+        transactionTypesVsAmount.getOrDefault(
+                TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+    final var nonLabelFineAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
+    final var feeAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, BigDecimal.ZERO);
+    final var parkingFineAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, BigDecimal.ZERO);
+
+    return depositAmount
+        .add(innerInsuranceAmount)
+        .add(nonLabelFineAmount)
+        .add(feeAmount)
+        .add(parkingFineAmount);
   }
 }

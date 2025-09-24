@@ -12,7 +12,7 @@ public class TransactionTypeCodesConstant {
 
   public static final String TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE = "ABSNADJ";
 
-  public static final String TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE = "INROADINSRC";
+  public static final String TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE = "INROADINSRC";
 
   public static final String TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE = "DMGWRTOFF";
 
@@ -29,4 +29,8 @@ public class TransactionTypeCodesConstant {
   public static final String TRANSACTION_TYPE_BONUS_FRIEND_CODE = "BONSFRIEND";
 
   public static final String TRANSACTION_TYPE_BOLT_PLUS_CODE = "BOLTPLUS";
+
+  public static final String TRANSACTION_TYPE_DEPOSIT_CODE = "DEPOSIT";
+
+  public static final String TRANSACTION_TYPE_PARKING_FINE_CODE = "PRKFIN";
 }

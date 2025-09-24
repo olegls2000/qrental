@@ -188,7 +188,7 @@ public class ObligationCalculator {
                 Stream.of(
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
                         TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
-                        TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
+                        TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE)
                     .collect(Collectors.toSet()))
             .build();
 

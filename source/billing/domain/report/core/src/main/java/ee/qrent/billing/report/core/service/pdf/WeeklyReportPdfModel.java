@@ -29,6 +29,7 @@ public class WeeklyReportPdfModel {
   private final BigDecimal netAmountOnThursday;
   private final BigDecimal totalRentAmount;
   private final BigDecimal totalExternalSystemsIncomeAmount;
+  private final BigDecimal totalOtherPaymentAmount;
   private Map<String, BigDecimal> transactionTypesVsAmount;
   private final String comment;
 

@@ -105,7 +105,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
               calculation.getReportTransactionLinks().add(reportTransactions);
             });
 
-      return addPort.add(calculation);
+    return addPort.add(calculation);
   }
 
   @Transactional
@@ -182,7 +182,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
                 Stream.of(
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
                         TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
-                        TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
+                        TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE)
                     .collect(Collectors.toSet()))
             .build();
 
@@ -239,7 +239,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final QWeekResponse requestedQWeek, final Long driverId) {
     final var sunday = requestedQWeek.getStart().minusDays(1L);
 
-      return balanceQuery.getRawByDriverAndDate(driverId, sunday);
+    return balanceQuery.getRawByDriverAndDate(driverId, sunday);
   }
 
   private Long getCallSignId(final Long driverId, final Long qWeekId) {
@@ -256,7 +256,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (carLink == null) {
 
-        return null;
+      return null;
     }
     return carLink.getCarId();
   }

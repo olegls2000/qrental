@@ -1,7 +1,7 @@
 package ee.qrent.billing.insurance.core.service;
 
 import static ee.qrent.billing.insurance.core.service.strategy.InsuranceCalculationStrategy.NEW_CONTRACTS_START_DATE;
-import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -135,7 +135,7 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     insurancePaymentTransaction.setDriverId(driverId);
     insurancePaymentTransaction.setAmount(transactionAmount);
     final var transactionTypeId =
-        transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE).getId();
+        transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE).getId();
     insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
     insurancePaymentTransaction.setDate(qDateTime.getToday());
 

@@ -61,7 +61,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     weeklyReportPdfDoc.add(getClarificationlabel(model));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
-    weeklyReportPdfDoc.add(getClarificationBlock3(model));
+    weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable());
@@ -104,7 +104,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   @SneakyThrows
   private PdfPTable getHeaderTable(final String language) {
     final var header = getQpdfTable(2);
-    header.setWidths(new int[]{20, 80});
+    header.setWidths(new int[] {20, 80});
 
     Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
     img.scaleToFit(33, 14);
@@ -153,6 +153,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(2);
+    table.setWidths(new int[] {70, 30});
     table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
 
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
@@ -183,6 +184,9 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   private PdfPTable getFinancialOutcomeAboutPreviousWeekTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var row = getQpdfTable(1);
+
+    final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 14, BOLD)));
+    row.addCell(paddingTopCell);
     final var currency = getLabel(language, CURRENCY_NAME_KEY);
     final var thursdayNet = format("%s %s", formatAmount(model.getNetAmountOnThursday()), currency);
 
@@ -292,6 +296,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return valueCell;
   }
 
+  private PdfPTable getClarificationTable() {
+    final var table = getQpdfTable(2);
+    table.setWidths(new int[] {70, 30});
+    return table;
+  }
+
   private PdfPTable getRentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var currency = getLabel(language, CURRENCY_NAME_KEY);
@@ -305,7 +315,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FRIEND_CODE);
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount());
-    final var table = getQpdfTable(2);
+    final var table = getClarificationTable();
     table.addCell(
         getClarificationTableHeaderCell(
             format(
@@ -333,7 +343,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getExternalSystemsIncomeClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = getQpdfTable(2);
+    final var table = getClarificationTable();
     final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
@@ -351,28 +361,48 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return table;
   }
 
-  private PdfPTable getClarificationBlock3(final WeeklyReportPdfModel model) {
+  private PdfPTable getOtherPaymentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var otherObligations = formatAmount(BigDecimal.valueOf(999L));
+    final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var otherObligationsText =
         format("Прочие обязательства: %s %s", otherObligations, euroCurrency);
-    final var table = getQpdfTable(2);
+    final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(otherObligationsText));
     table.addCell(getClarificationTableLabelCell("Залог"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    final var depositAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
+    table.addCell(getClarificationTableValueCell(depositAmount, language));
     table.addCell(
         getClarificationTableLabelCell(
             "ДВС за текущую неделю (дополнительное внутреннее страхование)"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    final var innerInsuranceAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+    table.addCell(getClarificationTableValueCell(innerInsuranceAmount, language));
     table.addCell(
         getClarificationTableLabelCell(
             "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    final var nonLabelFineAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
+    table.addCell(getClarificationTableValueCell(nonLabelFineAmount, language));
     table.addCell(getClarificationTableLabelCell("Штраф за парковку"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    final var parkingFineAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, BigDecimal.ZERO);
+    table.addCell(getClarificationTableValueCell(parkingFineAmount, language));
     table.addCell(getClarificationTableLabelCell("Пени на конец прошлой недели"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    final var feeAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, BigDecimal.ZERO);
+    table.addCell(getClarificationTableValueCell(feeAmount, language));
     table.addCell(getEmptyRow());
 
     return table;
@@ -380,7 +410,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getClarificationBlock4(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = getQpdfTable(2);
+    final var table = getClarificationTable();
     table.addCell(
         getClarificationTableHeaderCell("Востребуемая часть общей задолженности: 999.00 евро"));
     table.addCell(getClarificationTableLabelCell("Пени"));
