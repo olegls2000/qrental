@@ -168,13 +168,13 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
 
-    table.addCell(getDriverMainDataLabelCell("Weeks left till the end of Contract"));
+    table.addCell(getDriverMainDataLabelCell("До конца действия договора (календарных недель)"));
     table.addCell(getDriverMainDataValueCell(model.getWeeksCountTillEnd().toString()));
 
-    table.addCell(getDriverMainDataLabelCell("Deposit"));
+    table.addCell(getDriverMainDataLabelCell("Твой общий залог"));
     table.addCell(getDriverMainDataValueCell("N/A"));
 
-    table.addCell(getDriverMainDataLabelCell("Charged Deposit"));
+    table.addCell(getDriverMainDataLabelCell("Востребованная часть залога"));
     table.addCell(getDriverMainDataValueCell("N/A"));
 
     return table;
