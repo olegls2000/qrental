@@ -255,9 +255,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private Long getCarId(final Long driverId, final Long qWeekId) {
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     if (carLink == null) {
-      /*      throw new RuntimeException(
-      format("No Car-link found for driver.id = %d during week.id = %d", driverId, qWeekId));*/
-      return null;
+
+        return null;
     }
     return carLink.getCarId();
   }

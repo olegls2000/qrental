@@ -55,13 +55,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
     weeklyReportPdfDoc.open();
     weeklyReportPdfDoc.add(getHeaderTable(language));
-    weeklyReportPdfDoc.add(getEmptyRow());
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
     weeklyReportPdfDoc.add(getFinancialOutcomeAboutPreviousWeekTable(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(getClarificationlabel(model));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
-    weeklyReportPdfDoc.add(getClarificationBlock2(model));
+    weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
     weeklyReportPdfDoc.add(getClarificationBlock3(model));
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
@@ -104,7 +103,8 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   @SneakyThrows
   private PdfPTable getHeaderTable(final String language) {
-    final var header = getQpdfTable(4);
+    final var header = getQpdfTable(2);
+    header.setWidths(new int[]{20, 80});
 
     Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
     img.scaleToFit(33, 14);
@@ -119,11 +119,11 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         getQpdfPCell(
             new Paragraph(getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 14, BOLD)));
 
-    reportNameCell.setColspan(3);
     reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
     reportNameCell.setPaddingLeft(65f);
     reportNameCell.setVerticalAlignment(ALIGN_MIDDLE);
     header.addCell(reportNameCell);
+    header.addCell(getEmptyRow());
 
     return header;
   }
@@ -309,8 +309,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     table.addCell(
         getClarificationTableHeaderCell(
             format(
-                "Итоговая арендная плата за текущую неделю (за вычетом бонусов): %s %s",
-                totalRentAmount, currency)));
+                "Итоговая арендная плата (за вычетом бонусов): %s %s", totalRentAmount, currency)));
     table.addCell(getClarificationTableLabelCell("Аренда за текущую неделю"));
     table.addCell(getClarificationTableValueCell(rentAmount, language));
     table.addCell(getClarificationTableLabelCell("Кампания «Надежный партнер»"));
@@ -327,23 +326,26 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   private PdfPCell getEmptyRow() {
     final var emptyRow = getQpdfPCell(new Paragraph(" ", new Font(REPORT_FONT, 14, Font.BOLD)));
     emptyRow.setColspan(2);
-    emptyRow.setBackgroundColor(WHITE);
     emptyRow.setFixedHeight((float) 8.0);
+
     return emptyRow;
   }
 
-  private PdfPTable getClarificationBlock2(final WeeklyReportPdfModel model) {
+  private PdfPTable getExternalSystemsIncomeClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(2);
-    final var correctionOfRent = formatAmount(BigDecimal.valueOf(999L));
+    final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
         format(
-            "Сумма коррекции аренды с твоего заработка в приложениях на текущей неделе составила: %s %s",
+            "Сумма коррекции аренды с твоего заработка в приложениях: %s %s",
             correctionOfRent, euroCurrency);
+
+    final var boltPlusAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerText));
     table.addCell(getClarificationTableLabelCell("Заработок Bolt"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(getClarificationTableValueCell(boltPlusAmount, language));
     table.addCell(getEmptyRow());
 
     return table;

@@ -56,6 +56,8 @@ public class WeeklyReportToPdfModelMapper {
         .currentObligationAmount(report.getCurrentObligationAmount())
         .netAmountOnThursday(report.getNetAmountOnThursday())
         .totalRentAmount(getTotalRentAmount(report.getTransactionTypesVsAmount()))
+        .totalExternalSystemsIncomeAmount(
+            getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount()))
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .comment(report.getComment())
         .amount(
@@ -78,5 +80,13 @@ public class WeeklyReportToPdfModelMapper {
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_FRIEND_CODE, BigDecimal.ZERO);
 
     return rentAmount.add(bonusReliablePartnerAmount).add(bonusBoltAmount).add(bonusFriendAmount);
+  }
+
+  private BigDecimal getTotalExternalSystemsIncomeAmount(
+      final Map<String, BigDecimal> transactionTypesVsAmount) {
+    final var boltPlusAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
+
+    return boltPlusAmount;
   }
 }

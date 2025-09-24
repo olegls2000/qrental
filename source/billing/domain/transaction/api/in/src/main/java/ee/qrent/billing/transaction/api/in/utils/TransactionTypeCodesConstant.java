@@ -27,4 +27,6 @@ public class TransactionTypeCodesConstant {
   public static final String TRANSACTION_TYPE_BONUS_BOLT_CODE = "BONSBOLT";
 
   public static final String TRANSACTION_TYPE_BONUS_FRIEND_CODE = "BONSFRIEND";
+
+  public static final String TRANSACTION_TYPE_BOLT_PLUS_CODE = "BOLTPLUS";
 }
