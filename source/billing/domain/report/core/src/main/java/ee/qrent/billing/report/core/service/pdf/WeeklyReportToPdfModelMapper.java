@@ -7,6 +7,12 @@ import ee.qrent.billing.car.api.in.query.GetCarQuery;
 import ee.qrent.billing.report.domain.WeeklyReport;
 import lombok.AllArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_BONUS_FRIEND_CODE;
+
 @AllArgsConstructor
 public class WeeklyReportToPdfModelMapper {
 
@@ -48,14 +54,29 @@ public class WeeklyReportToPdfModelMapper {
         .obligationStatus(
             report.getObligationStatus() != null ? report.getObligationStatus().name() : null)
         .currentObligationAmount(report.getCurrentObligationAmount())
-            .netAmountOnThursday(report.getNetAmountOnThursday())
+        .netAmountOnThursday(report.getNetAmountOnThursday())
+        .totalRentAmount(getTotalRentAmount(report.getTransactionTypesVsAmount()))
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .comment(report.getComment())
-        // amount: prefer balance at calculation moment, fallback to balance on Sunday
         .amount(
             report.getBalanceAmountAtCalculationMoment() != null
                 ? report.getBalanceAmountAtCalculationMoment()
                 : report.getBalanceAmountSunday())
         .build();
+  }
+
+  private BigDecimal getTotalRentAmount(final Map<String, BigDecimal> transactionTypesVsAmount) {
+    final var rentAmount =
+        transactionTypesVsAmount.getOrDefault(
+            TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE, BigDecimal.ZERO);
+    final var bonusReliablePartnerAmount =
+        transactionTypesVsAmount.getOrDefault(
+            TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE, BigDecimal.ZERO);
+    final var bonusBoltAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_BOLT_CODE, BigDecimal.ZERO);
+    final var bonusFriendAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_FRIEND_CODE, BigDecimal.ZERO);
+
+    return rentAmount.add(bonusReliablePartnerAmount).add(bonusBoltAmount).add(bonusFriendAmount);
   }
 }

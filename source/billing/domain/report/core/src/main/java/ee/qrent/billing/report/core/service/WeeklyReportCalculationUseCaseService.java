@@ -16,7 +16,6 @@ import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
 import ee.qrent.billing.report.api.in.request.WeeklyReportSendByEmailRequest;
@@ -31,6 +30,7 @@ import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceQuery;
 import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndKindCodesFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodAndTypeCodesFilter;
+import ee.qrent.billing.transaction.api.in.query.filter.DriverAndPeriodFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.transaction.api.in.response.balance.BalanceResponse;
 import jakarta.transaction.Transactional;
@@ -56,7 +56,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetDriverQuery driverQuery;
   private final GetCallSignLinkQuery callSignLinkQuery;
   private final GetCarLinkQuery carLinkQuery;
-  private final GetFirmLinkQuery firmLinkQuery;
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetContractQuery contractQuery;
@@ -88,7 +87,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var requestedQWeek = qWeekQuery.getById(requestedQWeekId);
 
     driverQuery.getAll().parallelStream()
-        .filter(driverResponse -> driverResponse.getNeedReport())
+        .filter(DriverResponse::getNeedReport)
         .forEach(
             driver -> {
               final var driverId = driver.getId();
@@ -106,9 +105,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
               calculation.getReportTransactionLinks().add(reportTransactions);
             });
 
-    final var addedReportCalculation = addPort.add(calculation);
-
-    return addedReportCalculation;
+      return addPort.add(calculation);
   }
 
   @Transactional
@@ -128,7 +125,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final WeeklyReportTypeIn reportType) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
-    final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
+    final var nextWeek = qWeekQuery.getOneAfterById(qWeekId);
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
 
@@ -153,59 +150,34 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
-            .netAmountOnThursday(netAmountOnThursday)
-        .transactionTypesVsAmount(getAmountsMap(driverId, previousWeek.getId()))
+        .netAmountOnThursday(netAmountOnThursday)
+        .transactionTypesVsAmount(
+            getAmountsMap(driverId, nextWeek.getStart(), requestedQWeek.getEnd()))
         .comment("Automatically generated weekly report")
         .build();
   }
 
   private BigDecimal getNetAmountOnThursday(Long driverId, QWeekResponse requestedQWeek) {
     final var monday = requestedQWeek.getStart();
-    final var thursday = requestedQWeek.getEnd().minusDays(3l);
-    final var obligationTransactionFilter =
-            DriverAndPeriodAndTypeCodesFilter.builder()
-                    .driverId(driverId)
-                    .dateStart(monday)
-                    .dateEnd(thursday)
-                    .typeCodes(
-                            Stream.of(
-                                            TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
-                                            TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
-                                            TRANSACTION_TYPE_INNER_ROAD_INSURANCE_CODE)
-                                    .collect(Collectors.toSet()))
-                    .build();
+    final var thursday = requestedQWeek.getEnd().minusDays(3L);
 
-    final var obligationSum =
-            transactionQuery.getAllByFilter(obligationTransactionFilter).stream()
-                    .map(TransactionResponse::getRealAmount)
-                    .reduce(ZERO, BigDecimal::add);
-
-    final var positiveTransactionFilter =
-            DriverAndPeriodAndKindCodesFilter.builder()
-                    .driverId(driverId)
-                    .dateStart(monday)
-                    .dateEnd(thursday)
-                    .kindCodes(Stream.of(TRANSACTION_KIND_POSITIVE_CODE).collect(Collectors.toSet()))
-                    .build();
-
-    final var positiveSum =
-            transactionQuery.getAllByFilter(positiveTransactionFilter).stream()
-                    .map(TransactionResponse::getRealAmount)
-                    .reduce(ZERO, BigDecimal::add);
-
-    return obligationSum.add(positiveSum);
-
-
+    return getObligationInvolvedTransactionsSum(driverId, monday, thursday);
   }
 
   private BigDecimal getCurrentObligationAmount(Long driverId, QWeekResponse requestedQWeek) {
     final var monday = requestedQWeek.getStart();
-    final var mondayNextWeek = requestedQWeek.getEnd().plusDays(1l);
+    final var mondayNextWeek = requestedQWeek.getEnd().plusDays(1L);
+
+    return getObligationInvolvedTransactionsSum(driverId, monday, mondayNextWeek);
+  }
+
+  private BigDecimal getObligationInvolvedTransactionsSum(
+      final Long driverId, final LocalDate start, final LocalDate end) {
     final var obligationTransactionFilter =
         DriverAndPeriodAndTypeCodesFilter.builder()
             .driverId(driverId)
-            .dateStart(monday)
-            .dateEnd(mondayNextWeek)
+            .dateStart(start)
+            .dateEnd(end)
             .typeCodes(
                 Stream.of(
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
@@ -222,8 +194,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var positiveTransactionFilter =
         DriverAndPeriodAndKindCodesFilter.builder()
             .driverId(driverId)
-            .dateStart(monday)
-            .dateEnd(mondayNextWeek)
+            .dateStart(start)
+            .dateEnd(end)
             .kindCodes(Stream.of(TRANSACTION_KIND_POSITIVE_CODE).collect(Collectors.toSet()))
             .build();
 
@@ -235,11 +207,15 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     return obligationSum.add(positiveSum);
   }
 
-  private Map<String, BigDecimal> getAmountsMap(final Long driverId, final Long qWeekId) {
-    return transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
+  private Map<String, BigDecimal> getAmountsMap(
+      final Long driverId, final LocalDate start, final LocalDate end) {
+    final var filter =
+        DriverAndPeriodFilter.builder().driverId(driverId).dateStart(start).dateEnd(end).build();
+
+    return transactionQuery.getAllByFilter(filter).stream()
         .collect(
             groupingBy(
-                TransactionResponse::getTypeNameEst,
+                TransactionResponse::getTypeCode,
                 reducing(BigDecimal.ZERO, TransactionResponse::getRealAmount, BigDecimal::add)));
   }
 
@@ -250,9 +226,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     LocalDate reportDate = null;
     switch (reportType) {
       case MONDAY_REPORT -> reportDate = requestedQWeek.getStart();
-      case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1l);
-      case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2l);
-      case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4l);
+      case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
+      case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2L);
+      case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4L);
     }
     final var rawBalanceOnReportDate = balanceQuery.getRawByDriverAndDate(driverId, reportDate);
 
@@ -261,10 +237,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
   private BalanceResponse getBalanceOnSunday(
       final QWeekResponse requestedQWeek, final Long driverId) {
-    final var sunday = requestedQWeek.getStart().minusDays(1l);
-    final var sundayBalance = balanceQuery.getRawByDriverAndDate(driverId, sunday);
+    final var sunday = requestedQWeek.getStart().minusDays(1L);
 
-    return sundayBalance;
+      return balanceQuery.getRawByDriverAndDate(driverId, sunday);
   }
 
   private Long getCallSignId(final Long driverId, final Long qWeekId) {
@@ -285,15 +260,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       return null;
     }
     return carLink.getCarId();
-  }
-
-  private Long getQFirmId(final Long driverId, final Long qWeekId) {
-    final var firmLink = firmLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
-    if (firmLink == null) {
-      throw new RuntimeException(
-          format("No QFirm-link found for driver.id = %d during week.id = %d", driverId, qWeekId));
-    }
-    return firmLink.getFirmId();
   }
 
   private WeeklyReportObligationStatus getWeeklyReportObligationStatusForMondayReport(

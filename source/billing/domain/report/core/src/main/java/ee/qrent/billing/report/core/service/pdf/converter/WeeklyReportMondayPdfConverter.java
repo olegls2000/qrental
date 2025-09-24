@@ -5,6 +5,7 @@ import static com.lowagie.text.Font.*;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.*;
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.awt.Color.*;
 import static java.lang.String.format;
 
@@ -53,25 +54,25 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
     weeklyReportPdfDoc.open();
-    weeklyReportPdfDoc.add(getHeader(language));
+    weeklyReportPdfDoc.add(getHeaderTable(language));
     weeklyReportPdfDoc.add(getEmptyRow());
-    weeklyReportPdfDoc.add(getDriverMainData(model));
-    weeklyReportPdfDoc.add(getFinancialCommentRow(model));
-    weeklyReportPdfDoc.add(getFinancialCommentRowX(model));
+    weeklyReportPdfDoc.add(getDriverMainDataTable(model));
+    weeklyReportPdfDoc.add(getFinancialOutcomeAboutPreviousWeekTable(model));
+    weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(getClarificationlabel(model));
-    weeklyReportPdfDoc.add(getClarificationBlock1(model));
+    weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getClarificationBlock2(model));
     weeklyReportPdfDoc.add(getClarificationBlock3(model));
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
-    weeklyReportPdfDoc.add(getCommentRow());
+    weeklyReportPdfDoc.add(getCommentRowTable());
     weeklyReportPdfDoc.close();
     writer.close();
 
     return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
   }
 
-  private PdfPTable getCommentRow() {
+  private PdfPTable getCommentRowTable() {
 
     final var row = getQpdfTable(1);
 
@@ -102,7 +103,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   }
 
   @SneakyThrows
-  private PdfPTable getHeader(final String language) {
+  private PdfPTable getHeaderTable(final String language) {
     final var header = getQpdfTable(4);
 
     Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
@@ -149,7 +150,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return labelCell;
   }
 
-  private PdfPTable getDriverMainData(final WeeklyReportPdfModel model) {
+  private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(2);
     table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
@@ -179,40 +180,35 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     return table;
   }
 
-  private PdfPTable getFinancialCommentRow(WeeklyReportPdfModel model) {
+  private PdfPTable getFinancialOutcomeAboutPreviousWeekTable(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
     final var row = getQpdfTable(1);
-final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
+    final var currency = getLabel(language, CURRENCY_NAME_KEY);
+    final var thursdayNet = format("%s %s", formatAmount(model.getNetAmountOnThursday()), currency);
 
     final var weekDaysFormatted =
         "(%s - %s)"
             .formatted(
                 formatDate(model.getPreviousWeekStart()), formatDate(model.getPreviousWeekEnd()));
-    final var label =
-        "Согласно последним данным, внесенным в нашу программу на конец четверга прошлой недели, твои обязательства перед Q Takso Veod OÜ за прошлую неделю "
-            + weekDaysFormatted;
+    final var labelBeginning =
+        format(
+            "Согласно последним данным, внесенным в нашу программу на конец четверга прошлой недели, твои обязательства перед 'Q Takso Veod OÜ' за прошлую неделю %s ",
+            weekDaysFormatted);
 
-    final var good =
-        " «были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твоё сальдо на конец четверга прошлой недели "
-            + weekDaysFormatted
-            + " составило: "+thursdayNet+" евро в виде предоплаты. Эта предоплата учтена при рассчете твоих последующих обязательств";
-    final var bonusActivated =
-        "В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте";
+    final var obligationMatchText =
+        format(
+            "были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твоё сальдо на конец четверга прошлой недели %s составило: %s в виде предоплаты. Эта предоплата учтена при рассчете твоих последующих обязательств. В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте",
+            weekDaysFormatted, thursdayNet);
 
-    final var notGood =
-        "«не были выполнены своевременно и в полном объеме. Твое сальдо на конец прошлой недели "
-            + weekDaysFormatted
-            + " составило: 999 евро в виде долга. ";
-    final var bonusNotActivated =
-        "К сожалению, по причине этого наши еженедельные бонусных кампании не будут для тебя доступны, а сам долг будет учтен при рассчете твоих последующих обязательств.";
-    String labelF;
-
-    if (model.getObligationStatus().equals("COMPLETED")) {
-      labelF = label + good + bonusActivated;
-    } else {
-      labelF = label + notGood + bonusNotActivated;
-    }
-
-    final var cell = getQpdfPCell(new Paragraph(labelF, new Font(REPORT_FONT, 9)));
+    final var obligationMissMatchText =
+        format(
+            "не были выполнены своевременно и в полном объеме. Твое сальдо на конец прошлой недели %s составило: %s в виде долга. К сожалению, по причине этого наши еженедельные бонусных кампании не будут для тебя доступны, а сам долг будет учтен при рассчете твоих последующих обязательств.",
+            weekDaysFormatted, thursdayNet);
+    final var obligationText =
+        model.getObligationStatus().equals("COMPLETED")
+            ? labelBeginning.concat(obligationMatchText)
+            : labelBeginning.concat(obligationMissMatchText);
+    final var cell = getQpdfPCell(new Paragraph(obligationText, new Font(REPORT_FONT, 9)));
     cell.setHorizontalAlignment(ALIGN_LEFT);
     cell.setVerticalAlignment(ALIGN_BOTTOM);
     cell.setFixedHeight(55f);
@@ -221,24 +217,26 @@ final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
     return row;
   }
 
-  private PdfPTable getFinancialCommentRowX(WeeklyReportPdfModel model) {
+  private PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
     final var row = getQpdfTable(1);
     final var nextWeekDaysFormatted =
         "(%s - %s)"
             .formatted(formatDate(model.getNextWeekStart()), formatDate(model.getNextWeekEnd()));
 
+    final var tomorrow = formatDate(model.getCurrentWeekStart().plusDays(1));
+
     final var currentObligationAmountFormatted = formatAmount(model.getCurrentObligationAmount());
     final var label =
-        "В соответствии с этим твои обязательства перед Q Takso Veod OÜ за текущую неделю на текущий момент составляют: "
-            + currentObligationAmountFormatted
-            + " евро. Пожалуйста, оплати эту сумму до 16:00 следующего дня {???}, и твои бонусные кампании на следующую неделю "
-            + nextWeekDaysFormatted
-            + " будут активированы";
+        format(
+            "В соответствии с этим твои обязательства перед Q Takso Veod OÜ за текущую неделю на текущий момент составляют: %s %s. Пожалуйста, оплати эту сумму до 16:00 следующего дня (%s) , и твои бонусные кампании на следующую неделю %s будут активированы",
+            currentObligationAmountFormatted,
+            getLabel(model.getLanguage(), CURRENCY_NAME_KEY),
+            tomorrow,
+            nextWeekDaysFormatted);
 
     final var cell = getQpdfPCell(new Paragraph(label, new Font(REPORT_FONT, 9)));
     cell.setHorizontalAlignment(ALIGN_LEFT);
     cell.setVerticalAlignment(ALIGN_BOTTOM);
-    // cell.setFixedHeight(45f);
     row.addCell(cell);
 
     return row;
@@ -257,9 +255,7 @@ final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
     final var cell =
         getQpdfPCell(
             new Paragraph(
-                "Ниже, краткий обзор твоих обязательств за текущую "
-                    + currentWeekDaysFormatted
-                    + " неделю:\n",
+                format("Обзор обязательств за текущую неделю %s:", currentWeekDaysFormatted),
                 new Font(REPORT_FONT, 14, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
@@ -284,36 +280,45 @@ final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
 
   private PdfPCell getClarificationTableValueCell(final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var formattedValue = format("%s %s", formatAmount(value), euroCurrency);
     final var valueCell =
-        getQpdfPCell(
-            new Paragraph(
-                formatAmount(value) + euroCurrency, new Font(REPORT_FONT, 10, NORMAL, BLACK)));
+        getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, NORMAL, BLACK)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
-
     valueCell.setPaddingLeft(8f);
     valueCell.setBackgroundColor(WHITE);
 
     return valueCell;
   }
 
-  private PdfPTable getClarificationBlock1(final WeeklyReportPdfModel model) {
+  private PdfPTable getRentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
+    final var currency = getLabel(language, CURRENCY_NAME_KEY);
+    final var rentAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE);
+    final var bonusReliablePartnerAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE);
+    final var bonusBoltAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
+    final var bonusFriendAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FRIEND_CODE);
+
+    final var totalRentAmount = formatAmount(model.getTotalRentAmount());
     final var table = getQpdfTable(2);
     table.addCell(
         getClarificationTableHeaderCell(
-            "Твоя итоговая арендная плата за текущую неделю за вычетом бонусов по нашим кампаниям составила всего: 150,20 евро"));
-
+            format(
+                "Итоговая арендная плата за текущую неделю (за вычетом бонусов): %s %s",
+                totalRentAmount, currency)));
     table.addCell(getClarificationTableLabelCell("Аренда за текущую неделю"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(getClarificationTableValueCell(rentAmount, language));
     table.addCell(getClarificationTableLabelCell("Кампания «Надежный партнер»"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(getClarificationTableValueCell(bonusReliablePartnerAmount, language));
     table.addCell(getClarificationTableLabelCell("Кампания «Поездки Bolt»"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
-    table.addCell(
-        getClarificationTableLabelCell("Кампания «Приведи друга» ({driver's friend FN + LN}})"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(getClarificationTableValueCell(bonusBoltAmount, language));
+    table.addCell(getClarificationTableLabelCell("Кампания «Приведи друга»"));
+    table.addCell(getClarificationTableValueCell(bonusFriendAmount, language));
     table.addCell(getEmptyRow());
 
     return table;
@@ -424,8 +429,8 @@ final var thursdayNet = formatAmount(model.getNetAmountOnThursday());
     final var tableHeaderCell =
         getQpdfPCell(new Paragraph(headerText, new Font(REPORT_FONT, 12, NORMAL, WHITE)));
     tableHeaderCell.setHorizontalAlignment(ALIGN_CENTER);
-    tableHeaderCell.setVerticalAlignment(ALIGN_CENTER);
     tableHeaderCell.setFixedHeight(35f);
+    tableHeaderCell.setPaddingTop(9f);
     tableHeaderCell.setColspan(2);
     tableHeaderCell.setBackgroundColor(BLUE_BACKGROUND_COLOR);
 

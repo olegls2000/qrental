@@ -39,11 +39,9 @@ public class WeeklyReportMapperConfig {
 
   @Bean
   WeeklyReportAdapterMapper getWeeklyReportAdapterMapper(
-      final GetDriverQuery driverQuery,
-      final GetQWeekQuery qWeekQuery,
-      final GetObligationQuery obligationQuery) {
+      final GetQWeekQuery qWeekQuery, final GetObligationQuery obligationQuery) {
 
-    return new WeeklyReportAdapterMapper(driverQuery, qWeekQuery, obligationQuery);
+    return new WeeklyReportAdapterMapper(qWeekQuery, obligationQuery);
   }
 
   @Bean

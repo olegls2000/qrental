@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class WeeklyReportAdapterMapper {
 
-  private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
   private final GetObligationQuery obligationQuery;
 
@@ -43,7 +42,7 @@ public class WeeklyReportAdapterMapper {
         .depositPaid(entity.getDepositPaid())
         .obligationStatus(getObligationStatus(driverId, qWeekId))
         .currentObligationAmount(entity.getCurrentObligationAmount())
-            .netAmountOnThursday(entity.getNetAmountOnThursday())
+        .netAmountOnThursday(entity.getNetAmountOnThursday())
         .feeAmountSunday(entity.getFeeAmountSunday())
         .balanceAmountSunday(entity.getBalanceAmountSunday())
         .balanceAmountAtCalculationMoment(entity.getBalanceAmountAtCalculationMoment())
@@ -84,7 +83,7 @@ public class WeeklyReportAdapterMapper {
         .balanceAmountSunday(domain.getBalanceAmountSunday())
         .feeAmountSunday(domain.getFeeAmountSunday())
         .balanceAmountAtCalculationMoment(domain.getBalanceAmountAtCalculationMoment())
-            .netAmountOnThursday(domain.getNetAmountOnThursday())
+        .netAmountOnThursday(domain.getNetAmountOnThursday())
         .transactionTypesVsAmount(domain.getTransactionTypesVsAmount())
         .comment(domain.getComment())
         .build();

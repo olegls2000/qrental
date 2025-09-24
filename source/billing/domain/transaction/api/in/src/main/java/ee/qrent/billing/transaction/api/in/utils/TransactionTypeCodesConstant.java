@@ -21,4 +21,10 @@ public class TransactionTypeCodesConstant {
   public static final String TRANSACTION_TYPE_FEE_DEBT_CODE = "FEEDBT";
 
   public static final String TRANSACTION_TYPE_BONUS_CODE = "BNS";
+
+  public static final String TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE = "BONSRLBPARTNER";
+
+  public static final String TRANSACTION_TYPE_BONUS_BOLT_CODE = "BONSBOLT";
+
+  public static final String TRANSACTION_TYPE_BONUS_FRIEND_CODE = "BONSFRIEND";
 }
