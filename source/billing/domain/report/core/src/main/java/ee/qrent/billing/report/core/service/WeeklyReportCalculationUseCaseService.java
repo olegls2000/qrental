@@ -152,7 +152,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
         .netAmountOnThursday(netAmountOnThursday)
         .transactionTypesVsAmount(
-            getAmountsMap(driverId, nextWeek.getStart(), requestedQWeek.getEnd()))
+            getAmountsMap(driverId, nextWeek.getStart(), nextWeek.getEnd()))
         .comment("Automatically generated weekly report")
         .build();
   }
