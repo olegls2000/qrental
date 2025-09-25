@@ -13,17 +13,16 @@
                 </a>
             </th>
             <th style="width: 1% !important;">Delete</th>
-            <th>UI visible</th>
-            <th>UI name</th>
             <th>Negative</th>
             <th>Fee able</th>
+            <th>UI visible</th>
+            <th>UI name</th>
             <th>Kind</th>
             <th>Code</th>
             <th>Name (Eng)</th>
             <th>Name (Est)</th>
             <th>Name (Rus)</th>
             <th>Invoice Included</th>
-
             <th>Comment</th>
         </tr>
         <tr th:if="${#lists.isEmpty(transactionTypes)}">
@@ -51,9 +50,10 @@
                 class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
                 Positive
             </td>
-            <td th:text="${transactionType.uiVisible}">???</td>
-            <td th:text="${transactionType.uiName}">???</td>
+            <td th:text="${transactionType.negative}">???</td>
             <td th:text="${transactionType.feeAble}">???</td>
+            <td th:text="${transactionType.visibleForUi}">???</td>
+            <td th:text="${transactionType.uiName}">???</td>
             <td th:text="${transactionType.kind}">???</td>
             <td th:text="${transactionType.code}">???</td>
             <td th:text="${transactionType.nameEng}">???</td>
