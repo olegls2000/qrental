@@ -19,7 +19,8 @@ public class TransactionTypeAdapterMapper {
         .nameRus(entity.getNameRus())
         .nameEst(entity.getNameEst())
         .invoiceIncluded(entity.getInvoiceIncluded())
-        .visibleForUi(entity.getVisibleForUi())
+        .uiVisible(entity.getUiVisible())
+        .uiName(entity.getUiName())
         .kind(transactionKindAdapterMapper.mapToDomain(entity.getKind()))
         .comment(entity.getComment())
         .build();
@@ -34,7 +35,8 @@ public class TransactionTypeAdapterMapper {
         .nameRus(domain.getNameRus())
         .nameEst(domain.getNameEst())
         .invoiceIncluded(domain.getInvoiceIncluded())
-        .visibleForUi((domain.getVisibleForUi()))
+        .uiVisible((domain.getUiVisible()))
+        .uiName(domain.getUiName())
         .comment(domain.getComment())
         .kind(transactionKindAdapterMapper.mapToEntity(domain.getKind()))
         .build();

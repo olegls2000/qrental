@@ -58,7 +58,7 @@
                     <option th:value="''" th:text="Select"></option>
                     <option th:each="transactionType : ${negativeTransactionTypes}"
                             th:value="${transactionType.id}"
-                            th:text="${transactionType.name}"></option>
+                            th:text="${transactionType.uiName}"></option>
                 </select>
             </div>
         </div>
@@ -73,7 +73,7 @@
                     <option th:value="''" th:text="Select"></option>
                     <option th:each="transactionType : ${positiveTransactionTypes}"
                             th:value="${transactionType.id}"
-                            th:text="${transactionType.name}"></option>
+                            th:text="${transactionType.uiName}"></option>
                 </select>
             </div>
         </div>

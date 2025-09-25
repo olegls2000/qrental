@@ -1,8 +1,8 @@
 alter table transaction_type
-    drop column name;
+    rename column name to ui_name;
 
 alter table transaction_type_aud
-    drop column name;
+    rename column name to ui_name;
 
 alter table transaction_type
     drop column description;

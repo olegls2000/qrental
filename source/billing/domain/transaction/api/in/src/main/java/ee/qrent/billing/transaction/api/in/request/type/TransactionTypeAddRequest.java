@@ -15,6 +15,7 @@ public class TransactionTypeAddRequest extends AbstractAddRequest {
   private String nameEst;
   private String nameRus;
   private Boolean invoiceIncluded;
-  private Boolean visibleForUi;
+  private Boolean uiVisible;
+  private String uiName;
   private String comment;
 }

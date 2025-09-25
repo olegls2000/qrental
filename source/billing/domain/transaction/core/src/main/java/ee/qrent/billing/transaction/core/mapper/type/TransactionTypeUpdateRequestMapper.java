@@ -17,7 +17,7 @@ public class TransactionTypeUpdateRequestMapper
         .nameRus(request.getNameRus())
         .nameEst(request.getNameEst())
         .invoiceIncluded(request.getInvoiceIncluded())
-        .visibleForUi(request.getVisibleForUi())
+        .uiVisible(request.getUiVisible())
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .comment(request.getComment())
         .build();
@@ -35,7 +35,7 @@ public class TransactionTypeUpdateRequestMapper
         .nameRus(domain.getNameRus())
         .nameEst(domain.getNameEst())
         .invoiceIncluded(domain.getInvoiceIncluded())
-        .visibleForUi(domain.getVisibleForUi())
+        .uiVisible(domain.getUiVisible())
         .transactionKindId(kindId)
         .comment(domain.getComment())
         .build();

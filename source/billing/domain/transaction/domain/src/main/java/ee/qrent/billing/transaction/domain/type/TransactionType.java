@@ -15,7 +15,8 @@ public class TransactionType {
   private String nameRus;
   private String nameEst;
   private Boolean invoiceIncluded;
-  private Boolean visibleForUi;
+  private Boolean uiVisible;
+  private String uiName;
   private String comment;
 
   public boolean isNegative() {
@@ -33,7 +34,7 @@ public class TransactionType {
 
   public boolean isVisibleFoUi() {
 
-    if (visibleForUi.equals(false)) {
+    if (uiVisible.equals(false)) {
 
       return false;
     }

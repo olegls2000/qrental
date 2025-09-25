@@ -12,7 +12,8 @@ public class TransactionTypeResponse {
   private String nameRus;
   private String nameEst;
   private Boolean invoiceIncluded;
-  private Boolean visibleForUi;
+  private String uiName;
+  private Boolean uiVisible;
   private String kind;
   private Boolean negative;
   private Boolean feeAble;
