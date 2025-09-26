@@ -24,7 +24,7 @@ public class TransactionTypeResponseMapper
         .nameRus(domain.getNameRus())
         .nameEst(domain.getNameEst())
         .invoiceIncluded(domain.getInvoiceIncluded())
-        .visibleForUi(domain.getVisibleForUi())
+        .uiVisible(domain.getUiVisible())
         .uiName(domain.getUiName())
         .comment(domain.getComment())
         .build();

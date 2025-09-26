@@ -20,7 +20,7 @@ public class TransactionTypeUpdateRequest extends AbstractUpdateRequest {
   private String nameRus;
   private String nameEst;
   private Boolean invoiceIncluded;
-  private Boolean visibleForUi;
+  private Boolean uiVisible;
   private String uiName;
   private String comment;
 }

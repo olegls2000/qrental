@@ -18,7 +18,7 @@ public class TransactionTypeAddRequestMapper
         .nameRus(request.getNameRus())
         .nameEst(request.getNameEst())
         .invoiceIncluded(request.getInvoiceIncluded())
-        .visibleForUi(request.getVisibleForUi())
+        .uiVisible(request.getUiVisible())
         .uiName(request.getUiName())
         .comment(request.getComment())
         .build();
