@@ -11,6 +11,10 @@ public class TransactionTypeAdapterMapper {
   private TransactionKindAdapterMapper transactionKindAdapterMapper;
 
   public TransactionType mapToDomain(final TransactionTypeJakartaEntity entity) {
+    if (entity == null) {
+
+      return null;
+    }
 
     return TransactionType.builder()
         .id(entity.getId())
