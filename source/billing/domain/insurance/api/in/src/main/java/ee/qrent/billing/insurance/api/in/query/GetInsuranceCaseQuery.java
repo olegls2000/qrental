@@ -24,5 +24,8 @@ public interface GetInsuranceCaseQuery
   List<InsuranceCaseBalanceResponse> getInsuranceCaseBalancesByInsuranceCase(
       final Long insuranceCaseId);
 
+  InsuranceCaseBalanceResponse getInsuranceCaseBalancesLatestByInsuranceCaseId(
+      final Long insuranceCaseId);
+
   BigDecimal getPaidAmountByInsuranceCaseId(final Long insuranceCaseId);
 }

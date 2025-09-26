@@ -2,8 +2,10 @@ package ee.qrent.billing.report.core.service.pdf;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
+import ee.qrent.billing.report.domain.WeeklyReportInsuranceCase;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -31,12 +33,12 @@ public class WeeklyReportPdfModel {
   private final BigDecimal totalExternalSystemsIncomeAmount;
   private final BigDecimal totalOtherPaymentAmount;
   private Map<String, BigDecimal> transactionTypesVsAmount;
-  private final String comment;
-
+  private List<WeeklyReportPdfInsuranceCase> insuranceCases;
   private final LocalDate currentWeekStart;
   private final LocalDate currentWeekEnd;
   private final LocalDate previousWeekStart;
   private final LocalDate previousWeekEnd;
   private final LocalDate nextWeekStart;
   private final LocalDate nextWeekEnd;
+  private final String comment;
 }

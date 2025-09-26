@@ -11,6 +11,11 @@ public class TransactionTypeResponseMapper
 
   @Override
   public TransactionTypeResponse toResponse(final TransactionType domain) {
+    if (domain == null) {
+
+        return null;
+    }
+
     final var kind = domain.getKind();
     final var kindCode = kind == null ? "n/a" : kind.getCode();
 

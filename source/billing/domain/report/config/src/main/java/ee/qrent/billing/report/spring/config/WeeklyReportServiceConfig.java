@@ -8,7 +8,7 @@ import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
-import ee.qrent.billing.driver.api.in.query.GetFirmLinkQuery;
+import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
@@ -67,6 +67,7 @@ public class WeeklyReportServiceConfig {
       final GetTransactionQuery getTransactionQuery,
       final GetContractQuery contractQuery,
       final GetDepositQuery depositQuery,
+      final GetInsuranceCaseQuery insuranceCaseQuery,
       final WeeklyReportSendByEmailUseCase sendByEmailUseCase) {
 
     return new WeeklyReportCalculationUseCaseService(
@@ -82,6 +83,7 @@ public class WeeklyReportServiceConfig {
         getTransactionQuery,
         contractQuery,
         depositQuery,
+        insuranceCaseQuery,
         sendByEmailUseCase);
   }
 

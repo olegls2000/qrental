@@ -8,7 +8,9 @@ import ee.qrent.billing.report.domain.WeeklyReport;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_BONUS_FRIEND_CODE;
@@ -60,12 +62,25 @@ public class WeeklyReportToPdfModelMapper {
             getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount()))
         .totalOtherPaymentAmount(getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount()))
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
+        .insuranceCases(getInsuranceCases(report))
         .comment(report.getComment())
         .amount(
             report.getBalanceAmountAtCalculationMoment() != null
                 ? report.getBalanceAmountAtCalculationMoment()
                 : report.getBalanceAmountSunday())
         .build();
+  }
+
+  private List<WeeklyReportPdfInsuranceCase> getInsuranceCases(final WeeklyReport report) {
+    return report.getInsuranceCases().stream()
+        .map(
+            icDomain ->
+                WeeklyReportPdfInsuranceCase.builder()
+                    .damageRemaining(icDomain.getDamageRemaining())
+                    .occurrenceDate(icDomain.getOccurrenceDate())
+                    .carRegNumber(icDomain.getCarRegNumber())
+                    .build())
+        .collect(Collectors.toList());
   }
 
   private BigDecimal getTotalRentAmount(final Map<String, BigDecimal> transactionTypesVsAmount) {

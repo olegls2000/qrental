@@ -85,6 +85,15 @@ public class InsuranceCaseQueryService implements GetInsuranceCaseQuery {
   }
 
   @Override
+  public InsuranceCaseBalanceResponse getInsuranceCaseBalancesLatestByInsuranceCaseId(
+      final Long insuranceCaseId) {
+    final var latestBalance =
+        insuranceCaseBalanceLoadPort.loadLatestByInsuranceCaseId(insuranceCaseId);
+
+    return insuranceCaseBalanceResponseMapper.toResponse(latestBalance);
+  }
+
+  @Override
   public BigDecimal getPaidAmountByInsuranceCaseId(final Long insuranceCaseId) {
     final var paymentTransactionIds =
         loadPort.loadPaymentTransactionIdsByInsuranceCaseId(insuranceCaseId);

@@ -14,6 +14,11 @@ public class InsuranceCaseBalanceResponseMapper {
   private final GetQWeekQuery qWeekQuery;
 
   public InsuranceCaseBalanceResponse toResponse(final InsuranceCaseBalance domain) {
+    if (domain == null) {
+
+        return null;
+    }
+
     final var qWeekResponse = qWeekQuery.getById(domain.getQWeekId());
 
     return InsuranceCaseBalanceResponse.builder()

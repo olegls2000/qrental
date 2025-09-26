@@ -2,16 +2,19 @@ package ee.qrent.billing.report.adapter.mapper;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
-import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.report.domain.WeeklyReport;
+import ee.qrent.billing.report.domain.WeeklyReportInsuranceCase;
 import ee.qrent.billing.report.domain.WeeklyReportObligationStatus;
 import ee.qrent.billing.report.domain.WeeklyReportType;
+import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportInsuranceCaseJakarta;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportObligationStatusJakarta;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportJakartaEntity;
 import ee.qrent.billing.report.persistence.entity.jakarta.WeeklyReportTypeJakarta;
 import lombok.RequiredArgsConstructor;
 
-import java.math.BigDecimal;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 @RequiredArgsConstructor
 public class WeeklyReportAdapterMapper {
@@ -47,7 +50,48 @@ public class WeeklyReportAdapterMapper {
         .balanceAmountSunday(entity.getBalanceAmountSunday())
         .balanceAmountAtCalculationMoment(entity.getBalanceAmountAtCalculationMoment())
         .transactionTypesVsAmount(entity.getTransactionTypesVsAmount())
+        .insuranceCases(mapToDomains(entity.getInsuranceCases()))
         .comment(entity.getComment())
+        .build();
+  }
+
+  private List<WeeklyReportInsuranceCaseJakarta> mapToEntities(
+      final List<WeeklyReportInsuranceCase> entities) {
+    if (entities == null) {
+
+      return emptyList();
+    }
+
+    return entities.stream().map(this::mapToEntityInsuranceCase).toList();
+  }
+
+  private List<WeeklyReportInsuranceCase> mapToDomains(
+      final List<WeeklyReportInsuranceCaseJakarta> domains) {
+    if (domains == null) {
+
+      return emptyList();
+    }
+
+    return domains.stream().map(this::mapToDomainInsuranceCase).toList();
+  }
+
+  private WeeklyReportInsuranceCaseJakarta mapToEntityInsuranceCase(
+      final WeeklyReportInsuranceCase domain) {
+
+    return WeeklyReportInsuranceCaseJakarta.builder()
+        .carRegNumber(domain.getCarRegNumber())
+        .occurrenceDate(domain.getOccurrenceDate())
+        .carRegNumber(domain.getCarRegNumber())
+        .build();
+  }
+
+  private WeeklyReportInsuranceCase mapToDomainInsuranceCase(
+      final WeeklyReportInsuranceCaseJakarta entity) {
+
+    return WeeklyReportInsuranceCase.builder()
+        .carRegNumber(entity.getCarRegNumber())
+        .occurrenceDate(entity.getOccurrenceDate())
+        .carRegNumber(entity.getCarRegNumber())
         .build();
   }
 
@@ -85,18 +129,16 @@ public class WeeklyReportAdapterMapper {
         .balanceAmountAtCalculationMoment(domain.getBalanceAmountAtCalculationMoment())
         .netAmountOnThursday(domain.getNetAmountOnThursday())
         .transactionTypesVsAmount(domain.getTransactionTypesVsAmount())
+        .insuranceCases(mapToEntities(domain.getInsuranceCases()))
         .comment(domain.getComment())
         .build();
   }
 
   private WeeklyReportObligationStatusJakarta mapToWeeklyReportObligationStatusJakarta(
       final WeeklyReportObligationStatus status) {
-    switch (status) {
-      case COMPLETED:
-        return WeeklyReportObligationStatusJakarta.COMPLETED;
-      case NOT_COMPLETED:
-        return WeeklyReportObligationStatusJakarta.NOT_COMPLETED;
-    }
-    throw new RuntimeException("Unknown Weekly Report ObligationStatus: " + status);
+      return switch (status) {
+          case COMPLETED -> WeeklyReportObligationStatusJakarta.COMPLETED;
+          case NOT_COMPLETED -> WeeklyReportObligationStatusJakarta.NOT_COMPLETED;
+      };
   }
 }

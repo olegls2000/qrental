@@ -17,6 +17,8 @@ import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.driver.api.in.response.DriverResponse;
+import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseQuery;
+import ee.qrent.billing.insurance.api.in.response.InsuranceCaseResponse;
 import ee.qrent.billing.report.api.in.request.WeeklyReportCalculationAddRequest;
 import ee.qrent.billing.report.api.in.request.WeeklyReportSendByEmailRequest;
 import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
@@ -38,6 +40,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,7 +63,18 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetTransactionQuery transactionQuery;
   private final GetContractQuery contractQuery;
   private final GetDepositQuery depositQuery;
+  private final GetInsuranceCaseQuery insuranceCaseQuery;
   private final WeeklyReportSendByEmailUseCase sendByEmailUseCase;
+
+  private static WeeklyReportInsuranceCase apply(InsuranceCaseResponse insuranceCase) {
+    final var reportCase =
+        WeeklyReportInsuranceCase.builder()
+            .damageRemaining(insuranceCase.getDamageAmount())
+            .carRegNumber(insuranceCase.getCarInfo())
+            .occurrenceDate(insuranceCase.getOccurrenceDate())
+            .build();
+    return reportCase;
+  }
 
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
@@ -132,6 +146,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
     final var netAmountOnThursday = getNetAmountOnThursday(driverId, requestedQWeek);
+    final var activeInsuranceCases = getActiveInsuranceCases(driverId);
 
     return WeeklyReport.builder()
         .type(WeeklyReportType.valueOf(reportType.name()))
@@ -152,8 +167,32 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .netAmountOnThursday(netAmountOnThursday)
         .transactionTypesVsAmount(
             getAmountsMap(driverId, requestedQWeek.getStart(), requestedQWeek.getEnd()))
+        .insuranceCases(activeInsuranceCases)
         .comment("Automatically generated weekly report")
         .build();
+  }
+
+  private List<WeeklyReportInsuranceCase> getActiveInsuranceCases(final Long driverId) {
+    return insuranceCaseQuery.getActiveByDriverId(driverId).stream()
+        .map(
+            insuranceCase -> {
+              return WeeklyReportInsuranceCase.builder()
+                  .damageRemaining(getInsuranceCaseBalance(insuranceCase))
+                  .carRegNumber(insuranceCase.getCarInfo())
+                  .occurrenceDate(insuranceCase.getOccurrenceDate())
+                  .build();
+            })
+        .collect(Collectors.toList());
+  }
+
+  private BigDecimal getInsuranceCaseBalance(final InsuranceCaseResponse insuranceCase) {
+    final var balance =
+        insuranceCaseQuery.getInsuranceCaseBalancesLatestByInsuranceCaseId(insuranceCase.getId());
+
+    if (balance == null) {
+      return insuranceCase.getDamageAmount();
+    }
+    return balance.getDamageRemaining();
   }
 
   private BigDecimal getNetAmountOnThursday(

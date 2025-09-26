@@ -6,7 +6,6 @@ import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesCons
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
-
 import ee.qrent.billing.bolt.api.in.query.GetBoltRidesCountQuery;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -122,7 +121,8 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
         transactionQuery.getAllByDriverIdAndQWeekId(driverId, qWeekId).stream()
             .filter(
                 transactionResponse ->
-                    TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE.equals(transactionResponse.getTypeCode()))
+                    TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE.equals(
+                        transactionResponse.getTypeCode()))
             .map(tr -> tr.getRealAmount())
             .reduce(BigDecimal::add)
             .orElse(ZERO);
@@ -134,8 +134,15 @@ public class InsuranceCalculationUseCaseService implements InsuranceCalculationA
     insurancePaymentTransaction.setComment("Weekly Insurance payment for the new drivers");
     insurancePaymentTransaction.setDriverId(driverId);
     insurancePaymentTransaction.setAmount(transactionAmount);
-    final var transactionTypeId =
-        transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE).getId();
+    final var transactionType =
+        transactionTypeQuery.getByCode(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE);
+    if (transactionType == null) {
+      throw new RuntimeException(
+          format(
+              "Transaction type with code: %s is missing. Please create it and retrigger Insurance calculations.",
+              TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE));
+    }
+    final var transactionTypeId = transactionType.getId();
     insurancePaymentTransaction.setTransactionTypeId(transactionTypeId);
     insurancePaymentTransaction.setDate(qDateTime.getToday());
 

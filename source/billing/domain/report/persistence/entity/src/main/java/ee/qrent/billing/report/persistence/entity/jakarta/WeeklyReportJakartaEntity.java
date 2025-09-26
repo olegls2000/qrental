@@ -5,6 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -65,7 +66,6 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "net_amount_on_thursday")
   private BigDecimal netAmountOnThursday;
 
-
   @Column(name = "balance_amount_sunday")
   private BigDecimal balanceAmountSunday;
 
@@ -79,6 +79,11 @@ public class WeeklyReportJakartaEntity {
   @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "transaction_types_vs_amount", columnDefinition = "jsonb")
   private Map<String, BigDecimal> transactionTypesVsAmount;
+
+  @Type(JsonBinaryType.class)
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(name = "insurance_cases", columnDefinition = "jsonb")
+  private List<WeeklyReportInsuranceCaseJakarta> insuranceCases;
 
   @Column(name = "comment")
   private String comment;

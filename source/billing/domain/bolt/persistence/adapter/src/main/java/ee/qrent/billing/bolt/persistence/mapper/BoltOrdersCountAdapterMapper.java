@@ -6,6 +6,10 @@ import ee.qrent.billing.bolt.persistence.entity.jakarta.BoltOrdersCountJakartaEn
 public class BoltOrdersCountAdapterMapper {
 
   public BoltOrdersCount mapToDomain(final BoltOrdersCountJakartaEntity entity) {
+    if (entity == null) {
+      return null;
+    }
+
     return BoltOrdersCount.builder()
         .id(entity.getId())
         .boltId(entity.getBoltId())
