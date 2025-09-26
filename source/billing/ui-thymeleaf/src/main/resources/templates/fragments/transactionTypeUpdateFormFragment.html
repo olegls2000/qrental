@@ -16,6 +16,25 @@
                th:field="*{id}"
                type="text"
                hidden/>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="mt-5">
+                    <label class="form-check-label text-muted" for="uiVisible">UI Visible</label>
+                    <input class="form-check-input" id="uiVisible"
+                           th:field="*{uiVisible}"
+                           type="checkbox"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="form-label text-muted" for="uiNameId">UI name</label>
+                <input class="form-control" id="uiNameId"
+                       placeholder="Enter Transaction Type name "
+                       required
+                       th:field="*{uiName}"
+                       type="text"/>
+            </div>
+        </div>
         <div class="row">
             <div class="mb-3">
                 <label class="form-label text-muted" for="transactionKindId">Transaction Kind</label>
@@ -65,12 +84,6 @@
             <label class="form-check-label text-muted" for="invoiceIncluded">Invoice included</label>
             <input class="form-check-input" id="invoiceIncluded"
                    th:field="*{invoiceIncluded}"
-                   type="checkbox"/>
-        </div>
-        <div class="mb-3">
-            <label class="form-check-label text-muted" for="visibleForUi">Visible For Ui</label>
-            <input class="form-check-input" id="visibleForUi"
-                   th:field="*{visibleForUi}"
                    type="checkbox"/>
         </div>
         <div class="mb-3">

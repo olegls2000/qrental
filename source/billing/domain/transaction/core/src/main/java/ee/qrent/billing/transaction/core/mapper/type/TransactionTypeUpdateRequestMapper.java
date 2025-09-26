@@ -12,12 +12,13 @@ public class TransactionTypeUpdateRequestMapper
   public TransactionType toDomain(final TransactionTypeUpdateRequest request) {
     return TransactionType.builder()
         .id(request.getId())
+        .uiVisible(request.getUiVisible())
+        .uiName(request.getUiName())
         .code(request.getCode())
         .nameEng(request.getNameEng())
         .nameRus(request.getNameRus())
         .nameEst(request.getNameEst())
         .invoiceIncluded(request.getInvoiceIncluded())
-        .uiVisible(request.getUiVisible())
         .kind(TransactionKind.builder().id(request.getTransactionKindId()).build())
         .comment(request.getComment())
         .build();
@@ -30,12 +31,13 @@ public class TransactionTypeUpdateRequestMapper
 
     return TransactionTypeUpdateRequest.builder()
         .id(domain.getId())
+        .uiVisible(domain.getUiVisible())
+        .uiName(domain.getUiName())
         .code(domain.getCode())
         .nameEng(domain.getNameEng())
         .nameRus(domain.getNameRus())
         .nameEst(domain.getNameEst())
         .invoiceIncluded(domain.getInvoiceIncluded())
-        .uiVisible(domain.getUiVisible())
         .transactionKindId(kindId)
         .comment(domain.getComment())
         .build();

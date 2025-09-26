@@ -43,6 +43,8 @@
                     <span class="bi-trash"></span>
                 </a>
             </td>
+            <td th:text="${transactionType.uiVisible}">???</td>
+            <td th:text="${transactionType.uiName}">???</td>
             <td th:if="${transactionType.negative}"
                 class="text-center text-danger bg-danger bg-opacity-10 border border-danger border-opacity-10 rounded-2">
                 Negative
@@ -51,8 +53,7 @@
                 class="text-center text-success bg-success bg-opacity-10 border border-success border-opacity-10 rounded-2">
                 Positive
             </td>
-            <td th:text="${transactionType.uiVisible}">???</td>
-            <td th:text="${transactionType.uiName}">???</td>
+
             <td th:text="${transactionType.feeAble}">???</td>
             <td th:text="${transactionType.kind}">???</td>
             <td th:text="${transactionType.code}">???</td>
