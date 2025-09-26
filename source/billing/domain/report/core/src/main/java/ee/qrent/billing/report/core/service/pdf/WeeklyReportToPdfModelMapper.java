@@ -24,9 +24,9 @@ public class WeeklyReportToPdfModelMapper {
   public WeeklyReportPdfModel getPdfModel(final WeeklyReport report) {
     final var driver = driverQuery.getById(report.getDriverId());
     final var callSign = callSignQuery.getById(report.getCallSignId());
-    final var previousWeek = qWeekQuery.getById(report.getQWeekId());
-    final var currentWeek = qWeekQuery.getOneAfterById(report.getQWeekId());
-    final var currentWeekId = currentWeek.getId();
+    final var currentWeekId = report.getQWeekId();
+    final var currentWeek = qWeekQuery.getById(currentWeekId);
+    final var previousWeek = qWeekQuery.getOneBeforeById(currentWeekId);
     final var nextWeek = qWeekQuery.getOneAfterById(currentWeekId);
     final var carReg =
         report.getCarId() != null ? carQuery.getById(report.getCarId()).getRegNumber() : null;
@@ -97,7 +97,7 @@ public class WeeklyReportToPdfModelMapper {
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
     final var innerInsuranceAmount =
         transactionTypesVsAmount.getOrDefault(
-                TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+            TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
     final var nonLabelFineAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
     final var feeAmount =

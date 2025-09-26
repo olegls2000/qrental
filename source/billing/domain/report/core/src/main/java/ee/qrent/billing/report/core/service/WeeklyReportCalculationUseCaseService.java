@@ -109,7 +109,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   }
 
   @Transactional
-  private void sendNotifications(WeeklyReportCalculation savedDomain) {
+  private void sendNotifications(final WeeklyReportCalculation savedDomain) {
     savedDomain.getReportTransactionLinks().parallelStream()
         .forEach(
             link -> {
@@ -125,7 +125,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
       final WeeklyReportTypeIn reportType) {
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
-    final var nextWeek = qWeekQuery.getOneAfterById(qWeekId);
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
 
@@ -152,12 +151,13 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .balanceAmountAtCalculationMoment(balanceAmountOnDate)
         .netAmountOnThursday(netAmountOnThursday)
         .transactionTypesVsAmount(
-            getAmountsMap(driverId, nextWeek.getStart(), nextWeek.getEnd()))
+            getAmountsMap(driverId, requestedQWeek.getStart(), requestedQWeek.getEnd()))
         .comment("Automatically generated weekly report")
         .build();
   }
 
-  private BigDecimal getNetAmountOnThursday(Long driverId, QWeekResponse requestedQWeek) {
+  private BigDecimal getNetAmountOnThursday(
+      final Long driverId, final QWeekResponse requestedQWeek) {
     final var monday = requestedQWeek.getStart();
     final var thursday = requestedQWeek.getEnd().minusDays(3L);
 
@@ -165,10 +165,10 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   }
 
   private BigDecimal getCurrentObligationAmount(Long driverId, QWeekResponse requestedQWeek) {
+    final var mondayPreviousWeek = requestedQWeek.getStart().minusDays(7);
     final var monday = requestedQWeek.getStart();
-    final var mondayNextWeek = requestedQWeek.getEnd().plusDays(1L);
 
-    return getObligationInvolvedTransactionsSum(driverId, monday, mondayNextWeek);
+    return getObligationInvolvedTransactionsSum(driverId, mondayPreviousWeek, monday);
   }
 
   private BigDecimal getObligationInvolvedTransactionsSum(
