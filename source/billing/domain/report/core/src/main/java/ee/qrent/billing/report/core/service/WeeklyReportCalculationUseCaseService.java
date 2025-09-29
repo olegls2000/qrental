@@ -178,7 +178,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
             insuranceCase -> {
               return WeeklyReportInsuranceCase.builder()
                   .damageRemaining(getInsuranceCaseBalance(insuranceCase))
-                  .carRegNumber(insuranceCase.getCarInfo())
+                  .carRegNumber(insuranceCase.getCarRegistrationNumber())
                   .occurrenceDate(insuranceCase.getOccurrenceDate())
                   .build();
             })
@@ -190,8 +190,10 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         insuranceCaseQuery.getInsuranceCaseBalancesLatestByInsuranceCaseId(insuranceCase.getId());
 
     if (balance == null) {
-      return insuranceCase.getDamageAmount();
+
+        return insuranceCase.getDamageAmount();
     }
+
     return balance.getDamageRemaining();
   }
 

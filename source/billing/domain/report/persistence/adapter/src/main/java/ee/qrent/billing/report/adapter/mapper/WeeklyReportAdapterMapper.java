@@ -81,7 +81,7 @@ public class WeeklyReportAdapterMapper {
     return WeeklyReportInsuranceCaseJakarta.builder()
         .carRegNumber(domain.getCarRegNumber())
         .occurrenceDate(domain.getOccurrenceDate())
-        .carRegNumber(domain.getCarRegNumber())
+        .damageRemaining(domain.getDamageRemaining())
         .build();
   }
 
@@ -91,7 +91,7 @@ public class WeeklyReportAdapterMapper {
     return WeeklyReportInsuranceCase.builder()
         .carRegNumber(entity.getCarRegNumber())
         .occurrenceDate(entity.getOccurrenceDate())
-        .carRegNumber(entity.getCarRegNumber())
+        .damageRemaining(entity.getDamageRemaining())
         .build();
   }
 
@@ -136,9 +136,9 @@ public class WeeklyReportAdapterMapper {
 
   private WeeklyReportObligationStatusJakarta mapToWeeklyReportObligationStatusJakarta(
       final WeeklyReportObligationStatus status) {
-      return switch (status) {
-          case COMPLETED -> WeeklyReportObligationStatusJakarta.COMPLETED;
-          case NOT_COMPLETED -> WeeklyReportObligationStatusJakarta.NOT_COMPLETED;
-      };
+    return switch (status) {
+      case COMPLETED -> WeeklyReportObligationStatusJakarta.COMPLETED;
+      case NOT_COMPLETED -> WeeklyReportObligationStatusJakarta.NOT_COMPLETED;
+    };
   }
 }

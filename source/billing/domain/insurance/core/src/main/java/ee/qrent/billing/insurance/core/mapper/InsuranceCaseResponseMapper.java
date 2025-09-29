@@ -34,6 +34,7 @@ public class InsuranceCaseResponseMapper
             format("%s %s, %d", driver.getFirstName(), driver.getLastName(), driver.getTaxNumber()))
         .carId(domain.getCarId())
         .carInfo(format("%s %s, %s", car.getManufacturer(), car.getModel(), car.getRegNumber()))
+        .carRegistrationNumber(car.getRegNumber())
         .occurrenceDate(domain.getOccurrenceDate())
         .occurrenceWeekInfo(format("%d - %d", qWeek.getYear(), qWeek.getNumber()))
         .damageAmount(qRound(domain.getDamageAmount()))

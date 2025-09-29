@@ -12,6 +12,7 @@ public class InsuranceCaseResponse {
   private Long driverId;
   private String driverInfo;
   private String carInfo;
+  private String carRegistrationNumber;
   private Long carId;
   private BigDecimal damageAmount;
   private LocalDate occurrenceDate;

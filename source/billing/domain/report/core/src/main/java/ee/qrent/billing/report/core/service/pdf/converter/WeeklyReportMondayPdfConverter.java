@@ -419,10 +419,20 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
         getClarificationTableLabelCell(
             "Текущая задолженность / предоплата по обязательствам за прошлый период"));
     table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
-    table.addCell(getClarificationTableLabelCell("Ремонт / Сумма франшизы {CarNumberA}"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
-    table.addCell(getClarificationTableLabelCell("Ремонт / Сумма франшизы {CarNumberB}"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+
+    model
+        .getInsuranceCases()
+        .forEach(
+            insuranceCase -> {
+              final var occurrenceDate = formatDate(insuranceCase.getOccurrenceDate());
+              final var insuranceCaseInfo =
+                  format(
+                      "Ремонт / Сумма франшизы - %s (дата происшествия: %s)",
+                      insuranceCase.getCarRegNumber(), occurrenceDate);
+              table.addCell(getClarificationTableLabelCell(insuranceCaseInfo));
+              table.addCell(
+                  getClarificationTableValueCell(insuranceCase.getDamageRemaining(), language));
+            });
     table.addCell(getEmptyRow());
 
     return table;
