@@ -2,6 +2,7 @@ package ee.qrent.billing.e2e.helper;
 
 import ee.qrent.billing.car.api.in.request.CarAddRequest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -20,8 +21,8 @@ public class CarHelper {
     request.setActive(true);
     request.setStatus("IN_USE");
     request.setQRent(true);
-    request.setRegNumber("it_reg_number_1");
-    request.setVin("it_vin_1");
+    request.setRegNumber("it_AAA");
+    request.setVin("it_vin_1111111111");
     request.setReleaseDate(releaseDate);
     request.setManufacturer("it_manufacturer_1");
     request.setModel("it_model_1");
@@ -46,6 +47,8 @@ public class CarHelper {
     request.setBrandingForus(false);
     request.setBrandingUber(false);
     request.setBrandingTallink(false);
+    request.setCustomRentActive(Boolean.TRUE);
+    request.setCustomRentAmount(BigDecimal.valueOf(200L));
 
     return request;
   }

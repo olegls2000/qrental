@@ -46,7 +46,6 @@ public class DriverAddRequest extends AbstractAddRequest {
   private String boltDriverIdentifier;
   private String boltIndividualIdentifier;
   private String comment;
-
   private Long callSignId;
   private Long qFirmId;
   private Long recommendedByDriverId;

@@ -1,5 +1,6 @@
 package ee.qrent.billing.e2e.helper;
 
+import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
 import ee.qrent.billing.driver.api.in.request.DriverAddRequest;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class DriverHelper {
     addRequest.setActive(true);
     addRequest.setFirstName("it_first_name_1");
     addRequest.setLastName("it_last_name_1");
+    addRequest.setCommunicationLanguage(CommunicationLanguageIn.ENG);
     addRequest.setTaxNumber(11111111111l);
     addRequest.setPhone("it_+37211111111");
     addRequest.setEmail("it_driver1@gmail.com");
@@ -30,10 +32,11 @@ public class DriverHelper {
     addRequest.setCompanyVat("it_111111111111");
     addRequest.setDriverLicenseNumber("it_11111111111");
     addRequest.setDriverLicenseExp(LocalDate.now().plus(5, ChronoUnit.YEARS));
-    addRequest.setTaxiLicense("it_taxi_license_1");
+    addRequest.setTaxiLicense("it_taxi_licen_1");
     addRequest.setAddress("it_address_1");
     addRequest.setNeedInvoicesByEmail(true);
     addRequest.setNeedFee(true);
+    addRequest.setNeedReport(true);
     addRequest.setHasRequiredObligation(TRUE);
     addRequest.setRequiredObligation(BigDecimal.valueOf(200));
     addRequest.setByTelegram(true);

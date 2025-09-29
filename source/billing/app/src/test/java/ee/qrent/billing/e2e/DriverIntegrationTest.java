@@ -43,6 +43,7 @@ public class DriverIntegrationTest extends AbstractIntegrationTest {
     final var validAddRequestForDriver =
         DriverHelper.getValidAddRequest(
             savedFirmId, savedCallSignSecondId, savedDriverRecommendedById);
+    validAddRequestForDriver.setTaxNumber(11111111112l);
 
     // When
     final var savedId = driverAddUseCase.add(validAddRequestForDriver);
@@ -58,7 +59,10 @@ public class DriverIntegrationTest extends AbstractIntegrationTest {
   @Test
   void shouldDeleteCar() {
     // Given
-    final var savedId = driverAddUseCase.add(DriverHelper.getValidAddRequest(null, null, null));
+    final var firmAddRequest = FirmHelper.getValidAddRequest();
+    final var savedFirmId = firmAddUseCase.add(firmAddRequest);
+    final var savedId =
+        driverAddUseCase.add(DriverHelper.getValidAddRequest(savedFirmId, null, null));
 
     // When
     driverDeleteUseCase.delete(new DriverDeleteRequest(savedId));

@@ -31,6 +31,7 @@ public class CarUseCaseService implements CarAddUseCase, CarUpdateUseCase, CarDe
     final var violationsCollector = addRequestValidator.validate(request);
     if (violationsCollector.hasViolations()) {
       request.setViolations(violationsCollector.getViolations());
+      System.out.println("Invalid Request: " + request.getViolations());
 
       return null;
     }

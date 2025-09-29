@@ -16,6 +16,7 @@ spring:
   flyway:
     locations: classpath:db/migration/notification
     table: flyway_schema_history_notification
+    baseline-on-migrate: true
   mail:
     protocol: smtp
     properties:

@@ -34,7 +34,7 @@ public class CarAddRequest extends AbstractAddRequest {
   private Boolean gps;
   private LocalDate technicalInspectionEnd;
   private LocalDate gasInspectionEnd;
-    private String boltIdentifier;
+  private String boltIdentifier;
   private String comment;
   private LocalDate dateEndLpg;
   private Boolean brandingQrent;
@@ -44,5 +44,4 @@ public class CarAddRequest extends AbstractAddRequest {
   private Boolean brandingTallink;
   private Boolean customRentActive;
   private BigDecimal customRentAmount;
-
 }
