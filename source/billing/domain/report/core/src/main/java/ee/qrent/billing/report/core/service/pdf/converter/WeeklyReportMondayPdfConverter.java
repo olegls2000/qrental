@@ -414,11 +414,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     table.addCell(
         getClarificationTableHeaderCell("Востребуемая часть общей задолженности: 999.00 евро"));
     table.addCell(getClarificationTableLabelCell("Пени"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(
+        getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
     table.addCell(
         getClarificationTableLabelCell(
             "Текущая задолженность / предоплата по обязательствам за прошлый период"));
-    table.addCell(getClarificationTableValueCell(BigDecimal.valueOf(999L), language));
+    table.addCell(getClarificationTableValueCell(model.getBalanceAmountSunday(), language));
 
     model
         .getInsuranceCases()

@@ -66,16 +66,6 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
   private final GetInsuranceCaseQuery insuranceCaseQuery;
   private final WeeklyReportSendByEmailUseCase sendByEmailUseCase;
 
-  private static WeeklyReportInsuranceCase apply(InsuranceCaseResponse insuranceCase) {
-    final var reportCase =
-        WeeklyReportInsuranceCase.builder()
-            .damageRemaining(insuranceCase.getDamageAmount())
-            .carRegNumber(insuranceCase.getCarInfo())
-            .occurrenceDate(insuranceCase.getOccurrenceDate())
-            .build();
-    return reportCase;
-  }
-
   @Override
   public Long add(final WeeklyReportCalculationAddRequest request) {
     final var savedDomain = addCalculation(request);
@@ -142,7 +132,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
 
-    final var balanceAmountOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
+    final var balanceOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
+    final var balanceOnDateAmount = balanceOnDate.getAmount();
+    final var feeAmountAtCalculationMoment = balanceOnDate.getAmount();
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
     final var netAmountOnThursday = getNetAmountOnThursday(driverId, requestedQWeek);
@@ -163,7 +155,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .currentObligationAmount(currentObligationAmount)
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
-        .balanceAmountAtCalculationMoment(balanceAmountOnDate)
+        .feeAmountAtCalculationMoment(feeAmountAtCalculationMoment)
+        .balanceAmountAtCalculationMoment(balanceOnDateAmount)
         .netAmountOnThursday(netAmountOnThursday)
         .transactionTypesVsAmount(
             getAmountsMap(driverId, requestedQWeek.getStart(), requestedQWeek.getEnd()))
@@ -191,7 +184,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     if (balance == null) {
 
-        return insuranceCase.getDamageAmount();
+      return insuranceCase.getDamageAmount();
     }
 
     return balance.getDamageRemaining();
@@ -260,7 +253,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
                 reducing(BigDecimal.ZERO, TransactionResponse::getRealAmount, BigDecimal::add)));
   }
 
-  private BigDecimal getBalanceAmountOnDate(
+  private BalanceResponse getBalanceAmountOnDate(
       final QWeekResponse requestedQWeek,
       final WeeklyReportTypeIn reportType,
       final Long driverId) {
@@ -273,7 +266,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     }
     final var rawBalanceOnReportDate = balanceQuery.getRawByDriverAndDate(driverId, reportDate);
 
-    return rawBalanceOnReportDate.getAmount();
+    return rawBalanceOnReportDate;
   }
 
   private BalanceResponse getBalanceOnSunday(

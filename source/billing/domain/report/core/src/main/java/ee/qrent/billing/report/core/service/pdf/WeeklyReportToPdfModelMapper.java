@@ -47,6 +47,7 @@ public class WeeklyReportToPdfModelMapper {
         .nextWeekStart(nextWeek.getStart())
         .nextWeekEnd(nextWeek.getEnd())
         .feeAmountSunday(report.getFeeAmountSunday())
+        .feeAmountAtCalculationMoment(report.getFeeAmountAtCalculationMoment())
         .carRegistrationNumber(carReg)
         .depositObligation(report.getDepositObligation())
         .depositPaid(report.getDepositPaid())

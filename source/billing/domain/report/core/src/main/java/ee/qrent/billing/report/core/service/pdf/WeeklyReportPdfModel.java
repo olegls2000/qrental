@@ -25,6 +25,7 @@ public class WeeklyReportPdfModel {
   private final BigDecimal depositPaid;
   private final BigDecimal balanceAmountSunday;
   private final BigDecimal balanceAmountAtCalculationMoment;
+  private final BigDecimal feeAmountAtCalculationMoment;
   private final Long weeksCountTillEnd;
   private final String obligationStatus;
   private final BigDecimal currentObligationAmount;

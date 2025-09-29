@@ -30,6 +30,7 @@ public class WeeklyReport {
   private BigDecimal netAmountOnThursday;
   private BigDecimal balanceAmountAtCalculationMoment;
   private BigDecimal feeAmountSunday;
+  private BigDecimal feeAmountAtCalculationMoment;
   private Map<String, BigDecimal> transactionTypesVsAmount;
   private List<WeeklyReportInsuranceCase> insuranceCases;
   private String comment;
