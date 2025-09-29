@@ -416,10 +416,15 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     table.addCell(getClarificationTableLabelCell("Пени"));
     table.addCell(
         getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
+
+    final var netAmountOnTuesday = model.getNetAmountOnThursday();
+    final var netType =
+        netAmountOnTuesday.compareTo(BigDecimal.ZERO) < 0 ? "задолженность" : "предоплата";
+
     table.addCell(
         getClarificationTableLabelCell(
-            "Текущая задолженность / предоплата по обязательствам за прошлый период"));
-    table.addCell(getClarificationTableValueCell(model.getBalanceAmountSunday(), language));
+            "Текущая " + netType + " по обязательствам за прошлый период"));
+    table.addCell(getClarificationTableValueCell(model.getNetAmountOnThursday(), language));
 
     model
         .getInsuranceCases()
