@@ -32,6 +32,17 @@ public class WeeklyReportToPdfModelMapper {
     final var nextWeek = qWeekQuery.getOneAfterById(currentWeekId);
     final var carReg =
         report.getCarId() != null ? carQuery.getById(report.getCarId()).getRegNumber() : null;
+    final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
+    final var totalExternalSystemsIncomeAmount =
+        getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount());
+    final var totalOtherPaymentAmount =
+        getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount());
+
+    final var totalPaymentAmount =
+        totalRentAmount
+            .add(totalExternalSystemsIncomeAmount)
+            .add(totalOtherPaymentAmount)
+            .add(getDamagePaymentAmount(report));
 
     return WeeklyReportPdfModel.builder()
         .firstName(driver.getFirstName())
@@ -58,10 +69,9 @@ public class WeeklyReportToPdfModelMapper {
             report.getObligationStatus() != null ? report.getObligationStatus().name() : null)
         .currentObligationAmount(report.getCurrentObligationAmount())
         .netAmountOnThursday(report.getNetAmountOnThursday())
-        .totalRentAmount(getTotalRentAmount(report.getTransactionTypesVsAmount()))
-        .totalExternalSystemsIncomeAmount(
-            getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount()))
-        .totalOtherPaymentAmount(getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount()))
+        .totalRentAmount(totalRentAmount)
+        .totalExternalSystemsIncomeAmount(totalExternalSystemsIncomeAmount)
+        .totalOtherPaymentAmount(totalOtherPaymentAmount)
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .insuranceCases(getInsuranceCases(report))
         .comment(report.getComment())
@@ -69,6 +79,7 @@ public class WeeklyReportToPdfModelMapper {
             report.getBalanceAmountAtCalculationMoment() != null
                 ? report.getBalanceAmountAtCalculationMoment()
                 : report.getBalanceAmountSunday())
+        .totalPaymentAmount(totalPaymentAmount)
         .build();
   }
 
@@ -126,5 +137,12 @@ public class WeeklyReportToPdfModelMapper {
         .add(nonLabelFineAmount)
         .add(feeAmount)
         .add(parkingFineAmount);
+  }
+
+  private BigDecimal getDamagePaymentAmount(final WeeklyReport report) {
+
+      return report
+        .getTransactionTypesVsAmount()
+        .getOrDefault(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE, BigDecimal.ZERO);
   }
 }

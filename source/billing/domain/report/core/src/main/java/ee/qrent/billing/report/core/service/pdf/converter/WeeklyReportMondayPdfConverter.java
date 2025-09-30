@@ -411,8 +411,12 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
   private PdfPTable getClarificationBlock4(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    table.addCell(
-        getClarificationTableHeaderCell("Востребуемая часть общей задолженности: 999.00 евро"));
+    final var damagePayment =
+        formatAmount(model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE));
+    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var headerText =
+        format("Востребуемая часть общей задолженности: %s %s", damagePayment, euroCurrency);
+    table.addCell(getClarificationTableHeaderCell(headerText));
     table.addCell(getClarificationTableLabelCell("Пени"));
     table.addCell(
         getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
@@ -446,6 +450,7 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
 
   private PdfPTable getTotalBlock(final WeeklyReportPdfModel model) {
     final var table = getQpdfTable(2);
+    final var language = model.getLanguage();
     final var labelCell =
         getQpdfPCell(new Paragraph("Итого к оплате:", new Font(REPORT_FONT, 14, NORMAL, WHITE)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
@@ -456,11 +461,13 @@ public class WeeklyReportMondayPdfConverter implements WeeklyReportPdfConversion
     labelCell.setBackgroundColor(ORANGE_BACKGROUND_COLOR);
     table.addCell(labelCell);
 
+    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var totalPaymentAmount = formatAmount(model.getTotalPaymentAmount());
+    final var totalPaymentAmountFormatted = format("%s %s", totalPaymentAmount, euroCurrency);
+
     final var valueCell =
         getQpdfPCell(
-            new Paragraph(
-                formatAmount(BigDecimal.valueOf(999)) + " EUR",
-                new Font(REPORT_FONT, 14, NORMAL, WHITE)));
+            new Paragraph(totalPaymentAmountFormatted, new Font(REPORT_FONT, 14, NORMAL, WHITE)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(30f);
