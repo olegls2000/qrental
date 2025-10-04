@@ -91,7 +91,7 @@ public class WeeklyReportServiceConfig {
   List<WeeklyReportPdfConversionStrategy> getWeeklyReportPdfConversionStrategies() {
 
     return asList(
-        new WeeklyReportMondayPdfConverter(),
+        new WeeklyReportMondayPdfConverterVer1(),
         new WeeklyReportTuesdayPdfConverter(),
         new WeeklyReportWednesdayPdfConverter(),
         new WeeklyReportFridayPdfConverter());

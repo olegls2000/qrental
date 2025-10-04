@@ -1,13 +1,14 @@
 package ee.qrent.billing.report.core.service.pdf.label;
 
 import ee.qrent.billing.driver.api.in.request.CommunicationLanguageIn;
+import lombok.experimental.UtilityClass;
+
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class WeeklyReportMondayPdfLabelProvider {
+public class WeeklyReportMondayPdfLabelProviderVer1 {
 
   private static Map<String, Map<String, String>> languageVsLabelsMap = new HashMap<>(5);
   private static Map<String, String> mapEst;
@@ -46,13 +47,13 @@ public class WeeklyReportMondayPdfLabelProvider {
     mapRus =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ОТЧЕТ ЗА ПОНЕДЕЛЬНИК"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ОТЧЕТ НА ПОНЕДЕЛЬНИК"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Водитель"),
             new AbstractMap.SimpleEntry<>(
-                ID_NUMBER_LABEL_KEY, "Персональный идентификационный номер"),
+                ID_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Отчетная неделя"),
-            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной"),
-            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Арендованный автомобиль"),
+            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
+            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Используемый в данный момент автомобиль"),
             new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Создано на"),
             new AbstractMap.SimpleEntry<>(
                 FINANCIAL_COMMENT_KEY, "По нашим данным Ваше финансовое состояние"),

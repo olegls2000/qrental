@@ -2,7 +2,6 @@ package ee.qrent.billing.report.core.service;
 
 import ee.qrent.billing.report.api.in.usecase.WeeklyReportPdfUseCase;
 import ee.qrent.billing.report.api.out.WeeklyReportLoadPort;
-import ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportMondayPdfConverter;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportToPdfModelMapper;
 
 import java.io.InputStream;
