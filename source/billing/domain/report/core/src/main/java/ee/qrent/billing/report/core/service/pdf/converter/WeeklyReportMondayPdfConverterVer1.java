@@ -173,9 +173,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
-//TODO BALANCE
-    table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
-    table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
+
 
    /* table.addCell(getDriverMainDataLabelCell("До конца действия договора (календарных недель)"));
     table.addCell(getDriverMainDataValueCell(model.getWeeksCountTillEnd().toString()));
@@ -549,7 +547,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     table.addCell(
         getClarificationTableLabelCell(
-            "Текущая " + netType + " по обязательствам за прошлый период"));
+            "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть долг)
     table.addCell(getClarificationTableValueCell(model.getNetAmountOnThursday(), language));
 
     model
