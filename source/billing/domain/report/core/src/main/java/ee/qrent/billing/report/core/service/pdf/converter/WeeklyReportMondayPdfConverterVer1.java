@@ -8,6 +8,7 @@ import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayP
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.awt.Color.*;
 import static java.lang.String.format;
+import static java.math.BigDecimal.ZERO;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -61,9 +62,11 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.open();
     weeklyReportPdfDoc.add(getHeaderTable(language));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
-    weeklyReportPdfDoc.add(getFinancialOutcomeAboutPreviousWeekTable(model));
+    weeklyReportPdfDoc.add(getClarificationHeaderRow("Данные на конец четверга прошлой недели"));
+    weeklyReportPdfDoc.add(getBlock4(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
-    weeklyReportPdfDoc.add(getClarificationlabel(model));
+    weeklyReportPdfDoc.add(
+        getClarificationHeaderRow("Ниже детальная информация по твоим обязательствам"));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
@@ -77,7 +80,6 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   }
 
   private PdfPTable getCommentRowTable() {
-
     final var row = getQpdfTable(1);
 
     final var cell =
@@ -177,7 +179,44 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return table;
   }
 
-  private PdfPTable getFinancialOutcomeAboutPreviousWeekTable(final WeeklyReportPdfModel model) {
+  private PdfPTable getBlock4(final WeeklyReportPdfModel model) {
+    final var table = getQpdfTable(1);
+
+    final var textPositive =
+        "Ты выполнил свои обязательства за прошлую неделю i** (24.03.25-30.0325) **i ** своевременно и в полном объеме! \n"
+            + "\n"
+            + "Твоя предоплата на конец четверга прошлой недели составила: 2,27 евро.\n"
+            + "\n"
+            + "В знак нашей благодарности мы активировали все наши бонусные кампании на текущей неделе.";
+
+    final var paragraph1 = new Paragraph();
+    paragraph1.add(new Chunk("Ты ", new Font(REPORT_FONT, 9, NORMAL)));
+
+    final var positiveStatusChunk = new Chunk("выполнил ", new Font(REPORT_FONT, 9, BOLD));
+    final var negativeStatusChunk = new Chunk("не выполнил ", new Font(REPORT_FONT, 9, BOLD));
+    paragraph1.add(
+        model.getObligationStatus().equals("COMPLETED")
+            ? positiveStatusChunk
+            : negativeStatusChunk);
+
+    paragraph1.add(
+        new Chunk("свои обязательства за прошлую неделю ", new Font(REPORT_FONT, 9, NORMAL)));
+    final var weekDaysFormatted =
+        "(%s - %s)"
+            .formatted(
+                formatDate(model.getPreviousWeekStart()), formatDate(model.getPreviousWeekEnd()));
+    paragraph1.add(new Chunk(weekDaysFormatted + " ", new Font(REPORT_FONT, 9, BOLD)));
+    paragraph1.add(new Chunk("своевременно и в полном объеме!", new Font(REPORT_FONT, 9, NORMAL)));
+
+    table.addCell(getQpdfPCell(paragraph1));
+
+    final var textNegative =
+        "Ты не выполнил свои обязательства за прошлую неделю i** (24.03.25-30.03.25) **i ** своевременно и в полном объеме... \n"
+            + "\n"
+            + "Твой долг на конец четверга прошлой недели составил: 38,16 евро. \n"
+            + "\n"
+            + "К сожалению, наши бонусных кампании не будут для тебя доступны на текущей неделе.";
+
     final var language = model.getLanguage();
     final var row = getQpdfTable(1);
 
@@ -186,10 +225,6 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var currency = getLabel(language, CURRENCY_NAME_KEY);
     final var thursdayNet = format("%s %s", formatAmount(model.getNetAmountOnThursday()), currency);
 
-    final var weekDaysFormatted =
-        "(%s - %s)"
-            .formatted(
-                formatDate(model.getPreviousWeekStart()), formatDate(model.getPreviousWeekEnd()));
     final var labelBeginning =
         format(
             "Согласно последним данным, внесенным в нашу программу на конец четверга прошлой недели, твои обязательства перед 'Q Takso Veod OÜ' за прошлую неделю %s ",
@@ -214,7 +249,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     cell.setFixedHeight(55f);
     row.addCell(cell);
 
-    return row;
+    return table;
   }
 
   private PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
@@ -242,16 +277,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return row;
   }
 
-  private PdfPTable getClarificationlabel(final WeeklyReportPdfModel model) {
+  private PdfPTable getClarificationHeaderRow(final String text) {
     final var row = getQpdfTable(1);
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 14, BOLD)));
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
-    final var cell =
-        getQpdfPCell(
-            new Paragraph(
-                "Ниже детальная информация по твоим обязательствам:",
-                new Font(REPORT_FONT, 14, BOLD)));
+    final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 14, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
     cell.setFixedHeight(40f);
@@ -289,8 +320,10 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
   private PdfPCell getClarificationTableValueCell(final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
-    final var color = value.compareTo(BigDecimal.ZERO) > 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
-    final var formattedValue = format("%s %s", formatAmount(value.abs()), euroCurrency);
+    final var nonNullValue = value == null ? ZERO : value;
+
+    final var color = nonNullValue.compareTo(ZERO) > 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
+    final var formattedValue = format("%s %s", formatAmount(nonNullValue.abs()), euroCurrency);
     final var valueCell =
         getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, BOLD, color)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
@@ -446,7 +479,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
       final PdfPCell labelCell,
       final PdfPCell valueCell,
       final PdfPTable table) {
-    if (value != null && value.compareTo(BigDecimal.ZERO) != 0) {
+    if (value != null && value.compareTo(ZERO) != 0) {
       table.addCell(labelCell);
       table.addCell(valueCell);
     }
@@ -462,9 +495,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(otherObligationsText));
     final var depositAmount =
-        model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, ZERO);
     final var depositLabelCell = getClarificationTableLabelCellDarkBlue("Залог");
     final var depositValueCell = getClarificationTableValueCell(depositAmount, language);
     addRowIfValueIsNonZero(depositAmount, depositLabelCell, depositValueCell, table);
@@ -472,7 +503,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var innerInsuranceAmount =
         model
             .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
     final var innerInsuranceLabelCell =
         getClarificationTableLabelCellDarkBlue(
             "ДВС за текущую неделю (дополнительное внутреннее страхование)");
@@ -482,9 +513,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         innerInsuranceAmount, innerInsuranceLabelCell, innerInsuranceValueCell, table);
 
     final var nonLabelFineAmount =
-        model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, ZERO);
     final var nonLabelFineLabelCell =
         getClarificationTableLabelCellDarkBlue(
             "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю");
@@ -493,17 +522,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
 
     final var parkingFineAmount =
-        model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, BigDecimal.ZERO);
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, ZERO);
     final var parkingFineLabelCell = getClarificationTableLabelCellDarkBlue("Штраф за парковку");
     final var parkingFineValueCell = getClarificationTableValueCell(parkingFineAmount, language);
     addRowIfValueIsNonZero(parkingFineAmount, parkingFineLabelCell, parkingFineValueCell, table);
 
     final var feeAmount =
-        model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, BigDecimal.ZERO);
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, ZERO);
     final var feeLabelCell = getClarificationTableLabelCellDarkBlue("Пени на конец прошлой недели");
     final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
     addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
