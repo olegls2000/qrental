@@ -6,6 +6,11 @@ import ee.qrent.billing.constant.persistence.entity.jakarta.ConstantJakartaEntit
 public class ConstantAdapterMapper {
 
     public Constant mapToDomain(final ConstantJakartaEntity entity) {
+
+        if (entity == null) {
+            return null;
+        }
+
         return Constant.builder()
                 .id(entity.getId())
                 .constant(entity.getConstant())
