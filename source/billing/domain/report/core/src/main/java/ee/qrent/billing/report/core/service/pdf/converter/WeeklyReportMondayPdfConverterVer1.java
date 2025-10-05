@@ -174,8 +174,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
 
-
-   /* table.addCell(getDriverMainDataLabelCell("До конца действия договора (календарных недель)"));
+    /* table.addCell(getDriverMainDataLabelCell("До конца действия договора (календарных недель)"));
     table.addCell(getDriverMainDataValueCell(model.getWeeksCountTillEnd().toString()));
 
     table.addCell(getDriverMainDataLabelCell("Твой общий залог"));
@@ -265,7 +264,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var cell =
         getQpdfPCell(
             new Paragraph(
-                format("Ниже детальная информация по твоим обязательствам:", currentWeekDaysFormatted),
+                format(
+                    "Ниже детальная информация по твоим обязательствам:", currentWeekDaysFormatted),
                 new Font(REPORT_FONT, 14, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
@@ -290,7 +290,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
   private PdfPCell getClarificationTableLabelCellDarkBlue(final String label) {
     final var labelCell =
-            getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR)));
+        getQpdfPCell(
+            new Paragraph(label + ":", new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
@@ -315,11 +316,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return valueCell;
   }
 
-  private PdfPCell getClarificationTableValueCellRed(final BigDecimal value, final String language) {
+  private PdfPCell getClarificationTableValueCellRed(
+      final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var formattedValue = format("%s %s", formatAmount(value), euroCurrency);
     final var valueCell =
-        getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, BOLD, CUSTOM_RED_COLOR)));
+        getQpdfPCell(
+            new Paragraph(formattedValue, new Font(REPORT_FONT, 10, BOLD, CUSTOM_RED_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
@@ -329,11 +332,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return valueCell;
   }
 
-  private PdfPCell getClarificationTableValueCellGreen(final BigDecimal value, final String language) {
+  private PdfPCell getClarificationTableValueCellGreen(
+      final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var formattedValue = format("%s %s", formatAmount(value), euroCurrency);
     final var valueCell =
-            getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_GREEN_COLOR)));
+        getQpdfPCell(
+            new Paragraph(formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_GREEN_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
@@ -343,11 +348,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return valueCell;
   }
 
-  private PdfPCell getClarificationTableValueCellDarkBlue(final BigDecimal value, final String language) {
+  private PdfPCell getClarificationTableValueCellDarkBlue(
+      final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var formattedValue = format("%s %s", formatAmount(value), euroCurrency);
     final var valueCell =
-            getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR)));
+        getQpdfPCell(
+            new Paragraph(
+                formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
@@ -357,11 +365,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return valueCell;
   }
 
-  private PdfPCell getClarificationTableValueCellDarkGray(final BigDecimal value, final String language) {
+  private PdfPCell getClarificationTableValueCellDarkGray(
+      final BigDecimal value, final String language) {
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var formattedValue = format("%s %s", formatAmount(value), euroCurrency);
     final var valueCell =
-            getQpdfPCell(new Paragraph(formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_GRAY_COLOR)));
+        getQpdfPCell(
+            new Paragraph(
+                formattedValue, new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_GRAY_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
@@ -371,18 +382,19 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return valueCell;
   }
 
-
-  private PdfPCell getClarificationTableLabelCellMultiColor(final String text, final String language) {
+  private PdfPCell getClarificationTableLabelCellMultiColor(
+      final String text, final String language) {
     final var paragraph = new Paragraph();
-    
+
     // Добавляем "Заработок" темно-синим цветом
-    final var earningsText = new Chunk("Заработок ", new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR));
+    final var earningsText =
+        new Chunk("Заработок ", new Font(REPORT_FONT, 10, NORMAL, CUSTOM_DARK_BLUE_COLOR));
     paragraph.add(earningsText);
-    
+
     // Добавляем "Bolt" зеленым цветом
     final var boltText = new Chunk("Bolt", new Font(REPORT_FONT, 10, NORMAL, CUSTOM_GREEN_COLOR));
     paragraph.add(boltText);
-    
+
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
@@ -393,17 +405,19 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return labelCell;
   }
 
-  private PdfPCell getClarificationTableLabelCellCampaign(final String campaignName, final String language) {
+  private PdfPCell getClarificationTableLabelCellCampaign(
+      final String campaignName, final String language) {
     final var paragraph = new Paragraph();
-    
+
     // Добавляем "Кампания " черным цветом
     final var campaignText = new Chunk("Кампания ", new Font(REPORT_FONT, 10, NORMAL, BLACK));
     paragraph.add(campaignText);
-    
+
     // Добавляем название кампании в кавычках темно-синим цветом
-    final var campaignNameText = new Chunk(campaignName, new Font(REPORT_FONT, 10, BOLD, CUSTOM_DARK_BLUE_COLOR));
+    final var campaignNameText =
+        new Chunk(campaignName, new Font(REPORT_FONT, 10, BOLD, CUSTOM_DARK_BLUE_COLOR));
     paragraph.add(campaignNameText);
-    
+
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
@@ -413,8 +427,6 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     return labelCell;
   }
-
-
 
   private PdfPTable getClarificationTable() {
     final var table = getQpdfTable(2);
@@ -436,18 +448,30 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount());
     final var table = getClarificationTable();
-    table.addCell(
+    final var rentLabelCell =
         getClarificationTableHeaderCell(
-            format(
-                "Арендная плата всего: %s %s ", totalRentAmount, currency)+ " Состоит из:"));
-    table.addCell(getClarificationTableLabelCellDarkBlue("Аренда за текущую неделю"));
-    table.addCell(getClarificationTableValueCellRed(rentAmount, language));
-    table.addCell(getClarificationTableLabelCellCampaign("«Надежный партнер»", language));
-    table.addCell(getClarificationTableValueCellGreen(bonusReliablePartnerAmount, language));
-    table.addCell(getClarificationTableLabelCellCampaign("«Поездки Bolt»", language));
-    table.addCell(getClarificationTableValueCellGreen(bonusBoltAmount, language));
-    table.addCell(getClarificationTableLabelCellCampaign("«Приведи друга»", language));
-    table.addCell(getClarificationTableValueCellGreen(bonusFriendAmount, language));
+            format("Арендная плата всего: %s %s ", totalRentAmount, currency) + " Состоит из:");
+    final var rentValueCell = getClarificationTableValueCellRed(rentAmount, language);
+    addRowIfValueIsNonZero(rentAmount, rentLabelCell, rentValueCell, table);
+
+    final var bonusReliablePartnerLabelCell =
+        getClarificationTableLabelCellCampaign("«Надежный партнер»", language);
+    final var bonusReliablePartnerValueCell =
+        getClarificationTableValueCellGreen(bonusReliablePartnerAmount, language);
+    addRowIfValueIsNonZero(
+        bonusReliablePartnerAmount,
+        bonusReliablePartnerLabelCell,
+        bonusReliablePartnerValueCell,
+        table);
+    final var bonusBoltLabelCell =
+        getClarificationTableLabelCellCampaign("«Поездки Bolt»", language);
+    final var bonusBoltValueCell = getClarificationTableValueCellGreen(bonusBoltAmount, language);
+    addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
+    final var bonusFriendLabelCell =
+        getClarificationTableLabelCellCampaign("«Приведи друга»", language);
+    final var bonusFriendValueCell =
+        getClarificationTableValueCellGreen(bonusFriendAmount, language);
+    addRowIfValueIsNonZero(bonusFriendAmount, bonusFriendLabelCell, bonusFriendValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;
@@ -467,18 +491,29 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
-        format(
-            "Коррекция аренды: %s %s",
-            correctionOfRent, euroCurrency) + " Список коррекций ниже:";
-
+        format("Коррекция аренды: %s %s", correctionOfRent, euroCurrency)
+            + " Список коррекций ниже:";
     final var boltPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerText));
-    table.addCell(getClarificationTableLabelCellMultiColor("Заработок Bolt", language));
-    table.addCell(getClarificationTableValueCellDarkGray(boltPlusAmount, language));
+    final var boltPlusLabelCell =
+        getClarificationTableLabelCellMultiColor("Заработок Bolt", language);
+    final var boltPlusValueCell = getClarificationTableValueCellDarkGray(boltPlusAmount, language);
+    addRowIfValueIsNonZero(boltPlusAmount, boltPlusLabelCell, boltPlusValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;
+  }
+
+  private void addRowIfValueIsNonZero(
+      final BigDecimal value,
+      final PdfPCell labelCell,
+      final PdfPCell valueCell,
+      final PdfPTable table) {
+    if (value != null && value.compareTo(BigDecimal.ZERO) != 0) {
+      table.addCell(labelCell);
+      table.addCell(valueCell);
+    }
   }
 
   private PdfPTable getOtherPaymentClarificationTable(final WeeklyReportPdfModel model) {
@@ -486,43 +521,58 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var otherObligationsText =
-        format("Прочие обязательства: %s %s", otherObligations, euroCurrency) + " Список этик обязательств:";
+        format("Прочие обязательства: %s %s", otherObligations, euroCurrency)
+            + " Список этик обязательств:";
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(otherObligationsText));
-    table.addCell(getClarificationTableLabelCellDarkBlue("Залог"));
     final var depositAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
-    table.addCell(getClarificationTableValueCell(depositAmount, language));
-    table.addCell(
-        getClarificationTableLabelCellDarkBlue(
-            "ДВС за текущую неделю (дополнительное внутреннее страхование)"));
+    final var depositLabelCell = getClarificationTableLabelCellDarkBlue("Залог");
+    final var depositValueCell = getClarificationTableValueCell(depositAmount, language);
+    addRowIfValueIsNonZero(depositAmount, depositLabelCell, depositValueCell, table);
+
     final var innerInsuranceAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
-    table.addCell(getClarificationTableValueCellRed(innerInsuranceAmount, language));
-    table.addCell(
+    final var innerInsuranceLabelCell =
         getClarificationTableLabelCellDarkBlue(
-            "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"));
+            "ДВС за текущую неделю (дополнительное внутреннее страхование)");
+    final var innerInsuranceValueCell =
+        getClarificationTableValueCellRed(innerInsuranceAmount, language);
+    addRowIfValueIsNonZero(
+        innerInsuranceAmount, innerInsuranceLabelCell, innerInsuranceValueCell, table);
+
     final var nonLabelFineAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
-    table.addCell(getClarificationTableValueCellRed(nonLabelFineAmount, language));
-    table.addCell(getClarificationTableLabelCellDarkBlue("Штраф за парковку"));
+    final var nonLabelFineLabelCell =
+        getClarificationTableLabelCellDarkBlue(
+            "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю");
+
+    final var nonLabelFineValueCell =
+        getClarificationTableValueCellRed(nonLabelFineAmount, language);
+    addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
+
     final var parkingFineAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, BigDecimal.ZERO);
-    table.addCell(getClarificationTableValueCellRed(parkingFineAmount, language));
-    table.addCell(getClarificationTableLabelCellDarkBlue("Пени на конец прошлой недели"));
+    final var parkingFineLabelCell = getClarificationTableLabelCellDarkBlue("Штраф за парковку");
+    final var parkingFineValueCell = getClarificationTableValueCellRed(parkingFineAmount, language);
+    addRowIfValueIsNonZero(parkingFineAmount, parkingFineLabelCell, parkingFineValueCell, table);
+
     final var feeAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, BigDecimal.ZERO);
-    table.addCell(getClarificationTableValueCellRed(feeAmount, language));
+    final var feeLabelCell = getClarificationTableLabelCellDarkBlue("Пени на конец прошлой недели");
+    final var feeValueCell = getClarificationTableValueCellRed(feeAmount, language);
+    addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
+
     table.addCell(getEmptyRow());
 
     return table;
@@ -535,7 +585,10 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         formatAmount(model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE));
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
-        format("Требование в счет обязательств на начало текущей недели: %s %s", damagePayment, euroCurrency) + " Список этих обязательств:";
+        format(
+                "Требование в счет обязательств на начало текущей недели: %s %s",
+                damagePayment, euroCurrency)
+            + " Список этих обязательств:";
     table.addCell(getClarificationTableHeaderCell(headerText));
     table.addCell(getClarificationTableLabelCellDarkBlue("Пени"));
     table.addCell(
@@ -547,7 +600,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     table.addCell(
         getClarificationTableLabelCell(
-            "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть долг)
+            "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть
+    // долг)
     table.addCell(getClarificationTableValueCell(model.getNetAmountOnThursday(), language));
 
     model
@@ -561,7 +615,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                       insuranceCase.getCarRegNumber(), occurrenceDate);
               table.addCell(getClarificationTableLabelCell(insuranceCaseInfo));
               table.addCell(
-                  getClarificationTableValueCellDarkGray(insuranceCase.getDamageRemaining(), language));
+                  getClarificationTableValueCellDarkGray(
+                      insuranceCase.getDamageRemaining(), language));
             });
     table.addCell(getEmptyRow());
 
