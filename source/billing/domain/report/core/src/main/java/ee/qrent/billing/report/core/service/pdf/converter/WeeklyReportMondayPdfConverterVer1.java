@@ -67,8 +67,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getBlock4(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
-        getClarificationHeaderRowColored(
-            "Ниже детальная информация по ", "твоим обязательствам"));
+        getClarificationHeaderRowColored("Ниже детальная информация по ", "твоим обязательствам"));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
@@ -252,19 +251,26 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     // Removed unused variable 'tomorrow' (not shown in the final paragraph)
 
-    final var currentObligationAmountFormatted = formatAmount(model.getCurrentObligationAmount());
+    final var currentObligationAmountFormatted = formatAmount(model.getTotalPaymentAmount());
     // Build paragraph with "твои обязательства" in purple
     final var paragraph = new Paragraph();
     paragraph.add(new Chunk("Cейчас ", new Font(REPORT_FONT, 10)));
-    paragraph.add(new Chunk("твои обязательства", new Font(REPORT_FONT, 10, NORMAL, REPORT_PURPLE_COLOR)));
+    paragraph.add(
+        new Chunk("твои обязательства", new Font(REPORT_FONT, 10, NORMAL, REPORT_PURPLE_COLOR)));
     paragraph.add(new Chunk(" за текущую неделю составляют: ", new Font(REPORT_FONT, 10)));
-    paragraph.add(new Chunk(
-        format("%s %s.", currentObligationAmountFormatted, getLabel(model.getLanguage(), CURRENCY_NAME_KEY)),
-        new Font(REPORT_FONT, 10)));
-    paragraph.add(new Chunk(
-        "\nПожалуйста, оплати эту сумму до 16:00 завтрашнего дня, чтобы активировать бонусные кампании  \n",
-        new Font(REPORT_FONT, 10)));
-    paragraph.add(new Chunk(format("на следующую неделю %s", nextWeekDaysFormatted), new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            format(
+                "%s %s.",
+                currentObligationAmountFormatted, getLabel(model.getLanguage(), CURRENCY_NAME_KEY)),
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            "\nПожалуйста, оплати эту сумму до 16:00 завтрашнего дня, чтобы активировать бонусные кампании  \n",
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            format("на следующую неделю %s", nextWeekDaysFormatted), new Font(REPORT_FONT, 10)));
 
     final var cell = getQpdfPCell(paragraph);
     cell.setHorizontalAlignment(ALIGN_CENTER);
@@ -437,18 +443,15 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var totalRentAmount = formatAmount(model.getTotalRentAmount());
 
     final var rentLabelCell =
-            format("Арендная плата всего: %s %s ", totalRentAmount, currency) + " Состоит из:";
+        format("Арендная плата всего: %s %s ", totalRentAmount, currency) + " Состоит из:";
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(rentLabelCell));
 
-    final var weekRentLabelCell = getClarificationTableLabelCellDarkBlue("Аренда за текущую неделю");
+    final var weekRentLabelCell =
+        getClarificationTableLabelCellDarkBlue("Аренда за текущую неделю");
 
     final var rentValueCell = getClarificationTableValueCell(rentAmount, language);
-    addRowIfValueIsNonZero(
-            rentAmount,
-            weekRentLabelCell,
-            rentValueCell,
-            table);
+    addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);
 
     final var bonusReliablePartnerLabelCell =
         getClarificationTableLabelCellCampaign("«Надежный партнер»", language);
@@ -584,7 +587,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         getClarificationTableLabelCell(
             "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть
     // долг)
-    table.addCell(getClarificationTableValueCell(model.getNetAmountOnThursday(), language));
+    table.addCell(
+        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
 
     model
         .getInsuranceCases()
