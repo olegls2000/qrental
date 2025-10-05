@@ -204,17 +204,68 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     paragraph1.add(new Chunk(weekDaysFormatted + " ", new Font(REPORT_FONT, 9, BOLD)));
     paragraph1.add(new Chunk("своевременно и в полном объеме!", new Font(REPORT_FONT, 9, NORMAL)));
 
-    table.addCell(getQpdfPCell(paragraph1));
+    final var cell1 = getQpdfPCell(paragraph1);
+    cell1.setHorizontalAlignment(ALIGN_CENTER);
+    cell1.setVerticalAlignment(ALIGN_MIDDLE);
+    table.addCell(cell1);
+
+    // "Твоя предоплата на конец четверга прошлой недели: 2,27 евро.\n"
+    final var paragraph2 = new Paragraph();
+    final var yourPrepaymentChunk = new Chunk("Твоя предоплата ", new Font(REPORT_FONT, 9, NORMAL));
+    final var yourUnderpaymentChunk = new Chunk("Твой долг ", new Font(REPORT_FONT, 9, NORMAL));
+    paragraph2.add(
+        model.getObligationStatus().equals("COMPLETED")
+            ? yourPrepaymentChunk
+            : yourUnderpaymentChunk);
+    paragraph2.add(
+        new Chunk("на конец четверга прошлой недели: ", new Font(REPORT_FONT, 9, NORMAL)));
+
+    final var language = model.getLanguage();
+    final var currency = getLabel(language, CURRENCY_NAME_KEY);
+    final var thursdayNet =
+        format("%s %s", formatAmount(model.getNetAmountOnThursday().abs()), currency);
+    final var amountColor =
+        model.getNetAmountOnThursday().compareTo(ZERO) >= 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
+    paragraph2.add(new Chunk(thursdayNet, new Font(REPORT_FONT, 9, NORMAL, amountColor)));
+    final var cell2 = getQpdfPCell(paragraph2);
+    cell2.setHorizontalAlignment(ALIGN_CENTER);
+    cell2.setVerticalAlignment(ALIGN_MIDDLE);
+    table.addCell(cell2);
+
+    // В знак нашей благодарности мы активировали все наши бонусные кампании на текущей неделе.
+    // К сожалению, наши бонусных кампании не будут для тебя доступны на текущей неделе.
+
+    final var paragraphWithBonuses = new Paragraph();
+    paragraphWithBonuses.add(new Chunk("В знак нашей благодарности ", new Font(REPORT_FONT, 9)));
+    paragraphWithBonuses.add(new Chunk("мы активировали ", new Font(REPORT_FONT, 9, BOLD)));
+    paragraphWithBonuses.add(new Chunk("все наши ", new Font(REPORT_FONT, 9)));
+    paragraphWithBonuses.add(new Chunk("бонусные кампании ", new Font(REPORT_FONT, 9, BOLD)));
+    paragraphWithBonuses.add(new Chunk("на текущей неделе.", new Font(REPORT_FONT, 9)));
+
+    final var paragraphWithoutBonuses = new Paragraph();
+    paragraphWithoutBonuses.add(new Chunk("К сожалению, наши ", new Font(REPORT_FONT, 9)));
+    paragraphWithoutBonuses.add(
+        new Chunk("бонусные кампании не будут ", new Font(REPORT_FONT, 9, BOLD)));
+    paragraphWithoutBonuses.add(new Chunk("для тебя ", new Font(REPORT_FONT, 9)));
+    paragraphWithoutBonuses.add(new Chunk("доступны ", new Font(REPORT_FONT, 9, BOLD)));
+    paragraphWithoutBonuses.add(new Chunk("на текущей неделе.", new Font(REPORT_FONT, 9)));
+
+    final var paragraph =
+        model.getObligationStatus().equals("COMPLETED")
+            ? paragraphWithBonuses
+            : paragraphWithoutBonuses;
+
+    final var cell3 = getQpdfPCell(paragraph);
+    cell3.setHorizontalAlignment(ALIGN_CENTER);
+    cell3.setVerticalAlignment(ALIGN_MIDDLE);
+    table.addCell(cell3);
 
     // Removed unused sample text block (textNegative)
 
-    final var language = model.getLanguage();
     final var row = getQpdfTable(1);
 
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 14, BOLD)));
     row.addCell(paddingTopCell);
-    final var currency = getLabel(language, CURRENCY_NAME_KEY);
-    final var thursdayNet = format("%s %s", formatAmount(model.getNetAmountOnThursday()), currency);
 
     final var labelBeginning =
         format(
