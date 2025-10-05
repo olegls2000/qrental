@@ -128,9 +128,15 @@ where transaction_type_id in (select distinct(id)
 --------------------------------------------------------------------------------------------------------
 --## Rent Calculations:
 delete
-from rent_calculation_result;
+from rent_calculation_result
+where rent_calculation_id in (select id
+                               from rent_calculation
+                               where q_week_id in
+                                     (select qw.id from q_week qw where qw.number = 40));
 delete
-from rent_calculation;
+from rent_calculation
+where q_week_id in (select qw.id from q_week qw where qw.number = 40);
+
 delete
 from transaction
 where transaction_type_id in (select distinct(id)

@@ -56,6 +56,8 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
         .warrantyRagStatus(warrantyService.getWarrantyRagStatus(domain).name())
         .warrantyEndDate(warrantyService.getWarrantyEndDate(domain))
         .warrantyMonths(warrantyService.getWarrantyMonths(domain))
+            .customRentActive(domain.getCustomRentActive())
+            .customRentAmount(domain.getCustomRentAmount())
         .build();
   }
 

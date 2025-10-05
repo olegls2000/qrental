@@ -57,7 +57,7 @@ public class RentTransactionGenerator {
   private String getRentTransactionComment(
       final QWeekResponse week, final CarLinkResponse carLink) {
     final var car = getCar(carLink);
-    if (car.getCustomRentActive()) {
+    if (car.getCustomRentActive()!=null && car.getCustomRentActive()) {
 
       return format(
           "Automatically crated 'Rent' Transaction for active Car Link %d. Week %d, based on Car's custom rent amount",
@@ -147,7 +147,7 @@ public class RentTransactionGenerator {
 
   private BigDecimal calculateRentTransactionAmount(final CarLinkResponse carLink) {
     final var car = getCar(carLink);
-    if (car.getCustomRentActive()) {
+    if (car.getCustomRentActive()!= null && car.getCustomRentActive()) {
 
       return car.getCustomRentAmount();
     }
