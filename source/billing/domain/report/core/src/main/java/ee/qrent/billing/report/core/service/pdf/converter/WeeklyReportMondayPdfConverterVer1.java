@@ -63,20 +63,35 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getHeaderTable(language));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
     weeklyReportPdfDoc.add(getClarificationHeaderRow("Данные на конец четверга прошлой недели"));
+    weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getBonusStatus(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored("Ниже детальная информация по ", "твоим обязательствам"));
+    weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
+    weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
+    weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
+    weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable());
     weeklyReportPdfDoc.close();
     writer.close();
 
     return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
+  }
+
+  private PdfPTable getLineSeparator() {
+    final var lineSeparator = getQpdfTable(1);
+    final var qCell = new PdfPCell();
+    qCell.setFixedHeight(2);
+    qCell.setBackgroundColor(REPORT_DARK_GRAY_COLOR);
+    qCell.setBorder(1);
+    lineSeparator.addCell(qCell);
+    return lineSeparator;
   }
 
   private PdfPTable getCommentRowTable() {
@@ -184,7 +199,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   }
 
   private Chunk getBoldChunk(final String text) {
-    return new Chunk(text + " ", new Font(REPORT_FONT, 10, NORMAL));
+    return new Chunk(text + " ", new Font(REPORT_FONT, 10, BOLD));
   }
 
   private PdfPTable getBonusStatus(final WeeklyReportPdfModel model) {
