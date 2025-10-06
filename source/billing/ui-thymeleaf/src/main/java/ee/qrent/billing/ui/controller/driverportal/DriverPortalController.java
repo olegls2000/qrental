@@ -1,7 +1,9 @@
 package ee.qrent.billing.ui.controller.driverportal;
 
+import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
 import static ee.qrent.billing.ui.controller.ControllerUtils.DRIVER_PORTAL_PATH;
 import static ee.qrent.billing.ui.formatter.QDateFormatter.MODEL_ATTRIBUTE_DATE_FORMATTER;
+import static java.math.BigDecimal.ZERO;
 
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
@@ -92,7 +94,8 @@ public class DriverPortalController {
       addBalancePeriodDataToModel(
           model,
           rawBalanceContext.getPreviousWeekBalance(),
-          rawBalanceContext.getRequestedWeekBalance());
+          rawBalanceContext.getRequestedWeekBalance(),
+          getFeeAmountFromPeriod(transactions));
       addObligationPeriodDataToModel(model, driverId, requestedQWeekId);
       addInsuranceRequestedWeekBalance(model, driverId, requestedQWeekId);
     } else {
@@ -118,9 +121,23 @@ public class DriverPortalController {
     final var endBalance = balanceQuery.getRawByDriverAndDate(driverId, intervalEndDate);
     final var transactions = transactionQuery.getAllByFilter(transactionFilterRequest);
     addTransactionDataToModel(transactions, model);
-    addBalancePeriodDataToModel(model, startBalance, endBalance);
+
+    addBalancePeriodDataToModel(
+        model, startBalance, endBalance, getFeeAmountFromPeriod(transactions));
 
     return "detailView/driverPortalIntervalSearch";
+  }
+
+  private BigDecimal getFeeAmountFromPeriod(final List<TransactionResponse> transactions) {
+    final var optional =
+        transactions.stream()
+            .filter(transaction -> transaction.getTypeCode().equals(TRANSACTION_TYPE_FEE_DEBT_CODE))
+            .findAny();
+    var feeAmount = ZERO;
+    if (optional.isPresent()) {
+      feeAmount = optional.get().getRealAmount();
+    }
+    return feeAmount;
   }
 
   void populateModelByStaticData(final Model model, final Long driverId) {
@@ -140,7 +157,8 @@ public class DriverPortalController {
   private void addBalancePeriodDataToModel(
       final Model model,
       final BalanceResponse startBalance,
-      final BalanceResponse requestedWeekBalance) {
+      final BalanceResponse requestedWeekBalance,
+      final BigDecimal periodFeeTransaction) {
     final var startWeekFeeAbleAmount = startBalance.getFeeAbleAmount();
     final var startWeekNonFeeAbleAmount = startBalance.getNonFeeAbleAmount();
     final var startWeekPositiveAmount = startBalance.getPositiveAmount();
@@ -162,8 +180,7 @@ public class DriverPortalController {
     model.addAttribute(
         "balancePeriodTotalAmount", requestedWeekTotalAmount.subtract(startWeekTotalAmount));
     model.addAttribute(
-        "feePeriodTotalAmount",
-        startBalance.getFeeAmount().add(requestedWeekBalance.getFeeAmount()));
+        "feePeriodTotalAmount", startBalance.getFeeAmount().add(periodFeeTransaction));
   }
 
   private void addObligationPeriodDataToModel(
@@ -185,9 +202,7 @@ public class DriverPortalController {
     model.addAttribute("periodObligationAmountPaid", periodObligationAmountPaid);
     final var periodObligationDiff = periodObligationAmountAbs.subtract(periodObligationAmountPaid);
     final var periodObligationAmountLeftToPay =
-        periodObligationDiff.compareTo(BigDecimal.ZERO) < 0
-            ? BigDecimal.ZERO
-            : periodObligationDiff;
+        periodObligationDiff.compareTo(ZERO) < 0 ? ZERO : periodObligationDiff;
 
     final var periodObligationMatchCount = periodObligation.getMatchCount();
     model.addAttribute("periodObligationAmountLeftToPay", periodObligationAmountLeftToPay);
