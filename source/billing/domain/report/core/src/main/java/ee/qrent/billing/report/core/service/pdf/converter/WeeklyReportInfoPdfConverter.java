@@ -61,16 +61,15 @@ public class WeeklyReportInfoPdfConverter implements WeeklyReportPdfConversionSt
     weeklyReportPdfDoc.open();
     weeklyReportPdfDoc.add(getHeaderTable(language));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
-    weeklyReportPdfDoc.add(getClarificationHeaderRow("Данные на конец четверга прошлой недели"));
     final var row = getQpdfTable(1);
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, BOLD)));
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
     final var text = WeeklyReportInfoPdfLabelProvider.getLabel(language, INFO_LABEL_KEY);
-    final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 13, BOLD)));
+    final var cell = getQpdfPCell(new Paragraph(text, new Font(REPORT_FONT, 13, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
-    cell.setFixedHeight(40f);
+    cell.setFixedHeight(260f);
     row.addCell(cell);
     weeklyReportPdfDoc.add(row);
     weeklyReportPdfDoc.close();

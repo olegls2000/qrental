@@ -71,7 +71,7 @@ public class WeeklyReportInfoPdfLabelProvider {
                     + "\n"
                     + "With your help, we’ll be able to perfect the system and provide you with accurate and complete information in the future!\n"
                     + "\n"
-                    + "Thank you for your cooperation and your support in this project!"));
+                    + "Thank you for your cooperation and your support in this project!"));
 
     mapEst =
         Map.ofEntries(
@@ -95,7 +95,7 @@ public class WeeklyReportInfoPdfLabelProvider {
                     + "\n"
                     + "Nii saame tänu sinu abile süsteemi täiustada ja tulevikus edastada sulle alati täpset ja täielikku teavet!\n"
                     + "\n"
-                    + "Aitäh koostöö eest ja sinu panuse eest sellesse projekti!"));
+                    + "Aitäh koostöö eest ja sinu panuse eest sellesse projekti!"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
