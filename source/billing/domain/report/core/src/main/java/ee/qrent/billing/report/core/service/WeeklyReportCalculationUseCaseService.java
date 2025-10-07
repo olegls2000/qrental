@@ -40,6 +40,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -131,6 +132,31 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var qWeekId = requestedQWeek.getId();
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
+
+    if (reportType == WeeklyReportTypeIn.INFO_REPORT) {
+      return WeeklyReport.builder()
+          .type(WeeklyReportType.valueOf(reportType.name()))
+          .qWeekId(qWeekId)
+          .driverId(driverId)
+          .callSignId(getCallSignId(driverId, qWeekId))
+          .carId(getCarId(driverId, qWeekId))
+          .startDate(requestedQWeek.getStart())
+          .endDate(requestedQWeek.getEnd())
+          .weeksCountTillEnd(contract.getWeeksToEnd())
+          .depositObligation(DEPOSIT_OBLIGATION)
+          .depositPaid(ZERO)
+          .obligationStatus(WeeklyReportObligationStatus.NOT_COMPLETED)
+          .currentObligationAmount(ZERO)
+          .balanceAmountSunday(ZERO)
+          .feeAmountSunday(ZERO)
+          .feeAmountAtCalculationMoment(ZERO)
+          .balanceAmountAtCalculationMoment(ZERO)
+          .netAmountOnThursday(ZERO)
+          .transactionTypesVsAmount(Map.of())
+          .insuranceCases(Collections.emptyList())
+          .comment("Automatically generated weekly info")
+          .build();
+    }
 
     final var balanceOnDate = getBalanceAmountOnDate(requestedQWeek, reportType, driverId);
     final var balanceOnDateAmount = balanceOnDate.getAmount();

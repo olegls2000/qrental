@@ -3,6 +3,7 @@ package ee.qrent.billing.report.api.in.request;
 import lombok.Getter;
 
 public enum WeeklyReportTypeIn {
+  INFO_REPORT("Info report"),
   MONDAY_REPORT("Monday report"),
   TUESDAY_REPORT("Tuesday report"),
   WEDNESDAY_REPORT("Wednesday report"),
@@ -13,5 +14,4 @@ public enum WeeklyReportTypeIn {
   WeeklyReportTypeIn(final String label) {
     this.label = label;
   }
-  ;
 }
