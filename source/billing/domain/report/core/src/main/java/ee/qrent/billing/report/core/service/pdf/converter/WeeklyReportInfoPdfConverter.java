@@ -4,8 +4,7 @@ import static com.lowagie.text.Element.*;
 import static com.lowagie.text.Font.*;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportInfoPdfLabelProvider.INFO_LABEL_KEY;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProviderVer1.*;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportInfoPdfLabelProvider.*;
 import static java.awt.Color.*;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
@@ -65,7 +64,7 @@ public class WeeklyReportInfoPdfConverter implements WeeklyReportPdfConversionSt
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, BOLD)));
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
-    final var text = WeeklyReportInfoPdfLabelProvider.getLabel(language, INFO_LABEL_KEY);
+    final var text = getLabel(language, INFO_LABEL_KEY);
     final var cell = getQpdfPCell(new Paragraph(text, new Font(REPORT_FONT, 13, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);

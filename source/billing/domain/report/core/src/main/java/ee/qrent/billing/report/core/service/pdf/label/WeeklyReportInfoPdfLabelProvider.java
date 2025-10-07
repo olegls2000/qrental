@@ -28,7 +28,7 @@ public class WeeklyReportInfoPdfLabelProvider {
     mapRus =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ОТЧЕТ НА ПОНЕДЕЛЬНИК"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "Уведомительное письмо"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Водитель"),
             new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Отчетная неделя"),
@@ -52,7 +52,7 @@ public class WeeklyReportInfoPdfLabelProvider {
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "MONDAY REPORT"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "Notification letter"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Driver"),
             new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Personal identification number"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
@@ -76,7 +76,7 @@ public class WeeklyReportInfoPdfLabelProvider {
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ESMASPÄEVANE ARUANNE"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "Teavituskiri"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Juht"),
             new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
