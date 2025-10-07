@@ -43,6 +43,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   private static final Color REPORT_RED_COLOR = new Color(150, 30, 0); // Red
   private static final Color REPORT_DARK_BLUE_COLOR = new Color(0, 40, 120); // Dark Blue
   private static final Color REPORT_DARK_GRAY_COLOR = new Color(50, 50, 50); // Dark Gray
+  private static final Color REPORT_MIDDLE_GRAY_COLOR = new Color(100, 100, 100); // Middle Gray
   private static final Color REPORT_PURPLE_COLOR = new Color(128, 0, 128); // Purple
 
   @Override
@@ -63,19 +64,20 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getHeaderTable(language));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
     weeklyReportPdfDoc.add(getClarificationHeaderRow("Данные на конец четверга прошлой недели"));
-    weeklyReportPdfDoc.add(getLineSeparator());
+    //weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getBonusStatus(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored("Ниже детальная информация по ", "твоим обязательствам"));
-    weeklyReportPdfDoc.add(getLineSeparator());
+   // weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
-    weeklyReportPdfDoc.add(getLineSeparator());
+   // weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
-    weeklyReportPdfDoc.add(getLineSeparator());
+  //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
+  //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
-    weeklyReportPdfDoc.add(getLineSeparator());
+  //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable());
     weeklyReportPdfDoc.close();
@@ -87,8 +89,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   private PdfPTable getLineSeparator() {
     final var lineSeparator = getQpdfTable(1);
     final var qCell = new PdfPCell();
-    qCell.setFixedHeight(2);
-    qCell.setBackgroundColor(REPORT_DARK_GRAY_COLOR);
+    qCell.setFixedHeight(1);
+    qCell.setBackgroundColor(REPORT_MIDDLE_GRAY_COLOR);
     qCell.setBorder(1);
     lineSeparator.addCell(qCell);
     return lineSeparator;
@@ -221,6 +223,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var cell1 = getQpdfPCell(paragraph1);
     cell1.setHorizontalAlignment(ALIGN_CENTER);
     cell1.setVerticalAlignment(ALIGN_MIDDLE);
+  //  cell1.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
     table.addCell(cell1);
 
     final var paragraph2 = new Paragraph();
@@ -306,10 +309,10 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var row = getQpdfTable(1);
     final var nextWeekDaysFormatted = getInterval(model.getNextWeekStart(), model.getNextWeekEnd());
     final var paragraph = new Paragraph();
-    paragraph.add(new Chunk("Cейчас ", new Font(REPORT_FONT, 10)));
+    paragraph.add(new Chunk("Cейчас ", new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
-        new Chunk("твои обязательства", new Font(REPORT_FONT, 10, NORMAL, REPORT_PURPLE_COLOR)));
-    paragraph.add(new Chunk(" за текущую неделю составляют: ", new Font(REPORT_FONT, 10)));
+        new Chunk("твои обязательства", new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
+    paragraph.add(new Chunk(" за текущую неделю составляют: ", new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
         new Chunk(
             amountWithCurrency(model.getTotalPaymentAmount(), model.getLanguage()),
@@ -338,6 +341,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 13, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
+   // cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
     cell.setFixedHeight(40f);
     row.addCell(cell);
 
@@ -367,13 +371,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
   private PdfPCell getClarificationTableLabelCell(final String label) {
     final var labelCell =
-        getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 10, NORMAL, BLACK)));
+        getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 11, BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
-
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(WHITE);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     return labelCell;
   }
@@ -381,29 +384,30 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   private PdfPCell getClarificationTableLabelCellDarkBlue(final String label) {
     final var labelCell =
         getQpdfPCell(
-            new Paragraph(label + ":", new Font(REPORT_FONT, 10, NORMAL, REPORT_DARK_BLUE_COLOR)));
+            new Paragraph(label + ":", new Font(REPORT_FONT, 10, BOLD, REPORT_DARK_BLUE_COLOR)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
 
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(WHITE);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);;
 
     return labelCell;
   }
 
   private PdfPCell getClarificationTableValueCell(final BigDecimal value, final String language) {
     final var nonNullValue = value == null ? ZERO : value;
-    final var color = nonNullValue.compareTo(ZERO) > 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
+    final var color = nonNullValue.compareTo(ZERO) >= 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
     final var valueCell =
         getQpdfPCell(
             new Paragraph(
                 amountWithCurrency(value, language), new Font(REPORT_FONT, 10, BOLD, color)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
+    valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
     valueCell.setFixedHeight(18f);
     valueCell.setPaddingLeft(8f);
-    valueCell.setBackgroundColor(WHITE);
+
 
     return valueCell;
   }
@@ -414,12 +418,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var valueCell =
         getQpdfPCell(
             new Paragraph(
-                formattedValue, new Font(REPORT_FONT, 10, NORMAL, REPORT_DARK_GRAY_COLOR)));
+                formattedValue, new Font(REPORT_FONT, 10, BOLD, REPORT_DARK_GRAY_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
     valueCell.setPaddingLeft(8f);
-    valueCell.setBackgroundColor(WHITE);
+    valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);;
 
     return valueCell;
   }
@@ -430,11 +434,11 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     // Добавляем "Заработок" темно-синим цветом
     final var earningsText =
-        new Chunk("Заработок ", new Font(REPORT_FONT, 10, NORMAL, REPORT_DARK_BLUE_COLOR));
+        new Chunk(" - Заработок ", new Font(REPORT_FONT, 10, BOLD, REPORT_DARK_BLUE_COLOR));
     paragraph.add(earningsText);
 
     // Добавляем "Bolt" зеленым цветом
-    final var boltText = new Chunk("Bolt", new Font(REPORT_FONT, 10, NORMAL, REPORT_GREEN_COLOR));
+    final var boltText = new Chunk("Bolt", new Font(REPORT_FONT, 10, BOLD, REPORT_GREEN_COLOR));
     paragraph.add(boltText);
 
     final var labelCell = getQpdfPCell(paragraph);
@@ -442,7 +446,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(WHITE);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     return labelCell;
   }
@@ -452,7 +456,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var paragraph = new Paragraph();
 
     // Добавляем "Кампания " черным цветом
-    final var campaignText = new Chunk("Кампания ", new Font(REPORT_FONT, 10, NORMAL, BLACK));
+    final var campaignText = new Chunk(" - Кампания ", new Font(REPORT_FONT, 10, NORMAL, BLACK));
     paragraph.add(campaignText);
 
     // Добавляем название кампании в кавычках темно-синим цветом
@@ -465,7 +469,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(WHITE);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     return labelCell;
   }
@@ -490,13 +494,23 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount().abs());
 
-    final var rentLabelCell =
-        format("Арендная плата всего: %s %s ", totalRentAmount, currency) + " Состоит из:";
     final var table = getClarificationTable();
-    table.addCell(getClarificationTableHeaderCell(rentLabelCell));
+    final var headerPhrase = new com.lowagie.text.Phrase();
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+                " * " + "Арендная плата всего: ", new Font(REPORT_FONT, 12, Font.BOLD , BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            format("%s %s" , totalRentAmount, currency), new Font(REPORT_FONT, 12, Font.BOLD , REPORT_RED_COLOR)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            " * ", new Font(REPORT_FONT, 12, BOLD, BLACK)));
+
+
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
 
     final var weekRentLabelCell =
-        getClarificationTableLabelCellDarkBlue("Аренда за текущую неделю");
+        getClarificationTableLabelCellDarkBlue("- Аренда за текущую неделю");
 
     final var rentValueCell = getClarificationTableValueCell(rentAmount, language);
     addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);
@@ -538,12 +552,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerText =
         format("Коррекция аренды: %s %s", correctionOfRent, euroCurrency)
-            + " Список коррекций ниже:";
+            + " ";
     final var boltPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerText));
     final var boltPlusLabelCell =
-        getClarificationTableLabelCellMultiColor("Заработок Bolt", language);
+        getClarificationTableLabelCellMultiColor( " Заработок Bolt  ", language);
     final var boltPlusValueCell = getClarificationTableValueCellDarkGray(boltPlusAmount, language);
     addRowIfValueIsNonZero(boltPlusAmount, boltPlusLabelCell, boltPlusValueCell, table);
     table.addCell(getEmptyRow());
@@ -567,8 +581,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount().abs());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var otherObligationsText =
-        format("Прочие обязательства: %s %s", otherObligations, euroCurrency)
-            + " Список этик обязательств:";
+        format("Прочие обязательства: %s %s . ", otherObligations, euroCurrency)
+            + "";
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(otherObligationsText));
     final var depositAmount =
@@ -625,14 +639,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         format(
                 "Требование в счет обязательств на начало недели: %s %s",
                 damagePayment, euroCurrency)
-            + " Список обязательств:";
+            + " ";
     table.addCell(getClarificationTableHeaderCell(headerText));
     table.addCell(getClarificationTableLabelCellDarkBlue("Пени"));
     table.addCell(
         getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
 
     table.addCell(
-        getClarificationTableLabelCell(
+        getClarificationTableLabelCellDarkBlue(
             "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть
     // долг)
     table.addCell(
@@ -673,7 +687,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         amountWithCurrency(model.getTotalPaymentAmount(), language);
     final var valueCell =
         getQpdfPCell(
-            new Paragraph(totalPaymentAmountFormatted, new Font(REPORT_FONT, 14, BOLD, BLACK)));
+            new Paragraph(totalPaymentAmountFormatted, new Font(REPORT_FONT, 14, BOLD, REPORT_RED_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(30f);
@@ -688,7 +702,19 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
   private PdfPCell getClarificationTableHeaderCell(final String headerText) {
     final var tableHeaderCell =
-        getQpdfPCell(new Paragraph(headerText, new Font(REPORT_FONT, 12, NORMAL, BLACK)));
+        getQpdfPCell(new Paragraph(headerText, new Font(REPORT_FONT, 12, BOLD, BLACK)));
+    tableHeaderCell.setHorizontalAlignment(ALIGN_CENTER);
+    tableHeaderCell.setFixedHeight(35f);
+    tableHeaderCell.setPaddingTop(9f);
+    tableHeaderCell.setColspan(2);
+    tableHeaderCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+
+    return tableHeaderCell;
+  }
+
+  private PdfPCell getClarificationTableHeaderCell(final com.lowagie.text.Phrase headerPhrase) {
+    final var tableHeaderCell =
+            getQpdfPCell(new Paragraph(headerPhrase));
     tableHeaderCell.setHorizontalAlignment(ALIGN_CENTER);
     tableHeaderCell.setFixedHeight(35f);
     tableHeaderCell.setPaddingTop(9f);

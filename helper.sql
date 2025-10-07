@@ -172,9 +172,9 @@ delete
 from billing.transaction tx
 where tx.transaction_type_id in (select distinct(id)
                                  from billing.transaction_type
-                                 where name in ('fee replenish', 'compensation', 'fee debt'))
-  and tx.date >= '2025-06-23'::date
-  and tx.date <= '2025-05-29'::date;
+                                 where code in ('fee replenish', 'compensation', 'FEEDBT'))
+  and tx.date >= '2025-09-15'::date
+  and tx.date <= '2025-09-21'::date;
 
 ------------------------
     ---------------------
