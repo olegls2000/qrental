@@ -11,10 +11,7 @@ import ee.qrent.notification.email.core.service.messagestrategy.*;
 import java.util.List;
 
 import ee.qrent.notification.email.api.in.usecase.EmailSendUseCase;
-import ee.qrent.notification.email.core.service.messagestrategy.report.FridayReportLetterBuildStrategy;
-import ee.qrent.notification.email.core.service.messagestrategy.report.MondayReportLetterBuildStrategy;
-import ee.qrent.notification.email.core.service.messagestrategy.report.TuesdayReportLetterBuildStrategy;
-import ee.qrent.notification.email.core.service.messagestrategy.report.WednesdayReportLetterBuildStrategy;
+import ee.qrent.notification.email.core.service.messagestrategy.report.*;
 import ee.qrent.notification.email.domain.EmailNotification;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +36,8 @@ public class EmailNotificationServiceConfig {
         new MondayReportLetterBuildStrategy(templateEngine),
         new TuesdayReportLetterBuildStrategy(templateEngine),
         new WednesdayReportLetterBuildStrategy(templateEngine),
-        new FridayReportLetterBuildStrategy(templateEngine));
+        new FridayReportLetterBuildStrategy(templateEngine),
+        new InfoReportLetterBuildStrategy(templateEngine));
   }
 
   @Bean
