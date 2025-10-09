@@ -18,30 +18,50 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String CURRENCY_NAME_KEY = "CURRENCY_NAME_KEY";
   public static String REPORT_NAME_KEY = "REPORT_NAME_KEY";
   public static String DRIVER_LABEL_KEY = "DRIVER_LABEL_KEY";
-  public static String ID_NUMBER_LABEL_KEY = "ID_NUMBER_LABEL_KEY";
+
+  public static String PERSONAL_NUMBER_LABEL_KEY = "PERSONAL_NUMBER_LABEL_KEY";
   public static String REPORTED_WEEK_LABEL_KEY = "REPORTED_WEEK_LABEL_KEY";
   public static String CALL_SIGN_LABEL_KEY = "CALL_SIGN_LABEL_KEY";
   public static String RENTED_CAR_LABEL_KEY = "RENTED_CAR_LABEL_KEY";
-  public static String CREATED_ON_LABEL_KEY = "CREATED_ON_LABEL_KEY";
-  public static String FINANCIAL_COMMENT_KEY = "FINANCIAL_COMMENT_KEY";
-  public static String DEPOSIT_KEY = "DEPOSIT_KEY";
-  public static String PAID_DEPOSIT_KEY = "PAID_DEPOSIT_KEY";
-  public static String BALANCE_KEY = "BALANCE_KEY";
-  public static String BALANCE_END_WEEK_EXPLANATION_KEY = "BALANCE_END_WEEK_EXPLANATION_KEY";
-  public static String BALANCE_MONDAY_EXPLANATION_KEY = "BALANCE_MONDAY_EXPLANATION_KEY";
-  public static String DEBT_KEY = "DEBT_KEY";
-  public static String DEBT_EXPLANATION_KEY = "DEBT_EXPLANATION_KEY";
-  public static String OBLIGATION_KEY = "OBLIGATION_KEY";
-  public static String OBLIGATION_COMPLETED_EXPLANATION_KEY =
-      "OBLIGATION_COMPLETED_EXPLANATION_KEY";
-  public static String OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY =
-      "OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY";
-  public static String OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY =
-      "OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY";
-  public static String TRANSACTION_TABLE_NAME_KEY = "TRANSACTION_TABLE_NAME_KEY";
-  public static String TRANSACTION_TABLE_TYPE_COLUMN_KEY = "TRANSACTION_TABLE_TYPE_COLUMN_KEY";
-  public static String TRANSACTION_TABLE_AMOUNT_COLUMN_KEY = "TRANSACTION_TABLE_AMOUNT_COLUMN_KEY";
-  public static String REPORT_COMMENT_KEY = "REPORT_COMMENT_KEY";
+  public static String THURSDAY_LABEL_KEY = "THURSDAY_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_1_LABEL_KEY = "OBLIGATION_TEXT_PART_1_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY =
+      "OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY =
+      "OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_3_LABEL_KEY = "OBLIGATION_TEXT_PART_3_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_4_LABEL_KEY = "OBLIGATION_TEXT_PART_4_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_5_LABEL_KEY = "OBLIGATION_TEXT_PART_5_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_6_LABEL_KEY = "OBLIGATION_TEXT_PART_6_LABEL_KEY";
+  public static String THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY =
+      "THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY";
+  public static String THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY =
+      "THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY";
+  public static String THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY =
+      "THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY";
+  public static String THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY =
+      "THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY";
+  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY =
+      "BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY";
+  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY =
+      "BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY";
+  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_3_LABEL_KEY =
+      "BONUS_PROGRAM_ACTIVE_TEXT_PART_3_LABEL_KEY";
+  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_4_LABEL_KEY =
+      "BONUS_PROGRAM_ACTIVE_TEXT_PART_4_LABEL_KEY";
+  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY =
+      "BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY";
+
+  public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_1_LABEL_KEY =
+      "BONUS_PROGRAM_INACTIVE_TEXT_PART_1_LABEL_KEY";
+  public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_2_LABEL_KEY =
+      "BONUS_PROGRAM_INACTIVE_TEXT_PART_2_LABEL_KEY";
+  public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY =
+      "BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY";
+  public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY =
+      "BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY";
+  public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY =
+      "BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY";
 
   static {
     mapRus =
@@ -49,115 +69,139 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ОТЧЕТ НА ПОНЕДЕЛЬНИК"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Водитель"),
-            new AbstractMap.SimpleEntry<>(
-                ID_NUMBER_LABEL_KEY, "Личный код"),
-            new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Отчетная неделя"),
+            new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
-            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Используемый в данный момент автомобиль"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Создано на"),
             new AbstractMap.SimpleEntry<>(
-                FINANCIAL_COMMENT_KEY, "По нашим данным Ваше финансовое состояние"),
-            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Депозит"),
-            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Оплаченный депозит"),
-            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Баланс"),
+                RENTED_CAR_LABEL_KEY, "Используемый в данный момент автомобиль"),
             new AbstractMap.SimpleEntry<>(
-                BALANCE_END_WEEK_EXPLANATION_KEY, "в конце отчетной недели"),
+                THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "Ты"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "выполнил"),
             new AbstractMap.SimpleEntry<>(
-                BALANCE_MONDAY_EXPLANATION_KEY, "в понедельник после отчетной недели"),
-            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Долг"),
-            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "в конце отчетной недели"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Обязательство"),
+                OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "не выполнил"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_3_LABEL_KEY, "свои"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_4_LABEL_KEY, "обязательства"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "за прошлую неделю"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_EXPLANATION_KEY,
-                "Твои обязательства были выполнены своевременно и в полном объеме – согласно условиям твоего договора"),
+                OBLIGATION_TEXT_PART_6_LABEL_KEY, "своевременно и в полном объеме."),
+            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "Твой долг"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
-                "Твои обязательства были выполнены в полном объеме, но с опозданием"),
+                THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY, "Твоя предоплата"),
+            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "на конец"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
-                "Твои обязательства не были выполнены своевременно и в полном объеме"),
+                THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "четверга прошлой недели:"),
             new AbstractMap.SimpleEntry<>(
-                TRANSACTION_TABLE_NAME_KEY, "Отчетные недельные транзакции"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Тип"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Сумма"),
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "В знак нашей благодарности"),
             new AbstractMap.SimpleEntry<>(
-                REPORT_COMMENT_KEY,
-                "Данные о корректировках с заработков или обязательств из приложений (Bolt, Forus) будут внесены в твой баланс до 12:00 вторника этой недели. Свой обновленный отчет и сальдо ты получишь вскоре после этого."));
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY, "мы активировали"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_ACTIVE_TEXT_PART_3_LABEL_KEY, "все наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_4_LABEL_KEY, "бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_1_LABEL_KEY, "К сожалению, наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_2_LABEL_KEY, "бонусные кампании не будут"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY, "для тебя"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "доступны"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "на текущей неделе."));
+
+    ///  /////////////////////////////////////////////
 
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "MONDAY REPORT"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Driver"),
-            new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Personal identification number"),
+            new AbstractMap.SimpleEntry<>(
+                PERSONAL_NUMBER_LABEL_KEY, "Personal identification number"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
-            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Call Sign"),
-            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Rented Car"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Created on"),
+            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Call Sign in Q System"),
             new AbstractMap.SimpleEntry<>(
-                FINANCIAL_COMMENT_KEY, "According to our data, your financial state is"),
-            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Deposit"),
-            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Paid Deposit"),
-            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Balance"),
+                THURSDAY_LABEL_KEY, "?? Данные на конец четверга прошлой недели"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "?? Ты"),
             new AbstractMap.SimpleEntry<>(
-                BALANCE_END_WEEK_EXPLANATION_KEY, "on the end of Reported Week"),
+                OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "?? выполнил"),
             new AbstractMap.SimpleEntry<>(
-                BALANCE_MONDAY_EXPLANATION_KEY, "on Monday after Reported Week"),
-            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Debt"),
-            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "on the end of Reported Week"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Obligation"),
+                OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "?? не выполнил"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_3_LABEL_KEY, "?? свои"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_4_LABEL_KEY, "?? обязательства"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "?? за прошлую неделю"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_EXPLANATION_KEY,
-                "Your obligations were fulfilled on time and in full – according to the terms of your contract"),
+                THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "?? Твой долг"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
-                "Your obligations were fulfilled in full, but late."),
+                THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY, "?? Твоя предоплата"),
+            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "?? на конец"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
-                "Your obligations were not fulfilled in a timely manner and in full"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Reported Week Transactions"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Type"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Amount"),
+                THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "?? четверга прошлой недели:"),
             new AbstractMap.SimpleEntry<>(
-                REPORT_COMMENT_KEY,
-                "Adjustments to earnings or liabilities from applications (Bolt, Forus) will be entered into your balance by 12:00 Tuesday of this week. You will receive your updated report and balance shortly thereafter."));
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "?? В знак нашей благодарности"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY, "?? мы активировали"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_3_LABEL_KEY, "?? все наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_4_LABEL_KEY, "?? бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_1_LABEL_KEY, "?? К сожалению, наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_2_LABEL_KEY, "?? бонусные кампании не будут"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY, "?? для тебя"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "?? доступны"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."));
+    /////////////////////////////////////////////////////////////////////////////////////////
 
     mapEst =
         Map.ofEntries(
-                new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
+            new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "ESMASPÄEVANE ARUANNE"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Juht"),
-            new AbstractMap.SimpleEntry<>(ID_NUMBER_LABEL_KEY, "Isikukood"),
+            new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
-            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Kutsung"),
-            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Renditud auto"),
-            new AbstractMap.SimpleEntry<>(CREATED_ON_LABEL_KEY, "Loodud"),
+            new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "?? Kutsung"),
+            new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "?? Renditud auto"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "?? Ты"),
             new AbstractMap.SimpleEntry<>(
-                FINANCIAL_COMMENT_KEY, "Meie andmetel on teie finantsseisund"),
-            new AbstractMap.SimpleEntry<>(DEPOSIT_KEY, "Deposiit"),
-            new AbstractMap.SimpleEntry<>(PAID_DEPOSIT_KEY, "Tasutud tagatisraha"),
-            new AbstractMap.SimpleEntry<>(BALANCE_KEY, "Tasakaal"),
-            new AbstractMap.SimpleEntry<>(BALANCE_END_WEEK_EXPLANATION_KEY, "aruandenädala lõpus"),
+                OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "?? выполнил"),
             new AbstractMap.SimpleEntry<>(
-                BALANCE_MONDAY_EXPLANATION_KEY, "esmaspäeval pärast aruandenädalat"),
-            new AbstractMap.SimpleEntry<>(DEBT_KEY, "Võlg"),
-            new AbstractMap.SimpleEntry<>(DEBT_EXPLANATION_KEY, "aruandenädala lõpus"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_KEY, "Kohustus"),
+                OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "?? не выполнил"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_3_LABEL_KEY, "?? свои"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_4_LABEL_KEY, "?? обязательства"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "?? за прошлую неделю"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_EXPLANATION_KEY,
-                "Teie kohustused täideti õigeaegselt ja täielikult – vastavalt teie lepingu tingimustele"),
+                THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "?? Твой долг"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_COMPLETED_WITH_DELAY_EXPLANATION_KEY,
-                "Teie kohustused täideti täielikult, kuid hilinenult"),
+                THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY, "?? Твоя предоплата"),
+            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "?? на конец"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_NOT_COMPLETED_EXPLANATION_KEY,
-                "Teie kohustusi ei täidetud õigeaegselt ja täielikult"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_NAME_KEY, "Aruandenädala tehingud"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_TYPE_COLUMN_KEY, "Tüüp"),
-            new AbstractMap.SimpleEntry<>(TRANSACTION_TABLE_AMOUNT_COLUMN_KEY, "Summa"),
+                THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "?? четверга прошлой недели:"),
             new AbstractMap.SimpleEntry<>(
-                REPORT_COMMENT_KEY,
-                "Rakenduste (Bolt, Forus) tulude või kohustuste korrigeerimised kantakse teie saldole selle nädala teisipäevaks kell 12.00. Saate oma uuendatud aruande ja saldo varsti pärast seda."));
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "?? В знак нашей благодарности"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY, "?? мы активировали"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_3_LABEL_KEY, "?? все наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_4_LABEL_KEY, "?? бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_1_LABEL_KEY, "?? К сожалению, наши"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_2_LABEL_KEY, "?? бонусные кампании не будут"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY, "?? для тебя"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "?? доступны"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
