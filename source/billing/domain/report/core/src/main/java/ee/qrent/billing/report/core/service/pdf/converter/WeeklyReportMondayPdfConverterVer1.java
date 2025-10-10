@@ -67,16 +67,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getBonusStatus(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
-        getClarificationHeaderRowColored("Ниже детальная информация по ", "твоим обязательствам"));
-    // weeklyReportPdfDoc.add(getLineSeparator());
+        getClarificationHeaderRowColored(
+            getLabel(language, OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY),
+            getLabel(language, OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY)));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
-    // weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
-    //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
-    //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
-    //  weeklyReportPdfDoc.add(getLineSeparator());
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable());
     weeklyReportPdfDoc.close();
@@ -291,21 +288,21 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   }
 
   private PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
-    final var lanquage = model.getLanguage();
+    final var language = model.getLanguage();
     final var row = getQpdfTable(1);
     final var nextWeekDaysFormatted = getInterval(model.getNextWeekStart(), model.getNextWeekEnd());
     final var paragraph = new Paragraph();
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY),
             new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY),
             new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY),
             new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
         new Chunk(
@@ -313,33 +310,33 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            "\n" + getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY),
+            "\n" + getLabel(language, OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY),
-            new Font(REPORT_FONT, 10)));
-
-    paragraph.add(
-        new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY),
-            new Font(REPORT_FONT, 10)));
-    paragraph.add(
-        new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
 
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY) + "\n",
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
+
+    paragraph.add(
+        new Chunk(
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY),
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY) + "\n",
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            getLabel(language, OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
     paragraph.add(new Chunk(nextWeekDaysFormatted, new Font(REPORT_FONT, 10, BOLD)));
     final var cell = getQpdfPCell(paragraph);
@@ -515,7 +512,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            " * " + "Арендная плата всего: ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+            " * " + getLabel(language, RENT_HEADER_TEXT_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", totalRentAmount, currency),
@@ -525,7 +523,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
 
     final var weekRentLabelCell =
-        getClarificationTableLabelCellDarkBlue("- Аренда за текущую неделю");
+        getClarificationTableLabelCellDarkBlue(
+            "- " + getLabel(language, RENT_CLARIFICATION_TEXT_LABEL_KEY));
 
     final var rentValueCell = getClarificationTableValueCell(rentAmount, language);
     addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);

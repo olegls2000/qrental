@@ -84,6 +84,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY =
       "OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY";
 
+  public static String OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY =
+      "OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY";
+  public static String OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY =
+      "OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY";
+  public static String RENT_HEADER_TEXT_LABEL_KEY = "RENT_HEADER_TEXT_LABEL_KEY";
+
+  public static String RENT_CLARIFICATION_TEXT_LABEL_KEY = "RENT_CLARIFICATION_TEXT_LABEL_KEY";
+
   static {
     mapRus =
         Map.ofEntries(
@@ -142,7 +150,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "активировать бонусные кампании"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "на следующую неделю"));
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "на следующую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Ниже детальная информация по"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "твоим обязательствам"),
+            new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "Арендная плата всего:"),
+            new AbstractMap.SimpleEntry<>(
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "Аренда за текущую неделю"));
 
     ///  /////////////////////////////////////////////
 
@@ -207,7 +222,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "?? активировать бонусные кампании"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"));
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "?? Ниже детальная информация по"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "?? твоим обязательствам"),
+            new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "?? Арендная плата всего:"),
+            new AbstractMap.SimpleEntry<>(
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"));
     /////////////////////////////////////////////////////////////////////////////////////////
 
     mapEst =
@@ -269,7 +291,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "?? активировать бонусные кампании"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"));
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "?? Ниже детальная информация по"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "?? твоим обязательствам"),
+            new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "?? Арендная плата всего:"),
+            new AbstractMap.SimpleEntry<>(
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
