@@ -284,57 +284,64 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     table.addCell(cellEmpty);
 
     final var row = getQpdfTable(1);
-
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 14, BOLD)));
     row.addCell(paddingTopCell);
-
-    final var labelBeginning =
-        format(
-            "Согласно последним данным, внесенным в нашу программу на конец четверга прошлой недели, твои обязательства перед 'Q Takso Veod OÜ' за прошлую неделю %s ",
-            weekDaysFormatted);
-
-    final var obligationMatchText =
-        format(
-            "были выполнены своевременно и в полном объеме – согласно условиям твоего договора. Твоё сальдо на конец четверга прошлой недели %s составило: %s в виде предоплаты. Эта предоплата учтена при рассчете твоих последующих обязательств. В знак нашей благодарности мы активировали все наши еженедельные бонусные кампании в твоем аккаунте",
-            weekDaysFormatted, netAmountOnThursday);
-
-    final var obligationMissMatchText =
-        format(
-            "не были выполнены своевременно и в полном объеме. Твое сальдо на конец прошлой недели %s составило: %s в виде долга. К сожалению, по причине этого наши еженедельные бонусных кампании не будут для тебя доступны, а сам долг будет учтен при рассчете твоих последующих обязательств.",
-            weekDaysFormatted, netAmountOnThursday);
-    final var obligationText =
-        model.getObligationStatus().equals("COMPLETED")
-            ? labelBeginning.concat(obligationMatchText)
-            : labelBeginning.concat(obligationMissMatchText);
-    final var cell = getQpdfPCell(new Paragraph(obligationText, new Font(REPORT_FONT, 9)));
-    cell.setHorizontalAlignment(ALIGN_LEFT);
-    cell.setVerticalAlignment(ALIGN_BOTTOM);
-    cell.setFixedHeight(55f);
-    row.addCell(cell);
 
     return table;
   }
 
   private PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
+    final var lanquage = model.getLanguage();
     final var row = getQpdfTable(1);
     final var nextWeekDaysFormatted = getInterval(model.getNextWeekStart(), model.getNextWeekEnd());
     final var paragraph = new Paragraph();
-    paragraph.add(new Chunk("Cейчас ", new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
-        new Chunk("твои обязательства", new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
-    paragraph.add(new Chunk(" за текущую неделю составляют: ", new Font(REPORT_FONT, 10, BOLD)));
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD)));
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD)));
     paragraph.add(
         new Chunk(
             amountWithCurrency(model.getTotalPaymentAmount(), model.getLanguage()),
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            "\nПожалуйста, оплати эту сумму до 16:00 завтрашнего дня, чтобы активировать бонусные кампании  \n",
+            "\n" + getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY),
             new Font(REPORT_FONT, 10)));
     paragraph.add(
         new Chunk(
-            format("на следующую неделю %s", nextWeekDaysFormatted), new Font(REPORT_FONT, 10)));
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
 
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
+
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY) + "\n",
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(
+        new Chunk(
+            getLabel(lanquage, OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY),
+            new Font(REPORT_FONT, 10)));
+    paragraph.add(new Chunk(nextWeekDaysFormatted, new Font(REPORT_FONT, 10, BOLD)));
     final var cell = getQpdfPCell(paragraph);
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_BOTTOM);

@@ -63,6 +63,27 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY =
       "BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY";
 
+  public static String OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY";
+  public static String OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY =
+      "OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY";
+
   static {
     mapRus =
         Map.ofEntries(
@@ -106,7 +127,22 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_INACTIVE_TEXT_PART_3_LABEL_KEY, "для тебя"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "доступны"),
             new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "на текущей неделе."));
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY, "Cейчас"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY, "твои обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY, "за текущую неделю составляют:"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY, "Пожалуйста,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY, "оплати,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY, "эту сумму"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY, "до 16:00"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY, "завтрашнего дня, чтобы"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "активировать бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "на следующую неделю"));
 
     ///  /////////////////////////////////////////////
 
@@ -155,7 +191,23 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "?? доступны"),
             new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."));
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY, "?? Cейчас"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY, "?? твои обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY, "?? за текущую неделю составляют:"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY, "?? Пожалуйста,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY, "?? оплати,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY, "?? эту сумму"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY, "?? до 16:00"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY, "?? завтрашнего дня, чтобы"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "?? активировать бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"));
     /////////////////////////////////////////////////////////////////////////////////////////
 
     mapEst =
@@ -201,7 +253,23 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_INACTIVE_TEXT_PART_4_LABEL_KEY, "?? доступны"),
             new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."));
+                BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY, "?? на текущей неделе."),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY, "?? Cейчас"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY, "?? твои обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY, "?? за текущую неделю составляют:"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY, "?? Пожалуйста,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_5_LABEL_KEY, "?? оплати,"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_6_LABEL_KEY, "?? эту сумму"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_MONDAY_TEXT_PART_7_LABEL_KEY, "?? до 16:00"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_8_LABEL_KEY, "?? завтрашнего дня, чтобы"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "?? активировать бонусные кампании"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "?? на следующую неделю"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
