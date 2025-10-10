@@ -89,8 +89,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY =
       "OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY";
   public static String RENT_HEADER_TEXT_LABEL_KEY = "RENT_HEADER_TEXT_LABEL_KEY";
-
   public static String RENT_CLARIFICATION_TEXT_LABEL_KEY = "RENT_CLARIFICATION_TEXT_LABEL_KEY";
+  public static String BONUS_PROGRAM_LABEL_KEY = "BONUS_PROGRAM_LABEL_KEY";
+  public static String BONUS_PROGRAM_REL_PARTNER_LABEL_KEY = "BONUS_PROGRAM_REL_PARTNER_LABEL_KEY";
+  public static String BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY = "BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY";
+  public static String BONUS_PROGRAM_FRIEND_REF_LABEL_KEY = "BONUS_PROGRAM_FRIEND_REF_LABEL_KEY";
 
   static {
     mapRus =
@@ -157,7 +160,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
                 OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "твоим обязательствам"),
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "Арендная плата всего:"),
             new AbstractMap.SimpleEntry<>(
-                RENT_CLARIFICATION_TEXT_LABEL_KEY, "Аренда за текущую неделю"));
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "Аренда за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "Кампания"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Надежный партнер"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "«Поездки Bolt"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Приведи друга"));
 
     ///  /////////////////////////////////////////////
 
@@ -229,7 +236,12 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
                 OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "?? твоим обязательствам"),
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "?? Арендная плата всего:"),
             new AbstractMap.SimpleEntry<>(
-                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"));
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "?? Кампания"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "?? Надежный партнер"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "?? Поездки Bolt"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "?? Приведи друга"));
     /////////////////////////////////////////////////////////////////////////////////////////
 
     mapEst =
@@ -298,7 +310,12 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
                 OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "?? твоим обязательствам"),
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "?? Арендная плата всего:"),
             new AbstractMap.SimpleEntry<>(
-                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"));
+                RENT_CLARIFICATION_TEXT_LABEL_KEY, "?? Аренда за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "?? Кампания"),
+            new AbstractMap.SimpleEntry<>(
+                BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "?? Надежный партнер"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "?? Поездки Bolt"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "?? Приведи друга"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);

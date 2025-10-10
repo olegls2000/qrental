@@ -470,12 +470,16 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var paragraph = new Paragraph();
 
     // Добавляем "Кампания " черным цветом
-    final var campaignText = new Chunk(" - Кампания ", new Font(REPORT_FONT, 10, NORMAL, BLACK));
+    final var campaignText =
+        new Chunk(
+            " - " + getLabel(language, BONUS_PROGRAM_LABEL_KEY),
+            new Font(REPORT_FONT, 10, NORMAL, BLACK));
     paragraph.add(campaignText);
 
     // Добавляем название кампании в кавычках темно-синим цветом
     final var campaignNameText =
-        new Chunk(campaignName, new Font(REPORT_FONT, 10, BOLD, REPORT_DARK_BLUE_COLOR));
+        new Chunk(
+            format("«%s»", campaignName), new Font(REPORT_FONT, 10, BOLD, REPORT_DARK_BLUE_COLOR));
     paragraph.add(campaignNameText);
 
     final var labelCell = getQpdfPCell(paragraph);
@@ -530,7 +534,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);
 
     final var bonusReliablePartnerLabelCell =
-        getClarificationTableLabelCellCampaign("«Надежный партнер»", language);
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_REL_PARTNER_LABEL_KEY), language);
     final var bonusReliablePartnerValueCell =
         getClarificationTableValueCell(bonusReliablePartnerAmount, language);
     addRowIfValueIsNonZero(
@@ -539,11 +544,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         bonusReliablePartnerValueCell,
         table);
     final var bonusBoltLabelCell =
-        getClarificationTableLabelCellCampaign("«Поездки Bolt»", language);
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY), language);
     final var bonusBoltValueCell = getClarificationTableValueCell(bonusBoltAmount, language);
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
     final var bonusFriendLabelCell =
-        getClarificationTableLabelCellCampaign("«Приведи друга»", language);
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_FRIEND_REF_LABEL_KEY), language);
     final var bonusFriendValueCell = getClarificationTableValueCell(bonusFriendAmount, language);
     addRowIfValueIsNonZero(bonusFriendAmount, bonusFriendLabelCell, bonusFriendValueCell, table);
     table.addCell(getEmptyRow());
