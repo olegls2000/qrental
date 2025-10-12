@@ -107,6 +107,8 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String DEMAND_FEE_LABEL_KEY = "DEMAND_FEE_LABEL_KEY";
   public static String DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY =
       "DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY";
+  public static String TOTAL_PAYMENT_LABEL_KEY = "TOTAL_PAYMENT_LABEL_KEY";
+  public static String COMMENT_LABEL_KEY = "COMMENT_LABEL_KEY";
 
   static {
     mapRus =
@@ -190,7 +192,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
                 "Требование в счет обязательств на начало недели"),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг (без учета ремонтов)"));
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг (без учета ремонтов)"),
+            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Итого к оплате"),
+            new AbstractMap.SimpleEntry<>(
+                COMMENT_LABEL_KEY,
+                "Данные в этой рассылке являются информативными, сами по себе не налагают ни на одну из сторон никаких обязательств и меняются по мере занесения их в систему"));
 
     ///  /////////////////////////////////////////////
 
@@ -276,9 +282,13 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY,
                 "??Требование в счет обязательств на начало недели"),
-                new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "??Пени"),
+            new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "??Пени"),
+            new AbstractMap.SimpleEntry<>(
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "??Общий долг (без учета ремонтов)"),
+                new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "??Итого к оплате"),
                 new AbstractMap.SimpleEntry<>(
-                        DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "??Общий долг (без учета ремонтов)"));
+                        COMMENT_LABEL_KEY,
+                        "??Данные в этой рассылке являются информативными, сами по себе не налагают ни на одну из сторон никаких обязательств и меняются по мере занесения их в систему"));
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -363,9 +373,13 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY,
                 "??Требование в счет обязательств на начало недели"),
-                new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "??Пени"),
+            new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "??Пени"),
+            new AbstractMap.SimpleEntry<>(
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "??Общий долг (без учета ремонтов)"),
+                new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "??Итого к оплате"),
                 new AbstractMap.SimpleEntry<>(
-                        DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "??Общий долг (без учета ремонтов)"));
+                        COMMENT_LABEL_KEY,
+                        "??Данные в этой рассылке являются информативными, сами по себе не налагают ни на одну из сторон никаких обязательств и меняются по мере занесения их в систему"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);

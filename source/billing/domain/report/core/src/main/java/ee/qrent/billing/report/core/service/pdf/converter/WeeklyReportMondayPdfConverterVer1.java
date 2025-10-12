@@ -73,21 +73,20 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
     weeklyReportPdfDoc.add(getDemandOnTheBeginningOfWeek(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
-    weeklyReportPdfDoc.add(getCommentRowTable());
+    weeklyReportPdfDoc.add(getCommentRowTable(language));
     weeklyReportPdfDoc.close();
     writer.close();
 
     return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
   }
 
-  private PdfPTable getCommentRowTable() {
+  private PdfPTable getCommentRowTable(final String language) {
     final var row = getQpdfTable(1);
 
     final var cell =
         getQpdfPCell(
             new Paragraph(
-                "Данные в этой рассылке являются информативными, сами по себе не налагают ни на одну из сторон никаких обязательств и меняются по мере занесения их в систему",
-                new Font(REPORT_FONT, 9, Font.BOLD, BLACK)));
+                getLabel(language, COMMENT_LABEL_KEY), new Font(REPORT_FONT, 9, Font.BOLD, BLACK)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_BOTTOM);
     row.addCell(cell);
@@ -696,7 +695,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             getLabel(
                 language,
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на понедельник ( при
-                                                             // условии что есть
+    // условии что есть
     // долг)
     table.addCell(
         getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
@@ -724,7 +723,10 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var table = getQpdfTable(2);
     final var language = model.getLanguage();
     final var labelCell =
-        getQpdfPCell(new Paragraph("Итого к оплате:", new Font(REPORT_FONT, 14, Font.BOLD, BLACK)));
+        getQpdfPCell(
+            new Paragraph(
+                getLabel(language, TOTAL_PAYMENT_LABEL_KEY) + ":",
+                new Font(REPORT_FONT, 14, Font.BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(30f);
