@@ -69,7 +69,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             getLabel(language, OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY),
             getLabel(language, OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY)));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
-    weeklyReportPdfDoc.add(getExternalSystemsIncomeClarificationTable(model));
+    weeklyReportPdfDoc.add(getRentAdjustmentClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
     weeklyReportPdfDoc.add(getClarificationBlock4(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
@@ -564,7 +564,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return emptyRow;
   }
 
-  private PdfPTable getExternalSystemsIncomeClarificationTable(final WeeklyReportPdfModel model) {
+  private PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
     final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
@@ -582,11 +582,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
 
-    final var a = getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY);
-    final var b = getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY);
-
     final var paragraph = new Paragraph();
-
     final var incomeText =
         new Chunk(
             " - " + getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY),
@@ -628,23 +624,23 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var language = model.getLanguage();
     final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount().abs());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
-    final var otherObligationsText =
-        format("Прочие обязательства: %s %s . ", otherObligations, euroCurrency) + "";
+    final var headerPhrase = new com.lowagie.text.Phrase();
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            format("%s %s", otherObligations, euroCurrency),
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     final var table = getClarificationTable();
-    table.addCell(getClarificationTableHeaderCell(otherObligationsText));
-    final var depositAmount =
-        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, ZERO);
-    final var depositLabelCell = getClarificationTableLabelCellDarkBlue("Залог");
-    final var depositValueCell = getClarificationTableValueCell(depositAmount, language);
-    addRowIfValueIsNonZero(depositAmount, depositLabelCell, depositValueCell, table);
-
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
     final var innerInsuranceAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
     final var innerInsuranceLabelCell =
-        getClarificationTableLabelCellDarkBlue(
-            "ДВС за текущую неделю (дополнительное внутреннее страхование)");
+        getClarificationTableLabelCellDarkBlue(getLabel(language, ADD_INN_INSURANCE_LABEL_KEY));
     final var innerInsuranceValueCell =
         getClarificationTableValueCell(innerInsuranceAmount, language);
     addRowIfValueIsNonZero(

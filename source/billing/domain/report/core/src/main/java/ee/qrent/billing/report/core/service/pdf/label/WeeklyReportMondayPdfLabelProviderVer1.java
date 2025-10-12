@@ -99,6 +99,8 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
       "RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY";
   public static String RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY =
       "RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY";
+  public static String OTHER_OBLIGATIONS_LABEL_KEY = "OTHER_OBLIGATIONS_LABEL_KEY";
+  public static String ADD_INN_INSURANCE_LABEL_KEY = "ADD_INN_INSURANCE_LABEL_KEY";
 
   static {
     mapRus =
@@ -172,7 +174,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Приведи друга"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "Коррекция аренды"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "Заработок"),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"));
+            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "Прочие обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                ADD_INN_INSURANCE_LABEL_KEY,
+                "ДВС за текущую неделю (дополнительное внутреннее страхование)"));
 
     ///  /////////////////////////////////////////////
 
@@ -250,7 +256,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Bring a friend"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "??Коррекция аренды"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "??Заработок"),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"));
+            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "??Прочие обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                ADD_INN_INSURANCE_LABEL_KEY,
+                "??ДВС за текущую неделю (дополнительное внутреннее страхование)"));
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -327,7 +337,11 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Soovita sõbrale"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "?? Коррекция аренды"),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "??Заработок"),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"));
+            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "??Прочие обязательства"),
+            new AbstractMap.SimpleEntry<>(
+                ADD_INN_INSURANCE_LABEL_KEY,
+                "??ДВС за текущую неделю (дополнительное внутреннее страхование)"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
