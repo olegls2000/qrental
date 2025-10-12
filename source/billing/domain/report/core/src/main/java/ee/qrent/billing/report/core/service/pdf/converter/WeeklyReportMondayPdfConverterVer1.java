@@ -71,7 +71,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getRentAdjustmentClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
-    weeklyReportPdfDoc.add(getClarificationBlock4(model));
+    weeklyReportPdfDoc.add(getDemandOnTheBeginningOfWeek(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable());
     weeklyReportPdfDoc.close();
@@ -672,22 +672,31 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     return table;
   }
 
-  private PdfPTable getClarificationBlock4(final WeeklyReportPdfModel model) {
+  private PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    final var damagePayment =
-        formatAmount(model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE));
+    final var demandAmount = formatAmount(BigDecimal.valueOf(-9999).abs());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
-    final var headerText =
-        format("Пени и рассроченные обязательства: %s %s", damagePayment, euroCurrency) + " ";
-    table.addCell(getClarificationTableHeaderCell(headerText));
-    table.addCell(getClarificationTableLabelCellDarkBlue("Пени"));
+    final var headerPhrase = new com.lowagie.text.Phrase();
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            format("%s %s", demandAmount, euroCurrency),
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
+    table.addCell(getClarificationTableLabelCellDarkBlue(getLabel(language, DEMAND_FEE_LABEL_KEY)));
     table.addCell(
         getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
 
     table.addCell(
         getClarificationTableLabelCellDarkBlue(
-            "Общий долг (без учета ремонтов)")); // из баланса на понедельник ( при условии что есть
+            getLabel(
+                language,
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на понедельник ( при
+                                                             // условии что есть
     // долг)
     table.addCell(
         getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
