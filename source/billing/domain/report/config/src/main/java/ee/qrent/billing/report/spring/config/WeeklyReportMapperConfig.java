@@ -3,6 +3,7 @@ package ee.qrent.billing.report.spring.config;
 import ee.qrent.billing.bonus.api.in.query.GetObligationQuery;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.report.adapter.mapper.WeeklyReportAdapterMapper;
 import ee.qrent.billing.report.adapter.mapper.WeeklyReportCalculationAdapterMapper;
@@ -25,9 +26,10 @@ public class WeeklyReportMapperConfig {
   WeeklyReportResponseMapper getWeeklyReportResponseMapper(
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
-      final GetCarLinkQuery carLinkQuery) {
+      final GetCarLinkQuery carLinkQuery,
+      final GetCallSignQuery callSignQuery) {
 
-    return new WeeklyReportResponseMapper(qWeekQuery, driverQuery, carLinkQuery);
+    return new WeeklyReportResponseMapper(qWeekQuery, driverQuery, carLinkQuery, callSignQuery);
   }
 
   @Bean

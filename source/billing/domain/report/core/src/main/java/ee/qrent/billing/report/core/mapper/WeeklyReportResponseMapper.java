@@ -1,6 +1,7 @@
 package ee.qrent.billing.report.core.mapper;
 
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
+import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.report.api.in.request.WeeklyReportTypeIn;
@@ -19,6 +20,7 @@ public class WeeklyReportResponseMapper
   private final GetQWeekQuery qWeekQuery;
   private final GetDriverQuery driverQuery;
   private final GetCarLinkQuery carLinkQuery;
+  private final GetCallSignQuery callSignQuery;
 
   @Override
   public WeeklyReportResponse toResponse(final WeeklyReport domain) {
@@ -27,13 +29,14 @@ public class WeeklyReportResponseMapper
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var driver = driverQuery.getById(driverId);
     final var carLink = carLinkQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    final var callSign = callSignQuery.getById(domain.getCallSignId());
 
     return WeeklyReportResponse.builder()
         .id(domain.getId())
         .type(getInType(domain.getType()).getLabel())
         .driverName(driver.getFirstName() + " " + driver.getLastName())
         .driverTaxNumber(driver.getTaxNumber())
-        .callSign(driver.getCallSign())
+        .callSign(callSign.getCallSign())
         .carRegistrationNumber(
             carLink == null ? "No Car during period" : carLink.getRegistrationNumber())
         .weekYear(qWeek.getYear())
