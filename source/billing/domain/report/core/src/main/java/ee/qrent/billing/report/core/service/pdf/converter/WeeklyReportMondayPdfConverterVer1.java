@@ -206,10 +206,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     paragraph1.add(getBoldChunk(weekDaysFormatted));
     paragraph1.add(getNormalChunk(getLabel(language, OBLIGATION_TEXT_PART_6_LABEL_KEY)));
 
+
     final var cell1 = getQpdfPCell(paragraph1);
+
     cell1.setHorizontalAlignment(ALIGN_CENTER);
     cell1.setVerticalAlignment(ALIGN_MIDDLE);
     table.addCell(cell1);
+    table.addCell(getEmptyRow());
 
     final var paragraph2 = new Paragraph();
     paragraph2.add(
@@ -262,6 +265,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     cell3.setHorizontalAlignment(ALIGN_CENTER);
     cell3.setVerticalAlignment(ALIGN_MIDDLE);
     table.addCell(cell3);
+    table.addCell(getEmptyRow());
 
     final var paragraphEmpty = new Paragraph();
     final var cellEmpty = getQpdfPCell(paragraphEmpty);
@@ -397,7 +401,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setFixedHeight(18f);
 
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
     ;
 
     return labelCell;
@@ -412,7 +416,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 amountWithCurrency(value, language), new Font(REPORT_FONT, 10, Font.BOLD, color)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
-    valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    valueCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
     valueCell.setFixedHeight(18f);
     valueCell.setPaddingLeft(8f);
 
@@ -430,7 +434,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(18f);
     valueCell.setPaddingLeft(8f);
-    valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    valueCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
     ;
 
     return valueCell;
@@ -455,7 +459,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
 
     return labelCell;
   }
@@ -483,7 +487,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
 
     return labelCell;
   }
@@ -569,14 +573,18 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerPhrase = new com.lowagie.text.Phrase();
+
     headerPhrase.add(
         new com.lowagie.text.Chunk(
+                " * " +
             getLabel(language, RENT_ADJUSTMENT_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", correctionOfRent, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
+    headerPhrase.add(
+            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var boltPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
@@ -600,7 +608,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
     final var boltPlusValueCell = getClarificationTableValueCellDarkGray(boltPlusAmount, language);
     addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
     table.addCell(getEmptyRow());
@@ -626,12 +634,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
+                " * " + getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", otherObligations, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
+    headerPhrase.add(
+            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
     final var innerInsuranceAmount =
@@ -679,12 +689,15 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
+                " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", demandAmount, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
+    headerPhrase.add(
+            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
     table.addCell(getClarificationTableLabelCellDarkBlue(getLabel(language, DEMAND_FEE_LABEL_KEY)));
     table.addCell(
@@ -729,10 +742,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 new Font(REPORT_FONT, 14, Font.BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
+    labelCell.setBorderWidthTop(1f);
     labelCell.setFixedHeight(30f);
 
+    labelCell.setPaddingTop(7f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
     table.addCell(labelCell);
     final var totalPaymentAmountFormatted =
         amountWithCurrency(model.getTotalPaymentAmount(), language);
@@ -743,10 +758,13 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 new Font(REPORT_FONT, 14, Font.BOLD, REPORT_RED_COLOR)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
+
+    valueCell.setBorderWidthTop(1f);
     valueCell.setFixedHeight(30f);
 
+    valueCell.setPaddingTop(7f);
     valueCell.setPaddingLeft(8f);
-    valueCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+    valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     table.addCell(valueCell);
 
@@ -771,7 +789,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     tableHeaderCell.setFixedHeight(35f);
     tableHeaderCell.setPaddingTop(9f);
     tableHeaderCell.setColspan(2);
-    tableHeaderCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+    tableHeaderCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     return tableHeaderCell;
   }
