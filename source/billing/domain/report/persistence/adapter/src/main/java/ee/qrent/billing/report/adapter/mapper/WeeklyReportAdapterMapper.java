@@ -20,7 +20,6 @@ import static java.util.Collections.emptyList;
 public class WeeklyReportAdapterMapper {
 
   private final GetQWeekQuery qWeekQuery;
-  private final GetObligationQuery obligationQuery;
 
   public WeeklyReport mapToDomain(final WeeklyReportJakartaEntity entity) {
     if (entity == null) {
@@ -43,7 +42,7 @@ public class WeeklyReportAdapterMapper {
         .weeksCountTillEnd(entity.getWeeksCountTillEnd())
         .depositObligation(entity.getDepositObligation())
         .depositPaid(entity.getDepositPaid())
-        .obligationStatus(getObligationStatus(driverId, qWeekId))
+        .obligationStatus(WeeklyReportObligationStatus.valueOf(entity.getObligationStatus().name()))
         .currentObligationAmount(entity.getCurrentObligationAmount())
         .netAmountOnThursday(entity.getNetAmountOnThursday())
         .feeAmountSunday(entity.getFeeAmountSunday())
@@ -93,21 +92,6 @@ public class WeeklyReportAdapterMapper {
         .occurrenceDate(entity.getOccurrenceDate())
         .damageRemaining(entity.getDamageRemaining())
         .build();
-  }
-
-  private WeeklyReportObligationStatus getObligationStatus(
-      final long driverId, final long qWeekId) {
-    final var obligation = obligationQuery.getByDriverIdAndQWeekId(driverId, qWeekId);
-    if (obligation == null) {
-
-      return WeeklyReportObligationStatus.NOT_COMPLETED;
-    }
-    if (obligation.getMatchCount() > 0) {
-
-      return WeeklyReportObligationStatus.COMPLETED;
-    }
-
-    return WeeklyReportObligationStatus.NOT_COMPLETED;
   }
 
   public WeeklyReportJakartaEntity mapToEntity(final WeeklyReport domain) {

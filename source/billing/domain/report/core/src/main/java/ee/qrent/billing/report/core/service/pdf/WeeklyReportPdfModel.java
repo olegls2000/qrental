@@ -24,6 +24,7 @@ public class WeeklyReportPdfModel {
   private final BigDecimal depositObligation;
   private final BigDecimal depositPaid;
   private final BigDecimal balanceAmountSunday;
+  private final BigDecimal debtAmountSunday;
   private final BigDecimal balanceAmountAtCalculationMoment;
   private final BigDecimal feeAmountAtCalculationMoment;
   private final Long weeksCountTillEnd;
@@ -38,6 +39,7 @@ public class WeeklyReportPdfModel {
   private final LocalDate currentWeekStart;
   private final LocalDate currentWeekEnd;
   private final LocalDate previousWeekStart;
+  private final BigDecimal distributedObligationAmount;
   private final LocalDate previousWeekEnd;
   private final LocalDate nextWeekStart;
   private final LocalDate nextWeekEnd;

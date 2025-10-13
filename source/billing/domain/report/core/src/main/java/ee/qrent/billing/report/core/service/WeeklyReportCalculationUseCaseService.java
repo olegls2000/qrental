@@ -132,7 +132,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var qWeekId = requestedQWeek.getId();
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
-
+final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
     if (reportType == WeeklyReportTypeIn.INFO_REPORT) {
       return WeeklyReport.builder()
           .type(WeeklyReportType.valueOf(reportType.name()))
@@ -163,7 +163,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var feeAmountAtCalculationMoment = balanceOnDate.getAmount();
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
-    final var netAmountOnThursday = getNetAmountOnThursday(driverId, requestedQWeek);
+    final var netAmountOnThursday = getNetAmountOnThursdayPreviousWeek(driverId, requestedQWeek);
     final var activeInsuranceCases = getActiveInsuranceCases(driverId);
 
     return WeeklyReport.builder()
@@ -177,7 +177,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .weeksCountTillEnd(contract.getWeeksToEnd())
         .depositObligation(DEPOSIT_OBLIGATION)
         .depositPaid(depositPaid)
-        .obligationStatus(getWeeklyReportObligationStatusForMondayReport(driver, requestedQWeek))
+        .obligationStatus(getWeeklyReportObligationStatusForMondayReport(driver, previousWeek))
         .currentObligationAmount(currentObligationAmount)
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
@@ -216,12 +216,12 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     return balance.getDamageRemaining();
   }
 
-  private BigDecimal getNetAmountOnThursday(
+  private BigDecimal getNetAmountOnThursdayPreviousWeek(
       final Long driverId, final QWeekResponse requestedQWeek) {
-    final var monday = requestedQWeek.getStart();
-    final var thursday = requestedQWeek.getEnd().minusDays(3L);
+    final var mondayPreviousWeek = requestedQWeek.getStart().minusWeeks(1);
+    final var thursdayPreviousWeek = mondayPreviousWeek.plusDays(3L);
 
-    return getObligationInvolvedTransactionsSum(driverId, monday, thursday);
+    return getObligationInvolvedTransactionsSum(driverId, mondayPreviousWeek, thursdayPreviousWeek);
   }
 
   private BigDecimal getCurrentObligationAmount(Long driverId, QWeekResponse requestedQWeek) {
@@ -242,7 +242,9 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
                 Stream.of(
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
                         TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
-                        TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE)
+                        TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE,
+                        TRANSACTION_TYPE_DEPOSIT_CODE,
+                        TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE)
                     .collect(Collectors.toSet()))
             .build();
 

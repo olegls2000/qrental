@@ -224,7 +224,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var netAmountOnThursday = amountWithCurrency(model.getNetAmountOnThursday(), language);
 
     final var amountColor =
-        model.getNetAmountOnThursday().compareTo(ZERO) >= 0 ? REPORT_RED_COLOR : REPORT_GREEN_COLOR;
+        model.getNetAmountOnThursday().compareTo(ZERO) < 0 ? REPORT_RED_COLOR : REPORT_GREEN_COLOR;
     paragraph2.add(
         new Chunk(netAmountOnThursday, new Font(REPORT_FONT, 10, Font.BOLD, amountColor)));
     final var cell2 = getQpdfPCell(paragraph2);
@@ -644,10 +644,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
-    final var innerInsuranceAmount =
+     var innerInsuranceAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
+    innerInsuranceAmount =  innerInsuranceAmount.add( model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, ZERO));
+
     final var innerInsuranceLabelCell =
         getClarificationTableLabelCellDarkBlue(getLabel(language, ADD_INN_INSURANCE_LABEL_KEY));
     final var innerInsuranceValueCell =
@@ -684,7 +688,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   private PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    final var demandAmount = formatAmount(BigDecimal.valueOf(-9999).abs());
+    final var demandAmount = formatAmount(model.getDistributedObligationAmount().abs());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
@@ -694,7 +698,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", demandAmount, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(
             new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
 
@@ -711,7 +715,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     // условии что есть
     // долг)
     table.addCell(
-        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+        getClarificationTableValueCell(model.getDebtAmountSunday(), language));
 
     model
         .getInsuranceCases()

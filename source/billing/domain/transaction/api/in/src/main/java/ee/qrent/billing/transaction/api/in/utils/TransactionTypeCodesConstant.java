@@ -13,6 +13,7 @@ public class TransactionTypeCodesConstant {
   public static final String TRANSACTION_TYPE_ABSENCE_ADJUSTMENT_CODE = "ABSNADJ";
 
   public static final String TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE = "INROADINSRC";
+  public static final String TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE = "DVSWP";
 
   public static final String TRANSACTION_TYPE_DAMAGE_WRITE_OFF_CODE = "DMGWRTOFF";
 

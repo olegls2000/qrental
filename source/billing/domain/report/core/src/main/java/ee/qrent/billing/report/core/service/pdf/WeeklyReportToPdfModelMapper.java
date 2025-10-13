@@ -38,11 +38,18 @@ public class WeeklyReportToPdfModelMapper {
     final var totalOtherPaymentAmount =
         getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount());
 
+    final var balanceOnSunday = report.getBalanceAmountSunday();
+
+    final var distributedObligationAmount =
+            balanceOnSunday.compareTo(BigDecimal.ZERO) < 0 ?
+            totalRentAmount.add(getInsuranceAmount(report.getTransactionTypesVsAmount())).multiply(new BigDecimal(0.25)) : BigDecimal.ZERO;
+
     final var totalPaymentAmount =
         totalRentAmount
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
-            .add(getDamagePaymentAmount(report));
+            .add(getDamagePaymentAmount(report))
+            .add(distributedObligationAmount);
 
     return WeeklyReportPdfModel.builder()
         .firstName(driver.getFirstName())
@@ -63,6 +70,7 @@ public class WeeklyReportToPdfModelMapper {
         .depositObligation(report.getDepositObligation())
         .depositPaid(report.getDepositPaid())
         .balanceAmountSunday(report.getBalanceAmountSunday())
+            .debtAmountSunday(balanceOnSunday.compareTo(BigDecimal.ZERO) < 0 ? balanceOnSunday : BigDecimal.ZERO)
         .balanceAmountAtCalculationMoment(report.getBalanceAmountAtCalculationMoment())
         .weeksCountTillEnd(report.getWeeksCountTillEnd())
         .obligationStatus(
@@ -79,7 +87,9 @@ public class WeeklyReportToPdfModelMapper {
             report.getBalanceAmountAtCalculationMoment() != null
                 ? report.getBalanceAmountAtCalculationMoment()
                 : report.getBalanceAmountSunday())
+            .distributedObligationAmount(distributedObligationAmount)
         .totalPaymentAmount(totalPaymentAmount)
+
         .build();
   }
 
@@ -122,9 +132,10 @@ public class WeeklyReportToPdfModelMapper {
       final Map<String, BigDecimal> transactionTypesVsAmount) {
     final var depositAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
-    final var innerInsuranceAmount =
+     var innerInsuranceAmount =
         transactionTypesVsAmount.getOrDefault(
             TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+    transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
     final var nonLabelFineAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, BigDecimal.ZERO);
     final var feeAmount =
@@ -133,7 +144,7 @@ public class WeeklyReportToPdfModelMapper {
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, BigDecimal.ZERO);
 
     return depositAmount
-        .add(innerInsuranceAmount)
+        .add(getInsuranceAmount(transactionTypesVsAmount))
         .add(nonLabelFineAmount)
         .add(feeAmount)
         .add(parkingFineAmount);
@@ -144,5 +155,16 @@ public class WeeklyReportToPdfModelMapper {
       return report
         .getTransactionTypesVsAmount()
         .getOrDefault(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE, BigDecimal.ZERO);
+  }
+
+  private BigDecimal getInsuranceAmount(final Map<String, BigDecimal> transactionTypesVsAmount){
+    var innerInsuranceAmount =
+            transactionTypesVsAmount.getOrDefault(
+                    TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+    transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
+    return
+            innerInsuranceAmount.add( transactionTypesVsAmount.getOrDefault(
+                    TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, BigDecimal.ZERO));
+
   }
 }
