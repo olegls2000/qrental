@@ -103,6 +103,10 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
       "RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY";
   public static String OTHER_OBLIGATIONS_LABEL_KEY = "OTHER_OBLIGATIONS_LABEL_KEY";
   public static String ADD_INN_INSURANCE_LABEL_KEY = "ADD_INN_INSURANCE_LABEL_KEY";
+  public static String NON_LABEL_FINE_LABEL_KEY = "NON_LABEL_FINE_LABEL_KEY";
+  public static String DISTRIBUTED_OBLIGATION_LABEL_KEY = "DISTRIBUTED_OBLIGATION_LABEL_KEY";
+  public static String PARKING_FINE_LABEL_KEY = "PARKING_FINE_LABEL_KEY";
+  public static String FEE_WEEK_BEGINNING_LABEL_KEY = "FEE_WEEK_BEGINNING_LABEL_KEY";
   public static String DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY =
       "DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY";
   public static String DEMAND_FEE_LABEL_KEY = "DEMAND_FEE_LABEL_KEY";
@@ -122,7 +126,8 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "Ты"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "выполнил(а)"),
+            new AbstractMap.SimpleEntry<>(
+                OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "выполнил(а)"),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "не выполнил(а)"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_3_LABEL_KEY, "свои"),
@@ -193,6 +198,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 ADD_INN_INSURANCE_LABEL_KEY,
                 "ДВС за текущую неделю (дополнительное внутреннее страхование)"),
+            new AbstractMap.SimpleEntry<>(
+                NON_LABEL_FINE_LABEL_KEY,
+                "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Pассроченные обязательства"),
+            new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "Штраф за парковку"),
+            new AbstractMap.SimpleEntry<>(
+                FEE_WEEK_BEGINNING_LABEL_KEY, "Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Пени и рассроченные обязательства: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
@@ -290,6 +303,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
                 ADD_INN_INSURANCE_LABEL_KEY,
                 "AII for the current week (Additional Internal Insurance)"),
             new AbstractMap.SimpleEntry<>(
+                NON_LABEL_FINE_LABEL_KEY,
+                "??Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "??Pассроченные обязательства"),
+            new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "??Штраф за парковку"),
+            new AbstractMap.SimpleEntry<>(
+                FEE_WEEK_BEGINNING_LABEL_KEY, "??Пени на конец прошлой недели"),
+            new AbstractMap.SimpleEntry<>(
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Late fees and installment obligations: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
@@ -382,6 +403,14 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 ADD_INN_INSURANCE_LABEL_KEY,
                 "TSK käesoleva nädala kohta (täiendav sisekindlustus)"),
+            new AbstractMap.SimpleEntry<>(
+                NON_LABEL_FINE_LABEL_KEY,
+                "??Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"),
+            new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "??Pассроченные обязательства"),
+            new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "??Штраф за парковку"),
+            new AbstractMap.SimpleEntry<>(
+                FEE_WEEK_BEGINNING_LABEL_KEY, "??Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Viivised ja ajatatud kohustused: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Viivised"),

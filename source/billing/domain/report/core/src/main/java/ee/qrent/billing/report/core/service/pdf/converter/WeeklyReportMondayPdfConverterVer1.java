@@ -225,7 +225,9 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var amountColor =
         model.getNetAmountOnThursday().compareTo(ZERO) < 0 ? REPORT_RED_COLOR : REPORT_GREEN_COLOR;
     paragraph2.add(
-        new Chunk(netAmountOnThursday, new Font(REPORT_FONT, 10, Font.BOLD, amountColor))); //  amountColor
+        new Chunk(
+            netAmountOnThursday,
+            new Font(REPORT_FONT, 10, Font.BOLD, amountColor))); //  amountColor
     final var cell2 = getQpdfPCell(paragraph2);
     cell2.setHorizontalAlignment(ALIGN_CENTER);
     cell2.setVerticalAlignment(ALIGN_MIDDLE);
@@ -663,15 +665,28 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var nonLabelFineAmount =
         model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, ZERO);
     final var nonLabelFineLabelCell =
-        getClarificationTableLabelCellDarkBlue(
-            "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю");
+        getClarificationTableLabelCellDarkBlue(getLabel(language, NON_LABEL_FINE_LABEL_KEY));
 
     final var nonLabelFineValueCell = getClarificationTableValueCell(nonLabelFineAmount, language);
     addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
 
+    final var distributedObligationAmount = model.getDistributedObligationAmount().negate();
+    final var distributedObligationLabelCell =
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(language, DISTRIBUTED_OBLIGATION_LABEL_KEY));
+
+    final var distributedObligationValueCell =
+        getClarificationTableValueCell(distributedObligationAmount, language);
+    addRowIfValueIsNonZero(
+        distributedObligationAmount,
+        distributedObligationLabelCell,
+        distributedObligationValueCell,
+        table);
+
     final var parkingFineAmount =
         model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, ZERO);
-    final var parkingFineLabelCell = getClarificationTableLabelCellDarkBlue("Штраф за парковку");
+    final var parkingFineLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, PARKING_FINE_LABEL_KEY));
     final var parkingFineValueCell = getClarificationTableValueCell(parkingFineAmount, language);
     addRowIfValueIsNonZero(parkingFineAmount, parkingFineLabelCell, parkingFineValueCell, table);
 
@@ -689,17 +704,11 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   private PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    final var demandAmount = formatAmount(model.getDistributedObligationAmount().abs());
-    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            format("%s %s", demandAmount, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
 
@@ -746,7 +755,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 new Font(REPORT_FONT, 14, Font.BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
-    //labelCell.setBorderWidthTop(1f);
+    // labelCell.setBorderWidthTop(1f);
     labelCell.setFixedHeight(30f);
 
     labelCell.setPaddingTop(7f);
@@ -763,7 +772,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
 
-    //valueCell.setBorderWidthTop(1f);
+    // valueCell.setBorderWidthTop(1f);
     valueCell.setFixedHeight(30f);
 
     valueCell.setPaddingTop(7f);

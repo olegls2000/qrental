@@ -35,14 +35,12 @@ public class WeeklyReportToPdfModelMapper {
     final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
     final var totalExternalSystemsIncomeAmount =
         getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount());
-    final var totalOtherPaymentAmount =
-        getTotalOtherPaymentAmount(report.getTransactionTypesVsAmount());
 
     final var balanceOnSunday = report.getBalanceAmountSunday();
-
-    final var distributedObligationAmount =
-            balanceOnSunday.compareTo(BigDecimal.ZERO) < 0 ?
-            totalRentAmount.add(getInsuranceAmount(report.getTransactionTypesVsAmount())).multiply(new BigDecimal(0.25)) : BigDecimal.ZERO;
+    final var distributedObligationAmount = getDistributedObligationAmount(report);
+    final var totalOtherPaymentAmount =
+        getTotalOtherPaymentAmount(
+            report.getTransactionTypesVsAmount(), distributedObligationAmount);
 
     final var totalPaymentAmount =
         totalRentAmount
@@ -70,7 +68,8 @@ public class WeeklyReportToPdfModelMapper {
         .depositObligation(report.getDepositObligation())
         .depositPaid(report.getDepositPaid())
         .balanceAmountSunday(report.getBalanceAmountSunday())
-            .debtAmountSunday(balanceOnSunday.compareTo(BigDecimal.ZERO) < 0 ? balanceOnSunday : BigDecimal.ZERO)
+        .debtAmountSunday(
+            balanceOnSunday.compareTo(BigDecimal.ZERO) < 0 ? balanceOnSunday : BigDecimal.ZERO)
         .balanceAmountAtCalculationMoment(report.getBalanceAmountAtCalculationMoment())
         .weeksCountTillEnd(report.getWeeksCountTillEnd())
         .obligationStatus(
@@ -87,10 +86,27 @@ public class WeeklyReportToPdfModelMapper {
             report.getBalanceAmountAtCalculationMoment() != null
                 ? report.getBalanceAmountAtCalculationMoment()
                 : report.getBalanceAmountSunday())
-            .distributedObligationAmount(distributedObligationAmount)
+        .distributedObligationAmount(distributedObligationAmount)
         .totalPaymentAmount(totalPaymentAmount)
-
         .build();
+  }
+
+  private BigDecimal getDistributedObligationAmount(final WeeklyReport report) {
+    final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
+    final var balanceOnSunday = report.getBalanceAmountSunday();
+    final var nominalDistributedObligationAmount =
+        totalRentAmount
+            .add(getInsuranceAmount(report.getTransactionTypesVsAmount()))
+            .multiply(new BigDecimal(0.25));
+    if (balanceOnSunday.compareTo(BigDecimal.ZERO)
+        >= 0) { // balanceOnSunday = (5..0], nominalDistributedObligationAmount = -4
+      return BigDecimal.ZERO;
+    }
+    if (balanceOnSunday.compareTo(nominalDistributedObligationAmount)
+        < 0) { // balanceOnSunday = -5, nominalDistributedObligationAmount = -2
+      return nominalDistributedObligationAmount;
+    }
+    return balanceOnSunday; // balanceOnSunday = -1, nominalDistributedObligationAmount = -2
   }
 
   private List<WeeklyReportPdfInsuranceCase> getInsuranceCases(final WeeklyReport report) {
@@ -129,10 +145,11 @@ public class WeeklyReportToPdfModelMapper {
   }
 
   private BigDecimal getTotalOtherPaymentAmount(
-      final Map<String, BigDecimal> transactionTypesVsAmount) {
+      final Map<String, BigDecimal> transactionTypesVsAmount,
+      final BigDecimal distributedObligationAmount) {
     final var depositAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
-     var innerInsuranceAmount =
+    var innerInsuranceAmount =
         transactionTypesVsAmount.getOrDefault(
             TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
     transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
@@ -147,24 +164,24 @@ public class WeeklyReportToPdfModelMapper {
         .add(getInsuranceAmount(transactionTypesVsAmount))
         .add(nonLabelFineAmount)
         .add(feeAmount)
-        .add(parkingFineAmount);
+        .add(parkingFineAmount)
+        .add(distributedObligationAmount);
   }
 
   private BigDecimal getDamagePaymentAmount(final WeeklyReport report) {
 
-      return report
+    return report
         .getTransactionTypesVsAmount()
         .getOrDefault(TRANSACTION_TYPE_DAMAGE_PAYMENT_CODE, BigDecimal.ZERO);
   }
 
-  private BigDecimal getInsuranceAmount(final Map<String, BigDecimal> transactionTypesVsAmount){
+  private BigDecimal getInsuranceAmount(final Map<String, BigDecimal> transactionTypesVsAmount) {
     var innerInsuranceAmount =
-            transactionTypesVsAmount.getOrDefault(
-                    TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(
+            TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, BigDecimal.ZERO);
     transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO);
-    return
-            innerInsuranceAmount.add( transactionTypesVsAmount.getOrDefault(
-                    TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, BigDecimal.ZERO));
-
+    return innerInsuranceAmount.add(
+        transactionTypesVsAmount.getOrDefault(
+            TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, BigDecimal.ZERO));
   }
 }
