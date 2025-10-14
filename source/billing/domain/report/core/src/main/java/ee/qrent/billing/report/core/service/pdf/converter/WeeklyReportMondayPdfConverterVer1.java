@@ -206,7 +206,6 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     paragraph1.add(getBoldChunk(weekDaysFormatted));
     paragraph1.add(getNormalChunk(getLabel(language, OBLIGATION_TEXT_PART_6_LABEL_KEY)));
 
-
     final var cell1 = getQpdfPCell(paragraph1);
 
     cell1.setHorizontalAlignment(ALIGN_CENTER);
@@ -226,7 +225,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var amountColor =
         model.getNetAmountOnThursday().compareTo(ZERO) < 0 ? REPORT_RED_COLOR : REPORT_GREEN_COLOR;
     paragraph2.add(
-        new Chunk(netAmountOnThursday, new Font(REPORT_FONT, 10, Font.BOLD, amountColor)));
+        new Chunk(netAmountOnThursday, new Font(REPORT_FONT, 10, Font.BOLD, amountColor))); //  amountColor
     final var cell2 = getQpdfPCell(paragraph2);
     cell2.setHorizontalAlignment(ALIGN_CENTER);
     cell2.setVerticalAlignment(ALIGN_MIDDLE);
@@ -301,7 +300,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     paragraph.add(
         new Chunk(
             amountWithCurrency(model.getTotalPaymentAmount(), model.getLanguage()),
-            new Font(REPORT_FONT, 10, Font.NORMAL)));
+            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_RED_COLOR)));
     paragraph.add(
         new Chunk(
             "\n" + getLabel(language, OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY),
@@ -333,6 +332,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             getLabel(language, OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY),
             new Font(REPORT_FONT, 10, Font.NORMAL)));
     paragraph.add(new Chunk(nextWeekDaysFormatted, new Font(REPORT_FONT, 10, Font.BOLD)));
+
     final var cell = getQpdfPCell(paragraph);
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_BOTTOM);
@@ -576,15 +576,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-                " * " +
-            getLabel(language, RENT_ADJUSTMENT_LABEL_KEY),
+            " * " + getLabel(language, RENT_ADJUSTMENT_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", correctionOfRent, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(
-            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var boltPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
@@ -634,23 +633,25 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-                " * " + getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
+            " * " + getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", otherObligations, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(
-            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var table = getClarificationTable();
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
-     var innerInsuranceAmount =
+    var innerInsuranceAmount =
         model
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
-    innerInsuranceAmount =  innerInsuranceAmount.add( model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, ZERO));
+    innerInsuranceAmount =
+        innerInsuranceAmount.add(
+            model
+                .getTransactionTypesVsAmount()
+                .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, ZERO));
 
     final var innerInsuranceLabelCell =
         getClarificationTableLabelCellDarkBlue(getLabel(language, ADD_INN_INSURANCE_LABEL_KEY));
@@ -693,14 +694,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-                " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
+            " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
             new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", demandAmount, euroCurrency),
             new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(
-            new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
 
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
     table.addCell(getClarificationTableLabelCellDarkBlue(getLabel(language, DEMAND_FEE_LABEL_KEY)));
@@ -714,8 +715,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на понедельник ( при
     // условии что есть
     // долг)
-    table.addCell(
-        getClarificationTableValueCell(model.getDebtAmountSunday(), language));
+    table.addCell(getClarificationTableValueCell(model.getDebtAmountSunday(), language));
 
     model
         .getInsuranceCases()
@@ -746,7 +746,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
                 new Font(REPORT_FONT, 14, Font.BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
-    labelCell.setBorderWidthTop(1f);
+    //labelCell.setBorderWidthTop(1f);
     labelCell.setFixedHeight(30f);
 
     labelCell.setPaddingTop(7f);
@@ -763,7 +763,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
 
-    valueCell.setBorderWidthTop(1f);
+    //valueCell.setBorderWidthTop(1f);
     valueCell.setFixedHeight(30f);
 
     valueCell.setPaddingTop(7f);
