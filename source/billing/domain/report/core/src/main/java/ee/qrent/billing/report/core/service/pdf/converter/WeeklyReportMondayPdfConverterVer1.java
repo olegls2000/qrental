@@ -692,7 +692,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     final var feeAmount =
         model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, ZERO);
-    final var feeLabelCell = getClarificationTableLabelCellDarkBlue("Пени на конец прошлой недели");
+    final var feeLabelCell = getClarificationTableLabelCellDarkBlue(getLabel(language, FEE_WEEK_BEGINNING_LABEL_KEY));
     final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
     addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
 
