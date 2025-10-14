@@ -451,7 +451,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     // Добавляем "Bolt" зеленым цветом
     final var boltText =
-        new Chunk("Bolt", new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
+        new Chunk("Bolt" + ":", new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
     paragraph.add(boltText);
 
     final var labelCell = getQpdfPCell(paragraph);
@@ -478,7 +478,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     // Добавляем название кампании в кавычках темно-синим цветом
     final var campaignNameText =
         new Chunk(
-            format("«%s»", campaignName),
+            format("«%s»" + ":", campaignName),
             new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR));
     paragraph.add(campaignNameText);
 
@@ -595,7 +595,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             new Font(REPORT_FONT, 10, Font.NORMAL, REPORT_DARK_BLUE_COLOR));
     paragraph.add(incomeText);
 
-    // Добавляем название кампании в кавычках темно-синим цветом
+    // Добавляем название кампании в кавычках Green цветом
     final var incomeCompany =
         new Chunk(
             getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY),
@@ -608,7 +608,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
     labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
-    final var boltPlusValueCell = getClarificationTableValueCellDarkGray(boltPlusAmount, language);
+    final var boltPlusValueCell = getClarificationTableValueCell(boltPlusAmount, language);
     addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
     table.addCell(getEmptyRow());
 

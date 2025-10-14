@@ -122,9 +122,9 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "Ты"),
-            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "выполнил"),
+            new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "выполнил(а)"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "не выполнил"),
+                OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY, "не выполнил(а)"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_3_LABEL_KEY, "свои"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_4_LABEL_KEY, "обязательства"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "за прошлую неделю"),
