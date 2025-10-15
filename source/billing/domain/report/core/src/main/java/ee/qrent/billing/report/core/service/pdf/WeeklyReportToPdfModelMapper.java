@@ -32,7 +32,10 @@ public class WeeklyReportToPdfModelMapper {
     final var nextWeek = qWeekQuery.getOneAfterById(currentWeekId);
     final var carReg =
         report.getCarId() != null ? carQuery.getById(report.getCarId()).getRegNumber() : null;
-    final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
+    final var totalRentAmountRaw = getTotalRentAmount(report.getTransactionTypesVsAmount());
+    final var totalRentAmount = totalRentAmountRaw.compareTo(BigDecimal.ZERO) > 0 
+        ? BigDecimal.ZERO 
+        : totalRentAmountRaw;
     final var totalExternalSystemsIncomeAmount =
         getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount());
 
@@ -42,12 +45,17 @@ public class WeeklyReportToPdfModelMapper {
         getTotalOtherPaymentAmount(
             report.getTransactionTypesVsAmount(), distributedObligationAmount);
 
-    final var totalPaymentAmount =
+    final var totalPaymentAmountRaw =
         totalRentAmount
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
-            .add(getDamagePaymentAmount(report))
-            .add(distributedObligationAmount);
+            .add(getDamagePaymentAmount(report));
+        //    .add(distributedObligationAmount);
+
+    final var totalPaymentAmount =
+        totalPaymentAmountRaw.compareTo(BigDecimal.ZERO) > 0
+            ? BigDecimal.ZERO
+            : totalPaymentAmountRaw;
 
     return WeeklyReportPdfModel.builder()
         .firstName(driver.getFirstName())
@@ -130,18 +138,30 @@ public class WeeklyReportToPdfModelMapper {
             TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE, BigDecimal.ZERO);
     final var bonusBoltAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_BOLT_CODE, BigDecimal.ZERO);
+    final var bonusPlusAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_PLUS_CODE, BigDecimal.ZERO);
     final var bonusFriendAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_FRIEND_CODE, BigDecimal.ZERO);
+    final var bonusNewDriverAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE, BigDecimal.ZERO);
 
-    return rentAmount.add(bonusReliablePartnerAmount).add(bonusBoltAmount).add(bonusFriendAmount);
+    return rentAmount.add(bonusReliablePartnerAmount).add(bonusBoltAmount).add(bonusFriendAmount).add(bonusPlusAmount).add(bonusNewDriverAmount);
   }
 
   private BigDecimal getTotalExternalSystemsIncomeAmount(
       final Map<String, BigDecimal> transactionTypesVsAmount) {
     final var boltPlusAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
+    final var bankPlusAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BANK_PLUS_CODE, BigDecimal.ZERO);
+    final var cashPlusAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_CASH_PLUS_CODE, BigDecimal.ZERO);
+    final var otherPlusAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_OTHER_PLUS_CODE, BigDecimal.ZERO);
+    final var paycheckPlusAmount =
+            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PAYCHECK_PLUS_CODE, BigDecimal.ZERO);
 
-    return boltPlusAmount;
+    return boltPlusAmount.add(bankPlusAmount).add(cashPlusAmount).add(otherPlusAmount).add(paycheckPlusAmount);
   }
 
   private BigDecimal getTotalOtherPaymentAmount(

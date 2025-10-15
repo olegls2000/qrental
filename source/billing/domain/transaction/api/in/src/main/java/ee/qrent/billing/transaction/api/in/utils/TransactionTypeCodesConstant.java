@@ -23,13 +23,26 @@ public class TransactionTypeCodesConstant {
 
   public static final String TRANSACTION_TYPE_BONUS_CODE = "BNS";
 
+  public static final String TRANSACTION_TYPE_BONUS_PLUS_CODE = "BONUSPLUS";
+
   public static final String TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE = "BONUSRLBLPARTNER";
 
   public static final String TRANSACTION_TYPE_BONUS_BOLT_CODE = "BONUSBOLT";
 
   public static final String TRANSACTION_TYPE_BONUS_FRIEND_CODE = "BONUSFRIEND";
 
+  public static final String TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE = "BONUSNEWDRIVER";
+
   public static final String TRANSACTION_TYPE_BOLT_PLUS_CODE = "BOLTPLUS";
+
+  public static final String TRANSACTION_TYPE_BANK_PLUS_CODE = "BANKPLUS";
+  public static final String TRANSACTION_TYPE_CASH_PLUS_CODE = "CASHPLUS";
+  public static final String TRANSACTION_TYPE_OTHER_PLUS_CODE = "OTHERPLUS";
+  public static final String TRANSACTION_TYPE_PAYCHECK_PLUS_CODE = "PAYCHECK";
+
+
+
+
 
   public static final String TRANSACTION_TYPE_DEPOSIT_CODE = "DEPOSIT";
 

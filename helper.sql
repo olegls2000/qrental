@@ -81,8 +81,9 @@ DO $$
         EXECUTE sql;
     END $$;
 
+--------------------------------------------------------
 
-
+select * from billing.q_queue where processed = false;
 --------------------------------------------------------------------------------------------------------
 --## Obligation Calculations:
 
@@ -94,16 +95,16 @@ where ocr.obligation_calculation_id in
        where q_week_id in
              (select id
               from q_week
-              where year = 2024
-                and number = 23));
+              where year = 2025
+                and number = 41));
 
 delete
 from obligation ob
-where ob.q_week_id in (select id from q_week where year = 2024 and number = 23);
+where ob.q_week_id in (select id from q_week where year = 2025 and number = 41);
 
 delete
 from obligation_calculation
-where q_week_id in (select id from q_week where year = 2024 and number = 23);
+where q_week_id in (select id from q_week where year = 2025 and number = 41);
 
 --------------------------------------------------------------------------------------------------------
 

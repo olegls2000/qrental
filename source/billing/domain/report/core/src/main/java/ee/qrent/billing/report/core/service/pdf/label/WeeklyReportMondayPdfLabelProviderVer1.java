@@ -92,8 +92,10 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
   public static String RENT_CLARIFICATION_TEXT_LABEL_KEY = "RENT_CLARIFICATION_TEXT_LABEL_KEY";
   public static String BONUS_PROGRAM_LABEL_KEY = "BONUS_PROGRAM_LABEL_KEY";
   public static String BONUS_PROGRAM_REL_PARTNER_LABEL_KEY = "BONUS_PROGRAM_REL_PARTNER_LABEL_KEY";
+  public static String BONUS_PROGRAM_PLUS_LABEL_KEY = "BONUS_PROGRAM_PLUS_LABEL_KEY";
   public static String BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY = "BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY";
   public static String BONUS_PROGRAM_FRIEND_REF_LABEL_KEY = "BONUS_PROGRAM_FRIEND_REF_LABEL_KEY";
+  public static String BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY = "BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY";
   /// //////////////
   public static String COMMENT_LABEL_KEY = "COMMENT_LABEL_KEY";
   public static String RENT_ADJUSTMENT_LABEL_KEY = "RENT_ADJUSTMENT_LABEL_KEY";
@@ -101,6 +103,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
       "RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY";
   public static String RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY =
       "RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY";
+  public static String RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY = "RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY";
   public static String OTHER_OBLIGATIONS_LABEL_KEY = "OTHER_OBLIGATIONS_LABEL_KEY";
   public static String ADD_INN_INSURANCE_LABEL_KEY = "ADD_INN_INSURANCE_LABEL_KEY";
   public static String NON_LABEL_FINE_LABEL_KEY = "NON_LABEL_FINE_LABEL_KEY";
@@ -118,7 +121,8 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
     mapRus =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "РАССЫЛКА НА ВТОРНИК - 10:00"),
+            new AbstractMap.SimpleEntry<>(
+                REPORT_NAME_KEY, "РАССЫЛКА НА СРЕДУ - 16:00"), // ВТОРНИК - 10:00
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Арендатор"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
@@ -184,16 +188,21 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "Кампания "),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Надежный партнер"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Поездки Bolt"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Бонус+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Приведи друга"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "Новый водитель"),
             /// ///////
             new AbstractMap.SimpleEntry<>(
                 COMMENT_LABEL_KEY,
                 "\n"
                     + "Данные в этой рассылке являются информативными, сами по себе не налагают ни на одну из сторон "
                     + "никаких обязательств и меняются по мере занесения их в систему."),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "Коррекция аренды: "),
+            new AbstractMap.SimpleEntry<>(
+                RENT_ADJUSTMENT_LABEL_KEY, "Коррекция аренды и прочие поступления: "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "Заработок "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(
+                RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY, "Прочие поступления (сумма)"),
             new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "Прочие обязательства: "),
             new AbstractMap.SimpleEntry<>(
                 ADD_INN_INSURANCE_LABEL_KEY,
@@ -207,7 +216,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Пени и рассроченные обязательства: "),
+                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Пени и прочие обязательства: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг  (без учета ремонтов)"),
@@ -218,7 +227,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TUESDAY NEWSLETTER - 10:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "WEDNESDAY NEWSLETTER - 16:00"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Tenant"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Personal code"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
@@ -288,16 +297,21 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "Campaign "),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Reliable Partner"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Bolt Rides"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Bonus+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Bring a friend"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "New driver"),
             ///////
             new AbstractMap.SimpleEntry<>(
                 COMMENT_LABEL_KEY,
                 "\n"
                     + "The data in this newsletter is for informational purposes only, does not in itself create any "
                     + "obligations for either party, and may change as new information is entered into the system."),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "Rental fee adjustment: "),
+            new AbstractMap.SimpleEntry<>(
+                RENT_ADJUSTMENT_LABEL_KEY, "Rental fee adjustment and other income: "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "Earnings "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(
+                RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY, "Other income (amount)"),
             new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "Other obligations: "),
             new AbstractMap.SimpleEntry<>(
                 ADD_INN_INSURANCE_LABEL_KEY,
@@ -311,7 +325,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "??Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Late fees and installment obligations: "),
+                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Late fees and other obligations: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt (excluding repairs)"),
@@ -322,7 +336,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TEISIPÄEVA INFOKIRI - 10:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "KOLMAPÄEVA INFOKIRI - 16:00"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Rentnik"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
@@ -389,16 +403,20 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Usaldusväärne partner"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Bolt sõidud"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Bonus+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Soovita sõbrale"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "Uus juht"),
             ///////
             new AbstractMap.SimpleEntry<>(
                 COMMENT_LABEL_KEY,
                 "\n"
                     + "Selles infokirjas esitatud andmed on informatiivse iseloomuga, ei sea iseenesest kummalegi "
                     + "poolele mingeid kohustusi ning võivad muutuda vastavalt andmete sisestamisele süsteemi."),
-            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_LABEL_KEY, "Renditasu korrigeerimine: "),
+            new AbstractMap.SimpleEntry<>(
+                RENT_ADJUSTMENT_LABEL_KEY, "Rendi korrigeerimine ja muud sissetulekud: "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY, "Tulu "),
             new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY, "Bolt"),
+            new AbstractMap.SimpleEntry<>(RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY, "Muud sissetulekud (summa)"),
             new AbstractMap.SimpleEntry<>(OTHER_OBLIGATIONS_LABEL_KEY, "Muud kohustused: "),
             new AbstractMap.SimpleEntry<>(
                 ADD_INN_INSURANCE_LABEL_KEY,
@@ -412,7 +430,7 @@ public class WeeklyReportMondayPdfLabelProviderVer1 {
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "??Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Viivised ja ajatatud kohustused: "),
+                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Viivised ja muud kohustused: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Viivised"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg (välja arvatud remont)"),

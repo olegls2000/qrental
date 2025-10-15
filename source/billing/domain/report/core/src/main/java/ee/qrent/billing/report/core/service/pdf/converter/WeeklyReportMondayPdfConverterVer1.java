@@ -264,6 +264,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     final var cell3 = getQpdfPCell(paragraph);
     cell3.setHorizontalAlignment(ALIGN_CENTER);
+    cell3.setBackgroundColor(Color.LIGHT_GRAY);
     cell3.setVerticalAlignment(ALIGN_MIDDLE);
     table.addCell(cell3);
     table.addCell(getEmptyRow());
@@ -509,8 +510,12 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE);
     final var bonusBoltAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
+    final var bonusPlusAmount =
+            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
     final var bonusFriendAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FRIEND_CODE);
+    final var bonusNewDriverAmount =
+            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE);
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount().abs());
 
@@ -551,11 +556,26 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
             getLabel(language, BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY), language);
     final var bonusBoltValueCell = getClarificationTableValueCell(bonusBoltAmount, language);
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
+
+    final var bonusPlusLabelCell =
+            getClarificationTableLabelCellCampaign(
+                    getLabel(language, BONUS_PROGRAM_PLUS_LABEL_KEY), language);
+    final var bonusPlusValueCell = getClarificationTableValueCell(bonusPlusAmount, language);
+    addRowIfValueIsNonZero(bonusPlusAmount, bonusPlusLabelCell, bonusPlusValueCell, table);
+
     final var bonusFriendLabelCell =
         getClarificationTableLabelCellCampaign(
             getLabel(language, BONUS_PROGRAM_FRIEND_REF_LABEL_KEY), language);
     final var bonusFriendValueCell = getClarificationTableValueCell(bonusFriendAmount, language);
     addRowIfValueIsNonZero(bonusFriendAmount, bonusFriendLabelCell, bonusFriendValueCell, table);
+    table.addCell(getEmptyRow());
+
+    final var bonusNewDriverLabelCell =
+            getClarificationTableLabelCellCampaign(
+                    getLabel(language, BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY), language);
+    final var bonusNewDriverValueCell =
+            getClarificationTableValueCell(bonusNewDriverAmount, language);
+    addRowIfValueIsNonZero(bonusNewDriverAmount, bonusNewDriverLabelCell, bonusNewDriverValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;

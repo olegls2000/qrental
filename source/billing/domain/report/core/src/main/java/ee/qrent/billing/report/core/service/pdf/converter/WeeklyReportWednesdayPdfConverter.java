@@ -454,7 +454,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
 
     // Добавляем "Bolt" зеленым цветом
     final var boltText =
-        new Chunk("Bolt" + ":", new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
+        new Chunk("Bolt:", new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
     paragraph.add(boltText);
 
     final var labelCell = getQpdfPCell(paragraph);
@@ -479,11 +479,8 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
     paragraph.add(campaignText);
 
     // Добавляем название кампании в кавычках темно-синим цветом
-    final var campaignNameText =
-        new Chunk(
-            format("«%s»" + ":", campaignName),
-            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR));
-    paragraph.add(campaignNameText);
+
+
 
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
@@ -510,8 +507,12 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE);
     final var bonusBoltAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
+    final var bonusPlusAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
     final var bonusFriendAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FRIEND_CODE);
+    final var bonusNewDriverAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE);
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount().abs());
 
@@ -552,11 +553,26 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
             getLabel(language, BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY), language);
     final var bonusBoltValueCell = getClarificationTableValueCell(bonusBoltAmount, language);
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
+
+    final var bonusPlusLabelCell =
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_PLUS_LABEL_KEY), language);
+    final var bonusPlusValueCell = getClarificationTableValueCell(bonusPlusAmount, language);
+    addRowIfValueIsNonZero(bonusPlusAmount, bonusPlusLabelCell, bonusPlusValueCell, table);
+
     final var bonusFriendLabelCell =
         getClarificationTableLabelCellCampaign(
             getLabel(language, BONUS_PROGRAM_FRIEND_REF_LABEL_KEY), language);
     final var bonusFriendValueCell = getClarificationTableValueCell(bonusFriendAmount, language);
     addRowIfValueIsNonZero(bonusFriendAmount, bonusFriendLabelCell, bonusFriendValueCell, table);
+    table.addCell(getEmptyRow());
+
+    final var bonusNewDriverLabelCell =
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY), language);
+    final var bonusNewDriverValueCell =
+        getClarificationTableValueCell(bonusNewDriverAmount, language);
+    addRowIfValueIsNonZero(bonusNewDriverAmount, bonusNewDriverLabelCell, bonusNewDriverValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;
@@ -584,7 +600,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", correctionOfRent, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var boltPlusAmount =
@@ -604,6 +620,15 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
             getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY),
             new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
     paragraph.add(incomeCompany);
+    //
+    final var doted =
+            new Chunk(
+                    format(":"),
+                    new Font(REPORT_FONT, 10, Font.BOLD));
+    paragraph.add(doted);
+
+
+
 
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
@@ -614,6 +639,11 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
     final var boltPlusValueCell = getClarificationTableValueCell(boltPlusAmount, language);
     addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
     table.addCell(getEmptyRow());
+
+
+
+
+
 
     return table;
   }

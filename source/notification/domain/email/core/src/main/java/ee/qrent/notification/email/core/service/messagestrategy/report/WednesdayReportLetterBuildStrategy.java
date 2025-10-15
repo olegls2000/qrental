@@ -24,9 +24,9 @@ public class WednesdayReportLetterBuildStrategy extends AbstractReportLetterBuil
       throws MessagingException, IOException {
     useMimeMessageHelper(
         message,
-        "Wednesday financial Report",
+        "Wednesday newsletter",
         emailSendRequest,
-        "Wednesday-report.pdf",
+        "Wednesday-newsletter.pdf",
         "wednesdayReportMailTemplate",
         emailSendRequest.getProperties());
 

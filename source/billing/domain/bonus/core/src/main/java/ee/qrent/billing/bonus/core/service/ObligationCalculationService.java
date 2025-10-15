@@ -57,7 +57,7 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
         .map(CarLinkResponse::getDriverId)
         .forEach(
             driverId -> {
-              final var obligation = obligationCalculator.getObligation(driverId, qWeek);
+              final var obligation = obligationCalculator.getObligationOnThursday(driverId, qWeek);
               final var savedObligation = obligationAddPort.add(obligation);
               final var result = getResult(savedObligation.getId());
               domain.getResults().add(result);
