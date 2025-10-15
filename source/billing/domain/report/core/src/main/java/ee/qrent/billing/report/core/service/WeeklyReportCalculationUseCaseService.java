@@ -287,7 +287,6 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
       final Long driverId) {
     LocalDate reportDate = null;
     switch (reportType) {
-      case MONDAY_REPORT -> reportDate = requestedQWeek.getStart();
       case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
       case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2L);
       case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4L);

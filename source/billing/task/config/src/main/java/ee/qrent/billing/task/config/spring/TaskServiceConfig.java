@@ -60,7 +60,7 @@ public class TaskServiceConfig {
       final ObligationCalculationTask obligationCalculationTask,
       final QWeekCreationTask qWeekCreationTask,
       final RentCalculationTask rentCalculationTask,
-      final WeeklyReportMondayTask mondayFinancialReportTask) {
+      final WeeklyReportTuesdayTask mondayFinancialReportTask) {
 
     return new TaskRunService(
         taskRunner,
@@ -113,9 +113,9 @@ public class TaskServiceConfig {
   }
 
   @Bean
-  public WeeklyReportMondayTask getBillingWeeklyReportMondayTask(
+  public WeeklyReportTuesdayTask getBillingWeeklyReportMondayTask(
       final WeeklyReportCalculationAddUseCase addUseCase, final GetQWeekQuery qWeekQuery) {
 
-    return new WeeklyReportMondayTask(addUseCase, qWeekQuery);
+    return new WeeklyReportTuesdayTask(addUseCase, qWeekQuery);
   }
 }

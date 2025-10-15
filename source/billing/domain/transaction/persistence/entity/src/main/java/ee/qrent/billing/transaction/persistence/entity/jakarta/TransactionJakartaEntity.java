@@ -15,7 +15,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "transaction")
-@Audited
+//@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

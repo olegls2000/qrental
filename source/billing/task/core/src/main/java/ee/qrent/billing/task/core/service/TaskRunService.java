@@ -1,7 +1,7 @@
 package ee.qrent.billing.task.core.service;
 
 import ee.qrent.billing.task.api.in.usecase.TaskRunUseCase;
-import ee.qrent.billing.task.core.task.WeeklyReportMondayTask;
+import ee.qrent.billing.task.core.task.WeeklyReportTuesdayTask;
 import ee.qrent.billing.task.core.task.InsuranceCaseCalculationTask;
 import ee.qrent.billing.task.core.task.ObligationCalculationTask;
 import ee.qrent.billing.task.core.task.QWeekCreationTask;
@@ -17,7 +17,7 @@ public class TaskRunService implements TaskRunUseCase {
   private final ObligationCalculationTask obligationCalculationTask;
   private final QWeekCreationTask qWeekCreationTask;
   private final RentCalculationTask rentCalculationTask;
-  private final WeeklyReportMondayTask mondayFinancialReportTask;
+  private final WeeklyReportTuesdayTask mondayFinancialReportTask;
 
   @Override
   public void runQWeekCreationTask() {

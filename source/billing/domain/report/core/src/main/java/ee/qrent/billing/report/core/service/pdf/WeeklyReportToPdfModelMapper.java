@@ -33,11 +33,16 @@ public class WeeklyReportToPdfModelMapper {
     final var carReg =
         report.getCarId() != null ? carQuery.getById(report.getCarId()).getRegNumber() : null;
     final var totalRentAmountRaw = getTotalRentAmount(report.getTransactionTypesVsAmount());
-    final var totalRentAmount = totalRentAmountRaw.compareTo(BigDecimal.ZERO) > 0 
-        ? BigDecimal.ZERO 
-        : totalRentAmountRaw;
+    final var totalRentAmount =
+        totalRentAmountRaw.compareTo(BigDecimal.ZERO) > 0 ? BigDecimal.ZERO : totalRentAmountRaw;
     final var totalExternalSystemsIncomeAmount =
         getTotalExternalSystemsIncomeAmount(report.getTransactionTypesVsAmount());
+    final var boltExternalSystemsIncomeAmount =
+        report
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
+    final var otherPaymentAmount =
+        totalExternalSystemsIncomeAmount.subtract(boltExternalSystemsIncomeAmount);
 
     final var balanceOnSunday = report.getBalanceAmountSunday();
     final var distributedObligationAmount = getDistributedObligationAmount(report);
@@ -50,7 +55,6 @@ public class WeeklyReportToPdfModelMapper {
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
             .add(getDamagePaymentAmount(report));
-        //    .add(distributedObligationAmount);
 
     final var totalPaymentAmount =
         totalPaymentAmountRaw.compareTo(BigDecimal.ZERO) > 0
@@ -85,8 +89,10 @@ public class WeeklyReportToPdfModelMapper {
         .currentObligationAmount(report.getCurrentObligationAmount())
         .netAmountOnThursday(report.getNetAmountOnThursday())
         .totalRentAmount(totalRentAmount)
-        .totalExternalSystemsIncomeAmount(totalExternalSystemsIncomeAmount)
-        .totalOtherPaymentAmount(totalOtherPaymentAmount)
+        .incomeTotal(totalExternalSystemsIncomeAmount)
+        .incomeBolt(boltExternalSystemsIncomeAmount)
+        .incomeOthers(totalOtherPaymentAmount)
+        .totalOtherPaymentAmount(otherPaymentAmount)
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .insuranceCases(getInsuranceCases(report))
         .comment(report.getComment())
@@ -139,13 +145,19 @@ public class WeeklyReportToPdfModelMapper {
     final var bonusBoltAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_BOLT_CODE, BigDecimal.ZERO);
     final var bonusPlusAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_PLUS_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_PLUS_CODE, BigDecimal.ZERO);
     final var bonusFriendAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_FRIEND_CODE, BigDecimal.ZERO);
     final var bonusNewDriverAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(
+            TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE, BigDecimal.ZERO);
 
-    return rentAmount.add(bonusReliablePartnerAmount).add(bonusBoltAmount).add(bonusFriendAmount).add(bonusPlusAmount).add(bonusNewDriverAmount);
+    return rentAmount
+        .add(bonusReliablePartnerAmount)
+        .add(bonusBoltAmount)
+        .add(bonusFriendAmount)
+        .add(bonusPlusAmount)
+        .add(bonusNewDriverAmount);
   }
 
   private BigDecimal getTotalExternalSystemsIncomeAmount(
@@ -153,15 +165,19 @@ public class WeeklyReportToPdfModelMapper {
     final var boltPlusAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
     final var bankPlusAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BANK_PLUS_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BANK_PLUS_CODE, BigDecimal.ZERO);
     final var cashPlusAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_CASH_PLUS_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_CASH_PLUS_CODE, BigDecimal.ZERO);
     final var otherPlusAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_OTHER_PLUS_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_OTHER_PLUS_CODE, BigDecimal.ZERO);
     final var paycheckPlusAmount =
-            transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PAYCHECK_PLUS_CODE, BigDecimal.ZERO);
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PAYCHECK_PLUS_CODE, BigDecimal.ZERO);
 
-    return boltPlusAmount.add(bankPlusAmount).add(cashPlusAmount).add(otherPlusAmount).add(paycheckPlusAmount);
+    return boltPlusAmount
+        .add(bankPlusAmount)
+        .add(cashPlusAmount)
+        .add(otherPlusAmount)
+        .add(paycheckPlusAmount);
   }
 
   private BigDecimal getTotalOtherPaymentAmount(

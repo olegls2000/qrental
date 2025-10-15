@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import static com.lowagie.text.Element.*;
 import static com.lowagie.text.Element.ALIGN_BOTTOM;
 import static com.lowagie.text.Element.ALIGN_CENTER;
 import static com.lowagie.text.Element.ALIGN_LEFT;
@@ -27,7 +26,7 @@ import static com.lowagie.text.Element.ALIGN_MIDDLE;
 import static com.lowagie.text.Element.ALIGN_RIGHT;
 import static com.lowagie.text.PageSize.A4;
 import static com.lowagie.text.Rectangle.NO_BORDER;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProviderVer1.*;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
 import static java.awt.Color.BLACK;
@@ -589,7 +588,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
   private PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
+    final var correctionOfRent = formatAmount(model.getIncomeTotal());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerPhrase = new com.lowagie.text.Phrase();
 

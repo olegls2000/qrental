@@ -33,7 +33,7 @@ public class EmailNotificationServiceConfig {
         new BonusCalculationLetterBuildStrategy(templateEngine),
         new ObligationCalculationLetterBuildStrategy(templateEngine),
         new AuthorizationLetterBuildStrategy(templateEngine),
-        new MondayReportLetterBuildStrategy(templateEngine),
+        new TuesdayReportLetterBuildStrategy(templateEngine),
         new TuesdayReportLetterBuildStrategy(templateEngine),
         new WednesdayReportLetterBuildStrategy(templateEngine),
         new FridayReportLetterBuildStrategy(templateEngine),

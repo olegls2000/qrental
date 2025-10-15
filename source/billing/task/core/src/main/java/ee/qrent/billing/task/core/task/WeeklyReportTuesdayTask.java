@@ -8,7 +8,7 @@ import ee.qrent.common.in.usecase.QTask;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class WeeklyReportMondayTask implements QTask {
+public class WeeklyReportTuesdayTask implements QTask {
 
   private final WeeklyReportCalculationAddUseCase addUseCase;
   private final GetQWeekQuery qWeekQuery;
@@ -18,7 +18,7 @@ public class WeeklyReportMondayTask implements QTask {
     return () -> {
       final WeeklyReportCalculationAddRequest addRequest = new WeeklyReportCalculationAddRequest();
       addRequest.setQWeekId(qWeekQuery.getCurrentWeek().getId());
-      addRequest.setType(WeeklyReportTypeIn.MONDAY_REPORT);
+      addRequest.setType(WeeklyReportTypeIn.TUESDAY_REPORT);
       addUseCase.add(addRequest);
       if (addRequest.hasViolations()) {
         throw new RuntimeException(addRequest.getViolations().toString());
@@ -28,6 +28,6 @@ public class WeeklyReportMondayTask implements QTask {
 
   @Override
   public String getName() {
-    return "MONDAY-BILLING_WEEKLY-REPORT-TASK";
+    return "TUESDAY-BILLING_WEEKLY-REPORT-TASK";
   }
 }

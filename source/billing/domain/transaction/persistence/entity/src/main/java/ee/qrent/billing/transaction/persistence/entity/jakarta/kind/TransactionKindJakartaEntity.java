@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "transaction_kind")
-@Audited
+//@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

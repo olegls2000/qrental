@@ -2,7 +2,6 @@ package ee.qrent.queue.api.in;
 
 public enum EntryType {
   INFO_REPORT_EMAIL,
-  MONDAY_REPORT_EMAIL,
   TUESDAY_REPORT_EMAIL,
   WEDNESDAY_REPORT_EMAIL,
   FRIDAY_REPORT_EMAIL,

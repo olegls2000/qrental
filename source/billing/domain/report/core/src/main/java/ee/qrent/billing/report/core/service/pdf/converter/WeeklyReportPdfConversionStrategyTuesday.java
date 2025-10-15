@@ -1,9 +1,7 @@
 package ee.qrent.billing.report.core.service.pdf.converter;
 
 import static com.lowagie.text.Element.*;
-import static com.lowagie.text.PageSize.A4;
-import static com.lowagie.text.Rectangle.NO_BORDER;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProviderVer1.*;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static java.awt.Color.*;
 import static java.lang.String.format;
@@ -18,7 +16,6 @@ import java.util.Locale;
 import com.lowagie.text.*;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -33,21 +30,13 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
 @AllArgsConstructor
-public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConversionStrategy {
-
-  public static final int REPORT_FONT = Font.HELVETICA;
-  private static final Color REPORT_GRAY_BACKGROUND_COLOR = new Color(241, 241, 241);
-  private static final Color REPORT_WHITE_BACKGROUND_COLOR = new Color(255, 255, 255);
-  private static final Color REPORT_GREEN_COLOR = new Color(0, 100, 0); // Green
-  private static final Color REPORT_RED_COLOR = new Color(150, 30, 0); // Red
-  private static final Color REPORT_DARK_BLUE_COLOR = new Color(0, 40, 120); // Dark Blue
-  private static final Color REPORT_DARK_GRAY_COLOR = new Color(50, 50, 50); // Dark Gray
-  private static final Color REPORT_PURPLE_COLOR = new Color(128, 0, 128); // Purple
+public class WeeklyReportPdfConversionStrategyTuesday
+    extends AbstractWeeklyReportPdfConversionStrategy {
 
   @Override
   public boolean canApply(final WeeklyReportType reportType) {
 
-    return reportType == WeeklyReportType.MONDAY_REPORT;
+    return reportType == WeeklyReportType.TUESDAY_REPORT;
   }
 
   @Override
@@ -55,7 +44,7 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
   public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
 
-    final var weeklyReportPdfDoc = new Document(A4, 30f, 30f, 20f, 20f);
+    final var weeklyReportPdfDoc = getA4PdfDocument();
     final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
     weeklyReportPdfDoc.open();
@@ -92,48 +81,6 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     row.addCell(cell);
 
     return row;
-  }
-
-  private PdfPCell getQpdfPCell(final Paragraph paragraph) {
-    final var qCell = new PdfPCell(paragraph);
-    qCell.setBorder(NO_BORDER);
-
-    return qCell;
-  }
-
-  private PdfPTable getQpdfTable(int numColumns) {
-    final var table = new PdfPTable(numColumns);
-    table.setWidthPercentage(100f);
-
-    return table;
-  }
-
-  @SneakyThrows
-  private PdfPTable getHeaderTable(final String language) {
-    final var header = getQpdfTable(2);
-    header.setWidths(new int[] {20, 80});
-
-    Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
-    img.scaleToFit(33, 14);
-
-    PdfPCell imageCell = new PdfPCell(img, true);
-    imageCell.setHorizontalAlignment(ALIGN_LEFT);
-    imageCell.setVerticalAlignment(ALIGN_MIDDLE);
-    imageCell.setFixedHeight(20f);
-    imageCell.setBorder(NO_BORDER);
-    header.addCell(imageCell);
-    final var reportNameCell =
-        getQpdfPCell(
-            new Paragraph(
-                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 14, Font.BOLD)));
-
-    reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
-    reportNameCell.setPaddingLeft(65f);
-    reportNameCell.setVerticalAlignment(ALIGN_MIDDLE);
-    header.addCell(reportNameCell);
-    header.addCell(getEmptyRow());
-
-    return header;
   }
 
   private PdfPCell getDriverMainDataLabelCell(final String label) {
@@ -511,11 +458,11 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     final var bonusBoltAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
     final var bonusPlusAmount =
-            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
     final var bonusFriendAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FRIEND_CODE);
     final var bonusNewDriverAmount =
-            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE);
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE);
 
     final var totalRentAmount = formatAmount(model.getTotalRentAmount().abs());
 
@@ -558,8 +505,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
 
     final var bonusPlusLabelCell =
-            getClarificationTableLabelCellCampaign(
-                    getLabel(language, BONUS_PROGRAM_PLUS_LABEL_KEY), language);
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_PLUS_LABEL_KEY), language);
     final var bonusPlusValueCell = getClarificationTableValueCell(bonusPlusAmount, language);
     addRowIfValueIsNonZero(bonusPlusAmount, bonusPlusLabelCell, bonusPlusValueCell, table);
 
@@ -571,28 +518,21 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     table.addCell(getEmptyRow());
 
     final var bonusNewDriverLabelCell =
-            getClarificationTableLabelCellCampaign(
-                    getLabel(language, BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY), language);
+        getClarificationTableLabelCellCampaign(
+            getLabel(language, BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY), language);
     final var bonusNewDriverValueCell =
-            getClarificationTableValueCell(bonusNewDriverAmount, language);
-    addRowIfValueIsNonZero(bonusNewDriverAmount, bonusNewDriverLabelCell, bonusNewDriverValueCell, table);
+        getClarificationTableValueCell(bonusNewDriverAmount, language);
+    addRowIfValueIsNonZero(
+        bonusNewDriverAmount, bonusNewDriverLabelCell, bonusNewDriverValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;
   }
 
-  private PdfPCell getEmptyRow() {
-    final var emptyRow = getQpdfPCell(new Paragraph(" ", new Font(REPORT_FONT, 14, Font.BOLD)));
-    emptyRow.setColspan(2);
-    emptyRow.setFixedHeight((float) 8.0);
-
-    return emptyRow;
-  }
-
   private PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
-    final var correctionOfRent = formatAmount(model.getTotalExternalSystemsIncomeAmount());
+    final var correctionOfRent = formatAmount(model.getIncomeTotal());
     final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
     final var headerPhrase = new com.lowagie.text.Phrase();
 
@@ -632,6 +572,14 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
     labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
     final var boltPlusValueCell = getClarificationTableValueCell(boltPlusAmount, language);
     addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
+
+    final var incomeOthersAmount = model.getIncomeOthers();
+    final var incomeOthersLabelCell =
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(language, RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY));
+    final var incomeOthersValueCell =
+        getClarificationTableValueCell(model.getIncomeOthers(), language);
+    addRowIfValueIsNonZero(incomeOthersAmount, incomeOthersLabelCell, incomeOthersValueCell, table);
     table.addCell(getEmptyRow());
 
     return table;
@@ -712,7 +660,8 @@ public class WeeklyReportMondayPdfConverterVer1 implements WeeklyReportPdfConver
 
     final var feeAmount =
         model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, ZERO);
-    final var feeLabelCell = getClarificationTableLabelCellDarkBlue(getLabel(language, FEE_WEEK_BEGINNING_LABEL_KEY));
+    final var feeLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, FEE_WEEK_BEGINNING_LABEL_KEY));
     final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
     addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
 
