@@ -178,6 +178,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
     final var cell2 = getQpdfPCell(paragraph2);
     cell2.setHorizontalAlignment(ALIGN_CENTER);
     cell2.setVerticalAlignment(ALIGN_MIDDLE);
+    table.addCell(getEmptyRow());
     table.addCell(cell2);
 
     final var paragraphWithBonuses = new Paragraph();

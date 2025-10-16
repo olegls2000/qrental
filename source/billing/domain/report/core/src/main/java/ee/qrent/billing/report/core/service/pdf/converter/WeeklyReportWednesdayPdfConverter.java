@@ -479,7 +479,11 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
     paragraph.add(campaignText);
 
     // Добавляем название кампании в кавычках темно-синим цветом
-
+    final var campaignNameText =
+            new Chunk(
+                    format("«%s»" + ":", campaignName),
+                    new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR));
+    paragraph.add(campaignNameText);
 
 
     final var labelCell = getQpdfPCell(paragraph);
