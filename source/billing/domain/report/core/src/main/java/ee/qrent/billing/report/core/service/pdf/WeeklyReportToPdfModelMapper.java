@@ -41,7 +41,7 @@ public class WeeklyReportToPdfModelMapper {
         report
             .getTransactionTypesVsAmount()
             .getOrDefault(TRANSACTION_TYPE_BOLT_PLUS_CODE, BigDecimal.ZERO);
-    final var otherPaymentAmount =
+    final var incomeOther =
         totalExternalSystemsIncomeAmount.subtract(boltExternalSystemsIncomeAmount);
 
     final var balanceOnSunday = report.getBalanceAmountSunday();
@@ -91,8 +91,8 @@ public class WeeklyReportToPdfModelMapper {
         .totalRentAmount(totalRentAmount)
         .incomeTotal(totalExternalSystemsIncomeAmount)
         .incomeBolt(boltExternalSystemsIncomeAmount)
-        .incomeOthers(totalOtherPaymentAmount)
-        .totalOtherPaymentAmount(otherPaymentAmount)
+        .incomeOthers(incomeOther)
+        .totalOtherPaymentAmount(totalOtherPaymentAmount)
         .transactionTypesVsAmount(report.getTransactionTypesVsAmount())
         .insuranceCases(getInsuranceCases(report))
         .comment(report.getComment())

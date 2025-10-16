@@ -543,7 +543,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
     headerPhrase.add(
         new com.lowagie.text.Chunk(
             format("%s %s", correctionOfRent, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     final var boltPlusAmount =

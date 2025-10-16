@@ -210,6 +210,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
 
     cell1.setHorizontalAlignment(ALIGN_CENTER);
     cell1.setVerticalAlignment(ALIGN_MIDDLE);
+    table.addCell(getEmptyRow());
     table.addCell(cell1);
     table.addCell(getEmptyRow());
 
