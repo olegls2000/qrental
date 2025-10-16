@@ -142,7 +142,7 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
                                 .collect(Collectors.toSet()))
                         .build();
                 final var driversTransactions =
-                    transactionQuery.getAllByFilter(filter).stream().toList();
+                    transactionQuery.getAllByFilter(filter);
 
                 final var driverCompanyVat = driver.getCompanyVat();
                 final var driverInfo =

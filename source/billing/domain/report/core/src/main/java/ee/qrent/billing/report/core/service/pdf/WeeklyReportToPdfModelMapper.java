@@ -49,12 +49,15 @@ public class WeeklyReportToPdfModelMapper {
     final var totalOtherPaymentAmount =
         getTotalOtherPaymentAmount(
             report.getTransactionTypesVsAmount(), distributedObligationAmount);
+    final var sundayBalance = report.getBalanceAmountSunday();
+    final var sundayOverpayment = sundayBalance.compareTo(BigDecimal.ZERO) > 0 ? sundayBalance : BigDecimal.ZERO;
 
     final var totalPaymentAmountRaw =
         totalRentAmount
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
-            .add(getDamagePaymentAmount(report));
+            .add(getDamagePaymentAmount(report)
+            .add(sundayOverpayment));
 
     final var totalPaymentAmount =
         totalPaymentAmountRaw.compareTo(BigDecimal.ZERO) > 0

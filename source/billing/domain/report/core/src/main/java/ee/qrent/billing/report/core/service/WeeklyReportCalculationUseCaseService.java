@@ -163,7 +163,12 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
     final var feeAmountAtCalculationMoment = balanceOnDate.getAmount();
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
-    final var netAmountOnThursday = getNetAmountOnThursdayPreviousWeek(driverId, requestedQWeek);
+
+    final var netAmountOnThursdayCurrentWeek = getNetAmountOnThursdayCurrentWeek(driverId, requestedQWeek);
+    final var netAmountOnThursdayPreviousWeek = getNetAmountOnThursdayPreviousWeek(driverId, requestedQWeek);
+    final var netAmountOnThursday = reportType == WeeklyReportTypeIn.FRIDAY_REPORT
+            ? netAmountOnThursdayCurrentWeek : netAmountOnThursdayPreviousWeek;
+
     final var activeInsuranceCases = getActiveInsuranceCases(driverId);
 
     return WeeklyReport.builder()
@@ -214,6 +219,14 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
     }
 
     return balance.getDamageRemaining();
+  }
+
+  private BigDecimal getNetAmountOnThursdayCurrentWeek(
+          final Long driverId, final QWeekResponse requestedQWeek) {
+    final var monday = requestedQWeek.getStart().minusWeeks(1);
+    final var thursday = monday.plusDays(3L);
+
+    return getObligationInvolvedTransactionsSum(driverId, monday, thursday);
   }
 
   private BigDecimal getNetAmountOnThursdayPreviousWeek(
