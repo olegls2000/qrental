@@ -114,7 +114,7 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
           final var previousQWeekStartDay = previousQWeek.getStart();
           final var previousQWeekEndDay = previousQWeek.getEnd();
 
-          drivers.forEach(
+          drivers.parallelStream().forEach(
               driver -> {
                 final var driverCreationDate = driver.getCreatedDate();
                 final var driverId = driver.getId();

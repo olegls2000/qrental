@@ -43,3 +43,4 @@ Font underlinedFont = PdfFontManager.createBoldUnderlinedFont(12);
 FontFactory.register("C:/Windows/Fonts/arial.ttf", "ArialCustom");
 Font customFont = FontFactory.getFont("ArialCustom", 12, Font.BOLD);
 ```
+

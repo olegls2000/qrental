@@ -1,0 +1,1 @@
+ALTER TABLE invoice ADD UNIQUE (driver_id, q_week_id);
