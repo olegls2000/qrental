@@ -164,6 +164,10 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
         final var language = model.getLanguage();
         final var table = getQpdfTable(2);
         table.setWidths(new int[] {70, 30});
+
+        table.addCell(getDriverMainDataLabelCell(getLabel(language, REPORTED_WEEK_LABEL_KEY)));
+       // table.addCell(getDriverMainDataValueCell();
+
         table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
 
         final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
@@ -196,7 +200,7 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
         final var paragraph1 = new Paragraph();
         paragraph1.add(getNormalChunk(getLabel(language, OBLIGATION_TEXT_PART_1_LABEL_KEY)));
         paragraph1.add(
-                model.getObligationStatus().equals("COMPLETED")
+                model.getObligationStatus().equals("NOT_COMPLETED")
                         ? getBoldChunk(getLabel(language, OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY))
                         : getBoldChunk(getLabel(language, OBLIGATION_TEXT_PART_2_NOT_COMPLETED_LABEL_KEY)));
 
@@ -204,7 +208,7 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
         paragraph1.add(getBoldChunk(getLabel(language, OBLIGATION_TEXT_PART_4_LABEL_KEY)));
         paragraph1.add(getNormalChunk(getLabel(language, OBLIGATION_TEXT_PART_5_LABEL_KEY)));
         final var weekDaysFormatted =
-                getInterval(model.getPreviousWeekStart(), model.getPreviousWeekEnd());
+                getInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
         paragraph1.add(getBoldChunk(weekDaysFormatted));
         paragraph1.add(getNormalChunk(getLabel(language, OBLIGATION_TEXT_PART_6_LABEL_KEY)));
 
@@ -218,7 +222,7 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
 
         final var paragraph2 = new Paragraph();
         paragraph2.add(
-                model.getObligationStatus().equals("COMPLETED")
+                model.getObligationStatus().equals("NOT_COMPLETED")
                         ? getNormalChunk(getLabel(language, THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY))
                         : getNormalChunk(getLabel(language, THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY)));
         paragraph2.add(getNormalChunk(getLabel(language, THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY)));
@@ -261,7 +265,7 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
                 getNormalChunk(getLabel(language, BONUS_PROGRAM_INACTIVE_TEXT_PART_5_LABEL_KEY)));
 
         final var paragraph =
-                model.getObligationStatus().equals("COMPLETED")
+                model.getObligationStatus().equals("NOT_COMPLETED")
                         ? paragraphWithBonuses
                         : paragraphWithoutBonuses;
 
@@ -761,10 +765,10 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
                 getClarificationTableLabelCellDarkBlue(
                         getLabel(
                                 language,
-                                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на понедельник ( при
+                                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на текущий момент при
         // условии что есть
         // долг)
-        table.addCell(getClarificationTableValueCell(model.getDebtAmountSunday(), language));
+        table.addCell(getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
 
         model
                 .getInsuranceCases()

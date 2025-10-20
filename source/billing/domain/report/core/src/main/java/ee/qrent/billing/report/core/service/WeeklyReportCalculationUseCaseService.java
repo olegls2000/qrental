@@ -301,7 +301,7 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
     LocalDate reportDate = null;
     switch (reportType) {
       //case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
-      case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2L);
+      case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
       case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2L);
       case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4L);
     }
