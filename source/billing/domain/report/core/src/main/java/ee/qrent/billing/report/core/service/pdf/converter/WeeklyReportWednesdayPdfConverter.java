@@ -66,8 +66,9 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored(
-            getLabel(language, OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY),
-            getLabel(language, OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY)));
+            getLabel(language, OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY)
+      //      getLabel(language, OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY)));
+        ));
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getRentAdjustmentClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
@@ -361,7 +362,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
   }
 
   private PdfPTable getClarificationHeaderRowColored(
-      final String prefixText, final String purpleText) {
+      final String prefixText) {
     final var row = getQpdfTable(1);
     final var paddingTopCell =
         getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
@@ -370,7 +371,7 @@ public class WeeklyReportWednesdayPdfConverter implements WeeklyReportPdfConvers
 
     final var paragraph = new Paragraph();
     paragraph.add(new Chunk(prefixText, new Font(REPORT_FONT, 13, Font.BOLD)));
-    paragraph.add(new Chunk(purpleText, new Font(REPORT_FONT, 13, Font.BOLD, REPORT_PURPLE_COLOR)));
+  //  paragraph.add(new Chunk(purpleText, new Font(REPORT_FONT, 13, Font.BOLD, REPORT_PURPLE_COLOR)));
     paragraph.add(new Chunk(":", new Font(REPORT_FONT, 13, Font.BOLD)));
 
     final var cell = getQpdfPCell(paragraph);

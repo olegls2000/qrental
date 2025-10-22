@@ -122,7 +122,7 @@ public class WeeklyReportMondayPdfLabelProvider {
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
             new AbstractMap.SimpleEntry<>(
-                REPORT_NAME_KEY, "РАССЫЛКА НА СРЕДУ - 16:00"), // ВТОРНИК - 10:00
+                REPORT_NAME_KEY, "РАССЫЛКА НА ВТОРНИК - 10:00"), // ВТОРНИК - 10:00
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Арендатор"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
@@ -178,10 +178,14 @@ public class WeeklyReportMondayPdfLabelProvider {
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "активировать бонусные кампании "),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "на следующую неделю "),
-            new AbstractMap.SimpleEntry<>(
+
+                new AbstractMap.SimpleEntry<>(
+                        OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Отчет за текущую неделю на данный момент"),
+           /* new AbstractMap.SimpleEntry<>(
                 OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Ниже детальная информация по "),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "твоим обязательствам"),
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "твоим обязательствам"),*/
+
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "Арендная плата всего: "),
             new AbstractMap.SimpleEntry<>(
                 RENT_CLARIFICATION_TEXT_LABEL_KEY, "Аренда за текущую неделю"),
@@ -209,29 +213,35 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(
                 NON_LABEL_FINE_LABEL_KEY,
                 "Доплата за отсутствие логотипов Q на автомобиле за текущую неделю"),
-            new AbstractMap.SimpleEntry<>(
-                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Pассроченные обязательства"),
+
+           /* new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Pассроченные обязательства"),*/
+                new AbstractMap.SimpleEntry<>(
+                        DISTRIBUTED_OBLIGATION_LABEL_KEY, "Вычет в счёт прочих обязательств"),
             new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "Штраф за парковку"),
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "Пени на конец прошлой недели"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Пени и прочие обязательства: "),
+               /* DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Пени и прочие обязательства: "),*/
+                    DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Прочие обязательства (отчет) "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг  (без учета ремонтов)"),
+               /* DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг  (без учета ремонтов)"),*/
+                    DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Текущий долг (без учета ремонтов)"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Итого к оплате"));
 
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "WEDNESDAY NEWSLETTER - 16:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TUESDAY NEWSLETTER - 10:00"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Tenant"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Personal code"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Call Sign in Q System"),
             new AbstractMap.SimpleEntry<>(RENTED_CAR_LABEL_KEY, "Current vehicle"),
             new AbstractMap.SimpleEntry<>(
-                THURSDAY_LABEL_KEY, "Data as of the end of Thursday last week"),
+                /*THURSDAY_LABEL_KEY, "Data as of the end of Thursday last week"),*/
+                    THURSDAY_LABEL_KEY, "Payment and Bonus Report"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_1_LABEL_KEY, "You"),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_2_COMPLETED_LABEL_KEY, "have fulfilled"),
@@ -284,10 +294,13 @@ public class WeeklyReportMondayPdfLabelProvider {
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "to activate the bonus campaigns"),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "for the next week "),
-            new AbstractMap.SimpleEntry<>(
+           /* new AbstractMap.SimpleEntry<>(
                 OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Below are your"),
             new AbstractMap.SimpleEntry<>(
-                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, " current week obligations"),
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, " current week obligations"),*/
+                new AbstractMap.SimpleEntry<>(
+                        OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Report for the current week as of now "),
+
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "Total rental fee: "),
             new AbstractMap.SimpleEntry<>(
                 RENT_CLARIFICATION_TEXT_LABEL_KEY, "Current week rental fee"),
@@ -316,8 +329,11 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(
                 NON_LABEL_FINE_LABEL_KEY,
                 "Surcharge for the absence of Q logos on the vehicle"),
-            new AbstractMap.SimpleEntry<>(
-                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Deferred liabilities"),
+           /* new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Deferred liabilities"),*/
+                new AbstractMap.SimpleEntry<>(
+                        DISTRIBUTED_OBLIGATION_LABEL_KEY, "Deduction against other obligations"),
+
             new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "Parking fine"),
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "Penalties as of the end of last week"),
@@ -325,7 +341,8 @@ public class WeeklyReportMondayPdfLabelProvider {
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Late fees and other obligations: "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt (excluding repairs)"),
+                /*DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt (excluding repairs)"),*/
+                    DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Current debt (excluding repairs)"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Total to pay"));
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -333,7 +350,7 @@ public class WeeklyReportMondayPdfLabelProvider {
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "KOLMAPÄEVA INFOKIRI - 16:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TEISIPÄEVANE INFOKIRI - 10:00"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Rentnik"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
@@ -389,10 +406,14 @@ public class WeeklyReportMondayPdfLabelProvider {
                 OBLIGATION_MONDAY_TEXT_PART_9_LABEL_KEY, "et aktiveerida\n boonuskampaaniad "),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_MONDAY_TEXT_PART_10_LABEL_KEY, "järgmiseks nädalaks "),
-            new AbstractMap.SimpleEntry<>(
-                OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Allpool on detailne teave "),
-            new AbstractMap.SimpleEntry<>(
-                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "sinu kohustuste kohta"),
+
+          /*  new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Allpool on detailne teave "),*/
+                new AbstractMap.SimpleEntry<>(
+                        OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY, "Aruanne käesoleva nädala kohta hetkel "),
+         /*   new AbstractMap.SimpleEntry<>(
+                OBLIGATION_HEADER_TEXT_PART_2_LABEL_KEY, "sinu kohustuste kohta"),*/
+
             new AbstractMap.SimpleEntry<>(RENT_HEADER_TEXT_LABEL_KEY, "Renditasu kokku: "),
             new AbstractMap.SimpleEntry<>(
                 RENT_CLARIFICATION_TEXT_LABEL_KEY, "Käesoleva nädala renditasu"),
@@ -421,16 +442,22 @@ public class WeeklyReportMondayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(
                 NON_LABEL_FINE_LABEL_KEY,
                 "Lisatasu Q-logode puudumise eest sõidukil"),
-            new AbstractMap.SimpleEntry<>(
-                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Edasilükatud kohustused"),
+           /* new AbstractMap.SimpleEntry<>(
+                DISTRIBUTED_OBLIGATION_LABEL_KEY, "Edasilükatud kohustused"),*/
+                new AbstractMap.SimpleEntry<>(
+                        DISTRIBUTED_OBLIGATION_LABEL_KEY, "Tasaarvestus teiste kohustuste katteks"),
             new AbstractMap.SimpleEntry<>(PARKING_FINE_LABEL_KEY, "Parkimistrahv"),
             new AbstractMap.SimpleEntry<>(
                 FEE_WEEK_BEGINNING_LABEL_KEY, "Karistused eelmise nädala lõpu seisuga"),
-            new AbstractMap.SimpleEntry<>(
-                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Viivised ja muud kohustused: "),
+           /* new AbstractMap.SimpleEntry<>(
+                DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Viivised ja muud kohustused: "),*/
+                new AbstractMap.SimpleEntry<>(
+                        DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Muud kohustusee (väljavõte): "),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Viivised"),
-            new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg (välja arvatud remont)"),
+           /* new AbstractMap.SimpleEntry<>(
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg (välja arvatud remont)"),*/
+                new AbstractMap.SimpleEntry<>(
+                        DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Lühiajaline võlg (välja arvatud remont)"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Kokku maksmiseks"));
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
