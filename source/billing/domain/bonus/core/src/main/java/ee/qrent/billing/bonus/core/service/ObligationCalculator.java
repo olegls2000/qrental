@@ -26,12 +26,11 @@ public class ObligationCalculator {
 
   private static final BigDecimal DEBT_RATE = BigDecimal.valueOf(0.25d);
 
+  private final GetBalanceQuery balanceQuery;
   private final ObligationLoadPort loadPort;
   private final GetQWeekQuery qWeekQuery;
-  private final GetBalanceQuery balanceQuery;
   private final GetDriverQuery driverQuery;
   private final GetTransactionQuery transactionQuery;
-
 
   public Obligation getObligationOnThursday(final Long driverId, final QWeekResponse qWeek) {
     final var qWeekId = qWeek.getId();
@@ -44,18 +43,17 @@ public class ObligationCalculator {
   private Obligation getObligationByDriverIdAndQWeekIdAndPeriod(
       final Long driverId,
       final Long requestedQWeekId,
-      final LocalDate startDate,
-      final LocalDate endDate) {
+      final LocalDate monday,
+      final LocalDate thursday) {
 
-    final var obligationAmount =
-        getObligationAmount(driverId, requestedQWeekId, startDate, endDate);
-    final var positiveAmount = getPositiveAmount(driverId, startDate, endDate);
+    final var obligationAmount = getObligationAmount(driverId, monday, thursday);
+    final var positiveAmount = getPositiveAmount(driverId, monday, thursday);
 
     final var previousWeek = qWeekQuery.getOneBeforeById(requestedQWeekId);
     final var previousWeekId = previousWeek.getId();
     final var matchCount =
         getMatchCount(
-            driverId, startDate, endDate, previousWeekId, obligationAmount, positiveAmount);
+            driverId, monday, thursday, previousWeekId, obligationAmount, positiveAmount);
 
     return Obligation.builder()
         .id(null)
@@ -65,6 +63,30 @@ public class ObligationCalculator {
         .positiveAmount(positiveAmount)
         .matchCount(matchCount)
         .build();
+  }
+
+  public BigDecimal getObligationAmount(
+      final Long driverId, final LocalDate monday, final LocalDate thursday) {
+    final var manualObligationAmount = getManualObligation(driverId);
+    final var automaticObligationAmount = getAutomaticObligationAmount(driverId, monday, thursday);
+    if (manualObligationAmount.compareTo(automaticObligationAmount) > 0) {
+
+      return manualObligationAmount;
+    }
+    final var sunday = monday.minusDays(1);
+    final var sundayRawBalance = balanceQuery.getRawByDriverAndDate(driverId, sunday);
+    final var sundayRawBalanceAmount = sundayRawBalance.getAmount();
+    if (sundayRawBalanceAmount.compareTo(ZERO) >= 0) {
+
+      return automaticObligationAmount;
+    }
+    final var extraAmount = automaticObligationAmount.multiply(DEBT_RATE);
+    if (sundayRawBalanceAmount.abs().compareTo(extraAmount) >= 0) {
+
+      return automaticObligationAmount.add(extraAmount);
+    }
+
+    return automaticObligationAmount.add(sundayRawBalanceAmount);
   }
 
   private Integer getMatchCount(
@@ -85,7 +107,7 @@ public class ObligationCalculator {
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE, TRANSACTION_TYPE_NO_LABEL_FINE_CODE)
                     .collect(Collectors.toSet()))
             .build();
-    final var rentTransactionCount = transactionQuery.getAllByFilter(filter).stream().count();
+    final var rentTransactionCount = (long) transactionQuery.getAllByFilter(filter).size();
     if (rentTransactionCount == 0) {
       System.out.println("No Rent transactions. Match count is O");
 
@@ -121,73 +143,7 @@ public class ObligationCalculator {
         .reduce(ZERO, BigDecimal::add);
   }
 
-  public BigDecimal getObligationAmount(
-      final Long driverId, final Long qWeekId, final LocalDate startDate, final LocalDate endDate) {
-    var obligationAmount = ZERO;
-
-    final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
-    final var previousQWeekId = previousQWeek.getId();
-    final var manualObligationAmount = getRequiredObligation(driverId);
-    final var calculatedObligationAmount = getCalculatedObligationAmount(driverId, startDate, endDate);
-    final var initialObligationAmountAbs = getNominalObligationAbs(manualObligationAmount, calculatedObligationAmount);
-
-    final var previousWeekBalance =
-        balanceQuery
-            .getRawContextByDriverIdAndQWeekId(driverId, previousQWeekId)
-            .getRequestedWeekBalance()
-            .getAmount();
-    final var distributedObligation = distributedObligation(previousWeekBalance, manualObligationAmount, calculatedObligationAmount);
-    if (previousWeekBalance.compareTo(ZERO) < 0) {
-
-      obligationAmount = distributedObligation;
-    } else if (previousWeekBalance.compareTo(ZERO) > 0) {
-      obligationAmount = distributedObligation.subtract(previousWeekBalance.abs());
-      if (obligationAmount.compareTo(ZERO) <= 0) {
-        obligationAmount = ZERO;
-      }
-    } else {
-      obligationAmount = initialObligationAmountAbs;
-    }
-
-    return obligationAmount;
-  }
-
-  private BigDecimal getNominalObligationAbs(final BigDecimal manualObligationAmount, final BigDecimal calculatedObligationAmount){
-   final var manualObligationAmountAbs = manualObligationAmount.abs();
-   final var calculatedObligationAmountAbs = calculatedObligationAmount.abs();
-
-    if(manualObligationAmountAbs.compareTo(calculatedObligationAmountAbs) > 0){
-
-      return manualObligationAmountAbs;
-   }
-
-    return calculatedObligationAmountAbs;
-  }
-
-  private BigDecimal distributedObligation(
-      final BigDecimal previousWeekBalance,
-      final BigDecimal manualObligation,
-      final BigDecimal claculatedObligation
-  ) {
-
-    if(manualObligation.compareTo(claculatedObligation) > 0){
-        if(manualObligation.compareTo(previousWeekBalance.abs()) > 0){
-
-         return  previousWeekBalance.abs();
-        } else {
-          return manualObligation;
-        }
-    } else {
-        final var disrtibutedObligation = claculatedObligation.multiply(DEBT_RATE);
-        if(disrtibutedObligation.compareTo(previousWeekBalance.abs()) > 0){
-          return previousWeekBalance;
-        }
-        return disrtibutedObligation;
-    }
-
-  }
-
-  private BigDecimal getRequiredObligation(final Long driverId) {
+  private BigDecimal getManualObligation(final Long driverId) {
     final var driver = driverQuery.getById(driverId);
     if (driver.getHasRequiredObligation()) {
       return driver.getRequiredObligation();
@@ -195,7 +151,7 @@ public class ObligationCalculator {
     return ZERO;
   }
 
-  private BigDecimal getCalculatedObligationAmount(
+  private BigDecimal getAutomaticObligationAmount(
       final Long driverId, final LocalDate startDate, final LocalDate endDate) {
     final var filter =
         DriverAndPeriodAndTypeCodesFilter.builder()
@@ -213,6 +169,7 @@ public class ObligationCalculator {
 
     return transactionQuery.getAllByFilter(filter).stream()
         .map(TransactionResponse::getRealAmount)
-        .reduce(ZERO, BigDecimal::add);
+        .reduce(ZERO, BigDecimal::add)
+        .abs();
   }
 }

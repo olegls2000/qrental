@@ -39,7 +39,7 @@ class ObligationCalculatorTest {
     driverQuery = mock(GetDriverQuery.class);
     transactionQuery = mock(GetTransactionQuery.class);
     instanceUnderTest =
-        new ObligationCalculator(loadPort, qWeekQuery, balanceQuery, driverQuery, transactionQuery);
+        new ObligationCalculator(balanceQuery, loadPort, qWeekQuery, driverQuery, transactionQuery);
 
     when(qWeekQuery.getOneBeforeById(9L)).thenReturn(QWeekResponse.builder().id(8L).build());
   }

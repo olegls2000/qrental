@@ -7,6 +7,8 @@ import ee.qrent.billing.bonus.api.in.request.ObligationCalculationAddRequest;
 import ee.qrent.billing.bonus.api.out.ObligationCalculationLoadPort;
 import ee.qrent.common.in.validation.ViolationsCollector;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
+
+import java.time.DayOfWeek;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 
@@ -20,10 +22,22 @@ public class ObligationCalculationAddRequestValidator
   @Override
   public ViolationsCollector validate(final ObligationCalculationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
+    checkIfActionDateTuesday(addRequest, violationsCollector);
     checkIfPreviousWeekHasCalculatedObligation(addRequest, violationsCollector);
     checkIfCalculatedObligationNotForCurrentWeek(addRequest, violationsCollector);
 
     return violationsCollector;
+  }
+
+  private void checkIfActionDateTuesday(
+      final ObligationCalculationAddRequest addRequest,
+      final ViolationsCollector violationsCollector) {
+    final var requestedDayOfWeek = addRequest.getActionDate().getDayOfWeek();
+    if (requestedDayOfWeek != DayOfWeek.THURSDAY) {
+      final var violation = "Obligation Calculation can be started only on Thursday.";
+      System.out.println(violation);
+      violationsCollector.collect(violation);
+    }
   }
 
   private void checkIfPreviousWeekHasCalculatedObligation(

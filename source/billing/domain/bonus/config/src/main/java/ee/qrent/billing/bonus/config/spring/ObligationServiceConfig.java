@@ -1,5 +1,6 @@
 package ee.qrent.billing.bonus.config.spring;
 
+import ee.qrent.billing.bonus.core.service.*;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.billing.bonus.api.in.query.GetObligationCalculationQuery;
@@ -13,10 +14,6 @@ import ee.qrent.billing.bonus.api.out.ObligationLoadPort;
 import ee.qrent.billing.bonus.core.mapper.ObligationCalculationAddRequestMapper;
 import ee.qrent.billing.bonus.core.mapper.ObligationCalculationResponseMapper;
 import ee.qrent.billing.bonus.core.mapper.ObligationResponseMapper;
-import ee.qrent.billing.bonus.core.service.ObligationCalculationQueryService;
-import ee.qrent.billing.bonus.core.service.ObligationCalculationService;
-import ee.qrent.billing.bonus.core.service.ObligationCalculator;
-import ee.qrent.billing.bonus.core.service.ObligationQueryService;
 import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -51,14 +48,14 @@ public class ObligationServiceConfig {
 
   @Bean
   ObligationCalculator getObligationCalculator(
+      final GetBalanceQuery balanceQuery,
       final ObligationLoadPort loadPort,
       final GetQWeekQuery qWeekQuery,
-      final GetBalanceQuery balanceQuery,
       final GetDriverQuery driverQuery,
       final GetTransactionQuery transactionQuery) {
 
     return new ObligationCalculator(
-        loadPort, qWeekQuery, balanceQuery, driverQuery, transactionQuery);
+        balanceQuery, loadPort, qWeekQuery, driverQuery, transactionQuery);
   }
 
   @Bean

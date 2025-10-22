@@ -43,6 +43,8 @@ public class ObligationCalculationService implements ObligationCalculationAddUse
   @Override
   public Long add(final ObligationCalculationAddRequest addRequest) {
     final var calculationStartTime = System.currentTimeMillis();
+
+    //Thursday Included ONLY!!!!
     final var violationsCollector = addRequestValidator.validate(addRequest);
     if (violationsCollector.hasViolations()) {
       addRequest.setViolations(violationsCollector.getViolations());

@@ -29,7 +29,7 @@ public class ObligationQueryService implements GetObligationQuery {
     final var currentQWeek = qWeekQuery.getCurrentWeek();
     final var rawObligationAmount =
         obligationCalculator.getObligationAmount(
-            driverId, currentQWeek.getId(), currentQWeek.getStart(), currentQWeek.getEnd());
+            driverId,  currentQWeek.getStart(), currentQWeek.getEnd());
 
     return rawObligationAmount;
   }
