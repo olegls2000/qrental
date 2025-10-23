@@ -122,7 +122,7 @@ public class WeeklyReportMondayPdfLabelProvider {
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
             new AbstractMap.SimpleEntry<>(
-                REPORT_NAME_KEY, "РАССЫЛКА НА ВТОРНИК - 10:00"), // ВТОРНИК - 10:00
+                REPORT_NAME_KEY, "РАССЫЛКА НА СРЕДУ - 16:00"), // ВТОРНИК - 10:00
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Арендатор"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
@@ -233,7 +233,7 @@ public class WeeklyReportMondayPdfLabelProvider {
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TUESDAY NEWSLETTER - 10:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "WEDNESDAY NEWSLETTER - 16:00"),
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Tenant"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Personal code"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
@@ -350,7 +350,7 @@ public class WeeklyReportMondayPdfLabelProvider {
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TEISIPÄEVANE INFOKIRI - 10:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "KOLMAPÄEVANE INFOKIRI - 16:00"), // TEISIPÄEVANE
             new AbstractMap.SimpleEntry<>(DRIVER_LABEL_KEY, "Rentnik"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
