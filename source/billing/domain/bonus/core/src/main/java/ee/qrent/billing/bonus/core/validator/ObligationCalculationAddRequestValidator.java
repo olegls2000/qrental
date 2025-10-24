@@ -24,7 +24,6 @@ public class ObligationCalculationAddRequestValidator
     final var violationsCollector = new ViolationsCollector();
     checkIfActionDateTuesday(addRequest, violationsCollector);
     checkIfPreviousWeekHasCalculatedObligation(addRequest, violationsCollector);
-    checkIfCalculatedObligationNotForCurrentWeek(addRequest, violationsCollector);
 
     return violationsCollector;
   }
@@ -65,15 +64,4 @@ public class ObligationCalculationAddRequestValidator
     }
   }
 
-  private void checkIfCalculatedObligationNotForCurrentWeek(
-      final ObligationCalculationAddRequest addRequest,
-      final ViolationsCollector violationsCollector) {
-    final var requestedWeekId = addRequest.getQWeekId();
-    final var currentWeek = qWeekQuery.getCurrentWeek();
-    if (requestedWeekId == currentWeek.getId()) {
-      final var violation = "Obligation Calculation can not be calculated for current week.";
-      System.out.println(violation);
-      violationsCollector.collect(violation);
-    }
-  }
 }
