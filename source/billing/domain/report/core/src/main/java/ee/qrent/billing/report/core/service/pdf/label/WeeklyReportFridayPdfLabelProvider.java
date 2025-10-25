@@ -139,7 +139,7 @@ public class WeeklyReportFridayPdfLabelProvider {
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "за текущую неделю"),
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_6_LABEL_KEY, "\n своевременно и в полном объеме."),
-            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "??Твой долг"),
+            new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "Твой долг"),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_1_PREPAYMENT_LABEL_KEY, "твоя предоплата"),   //  Добавить "недоплата"
             new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "на конец"),

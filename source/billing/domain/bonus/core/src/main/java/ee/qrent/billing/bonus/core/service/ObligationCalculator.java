@@ -118,7 +118,7 @@ public class ObligationCalculator {
           loadPort.loadByDriverIdAndByQWeekId(driverId, previousQWeekId);
       if (previousWeekObligation == null) {
 
-        return 0;
+        return 1;
       }
       var previousWeekObligationMatchCount = previousWeekObligation.getMatchCount();
 

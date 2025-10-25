@@ -132,7 +132,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var qWeekId = requestedQWeek.getId();
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
-final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
+final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     if (reportType == WeeklyReportTypeIn.INFO_REPORT) {
       return WeeklyReport.builder()
           .type(WeeklyReportType.valueOf(reportType.name()))
@@ -182,7 +182,7 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
         .weeksCountTillEnd(contract.getWeeksToEnd())
         .depositObligation(DEPOSIT_OBLIGATION)
         .depositPaid(depositPaid)
-        .obligationStatus(getWeeklyReportObligationStatusForMondayReport(driver, previousWeek))
+        .obligationStatus(getWeeklyReportObligationStatus(reportType, driver, previousQWeek, requestedQWeek))
         .currentObligationAmount(currentObligationAmount)
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
@@ -336,10 +336,22 @@ final var previousWeek = qWeekQuery.getOneBeforeById(qWeekId);
     return carLink.getCarId();
   }
 
-  private WeeklyReportObligationStatus getWeeklyReportObligationStatusForMondayReport(
-      final DriverResponse driver, final QWeekResponse qWeek) {
+  private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
+    final WeeklyReportTypeIn reportType,  final DriverResponse driver,
+    final QWeekResponse previousWeek,
+    final QWeekResponse currentWeek) {
+   if(reportType == WeeklyReportTypeIn.TUESDAY_REPORT || reportType == WeeklyReportTypeIn.WEDNESDAY_REPORT) {
+     final var obligation =
+             obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), previousWeek.getId());
+     if (obligation.getMatchCount() > 0) {
+
+       return WeeklyReportObligationStatus.COMPLETED;
+     }
+   }
+
     final var obligation =
-        obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), qWeek.getId());
+            obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), currentWeek.getId());
+
     if (obligation.getMatchCount() > 0) {
 
       return WeeklyReportObligationStatus.COMPLETED;

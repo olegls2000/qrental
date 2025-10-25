@@ -22,7 +22,7 @@ public class ObligationCalculationAddRequestValidator
   @Override
   public ViolationsCollector validate(final ObligationCalculationAddRequest addRequest) {
     final var violationsCollector = new ViolationsCollector();
-    checkIfActionDateTuesday(addRequest, violationsCollector);
+    //checkIfActionDateTuesday(addRequest, violationsCollector);
     checkIfPreviousWeekHasCalculatedObligation(addRequest, violationsCollector);
 
     return violationsCollector;
