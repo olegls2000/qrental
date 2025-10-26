@@ -91,11 +91,10 @@ public class WeeklyReportServiceConfig {
   List<WeeklyReportPdfConversionStrategy> getWeeklyReportPdfConversionStrategies() {
 
     return asList(
-        new WeeklyReportInfoPdfConverter(),
+        new WeeklyReportPdfConversionStrategyInfo(),
         new WeeklyReportPdfConversionStrategyTuesday(),
-        new WeeklyReportTuesdayPdfConverter(),
-        new WeeklyReportWednesdayPdfConverter(),
-        new WeeklyReportFridayPdfConverter());
+        new WeeklyReportPdfConversionStrategyWednesday(),
+        new WeeklyReportPdfConversionStrategyFriday());
   }
 
   @Bean

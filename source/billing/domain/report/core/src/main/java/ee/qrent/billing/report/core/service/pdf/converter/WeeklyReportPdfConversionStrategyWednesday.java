@@ -5,116 +5,85 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportPdfModel;
+import ee.qrent.billing.report.domain.WeeklyReportType;
 import lombok.SneakyThrows;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
-import static com.lowagie.text.Element.*;
-import static com.lowagie.text.Rectangle.NO_BORDER;
+import static com.lowagie.text.Element.ALIGN_BOTTOM;
+import static com.lowagie.text.Element.ALIGN_CENTER;
+import static com.lowagie.text.Element.ALIGN_LEFT;
+import static com.lowagie.text.Element.ALIGN_MIDDLE;
+import static com.lowagie.text.Element.ALIGN_RIGHT;
+import static com.lowagie.text.PageSize.A4;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportFormatUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportPdfDocumentUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.*;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.RENTED_CAR_LABEL_KEY;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
 import static java.awt.Color.BLACK;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
-abstract class AbstractWeeklyReportPdfConversionStrategy
-    implements WeeklyReportPdfConversionStrategy {
+public class WeeklyReportPdfConversionStrategyWednesday
+    extends AbstractWeeklyReportPdfConversionStrategy {
 
+  @Override
+  public boolean canApply(final WeeklyReportType reportType) {
+
+    return reportType == WeeklyReportType.WEDNESDAY_REPORT;
+  }
+
+  @Override
   @SneakyThrows
-  PdfPTable getHeaderTable(final String language) {
-    final var header = getQpdfTable(2);
-    header.setWidths(new int[] {20, 80});
+  public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
 
-    com.lowagie.text.Image img = Image.getInstance("Images/qRentalGroup_gorznt.png");
-    img.scaleToFit(33, 14);
+    final var weeklyReportPdfDoc = new Document(A4, 30f, 30f, 20f, 20f);
+    final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
+    final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
+    weeklyReportPdfDoc.open();
+    weeklyReportPdfDoc.add(getHeaderTable(language));
+    weeklyReportPdfDoc.add(getDriverMainDataTable(model));
+    weeklyReportPdfDoc.add(getClarificationHeaderRow(getLabel(language, THURSDAY_LABEL_KEY)));
+    weeklyReportPdfDoc.add(getBonusStatus(model));
+    weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
+    weeklyReportPdfDoc.add(
+        getClarificationHeaderRowColored(
+            getLabel(language, OBLIGATION_HEADER_TEXT_PART_1_LABEL_KEY)));
+    weeklyReportPdfDoc.add(getRentClarificationTable(model));
+    weeklyReportPdfDoc.add(getRentAdjustmentClarificationTable(model));
+    weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
+    weeklyReportPdfDoc.add(getDemandOnTheBeginningOfWeek(model));
+    weeklyReportPdfDoc.add(getTotalBlock(model));
+    weeklyReportPdfDoc.add(getCommentRowTable(language));
+    weeklyReportPdfDoc.close();
+    writer.close();
 
-    PdfPCell imageCell = new PdfPCell(img, true);
-    imageCell.setHorizontalAlignment(ALIGN_LEFT);
-    imageCell.setVerticalAlignment(ALIGN_MIDDLE);
-    imageCell.setFixedHeight(20f);
-    imageCell.setBorder(NO_BORDER);
-    header.addCell(imageCell);
-    final var reportNameCell =
+    return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());
+  }
+
+  private PdfPTable getCommentRowTable(final String language) {
+    final var row = getQpdfTable(1);
+
+    final var cell =
         getQpdfPCell(
             new Paragraph(
-                getLabel(language, REPORT_NAME_KEY), new Font(REPORT_FONT, 14, Font.BOLD)));
-
-    reportNameCell.setHorizontalAlignment(ALIGN_LEFT);
-    reportNameCell.setPaddingLeft(65f);
-    reportNameCell.setVerticalAlignment(ALIGN_MIDDLE);
-    header.addCell(reportNameCell);
-    header.addCell(getEmptyRow());
-
-    return header;
-  }
-
-  PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
-    final var language = model.getLanguage();
-    final var table = getQpdfTable(2);
-    table.setWidths(new int[] {70, 30});
-    table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
-
-    final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
-    table.addCell(getDriverMainDataValueCell(driverName));
-
-    final var taxNumber = model.getIdNumber().toString();
-    table.addCell(getDriverMainDataLabelCell(getLabel(language, PERSONAL_NUMBER_LABEL_KEY)));
-    table.addCell(getDriverMainDataValueCell(taxNumber));
-
-    table.addCell(getDriverMainDataLabelCell(getLabel(language, CALL_SIGN_LABEL_KEY)));
-    table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
-
-    table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
-    table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
-
-    return table;
-  }
-
-  private PdfPCell getDriverMainDataLabelCell(final String label) {
-    final var labelCell = getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 12)));
-    labelCell.setHorizontalAlignment(ALIGN_RIGHT);
-    labelCell.setVerticalAlignment(ALIGN_MIDDLE);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
-    labelCell.setFixedHeight(20f);
-    labelCell.setPaddingRight(2f);
-
-    return labelCell;
-  }
-
-  private PdfPCell getDriverMainDataValueCell(final String value) {
-    final var labelCell = getQpdfPCell(new Paragraph(value, new Font(REPORT_FONT, 12, Font.BOLD)));
-    labelCell.setHorizontalAlignment(ALIGN_LEFT);
-    labelCell.setVerticalAlignment(ALIGN_MIDDLE);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
-    labelCell.setFixedHeight(20f);
-    labelCell.setPaddingLeft(8f);
-
-    return labelCell;
-  }
-
-  PdfPTable getClarificationHeaderRow(final String text) {
-    final var row = getQpdfTable(1);
-    final var paddingTopCell =
-        getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
-    paddingTopCell.setFixedHeight(15f);
-    row.addCell(paddingTopCell);
-    final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 13, Font.BOLD)));
+                getLabel(language, COMMENT_LABEL_KEY), new Font(REPORT_FONT, 9, Font.BOLD, BLACK)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
-    cell.setVerticalAlignment(ALIGN_MIDDLE);
-    cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
-    cell.setFixedHeight(40f);
+    cell.setVerticalAlignment(ALIGN_BOTTOM);
     row.addCell(cell);
 
     return row;
   }
 
-  PdfPTable getBonusStatus(final WeeklyReportPdfModel model) {
+  private PdfPTable getBonusStatus(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(1);
     final var paragraph1 = new Paragraph();
@@ -211,7 +180,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return table;
   }
 
-  PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
+  private PdfPTable getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var row = getQpdfTable(1);
     final var nextWeekDaysFormatted =
@@ -273,78 +242,70 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return row;
   }
 
-  PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
-    final var language = model.getLanguage();
-    final var table = getClarificationTable();
-    final var correctionOfRent = formatAmount(model.getIncomeTotal());
-    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
-    final var headerPhrase = new com.lowagie.text.Phrase();
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            " * " + getLabel(language, RENT_ADJUSTMENT_LABEL_KEY),
-            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            format("%s %s", correctionOfRent, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    final var boltPlusAmount =
-        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
-    table.addCell(getClarificationTableHeaderCell(headerPhrase));
-    final var paragraph = new Paragraph();
-    final var incomeText =
-        new Chunk(
-            " - " + getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY),
-            new Font(REPORT_FONT, 10, Font.NORMAL, REPORT_DARK_BLUE_COLOR));
-    paragraph.add(incomeText);
-    final var incomeCompany =
-        new Chunk(
-            getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY),
-            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
-    paragraph.add(incomeCompany);
+  private PdfPTable getClarificationHeaderRow(final String text) {
+    final var row = getQpdfTable(1);
+    final var paddingTopCell =
+        getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
+    paddingTopCell.setFixedHeight(15f);
+    row.addCell(paddingTopCell);
+    final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 13, Font.BOLD)));
+    cell.setHorizontalAlignment(ALIGN_CENTER);
+    cell.setVerticalAlignment(ALIGN_MIDDLE);
+    cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    cell.setFixedHeight(40f);
+    row.addCell(cell);
 
-    final var doted = new Chunk(format(":"), new Font(REPORT_FONT, 10, Font.BOLD));
-    paragraph.add(doted);
-    final var labelCell = getQpdfPCell(paragraph);
+    return row;
+  }
+
+  private PdfPTable getClarificationHeaderRowColored(final String prefixText) {
+    final var row = getQpdfTable(1);
+    final var paddingTopCell =
+        getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
+    paddingTopCell.setFixedHeight(15f);
+    row.addCell(paddingTopCell);
+    final var paragraph = new Paragraph();
+    paragraph.add(new Chunk(prefixText, new Font(REPORT_FONT, 13, Font.BOLD)));
+    paragraph.add(new Chunk(":", new Font(REPORT_FONT, 13, Font.BOLD)));
+
+    final var cell = getQpdfPCell(paragraph);
+    cell.setHorizontalAlignment(ALIGN_CENTER);
+    cell.setVerticalAlignment(ALIGN_MIDDLE);
+    cell.setFixedHeight(40f);
+    row.addCell(cell);
+
+    return row;
+  }
+
+  private PdfPCell getClarificationTableLabelCell(final String label) {
+    final var labelCell =
+        getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 11, Font.BOLD, BLACK)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
+    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+
+    return labelCell;
+  }
+
+  private PdfPCell getClarificationTableLabelCellDarkBlue(final String label) {
+    final var labelCell =
+        getQpdfPCell(
+            new Paragraph(
+                label + ":", new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR)));
+    labelCell.setHorizontalAlignment(ALIGN_RIGHT);
+    labelCell.setVerticalAlignment(ALIGN_CENTER);
+    labelCell.setFixedHeight(18f);
+
+    labelCell.setPaddingRight(8f);
     labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
-    final var boltPlusValueCell = getClarificationTableValueCell(boltPlusAmount, language);
-    addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
+    ;
 
-    final var incomeOthersAmount = model.getIncomeOthers();
-    final var incomeOthersLabelCell =
-        getClarificationTableLabelCellDarkBlue(
-            getLabel(language, RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY));
-    final var incomeOthersValueCell =
-        getClarificationTableValueCell(model.getIncomeOthers(), language);
-    addRowIfValueIsNonZero(incomeOthersAmount, incomeOthersLabelCell, incomeOthersValueCell, table);
-    table.addCell(getEmptyRow());
-
-    return table;
+    return labelCell;
   }
 
-  PdfPCell getClarificationTableHeaderCell(final com.lowagie.text.Phrase headerPhrase) {
-    final var tableHeaderCell = getQpdfPCell(new Paragraph(headerPhrase));
-    tableHeaderCell.setHorizontalAlignment(ALIGN_CENTER);
-    tableHeaderCell.setFixedHeight(35f);
-    tableHeaderCell.setPaddingTop(9f);
-    tableHeaderCell.setColspan(2);
-    tableHeaderCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
-
-    return tableHeaderCell;
-  }
-
-  PdfPTable getClarificationTable() {
-    final var table = getQpdfTable(2);
-    table.setWidths(new int[] {70, 30});
-    return table;
-  }
-
-  PdfPCell getClarificationTableValueCell(final BigDecimal value, final String language) {
+  private PdfPCell getClarificationTableValueCell(final BigDecimal value, final String language) {
     final var nonNullValue = value == null ? ZERO : value;
     final var color = nonNullValue.compareTo(ZERO) >= 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
     final var valueCell =
@@ -361,145 +322,54 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return valueCell;
   }
 
-  PdfPTable getClarificationHeaderRowColored(final String prefixText) {
-    final var row = getQpdfTable(1);
-    final var paddingTopCell =
-        getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
-    paddingTopCell.setFixedHeight(15f);
-    row.addCell(paddingTopCell);
+  private PdfPCell getClarificationTableValueCellDarkGray(
+      final BigDecimal value, final String language) {
+    final var formattedValue = formatAmountWithCurrency(value, language);
+    final var valueCell =
+        getQpdfPCell(
+            new Paragraph(
+                formattedValue, new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_GRAY_COLOR)));
+    valueCell.setHorizontalAlignment(ALIGN_LEFT);
+    valueCell.setVerticalAlignment(ALIGN_CENTER);
+    valueCell.setFixedHeight(18f);
+    valueCell.setPaddingLeft(8f);
+    valueCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+    ;
+
+    return valueCell;
+  }
+
+  private PdfPCell getClarificationTableLabelCellCampaign(
+      final String campaignName, final String language) {
     final var paragraph = new Paragraph();
-    paragraph.add(new Chunk(prefixText, new Font(REPORT_FONT, 13, Font.BOLD)));
-    paragraph.add(new Chunk(":", new Font(REPORT_FONT, 13, Font.BOLD)));
-    final var cell = getQpdfPCell(paragraph);
-    cell.setHorizontalAlignment(ALIGN_CENTER);
-    cell.setVerticalAlignment(ALIGN_MIDDLE);
-    cell.setFixedHeight(40f);
-    row.addCell(cell);
+    final var campaignText =
+        new Chunk(
+            " - " + getLabel(language, BONUS_PROGRAM_LABEL_KEY),
+            new Font(REPORT_FONT, 10, Font.NORMAL, BLACK));
+    paragraph.add(campaignText);
+    final var campaignNameText =
+        new Chunk(
+            format("«%s»" + ":", campaignName),
+            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR));
+    paragraph.add(campaignNameText);
 
-    return row;
+    final var labelCell = getQpdfPCell(paragraph);
+    labelCell.setHorizontalAlignment(ALIGN_RIGHT);
+    labelCell.setVerticalAlignment(ALIGN_CENTER);
+    labelCell.setFixedHeight(18f);
+    labelCell.setPaddingRight(8f);
+    labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+
+    return labelCell;
   }
 
-  PdfPTable getOtherPaymentClarificationTable(final WeeklyReportPdfModel model) {
-    final var language = model.getLanguage();
-    final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount().abs());
-    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
-    final var headerPhrase = new com.lowagie.text.Phrase();
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            " * " + getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
-            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            format("%s %s", otherObligations, euroCurrency),
-            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    final var table = getClarificationTable();
-    table.addCell(getClarificationTableHeaderCell(headerPhrase));
-    var innerInsuranceAmount =
-        model
-            .getTransactionTypesVsAmount()
-            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
-    innerInsuranceAmount =
-        innerInsuranceAmount.add(
-            model
-                .getTransactionTypesVsAmount()
-                .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, ZERO));
-
-    final var innerInsuranceLabelCell =
-        getClarificationTableLabelCell(
-            getLabel(language, ADD_INN_INSURANCE_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-    final var innerInsuranceValueCell =
-        getClarificationTableValueCell(innerInsuranceAmount, language);
-    addRowIfValueIsNonZero(
-        innerInsuranceAmount, innerInsuranceLabelCell, innerInsuranceValueCell, table);
-
-    final var nonLabelFineAmount =
-        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, ZERO);
-    final var nonLabelFineLabelCell =
-        getClarificationTableLabelCell(
-            getLabel(language, NON_LABEL_FINE_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-
-    final var nonLabelFineValueCell = getClarificationTableValueCell(nonLabelFineAmount, language);
-    addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
-
-    final var distributedObligationAmount = model.getDistributedObligationAmount(); // .negate()
-    final var distributedObligationLabelCell =
-        getClarificationTableLabelCell(
-            getLabel(language, DISTRIBUTED_OBLIGATION_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-
-    final var distributedObligationValueCell =
-        getClarificationTableValueCell(distributedObligationAmount, language);
-    addRowIfValueIsNonZero(
-        distributedObligationAmount,
-        distributedObligationLabelCell,
-        distributedObligationValueCell,
-        table);
-
-    final var parkingFineAmount =
-        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, ZERO);
-    final var parkingFineLabelCell =
-        getClarificationTableLabelCell(
-            getLabel(language, PARKING_FINE_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-    final var parkingFineValueCell = getClarificationTableValueCell(parkingFineAmount, language);
-    addRowIfValueIsNonZero(parkingFineAmount, parkingFineLabelCell, parkingFineValueCell, table);
-
-    final var feeAmount =
-        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, ZERO);
-    final var feeLabelCell =
-        getClarificationTableLabelCell(
-            getLabel(language, FEE_WEEK_BEGINNING_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-    final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
-    addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
-
-    table.addCell(getEmptyRow());
-
+  private PdfPTable getClarificationTable() {
+    final var table = getQpdfTable(2);
+    table.setWidths(new int[] {70, 30});
     return table;
   }
 
-  PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
-    final var language = model.getLanguage();
-    final var table = getClarificationTable();
-    final var headerPhrase = new com.lowagie.text.Phrase();
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(
-            " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
-            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-    headerPhrase.add(
-        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
-
-    table.addCell(getClarificationTableHeaderCell(headerPhrase));
-    table.addCell(
-        getClarificationTableLabelCell(
-            getLabel(language, DEMAND_FEE_LABEL_KEY), REPORT_DARK_BLUE_COLOR));
-    table.addCell(
-        getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
-
-    table.addCell(
-        getClarificationTableLabelCell(
-            getLabel(language, DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY), REPORT_DARK_BLUE_COLOR));
-    table.addCell(
-        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
-    model
-        .getInsuranceCases()
-        .forEach(
-            insuranceCase -> {
-              final var occurrenceDate = formatDate(insuranceCase.getOccurrenceDate());
-              final var insuranceCaseInfo =
-                  format(
-                      "Ремонт / Сумма франшизы - %s (дата происшествия: %s)",
-                      insuranceCase.getCarRegNumber(), occurrenceDate);
-              table.addCell(getClarificationTableLabelCell(insuranceCaseInfo, BLACK));
-              table.addCell(
-                  getClarificationTableValueCellDarkGray(
-                      insuranceCase.getDamageRemaining(), language));
-            });
-    table.addCell(getEmptyRow());
-
-    return table;
-  }
-
-  PdfPTable getRentClarificationTable(final WeeklyReportPdfModel model) {
+  private PdfPTable getRentClarificationTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var currency = getLabel(language, CURRENCY_NAME_KEY);
     final var rentAmount =
@@ -533,8 +403,8 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
 
     final var weekRentLabelCell =
-        getClarificationTableLabelCell(
-            "- " + getLabel(language, RENT_CLARIFICATION_TEXT_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
+        getClarificationTableLabelCellDarkBlue(
+            "- " + getLabel(language, RENT_CLARIFICATION_TEXT_LABEL_KEY));
 
     final var rentValueCell = getClarificationTableValueCell(rentAmount, language);
     addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);
@@ -580,60 +450,179 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return table;
   }
 
-  private PdfPCell getClarificationTableLabelCellCampaign(
-      final String campaignName, final String language) {
+  private PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+    final var table = getClarificationTable();
+    final var correctionOfRent = formatAmount(model.getIncomeTotal());
+    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var headerPhrase = new com.lowagie.text.Phrase();
+
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            " * " + getLabel(language, RENT_ADJUSTMENT_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            format("%s %s", correctionOfRent, euroCurrency),
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_GREEN_COLOR)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    final var boltPlusAmount =
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BOLT_PLUS_CODE);
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
+
     final var paragraph = new Paragraph();
-
-    final var campaignText =
+    final var incomeText =
         new Chunk(
-            " - " + getLabel(language, BONUS_PROGRAM_LABEL_KEY),
-            new Font(REPORT_FONT, 10, Font.NORMAL, BLACK));
-    paragraph.add(campaignText);
+            " - " + getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_1_LABEL_KEY),
+            new Font(REPORT_FONT, 10, Font.NORMAL, REPORT_DARK_BLUE_COLOR));
+    paragraph.add(incomeText);
 
-    final var campaignNameText =
+    // Добавляем название кампании в кавычках Green цветом
+    final var incomeCompany =
         new Chunk(
-            format("«%s»" + ":", campaignName),
-            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_BLUE_COLOR));
-    paragraph.add(campaignNameText);
-
+            getLabel(language, RENT_ADJUSTMENT_BOLT_INCOME_2_LABEL_KEY),
+            new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
+    paragraph.add(incomeCompany);
+    //
+    final var doted = new Chunk(format(":"), new Font(REPORT_FONT, 10, Font.BOLD));
+    paragraph.add(doted);
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
     labelCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+    final var boltPlusValueCell = getClarificationTableValueCell(boltPlusAmount, language);
+    addRowIfValueIsNonZero(boltPlusAmount, labelCell, boltPlusValueCell, table);
 
-    return labelCell;
+    final var incomeOthersAmount = model.getIncomeOthers();
+    final var incomeOthersLabelCell =
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(language, RENT_ADJUSTMENT_OTHER_INCOME_LABEL_KEY));
+    final var incomeOthersValueCell =
+        getClarificationTableValueCell(model.getIncomeOthers(), language);
+    addRowIfValueIsNonZero(incomeOthersAmount, incomeOthersLabelCell, incomeOthersValueCell, table);
+    table.addCell(getEmptyRow());
+
+    return table;
   }
 
-  PdfPCell getClarificationTableLabelCell(final String label, final Color color) {
-    final var labelCell =
-        getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 11, Font.BOLD, color)));
-    labelCell.setHorizontalAlignment(ALIGN_RIGHT);
-    labelCell.setVerticalAlignment(ALIGN_CENTER);
-    labelCell.setFixedHeight(18f);
-    labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+  private PdfPTable getOtherPaymentClarificationTable(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+    final var otherObligations = formatAmount(model.getTotalOtherPaymentAmount().abs());
+    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var headerPhrase = new com.lowagie.text.Phrase();
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            " * " + getLabel(language, OTHER_OBLIGATIONS_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            format("%s %s", otherObligations, euroCurrency),
+            new Font(REPORT_FONT, 12, Font.BOLD, REPORT_RED_COLOR)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    final var table = getClarificationTable();
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
+    var innerInsuranceAmount =
+        model
+            .getTransactionTypesVsAmount()
+            .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE, ZERO);
+    innerInsuranceAmount =
+        innerInsuranceAmount.add(
+            model
+                .getTransactionTypesVsAmount()
+                .getOrDefault(TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE, ZERO));
 
-    return labelCell;
+    final var innerInsuranceLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, ADD_INN_INSURANCE_LABEL_KEY));
+    final var innerInsuranceValueCell =
+        getClarificationTableValueCell(innerInsuranceAmount, language);
+    addRowIfValueIsNonZero(
+        innerInsuranceAmount, innerInsuranceLabelCell, innerInsuranceValueCell, table);
+
+    final var nonLabelFineAmount =
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_NO_LABEL_FINE_CODE, ZERO);
+    final var nonLabelFineLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, NON_LABEL_FINE_LABEL_KEY));
+
+    final var nonLabelFineValueCell = getClarificationTableValueCell(nonLabelFineAmount, language);
+    addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
+
+    final var distributedObligationAmount = model.getDistributedObligationAmount(); // .negate()
+    final var distributedObligationLabelCell =
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(language, DISTRIBUTED_OBLIGATION_LABEL_KEY));
+
+    final var distributedObligationValueCell =
+        getClarificationTableValueCell(distributedObligationAmount, language);
+    addRowIfValueIsNonZero(
+        distributedObligationAmount,
+        distributedObligationLabelCell,
+        distributedObligationValueCell,
+        table);
+
+    final var parkingFineAmount =
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_PARKING_FINE_CODE, ZERO);
+    final var parkingFineLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, PARKING_FINE_LABEL_KEY));
+    final var parkingFineValueCell = getClarificationTableValueCell(parkingFineAmount, language);
+    addRowIfValueIsNonZero(parkingFineAmount, parkingFineLabelCell, parkingFineValueCell, table);
+
+    final var feeAmount =
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_FEE_DEBT_CODE, ZERO);
+    final var feeLabelCell =
+        getClarificationTableLabelCellDarkBlue(getLabel(language, FEE_WEEK_BEGINNING_LABEL_KEY));
+    final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
+    addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
+
+    table.addCell(getEmptyRow());
+
+    return table;
   }
 
-  PdfPCell getClarificationTableValueCellDarkGray(final BigDecimal value, final String language) {
-    final var formattedValue = formatAmountWithCurrency(value, language);
-    final var valueCell =
-        getQpdfPCell(
-            new Paragraph(
-                formattedValue, new Font(REPORT_FONT, 10, Font.BOLD, REPORT_DARK_GRAY_COLOR)));
-    valueCell.setHorizontalAlignment(ALIGN_LEFT);
-    valueCell.setVerticalAlignment(ALIGN_CENTER);
-    valueCell.setFixedHeight(18f);
-    valueCell.setPaddingLeft(8f);
-    valueCell.setBackgroundColor(REPORT_WHITE_BACKGROUND_COLOR);
+  private PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+    final var table = getClarificationTable();
+    final var headerPhrase = new com.lowagie.text.Phrase();
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(
+            " * " + getLabel(language, DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY),
+            new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
+    headerPhrase.add(
+        new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
 
-    return valueCell;
+    table.addCell(getClarificationTableHeaderCell(headerPhrase));
+    table.addCell(getClarificationTableLabelCellDarkBlue(getLabel(language, DEMAND_FEE_LABEL_KEY)));
+    table.addCell(
+        getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
+
+    table.addCell(
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(language, DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY)));
+    table.addCell(
+        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+    model
+        .getInsuranceCases()
+        .forEach(
+            insuranceCase -> {
+              final var occurrenceDate = formatDate(insuranceCase.getOccurrenceDate());
+              final var insuranceCaseInfo =
+                  format(
+                      "Ремонт / Сумма франшизы - %s (дата происшествия: %s)",
+                      insuranceCase.getCarRegNumber(), occurrenceDate);
+              table.addCell(getClarificationTableLabelCell(insuranceCaseInfo));
+              table.addCell(
+                  getClarificationTableValueCellDarkGray(
+                      insuranceCase.getDamageRemaining(), language));
+            });
+    table.addCell(getEmptyRow());
+
+    return table;
   }
 
-  PdfPTable getTotalBlock(final WeeklyReportPdfModel model) {
+  private PdfPTable getTotalBlock(final WeeklyReportPdfModel model) {
     final var table = getQpdfTable(2);
     final var language = model.getLanguage();
     final var labelCell =
@@ -644,6 +633,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(30f);
+
     labelCell.setPaddingTop(7f);
     labelCell.setPaddingRight(8f);
     labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
@@ -661,11 +651,24 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
     valueCell.setFixedHeight(30f);
+
     valueCell.setPaddingTop(7f);
     valueCell.setPaddingLeft(8f);
     valueCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+
     table.addCell(valueCell);
 
     return table;
+  }
+
+  private PdfPCell getClarificationTableHeaderCell(final com.lowagie.text.Phrase headerPhrase) {
+    final var tableHeaderCell = getQpdfPCell(new Paragraph(headerPhrase));
+    tableHeaderCell.setHorizontalAlignment(ALIGN_CENTER);
+    tableHeaderCell.setFixedHeight(35f);
+    tableHeaderCell.setPaddingTop(9f);
+    tableHeaderCell.setColspan(2);
+    tableHeaderCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+
+    return tableHeaderCell;
   }
 }
