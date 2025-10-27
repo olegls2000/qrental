@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.CURRENCY_NAME_KEY;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.getLabel;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderCommon.CURRENCY_NAME_KEY;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderCommon.getLabelFromCommon;
 import static java.lang.String.format;
 import static java.math.BigDecimal.ZERO;
 
@@ -32,7 +32,7 @@ public class WeeklyReportFormatUtils {
   }
 
   static String formatAmountWithCurrency(final BigDecimal amount, final String language) {
-    final var euroCurrency = getLabel(language, CURRENCY_NAME_KEY);
+    final var euroCurrency = getLabelFromCommon(language, CURRENCY_NAME_KEY);
     var nonNullAmount = amount;
     if (amount == null) {
       nonNullAmount = ZERO;
