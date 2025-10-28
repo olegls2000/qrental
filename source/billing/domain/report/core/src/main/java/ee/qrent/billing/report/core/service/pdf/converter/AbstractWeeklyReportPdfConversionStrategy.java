@@ -627,7 +627,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);
     labelCell.setPaddingRight(8f);
-    labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    //labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
 
     return labelCell;
   }

@@ -112,6 +112,7 @@ public class WeeklyReportPdfLabelProviderCommon {
   static {
     mapRus =
         Map.ofEntries(
+            new AbstractMap.SimpleEntry<>(RENTER_LABEL_KEY, "Арендатор"),
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "евро"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Личный код"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Позывной в системе Q"),
@@ -205,6 +206,7 @@ public class WeeklyReportPdfLabelProviderCommon {
 
     mapEng =
         Map.ofEntries(
+                new AbstractMap.SimpleEntry<>(RENTER_LABEL_KEY, "Tenant"),
             new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Personal code"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Reported Week"),
@@ -299,7 +301,8 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Total to pay"));
     mapEst =
         Map.ofEntries(
-            new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
+                new AbstractMap.SimpleEntry<>(RENTER_LABEL_KEY, "Rentnik"),
+                new AbstractMap.SimpleEntry<>(CURRENCY_NAME_KEY, "euro"),
             new AbstractMap.SimpleEntry<>(PERSONAL_NUMBER_LABEL_KEY, "Isikukood"),
             new AbstractMap.SimpleEntry<>(REPORTED_WEEK_LABEL_KEY, "Aruande nädal"),
             new AbstractMap.SimpleEntry<>(CALL_SIGN_LABEL_KEY, "Kutsung Q süsteemis"),

@@ -26,7 +26,9 @@ public class WeeklyReportPdfLabelProviderTuesday {
     mapRus =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(
-                REPORT_NAME_KEY, "РАССЫЛКА НА СРЕДУ - 16:00"),
+                REPORT_NAME_KEY, "РАССЫЛКА НА ВТОРНИК - 16:00"),
+                new AbstractMap.SimpleEntry<>(
+                        THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"),
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "В знак нашей благодарности"),
             new AbstractMap.SimpleEntry<>(
@@ -34,7 +36,9 @@ public class WeeklyReportPdfLabelProviderTuesday {
 
     mapEng =
         Map.ofEntries(
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "WEDNESDAY NEWSLETTER - 16:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TUESDAY NEWSLETTER - 16:00"),
+                new AbstractMap.SimpleEntry<>(
+                        THURSDAY_LABEL_KEY, "Payment and Bonus Report"),
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "As a token of our appreciation,"),
             new AbstractMap.SimpleEntry<>(
@@ -42,7 +46,7 @@ public class WeeklyReportPdfLabelProviderTuesday {
 
     mapEst =
         Map.ofEntries(
-            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "KOLMAPÄEVANE INFOKIRI - 16:00"),
+            new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TEISIPÄEVANE INFOKIRI - 16:00"),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_LABEL_KEY, "Andmed eelmise nädala neljapäeva lõpu seisuga"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "Tänutäheks"),
