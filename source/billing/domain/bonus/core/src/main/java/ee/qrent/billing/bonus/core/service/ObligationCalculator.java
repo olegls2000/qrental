@@ -77,8 +77,13 @@ public class ObligationCalculator {
     final var sundayRawBalance = balanceQuery.getRawByDriverAndDate(driverId, sunday);
     final var sundayRawBalanceAmount = sundayRawBalance.getAmount();
     if (sundayRawBalanceAmount.compareTo(ZERO) >= 0) {
+     final var overpayment = sundayRawBalanceAmount.subtract(automaticObligationAmount);
+     if(overpayment.compareTo(ZERO) >=0){
 
-      return automaticObligationAmount;
+       return ZERO;
+     }
+
+      return overpayment.abs();
     }
     final var extraAmount = automaticObligationAmount.multiply(DEBT_RATE);
     if (sundayRawBalanceAmount.abs().compareTo(extraAmount) >= 0) {
