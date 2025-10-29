@@ -40,6 +40,9 @@ public class WeeklyReportJakartaEntity {
   @Column(name = "call_sign_id")
   private Long callSignId;
 
+  @Column(name = "q_firm_id")
+  private Long qFirmId;
+
   @Column(name = "car_id")
   private Long carId;
 

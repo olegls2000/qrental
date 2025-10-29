@@ -112,20 +112,30 @@ public class WeeklyReportPdfConversionStrategyTuesday
 
   private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = getQpdfTable(2);
-    table.setWidths(new int[] {70, 30});
+    final var table = getQpdfTable(4);
+    table.setWidths(new int[] {20, 35, 25, 20});
+    // Row 1:
+    table.addCell(getDriverMainDataLabelCell("Q firm"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmName()));
     table.addCell(getDriverMainDataLabelCell(getLabel(language, DRIVER_LABEL_KEY)));
-
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
     table.addCell(getDriverMainDataValueCell(driverName));
-
+    // Row 2:
+    table.addCell(getDriverMainDataLabelCell("IBAN"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmIban()));
     final var taxNumber = model.getIdNumber().toString();
     table.addCell(getDriverMainDataLabelCell(getLabel(language, PERSONAL_NUMBER_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(taxNumber));
 
+    // Row 3:
+    table.addCell(getDriverMainDataLabelCell("Q contact"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmContact()));
     table.addCell(getDriverMainDataLabelCell(getLabel(language, CALL_SIGN_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
-
+    // Row 4:
+    table.addCell(getDriverMainDataLabelCell("Reported week"));
+      final var reportedWeekDaysFormatted = getInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
+    table.addCell(getDriverMainDataValueCell(reportedWeekDaysFormatted));
     table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
 
@@ -218,7 +228,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
 
     final var cell3 = getQpdfPCell(paragraph);
     cell3.setHorizontalAlignment(ALIGN_CENTER);
-    //cell3.setBackgroundColor(Color.LIGHT_GRAY);
+    // cell3.setBackgroundColor(Color.LIGHT_GRAY);
     cell3.setVerticalAlignment(ALIGN_MIDDLE);
     table.addCell(cell3);
     table.addCell(getEmptyRow());
@@ -314,8 +324,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
     return row;
   }
 
-  private PdfPTable getClarificationHeaderRowColored(
-      final String prefixText) {
+  private PdfPTable getClarificationHeaderRowColored(final String prefixText) {
     final var row = getQpdfTable(1);
     final var paddingTopCell =
         getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, Font.BOLD)));
@@ -324,7 +333,8 @@ public class WeeklyReportPdfConversionStrategyTuesday
 
     final var paragraph = new Paragraph();
     paragraph.add(new Chunk(prefixText, new Font(REPORT_FONT, 13, Font.BOLD)));
-   // paragraph.add(new Chunk(purpleText, new Font(REPORT_FONT, 13, Font.BOLD, REPORT_PURPLE_COLOR)));
+    // paragraph.add(new Chunk(purpleText, new Font(REPORT_FONT, 13, Font.BOLD,
+    // REPORT_PURPLE_COLOR)));
     paragraph.add(new Chunk(":", new Font(REPORT_FONT, 13, Font.BOLD)));
 
     final var cell = getQpdfPCell(paragraph);
@@ -571,14 +581,8 @@ public class WeeklyReportPdfConversionStrategyTuesday
             new Font(REPORT_FONT, 10, Font.BOLD, REPORT_GREEN_COLOR));
     paragraph.add(incomeCompany);
     //
-    final var doted =
-            new Chunk(
-                    format(":"),
-                    new Font(REPORT_FONT, 10, Font.BOLD));
+    final var doted = new Chunk(format(":"), new Font(REPORT_FONT, 10, Font.BOLD));
     paragraph.add(doted);
-
-
-
 
     final var labelCell = getQpdfPCell(paragraph);
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
@@ -654,7 +658,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
     final var nonLabelFineValueCell = getClarificationTableValueCell(nonLabelFineAmount, language);
     addRowIfValueIsNonZero(nonLabelFineAmount, nonLabelFineLabelCell, nonLabelFineValueCell, table);
 
-    final var distributedObligationAmount = model.getDistributedObligationAmount(); //.negate()
+    final var distributedObligationAmount = model.getDistributedObligationAmount(); // .negate()
     final var distributedObligationLabelCell =
         getClarificationTableLabelCellDarkBlue(
             getLabel(language, DISTRIBUTED_OBLIGATION_LABEL_KEY));
@@ -703,13 +707,14 @@ public class WeeklyReportPdfConversionStrategyTuesday
         getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
 
     table.addCell(
-            getClarificationTableLabelCellDarkBlue(
-                    getLabel(
-                            language,
-                            DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на текущий момент при
+        getClarificationTableLabelCellDarkBlue(
+            getLabel(
+                language,
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY))); // из баланса на текущий момент при
     // условии что есть
     // долг)
-    table.addCell(getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+    table.addCell(
+        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
     model
         .getInsuranceCases()
         .forEach(
@@ -747,15 +752,15 @@ public class WeeklyReportPdfConversionStrategyTuesday
     labelCell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
     table.addCell(labelCell);
     final var totalPaymentAmountFormatted =
-            amountWithCurrency(model.getTotalPaymentAmount(), language);
+        amountWithCurrency(model.getTotalPaymentAmount(), language);
 
-    final var color = model.getTotalPaymentAmount().compareTo(ZERO) == 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
+    final var color =
+        model.getTotalPaymentAmount().compareTo(ZERO) == 0 ? REPORT_GREEN_COLOR : REPORT_RED_COLOR;
 
     final var valueCell =
-            getQpdfPCell(
-                    new Paragraph(
-                            totalPaymentAmountFormatted,
-                            new Font(REPORT_FONT, 14, Font.BOLD, color)));
+        getQpdfPCell(
+            new Paragraph(
+                totalPaymentAmountFormatted, new Font(REPORT_FONT, 14, Font.BOLD, color)));
     valueCell.setHorizontalAlignment(ALIGN_LEFT);
     valueCell.setVerticalAlignment(ALIGN_CENTER);
 

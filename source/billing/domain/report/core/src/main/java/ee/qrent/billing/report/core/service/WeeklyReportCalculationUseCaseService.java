@@ -13,6 +13,7 @@ import ee.qrent.billing.car.api.in.query.GetCarLinkQuery;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.constant.api.in.response.qweek.QWeekResponse;
 import ee.qrent.billing.contract.api.in.query.GetContractQuery;
+import ee.qrent.billing.contract.api.in.response.ContractResponse;
 import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -132,7 +133,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var qWeekId = requestedQWeek.getId();
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
-final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
+    final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     if (reportType == WeeklyReportTypeIn.INFO_REPORT) {
       return WeeklyReport.builder()
           .type(WeeklyReportType.valueOf(reportType.name()))
@@ -140,6 +141,7 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
           .driverId(driverId)
           .callSignId(getCallSignId(driverId, qWeekId))
           .carId(getCarId(driverId, qWeekId))
+          .qFirmId(contract.getQFirmId())
           .startDate(requestedQWeek.getStart())
           .endDate(requestedQWeek.getEnd())
           .weeksCountTillEnd(contract.getWeeksToEnd())
@@ -164,10 +166,14 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     final var balanceOnSunday = getBalanceOnSunday(requestedQWeek, driverId);
     final var currentObligationAmount = getCurrentObligationAmount(driverId, requestedQWeek);
 
-    final var netAmountOnThursdayCurrentWeek = getNetAmountOnThursdayCurrentWeek(driverId, requestedQWeek);
-    final var netAmountOnThursdayPreviousWeek = getNetAmountOnThursdayPreviousWeek(driverId, requestedQWeek);
-    final var netAmountOnThursday = reportType == WeeklyReportTypeIn.FRIDAY_REPORT
-            ? netAmountOnThursdayCurrentWeek : netAmountOnThursdayPreviousWeek;
+    final var netAmountOnThursdayCurrentWeek =
+        getNetAmountOnThursdayCurrentWeek(driverId, requestedQWeek);
+    final var netAmountOnThursdayPreviousWeek =
+        getNetAmountOnThursdayPreviousWeek(driverId, requestedQWeek);
+    final var netAmountOnThursday =
+        reportType == WeeklyReportTypeIn.FRIDAY_REPORT
+            ? netAmountOnThursdayCurrentWeek
+            : netAmountOnThursdayPreviousWeek;
 
     final var activeInsuranceCases = getActiveInsuranceCases(driverId);
 
@@ -182,7 +188,8 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
         .weeksCountTillEnd(contract.getWeeksToEnd())
         .depositObligation(DEPOSIT_OBLIGATION)
         .depositPaid(depositPaid)
-        .obligationStatus(getWeeklyReportObligationStatus(reportType, driver, previousQWeek, requestedQWeek))
+        .obligationStatus(
+            getWeeklyReportObligationStatus(reportType, driver, previousQWeek, requestedQWeek))
         .currentObligationAmount(currentObligationAmount)
         .balanceAmountSunday(balanceOnSunday.getAmount())
         .feeAmountSunday(balanceOnSunday.getFeeAmount())
@@ -222,7 +229,7 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
   }
 
   private BigDecimal getNetAmountOnThursdayCurrentWeek(
-          final Long driverId, final QWeekResponse requestedQWeek) {
+      final Long driverId, final QWeekResponse requestedQWeek) {
     final var monday = requestedQWeek.getStart().minusWeeks(1);
     final var thursday = monday.plusDays(3L);
 
@@ -300,7 +307,7 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
       final Long driverId) {
     LocalDate reportDate = null;
     switch (reportType) {
-      //case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
+      // case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
       case TUESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(1L);
       case WEDNESDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(2L);
       case FRIDAY_REPORT -> reportDate = requestedQWeek.getStart().plusDays(4L);
@@ -337,20 +344,22 @@ final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
   }
 
   private WeeklyReportObligationStatus getWeeklyReportObligationStatus(
-    final WeeklyReportTypeIn reportType,  final DriverResponse driver,
-    final QWeekResponse previousWeek,
-    final QWeekResponse currentWeek) {
-   if(reportType == WeeklyReportTypeIn.TUESDAY_REPORT || reportType == WeeklyReportTypeIn.WEDNESDAY_REPORT) {
-     final var obligation =
-             obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), previousWeek.getId());
-     if (obligation.getMatchCount() > 0) {
+      final WeeklyReportTypeIn reportType,
+      final DriverResponse driver,
+      final QWeekResponse previousWeek,
+      final QWeekResponse currentWeek) {
+    if (reportType == WeeklyReportTypeIn.TUESDAY_REPORT
+        || reportType == WeeklyReportTypeIn.WEDNESDAY_REPORT) {
+      final var obligation =
+          obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), previousWeek.getId());
+      if (obligation.getMatchCount() > 0) {
 
-       return WeeklyReportObligationStatus.COMPLETED;
-     }
-   }
+        return WeeklyReportObligationStatus.COMPLETED;
+      }
+    }
 
     final var obligation =
-            obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), currentWeek.getId());
+        obligationQuery.getByDriverIdAndQWeekIdOnThursday(driver.getId(), currentWeek.getId());
 
     if (obligation.getMatchCount() > 0) {
 

@@ -7,6 +7,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import ee.qrent.billing.report.core.service.pdf.WeeklyReportPdfModel;
+import ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider;
 import ee.qrent.billing.report.domain.WeeklyReportType;
 import lombok.SneakyThrows;
 
@@ -52,6 +53,10 @@ import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportFridayP
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportFridayPdfLabelProvider.RENT_HEADER_TEXT_LABEL_KEY;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportFridayPdfLabelProvider.TOTAL_PAYMENT_LABEL_KEY;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportFridayPdfLabelProvider.getLabel;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.CALL_SIGN_LABEL_KEY;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.DRIVER_LABEL_KEY;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.PERSONAL_NUMBER_LABEL_KEY;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportMondayPdfLabelProvider.RENTED_CAR_LABEL_KEY;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
 import static java.awt.Color.BLACK;
@@ -185,7 +190,7 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
         return labelCell;
     }
 
-    private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
+   /* private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
         final var language = model.getLanguage();
         final var table = getQpdfTable(2);
         table.setWidths(new int[] {70, 30});
@@ -206,6 +211,38 @@ public class WeeklyReportFridayPdfConverter implements WeeklyReportPdfConversion
         table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
 
         table.addCell(getDriverMainDataLabelCell(getLabel(language, RENTED_CAR_LABEL_KEY)));
+        table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
+
+        return table;
+    }*/
+
+    private PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
+        final var language = model.getLanguage();
+        final var table = getQpdfTable(4);
+        table.setWidths(new int[] {20, 35, 25, 20});
+        // Row 1:
+        table.addCell(getDriverMainDataLabelCell("Q firm"));
+        table.addCell(getDriverMainDataValueCell(model.getQFirmName()));
+        table.addCell(getDriverMainDataLabelCell(WeeklyReportMondayPdfLabelProvider.getLabel(language, DRIVER_LABEL_KEY)));
+        final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
+        table.addCell(getDriverMainDataValueCell(driverName));
+        // Row 2:
+        table.addCell(getDriverMainDataLabelCell("IBAN"));
+        table.addCell(getDriverMainDataValueCell(model.getQFirmIban()));
+        final var taxNumber = model.getIdNumber().toString();
+        table.addCell(getDriverMainDataLabelCell(WeeklyReportMondayPdfLabelProvider.getLabel(language, PERSONAL_NUMBER_LABEL_KEY)));
+        table.addCell(getDriverMainDataValueCell(taxNumber));
+
+        // Row 3:
+        table.addCell(getDriverMainDataLabelCell("Q contact"));
+        table.addCell(getDriverMainDataValueCell(model.getQFirmContact()));
+        table.addCell(getDriverMainDataLabelCell(WeeklyReportMondayPdfLabelProvider.getLabel(language, CALL_SIGN_LABEL_KEY)));
+        table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
+        // Row 4:
+        table.addCell(getDriverMainDataLabelCell("Reported week"));
+        final var reportedWeekDaysFormatted = getInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
+        table.addCell(getDriverMainDataValueCell(reportedWeekDaysFormatted));
+        table.addCell(getDriverMainDataLabelCell(WeeklyReportMondayPdfLabelProvider.getLabel(language, RENTED_CAR_LABEL_KEY)));
         table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
 
         return table;
