@@ -54,23 +54,32 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return header;
   }
 
-  PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
+   PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-    final var table = getQpdfTable(2);
-    table.setWidths(new int[] {70, 30});
+    final var table = getQpdfTable(4);
+    table.setWidths(new int[] {20, 30, 20, 30});
+    // Row 1:
+    table.addCell(getDriverMainDataLabelCell("Q firm"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmName()));
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, RENTER_LABEL_KEY)));
-
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
     table.addCell(getDriverMainDataValueCell(driverName));
-
+    // Row 2:
+    table.addCell(getDriverMainDataLabelCell("IBAN"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmIban()));
     final var taxNumber = model.getIdNumber().toString();
-    table.addCell(
-        getDriverMainDataLabelCell(getLabelFromCommon(language, PERSONAL_NUMBER_LABEL_KEY)));
+    table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, PERSONAL_NUMBER_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(taxNumber));
 
+    // Row 3:
+    table.addCell(getDriverMainDataLabelCell("Q contact"));
+    table.addCell(getDriverMainDataValueCell(model.getQFirmContact()));
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, CALL_SIGN_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
-
+    // Row 4:
+    table.addCell(getDriverMainDataLabelCell("Reported week"));
+    final var reportedWeekDaysFormatted = formatInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
+    table.addCell(getDriverMainDataValueCell(reportedWeekDaysFormatted));
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, RENTED_CAR_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCarRegistrationNumber()));
 
