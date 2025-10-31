@@ -17,6 +17,9 @@ public class WeeklyReportPdfModel {
   private final String language;
   private final Integer reportedWeekNumber;
   private final Integer callSign;
+  private final String qFirmName;
+  private final String qFirmIban;
+  private final String qFirmContact;
   private final BigDecimal amount;
   private final BigDecimal feeAmountSunday;
   private final String carRegistrationNumber;

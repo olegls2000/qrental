@@ -8,6 +8,7 @@ import ee.qrent.billing.deposit.api.in.query.GetDepositQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignLinkQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
+import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
 import ee.qrent.billing.insurance.api.in.query.GetInsuranceCaseQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportCalculationQuery;
 import ee.qrent.billing.report.api.in.query.GetWeeklyReportQuery;
@@ -102,9 +103,11 @@ public class WeeklyReportServiceConfig {
       final GetQWeekQuery qWeekQuery,
       final GetDriverQuery driverQuery,
       final GetCallSignQuery callSignQuery,
-      final ee.qrent.billing.car.api.in.query.GetCarQuery carQuery) {
+      final ee.qrent.billing.car.api.in.query.GetCarQuery carQuery,
+      final GetFirmQuery qFirmQuery) {
 
-    return new WeeklyReportToPdfModelMapper(qWeekQuery, driverQuery, callSignQuery, carQuery);
+    return new WeeklyReportToPdfModelMapper(
+        qWeekQuery, driverQuery, callSignQuery, carQuery, qFirmQuery);
   }
 
   @Bean

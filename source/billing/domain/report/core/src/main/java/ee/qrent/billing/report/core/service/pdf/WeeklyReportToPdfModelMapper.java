@@ -4,6 +4,8 @@ import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetCallSignQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
 import ee.qrent.billing.car.api.in.query.GetCarQuery;
+import ee.qrent.billing.firm.api.in.query.GetFirmQuery;
+import ee.qrent.billing.firm.api.in.response.FirmResponse;
 import ee.qrent.billing.report.domain.WeeklyReport;
 import lombok.AllArgsConstructor;
 
@@ -22,9 +24,17 @@ public class WeeklyReportToPdfModelMapper {
   private final GetDriverQuery driverQuery;
   private final GetCallSignQuery callSignQuery;
   private final GetCarQuery carQuery;
+  private final GetFirmQuery qFirmQuery;
+
+  private FirmResponse getFirm(final Long qFirmId) {
+    if (qFirmId == null) return null;
+
+    return qFirmQuery.getById(qFirmId);
+  }
 
   public WeeklyReportPdfModel getPdfModel(final WeeklyReport report) {
     final var driver = driverQuery.getById(report.getDriverId());
+    final var qFirm = getFirm(report.getQFirmId());
     final var callSign = callSignQuery.getById(report.getCallSignId());
     final var currentWeekId = report.getQWeekId();
     final var currentWeek = qWeekQuery.getById(currentWeekId);
@@ -50,14 +60,14 @@ public class WeeklyReportToPdfModelMapper {
         getTotalOtherPaymentAmount(
             report.getTransactionTypesVsAmount(), distributedObligationAmount);
     final var sundayBalance = report.getBalanceAmountSunday();
-    final var sundayOverpayment = sundayBalance.compareTo(BigDecimal.ZERO) > 0 ? sundayBalance : BigDecimal.ZERO;
+    final var sundayOverpayment =
+        sundayBalance.compareTo(BigDecimal.ZERO) > 0 ? sundayBalance : BigDecimal.ZERO;
 
     final var totalPaymentAmountRaw =
         totalRentAmount
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
-            .add(getDamagePaymentAmount(report)
-            .add(sundayOverpayment));
+            .add(getDamagePaymentAmount(report).add(sundayOverpayment));
 
     final var totalPaymentAmount =
         totalPaymentAmountRaw.compareTo(BigDecimal.ZERO) > 0
@@ -70,6 +80,9 @@ public class WeeklyReportToPdfModelMapper {
         .language(driver.getCommunicationLanguage())
         .idNumber(driver.getTaxNumber())
         .callSign(callSign.getCallSign())
+        .qFirmName(qFirm != null ? qFirm.getName() : "N/A")
+        .qFirmIban(qFirm != null ? qFirm.getIban() : "N/A")
+        .qFirmContact(qFirm != null ? qFirm.getEmail() : "N/A")
         .reportedWeekNumber(previousWeek.getNumber())
         .previousWeekStart(previousWeek.getStart())
         .previousWeekEnd(previousWeek.getEnd())
