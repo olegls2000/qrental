@@ -551,8 +551,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
         new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, Font.BOLD, BLACK)));
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
     final var weekRentLabelCell =
-        getClarificationTableLabelCell(
-            "- " + getLabelFromCommon(language, RENT_CLARIFICATION_TEXT_LABEL_KEY),
+        getClarificationTableLabelCell(getLabelFromCommon(language, RENT_CLARIFICATION_TEXT_LABEL_KEY),
             REPORT_DARK_BLUE_COLOR);
     final var rentValueCell = getClarificationTableValueCell(rentAmount, language);
     addRowIfValueIsNonZero(rentAmount, weekRentLabelCell, rentValueCell, table);
@@ -622,7 +621,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
 
   PdfPCell getClarificationTableLabelCell(final String label, final Color color) {
     final var labelCell =
-        getQpdfPCell(new Paragraph(label + ":", new Font(REPORT_FONT, 11, Font.BOLD, color)));
+        getQpdfPCell(new Paragraph("- "+label + ":", new Font(REPORT_FONT, 11, Font.BOLD, color)));
     labelCell.setHorizontalAlignment(ALIGN_RIGHT);
     labelCell.setVerticalAlignment(ALIGN_CENTER);
     labelCell.setFixedHeight(18f);

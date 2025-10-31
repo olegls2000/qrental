@@ -19,7 +19,7 @@ public class WeeklyReportFormatUtils {
 
       return "";
     }
-    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MMM.yyyy");
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     return date.format(formatter);
   }
