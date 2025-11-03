@@ -98,6 +98,8 @@ public class WeeklyReportPdfLabelProviderCommon {
   public static String DEMAND_FEE_LABEL_KEY = "DEMAND_FEE_LABEL_KEY";
   public static String DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY =
       "DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY";
+  public static String REPAIRMENT_1_LABEL_KEY =  "REPAIRMENT_1_LABEL_KEY";
+  public static String REPAIRMENT_2_LABEL_KEY =  "REPAIRMENT_2_LABEL_KEY";
   public static String TOTAL_PAYMENT_LABEL_KEY = "TOTAL_PAYMENT_LABEL_KEY";
   private static Map<String, Map<String, String>> languageVsLabelsMap = new HashMap<>(5);
   private static Map<String, String> mapEst;
@@ -202,6 +204,10 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Текущий долг (без учета ремонтов)"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_1_LABEL_KEY, "Ремонт / Сумма франшизы"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_2_LABEL_KEY, "дата происшествия"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Итого к оплате"));
 
     mapEng =
@@ -298,6 +304,10 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Current debt (excluding repairs)"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_1_LABEL_KEY, "?Ремонт / Сумма франшизы"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_2_LABEL_KEY, "?дата происшествия"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Total to pay"));
     mapEst =
         Map.ofEntries(
@@ -392,6 +402,10 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY,
                 "Lühiajaline võlg (välja arvatud remont)"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_1_LABEL_KEY, "?Ремонт / Сумма франшизы"),
+                new AbstractMap.SimpleEntry<>(
+                        REPAIRMENT_2_LABEL_KEY, "?дата происшествия"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Kokku maksmiseks"));
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);

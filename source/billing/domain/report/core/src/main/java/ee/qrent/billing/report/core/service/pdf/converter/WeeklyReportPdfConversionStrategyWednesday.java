@@ -29,7 +29,6 @@ public class WeeklyReportPdfConversionStrategyWednesday
   @SneakyThrows
   public InputStream getPdfInputStream(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
-
     final var weeklyReportPdfDoc = new Document(A4, 30f, 30f, 20f, 20f);
     final var weeklyReportPdfOutputStream = new ByteArrayOutputStream();
     final var writer = PdfWriter.getInstance(weeklyReportPdfDoc, weeklyReportPdfOutputStream);
@@ -38,7 +37,9 @@ public class WeeklyReportPdfConversionStrategyWednesday
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRow(getLabelFromWednesday(language, THURSDAY_LABEL_KEY)));
-    weeklyReportPdfDoc.add(getBonusStatus(model));
+    weeklyReportPdfDoc.add(getPreviousWeekObligationStatusText(model));
+    weeklyReportPdfDoc.add(gePreviousThursdayNetInfoText(model));
+    weeklyReportPdfDoc.add(getBonusStatusText(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored(

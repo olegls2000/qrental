@@ -1,19 +1,9 @@
 package ee.qrent.billing.report.core.service.pdf.converter;
 
-import static com.lowagie.text.Element.*;
-import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportFormatUtils.formatAmountWithCurrency;
-import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportFormatUtils.formatInterval;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportPdfDocumentUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderCommon.*;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderTuesday.*;
-import static java.awt.Color.*;
-import static java.math.BigDecimal.ZERO;
 
-import com.lowagie.text.*;
-
-import com.lowagie.text.Font;
-
-import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.ByteArrayInputStream;
@@ -46,7 +36,9 @@ public class WeeklyReportPdfConversionStrategyTuesday
     weeklyReportPdfDoc.add(getHeaderTable(getLabelFromTuesday(language, REPORT_NAME_KEY)));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
     weeklyReportPdfDoc.add(getClarificationHeaderRow(getLabelFromTuesday(language, THURSDAY_LABEL_KEY)));
-    weeklyReportPdfDoc.add(getBonusStatus(model));
+    weeklyReportPdfDoc.add(getPreviousWeekObligationStatusText(model));
+    weeklyReportPdfDoc.add(gePreviousThursdayNetInfoText(model));
+    weeklyReportPdfDoc.add(getBonusStatusText(model));
     weeklyReportPdfDoc.add(getObligationOutcomeAboutCurrentWeekTable(model));
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored(
