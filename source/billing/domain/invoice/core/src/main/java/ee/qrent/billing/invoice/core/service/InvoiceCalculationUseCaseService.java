@@ -68,7 +68,6 @@ public class InvoiceCalculationUseCaseService implements InvoiceCalculationAddUs
   private final GetBalanceQuery balanceQuery;
   private final GetTransactionQuery transactionQuery;
   private final GetTransactionTypeQuery transactionTypeQuery;
-  private final GetTransactionKindQuery transactionKindQuery;
   private final GetFirmLinkQuery firmLinkQuery;
   private final QueueEntryPushUseCase notificationQueuePushUseCase;
   private final InvoiceCalculationLoadPort loadPort;

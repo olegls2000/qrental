@@ -8,10 +8,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @AllArgsConstructor
 public class BoltOrdersCountQueryService implements GetBoltRidesCountQuery {
@@ -39,10 +35,5 @@ public class BoltOrdersCountQueryService implements GetBoltRidesCountQuery {
       return Integer.valueOf(0);
     }
     return counter.getMonthOrdersCount();
-  }
-
-  private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-    Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
 }

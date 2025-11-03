@@ -52,10 +52,8 @@ public class BoltStatisticsServiceConfig {
         addPort,
         updatePort,
         deletePort,
-        loadPort,
         addRequestMapper,
         updateRequestMapper,
-        requestValidator,
         boltOrdersCountAddPort,
         driverQuery,
         qWeekQuery);

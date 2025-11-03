@@ -10,7 +10,6 @@ import ee.qrent.billing.bolt.api.in.usecase.BoltStatisticsUpdateUseCase;
 import ee.qrent.billing.bolt.api.out.*;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsAddRequestMapper;
 import ee.qrent.billing.bolt.core.mapper.BoltStatisticsUpdateRequestMapper;
-import ee.qrent.billing.bolt.core.validator.BoltStatisticsRequestValidator;
 import ee.qrent.billing.bolt.domain.BoltOrdersCount;
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.driver.api.in.query.GetDriverQuery;
@@ -31,10 +30,8 @@ public class BoltStatisticsUseCaseService
   private final BoltStatisticsAddPort addPort;
   private final BoltStatisticsUpdatePort updatePort;
   private final BoltStatisticsDeletePort deletePort;
-  private final BoltStatisticsLoadPort loadPort;
   private final BoltStatisticsAddRequestMapper addRequestMapper;
   private final BoltStatisticsUpdateRequestMapper updateRequestMapper;
-  private final BoltStatisticsRequestValidator requestValidator;
   private final BoltOrdersCountAddPort boltOrdersCountAddPort;
   private final GetDriverQuery driverQuery;
   private final GetQWeekQuery qWeekQuery;
@@ -42,16 +39,6 @@ public class BoltStatisticsUseCaseService
   @Transactional(REQUIRES_NEW)
   @Override
   public Long add(final BoltStatisticsAddRequest request) {
-
-    /*  final var individualDriversVsDrivers =
-    new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
-            new InputStreamReader(request.getInputStream()))
-            .withType(BoltStatisticsCsvRecord.class)
-            .withIgnoreLeadingWhiteSpace(true)
-            .build()
-            .stream()
-            .collect(toMap(record -> record.getIndividualId(), record -> record.getDriver()));*/
-
     final var individualDriversVsOrders =
         new CsvToBeanBuilder<BoltStatisticsCsvRecord>(
                 new InputStreamReader(new ByteArrayInputStream(request.getData())))

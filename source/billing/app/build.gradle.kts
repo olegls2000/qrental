@@ -2,7 +2,7 @@ import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter.ofPattern
 
 plugins {
-    id("org.springframework.boot") version "3.1.1"
+    id("org.springframework.boot") version "3.5.7"
 }
 dependencies {
     implementation(project(":source:queue:config"))

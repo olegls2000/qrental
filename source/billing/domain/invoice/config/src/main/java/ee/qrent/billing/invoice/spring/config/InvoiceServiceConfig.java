@@ -101,7 +101,6 @@ public class InvoiceServiceConfig {
         balanceQuery,
         transactionQuery,
         transactionTypeQuery,
-        transactionKindQuery,
         firmLinkQuery,
         notificationQueuePushUseCase,
         loadPort,

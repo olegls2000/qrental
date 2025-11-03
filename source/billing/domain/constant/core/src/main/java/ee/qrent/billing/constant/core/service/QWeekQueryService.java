@@ -11,10 +11,7 @@ import ee.qrent.billing.constant.core.mapper.QWeekResponseMapper;
 import ee.qrent.billing.constant.core.mapper.QWeekUpdateRequestMapper;
 import lombok.AllArgsConstructor;
 import org.threeten.extra.YearWeek;
-
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
