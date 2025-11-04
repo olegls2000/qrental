@@ -182,6 +182,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .qWeekId(qWeekId)
         .driverId(driverId)
         .callSignId(getCallSignId(driverId, qWeekId))
+        .qFirmId(contract.getQFirmId())
         .carId(getCarId(driverId, qWeekId))
         .startDate(requestedQWeek.getStart())
         .endDate(requestedQWeek.getEnd())
