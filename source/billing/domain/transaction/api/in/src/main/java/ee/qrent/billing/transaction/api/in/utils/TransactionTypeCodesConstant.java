@@ -30,6 +30,8 @@ public class TransactionTypeCodesConstant {
 
   public static final String TRANSACTION_TYPE_BONUS_BOLT_CODE = "BONUSBOLT";
 
+  public static final String TRANSACTION_TYPE_BONUS_FORUS_CODE = "FORUSPLUS";
+
   public static final String TRANSACTION_TYPE_BONUS_FRIEND_CODE = "BONUSFRIEND";
 
   public static final String TRANSACTION_TYPE_BONUS_NEW_DRIVER_CODE = "BONUSNEWDRIVER";

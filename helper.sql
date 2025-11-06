@@ -96,15 +96,15 @@ where ocr.obligation_calculation_id in
              (select id
               from q_week
               where year = 2025
-                and number = 43));
+                and number = 44));
 
 delete
 from obligation ob
-where ob.q_week_id in (select id from q_week where year = 2025 and number = 43);
+where ob.q_week_id in (select id from q_week where year = 2025 and number = 44);
 
 delete
 from obligation_calculation
-where q_week_id in (select id from q_week where year = 2025 and number = 43);
+where q_week_id in (select id from q_week where year = 2025 and number = 44);
 
 --------------------------------------------------------------------------------------------------------
 

@@ -160,6 +160,10 @@ public class WeeklyReportToPdfModelMapper {
             TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE, BigDecimal.ZERO);
     final var bonusBoltAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_BOLT_CODE, BigDecimal.ZERO);
+
+    final var bonusForusAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_FORUS_CODE, BigDecimal.ZERO);
+
     final var bonusPlusAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_BONUS_PLUS_CODE, BigDecimal.ZERO);
     final var bonusFriendAmount =
@@ -171,6 +175,7 @@ public class WeeklyReportToPdfModelMapper {
     return rentAmount
         .add(bonusReliablePartnerAmount)
         .add(bonusBoltAmount)
+        .add(bonusForusAmount)
         .add(bonusFriendAmount)
         .add(bonusPlusAmount)
         .add(bonusNewDriverAmount);

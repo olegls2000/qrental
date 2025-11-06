@@ -548,6 +548,8 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_RELIABLE_PARTNER_CODE);
     final var bonusBoltAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
+    final var bonusForusAmount =
+            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FORUS_CODE);
     final var bonusPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
     final var bonusFriendAmount =
@@ -588,6 +590,15 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
             getLabelFromCommon(language, BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY), language);
     final var bonusBoltValueCell = getClarificationTableValueCell(bonusBoltAmount, language);
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
+
+    final var bonusForusLabelCell =
+            getClarificationTableLabelCellCampaign(
+                    getLabelFromCommon(language, BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY), language);
+    final var bonusForusValueCell = getClarificationTableValueCell(bonusForusAmount, language);
+    addRowIfValueIsNonZero(bonusForusAmount, bonusForusLabelCell, bonusForusValueCell, table);
+
+
+
     final var bonusPlusLabelCell =
         getClarificationTableLabelCellCampaign(
             getLabelFromCommon(language, BONUS_PROGRAM_PLUS_LABEL_KEY), language);

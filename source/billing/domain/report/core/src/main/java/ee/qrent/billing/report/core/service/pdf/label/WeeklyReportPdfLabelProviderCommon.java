@@ -78,6 +78,7 @@ public class WeeklyReportPdfLabelProviderCommon {
   public static String BONUS_PROGRAM_REL_PARTNER_LABEL_KEY = "BONUS_PROGRAM_REL_PARTNER_LABEL_KEY";
   public static String BONUS_PROGRAM_PLUS_LABEL_KEY = "BONUS_PROGRAM_PLUS_LABEL_KEY";
   public static String BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY = "BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY";
+  public static String BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY = "BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY";
   public static String BONUS_PROGRAM_FRIEND_REF_LABEL_KEY = "BONUS_PROGRAM_FRIEND_REF_LABEL_KEY";
   public static String BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY = "BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY";
   public static String RENT_ADJUSTMENT_LABEL_KEY = "RENT_ADJUSTMENT_LABEL_KEY";
@@ -173,6 +174,7 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "Кампания "),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Надежный партнер"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Поездки Bolt"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY, "Поездки Forus"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Бонус+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Приведи друга"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "Новый водитель"),
@@ -274,6 +276,7 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_LABEL_KEY, "Campaign "),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Reliable Partner"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Bolt Rides"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY, "Forus Rides"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Bonus+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Bring a friend"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "New driver"),
@@ -371,6 +374,7 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_REL_PARTNER_LABEL_KEY, "Usaldusväärne partner"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_BOLT_RIDES_LABEL_KEY, "Bolt sõidud"),
+            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY, "Forus sõidud"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_PLUS_LABEL_KEY, "Bonus+"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_FRIEND_REF_LABEL_KEY, "Soovita sõbrale"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_NEW_DRIVER_LABEL_KEY, "Uus juht"),
