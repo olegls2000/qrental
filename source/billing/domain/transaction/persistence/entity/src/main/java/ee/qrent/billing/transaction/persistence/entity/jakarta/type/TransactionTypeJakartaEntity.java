@@ -13,7 +13,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "transaction_type")
-//@Audited
+@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
