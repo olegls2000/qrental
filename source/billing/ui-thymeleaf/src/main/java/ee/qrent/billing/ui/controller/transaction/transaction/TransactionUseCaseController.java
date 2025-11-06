@@ -143,7 +143,7 @@ public class TransactionUseCaseController {
     if (deleteRequest.hasViolations()) {
       model.addAttribute("deleteRequest", deleteRequest);
 
-      return "forms/updateTransaction";
+      return "forms/deleteTransaction";
     }
 
     return "redirect:" + TRANSACTION_ROOT_PATH;

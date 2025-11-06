@@ -6,10 +6,13 @@ import static ee.qrent.billing.ui.controller.ControllerUtils.TRANSACTION_ROOT_PA
 import ee.qrent.billing.constant.api.in.query.GetQWeekQuery;
 import ee.qrent.billing.transaction.api.in.query.GetTransactionQuery;
 import ee.qrent.billing.transaction.api.in.query.balance.GetBalanceCalculationQuery;
+import ee.qrent.billing.transaction.api.in.query.filter.PeriodFilter;
 import ee.qrent.billing.transaction.api.in.query.filter.WeekFilter;
 import ee.qrent.billing.transaction.api.in.response.TransactionResponse;
 import ee.qrent.billing.ui.formatter.QDateFormatter;
 import java.util.List;
+
+import ee.qrent.common.in.time.QDateTime;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,13 +30,19 @@ public class TransactionQueryController {
   private final GetTransactionQuery transactionQuery;
   private final GetBalanceCalculationQuery balanceCalculationQuery;
   private final GetQWeekQuery qWeekQuery;
+  private final QDateTime qDateTime;
 
   @GetMapping
   public String getPageWithAllTransactions(final Model model) {
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("transactionFilterRequest", new WeekFilter());
+
+    final var dateStart = qDateTime.getToday().minusDays(60);
+    final var dateEnd = qDateTime.getToday();
+
+    final var period = PeriodFilter.builder().dateStart(dateStart).dateEnd(dateEnd).build();
     model.addAttribute("weeks", qWeekQuery.getAll());
-    addTransactionDataToModel(transactionQuery.getAll(), model);
+    addTransactionDataToModel(transactionQuery.getAllByFilter(period), model);
     addLatestDataToModel(model);
 
     return "transactions";

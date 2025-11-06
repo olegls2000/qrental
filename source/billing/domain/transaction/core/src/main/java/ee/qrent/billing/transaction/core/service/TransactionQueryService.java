@@ -117,7 +117,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   @Override
   public List<TransactionResponse> getAllByFilter(final PeriodFilter filter) {
     return mapToTransactionResponseList(
-        transactionLoadPort.loadAllBetweenDates(filter.getDateStart(), filter.getDatEnd()));
+        transactionLoadPort.loadAllBetweenDates(filter.getDateStart(), filter.getDateEnd()));
   }
 
   @Override
@@ -152,7 +152,7 @@ public class TransactionQueryService implements GetTransactionQuery {
   public List<TransactionResponse> getAllByQWeekId(final Long qWeekId) {
     final var qWeek = qWeekQuery.getById(qWeekId);
     final var periodFilter =
-        PeriodFilter.builder().dateStart(qWeek.getStart()).datEnd(qWeek.getEnd()).build();
+        PeriodFilter.builder().dateStart(qWeek.getStart()).dateEnd(qWeek.getEnd()).build();
 
     return getAllByFilter(periodFilter);
   }

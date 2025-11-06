@@ -6,4 +6,7 @@ public class TransactionDeleteRequest extends AbstractDeleteRequest {
     public TransactionDeleteRequest( Long id) {
         super(id);
     }
+
+    public TransactionDeleteRequest() {
+    }
 }

@@ -2,7 +2,9 @@ package ee.qrent.billing.bonus.api.in.request;
 
 
 import ee.qrent.common.in.request.AbstractDeleteRequest;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class BonusProgramDeleteRequest extends AbstractDeleteRequest {
     public BonusProgramDeleteRequest(final Long id) {
         super(id);

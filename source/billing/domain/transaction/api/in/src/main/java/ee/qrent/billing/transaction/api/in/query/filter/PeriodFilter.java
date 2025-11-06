@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class PeriodFilter {
   private LocalDate dateStart;
-  private LocalDate datEnd;
+  private LocalDate dateEnd;
 }
