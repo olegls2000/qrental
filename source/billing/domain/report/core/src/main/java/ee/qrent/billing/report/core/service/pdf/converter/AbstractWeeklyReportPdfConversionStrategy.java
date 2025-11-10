@@ -17,6 +17,7 @@ import static com.lowagie.text.Rectangle.NO_BORDER;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportFormatUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportPdfDocumentUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderCommon.*;
+import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderFriday.getLabelFromFriday;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderTuesday.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
@@ -58,9 +59,9 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
   PdfPTable getDriverMainDataTable(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getQpdfTable(4);
-    table.setWidths(new int[] {20, 30, 20, 30});
+    table.setWidths(new int[] {20, 30, 25, 25});
     // Row 1:
-    table.addCell(getDriverMainDataLabelCell("Q firm"));
+    table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, Q_COMPANY_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getQFirmName()));
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, RENTER_LABEL_KEY)));
     final var driverName = "%s %s".formatted(model.getFirstName(), model.getLastName());
@@ -74,12 +75,12 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     table.addCell(getDriverMainDataValueCell(taxNumber));
 
     // Row 3:
-    table.addCell(getDriverMainDataLabelCell("Q contact"));
+    table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, Q_CONTACT_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getQFirmContact()));
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, CALL_SIGN_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
     // Row 4:
-    table.addCell(getDriverMainDataLabelCell("Reported week"));
+    table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, REPORTED_WEEK_LABEL_KEY)));
     final var reportedWeekDaysFormatted =
         formatInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
     table.addCell(getDriverMainDataValueCell(reportedWeekDaysFormatted));
@@ -111,12 +112,12 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return labelCell;
   }
 
-  PdfPTable getClarificationHeaderRow(final String text) {
+  PdfPTable getClarificationHeaderRow(final String language) {
     final var row = getQpdfTable(1);
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, BOLD)));
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
-    final var cell = getQpdfPCell(new Paragraph(text + ":", new Font(REPORT_FONT, 13, BOLD)));
+    final var cell = getQpdfPCell(new Paragraph(getLabelFromCommon(language, BONUS_REPORT_HEADER_LABEL_KEY) + ":", new Font(REPORT_FONT, 13, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
     cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
@@ -423,7 +424,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            " * " + getLabelFromCommon(language, OTHER_OBLIGATIONS_LABEL_KEY),
+            " * " + getLabelFromCommon(language, OTHER_OBLIGATIONS_LABEL_KEY) + ": ",
             new Font(REPORT_FONT, 12, BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
@@ -561,11 +562,11 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var headerPhrase = new com.lowagie.text.Phrase();
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            " * " + getLabelFromCommon(language, RENT_HEADER_TEXT_LABEL_KEY),
+            " * " + getLabelFromCommon(language, RENT_HEADER_TEXT_LABEL_KEY) + ":",
             new Font(REPORT_FONT, 12, BOLD, BLACK)));
     headerPhrase.add(
         new com.lowagie.text.Chunk(
-            format("%s %s", totalRentAmount, currency),
+            format(" %s %s", totalRentAmount, currency),
             new Font(REPORT_FONT, 12, BOLD, REPORT_RED_COLOR)));
     headerPhrase.add(new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, BOLD, BLACK)));
     table.addCell(getClarificationTableHeaderCell(headerPhrase));

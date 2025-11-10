@@ -35,7 +35,7 @@ public class WeeklyReportPdfConversionStrategyTuesday
     weeklyReportPdfDoc.open();
     weeklyReportPdfDoc.add(getHeaderTable(getLabelFromTuesday(language, REPORT_NAME_KEY)));
     weeklyReportPdfDoc.add(getDriverMainDataTable(model));
-    weeklyReportPdfDoc.add(getClarificationHeaderRow(getLabelFromTuesday(language, THURSDAY_LABEL_KEY)));
+    weeklyReportPdfDoc.add(getClarificationHeaderRow(language));
     weeklyReportPdfDoc.add(getPreviousWeekObligationStatusText(model));
     weeklyReportPdfDoc.add(gePreviousThursdayNetInfoText(model));
     weeklyReportPdfDoc.add(getBonusStatusText(model));

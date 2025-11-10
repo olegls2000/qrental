@@ -69,6 +69,7 @@ public class ObligationCalculator {
       final Long driverId, final LocalDate monday, final LocalDate thursday) {
     final var manualObligationAmount = getManualObligation(driverId);
     final var automaticObligationAmount = getAutomaticObligationAmount(driverId, monday, thursday);
+    final var innerRoadInsuranceAmount = getInnerRoadInsuranceAmount(driverId, monday, thursday);
     if (manualObligationAmount.compareTo(automaticObligationAmount) > 0) {
 
       return manualObligationAmount;
@@ -88,10 +89,10 @@ public class ObligationCalculator {
     final var extraAmount = automaticObligationAmount.multiply(DEBT_RATE);
     if (sundayRawBalanceAmount.abs().compareTo(extraAmount) >= 0) {
 
-      return automaticObligationAmount.add(extraAmount);
+      return automaticObligationAmount.add(extraAmount).add(innerRoadInsuranceAmount);
     }
 
-    return automaticObligationAmount.add(sundayRawBalanceAmount);
+    return automaticObligationAmount.add(sundayRawBalanceAmount).add(innerRoadInsuranceAmount);
   }
 
   private Integer getMatchCount(
@@ -175,4 +176,30 @@ public class ObligationCalculator {
         .reduce(ZERO, BigDecimal::add)
         .abs();
   }
+
+  private BigDecimal getInnerRoadInsuranceAmount(
+          final Long driverId, final LocalDate startDate, final LocalDate endDate) {
+    final var filter =
+            DriverAndPeriodAndTypeCodesFilter.builder()
+                    .driverId(driverId)
+                    .dateStart(startDate)
+                    .dateEnd(endDate)
+                    .typeCodes(
+                            Stream.of(
+
+                                            TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE,
+                                            TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE)
+                                    .collect(Collectors.toSet()))
+                    .build();
+
+    return transactionQuery.getAllByFilter(filter).stream()
+            .map(TransactionResponse::getRealAmount)
+            .reduce(ZERO, BigDecimal::add)
+            .abs();
+  }
+
+
+
+
+
 }
