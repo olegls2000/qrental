@@ -80,7 +80,8 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, CALL_SIGN_LABEL_KEY)));
     table.addCell(getDriverMainDataValueCell(model.getCallSign().toString()));
     // Row 4:
-    table.addCell(getDriverMainDataLabelCell(getLabelFromCommon(language, REPORTED_WEEK_LABEL_KEY)));
+    table.addCell(
+        getDriverMainDataLabelCell(getLabelFromCommon(language, REPORTED_WEEK_LABEL_KEY)));
     final var reportedWeekDaysFormatted =
         formatInterval(model.getCurrentWeekStart(), model.getCurrentWeekEnd());
     table.addCell(getDriverMainDataValueCell(reportedWeekDaysFormatted));
@@ -117,7 +118,11 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, BOLD)));
     paddingTopCell.setFixedHeight(15f);
     row.addCell(paddingTopCell);
-    final var cell = getQpdfPCell(new Paragraph(getLabelFromCommon(language, BONUS_REPORT_HEADER_LABEL_KEY) + ":", new Font(REPORT_FONT, 13, BOLD)));
+    final var cell =
+        getQpdfPCell(
+            new Paragraph(
+                getLabelFromCommon(language, BONUS_REPORT_HEADER_LABEL_KEY) + ":",
+                new Font(REPORT_FONT, 13, BOLD)));
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
     cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
@@ -505,18 +510,26 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     headerPhrase.add(new com.lowagie.text.Chunk(" * ", new Font(REPORT_FONT, 12, BOLD, BLACK)));
 
     table.addCell(getClarificationTableHeaderCell(headerPhrase));
-    table.addCell(
-        getClarificationTableLabelCell(
-            getLabelFromCommon(language, DEMAND_FEE_LABEL_KEY), REPORT_DARK_BLUE_COLOR));
-    table.addCell(
-        getClarificationTableValueCell(model.getFeeAmountAtCalculationMoment(), language));
 
-    table.addCell(
-        getClarificationTableLabelCell(
-            getLabelFromCommon(language, DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY),
-            REPORT_DARK_BLUE_COLOR));
-    table.addCell(
-        getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+    final var feeAmountAtCalculationMoment = model.getFeeAmountAtCalculationMoment();
+    if (feeAmountAtCalculationMoment != null && feeAmountAtCalculationMoment.compareTo(ZERO) < 0) {
+      table.addCell(
+          getClarificationTableLabelCell(
+              getLabelFromCommon(language, DEMAND_FEE_LABEL_KEY), REPORT_DARK_BLUE_COLOR));
+      table.addCell(getClarificationTableValueCell(feeAmountAtCalculationMoment, language));
+    }
+
+    final var balanceAmountAtCalculationMoment = model.getBalanceAmountAtCalculationMoment();
+    if (balanceAmountAtCalculationMoment != null
+        && balanceAmountAtCalculationMoment.compareTo(ZERO) < 0) {
+      table.addCell(
+          getClarificationTableLabelCell(
+              getLabelFromCommon(language, DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY),
+              REPORT_DARK_BLUE_COLOR));
+      table.addCell(
+          getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+    }
+
     model
         .getInsuranceCases()
         .forEach(
@@ -550,7 +563,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var bonusBoltAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_BOLT_CODE);
     final var bonusForusAmount =
-            model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FORUS_CODE);
+        model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_FORUS_CODE);
     final var bonusPlusAmount =
         model.getTransactionTypesVsAmount().get(TRANSACTION_TYPE_BONUS_PLUS_CODE);
     final var bonusFriendAmount =
@@ -593,12 +606,10 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     addRowIfValueIsNonZero(bonusBoltAmount, bonusBoltLabelCell, bonusBoltValueCell, table);
 
     final var bonusForusLabelCell =
-            getClarificationTableLabelCellCampaign(
-                    getLabelFromCommon(language, BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY), language);
+        getClarificationTableLabelCellCampaign(
+            getLabelFromCommon(language, BONUS_PROGRAM_FORUS_RIDES_LABEL_KEY), language);
     final var bonusForusValueCell = getClarificationTableValueCell(bonusForusAmount, language);
     addRowIfValueIsNonZero(bonusForusAmount, bonusForusLabelCell, bonusForusValueCell, table);
-
-
 
     final var bonusPlusLabelCell =
         getClarificationTableLabelCellCampaign(
