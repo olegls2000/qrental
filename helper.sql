@@ -148,22 +148,22 @@ where transaction_type_id in (select distinct(id)
 --------------------------------------------------------------------------------------------------------
 --## Remove Balance Calculations for week:
 delete
-from balance_calculation_result bcr
+from billing.balance_calculation_result bcr
 where bcr.balance_id in
       (select bl.id
-       from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 43 and qw.year = 2025));
+       from billing.balance bl
+       where q_week_id in (select qw.id from billing.q_week qw where qw.number = 45 and qw.year = 2025));
 
 delete
-from balance_transaction btr
+from billing.balance_transaction btr
 where btr.balance_id in
       (select bl.id
-       from balance bl
-       where q_week_id in (select qw.id from q_week qw where qw.number = 43 and qw.year = 2025));
+       from billing.balance bl
+       where q_week_id in (select qw.id from billing.q_week qw where qw.number = 45 and qw.year = 2025));
 
 delete
-from balance bl
-where q_week_id in (select qw.id from q_week qw where qw.number = 43 and qw.year = 2025);
+from billing.balance bl
+where q_week_id in (select qw.id from billing.q_week qw where qw.number = 45 and qw.year = 2025);
 
 
 ----------------------------

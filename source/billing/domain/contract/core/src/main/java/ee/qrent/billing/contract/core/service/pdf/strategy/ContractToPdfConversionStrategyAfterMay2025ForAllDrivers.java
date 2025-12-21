@@ -122,27 +122,66 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
                 + "ning Rentnik nõustub, et Rendileandja võib nende toimumisel ja Rentniku vastuväidete puudumisel teha korrigeerivaid kandeid Rentniku saldole. Rentnik tunnistab, et selliste boonuskannete tegemine " +
                     "ei ole Rendileandja kohustus ning Rendileandja võib neid igal ajal omal äranägemisel alustada, jätkata või lõpetada. Samal ajal, käesoleva kalendrinädala mistahes boonuskampaania aktiveerimise tingimusteks " +
                     "on Rentnikupoolne õigeaegne ja täielik eelmise nädala renditasu tasumine ning käesolevas lepingus määratud võlakohustuste osa hüvitamine (hüvitamise kord on kirjeldatud punktides 3.4 ja 3.5)."));
+//    chapter1.addCell(getSubChapterNumber("1.13"));
+//    chapter1.addCell(
+//        getSubChapterText(
+//            "Käesolev leping on tähtajatu. Samal ajal, Rendileandja poolt käesoleva koostöölepingu alusel osutatava renditeenuse miinimumperiood on "
+//                + getDuration(model)
+//                + " järjestikut täispika kalendrinädalat, mille eest peab renditeenuse maksumus olema tasutud. Renditeenuse osutamise miinimumperioodi arvestus algab kuupäevast, mis" +
+//                    " on määratud käesoleva lepingu alusel koostatud esimese rendiauto üleandmise-vastuvõtmise aktis, juhul kui see akt allkirjastatakse lepingu sõlmimise päeval või hiljem." +
+//                    " Kui Rentnikul on lepingu allkirjastamise hetkel Rendileandja rendiauto juba kasutuses, algab miinimumperioodi arvestus käesoleva lepingu allkirjastamise kuupäevast."));
+// From 24.11.2025
     chapter1.addCell(getSubChapterNumber("1.13"));
     chapter1.addCell(
         getSubChapterText(
-            "Käesolev leping on tähtajatu. Samal ajal, Rendileandja poolt käesoleva koostöölepingu alusel osutatava renditeenuse miinimumperiood on "
+            "Käesolev leping on tähtajatu. Pooled kinnitavad, et renditeenuse osutamisel on tegemist majandustegevuse raames sõlmitud lepinguga, millele ei kohaldata tarbijakaitsealaseid piiranguid ega VÕS tarbijasätteid." +
+               "Renditeenuse miinimumperiood on "
                 + getDuration(model)
-                + " järjestikut täispika kalendrinädalat, mille eest peab renditeenuse maksumus olema tasutud. Renditeenuse osutamise miinimumperioodi arvestus algab kuupäevast, mis" +
-                    " on määratud käesoleva lepingu alusel koostatud esimese rendiauto üleandmise-vastuvõtmise aktis, juhul kui see akt allkirjastatakse lepingu sõlmimise päeval või hiljem." +
-                    " Kui Rentnikul on lepingu allkirjastamise hetkel Rendileandja rendiauto juba kasutuses, algab miinimumperioodi arvestus käesoleva lepingu allkirjastamise kuupäevast."));
+                    + " järjestikust täispikka kalendrinädalat, mille eest peab Rentnik tasuma täies ulatuses olenemata sellest, kas rendiautot kasutatakse või tagastatakse enne miinimumperioodi lõppu. " +
+
+                    "Miinimumperioodi arvestus algab kuupäevast, mis on märgitud esimese rendiauto üleandmise-vastuvõtmise aktis. Kui Rentnik kasutab rendiautot juba lepingu allkirjastamise hetkel," +
+                    " algab miinimumperiood lepingu allkirjastamise kuupäevast." +
+
+                    "Miinimumperioodi tasu on lepinguline kohustus, mis ei ole seotud rendiauto kasutusintensiivsusega, tagastamise ajaga ega renditeenuse faktilise kasutamisega." +
+                    " Rentniku poolt rendiauto ennetähtaegne tagastamine ei vabasta kohustusest tasuda kogu miinimumperioodi renditasu. " +
+
+                    "Etteteatamine ega lepingu lõpetamine ei lühenda miinimumperioodi kestust." +
+
+                    "Pooled kinnitavad, et nimetatud miinimumperioodi kokkulepe on VÕS § 11 lg 1 kohaselt kehtiv, mõistlik ning vastab renditeenuse majanduslikule olemusele ja Rendileandja äririskile."));
+
+//    chapter1.addCell(getSubChapterNumber("1.14"));
+//    chapter1.addCell(
+//        getSubChapterText(
+//            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt "
+//                + "kaks "
+//                + " täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva " +
+//                    "rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise " +
+//                    "kahe " +
+//                    "täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul " +
+//                    "(kaks täispika kalendrinädalat) " +
+//                    "ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 " +
+//                    "kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
+//    pdfDocument.add(chapter1);
+
+// From 24.11.2025
     chapter1.addCell(getSubChapterNumber("1.14"));
     chapter1.addCell(
         getSubChapterText(
-            "Rentnikul on õigus lepingu igal ajal ja mistahes põhjusel lõpetada. Lepingu lõpetamiseks kohustub Rentnik teavitama Rendileandjat kirjalikult, kasutades rendilepingus määratud e-posti aadressi, vähemalt "
-                + "kaks "
-                + " täispika kalendrinädalat enne rendiauto tagastamist. Auto tagastamise tingimused on kirjeldatud “Tüüptingimused” lepingulisa punktides 4.3 ja 4.4. Pärast seda, kui on Rentnik Rendileandja käesoleva " +
-                    "rendilepingu lõpetamise soovist teavitanud, tekib Rentnikul õigus lõpetada lepingualuse autorenditeenuse kasutamise " +
-                    "kahe " +
-                    "täispika kalendrinädala möödumisel. Selle ajani peab Rentnik tasuma renditasu tema lepingualuse rendiauto eest täies ulatuses, käesolevas punktis nimetatud rendiperioodi jooksul " +
-                    "(kaks täispika kalendrinädalat) " +
-                    "ja vastavalt punktides 3.4 ja 3.5 sätestatud tingimustele. Rentnikul on õigus kasutada rendiautot kogu nimetatud perioodi vältel vastavalt lepingu punktides 4.4, 4.4.1 ja 4.4.2 " +
-                    "kirjeldatud tingimustele. Kui Rentnik tagastab rendiauto enne tähtaega, kohustub ta tasuma kogu kasutamata rendiperioodi eest vastavalt selle auto üleandmise-vastuvõtmise aktis määratud rendimaksumusele."));
+            " Rentnikul on õigus leping igal ajal üles öelda mistahes põhjusel, esitades Rendileandjale kirjaliku teate üksnes lepingu ametlikule e-posti aadressile." +
+                    " Suulised teated, sõnumirakenduste sõnumid või kolmandatele isikutele edastatud teated ei loeta kehtivaks teavitamiseks."
+                + "Rentnik peab lepingu ülesütlemisest teatama vähemalt kaks (2) täispikka kalendrinädalat enne auto tagastamist. Etteteatamise tähtaega arvestatakse alates tööpäevast, " +
+                    "mil teade jõudis Rendileandja ametlikule e-posti aadressile."
+                + "Rentnikul tekib õigus lõpetada renditeenuse kasutamine pärast etteteatamistähtaja täielikku möödumist, kuid mitte enne miinimumperioodi lõppu, kui viimane ei ole veel täitunud."
+                + "Etteteatamine ei lühenda ega muuda miinimumperioodi kestust."
+                + "Kuni etteteatamistähtaja möödumiseni ning miinimumperioodi lõpuni (kui see langeb hilisemaks) on Rentnik kohustatud tasuma renditasu täies ulatuses vastavalt " +
+                    "rendinädala maksumusele ja punktides 3.4 ning 3.5 sätestatud tingimustele, sõltumata rendiauto faktilisest kasutamisest."
+                + "Rentnik on kohustatud tasuma rendi ka juhul, kui ta ei kasuta sõidukit etteteatamistähtaja jooksul või tagastab selle enne tähtaja möödumist."
+                + "Rentnikul on õigus kasutada rendiautot kogu etteteatamistähtaja jooksul vastavalt lepingu punktidele 4.4, 4.4.1 ja 4.4.2."
+                + "Kui Rentnik tagastab rendiauto enne etteteatamistähtaja möödumist või enne miinimumperioodi lõppu, kohustub ta tasuma kogu kasutamata aja renditasu " +
+                    "vastavalt üleandmise-vastuvõtmise aktis märgitud rendihinnale. Ennetähtaegne tagastamine ei vähenda ega välista Rentniku rahalisi kohustusi."
+                + "Pooled kinnitavad, et see tingimus on sõlmitud VÕS § 12 lg 1 alusel, on majanduslikult põhjendatud ning tagab Rendileandjale õiguspärase kaitse äririski vastu."));
     pdfDocument.add(chapter1);
+
 
     final var chapter2 = getChapterTable();
     chapter2.addCell(getChapterNumber("II"));
@@ -302,7 +341,9 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
     chapter4.addCell(
             getSubChapterText(
                     "Rentniku käesoleva lepingualune seaduslik esindaja või tegelik kasusaaja ("
-                            + model.getRenter()
+                            + model.getRenterSignerName()
+                            +", "
+                            + model.getRenterSignerTaxNumber()
                             + ") avaldab ja kinnitab oma allkirjaga tingimusteta, et ta käendab käesolevas lepingus (majandustegevuse raames) tekkivaid kohustusi. Käendaja tagab nimetatud lepingus sätestatud kohustuste täitmise antava käendusega. Pooled kinnitavad, et nad ei käsitle käesoleva lepingu alusel antud käendust tarbijakäendusena võlaõigusseaduse tähenduses. Käendaja vastutab Rendileandja ees täies ulatuses solidaarselt, tagades kõiki Rendileandja nõudeid Rentniku vastu, mis tekivad või võivad tekkida käesoleva lepingu alusel."));
     chapter4.addCell(getSubChapterNumber("4.6.2"));
     chapter4.addCell(

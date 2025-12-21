@@ -25,14 +25,16 @@ public abstract class AbstractContractToPdfConversionStrategy
 
   private final ContractLoadPort loadPort;
 
-  protected Document getDocument(){
+  protected Document getDocument() {
     return new Document(A4, 40f, 40f, 50f, 50f);
   }
 
-  protected String getDuration(final ContractPdfModel model){
-    switch (model.getDuration()){
-      case  "FOUR_WEEKS":
+  protected String getDuration(final ContractPdfModel model) {
+    switch (model.getDuration()) {
+      case "FOUR_WEEKS":
         return "neli";
+      case "SIX_WEEKS":
+        return "kuus";
       case "TWELVE_WEEKS":
         return "kaksteist";
       default:
@@ -40,9 +42,11 @@ public abstract class AbstractContractToPdfConversionStrategy
     }
   }
 
-  protected String getNoticePeriod(final ContractPdfModel model){
-    switch (model.getDuration()){
-      case  "FOUR_WEEKS":
+  protected String getNoticePeriod(final ContractPdfModel model) {
+    switch (model.getDuration()) {
+      case "FOUR_WEEKS":
+        return "kaks";
+      case "SIX_WEEKS":
         return "kaks";
       case "TWELVE_WEEKS":
         return "neli";
@@ -51,9 +55,11 @@ public abstract class AbstractContractToPdfConversionStrategy
     }
   }
 
-  protected String getNoticePeriod1(final ContractPdfModel model){
-    switch (model.getDuration()){
-      case  "FOUR_WEEKS":
+  protected String getNoticePeriod1(final ContractPdfModel model) {
+    switch (model.getDuration()) {
+      case "FOUR_WEEKS":
+        return "kahe";
+      case "SIX_WEEKS":
         return "kahe";
       case "TWELVE_WEEKS":
         return "nelja";
@@ -69,7 +75,8 @@ public abstract class AbstractContractToPdfConversionStrategy
   protected boolean isContractAfterNewContractDate(final ContractPdfModel model) {
     final var dateStart = model.getDateStart();
 
-    return dateStart.isAfter(NEW_CONTRACTS_START_DATE) || dateStart.isEqual(NEW_CONTRACTS_START_DATE);
+    return dateStart.isAfter(NEW_CONTRACTS_START_DATE)
+        || dateStart.isEqual(NEW_CONTRACTS_START_DATE);
   }
 
   protected boolean isDriverNew(final ContractPdfModel model) {
@@ -152,7 +159,7 @@ public abstract class AbstractContractToPdfConversionStrategy
             new Paragraph(
                 "Koostööleping   Nr. "
                     + model.getNumber()
-                    +"- rendiauto taksoteenuse ja majandustegevuse kasutamiseks (üldtingimused). ",
+                    + "- rendiauto taksoteenuse ja majandustegevuse kasutamiseks (üldtingimused). ",
                 new Font(TIMES_ROMAN, 10, BOLD)));
     headlineCell.setBorder(NO_BORDER);
     headlineCell.setHorizontalAlignment(CENTER);
@@ -224,7 +231,8 @@ public abstract class AbstractContractToPdfConversionStrategy
             + getTextOrEmpty(model.getRenterSignerName());
     tenantTable.addCell(getQCell(tenantCeoNameValue));
     final var tenantCeoTaxNumberValue =
-        "Rentniku seadusliku või volitatud esindaja isikukood:  " + model.getRenterSignerTaxNumber();
+        "Rentniku seadusliku või volitatud esindaja isikukood:  "
+            + model.getRenterSignerTaxNumber();
     tenantTable.addCell(getQCell(tenantCeoTaxNumberValue));
     final var tenantDriverLicenceNumberValue =
         "Rentniku või selle seadusliku ega volitatud esindaja juhiloa number:  "

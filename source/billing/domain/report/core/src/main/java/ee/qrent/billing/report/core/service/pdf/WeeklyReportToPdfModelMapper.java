@@ -126,7 +126,7 @@ public class WeeklyReportToPdfModelMapper {
     final var balanceOnSunday = report.getBalanceAmountSunday();
     final var nominalDistributedObligationAmount =
         totalRentAmount
-            .add(getInsuranceAmount(report.getTransactionTypesVsAmount()))
+    //        .add(getInsuranceAmount(report.getTransactionTypesVsAmount()))
             .multiply(new BigDecimal(0.25));
     if (balanceOnSunday.compareTo(BigDecimal.ZERO)
         >= 0) { // balanceOnSunday = (5..0], nominalDistributedObligationAmount = -4

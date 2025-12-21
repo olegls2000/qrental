@@ -126,7 +126,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     cell.setHorizontalAlignment(ALIGN_CENTER);
     cell.setVerticalAlignment(ALIGN_MIDDLE);
     cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
-    cell.setFixedHeight(40f);
+    cell.setFixedHeight(30f);
     row.addCell(cell);
 
     return row;
@@ -734,4 +734,27 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
 
     return row;
   }
+
+  PdfPTable getPredictionHeaderRow(final String language) {
+    final var row = getQpdfTable(1);
+    final var paddingTopCell = getQpdfPCell(new Paragraph("", new Font(REPORT_FONT, 13, BOLD)));
+    paddingTopCell.setFixedHeight(15f);
+    row.addCell(paddingTopCell);
+    final var cell =
+            getQpdfPCell(
+                    new Paragraph(
+                            getLabelFromCommon(language, PREDICTION_HEADER_LABEL_KEY) + ":",
+                            new Font(REPORT_FONT, 13, BOLD)));
+    cell.setHorizontalAlignment(ALIGN_CENTER);
+    cell.setVerticalAlignment(ALIGN_MIDDLE);
+    cell.setBackgroundColor(REPORT_GRAY_BACKGROUND_COLOR);
+    cell.setFixedHeight(30f);
+    row.addCell(cell);
+
+    return row;
+  }
+
+
+
+
 }

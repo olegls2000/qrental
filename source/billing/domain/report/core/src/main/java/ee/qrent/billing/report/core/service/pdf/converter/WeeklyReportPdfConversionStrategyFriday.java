@@ -46,7 +46,8 @@ public class WeeklyReportPdfConversionStrategyFriday
     weeklyReportPdfDoc.add(getDemandOnTheBeginningOfWeek(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable(language));
-    weeklyReportPdfDoc.close();
+    weeklyReportPdfDoc.add(getPredictionHeaderRow(language));
+        weeklyReportPdfDoc.close();
     writer.close();
 
     return new ByteArrayInputStream(weeklyReportPdfOutputStream.toByteArray());

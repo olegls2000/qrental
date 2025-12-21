@@ -45,6 +45,7 @@ public class ContractToPdfModelMapper {
   private String getStringDuration1(final ContractDuration contractDuration) {
     return switch (contractDuration) {
       case FOUR_WEEKS -> "seitse";
+      case SIX_WEEKS -> "seitse";
       case TWELVE_WEEKS -> "neliteist";
     };
   }
