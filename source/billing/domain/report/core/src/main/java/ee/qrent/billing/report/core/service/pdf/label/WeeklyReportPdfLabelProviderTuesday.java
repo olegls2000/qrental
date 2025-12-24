@@ -17,10 +17,8 @@ public class WeeklyReportPdfLabelProviderTuesday {
 
   public static String REPORT_NAME_KEY = "REPORT_NAME_KEY";
   public static String THURSDAY_LABEL_KEY = "THURSDAY_LABEL_KEY";
-  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY =
-      "BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY";
-  public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY =
-      "BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY";
+
+
 
   static {
     mapRus =
@@ -28,30 +26,24 @@ public class WeeklyReportPdfLabelProviderTuesday {
             new AbstractMap.SimpleEntry<>(
                 REPORT_NAME_KEY, "РАССЫЛКА НА ВТОРНИК - 10:00"),
                 new AbstractMap.SimpleEntry<>(
-                        THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"),
-            new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "В знак нашей благодарности"),
-            new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "на текущей неделе."));
+                        THURSDAY_LABEL_KEY, "Данные на конец четверга прошлой недели"));
+
 
     mapEng =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TUESDAY NEWSLETTER - 10:00"),
                 new AbstractMap.SimpleEntry<>(
-                        THURSDAY_LABEL_KEY, "Payment and Bonus Report"),
-            new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "As a token of our appreciation,"),
-            new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "for the current week."));
+                        THURSDAY_LABEL_KEY, "Payment and Bonus Report"));
+
+
 
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(REPORT_NAME_KEY, "TEISIPÄEVANE INFOKIRI - 10:00"),
             new AbstractMap.SimpleEntry<>(
-                THURSDAY_LABEL_KEY, "Andmed eelmise nädala neljapäeva lõpu seisuga"),
-            new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "Tänutäheks"),
-            new AbstractMap.SimpleEntry<>(
-                BONUS_PROGRAM_ACTIVE_TEXT_PART_5_LABEL_KEY, "meie boonuskampaaniad."));
+                THURSDAY_LABEL_KEY, "Andmed eelmise nädala neljapäeva lõpu seisuga"));
+
+
 
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);

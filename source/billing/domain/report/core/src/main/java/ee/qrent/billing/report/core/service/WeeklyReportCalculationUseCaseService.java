@@ -108,6 +108,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
               final var weeklyReport = getWeeklyReport(driver, requestedQWeek, request.getType());
               final var reportTransactions =
                   getWeeklyReportTransactions(weeklyReport, driver.getId(), requestedQWeekId);
+              weeklyReport.setDepositPaid(
+                      reportTransactions.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, BigDecimal.ZERO));
               calculation.getReportTransactionLinks().add(reportTransactions);
             });
 
@@ -132,6 +134,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
     final var driverId = driver.getId();
     final var qWeekId = requestedQWeek.getId();
     final var contract = contractQuery.getActiveByDriverIdAndQWeekId(driverId, qWeekId);
+    //TODO: reconsider why Deposit domain functionallity doesnt suite fot the operators
     final var depositPaid = depositQuery.getPaidAmountByDriverId(driverId);
     final var previousQWeek = qWeekQuery.getOneBeforeById(qWeekId);
     if (reportType == WeeklyReportTypeIn.INFO_REPORT) {
@@ -177,6 +180,8 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
 
     final var activeInsuranceCases = getActiveInsuranceCases(driverId);
 
+final var transactionTypesVsAmounts = getAmountsMap(driverId, requestedQWeek.getStart(), requestedQWeek.getEnd());
+
     return WeeklyReport.builder()
         .type(WeeklyReportType.valueOf(reportType.name()))
         .qWeekId(qWeekId)
@@ -188,7 +193,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .endDate(requestedQWeek.getEnd())
         .weeksCountTillEnd(contract.getWeeksToEnd())
         .depositObligation(DEPOSIT_OBLIGATION)
-        .depositPaid(depositPaid)
+        .depositPaid(transactionTypesVsAmounts.getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, ZERO))
         .obligationStatus(
             getWeeklyReportObligationStatus(reportType, driver, previousQWeek, requestedQWeek))
         .currentObligationAmount(currentObligationAmount)
@@ -197,8 +202,7 @@ public class WeeklyReportCalculationUseCaseService implements WeeklyReportCalcul
         .feeAmountAtCalculationMoment(feeAmountAtCalculationMoment)
         .balanceAmountAtCalculationMoment(balanceOnDateAmount)
         .netAmountOnThursday(netAmountOnThursday)
-        .transactionTypesVsAmount(
-            getAmountsMap(driverId, requestedQWeek.getStart(), requestedQWeek.getEnd()))
+        .transactionTypesVsAmount(transactionTypesVsAmounts)
         .insuranceCases(activeInsuranceCases)
         .comment("Automatically generated weekly report")
         .build();

@@ -18,16 +18,17 @@ Select * from billing.balance where driver_id=397;
 --------------------------------------------------
 DO $$
     DECLARE
-        tbl TEXT;
+        r RECORD;
     BEGIN
-        FOR tbl IN
-            SELECT format('%I.%I', schemaname, tablename)
+        FOR r IN
+            SELECT tablename
             FROM pg_tables
             WHERE schemaname = 'billing'
             LOOP
-                EXECUTE format('DROP TABLE IF EXISTS %s CASCADE', tbl);
+                EXECUTE 'DROP TABLE billing.' || quote_ident(r.tablename) || ' CASCADE';
             END LOOP;
-    END$$;
+    END $$;
+
 
 -------------------------------------------------------------------------------------
     --## Driver  - rewrite NULL into not NULL
