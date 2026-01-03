@@ -18,7 +18,6 @@ import static com.lowagie.text.Rectangle.NO_BORDER;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportFormatUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.converter.WeeklyReportPdfDocumentUtils.*;
 import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderCommon.*;
-import static ee.qrent.billing.report.core.service.pdf.label.WeeklyReportPdfLabelProviderTuesday.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.*;
 import static ee.qrent.billing.transaction.api.in.utils.TransactionTypeCodesConstant.TRANSACTION_TYPE_FEE_DEBT_CODE;
 import static java.awt.Color.BLACK;
@@ -242,7 +241,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
   }
 
   Optional<PdfPTable> getObligationOutcomeAboutCurrentWeekTable(final WeeklyReportPdfModel model) {
-    if (OBLIGATION_STATUS_COMPLETED.equals(model.getObligationStatus())) {
+    if (model.getTotalPaymentAmount().compareTo(ZERO) >= 0) {
 
       return Optional.empty();
     }
@@ -252,22 +251,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var nextWeekDaysFormatted =
         formatInterval(model.getNextWeekStart(), model.getNextWeekEnd());
     final var paragraph = new Paragraph();
-    paragraph.add(
-        new Chunk(
-            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY),
-            new Font(REPORT_FONT, 10, BOLD)));
-    paragraph.add(
-        new Chunk(
-            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY),
-            new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
-    paragraph.add(
-        new Chunk(
-            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY),
-            new Font(REPORT_FONT, 10, BOLD)));
-    paragraph.add(
-        new Chunk(
-            formatAmountWithCurrency(model.getTotalPaymentAmount(), model.getLanguage()),
-            new Font(REPORT_FONT, 10, BOLD, REPORT_RED_COLOR)));
+
     paragraph.add(
         new Chunk(
             " \n \n " + getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_4_LABEL_KEY),
@@ -306,6 +290,36 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     row.addCell(cell);
 
     return Optional.of(row);
+  }
+
+  PdfPTable getPaymentStatus(final WeeklyReportPdfModel model) {
+    final var language = model.getLanguage();
+    final var row = getQpdfTable(1);
+    final var paragraph = new Paragraph();
+    paragraph.add(
+        new Chunk(
+            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_1_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD)));
+    paragraph.add(
+        new Chunk(
+            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_2_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD, REPORT_PURPLE_COLOR)));
+    paragraph.add(
+        new Chunk(
+            getLabelFromCommon(language, OBLIGATION_MONDAY_TEXT_PART_3_LABEL_KEY),
+            new Font(REPORT_FONT, 10, BOLD)));
+    final var amountColor =
+        model.getTotalPaymentAmount().compareTo(ZERO) < 0 ? REPORT_RED_COLOR : REPORT_GREEN_COLOR;
+    paragraph.add(
+        new Chunk(
+            formatAmountWithCurrency(model.getTotalPaymentAmount(), model.getLanguage()),
+            new Font(REPORT_FONT, 10, BOLD, amountColor)));
+    final var cell = getQpdfPCell(paragraph);
+    cell.setHorizontalAlignment(ALIGN_CENTER);
+    cell.setVerticalAlignment(ALIGN_BOTTOM);
+    row.addCell(cell);
+
+    return row;
   }
 
   PdfPTable getRentAdjustmentClarificationTable(final WeeklyReportPdfModel model) {
@@ -497,11 +511,11 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     final var feeValueCell = getClarificationTableValueCell(feeAmount, language);
     addRowIfValueIsNonZero(feeAmount, feeLabelCell, feeValueCell, table);
     final var depositAmount =
-            model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, ZERO);
+        model.getTransactionTypesVsAmount().getOrDefault(TRANSACTION_TYPE_DEPOSIT_CODE, ZERO);
     final var depositLabelCell =
-            getClarificationTableLabelCell(
-                    getLabelFromCommon(language, DEPOSIT_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
-    final var depositValueCell = getClarificationTableValueCell(feeAmount, language);
+        getClarificationTableLabelCell(
+            getLabelFromCommon(language, DEPOSIT_LABEL_KEY), REPORT_DARK_BLUE_COLOR);
+    final var depositValueCell = getClarificationTableValueCell(depositAmount, language);
     addRowIfValueIsNonZero(depositAmount, depositLabelCell, depositValueCell, table);
 
     table.addCell(getEmptyRow());
@@ -509,7 +523,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
     return table;
   }
 
-  PdfPTable getDemandOnTheBeginningOfWeek(final WeeklyReportPdfModel model) {
+  PdfPTable getPivotalSummary(final WeeklyReportPdfModel model) {
     final var language = model.getLanguage();
     final var table = getClarificationTable();
     final var headerPhrase = new com.lowagie.text.Phrase();
@@ -540,12 +554,16 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
       table.addCell(
           getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
     } else {
+      final var overpaymentOrDebtLabel =
+          model.getBalanceAmountAtCalculationMoment().compareTo(ZERO) >= 0
+              ? DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY
+              : DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY;
+
       table.addCell(
-              getClarificationTableLabelCell(
-                      getLabelFromCommon(language, DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY),
-                      REPORT_DARK_BLUE_COLOR));
+          getClarificationTableLabelCell(
+              getLabelFromCommon(language, overpaymentOrDebtLabel), REPORT_DARK_BLUE_COLOR));
       table.addCell(
-              getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
+          getClarificationTableValueCell(model.getBalanceAmountAtCalculationMoment(), language));
     }
 
     model

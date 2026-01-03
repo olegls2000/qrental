@@ -48,5 +48,6 @@ public class WeeklyReportPdfModel {
   private final LocalDate nextWeekStart;
   private final LocalDate nextWeekEnd;
   private final BigDecimal totalPaymentAmount;
+  private final BigDecimal totalPaymentAmountRaw;
   private final String comment;
 }

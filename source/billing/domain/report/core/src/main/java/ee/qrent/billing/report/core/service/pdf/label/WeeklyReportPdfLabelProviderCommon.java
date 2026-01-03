@@ -28,11 +28,16 @@ public class WeeklyReportPdfLabelProviderCommon {
   public static String OBLIGATION_TEXT_PART_3_LABEL_KEY = "OBLIGATION_TEXT_PART_3_LABEL_KEY";
   public static String OBLIGATION_TEXT_PART_4_LABEL_KEY = "OBLIGATION_TEXT_PART_4_LABEL_KEY";
   public static String OBLIGATION_TEXT_PART_5_LABEL_KEY = "OBLIGATION_TEXT_PART_5_LABEL_KEY";
+  public static String OBLIGATION_TEXT_PART_5_1_LABEL_KEY = "OBLIGATION_TEXT_PART_5_1_LABEL_KEY";
   public static String OBLIGATION_TEXT_PART_6_LABEL_KEY = "OBLIGATION_TEXT_PART_6_LABEL_KEY";
   public static String THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY =
       "THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY";
+  public static String THURSDAY_BALANCE_TEXT_PART_1_OVERPAYMENT_LABEL_KEY =
+      "THURSDAY_BALANCE_TEXT_PART_1_OVERPAYMENT_LABEL_KEY";
   public static String THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY =
       "THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY";
+  public static String FRIDAY_THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY =
+      "FRIDAY_THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY";
   public static String THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY =
       "THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY";
   public static String BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY =
@@ -105,6 +110,8 @@ public class WeeklyReportPdfLabelProviderCommon {
   public static String DEMAND_FEE_LABEL_KEY = "DEMAND_FEE_LABEL_KEY";
   public static String DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY =
       "DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY";
+  public static String DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY =
+      "DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY";
   public static String REPAIRMENT_1_LABEL_KEY = "REPAIRMENT_1_LABEL_KEY";
   public static String REPAIRMENT_2_LABEL_KEY = "REPAIRMENT_2_LABEL_KEY";
   public static String TOTAL_PAYMENT_LABEL_KEY = "TOTAL_PAYMENT_LABEL_KEY";
@@ -144,9 +151,13 @@ public class WeeklyReportPdfLabelProviderCommon {
                 OBLIGATION_TEXT_PART_6_LABEL_KEY, "\n своевременно и в полном объеме."),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "Твоя недоплата"),
+            new AbstractMap.SimpleEntry<>(
+                THURSDAY_BALANCE_TEXT_PART_1_OVERPAYMENT_LABEL_KEY, "Твоя переплата"),
             new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "на конец"),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "четверга прошлой недели:"),
+            new AbstractMap.SimpleEntry<>(
+                FRIDAY_THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "четверга текущей недели:"),
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "В знак нашей благодарности"),
             new AbstractMap.SimpleEntry<>(
@@ -221,6 +232,9 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг (без учета ремонтов)"),
+            new AbstractMap.SimpleEntry<>(
+                DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
+                "Общая предоплата (без учета ремонтов)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Ремонт/Сумма франшизы"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "дата происшествия"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Итого к оплате"));
@@ -247,12 +261,18 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_5_LABEL_KEY, "for the previous week"),
             new AbstractMap.SimpleEntry<>(
+                OBLIGATION_TEXT_PART_5_1_LABEL_KEY, "for the current week"),
+            new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_6_LABEL_KEY, "\n in a timely and complete manner."),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "Your underpayment"),
+            new AbstractMap.SimpleEntry<>(
+                THURSDAY_BALANCE_TEXT_PART_1_OVERPAYMENT_LABEL_KEY, "Your overpayment"),
             new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "as of the"),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "end of Thursday last week was:"),
+            new AbstractMap.SimpleEntry<>(
+                FRIDAY_THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "end of Thursday current week was:"),
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "As a token of our appreciation,"),
             new AbstractMap.SimpleEntry<>(
@@ -327,6 +347,9 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt (excluding repairs)"),
+            new AbstractMap.SimpleEntry<>(
+                DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
+                "Total overpayment (excluding repairs)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Repair / Franchise amount"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "date of incident"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Total to pay"));
@@ -350,12 +373,19 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_4_LABEL_KEY, "kohustused"),
             new AbstractMap.SimpleEntry<>(OBLIGATION_TEXT_PART_5_LABEL_KEY, "eelmise nädala eest"),
             new AbstractMap.SimpleEntry<>(
+                OBLIGATION_TEXT_PART_5_1_LABEL_KEY, "eelmise nädala eest"),
+            new AbstractMap.SimpleEntry<>(
                 OBLIGATION_TEXT_PART_6_LABEL_KEY, "õigeaegselt ja täies mahus."),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_1_DEBT_LABEL_KEY, "Sinu alamakstud summa eelmise"),
+            new AbstractMap.SimpleEntry<>(
+                THURSDAY_BALANCE_TEXT_PART_1_OVERPAYMENT_LABEL_KEY,
+                "Sinu ülemakstud summa eelmise"),
             new AbstractMap.SimpleEntry<>(THURSDAY_BALANCE_TEXT_PART_2_LABEL_KEY, "nädala"),
             new AbstractMap.SimpleEntry<>(
                 THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "neljapäeva lõpu seisuga on"),
+            new AbstractMap.SimpleEntry<>(
+                FRIDAY_THURSDAY_BALANCE_TEXT_PART_3_LABEL_KEY, "neljapäeva lõpu käesoleva on"),
             new AbstractMap.SimpleEntry<>(BONUS_PROGRAM_ACTIVE_TEXT_PART_1_LABEL_KEY, "Tänutäheks"),
             new AbstractMap.SimpleEntry<>(
                 BONUS_PROGRAM_ACTIVE_TEXT_PART_2_LABEL_KEY, "oleme käesoleval"),
@@ -428,6 +458,9 @@ public class WeeklyReportPdfLabelProviderCommon {
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Viivised"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg (ilma remondikuludeta)"),
+            new AbstractMap.SimpleEntry<>(
+                DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
+                "Kogu ettemaks (ilma remondikuludeta)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Remont / Frantsiisisumma"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "juhtumi kuupäev"),
             new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Kokku maksmiseks"));

@@ -39,6 +39,7 @@ public class WeeklyReportPdfConversionStrategyWednesday
     weeklyReportPdfDoc.add(getPreviousWeekObligationStatusText(model));
     gePreviousThursdayUnderpaymentInfoText(model).ifPresent(weeklyReportPdfDoc::add);
     weeklyReportPdfDoc.add(getBonusStatusText(model));
+    weeklyReportPdfDoc.add(getPaymentStatus(model));
     getObligationOutcomeAboutCurrentWeekTable(model).ifPresent(weeklyReportPdfDoc::add);
     weeklyReportPdfDoc.add(
         getClarificationHeaderRowColored(
@@ -46,7 +47,7 @@ public class WeeklyReportPdfConversionStrategyWednesday
     weeklyReportPdfDoc.add(getRentClarificationTable(model));
     weeklyReportPdfDoc.add(getRentAdjustmentClarificationTable(model));
     weeklyReportPdfDoc.add(getOtherPaymentClarificationTable(model));
-    weeklyReportPdfDoc.add(getDemandOnTheBeginningOfWeek(model));
+    weeklyReportPdfDoc.add(getPivotalSummary(model));
     weeklyReportPdfDoc.add(getTotalBlock(model));
     weeklyReportPdfDoc.add(getCommentRowTable(language));
     weeklyReportPdfDoc.add(getPredictionHeaderRow(language));

@@ -11,6 +11,7 @@ import ee.qrent.billing.report.api.in.response.WeeklyReportCalculationResponse;
 import ee.qrent.billing.report.api.out.WeeklyReportCalculationLoadPort;
 import ee.qrent.billing.report.core.mapper.WeeklyReportCalculationResponseMapper;
 
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +25,10 @@ public class WeeklyReportCalculationQueryService implements GetWeeklyReportCalcu
 
   @Override
   public List<WeeklyReportCalculationResponse> getAll() {
-    return loadPort.loadAll().stream().map(mapper::toResponse).collect(toList());
+
+    return loadPort.loadAll().stream().map(mapper::toResponse)
+            .sorted(getActionDateComparator())
+            .collect(toList());
   }
 
   @Override
@@ -62,5 +66,14 @@ public class WeeklyReportCalculationQueryService implements GetWeeklyReportCalcu
       return qWeekQuery.getFirstWeek();
     }
     return qWeekQuery.getById(lastCalculatedQWeekId);
+  }
+
+  private Comparator<WeeklyReportCalculationResponse> getActionDateComparator() {
+    return (report1, report2) -> {
+      final var actionDate1 = report1.getActionDate();
+      final var actionDate2 = report2.getActionDate();
+
+      return actionDate2.compareTo(actionDate1);
+    };
   }
 }
