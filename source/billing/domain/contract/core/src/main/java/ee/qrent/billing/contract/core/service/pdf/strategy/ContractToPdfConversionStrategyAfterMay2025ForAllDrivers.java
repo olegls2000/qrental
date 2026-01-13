@@ -25,7 +25,8 @@ public class ContractToPdfConversionStrategyAfterMay2025ForAllDrivers
   @Override
   public boolean canApply(final ContractPdfModel model) {
 
-    return isContractAfterNewContractDate(model) && !isDriverNew(model);
+    return isContractBetweenNewContractDateAndNew1ContractDate(model)
+            && !isDriverNew(model);
   }
 
   @SneakyThrows

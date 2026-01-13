@@ -28,7 +28,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
   @Override
   public boolean canApply(final ContractPdfModel model) {
 
-    return isContractAfterNewContractDate(model)
+    return isContractBetweenNewContractDateAndNew1ContractDate(model)
         && isDriverNew(model)
         && isContractFor12Weeks(model);
   }
@@ -482,7 +482,7 @@ public class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers
     pdfDocument.add(chapter5);
 
     //////// Star New Driver
-
+    pdfDocument.newPage();
     final var chapter16 = getChapterTable();
     chapter16.addCell(getChapterSummary("\n\n\n\n\n\n\n\nLisa"));
     final var contractNumber = model.getNumber();

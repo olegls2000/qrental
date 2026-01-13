@@ -18,6 +18,7 @@ public class ContractResponse {
   private String renterRegistrationNumber;
   private String renterAddress;
   private String renterSignerName;
+  private String renterLegalEntityType;
   private Long renterSignerTaxNumber;
   private String renterPhone;
   private String renterEmail;

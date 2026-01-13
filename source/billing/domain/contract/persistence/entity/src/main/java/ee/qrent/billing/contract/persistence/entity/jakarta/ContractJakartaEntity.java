@@ -44,6 +44,9 @@ public class ContractJakartaEntity {
   @Column(name = "renter_signer_name")
   private String renterSignerName;
 
+  @Column(name = "renter_legal_entity_type")
+  private String renterLegalEntityType;
+
   @Column(name = "renter_signer_tax_number")
   private Long renterSignerTaxNumber;
 

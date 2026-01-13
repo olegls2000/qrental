@@ -8,10 +8,7 @@ import ee.qrent.billing.contract.core.mapper.ContractResponseMapper;
 import ee.qrent.billing.contract.core.mapper.ContractUpdateRequestMapper;
 import ee.qrent.billing.contract.core.service.*;
 import ee.qrent.billing.contract.core.service.pdf.*;
-import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategy;
-import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers;
-import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyAfterMay2025ForAllDrivers;
-import ee.qrent.billing.contract.core.service.pdf.strategy.ContractToPdfConversionStrategyBeforeMay2025;
+import ee.qrent.billing.contract.core.service.pdf.strategy.*;
 import ee.qrent.common.in.time.QDateTime;
 import ee.qrent.common.in.validation.AddRequestValidator;
 import ee.qrent.common.in.validation.CloseRequestValidator;
@@ -100,11 +97,16 @@ public class ContractServiceConfig {
   @Bean
   List<ContractToPdfConversionStrategy> getContractToPdfConversionStrategies(
       final ContractLoadPort loadPort) {
-
     return asList(
         new ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDrivers(loadPort),
         new ContractToPdfConversionStrategyAfterMay2025ForAllDrivers(loadPort),
-        new ContractToPdfConversionStrategyBeforeMay2025(loadPort));
+        new ContractToPdfConversionStrategyBeforeMay2025(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForOuFor12Weeks(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForOuFor6And4Weeks(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForLhvFor12Weeks(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForLhvFor6And4Weeks(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForFieFor12Weeks(loadPort),
+        new ContractToPdfConversionStrategyAfter11January2026ForFieFor6And4Weeks(loadPort));
   }
 
   @Bean

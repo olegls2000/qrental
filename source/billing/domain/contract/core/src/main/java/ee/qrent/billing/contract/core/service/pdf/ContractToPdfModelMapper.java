@@ -17,6 +17,7 @@ public class ContractToPdfModelMapper {
         .duration(contract.getContractDuration().name())
         .duration1(duration1)
         .renter(contract.getRenter())
+        .renterEntityType(contract.getRenterLegalEntityType())
         .renterLhvAccount(contract.getRenterLhvAccount())
         .renterRegistrationNumber(contract.getRenterRegistrationNumber())
         .renterAddress(contract.getRenterAddress())

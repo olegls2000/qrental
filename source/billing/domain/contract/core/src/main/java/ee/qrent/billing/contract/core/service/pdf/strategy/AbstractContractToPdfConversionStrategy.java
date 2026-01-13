@@ -23,6 +23,8 @@ public abstract class AbstractContractToPdfConversionStrategy
     implements ContractToPdfConversionStrategy {
   protected static final LocalDate NEW_CONTRACTS_START_DATE = LocalDate.of(2025, Month.APRIL, 28);
 
+  protected static final LocalDate NEW1_CONTRACTS_START_DATE = LocalDate.of(2026, Month.JANUARY, 11);
+
   private final ContractLoadPort loadPort;
 
   protected Document getDocument() {
@@ -72,26 +74,64 @@ public abstract class AbstractContractToPdfConversionStrategy
     return model.getCreated().isBefore(NEW_CONTRACTS_START_DATE);
   }
 
-  protected boolean isContractAfterNewContractDate(final ContractPdfModel model) {
+  protected boolean isContractBetweenNewContractDateAndNew1ContractDate(
+      final ContractPdfModel model) {
     final var dateStart = model.getDateStart();
 
-    return dateStart.isAfter(NEW_CONTRACTS_START_DATE)
+    return (dateStart.isAfter(NEW_CONTRACTS_START_DATE)
+            && dateStart.isBefore(NEW1_CONTRACTS_START_DATE))
         || dateStart.isEqual(NEW_CONTRACTS_START_DATE);
+  }
+
+  protected boolean isContractAfterNew1ContractDateForCompany(final ContractPdfModel model) {
+    final var dateStart = model.getDateStart();
+    if (model.getRenterEntityType().equals("COMPANY")) {
+
+      return dateStart.isAfter(NEW1_CONTRACTS_START_DATE)
+          || dateStart.isEqual(NEW1_CONTRACTS_START_DATE);
+    }
+    return false;
+  }
+
+  protected boolean isContractAfterNew1ContractDateAndLhv(final ContractPdfModel model) {
+    final var dateStart = model.getDateStart();
+    if (model.getRenterEntityType().equals("LHV_ACCOUNT")) {
+
+      return dateStart.isAfter(NEW1_CONTRACTS_START_DATE)
+          || dateStart.isEqual(NEW1_CONTRACTS_START_DATE);
+    }
+    return false;
+  }
+
+  protected boolean isContractAfterNew1ContractDateAndFie(final ContractPdfModel model) {
+    final var dateStart = model.getDateStart();
+    if (model.getRenterEntityType().equals("SELF_EMPLOYED")) {
+
+      return dateStart.isAfter(NEW1_CONTRACTS_START_DATE)
+          || dateStart.isEqual(NEW1_CONTRACTS_START_DATE);
+    }
+    return false;
   }
 
   protected boolean isDriverNew(final ContractPdfModel model) {
     final var driverId = model.getDriverId();
     final var driversContracts = loadPort.loadAllByDriverId(driverId);
     if (driversContracts.size() > 1) {
-
       return false;
     }
-
     return true;
   }
 
   protected boolean isContractFor12Weeks(final ContractPdfModel model) {
     return model.getDuration().equals("TWELVE_WEEKS");
+  }
+
+  protected boolean isContractFor6Weeks(final ContractPdfModel model) {
+    return model.getDuration().equals("SIX_WEEKS");
+  }
+
+  protected boolean isContractFor4Weeks(final ContractPdfModel model) {
+    return model.getDuration().equals("FOUR_WEEKS");
   }
 
   protected void addLhvChapterIfNecessary(
@@ -166,7 +206,7 @@ public abstract class AbstractContractToPdfConversionStrategy
     header.addCell(headlineCell);
 
     final var dateCell =
-        new Cell(new Paragraph("Data : " + model.getCreated(), new Font(TIMES_ROMAN, 10, BOLD)));
+        new Cell(new Paragraph("Kuupäev : " + model.getCreated(), new Font(TIMES_ROMAN, 10, BOLD)));
     dateCell.setBorder(NO_BORDER);
     dateCell.setHorizontalAlignment(CENTER);
     header.addCell(dateCell);
@@ -184,7 +224,7 @@ public abstract class AbstractContractToPdfConversionStrategy
     renterTable.setBorder(NO_BORDER);
 
     final var labelValue = "RENDILEANDJA ANDMED:";
-    renterTable.addCell(getQCell(labelValue));
+    renterTable.addCell(getQCellBold(labelValue));
     final var qFirmNameValue = model.getQFirmName();
     renterTable.addCell(getQCell(qFirmNameValue));
     final var hereinafterLabel = "edaspidi Rendileandja.";
@@ -224,8 +264,23 @@ public abstract class AbstractContractToPdfConversionStrategy
     final var tenantRegNumberValue =
         "Rentniku reg. nr. või isikukood: " + getTextOrEmpty(model.getRenterRegistrationNumber());
     tenantTable.addCell(getQCell(tenantRegNumberValue));
+    final var tenantBankValue = "Rentniku pank: " + getTextOrEmpty(model.getRenterBank());
+    tenantTable.addCell(getQCell(tenantBankValue));
+    final var tenantIbanValue = "Rentniku pangakonto nr.: " + getTextOrEmpty(model.getRenterIban());
+    tenantTable.addCell(getQCell(tenantIbanValue));
     final var tenantAddressValue = "Rentniku aadress: " + getTextOrEmpty(model.getRenterAddress());
     tenantTable.addCell(getQCell(tenantAddressValue));
+
+    final var tenantNameSurnameIkValue =
+            "Käendaja: "
+                    + getTextOrEmpty(model.getRenterSignerName())
+                    + ", "
+                    + getTextOrEmpty(String.valueOf(model.getRenterSignerTaxNumber()));
+    tenantTable.addCell(getQCell(tenantNameSurnameIkValue));
+    final var tenantStatus = "Käendaja staatus: Rentniku juhatuse liige";
+    tenantTable.addCell(getQCell(tenantStatus));
+
+
     final var tenantCeoNameValue =
         "Rentniku seadusliku või volitatud esindaja nimi:  "
             + getTextOrEmpty(model.getRenterSignerName());
@@ -252,6 +307,18 @@ public abstract class AbstractContractToPdfConversionStrategy
     tenantTable.addCell(getQCell(tenantEmailValue));
 
     return tenantTable;
+  }
+
+  protected static Table getGuaranteeTable(final ContractPdfModel model) {
+    final var guaranteeTable = new Table(1);
+    guaranteeTable.setPadding(0f);
+    guaranteeTable.setSpacing(0f);
+    guaranteeTable.setWidth(100f);
+    guaranteeTable.setBorderColor(white);
+    guaranteeTable.setHorizontalAlignment(LEFT);
+    guaranteeTable.setBorder(NO_BORDER);
+
+    return guaranteeTable;
   }
 
   protected static Table getChapterTable() {

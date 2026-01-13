@@ -43,4 +43,7 @@ public class Contract {
   private LocalDate created;
   private LocalDate dateStart;
   private LocalDate dateEnd;
+  private String renterBank;
+  private String renterIban;
+  private String renterLegalEntityType;
 }

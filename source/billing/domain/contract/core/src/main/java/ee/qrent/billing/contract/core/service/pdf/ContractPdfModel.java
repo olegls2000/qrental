@@ -37,4 +37,7 @@ public class ContractPdfModel {
   private String carModel;
   private LocalDate created;
   private LocalDate dateStart;
+  private String renterBank;
+  private String renterIban;
+  private String renterEntityType;
 }

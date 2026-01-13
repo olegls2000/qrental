@@ -26,6 +26,7 @@ public class ContractResponseMapper implements ResponseMapper<ContractResponse, 
         .renterRegistrationNumber(domain.getRenterRegistrationNumber())
         .renterAddress(domain.getRenterAddress())
         .renterSignerName(domain.getRenterSignerName())
+        .renterLegalEntityType(domain.getRenterLegalEntityType())
         .renterSignerTaxNumber(domain.getRenterSignerTaxNumber())
         .renterPhone(domain.getRenterPhone())
         .renterEmail(domain.getRenterEmail())

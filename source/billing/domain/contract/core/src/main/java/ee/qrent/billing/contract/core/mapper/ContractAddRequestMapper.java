@@ -36,6 +36,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
         .number(contractNumber)
         .renter(getRenter(driver))
         .renterLhvAccount(driver.getLhvAccount())
+        .renterLegalEntityType(driver.getLegalEntityType())
         .renterRegistrationNumber(getRenterRegistrationNumber(driver))
         .renterSignerName(getRenterSignerName(driver))
         .renterSignerTaxNumber(getRenterSignerTaxNumber(driver))
@@ -125,7 +126,7 @@ public class ContractAddRequestMapper implements AddRequestMapper<ContractAddReq
   private String getRenterAddress(final DriverResponse driver) {
     final var legalEntity = driver.getLegalEntityType();
     return switch (legalEntity) {
-      case "PERSON", "LHV_ACCOUNT"  -> driver.getAddress();
+      case "PERSON", "LHV_ACCOUNT" -> driver.getAddress();
       case "COMPANY", "SELF_EMPLOYED" -> driver.getCompanyAddress();
       default -> throw new RuntimeException(format("Unknown legal entity type: %s", legalEntity));
     };

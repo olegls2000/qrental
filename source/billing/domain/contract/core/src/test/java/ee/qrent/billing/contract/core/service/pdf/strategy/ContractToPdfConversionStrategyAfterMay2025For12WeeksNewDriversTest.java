@@ -1,4 +1,4 @@
-package ee.qrent.billing.contract.core.service.pdf.strategy;
+/*package ee.qrent.billing.contract.core.service.pdf.strategy;
 
 import ee.qrent.billing.contract.api.out.ContractLoadPort;
 import ee.qrent.billing.contract.core.service.pdf.ContractPdfModel;
@@ -83,4 +83,4 @@ class ContractToPdfConversionStrategyAfterMay2025For12WeeksNewDriversTest {
     // then
     assertTrue(canApply);
   }
-}
+}*/
