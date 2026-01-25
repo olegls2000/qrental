@@ -64,6 +64,7 @@ public class DriverAdapterMapper {
         .qFirmId(entity.getQFirmId())
         .boltDriverIdentifier(entity.getBoltDriverIdentifier())
         .boltIndividualIdentifier(entity.getBoltId())
+        .parkConnection(entity.getParkConnection())
         .build();
   }
 

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <div th:replace="fragments/navigationFragment.html :: qrental-navigation"></div>
+<ul th:replace="fragments/homeTabFragment.html :: homeTabs('carOnHomePage')"></ul>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/carOnHomePageFragment.html :: carOnHomePage})"></div>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/driverPotentialPageFragment.html :: driverPotentialPage})"></div>
 <div th:replace="fragments/basePageFragment.html :: qrentalPage(~{fragments/driverOnHomePageFragment.html :: driverOnHomePage})"></div>

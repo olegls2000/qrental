@@ -724,6 +724,7 @@ abstract class AbstractWeeklyReportPdfConversionStrategy
 
   PdfPTable getTotalBlock(final WeeklyReportPdfModel model) {
     final var table = getQpdfTable(2);
+    table.setWidths(new int[] {70, 30});
     final var language = model.getLanguage();
     final var labelCell =
         getQpdfPCell(

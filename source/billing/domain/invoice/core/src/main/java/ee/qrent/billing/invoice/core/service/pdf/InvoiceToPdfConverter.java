@@ -184,7 +184,7 @@ public class InvoiceToPdfConverter {
         table.setBorderColor(Color.DARK_GRAY);
         table.setBorderWidth(1f);
         table.addCell(getItemTablHeaderCell("Selgitus"));
-        table.addCell(getItemTablHeaderCell("Summa"));
+        table.addCell(getItemTablHeaderCell("Summa koos km-ga"));
         items.entrySet().forEach(item -> addRow(item, table));
 
         return table;

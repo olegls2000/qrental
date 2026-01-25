@@ -11,6 +11,10 @@ import java.util.Map;
 public interface GetCarQuery extends BaseGetQuery<CarUpdateRequest, CarResponse> {
   List<CarResponse> getAvailableCars();
 
+ /* List<CarResponse> getFreeCars();
+
+  List<CarResponse> getCarsNoInsurance();
+*/
   List<CarResponse> getAllByFilter(final CarFilter filterRequest);
 
   Map<String, String> getAllStatuses();

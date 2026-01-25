@@ -133,6 +133,9 @@ public class DriverJakartaEntity {
   @Column(name = "bolt_id")
   private String boltId;
 
+  @Column(name = "park_connection")
+  private Boolean parkConnection;
+
   @OneToMany(mappedBy = "driver")
   private List<CallSignLinkJakartaEntity> callSignLinks;
 }

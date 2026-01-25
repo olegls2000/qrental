@@ -53,6 +53,7 @@ public class DriverAddRequestMapper implements AddRequestMapper<DriverAddRequest
         .callSign(getCallSign(request))
         .boltDriverIdentifier(request.getBoltDriverIdentifier())
         .boltIndividualIdentifier(request.getBoltIndividualIdentifier())
+        .parkConnection(request.getParkConnection())
         .build();
   }
 

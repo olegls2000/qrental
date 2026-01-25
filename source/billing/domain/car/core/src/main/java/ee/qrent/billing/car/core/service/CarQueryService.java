@@ -39,6 +39,23 @@ public class CarQueryService implements GetCarQuery {
         .collect(toList());
   }
 
+  /*@Override
+  public List<CarResponse> getFreeCars() {
+    return loadPort.loadAll().stream()
+            .map(mapper::toResponse)
+            .sorted(DEFAULT_COMPARATOR)
+            .collect(toList());
+  }
+
+  @Override
+  public List<CarResponse> getCarsNoInsurance() {
+    return loadPort.loadAll().stream()
+            .map(mapper::toResponse)
+            .sorted(DEFAULT_COMPARATOR)
+            .collect(toList());
+  }
+*/
+
   @Override
   public CarResponse getById(final Long id) {
     return mapper.toResponse(loadPort.loadById(id));

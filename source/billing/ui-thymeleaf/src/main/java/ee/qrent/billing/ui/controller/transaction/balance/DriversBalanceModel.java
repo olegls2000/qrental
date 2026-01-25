@@ -18,4 +18,5 @@ public class DriversBalanceModel {
   private BigDecimal fee;
   private BigDecimal obligationAmount;
   private Integer obligationMatchCount;
+  private Boolean parkConnection;
 }

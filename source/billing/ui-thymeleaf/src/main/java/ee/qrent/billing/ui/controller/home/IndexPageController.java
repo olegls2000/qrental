@@ -28,4 +28,25 @@ public class IndexPageController {
 
     return "index";
   }
+
+  /*@GetMapping
+  public String getCarsNoInsurance(final Model model) {
+    final var carsNoInsurance = carQuery.getCarsNoInsurance();
+    model.addAttribute("carsNoInsurance", carsNoInsurance);
+   *//*  addCarCounts(model);
+    addDateFormatter(model);*//*
+
+    return "index";
+   *//* return "carsNoInsurance";*//*
+  }
+
+  @GetMapping
+  public String getFreeCars(final Model model) {
+    final var freeCars = carQuery.getFreeCars();
+    model.addAttribute("freeCars", freeCars);
+    *//*addCarCounts(model);
+    addDateFormatter(model);*//*
+    return "index";
+  *//*  return "freeCars";*//*
+  }*/
 }

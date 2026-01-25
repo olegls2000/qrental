@@ -67,8 +67,7 @@ public class WeeklyReportToPdfModelMapper {
         totalRentAmount
             .add(totalExternalSystemsIncomeAmount)
             .add(totalOtherPaymentAmount)
-            .add(getDamagePaymentAmount(report)
-            .add(sundayOverpayment));
+            .add(getDamagePaymentAmount(report).add(sundayOverpayment));
 
     final var totalPaymentAmount =
         totalPaymentAmountRaw.compareTo(BigDecimal.ZERO) > 0
@@ -124,10 +123,12 @@ public class WeeklyReportToPdfModelMapper {
   }
 
   private BigDecimal getDistributedObligationAmount(final WeeklyReport report) {
-    final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
+    // final var totalRentAmount = getTotalRentAmount(report.getTransactionTypesVsAmount());
+     final var rentAmount = getRentAmount(report.getTransactionTypesVsAmount());
+
     final var balanceOnSunday = report.getBalanceAmountSunday();
     final var nominalDistributedObligationAmount =
-        totalRentAmount
+        rentAmount
     //        .add(getInsuranceAmount(report.getTransactionTypesVsAmount()))
             .multiply(new BigDecimal(0.25));
     if (balanceOnSunday.compareTo(BigDecimal.ZERO)
@@ -152,6 +153,14 @@ public class WeeklyReportToPdfModelMapper {
                     .build())
         .collect(Collectors.toList());
   }
+
+  private BigDecimal getRentAmount(final Map< String, BigDecimal> transactionTypesVsAmount ) {
+    final var rentAmount =
+            transactionTypesVsAmount.getOrDefault(
+                    TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE, BigDecimal.ZERO);
+    return rentAmount;
+  }
+
 
   private BigDecimal getTotalRentAmount(final Map<String, BigDecimal> transactionTypesVsAmount) {
     final var rentAmount =
@@ -195,12 +204,15 @@ public class WeeklyReportToPdfModelMapper {
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_OTHER_PLUS_CODE, BigDecimal.ZERO);
     final var paycheckPlusAmount =
         transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_PAYCHECK_PLUS_CODE, BigDecimal.ZERO);
+    final var adjustmentRentPriceAmount =
+        transactionTypesVsAmount.getOrDefault(TRANSACTION_TYPE_ADJUSTMENT_RENTAL_PRICE_CODE, BigDecimal.ZERO);
 
     return boltPlusAmount
         .add(bankPlusAmount)
         .add(cashPlusAmount)
         .add(otherPlusAmount)
-        .add(paycheckPlusAmount);
+        .add(paycheckPlusAmount)
+        .add(adjustmentRentPriceAmount);
   }
 
   private BigDecimal getTotalOtherPaymentAmount(

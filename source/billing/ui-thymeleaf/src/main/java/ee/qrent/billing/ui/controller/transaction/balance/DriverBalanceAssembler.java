@@ -53,6 +53,7 @@ public class DriverBalanceAssembler {
         .fee(fee)
         .obligationAmount(obligationAmount)
         .obligationMatchCount(obligationMatchCount)
+        .parkConnection(driver.getParkConnection())
         .build();
   }
 }

@@ -49,4 +49,5 @@ public class DriverAddRequest extends AbstractAddRequest {
   private Long callSignId;
   private Long qFirmId;
   private Long recommendedByDriverId;
+  private Boolean parkConnection;
 }

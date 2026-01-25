@@ -237,7 +237,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 "Общая предоплата (без учета ремонтов)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Ремонт/Сумма франшизы"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "дата происшествия"),
-            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Итого к оплате"));
+            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Обязательства текущей недели"));
 
     mapEng =
         Map.ofEntries(
@@ -352,7 +352,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 "Total overpayment (excluding repairs)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Repair / Franchise amount"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "date of incident"),
-            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Total to pay"));
+            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Current week obligations"));
     mapEst =
         Map.ofEntries(
             new AbstractMap.SimpleEntry<>(RENTER_LABEL_KEY, "Rentnik"),
@@ -463,7 +463,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 "Kogu ettemaks (ilma remondikuludeta)"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_1_LABEL_KEY, "Remont / Frantsiisisumma"),
             new AbstractMap.SimpleEntry<>(REPAIRMENT_2_LABEL_KEY, "juhtumi kuupäev"),
-            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Kokku maksmiseks"));
+            new AbstractMap.SimpleEntry<>(TOTAL_PAYMENT_LABEL_KEY, "Käesoleva nädala kohustused"));
     languageVsLabelsMap.put(CommunicationLanguageIn.RUS.name(), mapRus);
     languageVsLabelsMap.put(CommunicationLanguageIn.EST.name(), mapEst);
     languageVsLabelsMap.put(CommunicationLanguageIn.ENG.name(), mapEng);

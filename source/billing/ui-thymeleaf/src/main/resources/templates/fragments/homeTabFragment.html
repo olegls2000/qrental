@@ -1,0 +1,21 @@
+<ul th:fragment="homeTabs(activeTab)" class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'freeCars'} ? active : ''"
+           href="/freecars">Free Cars</a>
+    </li>
+   <!-- <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'noInsurance'} ? active : ''"
+           href="/no-insurance">No Insurance</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'obligationComleted'} ? active : ''"
+           href="/obligations/complited">Obligation Complited
+            <span class="badge rounded-pill bg-success" th:text="${counters.activeCallSignLinkCount}">???</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'obligationNotComleted'} ? active : ''"
+           href="/obligations/not-complited">Obligation Not Complited
+            <span class="badge rounded-pill bg-dark" th:text="${counters.closedCallSignLinkCount}">???</span>
+        </a>
+    </li>-->
+</ul>

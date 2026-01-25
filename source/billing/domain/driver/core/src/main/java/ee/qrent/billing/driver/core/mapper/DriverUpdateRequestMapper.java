@@ -57,6 +57,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .friendship(friendshipDomainMapper.toDomain(request))
         .boltDriverIdentifier(request.getBoltDriverIdentifier())
         .boltIndividualIdentifier(request.getBoltIndividualIdentifier())
+        .parkConnection(request.getParkConnection())
         .build();
   }
 
@@ -112,6 +113,7 @@ public class DriverUpdateRequestMapper implements UpdateRequestMapper<DriverUpda
         .requiredObligation(domain.getRequiredObligation())
         .boltDriverIdentifier(domain.getBoltDriverIdentifier())
         .boltIndividualIdentifier(domain.getBoltIndividualIdentifier())
+        .parkConnection(domain.getParkConnection())
         .comment(domain.getComment())
         .build();
   }

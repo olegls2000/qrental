@@ -52,5 +52,6 @@ public class DriverUpdateRequest extends AbstractUpdateRequest {
   private BigDecimal deposit;
   private String boltDriverIdentifier;
   private String boltIndividualIdentifier;
+  private Boolean parkConnection;
   private String comment;
 }

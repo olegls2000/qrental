@@ -49,4 +49,7 @@ public class TransactionTypeCodesConstant {
   public static final String TRANSACTION_TYPE_DEPOSIT_CODE = "DEPOSIT";
 
   public static final String TRANSACTION_TYPE_PARKING_FINE_CODE = "PRKFIN";
+
+  public static final String TRANSACTION_TYPE_ADJUSTMENT_RENTAL_PRICE_CODE = "ARENDACORRECT";
+
 }

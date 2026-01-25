@@ -51,6 +51,7 @@ public class Driver {
   private Friendship friendship;
   private String boltDriverIdentifier;
   private String boltIndividualIdentifier;
+  private Boolean parkConnection;
 
   public boolean hasRequiredObligation() {
     return requiredObligation.compareTo(ZERO) > 0;

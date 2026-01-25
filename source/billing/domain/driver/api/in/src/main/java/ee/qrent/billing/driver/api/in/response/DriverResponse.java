@@ -51,4 +51,5 @@ public class DriverResponse {
   private String boltDriverIdentifier;
   private String boltId;
   private LocalDate createdDate;
+  private Boolean parkConnection;
 }
