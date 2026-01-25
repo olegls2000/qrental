@@ -11,6 +11,7 @@ public class InvoiceResponse {
   private String number;
   private Integer weekNumber;
   private Integer year;
+  private String driverInfo;
   private String driverCompany;
   private String driverCompanyRegNumber;
   private String driverCompanyAddress;

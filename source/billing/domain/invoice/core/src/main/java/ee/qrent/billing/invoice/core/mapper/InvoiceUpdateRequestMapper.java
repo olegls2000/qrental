@@ -15,6 +15,7 @@ public class InvoiceUpdateRequestMapper
   @Override
   public Invoice toDomain(final InvoiceUpdateRequest request) {
     final var invoiceFromDb = loadPort.loadById(request.getId());
+    invoiceFromDb.setDriverInfo(request.getDriverInfo());
     invoiceFromDb.setDriverCompany(request.getDriverCompany());
     invoiceFromDb.setDriverCompanyRegNumber(request.getDriverCompanyRegNumber());
     invoiceFromDb.setDriverCompanyAddress(request.getDriverCompanyAddress());
@@ -31,6 +32,7 @@ public class InvoiceUpdateRequestMapper
   public InvoiceUpdateRequest toRequest(final Invoice domain) {
     return InvoiceUpdateRequest.builder()
         .id(domain.getId())
+        .driverInfo(domain.getDriverInfo())
         .driverCompany(domain.getDriverCompany())
         .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())
         .driverCompanyAddress(domain.getDriverCompanyAddress())

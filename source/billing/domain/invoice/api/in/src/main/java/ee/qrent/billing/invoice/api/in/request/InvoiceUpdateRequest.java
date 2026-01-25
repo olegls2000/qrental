@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class InvoiceUpdateRequest extends AbstractUpdateRequest {
 
   private Long id;
+  private String driverInfo;
   private String driverCompany;
   private String driverCompanyRegNumber;
   private String driverCompanyAddress;

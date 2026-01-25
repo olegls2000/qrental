@@ -25,6 +25,7 @@ public class InvoiceResponseMapper implements ResponseMapper<InvoiceResponse, In
         .number(domain.getNumber())
         .weekNumber(qWeek.getNumber())
         .year(qWeek.getYear())
+            .driverInfo(domain.getDriverInfo())
         .driverCompany(domain.getDriverCompany())
         .driverCompanyRegNumber(domain.getDriverCompanyRegNumber())
         .driverCompanyAddress(domain.getDriverCompanyAddress())

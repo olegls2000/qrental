@@ -8,6 +8,8 @@ import ee.qrent.billing.invoice.api.in.request.InvoiceCalculationUpdateRequest;
 import ee.qrent.billing.invoice.api.in.response.InvoiceCalculationResponse;
 import ee.qrent.billing.invoice.api.out.InvoiceCalculationLoadPort;
 import ee.qrent.billing.invoice.core.mapper.InvoiceCalculationResponseMapper;
+
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -20,8 +22,11 @@ public class InvoiceCalculationQueryService implements GetInvoiceCalculationQuer
 
   @Override
   public List<InvoiceCalculationResponse> getAll() {
-    return loadPort.loadAll().stream().map(responseMapper::toResponse).collect(toList());
+    return loadPort.loadAll().stream().map(responseMapper::toResponse)
+            .sorted(getActionDateComparator())
+            .collect(toList());
   }
+
 
   @Override
   public InvoiceCalculationResponse getById(final Long id) {
@@ -44,4 +49,15 @@ public class InvoiceCalculationQueryService implements GetInvoiceCalculationQuer
 
     return lastCalculation == null ? null : lastCalculation.getEndQWeekId();
   }
+  private Comparator<InvoiceCalculationResponse> getActionDateComparator() {
+    return (report1, report2) -> {
+      final var actionDate1 = report1.getId();
+      final var actionDate2 = report2.getId();
+
+      return actionDate2.compareTo(actionDate1);
+    };
+  }
+
+
+
 }

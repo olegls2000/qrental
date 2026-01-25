@@ -6,6 +6,8 @@ import ee.qrent.billing.invoice.adapter.mapper.InvoiceAdapterMapper;
 import ee.qrent.billing.invoice.adapter.repository.InvoiceRepository;
 import ee.qrent.billing.invoice.api.out.InvoiceLoadPort;
 import ee.qrent.billing.invoice.domain.Invoice;
+
+import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
@@ -41,6 +43,7 @@ public class InvoiceLoadAdapter implements InvoiceLoadPort {
   public List<Invoice> loadAllByCalculationId(Long calculationId) {
     return repository.findByCalculationId(calculationId).stream()
             .map(mapper::mapToDomain)
+            .sorted(Comparator.comparing(Invoice::getDriverInfo))
             .collect(toList());
   }
 }
