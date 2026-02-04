@@ -48,12 +48,23 @@ public class Car {
   private Boolean brandingTallink;
   private Boolean customRentActive;
   private BigDecimal customRentAmount;
+  private Boolean brandingControl;
+  private LocalDate brandingExpirationDate;
+  private Boolean technicalPassport;
 
   public RagStatus getInsuranceRagStatus() {
     final var daysBetween = DAYS.between(LocalDate.now(), insuranceDateEnd);
 
     return getRagStatusByDuration(daysBetween);
   }
+
+  public RagStatus getBrandingExpirationDateRagStatus() {
+    final var daysBetween = DAYS.between(LocalDate.now(), brandingExpirationDate);
+
+    return getRagStatusByDuration(daysBetween);
+  }
+
+
 
   public RagStatus getTechnicalInspectionRagStatus() {
     final var daysBetween = DAYS.between(LocalDate.now(), technicalInspectionEnd);

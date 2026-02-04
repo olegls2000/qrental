@@ -89,23 +89,23 @@ select * from billing.q_queue where processed = false;
 --## Obligation Calculations:
 
 delete
-from obligation_calculation_result ocr
+from billing.obligation_calculation_result ocr
 where ocr.obligation_calculation_id in
       (select id
-       from obligation_calculation
+       from billing.obligation_calculation
        where q_week_id in
              (select id
-              from q_week
-              where year = 2025
-                and number = 44));
+              from billing.q_week
+              where year = 2026
+                and number = 5));
 
 delete
-from obligation ob
-where ob.q_week_id in (select id from q_week where year = 2025 and number = 44);
+from billing.obligation ob
+where ob.q_week_id in (select id from billing.q_week where year = 2026 and number = 5);
 
 delete
-from obligation_calculation
-where q_week_id in (select id from q_week where year = 2025 and number = 44);
+from billing.obligation_calculation
+where q_week_id in (select id from billing.q_week where year = 2026 and number = 5);
 
 --------------------------------------------------------------------------------------------------------
 

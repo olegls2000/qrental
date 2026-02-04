@@ -42,6 +42,9 @@ public class CarAddRequestMapper implements AddRequestMapper<CarAddRequest, Car>
         .brandingTallink(request.getBrandingTallink())
         .customRentActive(request.getCustomRentActive())
         .customRentAmount(request.getCustomRentAmount())
+            .brandingControl(request.getBrandingControl())
+            .brandingExpirationDate(request.getBrandingExpirationDate())
+            .technicalPassport(request.getTechnicalPassport())
         .build();
   }
 }

@@ -43,6 +43,9 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
         .brandingTallink(request.getBrandingTallink())
         .customRentActive(request.getCustomRentActive())
         .customRentAmount(request.getCustomRentAmount())
+            .brandingControl(request.getBrandingControl())
+            .brandingExpirationDate(request.getBrandingExpirationDate())
+            .technicalPassport(request.getTechnicalPassport())
         .build();
   }
 
@@ -82,6 +85,9 @@ public class CarUpdateRequestMapper implements UpdateRequestMapper<CarUpdateRequ
         .brandingTallink(domain.getBrandingTallink())
         .customRentActive(domain.getCustomRentActive())
         .customRentAmount(domain.getCustomRentAmount())
+            .brandingControl(domain.getBrandingControl())
+            .brandingExpirationDate(domain.getBrandingExpirationDate())
+            .technicalPassport(domain.getTechnicalPassport())
         .build();
   }
 }

@@ -231,7 +231,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Сводная выписка (общая информация)"),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Пени"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг (без учета ремонтов)"),
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Общий долг + обязательства текущей недели (без учета ремонтов)"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
                 "Общая предоплата (без учета ремонтов)"),
@@ -346,7 +346,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Summary statement (general information)"),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Fees"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt (excluding repairs)"),
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Total debt + current week obligations (excluding repairs)"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
                 "Total overpayment (excluding repairs)"),
@@ -457,7 +457,7 @@ public class WeeklyReportPdfLabelProviderCommon {
                 DEMAND_ON_BEGINNING_OF_WEEK_LABEL_KEY, "Koondväljavõte (üldine teave)"),
             new AbstractMap.SimpleEntry<>(DEMAND_FEE_LABEL_KEY, "Viivised"),
             new AbstractMap.SimpleEntry<>(
-                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg (ilma remondikuludeta)"),
+                DEMAND_DEBT_WITHOUT_REPAIRMENT_LABEL_KEY, "Koguvõlg + käesoleva nädala kohustused (ilma remondikuludeta)"),
             new AbstractMap.SimpleEntry<>(
                 DEMAND_OVERPAYMENT_WITHOUT_REPAIRMENT_LABEL_KEY,
                 "Kogu ettemaks (ilma remondikuludeta)"),

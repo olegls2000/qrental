@@ -179,6 +179,28 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-4">
+            <div class="mb-3 mt-4">
+                <input class="form-check-input" id="brandingControlId"
+                       th:field="*{brandingControl}"
+                       type="checkbox"/>
+                <label class="form-label text-muted" for="brandingControlId">Branding control</label>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="brandingExpirationDateId">Expiration Date </label>
+                <input class="form-control" id="brandingExpirationDateId" placeholder="Enter date Install Lpg"
+                       th:field="*{brandingExpirationDate}"
+                       type="date"/>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <p class="fs-5">LPG info:</p>
     <div class="row">
         <div class="col-2">
@@ -239,7 +261,7 @@
     </div>
     <p class="fs-5">Car equipments:</p>
     <div class="row">
-        <div class="col">
+        <div class="col-2">
             <div class="mb-3">
                 <input class="form-check-input" id="sCardId"
                        th:field="*{sCard}"
@@ -247,7 +269,7 @@
                 <label class="form-label text-muted" for="sCardId">S-Card</label>
             </div>
         </div>
-        <div class="col">
+        <div class="col-2">
             <div class="mb-3">
                 <input class="form-check-input" id="key2Id"
                        th:field="*{key2}"
@@ -256,7 +278,7 @@
             </div>
         </div>
 
-        <div class="col">
+        <div class="col-2">
             <div class="mb-3">
                 <input class="form-check-input" id="gpsId"
                        th:field="*{gps}"
@@ -264,6 +286,17 @@
                 <label class="form-label text-muted" for="gpsId">GPS</label>
             </div>
         </div>
+
+        <div class="col-6">
+            <div class="mb-3">
+                <input class="form-check-input" id="technicalPassportId"
+                       th:field="*{technicalPassport}"
+                       type="checkbox"/>
+                <label class="form-label text-muted" for="technicalPassportId">Technical Passport</label>
+            </div>
+        </div>
+
+
     </div>
     <p class="fs-5">Car inspections:</p>
     <div class="row">

@@ -119,4 +119,14 @@ public class CarJakartaEntity {
 
   @Column(name = "custom_rent_amount")
   private BigDecimal customRentAmount;
+
+  @Column (name = "branding_expiration_date")
+  private LocalDate brandingExpirationDate;
+
+  @Column (name = "technical_passport")
+  private Boolean technicalPassport;
+
+  @Column (name = "branding_control")
+  private Boolean brandingControl;
+
 }

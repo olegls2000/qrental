@@ -86,13 +86,13 @@ public class ObligationCalculator {
 
       return overpayment.abs();
     }
-    final var extraAmount = automaticObligationAmount.multiply(DEBT_RATE);
+    final var extraAmount = (automaticObligationAmount.subtract(innerRoadInsuranceAmount)).multiply(DEBT_RATE);
     if (sundayRawBalanceAmount.abs().compareTo(extraAmount) >= 0) {
 
-      return automaticObligationAmount.add(extraAmount).add(innerRoadInsuranceAmount);
+      return automaticObligationAmount.add(extraAmount);
     }
 
-    return automaticObligationAmount.add(sundayRawBalanceAmount).add(innerRoadInsuranceAmount);
+    return automaticObligationAmount.add(sundayRawBalanceAmount);
   }
 
   private Integer getMatchCount(
@@ -167,7 +167,9 @@ public class ObligationCalculator {
             .typeCodes(
                 Stream.of(
                         TRANSACTION_TYPE_NAME_WEEKLY_RENT_CODE,
-                        TRANSACTION_TYPE_NO_LABEL_FINE_CODE)
+                        TRANSACTION_TYPE_NO_LABEL_FINE_CODE,
+                                TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_CODE,
+                                TRANSACTION_TYPE_INNER_ADDITIONAL_INSURANCE_MANUAL_CODE)
                     .collect(Collectors.toSet()))
             .build();
 

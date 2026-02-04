@@ -109,6 +109,7 @@ public class DriverAdapterMapper {
         .createdDate(domain.getCreatedDate())
         .boltDriverIdentifier(domain.getBoltDriverIdentifier())
         .boltId(domain.getBoltIndividualIdentifier())
+        .parkConnection(domain.getParkConnection())
         .build();
   }
 

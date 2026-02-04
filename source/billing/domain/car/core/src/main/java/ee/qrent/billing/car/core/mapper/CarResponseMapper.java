@@ -58,6 +58,9 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
         .warrantyMonths(warrantyService.getWarrantyMonths(domain))
             .customRentActive(domain.getCustomRentActive())
             .customRentAmount(domain.getCustomRentAmount())
+            .brandingControl(domain.getBrandingControl())
+            .brandingExpirationDate(domain.getBrandingExpirationDate())
+            .technicalPassport(domain.getTechnicalPassport())
         .build();
   }
 

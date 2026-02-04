@@ -49,4 +49,7 @@ public class CarResponse {
   private Long warrantyMonths;
   private Boolean customRentActive;
   private BigDecimal customRentAmount;
+  private Boolean brandingControl;
+  private LocalDate brandingExpirationDate;
+  private Boolean technicalPassport;
 }

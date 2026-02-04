@@ -61,8 +61,18 @@
                                  'text-danger bg-danger border-danger'
                                  : 'text-success bg-success border-success'">???</small>
                         </div>
+
+             <!--           <div class="col-md-auto">
+                            <small th:text="|To pay: ${feePeriodTotalAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${feePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>-->
+
                         <div class="col-md-auto">
-                            <small th:text="|Period total: ${feePeriodTotalAmount}|"
+                            <small th:text="|Paid: ${feePeriodTotalAmount}|"
                                    class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
                                border-opacity-10 rounded-2"
                                    th:classappend="${feePeriodTotalAmount<0} ?

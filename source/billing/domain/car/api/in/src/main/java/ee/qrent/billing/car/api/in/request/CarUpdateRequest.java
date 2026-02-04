@@ -46,4 +46,7 @@ public class CarUpdateRequest extends AbstractUpdateRequest {
   private Boolean brandingTallink;
   private Boolean customRentActive;
   private BigDecimal customRentAmount;
+  private Boolean brandingControl;
+  private LocalDate brandingExpirationDate;
+  private Boolean technicalPassport;
 }

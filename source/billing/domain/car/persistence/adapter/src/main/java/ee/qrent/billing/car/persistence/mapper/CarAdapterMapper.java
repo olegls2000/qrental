@@ -46,6 +46,9 @@ public class CarAdapterMapper {
         .brandingTallink(entity.getBrandingTallink())
         .customRentActive(entity.getCustomRentActive())
         .customRentAmount(entity.getCustomRentAmount())
+            .brandingControl(entity.getBrandingControl())
+            .brandingExpirationDate(entity.getBrandingExpirationDate())
+            .technicalPassport(entity.getTechnicalPassport())
         .build();
   }
 
@@ -84,6 +87,9 @@ public class CarAdapterMapper {
         .brandingTallink(domain.getBrandingTallink())
         .customRentActive(domain.getCustomRentActive())
         .customRentAmount(domain.getCustomRentAmount())
+            .brandingControl(domain.getBrandingControl())
+            .brandingExpirationDate(domain.getBrandingExpirationDate())
+            .technicalPassport(domain.getTechnicalPassport())
         .build();
   }
 }
