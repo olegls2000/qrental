@@ -292,7 +292,7 @@ public class InvoiceToPdfConverter {
 
         table.addCell(getTotalLabelCell("Eelmise nädala täiskohustused (ilma korrigeeringuteta), koos KM-ga"));
         table.addCell(getTotalValueCell(b));
-        table.addCell(getTotalLabelCell("Eelmise nädala sissetulekud (sh korrigeeringud), koos KM-ga"));
+        table.addCell(getTotalLabelCell("Eelmise nädala laekumised (sh korrigeeringud), koos KM-ga"));
         table.addCell(getTotalValueCell(a));
                  table.addCell(getTotalLabelCell(String.format("Eelmise nädala alguseks (kuni %s) kogunenud viiviste üldsumma", feeStartPeriod)));
                  table.addCell(getTotalValueCell(c));
@@ -313,9 +313,9 @@ public class InvoiceToPdfConverter {
         table.setHorizontalAlignment(RIGHT);
         table.setBorder(NO_BORDER);
 
-        table.addCell(getTotalLabelCell("Kogu eelmise perioodi ettemaks koos KM-ga"));
+        table.addCell(getTotalLabelCell("Eelmise perioodi ettemaks koos KM-ga"));
         table.addCell(getTotalValueCell(advancePayment));
-        table.addCell(getTotalLabelCell("Kogu eelmise perioodi võlgnevus koos KM-ga"));
+        table.addCell(getTotalLabelCell("Eelmise perioodi võlgnevus koos KM-ga"));
         table.addCell(getTotalValueCell(debt));
 
         return table;
@@ -330,9 +330,9 @@ public class InvoiceToPdfConverter {
         table.setHorizontalAlignment(RIGHT);
         table.setBorder(NO_BORDER);
 
-        table.addCell(getTotalLabelCell("Jooksvate kohustuste summa koos KM-ga"));
+        table.addCell(getTotalLabelCell("Arve summa koos KM-ga"));
         table.addCell(getTotalValueCell(arveSum));
-        table.addCell(getTotalLabelCell("Arve summa koos KM-ga (sh jooksvad kohustused, võlgnevus / ettemaks)"));
+        table.addCell(getTotalLabelCell("Tasumisele kuuluv summa"));
         table.addCell(getTotalValueCell(total));
 
         return table;
