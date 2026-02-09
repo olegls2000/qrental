@@ -51,5 +51,6 @@ public class CarResponse {
   private BigDecimal customRentAmount;
   private Boolean brandingControl;
   private LocalDate brandingExpirationDate;
+  private String brandingExpirationRagStatus;
   private Boolean technicalPassport;
 }

@@ -86,9 +86,9 @@ public class InvoiceToPdfConverter {
         invoicePdfDoc.add(new Paragraph("\n"));
         invoicePdfDoc.add(itemsTable);
         invoicePdfDoc.add(block1);
+        invoicePdfDoc.add(block3);
         invoicePdfDoc.add(block2);
         invoicePdfDoc.add(block21);
-        invoicePdfDoc.add(block3);
         invoicePdfDoc.add(block4);
         invoicePdfDoc.add(block5);
         invoicePdfDoc.add(new Paragraph("\n"));
@@ -268,7 +268,7 @@ public class InvoiceToPdfConverter {
         table.setHorizontalAlignment(RIGHT);
         table.setBorder(NO_BORDER);
 
-        table.addCell(getTotalLabelCell("Tasuda kokku (kohustused + viivised)"));
+        table.addCell(getTotalLabelCell("Tasumisele kuuluv saldo (sh ettemaks)"));
         final var finalTotalWithFee =
                 totalWithFee.compareTo(BigDecimal.ZERO) > 0 ? totalWithFee : BigDecimal.ZERO;
         table.addCell(getTotalValueCell(finalTotalWithFee));
@@ -332,8 +332,8 @@ public class InvoiceToPdfConverter {
 
         table.addCell(getTotalLabelCell("Arve summa koos KM-ga"));
         table.addCell(getTotalValueCell(arveSum));
-        table.addCell(getTotalLabelCell("Tasumisele kuuluv summa"));
-        table.addCell(getTotalValueCell(total));
+       /* table.addCell(getTotalLabelCell("Tasumisele kuuluv summa"));
+        table.addCell(getTotalValueCell(total));*/
 
         return table;
     }

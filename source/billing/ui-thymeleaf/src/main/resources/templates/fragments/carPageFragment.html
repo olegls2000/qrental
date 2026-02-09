@@ -76,7 +76,7 @@
                 <i th:if="${car.brandingTallink}"> T </i>
             </td>
 
-           <!-- <th:block th:switch="${car.BrandingExpirationDateRagStatus}">
+            <th:block th:switch="${car.brandingExpirationRagStatus}">
                 <td th:case="'RED'"
                     class="text-center bg-opacity-10 border border-opacity-10
                     text-danger bg-danger border-danger"
@@ -93,9 +93,6 @@
                     th:text="${qDateFormatter.format(car.brandingExpirationDate)}">???
                 </td>
             </th:block>
--->
-
-            <td th:text="${car.brandingExpirationDate}"></td>
 
 
 

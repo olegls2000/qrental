@@ -60,6 +60,7 @@ public class CarResponseMapper implements ResponseMapper<CarResponse, Car> {
             .customRentAmount(domain.getCustomRentAmount())
             .brandingControl(domain.getBrandingControl())
             .brandingExpirationDate(domain.getBrandingExpirationDate())
+            .brandingExpirationRagStatus(domain.getBrandingExpirationDateRagStatus().name())
             .technicalPassport(domain.getTechnicalPassport())
         .build();
   }

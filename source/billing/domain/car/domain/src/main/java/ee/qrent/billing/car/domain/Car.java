@@ -59,9 +59,31 @@ public class Car {
   }
 
   public RagStatus getBrandingExpirationDateRagStatus() {
+    if (brandingControl == null || !brandingControl) {
+      return RagStatus.GREEN;
+    }
+
+    if (brandingExpirationDate == null) {
+      return RagStatus.RED;
+    }
+
     final var daysBetween = DAYS.between(LocalDate.now(), brandingExpirationDate);
 
-    return getRagStatusByDuration(daysBetween);
+    return getBrandingRagStatusByDuration(daysBetween);
+  }
+
+  private RagStatus getBrandingRagStatusByDuration(final Long durationInDays) {
+    if (durationInDays <= 7) {
+
+      return RagStatus.RED;
+    }
+
+    if (durationInDays >= 8 && durationInDays <= 14) {
+
+      return RagStatus.AMBER;
+    }
+
+    return RagStatus.GREEN;
   }
 
 
