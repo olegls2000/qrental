@@ -1,0 +1,1 @@
+alter table contract alter column renter_ceo_isikukood type bigint using renter_ceo_isikukood::bigint;

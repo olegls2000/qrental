@@ -1,0 +1,34 @@
+<form th:fragment="searchForm"
+      th:action="@{/tasks/results}"
+      th:object="${resultFilterRequest}"
+      method="post">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="stateId">Select Task Name</label>
+                <select id="stateId" class="form-select"
+                        th:field="*{taskName}">
+                    <option th:each="name: ${taskNames}"
+                            th:value="${name}"
+                            th:text="|${name}|"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <input class="btn btn-sm btn-success"
+                   type="submit"
+                   value="Apply Filter">
+            <i class="fa fa-home"></i>
+            </input>
+        </div>
+        <div class="col-6">
+            <a class="btn btn-sm btn-danger"
+               th:href="@{/tasks/results}">
+                <span class="bi bi-x-circle"></span>
+                Clean</a>
+        </div>
+    </div>
+</form>

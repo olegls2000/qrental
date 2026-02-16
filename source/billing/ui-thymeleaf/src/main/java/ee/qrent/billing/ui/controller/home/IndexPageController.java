@@ -66,7 +66,10 @@ public class IndexPageController {
     final var freeCarsCount = carQuery.getAvailableCarsCount();
     final var noInsuranceCarsCount = carQuery.getCarsNoInsuranceCount();
     final var brandingControlCarsCount = carQuery.getCarsWithBrandingControlCount();
-    final var noInsuranceCars = carQuery.getCarsNoInsurance();
+    final var noInsuranceCars =
+        carQuery.getCarsNoInsurance().stream()
+            .filter(car -> "No Insurance".equals(car.getStatus()))
+            .toList();
     model.addAttribute("cars", noInsuranceCars);
     model.addAttribute("freeCarsCount", freeCarsCount);
     model.addAttribute("noInsuranceCarsCount", noInsuranceCarsCount);
@@ -78,7 +81,13 @@ public class IndexPageController {
 
   @GetMapping("/branding-control")
   public String getCarsBrandingControl(final Model model) {
-    final var brandingControlCars = carQuery.getCarsWithBrandingControl();
+    final var brandingControlCars =
+        carQuery.getCarsWithBrandingControl().stream()
+            .filter(
+                car ->
+                    Boolean.TRUE.equals(car.getBrandingControl())
+                        || car.getBrandingExpirationDate() != null)
+            .toList();
     model.addAttribute("cars", brandingControlCars);
     model.addAttribute("freeCarsCount", carQuery.getAvailableCarsCount());
     model.addAttribute("noInsuranceCarsCount", carQuery.getCarsNoInsuranceCount());

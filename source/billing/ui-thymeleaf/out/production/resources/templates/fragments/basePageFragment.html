@@ -1,0 +1,17 @@
+<!doctype html>
+<html th:fragment="qrentalPage(bodyContent)"
+      lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/headFragment.html :: qrental-head"></head>
+<body class="container">
+<div class="row fixed-bottom">
+    <div class="col text-end"> <span th:text="|${gitBranch}, ${gitCommitAbbrev}|"
+                                        class="badge text-bg-dark">???</span>
+        <span th:text="|On: ${gitCommitTime} by ${gitCommitUserEmail}|"
+              class="badge text-bg-secondary">???</span></div>
+</div>
+<div th:insert="${bodyContent}"></div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+alter table transaction alter column driver_id set not null;

@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.task.config.spring.TaskAdapterConfig,\
+ee.qrent.billing.task.config.spring.TaskMapperConfig,\
+ee.qrent.billing.task.config.spring.TaskRepositoryConfig,\
+ee.qrent.billing.task.config.spring.TaskServiceConfig

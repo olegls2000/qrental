@@ -1,0 +1,28 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Delete a Potential Driver',
+            closeRef='/',
+            content=~{fragments/driverPotentialDeleteFormFragment.html :: deleteForm}
+        )">
+    </div>
+</div>
+
+<form th:fragment="deleteForm"
+      th:action="@{/drivers-potential/delete}"
+      th:object="${driverPotentialDeleteCommand}"
+      method="post">
+    <input id="driverId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <div class="mb-3">
+        <p class="fs-4 ">Please confirm that you want to delete next data:</p>
+        <p class="fs-6 text-center"
+           th:text=${driverPotentialDeleteCommand.objectInfo}>Driver info</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Delete',
+            cancelHref='/'
+        )">
+    </div>
+</form>

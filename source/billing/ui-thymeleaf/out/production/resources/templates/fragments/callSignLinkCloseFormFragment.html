@@ -1,0 +1,33 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Close active Call Sign Link',
+            closeRef='/call-sign-links',
+            content=~{fragments/callSignLinkCloseFormFragment.html :: closeForm},
+            request=${closeRequest}
+        )">
+    </div>
+</div>
+
+<form th:fragment="closeForm"
+      th:action="@{/call-sign-links/close}"
+      th:object="${closeRequest}"
+      method="post">
+    <input id="callSignLinkId" required
+           th:field="*{id}"
+           type="text"
+           hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="text"
+           hidden/>
+    <div class="mb-5 mt-5">
+        <p class="fs-5 text-center">Please confirm that you want to close (end date will be yesterday) selected Call Sign
+            Link:</p>
+        <p class="fs-4 text-center"
+           th:text=${objectInfo}>???</p>
+    </div>
+    <div th:replace="fragments/deleteFormButtonsFragment.html :: deleteButtons(
+            submitValue='Close'
+        )">
+    </div>
+</form>

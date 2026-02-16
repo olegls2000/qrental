@@ -1,0 +1,10 @@
+<ul th:fragment="invoiceTabs(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'invoices'} ? active : ''"
+       href="/invoices">Invoices</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'calculations'} ? active : ''"
+       href="/invoices/calculations">Calculations</a>
+  </li>
+</ul>

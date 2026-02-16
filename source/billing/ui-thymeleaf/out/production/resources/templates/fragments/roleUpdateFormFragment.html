@@ -1,0 +1,40 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Role',
+            closeRef='/roles',
+            content=~{fragments/roleUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+<div th:fragment="updateForm">
+    <form method="post"
+          th:action="@{/roles/update}"
+          th:object="${updateRequest}">
+        <input id="roleId" required
+               th:field="*{id}"
+               type="text"
+               hidden/>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="name">Name</label>
+            <input class="form-control" id="name" placeholder="Enter Name"
+                   th:field="*{name}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="commentId">Comment</label>
+                <textarea class="form-control"
+                          id="commentId"
+                          placeholder="Enter Comment"
+                          th:field="*{comment}"/>
+            </div>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update',
+            cancelHref='/roles'
+        )">
+        </div>
+    </form>
+</div>
+

@@ -1,0 +1,28 @@
+server:
+  port: ${PORT:8181}
+  servlet:
+    session:
+      timeout=60m:
+spring:
+  datasource:
+    hikari:
+      schema: billing
+  flyway:
+    locations: classpath:db/migration/billing
+    table: flyway_schema_history_billing
+    out-of-order: true
+  jpa:
+    #show-sql: true
+    properties:
+      hibernate:
+        #format_sql: true
+        enable_lazy_load_no_trans: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  info:
+    git:
+      mode: full

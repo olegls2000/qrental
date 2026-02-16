@@ -1,0 +1,9 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.constant.config.spring.ConstantAdapterConfig,\
+ee.qrent.billing.constant.config.spring.ConstantMapperConfig,\
+ee.qrent.billing.constant.config.spring.ConstantServiceConfig,\
+ee.qrent.billing.constant.config.spring.ConstantRepositoryConfig,\
+ee.qrent.billing.constant.config.spring.QWeekAdapterConfig,\
+ee.qrent.billing.constant.config.spring.QWeekMapperConfig,\
+ee.qrent.billing.constant.config.spring.QWeekServiceConfig,\
+ee.qrent.billing.constant.config.spring.QWeekRepositoryConfig

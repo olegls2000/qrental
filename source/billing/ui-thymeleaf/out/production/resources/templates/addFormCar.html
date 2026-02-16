@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/headFragment.html :: qrental-head">
+</head>
+<body class="container">
+<nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Add new Car</h4>
+
+                <form method="post"
+                      th:action="@{/cars/add}"
+                      th:object="${carAddCommand}">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="regNumber">Registration Number </label>
+                                <input class="form-control" id="regNumber" placeholder="Enter regNumber" required
+                                       th:field="*{regNumber}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="vin">VIN</label>
+                                <input class="form-control" id="vin" placeholder="Enter vin" required
+                                       th:field="*{vin}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="releaseDate">Release Date</label>
+                            <input class="form-control" id="releaseDate" placeholder="Enter releaseDate" required
+                                   th:field="*{releaseDate}"
+                                   type="date"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="manufacturer">Manufacturer</label>
+                                <input class="form-control" id="manufacturer" placeholder="Enter manufacturer" required
+                                       th:field="*{manufacturer}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="model">Model</label>
+                                <input class="form-control" id="model" placeholder="Enter model" required
+                                       th:field="*{model}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label text-muted" for="active">Active Car</label>
+                                <input class="form-check-input" id="active"
+                                       th:field="*{active}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label text-muted" for="qRent">Q-Rent</label>
+                                <input class="form-check-input" id="qRent"
+                                       th:field="*{qRent}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="elegance">Elegance</label>
+                                <input class="form-check-input" id="elegance"
+                                       th:field="*{elegance}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="appropriation">Appropriation</label>
+                                <input class="form-check-input" id="appropriation"
+                                       th:field="*{appropriation}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="gearType">Gear Type</label>
+                                <input class="form-control" id="gearType" placeholder="Enter gearType" required
+                                       th:field="*{gearType}"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="fuelType">Fuel Type</label>
+                                <input class="form-control" id="fuelType" placeholder="Enter fuelType" required
+                                       th:field="*{fuelType}"
+                                       type="text"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="lpg">LPG</label>
+                                <input class="form-check-input" id="lpg"
+                                       th:field="*{lpg}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="dateInstallLpg">Date Installing LPG</label>
+                                <input class="form-control" id="dateInstallLpg" placeholder="Enter date Install Lpg"
+                                       th:field="*{dateInstallLpg}"
+                                       type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="insuranceFirm">Insurance Firm </label>
+                            <input class="form-control" id="insuranceFirm" placeholder="Enter insurance Firm"
+                                   required
+                                   th:field="*{insuranceFirm}"
+                                   type="text"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="insuranceDateStart">Insurance Date Start</label>
+                                <input class="form-control" id="insuranceDateStart"
+                                       placeholder="Enter insuranceDateStart"
+                                       required
+                                       th:field="*{insuranceDateStart}"
+                                       type="date"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="insuranceDateEnd">Insurance Date End</label>
+                                <input class="form-control" id="insuranceDateEnd" placeholder="Enter insuranceDateEnd"
+                                       required
+                                       th:field="*{insuranceDateEnd}"
+                                       type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="sCard">S-Card</label>
+                                <input class="form-check-input" id="sCard"
+                                       th:field="*{sCard}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="key2">Key 2</label>
+                                <input class="form-check-input" id="key2"
+                                       th:field="*{key2}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-check-label" for="gps">GPS</label>
+                                <input class="form-check-input" id="gps"
+                                       th:field="*{gps}"
+                                       type="checkbox"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="technicalInspectionEnd">Technical Inspection End</label>
+                                <input class="form-control" id="technicalInspectionEnd"
+                                       placeholder="Enter technicalInspectionEnd"
+                                       required
+                                       th:field="*{technicalInspectionEnd}"
+                                       type="date"/>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="gasInspectionEnd">Technical Gas InspectionEnd End</label>
+                                <input class="form-control" id="gasInspectionEnd"
+                                       placeholder="Enter gasInspectionEnd"
+                                       th:field="*{gasInspectionEnd}"
+                                       type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-muted" for="commentId">Comment</label>
+                            <textarea class="form-control"
+                                      id="commentId"
+                                      placeholder="Enter Comment"
+                                      th:field="*{comment}"/>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <input class="btn btn-success"
+                                   type="submit"
+                                   value="Add">
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-secondary"
+                               href="/cars">
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+</body>
+</html>

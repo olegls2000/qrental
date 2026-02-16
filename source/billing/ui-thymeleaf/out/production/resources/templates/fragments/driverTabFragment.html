@@ -1,0 +1,60 @@
+<ul th:fragment="driverTabs(activeTab)" class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'drivers'} ? active : ''"
+           href="/drivers">Drivers
+            <span class="badge rounded-pill bg-dark" th:text="${counters.driversCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'activeDrivers'} ? active : ''"
+           href="/drivers/active">Active Drivers
+            <span class="badge rounded-pill bg-success" th:text="${counters.activeDriversCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'inactiveDrivers'} ? active : ''"
+           href="/drivers/inactive">Inactive Drivers
+            <span class="badge rounded-pill bg-dark" th:text="${counters.inactiveDriversCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'callSigns'} ? active : ''"
+           href="/call-signs">Call Signs</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'callSignLinksActive'} ? active : ''"
+           href="/call-sign-links/active">Active Call Sign Links
+            <span class="badge rounded-pill bg-success" th:text="${counters.activeCallSignLinkCount}">???</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'callSignLinksClosed'} ? active : ''"
+           href="/call-sign-links/closed">Closed Call Sign Links
+            <span class="badge rounded-pill bg-dark" th:text="${counters.closedCallSignLinkCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'firmLinks'} ? active : ''"
+           href="/firm-links">Firm Links</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'contractsActive'} ? active : ''"
+           href="/contracts/active">Active Contracts
+            <span class="badge rounded-pill bg-success" th:text="${counters.activeContractCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'contractsClosed'} ? active : ''"
+           href="/contracts/closed">Closed Contracts
+            <span class="badge rounded-pill bg-dark" th:text="${counters.closedContractCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'absences'} ? active : ''"
+           href="/absences">Absences
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'authorizations'} ? active : ''"
+           href="/authorizations">BOLT Authorizations</a>
+    </li>
+</ul>

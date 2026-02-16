@@ -1,0 +1,17 @@
+<ul th:fragment="insuranceCasesTabs(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'casesActive'} ? active : ''"
+       href="/insurance/cases/active">Active Cases
+      <span class="badge rounded-pill bg-success" th:text="${counters.activeCasesCount}">???</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'casesClosed'} ? active : ''"
+       href="/insurance/cases/closed">Closed Cases
+      <span class="badge rounded-pill bg-dark" th:text="${counters.closedCasesCount}">???</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'calculations'} ? active : ''"
+       href="/insurance/calculations">Calculations</a>
+  </li>
+</ul>

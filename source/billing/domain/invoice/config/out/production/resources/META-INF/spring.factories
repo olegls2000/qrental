@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.invoice.spring.config.InvoiceAdapterConfig,\
+ee.qrent.billing.invoice.spring.config.InvoiceMapperConfig,\
+ee.qrent.billing.invoice.spring.config.InvoiceServiceConfig,\
+ee.qrent.billing.invoice.spring.config.InvoiceRepositoryConfig,\
+ee.qrent.billing.invoice.spring.config.InvoiceValidatorConfig

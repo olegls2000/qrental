@@ -42,7 +42,16 @@ public class CarQueryService implements GetCarQuery {
   @Override
   public List<CarResponse> getCarsNoInsurance() {
     return loadPort.loadAll().stream()
-        .filter(car -> CarStatus.NO_INSURANCE == car.getStatus())
+        .filter(car -> CarStatus.NO_INSURANCE.equals(car.getStatus()))
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
+  }
+
+  @Override
+  public List<CarResponse> getActiveCars() {
+    final var activeState = true;
+    return loadPort.loadByActive(activeState).stream()
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
@@ -53,7 +62,7 @@ public class CarQueryService implements GetCarQuery {
     return loadPort.loadAll().stream()
         .filter(
             car ->
-                (car.getBrandingControl() != null && car.getBrandingControl())
+                Boolean.TRUE.equals(car.getBrandingControl())
                     || car.getBrandingExpirationDate() != null)
         .map(mapper::toResponse)
         .sorted(DEFAULT_COMPARATOR)
@@ -62,7 +71,7 @@ public class CarQueryService implements GetCarQuery {
 
   @Override
   public Long getAvailableCarsCount() {
-    return loadPort.loadCountAvailableByDate(LocalDate.now());
+    return (long) getAvailableCars().size();
   }
 
   @Override
@@ -82,7 +91,8 @@ public class CarQueryService implements GetCarQuery {
 
   @Override
   public Long getActiveCarsCount() {
-    return loadPort.loadCountByActive(true);
+    final var activeState = true;
+    return loadPort.loadCountByActive(activeState);
   }
 
   @Override
@@ -112,19 +122,14 @@ public class CarQueryService implements GetCarQuery {
 
     final var activeCarIds = activeLinks.stream().map(CarLink::getCarId).collect(toSet());
     final var notActiveCars =
-        allCars.stream().filter(car -> !activeCarIds.contains(car.getId())).collect(toList());
+        allCars.stream()
+            .filter(car -> !activeCarIds.contains(car.getId()))
+            .filter(car -> !CarStatus.NO_INSURANCE.equals(car.getStatus()))
+            .collect(toList());
 
     return notActiveCars.stream()
         .map(car -> mapper.toResponse(car))
         .sorted(STATUS_COMPARATOR)
-        .collect(toList());
-  }
-
-  @Override
-  public List<CarResponse> getActiveCars() {
-    return loadPort.loadByActive(true).stream()
-        .map(mapper::toResponse)
-        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 

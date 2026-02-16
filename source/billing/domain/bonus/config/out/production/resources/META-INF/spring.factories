@@ -1,0 +1,11 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.bonus.config.spring.ObligationAdapterConfig,\
+ee.qrent.billing.bonus.config.spring.ObligationMapperConfig,\
+ee.qrent.billing.bonus.config.spring.ObligationServiceConfig,\
+ee.qrent.billing.bonus.config.spring.ObligationRepositoryConfig,\
+ee.qrent.billing.bonus.config.spring.ObligationValidatorConfig,\
+ee.qrent.billing.bonus.config.spring.BonusAdapterConfig,\
+ee.qrent.billing.bonus.config.spring.BonusMapperConfig,\
+ee.qrent.billing.bonus.config.spring.BonusServiceConfig,\
+ee.qrent.billing.bonus.config.spring.BonusRepositoryConfig,\
+ee.qrent.billing.bonus.config.spring.BonusValidatorConfig

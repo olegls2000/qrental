@@ -1,0 +1,68 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Create a Link between Call Sign and Driver',
+            content=~{fragments/callSignLinkAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/call-sign-links/add}"
+          th:object="${addRequest}">
+        <div class="row mb-4 mt-4">
+              <div class="col">
+                  <span class="fs-5">Driver:</span>
+                  <span class="fs-5" th:text="${driver.firstName}">???</span>
+                  <span class="fs-5" th:text="${driver.lastName}">???</span>
+            </div>
+        </div>
+        <input id="driverId" required
+               th:field="*{driverId}"
+               type="number"
+               hidden/>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="callSignId">Available Call Signs</label>
+                <select id="callSignId" class="form-select"
+                        th:field="*{callSignId}">
+                    <option th:each="callSign : ${callSigns}"
+                            th:value="${callSign.id}"
+                            th:text="${callSign.callSign}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateStartId">Start Date</label>
+                    <input class="form-control" id="dateStartId" placeholder="Enter Start Date" required
+                           th:field="*{dateStart}"
+                           type="date"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="dateEndId">End Date</label>
+                    <input class="form-control" id="dateEndId" placeholder="Enter End Date"
+                           th:field="*{dateEnd}"
+                           type="date"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Link'
+        )">
+        </div>
+    </form>
+</div>
+
+

@@ -1,0 +1,72 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Bolt Statistics',
+            content=~{fragments/boltStatisticsUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="updateForm">
+    <form method="post"
+          th:action="@{/bolt-statistics/update}"
+          th:object="${updateRequest}">
+
+        <input id="reportId" required
+               th:field="*{id}"
+               type="text"
+               hidden/>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="monthId">Select Month</label>
+                    <select name="month" id="monthId" class="form-select"
+                            th:field="*{month}">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="yearId">Select Year</label>
+                    <select name="year" id="yearId" class="form-select"
+                            th:field="*{year}">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="regionId">Select Region</label>
+                <select name="region" id="regionId" class="form-select"
+                        th:field="*{region}">
+                    <option value="tallinn">Tallinn</option>
+                    <option value="tartu">Tartu</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <div> File name: <b th:text="${fileName}"></b></div>
+            </div>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update'
+        )">
+        </div>
+    </form>
+</div>

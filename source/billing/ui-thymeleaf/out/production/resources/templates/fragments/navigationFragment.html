@@ -1,0 +1,70 @@
+<div th:fragment="qrental-navigation">
+    <div class="row">
+        <div class="col-1 mt-2">
+            <img th:src="@{/img/q-rental-group-logo-gorznt.png}" width="80" height="35"/>
+        </div>
+        <div class="col-9">
+            <nav th:fragment="qrental-navigation"
+                 class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav me-auto mb-2">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/drivers">Drivers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/cars">Cars</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/balances">Transactions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/invoices/calculations">Invoices</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/bonus-programs">Bonuses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/insurance/cases/active">Insurance</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/reports/calculations">Reports</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/deposits">Deposits</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/bolt-statistics/rides">Bolt</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/weeks">Settings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/users">User Management</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-2">
+            <div sec:authorize="isAuthenticated()">
+                <div class="row mt-3">
+                    <div class="col">
+                        <div sec:authentication="name"></div>
+                    </div>
+                    <div class="col" style="padding-left: 0px; padding-right: 0px">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn btn-outline-secondary">Sign-out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

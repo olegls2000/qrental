@@ -1,0 +1,47 @@
+<div th:fragment="firmPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/settingsTabFragment :: settingsTab('firms')"></ul>
+    <h2 class="py-3">Firms</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/firms/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th style="width: 1% !important;">Delete</th>
+            <th>Name</th>
+            <th>IBAN</th>
+            <th>BANK</th>
+            <th>REG Number</th>
+            <th>VAT Number</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(firms)}">
+            <td colspan="5">No Firms</td>
+        </tr>
+        <tr th:each="firm : ${firms}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/firms/update-form/{id}(id=${firm.id})}">
+                    <span class="bi-pencil-square"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/firms/delete-form/{id}(id=${firm.id})}">
+                    <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td th:text="${firm.name}"></td>
+            <td th:text="${firm.iban}"></td>
+            <td th:text="${firm.bank}"></td>
+            <td th:text="${firm.registrationNumber}"></td>
+            <td th:text="${firm.vatNumber}"></td>
+            <td th:text="${firm.comment}"></td>
+        </tr>
+    </table>
+</div>

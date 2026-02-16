@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.firm.config.spring.FirmAdapterConfig,\
+ee.qrent.billing.firm.config.spring.FirmMapperConfig,\
+ee.qrent.billing.firm.config.spring.FirmServiceConfig,\
+ee.qrent.billing.firm.config.spring.FirmValidatorConfig,\
+ee.qrent.billing.firm.config.spring.FirmRepositoryConfig

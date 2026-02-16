@@ -1,0 +1,53 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Close an Insurance Case',
+            content=~{fragments/insuranceCaseCloseFormFragment.html :: closeForm},
+            request=${closeRequest}
+        )">
+    </div>
+</div>
+<div th:fragment="closeForm">
+    <form method="post"
+          th:action="@{/insurance/cases/close}"
+          th:object="${closeRequest}">
+        <input id="insuranceCaseId" required
+               th:field="*{id}"
+               type="text"
+               hidden/>
+
+        <p class="fs-5">Insurance Case detailed data:</p>
+        <table class="table table-sm">
+            <tbody>
+            <tr>
+                <td>Responsible Driver:</td>
+                <td th:text="${preCloseResponse.driverInfo}">???</td>
+            </tr>
+            <tr>
+                <td>Original damage, EUR:</td>
+                <td th:text="${preCloseResponse.originalAmount}">???</td>
+            </tr>
+            <tr>
+                <td>With Q-Kasko:</td>
+                <td th:if="${preCloseResponse.withQKasko}">Yes</td>
+                <td th:unless="${preCloseResponse.withQKasko}">No</td>
+            </tr>
+            <tr>
+                <td>Damage after Q-Kasko deduction:</td>
+                <td th:text="${preCloseResponse.paymentAmount}">???</td>
+            </tr>
+            <tr>
+                <td>Paid Damage, EUR:</td>
+                <td th:text="${preCloseResponse.paidAmount}">???</td>
+            </tr>
+            <tr>
+                <td>To be paid, EUR:</td>
+                <td th:text="${preCloseResponse.paymentAmount}">???</td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Close'
+        )">
+        </div>
+    </form>
+</div>

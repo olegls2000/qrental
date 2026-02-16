@@ -1,0 +1,5 @@
+<div th:fragment="homeFreeCarsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/homeTabFragment.html :: homeTabs('freeCars')"></ul>
+    <div th:replace="fragments/carOnHomePageFragment.html :: carOnHomePage"></div>
+</div>

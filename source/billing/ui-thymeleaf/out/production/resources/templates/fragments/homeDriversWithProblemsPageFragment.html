@@ -1,0 +1,5 @@
+<div th:fragment="homeDriversWithProblemsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/homeTabFragment.html :: homeTabs('driversWithProblems')"></ul>
+    <div th:replace="fragments/driverOnHomePageFragment.html :: driverOnHomePage"></div>
+</div>

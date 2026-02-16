@@ -1,0 +1,52 @@
+<div th:fragment="boltStatisticsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/boltStatisticsTabFragment :: boltTabs('statistics')"></ul>
+    <h2 class="py-3">Bolt Statistics</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/bolt-statistics/reports/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th style="width: 1% !important;">Delete</th>
+            <th style="width: 1% !important;">Download</th>
+            <th>Region</th>
+            <th>Year</th>
+            <th>Month</th>
+            <th>File name</th>
+            <th>Created on</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(reports)}">
+            <td colspan="5">No Firms</td>
+        </tr>
+        <tr th:each="report : ${reports}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/bolt-statistics/reports/update-form/{id}(id=${report.id})}">
+                    <span class="bi-pencil-square"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/bolt-statistics/reports/delete-form/{id}(id=${report.id})}">
+                    <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/bolt-statistics/reports/{id}/files(id=${report.id})}">
+                    <span class="bi bi-filetype-csv"></span>
+                </a>
+            </td>
+            <td th:text="${report.region}"></td>
+            <td th:text="${report.year}"></td>
+            <td th:text="${report.month}"></td>
+            <td th:text="${report.fileName}"></td>
+            <td th:text="${qDateFormatter.format(report.createdOn)}">???</td>
+        </tr>
+    </table>
+</div>

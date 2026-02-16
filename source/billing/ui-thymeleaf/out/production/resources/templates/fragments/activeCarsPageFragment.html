@@ -1,0 +1,193 @@
+<div th:fragment="activeCarsPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/carTabFragment.html :: carTabs('activeCars')"></ul>
+
+    <h2 class="py-3">Active Cars</h2>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">
+                <a class="btn btn-sm btn-success"
+                   href="/cars/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                </a>
+            </th>
+            <th style="width: 1% !important;">Delete</th>
+            <th>Active</th>
+            <th>Status</th>
+            <th>REG Number</th>
+            <th>PTS</th>
+            <th>Fuel Type</th>
+            <th>Branding</th>
+            <th>Branding Exp Date</th>
+            <th>Age, years</th>
+            <th>Warranty, months</th>
+            <th>Warranty end date</th>
+            <th>Manufacturer</th>
+            <th>Model</th>
+            <th>Gear Type</th>
+            <th>Insurance date</th>
+            <th>Technical Inspection</th>
+            <th>Gas Inspection</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(cars)}">
+            <td colspan="5">No cars</td>
+        </tr>
+        <tr th:each="car : ${cars}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/cars/update-form/{id}(id=${car.id})}">
+                    <span class="bi-pencil-square"></span>
+                </a>
+
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/cars/delete-form/{id}(id=${car.id})}">
+                    <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td th:if="${car.active}" class="text-center">Yes</td>
+            <td th:unless="${car.active}" class="text-center text-secondary">No</td>
+            <td th:text="${car.status}"></td>
+            <td th:text="${car.regNumber}"></td>
+
+            <td th:text="${car.technicalPassport} ? 'Yes' : 'No' "
+                class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+                th:classappend="${car.technicalPassport==false} ?
+                'text-danger bg-danger border-danger'
+                : 'text-success bg-success border-success'">???
+            </td>
+
+            <td th:text="${car.fuelType} "></td>
+            <td class="text-center bg-opacity-10 border border-opacity-10"
+                th:classappend="${car.brandingControl==false and car.brandingExpirationDate!=null} ?
+                'text-danger bg-danger border-danger' : ''">
+                <i th:if="${car.brandingQrent}"> Q </i>
+                <i th:if="${car.brandingBolt}" class="bi bi-type-bold"></i>
+                <i th:if="${car.brandingForus}"> F </i>
+                <i th:if="${car.brandingUber}"> U </i>
+                <i th:if="${car.brandingTallink}"> T </i>
+            </td>
+
+            <th:block th:switch="${car.brandingExpirationRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.brandingExpirationDate)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.brandingExpirationDate)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.brandingExpirationDate)}">???
+                </td>
+            </th:block>
+
+            <td th:text="${car.age}"></td>
+            <th:block th:switch="${car.warrantyRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${car.warrantyMonths}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${car.warrantyMonths}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${car.warrantyMonths}">???
+                </td>
+            </th:block>
+            <th:block th:switch="${car.warrantyRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.warrantyEndDate)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.warrantyEndDate)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.warrantyEndDate)}">???
+                </td>
+            </th:block>
+
+            <td th:text="${car.manufacturer}"></td>
+            <td th:text="${car.model}"></td>
+            <td class="text-center bg-opacity-10 border border-opacity-10 "
+                th:classappend="${car.gearType=='MANUAL'} ?
+                                 'text-warning bg-warning border-warning'
+                                 : 'text-success bg-success border-success'"
+                th:text="${car.gearType}">??
+            </td>
+
+            <th:block th:switch="${car.insuranceRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.insuranceDateEnd)}">???
+                </td>
+            </th:block>
+
+            <th:block th:switch="${car.technicalInspectionRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.technicalInspectionEnd)}">???
+                </td>
+            </th:block>
+
+            <th:block th:switch="${car.gasInspectionRagStatus}">
+                <td th:case="'RED'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-danger bg-danger border-danger"
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
+                </td>
+                <td th:case="'AMBER'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-secondary bg-warning border-warning"
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
+                </td>
+                <td th:case="'GREEN'"
+                    class="text-center bg-opacity-10 border border-opacity-10
+                    text-success bg-success border-success"
+                    th:text="${qDateFormatter.format(car.gasInspectionEnd)}">???
+                </td>
+            </th:block>
+        </tr>
+    </table>
+</div>

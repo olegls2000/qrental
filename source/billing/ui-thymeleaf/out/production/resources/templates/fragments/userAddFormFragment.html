@@ -1,0 +1,79 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Register a new User',
+            content=~{fragments/userAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/users/add}"
+          th:object="${addRequest}">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="username">Username</label>
+                    <input class="form-control" id="username"
+                           placeholder="Enter username"
+                           required
+                           th:field="*{username}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="email">Email</label>
+                    <input class="form-control" id="email"
+                           placeholder="Enter eemail"
+                           th:field="*{email}"
+                           type="email"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="firstName">First Name</label>
+                    <input class="form-control" id="firstName" placeholder="Enter First Name" required
+                           th:field="*{firstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="lastName">Last Name</label>
+                    <input class="form-control" id="lastName" placeholder="Enter Last Name" required
+                           th:field="*{lastName}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="optionsbox">Select Roles:</label>
+                <select multiple="multiple" size="10" name="selected[]" id="optionsbox" th:field="*{roles}"
+                        class="form-control">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.id}"
+                            th:text="${role.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Register',
+            cancelHref='/users'
+        )">
+        </div>
+    </form>
+
+    <script src="../webjars/jquery/jquery.min.js"></script>
+    <script src="../webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../webjars/popper.js/umd/popper.min.js"></script>
+    <script src="../bootstrap-dual-listbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script>
+        $('#optionsbox').bootstrapDualListbox();
+    </script>
+</div>
+
+

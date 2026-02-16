@@ -1,0 +1,76 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Absence',
+            content=~{fragments/absenceAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/absences/add}"
+          th:object="${addRequest}">
+        <div class="row mb-4 mt-4">
+            <div class="col">
+                <span class="fs-5">Driver:</span>
+                <span class="fs-5" th:text="${driver.firstName}">???</span>
+                <span class="fs-5" th:text="${driver.lastName}">???</span>
+            </div>
+        </div>
+        <input id="driverId" required
+               th:field="*{driverId}"
+               type="number"
+               hidden/>
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label text-muted" for="reasonId">Select a Reason:</label>
+                <select id="reasonId" name="reason" class="form-select">
+                    <option
+                            th:each="reason : ${reasons}"
+                            th:text="${reason.displayValue}"
+                            th:value="${reason.name()}">
+                    </option>
+                </select>
+            </div>
+            <div class="col pt-4">
+                <input class="form-check-input" id="absenceCarWithDriverId"
+                       th:field="*{withCar}"
+                       type="checkbox"/>
+                <label class="form-check-label text-muted m-2" for="absenceCarWithDriverId">Does Car stay with
+                    Driver</label>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-check-label text-muted" for="absenceDateStartId">Start date</label>
+                <input class="form-control" id="absenceDateStartId"
+                       placeholder="Enter Start Date"
+                       required
+                       th:field="*{dateStart}"
+                       type="date"/>
+            </div>
+            <div class="col">
+                <label class="form-check-label text-muted" for="absenceDateEndId">End date</label>
+                <input class="form-control" id="absenceDateEndId"
+                       placeholder="Enter End Date"
+                       th:field="*{dateEnd}"
+                       type="date"/>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add'
+        )">
+        </div>
+    </form>
+</div>
+
+

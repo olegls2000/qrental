@@ -1,0 +1,63 @@
+<div th:fragment="driverOnHomePage">
+
+    <h1 class="py-5">Drivers with problems</h1>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">Portal</th>
+            <th>Call Sign</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Isikukood</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Contact Types</th>
+            <th>Invoices by email</th>
+            <th>Charge Fee</th>
+            <th>Need Reports</th>
+            <th>Q Firm</th>
+            <th>Deposit</th>
+            <th>Created on</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(drivers)}">
+            <td colspan="5">No drivers</td>
+        </tr>
+        <tr th:each="driver : ${drivers}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/driver-portal/{id}(id=${driver.id})}">
+                    <span class="bi bi-card-checklist"></span></a>
+            </td>
+            <td th:text="${driver.callSign}">??</td>
+            <td th:text="${driver.firstName}">??</td>
+            <td th:text="${driver.lastName}">??</td>
+            <td th:text="${driver.taxNumber}">??</td>
+            <td th:text="${driver.phone}">??</td>
+            <td th:text="${driver.email}">??</td>
+            <a th:if="${callSignLinkId != null}" class="btn btn-sm btn-warning "
+               th:href="@{/call-sign-links/update-form/{id}(id=${callSignLinkId})}">
+                <span class="bi-pencil-square"></span>
+            </a>
+            <td>
+                <i th:if="${driver.byTelegram}" class="bi bi-telegram"></i>
+                <i th:if="${driver.byWhatsApp}" class="bi bi-whatsapp"></i>
+                <i th:if="${driver.byViber}" class="bi bi-vimeo"></i>
+                <i th:if="${driver.byEmail}" class="bi bi-envelope-at"></i>
+                <i th:if="${driver.bySms}" class="bi bi-chat-left-dots"></i>
+                <i th:if="${driver.byPhone}" class="bi bi-telephone"></i>
+            </td>
+            <td>
+                <span th:text="${driver.needInvoicesByEmail} ? 'Yes' : 'No'"></span>
+            </td>
+            <td>
+                <span th:text="${driver.needFee} ? 'Yes' : 'No'"></span>
+            </td>
+            <td>
+                <span th:text="${driver.needReport} ? 'Yes' : 'No'"></span>
+            </td>
+            <td th:text="${driver.qFirmName}">??</td>
+            <td th:text="${driver.deposit}">??</td>
+            <td th:text="${qDateFormatter.format(driver.createdDate)}">???</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,97 @@
+<div th:fragment="assembledDriverPortal" class="row mt-5">
+    <div class="col"></div>
+    <div class="col-11">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Driver portal</h4>
+                <div class="col">
+                    <a class="btn-close position-absolute top-0 end-0 m-2"
+                       aria-label="Close"
+                       href="/balances"></a>
+                </div>
+                <div th:replace="fragments/driverPortalDriverDataFragment.html :: driverData"></div>
+                <div th:replace="fragments/driverPortalFinancialDataFragment.html :: financialData"></div>
+                <ul th:replace="fragments/driverPortalSearchTabFragment.html :: driverPortalSearchTabs('interval', ${driverId})"></ul>
+                <div class="row justify-content-md-center mb-3 mt-3">
+                    <div class="col-md-auto">
+                        <form th:replace="fragments/driverPortalIntervalSearchFormFragment.html :: searchForm"></form>
+                    </div>
+                </div>
+                <div th:if="${transactionFilterRequest.startQWeekId != null && transactionFilterRequest.endQWeekId != null}">
+                    <div id="periodBalanceDataId" class="row justify-content-md-center mb-3">
+                        <div class="col-md-auto">
+                            <small th:text="|Period Balance data, EURO:|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold  text-dark">???</small>
+                        </div>
+                        <div class="col-md-auto">
+                            <small th:text="|Beginning of period: ${balancePeriodStartAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${balancePeriodStartAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+                        <div class="col-md-auto">
+                            <small th:text="|Period total: ${balancePeriodTotalAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${balancePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+                        <div class="col-md-auto">
+                            <small th:text="|End of period: ${balancePeriodEndAmount} |"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${balancePeriodEndAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+                    </div>
+                    <div id="periodFeeDataId" class="row justify-content-md-center mb-3">
+                        <div class="col-md-auto">
+                            <small th:text="|Period Fee data, EURO:|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold text-dark ">???</small>
+                        </div>
+                        <div class="col-md-auto">
+                            <small th:text="|Beginning of period: ${feePeriodStartAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${feePeriodStartAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+
+             <!--           <div class="col-md-auto">
+                            <small th:text="|To pay: ${feePeriodTotalAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${feePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>-->
+
+                        <div class="col-md-auto">
+                            <small th:text="|Paid: ${feePeriodTotalAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${feePeriodTotalAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+                        <div class="col-md-auto">
+                            <small th:text="|End of period: ${feePeriodEndAmount}|"
+                                   class="fs-6 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                                   th:classappend="${feePeriodEndAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="fragments/driverPortalTransactionsTableFragment.html :: transactionsTable(transactions = ${transactions}, driverId = ${driverId})"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

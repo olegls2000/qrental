@@ -1,0 +1,54 @@
+<table th:fragment="transactionsTable(transactions, driverId)" class="table table-bordered table-hover">
+    <tr>
+        <th style="width: 1% !important;">
+            <a class="btn btn-sm btn-success"
+               th:href="@{/transactions/add-form/driver/{id}(id=${driverId})}"
+               role="button"
+               aria-controls="offcanvasExample">
+                <span class="bi-plus-circle"></span>
+            </a>
+        </th>
+        <th style="width: 1% !important;">Delete</th>
+        <th>Transaction Type (Rus)</th>
+        <th>Amount</th>
+        <th>Week</th>
+        <th>Date</th>
+        <th>Comment</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(transactions)}">
+        <td colspan="9">No Transactions</td>
+    </tr>
+    <tr th:each="transaction : ${transactions}"
+        data-bs-toggle="tooltip" th:attr="title=${transaction.comment}">
+        <td class="text-center"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">
+            <a th:if="${transaction.raw == true}" class="btn btn-sm btn-warning"
+               th:href="@{/transactions/update-form/driver/{id}(id=${transaction.id})}">
+                <span class="bi-pencil-square"></span></a>
+        </td>
+        <td class="text-center"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">
+            <a th:if="${transaction.raw == true}" class="btn btn-sm btn-danger"
+               th:href="@{/transactions/delete-form/driver/{id}(id=${transaction.id})}">
+                <span class="bi-trash"></span></a>
+        </td>
+        <td th:text="${transaction.typeNameRus}"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
+        </td>
+        <td class="text-center bg-opacity-10 border border-opacity-10 rounded-2"
+            th:classappend="${transaction.realAmount<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'"
+            th:text="${transaction.realAmount}">???
+        </td>
+        <td th:text="${transaction.weekNumber}"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
+        </td>
+        <td th:text="${qDateFormatter.format(transaction.date)}"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
+        </td>
+        <td th:text="${transaction.comment}"
+            th:classappend="${transaction.weekNumber % 2 == 0} ? 'bg-secondary bg-opacity-10' : ''">???
+        </td>
+    </tr>
+</table>

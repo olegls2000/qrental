@@ -1,0 +1,53 @@
+<div th:fragment="assembledObligationtCalculation" class="row mt-5">
+    <div class="col"></div>
+    <div class="col-10">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Obligation Calculation Details</h4>
+                <a class="btn-close position-absolute top-0 end-0 m-2"
+                   aria-label="Close"
+                   href="#" onclick="history.back();">
+                </a>
+                <div class="row m-3">
+                    <div class="col-3">
+                        <p>Action Date:</p>
+                        <p th:text="${qDateFormatter.format(calculation.actionDate)}">???</p>
+                    </div>
+                    <div class="col-3">
+                        <p>Week number:</p>
+                        <p th:text="${calculation.weekNumber}">???</p>
+                    </div>
+                    <div class="col-3">
+                        <p>Start period:</p>
+                        <p th:text="${qDateFormatter.format(calculation.startDate)}">???</p>
+                    </div>
+                    <div class="col-3">
+                        <p>End period:</p>
+                        <p th:text="${qDateFormatter.format(calculation.endDate)}">???</p>
+                    </div>
+                </div>
+
+                <div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <tr>
+                            <th>Driver</th>
+                            <th>Amount, EUR</th>
+                            <th>Positive Amount, EUR</th>
+                            <th>Match count</th>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(obligations)}">
+                            <td colspan="6">No Obligations</td>
+                        </tr>
+                        <tr th:each="obligation : ${obligations}">
+                            <td th:text="${obligation.driverInfo}">???</td>
+                            <td th:text="${obligation.amount}">???</td>
+                            <td th:text="${obligation.positiveAmount}">???</td>
+                            <td th:text="${obligation.matchCount}">???</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

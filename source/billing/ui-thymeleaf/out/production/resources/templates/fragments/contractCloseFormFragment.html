@@ -1,0 +1,61 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Close a Contract',
+            content=~{fragments/contractCloseFormFragment.html :: closeForm},
+            request=${closeRequest}
+        )">
+    </div>
+</div>
+<div th:fragment="closeForm">
+    <form method="post"
+          th:action="@{/contracts/close}"
+          th:object="${closeRequest}">
+        <input id="contractId" required
+               th:field="*{id}"
+               type="text"
+               hidden/>
+
+        <p class="fs-5">Contract detailed data:</p>
+        <table class="table table-sm">
+            <tbody>
+            <tr>
+                <td class="col-2">Driver:</td>
+                <td class="col-1" th:text="${preCloseResponse.driverInfo}">???</td>
+            </tr>
+            <tr>
+                <td>Contract duration:</td>
+                <td th:text="${preCloseResponse.contractDuration}">???</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="fs-5">Active Insurance cases that will be closed:</p>
+        <span th:if="${#lists.isEmpty(preCloseResponse.insuranceCasesToClose)}">
+            <span colspan="6">No active Insurance Cases</span>
+        </span>
+
+        <div th:each="insuranceCase : ${preCloseResponse.insuranceCasesToClose}">
+            <table class="table table-sm">
+                <tr>
+                    <th class="col-2">Insurance Case ID:</th>
+                    <th class="col-1" th:text="${insuranceCase.insuranceCaseId}">???</th>
+                </tr>
+                <tr>
+                    <td>Original damage, EUR:</td>
+                    <td th:text="${insuranceCase.originalAmount}">???</td>
+                </tr>
+                <tr>
+                    <td>Paid Damage, EUR:</td>
+                    <td th:text="${insuranceCase.paidAmount}">???</td>
+                </tr>
+                <tr>
+                    <td>To be paid, EUR:</td>
+                    <td th:text="${insuranceCase.paymentAmount}">???</td>
+                </tr>
+            </table>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Close'
+        )">
+        </div>
+    </form>
+</div>

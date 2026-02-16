@@ -1,0 +1,75 @@
+<div th:fragment="financialData">
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Latest Balance year: ${latestBalanceYear}, week: ${latestBalanceWeek}|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 text-dark bg-secondary border-secondary">???</small>
+        </div>
+    </div>
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Total Raw Balance: ${rawBalanceTotal} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${rawBalanceTotal<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Total Raw Fee Balance: ${rawFeeTotal} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${rawFeeTotal<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Total: ${total} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2"
+                   th:classappend="${total<0} ?
+                                 'text-danger bg-danger border-danger'
+                                 : 'text-success bg-success border-success'">???</small>
+        </div>
+    </div>
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Current week raw obligation: ${obligationAmount} EURO |"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-success bg-success border-success'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Obligation match count: ${obligationMatchCount}|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-success bg-success border-success'">???</small>
+        </div>
+    </div>
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-auto">
+            <small th:text="|Initial Damage total: ${insuranceBalanceTotal.damageInitialTotal} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-danger bg-danger border-danger'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Has QKasko: ${hasQKasko} |"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-danger bg-danger border-danger'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Insurance damage remaining total: ${insuranceBalanceTotal.damageRemainingTotal} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-danger bg-danger border-danger'">???</small>
+        </div>
+        <div class="col-md-auto">
+            <small th:text="|Insurance Self responsibility remaining total: ${insuranceBalanceTotal.selfResponsibilityRemainingTotal} EURO|"
+                   class="fs-5 d-inline-flex mb-3 px-2 py-1 fw-semibold border bg-opacity-10
+                               border-opacity-10 rounded-2 "
+                   th:classappend="'text-danger bg-danger border-danger'">???</small>
+        </div>
+    </div>
+</div>

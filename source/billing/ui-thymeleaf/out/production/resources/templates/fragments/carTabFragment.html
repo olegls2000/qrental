@@ -1,0 +1,32 @@
+<ul th:fragment="carTabs(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'cars'} ? active : ''"
+       href="/cars">Cars
+      <span class="badge rounded-pill bg-dark" th:text="${carsCount}">???</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'activeCars'} ? active : ''"
+       href="/cars/active">Active Cars
+      <span class="badge rounded-pill bg-success" th:text="${activeCarsCount}">???</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'carLinksActive'} ? active : ''"
+       href="/car-links/active">Active Car Links
+      <span class="badge rounded-pill bg-success" th:text="${carLinksActiveCount}">???</span>
+    </a>
+
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'carLinksClosed'} ?  active : ''"
+       href="/car-links/closed">Closed Car Links
+      <span class="badge rounded-pill bg-dark" th:text="${carLinksClosedCount}">???</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"
+       th:classappend="${activeTab == 'verificationControlCalculations'} ? active : ''"
+       href="/cars/verification-control-calculations">Verification Control Calculations</a>
+  </li>
+</ul>

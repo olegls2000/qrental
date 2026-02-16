@@ -1,0 +1,39 @@
+<div th:fragment="assembledForm">
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <img th:src="@{/img/q-rental-group-logo-250.jpg}"/>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Well come to the Billing System, please sign in</h4>
+                    <div>
+                        <div th:if="${param.error}">
+                            Invalid username or password.
+                        </div>
+                        <div th:if="${param.logout}">
+                            You have been logged out.
+                        </div>
+                        <form class="mt-2" th:action="@{/login}" method="post">
+                            <div>
+                                <label for="usernameId" class="form-label text-muted">User Name:</label>
+                                <input id="usernameId" type="text" class="form-control" name="username"/>
+                            </div>
+                            <div>
+                                <label for="passwordId" class="form-label text-muted">Password:</label>
+                                <input id="passwordId" type="password" class="form-control" name="password"/>
+                            </div>
+                            <div class="text-center mt-4">
+                                <input type="submit" class="btn btn-success" value="Sign In"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
+</div>

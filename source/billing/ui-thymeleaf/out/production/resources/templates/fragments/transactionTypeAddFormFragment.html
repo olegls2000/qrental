@@ -1,0 +1,97 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Transaction Type',
+            content=~{fragments/transactionTypeAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/transaction-types/add}"
+          th:object="${addRequest}">
+        <div class="row">
+            <div class="col-6">
+                <div class="mt-5">
+                    <label class="form-check-label text-muted" for="uiVisible">UI Visible</label>
+                    <input class="form-check-input" id="uiVisible"
+                           th:field="*{uiVisible}"
+                           type="checkbox"/>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="form-label text-muted" for="uiNameId">UI name</label>
+                <input class="form-control" id="uiNameId"
+                       placeholder="Enter Transaction Type name "
+                       required
+                       th:field="*{uiName}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="transactionKindId">Transaction Kind</label>
+                <select id="transactionKindId" class="form-select" required
+                        th:field="*{transactionKindId}">
+                    <option th:value="''" th:text="Select"></option>
+                    <option th:each="transactionKind : ${transactionKinds}"
+                            th:value="${transactionKind.id}"
+                            th:text="|${transactionKind.code} - ${transactionKind.name}|">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-muted" for="codeId">Code</label>
+            <input class="form-control" id="codeId"
+                   placeholder="Enter Transaction Type code"
+                   required
+                   th:field="*{code}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEngId">Transaction type name (Eng)</label>
+            <input class="form-control" id="nameEngId"
+                   placeholder="Enter Transaction Type English name"
+                   required
+                   th:field="*{nameEng}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameEstId">Transaction type name (Est)</label>
+            <input class="form-control" id="nameEstId"
+                   placeholder="Sisestage tehingutüübi nimi"
+                   required
+                   th:field="*{nameEst}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameRusId">Transaction type name (Rus)</label>
+            <input class="form-control" id="nameRusId"
+                   placeholder="Введите название типа транзакции"
+                   required
+                   th:field="*{nameRus}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="invoiceIncluded">Invoice included</label>
+            <input class="form-check-input" id="invoiceIncluded"
+                   th:field="*{invoiceIncluded}"
+                   type="checkbox"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add'
+        )">
+        </div>
+    </form>
+</div>

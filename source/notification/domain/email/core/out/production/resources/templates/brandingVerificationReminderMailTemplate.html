@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p th:text="${message}">BOLT-kleebiste kinnitusperiood on lõppemas | Заканчивается срок действия верификации БОЛТ наклеек | The verification period for BOLT stickers is expiring</p>
+<p>
+  <span th:text="${driverLastName}">Фамилия</span>
+  <span th:text="${driverFirstName}">Имя</span>
+</p>
+<p>
+  Car: <span th:text="${carRegNumber}">REG</span>
+</p>
+<p>
+  Branding Expiration Date:
+  <span th:text="${brandingExpirationDate}">DATE</span>
+</p>
+</body>
+</html>

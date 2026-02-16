@@ -1,0 +1,431 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Driver',
+            content=~{fragments/driverAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <div th:replace="fragments/driverCommonFormFragment :: onChangeRequiredObligationScript"></div>
+    <div th:replace="fragments/driverCommonFormFragment :: onChangeLegalEntityScript"></div>
+    <form method="post"
+          th:action="@{/drivers/add}"
+          th:object="${addRequest}">
+        <p class="fs-5">Setup:</p>
+        <div class="row">
+            <div class="mb-3">
+                <label class="form-label text-muted"
+                       for="recommendedByDriverId">Recommended by:</label>
+                <select id="recommendedByDriverId"
+                        class="form-select"
+                        th:field="*{recommendedByDriverId}">
+                    <option th:value="null">No recommendation</option>
+                    <option th:each="driver : ${recommendedByOptions}"
+                            th:value="${driver.id}"
+                            th:text="|${driver.lastName} ${driver.firstName}, isikukood: ${driver.taxNumber}|">??
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="activeId"
+                           th:field="*{active}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="activeId">Activated</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="needFeeId"
+                           th:field="*{needFee}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="needFeeId">Need Fee</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="needReportId"
+                           th:field="*{needReport}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="needReportId">Need Report</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted"
+                           for="callSignId">Select Call Sign</label>
+                    <select id="callSignId"
+                            class="form-select"
+                            th:field="*{callSignId}">
+                        <option th:value="null">No Call Sign</option>
+                        <option th:each="callSign : ${callSigns}"
+                                th:value="${callSign.id}"
+                                th:text="${callSign.callSign}">??
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="parkConnectionId"
+                           th:field="*{parkConnection}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="parkConnectionId">Park Connection</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="hasRequiredObligationId"
+                           th:field="*{hasRequiredObligation}"
+                           onchange="onChangeRequiredObligation()"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="hasRequiredObligationId">Need Required
+                        Obligation</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="requiredObligationId">Required Obligation, EUR</label>
+                    <input class="form-control" id="requiredObligationId"
+                           placeholder="Enter Required Obligation, EUR"
+                           th:field="*{requiredObligation}"
+                           disabled
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+        <p class="fs-5">Q-info:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted"
+                           for="qFirmId">Select Q-Firm</label>
+                    <select id="qFirmId"
+                            class="form-select"
+                            th:field="*{qFirmId}" required>
+                        <option th:each="qFirm : ${qFirms}"
+                                th:value="${qFirm.id}"
+                                th:text="${qFirm.name}"
+                        >??
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="deposit">Deposit</label>
+                    <input class="form-control" id="deposit" placeholder="Enter Deposit -EUR"
+                           th:field="*{deposit}"
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+
+        <p class="fs-5">Drivers BOLT Identifiers:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="boltDriverIdentifier">Bolt Driver Identifier</label>
+                    <input class="form-control" id="boltDriverIdentifier" placeholder="Enter Driver Identifier"
+                           th:field="*{boltDriverIdentifier}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="boltIndividualIdentifier">Bolt Individual
+                        Identifier</label>
+                    <input class="form-control" id="boltIndividualIdentifier" placeholder="Enter Individual Identifier"
+                           th:field="*{boltIndividualIdentifier}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+
+
+        <p class="fs-5">Drivers info:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="firstName">First Name</label>
+                    <input class="form-control" id="firstName" placeholder="Enter First Name" required
+                           th:field="*{firstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="lastName">Last Name</label>
+                    <input class="form-control" id="lastName" placeholder="Enter Last Name" required
+                           th:field="*{lastName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="taxNumber">Isikukood</label>
+                    <input class="form-control" id="taxNumber" placeholder="Enter tax number" required
+                           th:field="*{taxNumber}"
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="address">Address</label>
+            <input class="form-control" id="address" placeholder="Enter Address"
+                   required
+                   th:field="*{address}"
+                   type="text"/>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="driverLicenseNumber">License Number</label>
+                    <input class="form-control" id="driverLicenseNumber"
+                           placeholder="Enter License Number"
+                           required
+                           th:field="*{driverLicenseNumber}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="driverLicenseExp">License Expiration
+                        date</label>
+                    <input class="form-control" id="driverLicenseExp"
+                           placeholder="Enter License Exp"
+                           required
+                           th:field="*{driverLicenseExp}"
+                           type="date"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="taxiLicense">Taxi License </label>
+                    <input class="form-control" id="taxiLicense"
+                           placeholder="Enter Taxi License"
+                           th:field="*{taxiLicense}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <p class="fs-5">Drivers contact info:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="phone">Phone</label>
+                    <input class="form-control" id="phone" placeholder="Enter Phone" required
+                           th:field="*{phone}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="email">E-mail</label>
+                    <input class="form-control" id="email" placeholder="Enter E-mail" required
+                           th:field="*{email}"
+                           type="email"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label text-muted" for="weekId">Select communication language</label>
+                    <select id="weekId" class="form-select"
+                            th:field="*{communicationLanguage}">
+                        <option th:each="communicationLanguage: ${communicationLanguages}"
+                                th:value="${communicationLanguage}"
+                                th:text="${communicationLanguage.label}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="needInvoicesByEmailId"
+                           th:field="*{needInvoicesByEmail}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="needInvoicesByEmailId">Need invoices by
+                        email</label>
+                </div>
+            </div>
+        </div>
+        <p class="fs-5">Drivers communication type:</p>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byTelegramId"
+                           th:field="*{byTelegram}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byTelegramId">Telegram</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byWhatsAppId"
+                           th:field="*{byWhatsApp}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byWhatsAppId">WhatsApp</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byViberId"
+                           th:field="*{byViber}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Viber</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byEmailId"
+                           th:field="*{byEmail}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Email</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="bySmsId"
+                           th:field="*{bySms}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Sms</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <input class="form-check-input" id="byPhoneId"
+                           th:field="*{byPhone}"
+                           type="checkbox"/>
+                    <label class="form-check-label text-muted" for="byViberId">Phone</label>
+                </div>
+            </div>
+        </div>
+        <p class="fs-5">Drivers Legal entity:</p>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="person_id"
+                           onclick="onChangeLegalEntity(this)" value="PERSON"
+                           th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="person_id">Person</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="self_employed_id"
+                           onclick="onChangeLegalEntity(this)" value="SELF_EMPLOYED"
+                           th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="self_employed_id">Self employed</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="lhv_account_id"
+                           onclick="onChangeLegalEntity(this)" value="LHV_ACCOUNT" th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="lhv_account_id">LHV Bank account</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="company_id"
+                           onclick="onChangeLegalEntity(this)" value="COMPANY" th:field="*{legalEntityType}">
+                    <label class="form-check-label text-muted" for="company_id">Company</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="lhvAccountId">LHV Account:</label>
+                    <input class="form-control" id="lhvAccountId" placeholder="Enter LHV Account"
+                           th:field="*{lhvAccount}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyNameId">Company name</label>
+                    <input class="form-control" id="companyNameId" placeholder="Enter Company Name"
+                           th:field="*{companyName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyRegNumberId">Registration Number</label>
+                    <input class="form-control" id="companyRegNumberId" placeholder="Enter Registration Number"
+                           th:field="*{regNumber}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyVatId">VAT</label>
+                    <input class="form-control" id="companyVatId" placeholder="Enter VAT"
+                           th:field="*{companyVat}"
+                           type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoFirstNameId">CEO first name</label>
+                    <input class="form-control" id="companyCeoFirstNameId" placeholder="Enter first name"
+                           th:field="*{companyCeoFirstName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoLastNameId">CEO last name</label>
+                    <input class="form-control" id="companyCeoLastNameId" placeholder="Enter last name"
+                           th:field="*{companyCeoLastName}"
+                           type="text"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-check-label text-muted" for="companyCeoTaxNumberId">CEO isikukood</label>
+                    <input class="form-control" id="companyCeoTaxNumberId" placeholder="Enter tax number"
+                           th:field="*{companyCeoTaxNumber}"
+                           type="number"/>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-check-label text-muted" for="companyAddressId">Address</label>
+            <input class="form-control" id="companyAddressId" placeholder="Enter Address"
+                   th:field="*{companyAddress}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="commentId">Comment</label>
+                <textarea class="form-control"
+                          id="commentId"
+                          placeholder="Enter Comment"
+                          th:field="*{comment}"/>
+            </div>
+        </div>
+
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add')">
+        </div>
+    </form>
+</div>
+
+

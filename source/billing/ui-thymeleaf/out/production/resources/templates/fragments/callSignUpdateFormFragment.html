@@ -1,0 +1,38 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a  Call Sign',
+            content=~{fragments/callSignUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+
+<form th:fragment="updateForm"
+      th:action="@{/call-signs/update}"
+      th:object="${updateRequest}"
+      method="post">
+    <input id="id" required
+           th:field="*{id}"
+           type="number"
+           hidden/>
+    <div class="col">
+        <div class="mb-3">
+            <label class="form-label text-muted" for="callSignId">Call Sign</label>
+            <input class="form-control" id="callSignId" placeholder="Enter  Call Sign" required
+                   th:field="*{callSign}"
+                   type="number"/>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="commentId">Comment</label>
+        <textarea class="form-control"
+                  id="commentId"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update'
+        )">
+    </div>
+</form>

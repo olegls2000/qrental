@@ -1,0 +1,78 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Update a Car Link',
+            closeRef='/links',
+            content=~{fragments/carLinkUpdateFormFragment.html :: updateForm},
+            request=${updateRequest}
+        )">
+    </div>
+</div>
+<form th:fragment="updateForm"
+      th:action="@{/car-links/update}"
+      th:object="${updateRequest}"
+      method="post">
+    <input id="linkId" required
+           th:field="*{id}"
+           type="number"
+           hidden/>
+    <input id="driverId" required
+           th:field="*{driverId}"
+           type="number"
+           hidden/>
+
+    <div class="row mb-4 mt-4">
+        <div class="col">
+            <div>
+                <span class="fs-5">Driver:</span>
+                <span class="fs-5" th:text="${driver.firstName}">???</span>
+                <span class="fs-5" th:text="${driver.lastName}">???</span>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <span class="fs-5">Linked Car:</span>
+                <span class="fs-5" th:text="${linkedCar.manufacturer}">???</span>
+                <span class="fs-5" th:text="${linkedCar.model}">???</span>
+                <span class="fs-5" th:text="${linkedCar.regNumber}">???</span>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="carId">Available Cars</label>
+        <select id="carId" class="form-select"
+                th:field="*{carId}">
+            <option th:each="car: ${cars}"
+                    th:value="${car.id}"
+                    th:text="|${car.regNumber}|"></option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="dateStart">Start Date</label>
+                <input class="form-control" id="dateStart" placeholder="Enter Start Date" required
+                       th:field="*{dateStart}"
+                       type="date"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-label text-muted" for="dateEnd">End Date</label>
+                <input class="form-control" id="dateEnd" placeholder="Enter End Date"
+                       th:field="*{dateEnd}"
+                       type="date"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label text-muted" for="comment">Comment</label>
+        <textarea class="form-control"
+                  id="comment"
+                  placeholder="Enter Comment"
+                  th:field="*{comment}"/>
+    </div>
+    <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Update'
+        )">
+    </div>
+</form>

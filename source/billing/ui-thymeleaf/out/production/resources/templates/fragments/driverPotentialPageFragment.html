@@ -1,0 +1,41 @@
+<div th:fragment="driverPotentialPage">
+
+    <h1 class="py-5">Potential Drivers</h1>
+
+    <table  class="table table-striped table-bordered">
+        <tr>
+            <th>
+                <a class="btn btn-sm btn-success"
+                   href="/drivers-potential/add-form"
+                   role="button"
+                   aria-controls="offcanvasExample">
+                    <span class="bi-plus-circle"></span>
+                    Add Potential Driver
+                </a>
+            </th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(driversPotential)}">
+            <td colspan="5">No potential drivers</td>
+        </tr>
+        <tr th:each="driver : ${driversPotential}">
+            <td>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/drivers-potential/update-form/{id}(id=${driver.id})}">
+                    <span class="bi-pencil-square"></span>
+                    Edit</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/drivers-potential/delete-form/{id}(id=${driver.id})}">
+                    <span class="bi-trash"></span>
+                    Delete</a>
+            </td>
+            <td th:text="${driver.firstName}"></td>
+            <td th:text="${driver.lastName}"></td>
+            <td th:text="${driver.phone}"></td>
+            <td th:text="${driver.comment}"></td>
+        </tr>
+    </table>
+</div>

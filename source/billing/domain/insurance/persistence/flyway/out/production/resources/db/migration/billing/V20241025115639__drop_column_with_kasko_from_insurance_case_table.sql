@@ -1,0 +1,1 @@
+alter table insurance_case drop column with_q_kasko;

@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.insurance.config.spring.InsuranceAdapterConfig,\
+ee.qrent.billing.insurance.config.spring.InsuranceMapperConfig,\
+ee.qrent.billing.insurance.config.spring.InsuranceCaseServiceConfig,\
+ee.qrent.billing.insurance.config.spring.InsuranceRepositoryConfig,\
+ee.qrent.billing.insurance.config.spring.InsuranceCaseValidatorConfig

@@ -1,0 +1,40 @@
+<div th:fragment="assembledForm">
+    <div th:replace="fragments/commonFormFragment.html :: commonForm(
+            title='Add a new Transaction Kind',
+            content=~{fragments/transactionKindAddFormFragment.html :: addForm},
+            request=${addRequest}
+        )">
+    </div>
+</div>
+
+<div th:fragment="addForm">
+    <form method="post"
+          th:action="@{/transaction-kinds/add}"
+          th:object="${addRequest}">
+        <div class="mb-3">
+            <label class="form-label text-muted" for="codeId">Transaction Kind code</label>
+            <input class="form-control" id="codeId"
+                   placeholder="Enter Transaction Kind code"
+                   required
+                   th:field="*{code}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="nameId">Transaction Kind name</label>
+            <input class="form-control" id="nameId" placeholder="Enter Transaction Kind name"
+                   th:field="*{name}"
+                   type="text"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label text-muted" for="commentId">Comment</label>
+            <textarea class="form-control"
+                      id="commentId"
+                      placeholder="Enter Comment"
+                      th:field="*{comment}"/>
+        </div>
+        <div th:replace="fragments/addUpdateFormButtonsFragment.html :: addUpdateButtons(
+            submitValue='Add'
+        )">
+        </div>
+    </form>
+</div>

@@ -1,0 +1,48 @@
+<div th:fragment="qTaskPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/settingsTabFragment :: settingsTab('qTasks')"></ul>
+
+    <h2 class="py-3">Billing tasks</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <td style="width: 1% !important;" class="text-center">
+                <a class="btn btn-success"
+                   href="/tasks/q-week-calculation/run">
+                    <span class="bi bi-play-circle"></span></a>
+            </td>
+            <td>Q-Week calculation task</td>
+        </tr>
+        <tr>
+            <td class="text-center">
+                <a class="btn btn-success"
+                   href="/tasks/insurance-calculation/run">
+                    <span class="bi bi-play-circle"></span></a>
+            </td>
+            <td>Insurance calculation task</td>
+        </tr>
+        <tr>
+            <td class="text-center">
+                <form method="post" action="/tasks/rent-calculation/run">
+                    <input class="btn btn-success" type="submit" value="Run">
+                </form>
+            </td>
+            <td>Rent calculation task</td>
+        </tr>
+        <tr>
+            <td class="text-center">
+                <form method="post" action="/tasks/obligation-calculation/run">
+                    <input class="btn btn-success" type="submit" value="Run">
+                </form>
+            </td>
+            <td>Obligation calculation task</td>
+        </tr>
+        <tr>
+            <td class="text-center">
+                <form method="post" action="/tasks/weekly-report-monday/run">
+                    <input class="btn btn-success" type="submit" value="Run">
+                </form>
+            </td>
+            <td>Weekly Monday report task</td>
+        </tr>
+    </table>
+</div>

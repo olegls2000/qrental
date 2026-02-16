@@ -1,0 +1,62 @@
+<div th:fragment="contractPage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/driverTabFragment :: driverTabs('contractsActive')"></ul>
+    <h2 class="py-3">Contracts</h2>
+    <table class="table table-sm table-striped table-bordered align-middle">
+        <tr>
+            <th style="width: 1% !important;">Close</th>
+            <th style="width: 1% !important;">Portal</th>
+            <th>Actions</th>
+            <th>Number</th>
+            <th>Duration, weeks</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Renter</th>
+            <th>Renter Reg. number</th>
+            <th>Renter Signer</th>
+            <th>Driver Isikukood</th>
+            <th>Q-Firm name</th>
+            <th>Q-Firm CEO</th>
+            <th>Created</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(contractsActive)}">
+            <td colspan="9">No Active Contracts</td>
+        </tr>
+        <tr th:each="contract : ${contractsActive}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/contracts/close-form/{id}(id=${contract.id})}">
+                    <span class="bi bi-x-circle"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/driver-portal/{id}(id=${contract.driverId})}">
+                    <span class="bi bi-card-checklist"></span></a>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/contracts/pdf/{id}(id=${contract.id})}">
+                    <span class="bi-file-earmark-pdf"></span></a>
+                <a class="btn btn-sm btn-outline-info disabled"
+                   th:href="@{/contracts/pdf/{id}(id=${contract.id})}">
+                    <span class="bi-file-earmark-pdf"></span></a>
+                <a class="btn btn-sm btn-warning"
+                   th:href="@{/contracts/email/send-form/{id}(id=${contract.id})}">
+                    <span class="bi bi-envelope-at"></span></a>
+            </td>
+            <td th:text="${contract.number}">???</td>
+            <td th:text="${contract.duration}">???</td>
+            <td th:text="${qDateFormatter.format(contract.dateStart)}">???</td>
+            <td th:if="${contract.dateEnd == null}">No date</td>
+            <td th:if="${contract.dateEnd != null}" th:text="${qDateFormatter.format(contract.dateEnd)}">???</td>
+            <td th:text="${contract.renter}">???</td>
+            <td th:text="${contract.renterRegistrationNumber}">???</td>
+            <td th:text="${contract.renterSignerName}">???</td>
+            <td th:text="${contract.driverIsikukood}">???</td>
+            <td th:text="${contract.qFirmName}">???</td>
+            <td th:text="${contract.qFirmCeo}">???</td>
+            <td th:text="${qDateFormatter.format(contract.created)}">???</td>
+        </tr>
+    </table>
+</div>

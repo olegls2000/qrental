@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ee.qrent.billing.bolt.config.spring.BoltStatisticsAdapterConfig,\
+ee.qrent.billing.bolt.config.spring.BoltStatisticsMapperConfig,\
+ee.qrent.billing.bolt.config.spring.BoltStatisticsServiceConfig,\
+ee.qrent.billing.bolt.config.spring.BoltStatisticsValidatorConfig,\
+ee.qrent.billing.bolt.config.spring.BoltStatisticsRepositoryConfig

@@ -1,0 +1,10 @@
+<ul th:fragment="userTabs(activeTab)" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'users'} ? active : ''"
+       href="/users">Users</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" th:classappend="${activeTab == 'roles'} ? active : ''"
+       href="/roles">Roles</a>
+  </li>
+</ul>

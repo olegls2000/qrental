@@ -1,0 +1,297 @@
+<div th:fragment="onChangeRequiredObligationScript">
+    <script>
+        function onChangeRequiredObligation() {
+            const hasRequiredObligation = document.getElementById("hasRequiredObligationId");
+            const requiredObligation = document.getElementById("requiredObligationId");
+            if (hasRequiredObligation.checked == true) {
+                requiredObligation.disabled = false;
+                requiredObligation.value = 0
+            } else {
+                requiredObligation.disabled = true;
+                requiredObligation.value = 0
+            }
+        }
+    </script>
+</div>
+
+<div th:fragment="onChangeLegalEntityScript">
+    <script>
+        function onChangeLegalEntity(legalEntityTypeOptions) {
+            const selectedLegalEntityType = legalEntityTypeOptions.value;
+            const lhvAccount = document.getElementById("lhvAccountId");
+            const companyName = document.getElementById("companyNameId");
+            const companyRegNumber = document.getElementById("companyRegNumberId");
+            const companyVat = document.getElementById("companyVatId");
+            const companyCeoFirstName = document.getElementById("companyCeoFirstNameId");
+            const companyCeoLastName = document.getElementById("companyCeoLastNameId");
+            const companyCeoTaxNumber = document.getElementById("companyCeoTaxNumberId");
+            const companyAddress = document.getElementById("companyAddressId");
+
+            if (selectedLegalEntityType === 'PERSON') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+
+            if (selectedLegalEntityType === 'SELF_EMPLOYED') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = false;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = false;
+                companyAddress.value = "";
+            }
+
+            if (selectedLegalEntityType === 'LHV_ACCOUNT') {
+                lhvAccount.disabled = false;
+
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+            if (selectedLegalEntityType === 'COMPANY') {
+                companyName.disabled = false;
+                companyRegNumber.disabled = false;
+                companyVat.disabled = false;
+                companyCeoFirstName.disabled = false;
+                companyCeoLastName.disabled = false;
+                companyCeoTaxNumber.disabled = false;
+                companyAddress.disabled = false;
+
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+            }
+        }
+    </script>
+</div>
+
+
+<div th:fragment="legalEntityFragment">
+    <script th:inline="javascript">
+        function onClickLegalEntityType(legalEntityTypeOptions) {
+            const selectedLegalEntityType = legalEntityTypeOptions.value;
+            updateLegalEntityInputs(selectedLegalEntityType);
+        }
+
+        function updateLegalEntityInputs(selectedLegalEntityType) {
+            const lhvAccount = document.getElementById("lhvAccountId");
+            const companyName = document.getElementById("companyNameId");
+            const companyRegNumber = document.getElementById("companyRegNumberId");
+            const companyVat = document.getElementById("companyVatId");
+            const companyCeoFirstName = document.getElementById("companyCeoFirstNameId");
+            const companyCeoLastName = document.getElementById("companyCeoLastNameId");
+            const companyCeoTaxNumber = document.getElementById("companyCeoTaxNumberId");
+            const companyAddress = document.getElementById("companyAddressId");
+
+            if (selectedLegalEntityType === 'PERSON') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+
+            if (selectedLegalEntityType === 'SELF_EMPLOYED') {
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = false;
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = false;
+            }
+
+            if (selectedLegalEntityType === 'LHV_ACCOUNT') {
+                lhvAccount.disabled = false;
+
+                companyName.disabled = true;
+                companyName.value = "";
+                companyRegNumber.disabled = true;
+                companyRegNumber.value = "";
+                companyVat.disabled = true;
+                companyVat.value = "";
+                companyCeoFirstName.disabled = true;
+                companyCeoFirstName.value = "";
+                companyCeoLastName.disabled = true;
+                companyCeoLastName.value = "";
+                companyCeoTaxNumber.disabled = true;
+                companyCeoTaxNumber.value = "";
+                companyAddress.disabled = true;
+                companyAddress.value = "";
+            }
+            if (selectedLegalEntityType === 'COMPANY') {
+                companyName.disabled = false;
+                companyRegNumber.disabled = false;
+                companyVat.disabled = false;
+                companyCeoFirstName.disabled = false;
+                companyCeoLastName.disabled = false;
+                companyCeoTaxNumber.disabled = false;
+                companyAddress.disabled = false;
+
+                lhvAccount.disabled = true;
+                lhvAccount.value = "";
+            }
+        }
+    </script>
+
+    <p class="fs-5">Drivers Legal entity:</p>
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="person_id"
+                       onclick="onClickLegalEntityType(this)" value="PERSON"
+                       th:field="*{legalEntityType}">
+                <label class="form-check-label text-muted" for="person_id">Person</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="self_employed_id"
+                       onclick="onClickLegalEntityType(this)" value="SELF_EMPLOYED"
+                       th:field="*{legalEntityType}">
+                <label class="form-check-label text-muted" for="self_employed_id">Self employed</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="lhv_account_id"
+                       onclick="onClickLegalEntityType(this)" value="LHV_ACCOUNT" th:field="*{legalEntityType}">
+                <label class="form-check-label text-muted" for="lhv_account_id">LHV Bank account</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="legalEntityTypeOptions" id="company_id"
+                       onclick="onClickLegalEntityType(this)" value="COMPANY" th:field="*{legalEntityType}">
+                <label class="form-check-label text-muted" for="company_id">Company</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="lhvAccountId">LHV Account:</label>
+                <input class="form-control" id="lhvAccountId" placeholder="Enter LHV Account"
+                       th:field="*{lhvAccount}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyNameId">Company name</label>
+                <input class="form-control" id="companyNameId" placeholder="Enter Company Name"
+                       th:field="*{companyName}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyRegNumberId">Registration Number</label>
+                <input class="form-control" id="companyRegNumberId" placeholder="Enter Registration Number"
+                       th:field="*{regNumber}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyVatId">VAT</label>
+                <input class="form-control" id="companyVatId" placeholder="Enter VAT"
+                       th:field="*{companyVat}"
+                       type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyCeoFirstNameId">CEO first name</label>
+                <input class="form-control" id="companyCeoFirstNameId" placeholder="Enter first name"
+                       th:field="*{companyCeoFirstName}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyCeoLastNameId">CEO last name</label>
+                <input class="form-control" id="companyCeoLastNameId" placeholder="Enter last name"
+                       th:field="*{companyCeoLastName}"
+                       type="text"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label class="form-check-label text-muted" for="companyCeoTaxNumberId">CEO isikukood</label>
+                <input class="form-control" id="companyCeoTaxNumberId" placeholder="Enter tax number"
+                       th:field="*{companyCeoTaxNumber}"
+                       type="number"/>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-check-label text-muted" for="companyAddressId">Address</label>
+        <input class="form-control" id="companyAddressId" placeholder="Enter Address"
+               th:field="*{companyAddress}"
+               type="text"/>
+    </div>
+    <script th:inline="javascript">
+        setLegalEntityInputs();
+        function setLegalEntityInputs() {
+            var selectedLegalEntityType = [[${updateRequest.legalEntityType}]];
+            updateLegalEntityInputs(selectedLegalEntityType);
+        }
+    </script>
+</div>

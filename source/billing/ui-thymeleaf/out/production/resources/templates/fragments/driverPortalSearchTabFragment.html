@@ -1,0 +1,10 @@
+<ul th:fragment="driverPortalSearchTabs(activeTab, driverId)" class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'week'} ? active : ''"
+           th:href="@{/driver-portal/week/{id}(id=${driverId})}">Week search</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'interval'} ? active : ''"
+           th:href="@{/driver-portal/interval/{id}(id=${driverId})}">Interval search</a>
+    </li>
+</ul>

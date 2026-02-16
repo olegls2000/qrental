@@ -1,0 +1,43 @@
+<div th:fragment="absencePage">
+    <nav th:replace="fragments/navigationFragment.html :: qrental-navigation"></nav>
+    <ul th:replace="fragments/driverTabFragment :: driverTabs('absences')"></ul>
+    <h2 class="py-3">Absences</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th style="width: 1% !important;">Delete</th>
+            <th style="width: 1% !important;">Portal</th>
+            <th>Driver's name</th>
+            <th>Driver's last name</th>
+            <th>Isikukood</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>With car</th>
+            <th>Reason</th>
+            <th>Comment</th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(absences)}">
+            <td colspan="5">No cars</td>
+        </tr>
+        <tr th:each="absence : ${absences}">
+            <td class="text-center">
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/absences/delete-form/{id}(id=${absence.id})}">
+                    <span class="bi-trash"></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/driver-portal/week/{id}(id=${absence.driverId})}">
+                    <span class="bi bi-card-checklist"></span></a>
+            </td>
+            <td th:text="${absence.driverFirstName}">???</td>
+            <td th:text="${absence.driverLastName}">???</td>
+            <td th:text="${absence.driverIsikukood}">???</td>
+            <td th:text="${qDateFormatter.format(absence.dateStart)}">???</td>
+            <td th:text="${qDateFormatter.format(absence.dateEnd)}">???</td>
+            <td th:text="${absence.withCar}">???</td>
+            <td th:text="${absence.reason}">???</td>
+            <td th:text="${absence.comment}">???</td>
+        </tr>
+    </table>
+</div>
