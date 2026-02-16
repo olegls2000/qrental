@@ -22,11 +22,70 @@ public class IndexPageController {
 
   @GetMapping
   public String getFreeCarView(final Model model) {
-    model.addAttribute("cars", carQuery.getAvailableCars());
-    model.addAttribute("drivers", driverQuery.getDriversWithZeroMatchCountForLatestCalculation());
+    final var freeCars = carQuery.getAvailableCars();
+    final var noInsuranceCarsCount = carQuery.getCarsNoInsuranceCount();
+    final var brandingControlCarsCount = carQuery.getCarsWithBrandingControlCount();
+    final var freeCarsCount = carQuery.getAvailableCarsCount();
+    model.addAttribute("cars", freeCars);
+    model.addAttribute("freeCarsCount", freeCarsCount);
+    model.addAttribute("noInsuranceCarsCount", noInsuranceCarsCount);
+    model.addAttribute("brandingControlCarsCount", brandingControlCarsCount);
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
 
-    return "index";
+    return "freeCars";
+  }
+
+  @GetMapping("/freecars")
+  public String getFreeCarsTab(final Model model) {
+    final var freeCars = carQuery.getAvailableCars();
+    final var noInsuranceCarsCount = carQuery.getCarsNoInsuranceCount();
+    final var brandingControlCarsCount = carQuery.getCarsWithBrandingControlCount();
+    final var freeCarsCount = carQuery.getAvailableCarsCount();
+    model.addAttribute("cars", freeCars);
+    model.addAttribute("freeCarsCount", freeCarsCount);
+    model.addAttribute("noInsuranceCarsCount", noInsuranceCarsCount);
+    model.addAttribute("brandingControlCarsCount", brandingControlCarsCount);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+
+    return "freeCars";
+  }
+
+  @GetMapping("/drivers-with-problems")
+  public String getDriversWithProblems(final Model model) {
+    model.addAttribute("drivers", driverQuery.getDriversWithZeroMatchCountForLatestCalculation());
+    model.addAttribute("freeCarsCount", carQuery.getAvailableCarsCount());
+    model.addAttribute("noInsuranceCarsCount", carQuery.getCarsNoInsuranceCount());
+    model.addAttribute("brandingControlCarsCount", carQuery.getCarsWithBrandingControlCount());
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+
+    return "driversWithProblems";
+  }
+
+  @GetMapping("/no-insurance")
+  public String getCarsNoInsurance(final Model model) {
+    final var freeCarsCount = carQuery.getAvailableCarsCount();
+    final var noInsuranceCarsCount = carQuery.getCarsNoInsuranceCount();
+    final var brandingControlCarsCount = carQuery.getCarsWithBrandingControlCount();
+    final var noInsuranceCars = carQuery.getCarsNoInsurance();
+    model.addAttribute("cars", noInsuranceCars);
+    model.addAttribute("freeCarsCount", freeCarsCount);
+    model.addAttribute("noInsuranceCarsCount", noInsuranceCarsCount);
+    model.addAttribute("brandingControlCarsCount", brandingControlCarsCount);
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+
+    return "noInsurance";
+  }
+
+  @GetMapping("/branding-control")
+  public String getCarsBrandingControl(final Model model) {
+    final var brandingControlCars = carQuery.getCarsWithBrandingControl();
+    model.addAttribute("cars", brandingControlCars);
+    model.addAttribute("freeCarsCount", carQuery.getAvailableCarsCount());
+    model.addAttribute("noInsuranceCarsCount", carQuery.getCarsNoInsuranceCount());
+    model.addAttribute("brandingControlCarsCount", carQuery.getCarsWithBrandingControlCount());
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+
+    return "brandingControl";
   }
 
   /*@GetMapping

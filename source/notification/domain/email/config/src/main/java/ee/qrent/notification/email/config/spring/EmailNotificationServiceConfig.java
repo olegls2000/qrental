@@ -37,7 +37,8 @@ public class EmailNotificationServiceConfig {
         new TuesdayReportLetterBuildStrategy(templateEngine),
         new WednesdayReportLetterBuildStrategy(templateEngine),
         new FridayReportLetterBuildStrategy(templateEngine),
-        new InfoReportLetterBuildStrategy(templateEngine));
+        new InfoReportLetterBuildStrategy(templateEngine),
+        new BrandingVerificationLetterBuildStrategy(templateEngine));
   }
 
   @Bean

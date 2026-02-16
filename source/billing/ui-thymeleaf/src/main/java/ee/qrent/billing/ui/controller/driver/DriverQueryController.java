@@ -33,4 +33,22 @@ public class DriverQueryController extends AbstractDriverQueryController {
 
     return "drivers";
   }
+
+  @GetMapping("/active")
+  public String getActiveDriversView(final Model model) {
+    model.addAttribute("drivers", driverQuery.getActiveDrivers());
+    addDriverCounts(model);
+    addDateFormatter(model);
+
+    return "activeDrivers";
+  }
+
+  @GetMapping("/inactive")
+  public String getInactiveDriversView(final Model model) {
+    model.addAttribute("drivers", driverQuery.getInactiveDrivers());
+    addDriverCounts(model);
+    addDateFormatter(model);
+
+    return "inactiveDrivers";
+  }
 }

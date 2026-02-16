@@ -23,4 +23,14 @@ public interface CarRepository {
   CarJakartaEntity findByVin(final String vin);
 
   CarJakartaEntity findByBoltIdentifier(final String boltIdentifier);
+
+  Long countByActive(final boolean active);
+
+  Long countByStatus(final String status);
+
+  Long countBrandingControl();
+
+  Long countAvailableByDate(final LocalDate date);
+
+  Long countAll();
 }

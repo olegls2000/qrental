@@ -1,7 +1,21 @@
 <ul th:fragment="driverTabs(activeTab)" class="nav nav-tabs">
     <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'drivers'} ? active : ''"
-           href="/drivers">Drivers</a>
+           href="/drivers">Drivers
+            <span class="badge rounded-pill bg-dark" th:text="${counters.driversCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'activeDrivers'} ? active : ''"
+           href="/drivers/active">Active Drivers
+            <span class="badge rounded-pill bg-success" th:text="${counters.activeDriversCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'inactiveDrivers'} ? active : ''"
+           href="/drivers/inactive">Inactive Drivers
+            <span class="badge rounded-pill bg-dark" th:text="${counters.inactiveDriversCount}">???</span>
+        </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'callSigns'} ? active : ''"

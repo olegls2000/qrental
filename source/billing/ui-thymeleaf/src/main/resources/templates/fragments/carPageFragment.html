@@ -68,7 +68,9 @@
             </td>
 
             <td th:text="${car.fuelType} "></td>
-            <td>
+            <td class="text-center bg-opacity-10 border border-opacity-10"
+                th:classappend="${car.brandingControl==false and car.brandingExpirationDate!=null} ?
+                'text-danger bg-danger border-danger' : ''">
                 <i th:if="${car.brandingQrent}"> Q </i>
                 <i th:if="${car.brandingBolt}" class="bi bi-type-bold"></i>
                 <i th:if="${car.brandingForus}"> F </i>

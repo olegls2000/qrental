@@ -99,4 +99,35 @@ public class DriverQueryService implements GetDriverQuery {
 
       return asList(CommunicationLanguageIn.values());
   }
+
+  @Override
+  public List<DriverResponse> getActiveDrivers() {
+    return loadPort.loadByActive(true).stream()
+        .map(mapper::toResponse)
+        .sorted(getCallSignOrLastNameComparator())
+        .collect(toList());
+  }
+
+  @Override
+  public List<DriverResponse> getInactiveDrivers() {
+    return loadPort.loadByActive(false).stream()
+        .map(mapper::toResponse)
+        .sorted(getCallSignOrLastNameComparator())
+        .collect(toList());
+  }
+
+  @Override
+  public Long getDriversCount() {
+    return loadPort.loadCountAll();
+  }
+
+  @Override
+  public Long getActiveDriversCount() {
+    return loadPort.loadCountByActive(true);
+  }
+
+  @Override
+  public Long getInactiveDriversCount() {
+    return loadPort.loadCountByActive(false);
+  }
 }

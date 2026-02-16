@@ -21,4 +21,8 @@ public interface DriverSpringDataRepository extends JpaRepository<DriverJakartaE
   DriverJakartaEntity findByTaxNumber(final Long taxNumber);
 
   DriverJakartaEntity findByBoltId(final String boltId);
+
+  Long countByActive(final boolean active);
+
+  List<DriverJakartaEntity> findByActive(final boolean active);
 }

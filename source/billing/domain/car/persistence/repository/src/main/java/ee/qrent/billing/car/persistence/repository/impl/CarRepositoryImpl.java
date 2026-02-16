@@ -63,6 +63,31 @@ public class CarRepositoryImpl implements CarRepository {
   @Override
   public CarJakartaEntity findByBoltIdentifier(final String boltIdentifier) {
 
-      return springDataRepository.findByBoltIdentifier(boltIdentifier);
+    return springDataRepository.findByBoltIdentifier(boltIdentifier);
+  }
+
+  @Override
+  public Long countByActive(final boolean active) {
+    return springDataRepository.countByActive(active);
+  }
+
+  @Override
+  public Long countByStatus(final String status) {
+    return springDataRepository.countByStatus(status);
+  }
+
+  @Override
+  public Long countBrandingControl() {
+    return springDataRepository.countBrandingControl();
+  }
+
+  @Override
+  public Long countAvailableByDate(final LocalDate date) {
+    return springDataRepository.countAvailableByDate(date);
+  }
+
+  @Override
+  public Long countAll() {
+    return springDataRepository.count();
   }
 }

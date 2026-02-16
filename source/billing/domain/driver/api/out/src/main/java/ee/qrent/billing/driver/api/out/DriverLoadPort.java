@@ -12,4 +12,10 @@ public interface DriverLoadPort extends LoadPort<Driver> {
   Driver loadByTaxNumber(final Long taxNumber);
 
   Driver loadByBoltId(final String boltId);
+
+  Long loadCountAll();
+
+  Long loadCountByActive(final boolean active);
+
+  List<Driver> loadByActive(final boolean active);
 }

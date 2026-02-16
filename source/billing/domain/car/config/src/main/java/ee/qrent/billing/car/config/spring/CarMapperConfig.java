@@ -1,6 +1,8 @@
 package ee.qrent.billing.car.config.spring;
 
 import ee.qrent.common.in.time.QDateTime;
+import ee.qrent.billing.car.core.mapper.BrandingVerificationCalculationResultResponseMapper;
+import ee.qrent.billing.car.core.mapper.BrandingVerificationCalculationSummaryResponseMapper;
 import ee.qrent.billing.car.core.mapper.CarAddRequestMapper;
 import ee.qrent.billing.car.core.mapper.CarResponseMapper;
 import ee.qrent.billing.car.core.mapper.CarUpdateRequestMapper;
@@ -24,5 +26,17 @@ public class CarMapperConfig {
   @Bean
   CarUpdateRequestMapper getCarUpdateRequestMapper() {
     return new CarUpdateRequestMapper();
+  }
+
+  @Bean
+  BrandingVerificationCalculationResultResponseMapper
+      getBrandingVerificationCalculationResultResponseMapper() {
+    return new BrandingVerificationCalculationResultResponseMapper();
+  }
+
+  @Bean
+  BrandingVerificationCalculationSummaryResponseMapper
+      getBrandingVerificationCalculationSummaryResponseMapper() {
+    return new BrandingVerificationCalculationSummaryResponseMapper();
   }
 }

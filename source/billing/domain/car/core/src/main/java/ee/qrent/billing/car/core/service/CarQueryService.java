@@ -39,22 +39,51 @@ public class CarQueryService implements GetCarQuery {
         .collect(toList());
   }
 
-  /*@Override
-  public List<CarResponse> getFreeCars() {
-    return loadPort.loadAll().stream()
-            .map(mapper::toResponse)
-            .sorted(DEFAULT_COMPARATOR)
-            .collect(toList());
-  }
-
   @Override
   public List<CarResponse> getCarsNoInsurance() {
     return loadPort.loadAll().stream()
-            .map(mapper::toResponse)
-            .sorted(DEFAULT_COMPARATOR)
-            .collect(toList());
+        .filter(car -> CarStatus.NO_INSURANCE == car.getStatus())
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
   }
-*/
+
+  @Override
+  public List<CarResponse> getCarsWithBrandingControl() {
+    return loadPort.loadAll().stream()
+        .filter(
+            car ->
+                (car.getBrandingControl() != null && car.getBrandingControl())
+                    || car.getBrandingExpirationDate() != null)
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
+        .collect(toList());
+  }
+
+  @Override
+  public Long getAvailableCarsCount() {
+    return loadPort.loadCountAvailableByDate(LocalDate.now());
+  }
+
+  @Override
+  public Long getCarsNoInsuranceCount() {
+    return loadPort.loadCountByStatus(CarStatus.NO_INSURANCE.name());
+  }
+
+  @Override
+  public Long getCarsWithBrandingControlCount() {
+    return loadPort.loadCountBrandingControl();
+  }
+
+  @Override
+  public Long getCarsCount() {
+    return loadPort.loadCountAll();
+  }
+
+  @Override
+  public Long getActiveCarsCount() {
+    return loadPort.loadCountByActive(true);
+  }
 
   @Override
   public CarResponse getById(final Long id) {
@@ -88,6 +117,14 @@ public class CarQueryService implements GetCarQuery {
     return notActiveCars.stream()
         .map(car -> mapper.toResponse(car))
         .sorted(STATUS_COMPARATOR)
+        .collect(toList());
+  }
+
+  @Override
+  public List<CarResponse> getActiveCars() {
+    return loadPort.loadByActive(true).stream()
+        .map(mapper::toResponse)
+        .sorted(DEFAULT_COMPARATOR)
         .collect(toList());
   }
 

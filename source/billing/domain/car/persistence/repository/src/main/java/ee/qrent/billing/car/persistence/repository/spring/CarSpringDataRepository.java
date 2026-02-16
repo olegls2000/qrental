@@ -26,4 +26,27 @@ public interface CarSpringDataRepository extends JpaRepository<CarJakartaEntity,
   CarJakartaEntity findByVin(final String vin);
 
   CarJakartaEntity findByBoltIdentifier(final String boltIdentifier);
+
+  Long countByActive(final boolean active);
+
+  Long countByStatus(final String status);
+
+  @Query(
+      value =
+          "select count(*) from car c "
+              + "where c.branding_control = true "
+              + "or c.branding_expiration_date is not null",
+      nativeQuery = true)
+  Long countBrandingControl();
+
+  @Query(
+      value =
+          "select count(*) from car c "
+              + "where c.active = true and c.id not in ("
+              + "select cl.car_id from car_link cl "
+              + "where cl.date_start <= :date "
+              + "and (cl.date_end is null or cl.date_end >= :date)"
+              + ")",
+      nativeQuery = true)
+  Long countAvailableByDate(@Param("date") final LocalDate date);
 }

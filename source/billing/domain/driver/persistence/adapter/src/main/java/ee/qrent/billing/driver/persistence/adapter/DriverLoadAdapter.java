@@ -41,4 +41,21 @@ public class DriverLoadAdapter implements DriverLoadPort {
   public Driver loadByBoltId(final String boltId) {
     return mapper.mapToDomain(repository.findByBoltId(boltId));
   }
+
+  @Override
+  public Long loadCountAll() {
+    return repository.countAll();
+  }
+
+  @Override
+  public Long loadCountByActive(final boolean active) {
+    return repository.countByActive(active);
+  }
+
+  @Override
+  public List<Driver> loadByActive(final boolean active) {
+    return repository.findByActive(active).stream()
+        .map(mapper::mapToDomain)
+        .collect(toList());
+  }
 }

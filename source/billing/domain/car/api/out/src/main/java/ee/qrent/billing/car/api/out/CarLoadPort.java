@@ -16,4 +16,14 @@ public interface CarLoadPort extends LoadPort<Car> {
   Car loadByVin(final String vin);
 
   Car loadByBoltIdentifier(final String boltIdentifier);
+
+  Long loadCountByActive(final boolean active);
+
+  Long loadCountByStatus(final String status);
+
+  Long loadCountBrandingControl();
+
+  Long loadCountAvailableByDate(final LocalDate date);
+
+  Long loadCountAll();
 }

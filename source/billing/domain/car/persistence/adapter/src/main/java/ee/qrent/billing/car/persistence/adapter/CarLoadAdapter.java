@@ -53,8 +53,33 @@ public class CarLoadAdapter implements CarLoadPort {
       return mapper.mapToDomain(repository.findByVin(vin));
     }
 
-    @Override
-    public Car loadByBoltIdentifier(final String boltIdentifier) {
-        return mapper.mapToDomain(repository.findByBoltIdentifier(boltIdentifier));
-    }
+  @Override
+  public Car loadByBoltIdentifier(final String boltIdentifier) {
+    return mapper.mapToDomain(repository.findByBoltIdentifier(boltIdentifier));
+  }
+
+  @Override
+  public Long loadCountByActive(final boolean active) {
+    return repository.countByActive(active);
+  }
+
+  @Override
+  public Long loadCountByStatus(final String status) {
+    return repository.countByStatus(status);
+  }
+
+  @Override
+  public Long loadCountBrandingControl() {
+    return repository.countBrandingControl();
+  }
+
+  @Override
+  public Long loadCountAvailableByDate(final LocalDate date) {
+    return repository.countAvailableByDate(date);
+  }
+
+  @Override
+  public Long loadCountAll() {
+    return repository.countAll();
+  }
 }

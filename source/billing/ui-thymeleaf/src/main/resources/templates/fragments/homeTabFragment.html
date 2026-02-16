@@ -1,13 +1,27 @@
 <ul th:fragment="homeTabs(activeTab)" class="nav nav-tabs">
     <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'freeCars'} ? active : ''"
-           href="/freecars">Free Cars</a>
-    </li>
-   <!-- <li class="nav-item">
-        <a class="nav-link" th:classappend="${activeTab == 'noInsurance'} ? active : ''"
-           href="/no-insurance">No Insurance</a>
+           href="/freecars">Free Cars
+            <span class="badge rounded-pill bg-success" th:text="${freeCarsCount}">???</span>
+        </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'noInsurance'} ? active : ''"
+           href="/no-insurance">No Insurance
+            <span class="badge rounded-pill bg-dark" th:text="${noInsuranceCarsCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'brandingControl'} ? active : ''"
+           href="/branding-control">Branding Control
+            <span class="badge rounded-pill bg-warning text-dark" th:text="${brandingControlCarsCount}">???</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" th:classappend="${activeTab == 'driversWithProblems'} ? active : ''"
+           href="/drivers-with-problems">Drivers with problems</a>
+    </li>
+   <!-- <li class="nav-item">
         <a class="nav-link" th:classappend="${activeTab == 'obligationComleted'} ? active : ''"
            href="/obligations/complited">Obligation Complited
             <span class="badge rounded-pill bg-success" th:text="${counters.activeCallSignLinkCount}">???</span></a>

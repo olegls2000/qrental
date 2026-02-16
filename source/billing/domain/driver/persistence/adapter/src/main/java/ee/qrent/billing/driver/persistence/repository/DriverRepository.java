@@ -19,4 +19,10 @@ public interface DriverRepository {
       final Integer matchCount, final Long qWeekId);
 
   DriverJakartaEntity findByBoltId(final String boltId);
+
+  Long countAll();
+
+  Long countByActive(final boolean active);
+
+  List<DriverJakartaEntity> findByActive(final boolean active);
 }

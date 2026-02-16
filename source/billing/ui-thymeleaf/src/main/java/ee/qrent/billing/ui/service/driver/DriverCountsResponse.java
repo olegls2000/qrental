@@ -10,4 +10,7 @@ public class DriverCountsResponse {
   private Long closedCallSignLinkCount;
   private Long activeContractCount;
   private Long closedContractCount;
+  private Long driversCount;
+  private Long activeDriversCount;
+  private Long inactiveDriversCount;
 }

@@ -16,4 +16,14 @@ public interface GetDriverQuery extends BaseGetQuery<DriverUpdateRequest, Driver
   DriverResponse getDriverByBoltId(final String boltId);
 
   List<CommunicationLanguageIn> getCommunicationLanguages();
+
+  List<DriverResponse> getActiveDrivers();
+
+  List<DriverResponse> getInactiveDrivers();
+
+  Long getDriversCount();
+
+  Long getActiveDriversCount();
+
+  Long getInactiveDriversCount();
 }

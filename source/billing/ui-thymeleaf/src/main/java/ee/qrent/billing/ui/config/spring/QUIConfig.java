@@ -37,9 +37,11 @@ public class QUIConfig {
 
   @Bean
   DriverCounterService getDriverCounterService(
-      final GetCallSignLinkQuery callSignLinkQuery, final GetContractQuery contractQuery) {
+      final GetCallSignLinkQuery callSignLinkQuery,
+      final GetContractQuery contractQuery,
+      final GetDriverQuery driverQuery) {
 
-    return new DriverCounterServiceImpl(callSignLinkQuery, contractQuery);
+    return new DriverCounterServiceImpl(callSignLinkQuery, contractQuery, driverQuery);
   }
 
   @Bean

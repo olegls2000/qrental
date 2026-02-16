@@ -5,6 +5,7 @@ dependencies {
     implementation(project(":source:billing:domain:car:api:out"))
     implementation(project(":source:billing:domain:car:domain"))
     implementation(project(":source:billing:domain:driver:api:in"))
+    implementation(project(":source:queue:api:in"))
 
     compileOnly(libs.q.lombok)
     annotationProcessor(libs.q.lombok)

@@ -52,4 +52,19 @@ public class DriverRepositoryImpl implements DriverRepository {
 
     return springDataRepository.findByBoltId(boltId);
   }
+
+  @Override
+  public Long countAll() {
+    return springDataRepository.count();
+  }
+
+  @Override
+  public Long countByActive(final boolean active) {
+    return springDataRepository.countByActive(active);
+  }
+
+  @Override
+  public List<DriverJakartaEntity> findByActive(final boolean active) {
+    return springDataRepository.findByActive(active);
+  }
 }

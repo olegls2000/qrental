@@ -25,13 +25,27 @@ public class CarQueryController {
 
   @GetMapping
   public String getCarView(final Model model) {
-    model.addAttribute("cars", carQuery.getAll());
+    final var cars = carQuery.getAll();
+    model.addAttribute("cars", cars);
     model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
     model.addAttribute("states", Availability.values());
     model.addAttribute("carFilterRequest", new CarFilter());
+    model.addAttribute("carsCount", carQuery.getCarsCount());
+    model.addAttribute("activeCarsCount", carQuery.getActiveCarsCount());
     populatedLinksCounts(model);
 
     return "cars";
+  }
+
+  @GetMapping("/active")
+  public String getActiveCarsView(final Model model) {
+    model.addAttribute("cars", carQuery.getActiveCars());
+    model.addAttribute(MODEL_ATTRIBUTE_DATE_FORMATTER, qDateFormatter);
+    model.addAttribute("carsCount", carQuery.getCarsCount());
+    model.addAttribute("activeCarsCount", carQuery.getActiveCarsCount());
+    populatedLinksCounts(model);
+
+    return "activeCars";
   }
 
     @PostMapping
